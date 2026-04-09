@@ -1,0 +1,37 @@
+# Mirrored site data (large, generated at runtime)
+data/mirrors/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg
+*.egg-info/
+.eggs/
+dist/
+build/
+*.so
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Scrapy cache
+.scrapy/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+scrapy.log
+
+# OS
+.DS_Store
+Thumbs.db
