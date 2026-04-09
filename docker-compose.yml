@@ -1,0 +1,16 @@
+services:
+  scraper:
+    build: .
+    # Mount the local data/ directory so mirrored content is saved on the host
+    volumes:
+      - ./data:/app/data
+    environment:
+      - PYTHONUNBUFFERED=1
+    # Pass extra arguments to run_mirrors.py here.
+    # Examples:
+    #   Mirror all partners (default):
+    #     command: []
+    #   Mirror only the first 5 partners (smoke test):
+    #     command: ["--limit", "5"]
+    #   Resume an interrupted run:
+    #     command: ["--resume"]
