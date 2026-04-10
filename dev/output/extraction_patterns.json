@@ -1,0 +1,131 @@
+{
+  "1A_event_sitemap+generic": {
+    "site_count": 8,
+    "samples": 15,
+    "extractors": [
+      "yoast_custom_post"
+    ],
+    "has_dates": "5/15",
+    "has_description": "13/15",
+    "has_registration": "11/15",
+    "has_api_url": "0/15",
+    "example_domains": [
+      "hthgse.edu",
+      "hthgse.edu",
+      "hthgse.edu"
+    ]
+  },
+  "1A_event_sitemap+stec": {
+    "site_count": 1,
+    "samples": 3,
+    "extractors": [
+      "yoast_custom_post"
+    ],
+    "has_dates": "0/3",
+    "has_description": "0/3",
+    "has_registration": "0/3",
+    "has_api_url": "0/3",
+    "example_domains": [
+      "www.awissd.org",
+      "www.awissd.org",
+      "www.awissd.org"
+    ]
+  },
+  "1A_event_sitemap+tribe_events_calendar": {
+    "site_count": 5,
+    "samples": 12,
+    "extractors": [
+      "tribe_events"
+    ],
+    "has_dates": "7/12",
+    "has_description": "5/12",
+    "has_registration": "8/12",
+    "has_api_url": "12/12",
+    "example_domains": [
+      "coastalrootsfarm.org",
+      "coastalrootsfarm.org",
+      "coastalrootsfarm.org"
+    ]
+  },
+  "1B_program_sitemap": {
+    "site_count": 9,
+    "samples": 15,
+    "extractors": [
+      "yoast_custom_post"
+    ],
+    "has_dates": "0/15",
+    "has_description": "2/15",
+    "has_registration": "15/15",
+    "has_api_url": "0/15",
+    "example_domains": [
+      "edfortech.com",
+      "edfortech.com",
+      "edfortech.com"
+    ]
+  },
+  "1C_wix_event_sitemap": {
+    "site_count": 3,
+    "samples": 9,
+    "extractors": [
+      "wix"
+    ],
+    "has_dates": "1/9",
+    "has_description": "5/9",
+    "has_registration": "0/9",
+    "has_api_url": "0/9",
+    "example_domains": [
+      "escondidocreek.org",
+      "escondidocreek.org",
+      "escondidocreek.org"
+    ]
+  },
+  "2_filtered_general_sitemap": {
+    "site_count": 35,
+    "samples": 13,
+    "extractors": [
+      "generic"
+    ],
+    "has_dates": "8/13",
+    "has_description": "6/13",
+    "has_registration": "6/13",
+    "has_api_url": "0/13",
+    "example_domains": [
+      "aquarium.ucsd.edu",
+      "aquarium.ucsd.edu",
+      "aquarium.ucsd.edu"
+    ]
+  },
+  "2_sitemap+dir_scan": {
+    "site_count": 32,
+    "samples": 7,
+    "extractors": [
+      "generic"
+    ],
+    "has_dates": "1/7",
+    "has_description": "4/7",
+    "has_registration": "5/7",
+    "has_api_url": "0/7",
+    "example_domains": [
+      "casadeamistad.org",
+      "extendedstudies.ucsd.edu",
+      "extendedstudies.ucsd.edu"
+    ]
+  },
+  "3_dir_scan_only": {
+    "site_count": 23,
+    "samples": 5,
+    "extractors": [
+      "generic",
+      "tribe_events"
+    ],
+    "has_dates": "2/5",
+    "has_description": "4/5",
+    "has_registration": "5/5",
+    "has_api_url": "0/5",
+    "example_domains": [
+      "ece.ucsd.edu",
+      "ece.ucsd.edu",
+      "gridalternatives.org"
+    ]
+  }
+}
