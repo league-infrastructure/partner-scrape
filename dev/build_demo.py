@@ -13,8 +13,12 @@ Outputs: dev/output/demo_events.json
 import html as html_lib
 import json
 import re
+import sys
 from pathlib import Path
 from collections import defaultdict
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from lib.relevance import score_event
 
 OUTPUT_DIR = Path(__file__).resolve().parent / "output"
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
@@ -212,6 +216,12 @@ def build_program_listing(e: dict, partners: dict) -> dict | None:
 def main():
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     partners = load_partners()
+    # Also build a name-based lookup for relevance scoring
+    partners_by_name = {}
+    for domain, row in partners.items():
+        name = row.get("name", "")
+        if name:
+            partners_by_name[name] = row
 
     events = json.loads((OUTPUT_DIR / "events_merged.json").read_text())
     print(f"Input events: {len(events)}")
@@ -220,11 +230,26 @@ def main():
     program_listings = []
     seen_titles = defaultdict(set)  # per-org dedup
 
+    filtered_out = 0
     for e in events:
         if is_junk_event(e):
             continue
 
         org = e.get("organization", "")
+        org_type = partners_by_name.get(org, {}).get("organization_type", "")
+
+        # STEM-for-kids relevance filter
+        relevance = score_event(
+            title=e.get("title", ""),
+            description=e.get("description", ""),
+            org=org,
+            org_type=org_type,
+            audience=e.get("audience", ""),
+            url=e.get("page_url", ""),
+        )
+        if not relevance["relevant"]:
+            filtered_out += 1
+            continue
         title_key = clean_title(e.get("title", "")).lower()
 
         has_real_date = (e.get("start_date")
@@ -322,6 +347,7 @@ def main():
     print(f"Organizations:      {len(orgs_list)}")
     print(f"Calendar events:    {len(calendar_events)}")
     print(f"Program listings:   {len(program_listings)}")
+    print(f"Filtered (not STEM/kids): {filtered_out}")
     print(f"{'='*60}")
 
     # Calendar event stats
