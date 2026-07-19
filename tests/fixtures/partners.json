@@ -1,0 +1,35 @@
+[
+  {
+    "id": 101,
+    "name": "Coastal Roots Farm",
+    "organization_type": "Afterschool/Out-of-School Time",
+    "description": "A synthetic fixture partner for tests -- not the real stem-ecosystem data.",
+    "location": "Encinitas, California",
+    "latitude": 33.05,
+    "longitude": -117.26,
+    "website": "https://example.org/coastal-roots-farm",
+    "logo_src": "coastal_roots_farm.jpg"
+  },
+  {
+    "id": 102,
+    "name": "The Living Coast Discovery Center",
+    "organization_type": "Museums, Science Centers & Zoos",
+    "description": "A synthetic fixture partner for tests -- not the real stem-ecosystem data.",
+    "location": "Chula Vista, California",
+    "latitude": 32.62,
+    "longitude": -117.1,
+    "website": "https://example.org/living-coast",
+    "logo_src": "living_coast.jpg"
+  },
+  {
+    "id": 103,
+    "name": "Ocean Connectors",
+    "organization_type": "Advocacy/Philanthropy & Government",
+    "description": "A synthetic fixture partner for tests -- not the real stem-ecosystem data.",
+    "location": "San Diego, California",
+    "latitude": 32.7,
+    "longitude": -117.15,
+    "website": "https://example.org/ocean-connectors",
+    "logo_src": "ocean_connectors.jpg"
+  }
+]
