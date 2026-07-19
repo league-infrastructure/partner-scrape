@@ -1,0 +1,44 @@
+{
+  "total": 2,
+  "total_pages": 1,
+  "events": [
+    {
+      "id": 9001,
+      "title": "Tide Pool Exploration",
+      "description": "<p>Explore local tide pools with a naturalist guide.</p>",
+      "start_date": "2026-08-15 09:00:00",
+      "end_date": "2026-08-15 11:00:00",
+      "all_day": false,
+      "cost": "$5",
+      "url": "https://coastalrootsfarm.example/events/tide-pool-exploration/",
+      "image": {},
+      "venue": {
+        "venue": "Cabrillo Tide Pools",
+        "address": "",
+        "city": "San Diego",
+        "state": "CA"
+      },
+      "categories": [],
+      "tags": []
+    },
+    {
+      "id": 9002,
+      "title": "Spring Planting Day",
+      "description": "<p>A past event that must be excluded by the upcoming filter.</p>",
+      "start_date": "2026-06-01 09:00:00",
+      "end_date": "2026-06-01 11:00:00",
+      "all_day": false,
+      "cost": "Free",
+      "url": "https://coastalrootsfarm.example/events/spring-planting-day/",
+      "image": {},
+      "venue": {
+        "venue": "Coastal Roots Farm",
+        "address": "",
+        "city": "Encinitas",
+        "state": "CA"
+      },
+      "categories": [],
+      "tags": []
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+# Synthetic fixture for the pipeline walking-skeleton test (ticket 008):
+# a well-formed, *enabled* registry entry whose adapter_type has no
+# matching canned response in the e2e test's fixture Fetcher. Fetching
+# it raises a real exception (the fixture Fetcher's "no canned response
+# for this URL" error) -- this is what forces the real per-source
+# failure path SUC-008 requires: the run must continue with the other
+# sources and still produce output.
+
+org_name = "Broken Fixture Org"
+adapter_type = "tec_rest"
+enabled = true
+
+[config]
+api_base = "https://broken-source.example/wp-json/tribe/events/v1/events/"

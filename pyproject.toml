@@ -10,6 +10,9 @@ dependencies = [
     "w3lib>=2.1",
 ]
 
+[project.scripts]
+partner-scrape = "partner_scrape.cli:main"
+
 [dependency-groups]
 dev = [
     "pytest>=8.0",
