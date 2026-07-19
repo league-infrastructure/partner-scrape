@@ -1,0 +1,14 @@
+{
+  "start": null,
+  "end": null,
+  "all_day": null,
+  "location": null,
+  "cost": null,
+  "registration_url": null,
+  "areas_of_interest": [],
+  "age_grade_level": ["Adult"],
+  "cost_range": "Less than $50",
+  "time_of_day": ["Evening"],
+  "relevant": false,
+  "relevance_reason": "Adult-only wine tasting event, not a STEM learning opportunity for youth."
+}
