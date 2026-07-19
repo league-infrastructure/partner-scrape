@@ -280,3 +280,98 @@ class TestMixedBatchIsolation:
 
         assert [e.title for e in survivors] == ["Mystery Program", "Robotics Night"]
         assert len(llm_client.calls) == 2
+
+
+# ---------------------------------------------------------------------
+# AC (sprint 006 ticket 005, SUC-005): kind="internship" Events bypass
+# the relevance gate entirely -- no cache lookup, no LLM call, no field
+# mutation, never dropped.
+# ---------------------------------------------------------------------
+
+
+class _SpyCache(EnrichmentCache):
+    """`EnrichmentCache` subclass that records every `lookup()`/`store()`
+    call, in order, on top of its real (tmp_path-backed) behavior -- lets
+    a test assert an internship Event never touches the cache at all,
+    not just that it happens to miss.
+    """
+
+    def __init__(self, cache_dir):
+        super().__init__(cache_dir=cache_dir)
+        self.lookup_calls: list[Event] = []
+        self.store_calls: list[Event] = []
+
+    def lookup(self, event: Event) -> EnrichmentResult | None:
+        self.lookup_calls.append(event)
+        return super().lookup(event)
+
+    def store(self, event: Event, result: EnrichmentResult) -> None:
+        self.store_calls.append(event)
+        super().store(event, result)
+
+
+class TestInternshipEventsBypassTheRelevanceGate:
+    def test_internship_event_passes_through_unchanged_with_zero_llm_calls(self, tmp_path):
+        event = _event(title="Software Engineering Intern", kind="internship")
+        # Empty responses: any unexpected enrich_event() call raises
+        # KeyError and fails the test loudly (ticket 005's Testing note).
+        llm_client = FixtureLLMClient(responses={})
+        cache = _SpyCache(cache_dir=tmp_path)
+        enricher = LLMEnricher(llm_client, cache)
+
+        [survivor] = enricher.enrich([event])
+
+        assert survivor is event
+        assert survivor.relevant is None
+        assert survivor.field_provenance == {}
+        assert llm_client.calls == []
+        assert cache.lookup_calls == []
+        assert cache.store_calls == []
+
+    def test_internship_event_is_never_dropped_even_if_a_relevance_verdict_would_be_false(
+        self, tmp_path
+    ):
+        # A response keyed to this title *would* gate a kind="event"
+        # Event out (see TestRelevanceGate above) -- registering it here
+        # and then asserting zero calls proves the bypass never even
+        # consults it, so it can never drop this Event.
+        event = _event(title="Adult Wine Tasting", kind="internship")
+        result = EnrichmentResult(relevant=False, relevance_reason="Adult-only, not for youth.")
+        llm_client = FixtureLLMClient(responses={"Adult Wine Tasting": result})
+        enricher = LLMEnricher(llm_client, EnrichmentCache(cache_dir=tmp_path))
+
+        survivors = enricher.enrich([event])
+
+        assert survivors == [event]
+        assert event.relevant is None
+        assert llm_client.calls == []
+
+    def test_mixed_batch_gates_only_event_kind_and_preserves_relative_order(self, tmp_path):
+        internship = _event(title="Data Science Intern", kind="internship")
+        event = _event(title="Robotics Night")
+        result = EnrichmentResult(relevant=True, relevance_reason="stem")
+        llm_client = FixtureLLMClient(responses={"Robotics Night": result})
+        cache = _SpyCache(cache_dir=tmp_path)
+        enricher = LLMEnricher(llm_client, cache)
+
+        survivors = enricher.enrich([internship, event])
+
+        assert [e.title for e in survivors] == ["Data Science Intern", "Robotics Night"]
+        assert survivors[0].field_provenance == {}
+        assert survivors[1].field_provenance["relevant"].source == LLM_SOURCE
+        assert [e.title for e in llm_client.calls] == ["Robotics Night"]
+        assert [e.title for e in cache.lookup_calls] == ["Robotics Night"]
+        assert [e.title for e in cache.store_calls] == ["Robotics Night"]
+
+    def test_existing_event_kind_relevance_gating_is_unchanged(self, tmp_path):
+        # Guards against a regression where the internship branch
+        # accidentally short-circuits kind="event"/"program" handling.
+        event = _event(title="Adult Wine Tasting")
+        result = EnrichmentResult(relevant=False, relevance_reason="Adult-only, not for youth.")
+        llm_client = FixtureLLMClient(responses={"Adult Wine Tasting": result})
+        enricher = LLMEnricher(llm_client, EnrichmentCache(cache_dir=tmp_path))
+
+        survivors = enricher.enrich([event])
+
+        assert survivors == []
+        assert event.relevant is False

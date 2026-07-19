@@ -8,6 +8,14 @@ with zero changes to `pipeline.py` -- exactly the seam sprint 001 paid
 for.
 
 Per-Event flow (SUC-011's Main Flow):
+0. `kind="internship"` Events (sprint 006 ticket 005, SUC-005) bypass
+   this entire flow: no cache lookup, no `LLMClient` call, no field
+   mutation -- the Event is appended to the survivors list unchanged.
+   An internship arrives already classified/gated deterministically by
+   `adapters/ats_filters.py`, and this module's LLM prompt is written
+   specifically around a "STEM learning opportunity for K-12 youth"
+   framing that could misjudge legitimate job-posting text as
+   adult-only and silently drop it -- see sprint.md's Design Rationale.
 1. Compute the Event's `identity_key()` and check the `EnrichmentCache`.
 2. Cache hit (same content hash) -> reapply the cached `EnrichmentResult`
    to the Event via `Event.set(...)`, no LLM call (cost control).
@@ -143,6 +151,20 @@ class LLMEnricher:
         """
         survivors: list[Event] = []
         for event in events:
+            if event.kind == "internship":
+                # Relevance Gate bypass (sprint 006 ticket 005, SUC-005):
+                # already classified/gated deterministically by
+                # adapters/ats_filters.py at acquisition time. Never
+                # re-judged, never dropped here, and -- skip-LLM is the
+                # preferred, cheaper option over "call but never
+                # gate-drop" -- never even sent to the LLM: no cache
+                # lookup, no `llm_client.enrich_event()` call, no
+                # `_apply_result()` call, no field or field_provenance
+                # mutation. Every other `kind` keeps the exact behavior
+                # below, unchanged.
+                survivors.append(event)
+                continue
+
             cached_result = self.cache.lookup(event)
             if cached_result is not None:
                 _apply_result(event, cached_result, source=LLM_SOURCE, confidence=LLM_CONFIDENCE)
