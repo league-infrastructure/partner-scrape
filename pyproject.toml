@@ -11,6 +11,9 @@ dependencies = [
     "w3lib>=2.1",
 ]
 
+[project.optional-dependencies]
+headless = ["playwright>=1.40"]
+
 [project.scripts]
 partner-scrape = "partner_scrape.cli:main"
 
