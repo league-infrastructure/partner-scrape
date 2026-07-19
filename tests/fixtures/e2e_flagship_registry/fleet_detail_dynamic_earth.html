@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<!--
+  Ticket 005's flagship end-to-end fixture. Fleet's REAL detail pages
+  carry no JSON-LD or <time> markup (confirmed live during sprint 003
+  planning; see test_adapters_listing_html.py's fleet_style_*.html
+  fixtures for that exact, faithfully-undated shape). This fixture is
+  deliberately dated instead, purely so this integration test's event
+  survives Site Export's current/upcoming filter without also having to
+  wire an LLM Enricher into this particular test (ticket 005's own
+  Constraints list that as one of two acceptable options -- this file
+  takes the other one). Per-rung extraction correctness for Fleet's
+  real (dateless) shape is already proven by SUC-014's own tests; this
+  file's only job is proving the whole pipeline chain end to end.
+-->
+<html>
+<head>
+<title>Dynamic Earth | Fleet Science Center (fixture)</title>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": "Dynamic Earth",
+  "description": "An immersive dome show exploring Earth's climate systems.",
+  "startDate": "2026-08-05T11:00:00-07:00",
+  "endDate": "2026-08-05T12:00:00-07:00",
+  "location": {"@type": "Place", "name": "Fleet Science Center"},
+  "offers": {"@type": "Offer", "price": "12", "priceCurrency": "USD"}
+}
+</script>
+</head>
+<body>
+<h1>Dynamic Earth</h1>
+<p>An immersive dome show exploring Earth's climate systems.</p>
+</body>
+</html>

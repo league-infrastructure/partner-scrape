@@ -1,0 +1,19 @@
+# Synthetic fixture proving Pipeline's per-source fetch_strategy
+# selection (ticket 005) -- NOT a claim that a real tec_rest source
+# would ever be flagged headless. SUC-015's own Main Flow is explicit
+# that headless routing is a Fetch-layer concern, adapter-agnostic:
+# "The adapter (any adapter type -- this is Fetch-layer, not
+# adapter-specific) receives this FetchResponse exactly as it would
+# from a static fetch, and proceeds unchanged." tec_rest is used here
+# only because its discover()/fetch() need just two URLs, keeping this
+# fixture source minimal.
+
+org_name = "Headless Fixture Org A"
+adapter_type = "tec_rest"
+enabled = true
+
+[config]
+api_base = "https://headless-a.example/wp-json/tribe/events/v1/events/"
+
+[acquisition_policy]
+fetch_strategy = "headless"

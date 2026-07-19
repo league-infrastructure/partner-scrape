@@ -1,0 +1,15 @@
+# Fixture Localist source for the sprint 003 flagship end-to-end proof
+# (ticket 005) -- mirrors the real
+# partner_scrape/registry/sources/birch-aquarium.toml's shape
+# (adapter_type, group_id/days/pp query params) but points at a fixture
+# domain so this test never risks a real network call.
+
+org_name = "Birch Aquarium at Scripps"
+adapter_type = "localist"
+enabled = true
+
+[config]
+api_base = "https://calendar.fixture.edu/api/2/events"
+group_id = "49845193640602"
+days = 180
+pp = 50

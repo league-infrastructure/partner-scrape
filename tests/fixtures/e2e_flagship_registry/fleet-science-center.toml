@@ -1,0 +1,13 @@
+# Fixture listing_html source for the sprint 003 flagship end-to-end
+# proof (ticket 005) -- mirrors the real
+# partner_scrape/registry/sources/fleet-science-center.toml's shape but
+# points at a fixture domain so this test never risks a real network
+# call.
+
+org_name = "Fleet Science Center"
+adapter_type = "listing_html"
+enabled = true
+
+[config]
+site_url = "https://fleetscience.fixture"
+listing_urls = ["/events"]

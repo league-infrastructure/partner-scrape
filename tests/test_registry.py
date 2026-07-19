@@ -44,7 +44,23 @@ class TestSourceConfigFromToml:
             "rate_limit_seconds": 1.0,
             "respect_robots": True,
             "discovered_via": "manual",
+            # ticket 005: additive default -- a file with no
+            # [acquisition_policy] section at all (good_one.toml) still
+            # resolves fetch_strategy to "static", today's exact
+            # pre-ticket-005 fetch behavior.
+            "fetch_strategy": "static",
         }
+
+    def test_fetch_strategy_defaults_to_static_when_acquisition_policy_omits_it(self):
+        # A source with an [acquisition_policy] section that sets other
+        # keys but not fetch_strategy must still default it to "static"
+        # -- the merge in SourceConfig.from_toml is per-key, not
+        # all-or-nothing.
+        source = SourceConfig.from_toml(
+            FIXTURES_DIR.parent / "registry_fetch_strategy" / "partial_acquisition_policy.toml"
+        )
+        assert source.acquisition_policy["rate_limit_seconds"] == 2.5
+        assert source.acquisition_policy["fetch_strategy"] == "static"
 
     def test_taxonomy_defaults_read_when_present(self):
         source = SourceConfig.from_toml(FIXTURES_DIR / "good_two.toml")

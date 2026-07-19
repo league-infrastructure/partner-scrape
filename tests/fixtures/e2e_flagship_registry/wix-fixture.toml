@@ -1,0 +1,18 @@
+# Synthetic headless-flagged fixture source (ticket 005) standing in
+# for one of the ~9 known Wix sites this sprint's headless capability
+# targets (bulk-registering the real ones is explicitly out of this
+# sprint's scope -- see sprint.md's Open Question 1). tec_rest is used
+# here only because its discover()/fetch() need just two URLs, keeping
+# this fixture minimal -- SUC-015's Main Flow is explicit that headless
+# routing is a Fetch-layer concern, exercised identically regardless of
+# which adapter_type a headless-flagged source uses.
+
+org_name = "Wix Fixture Org"
+adapter_type = "tec_rest"
+enabled = true
+
+[config]
+api_base = "https://wix-fixture.example/wp-json/tribe/events/v1/events/"
+
+[acquisition_policy]
+fetch_strategy = "headless"
