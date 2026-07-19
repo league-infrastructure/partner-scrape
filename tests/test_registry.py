@@ -118,6 +118,7 @@ class TestLoadSources:
             "visitcmod",
             "birch-aquarium",
             "fleet-science-center",
+            "jointheleague",
         }
 
 
@@ -222,3 +223,35 @@ class TestRealFleetScienceCenterSource:
         fleet = sources["fleet-science-center"]
         assert fleet.config["site_url"] == "https://www.fleetscience.org"
         assert fleet.config["listing_urls"] == ["/events"]
+
+
+class TestRealJoinTheLeagueSource:
+    """The real jointheleague.toml generic_html source (sprint 005 ticket 002)."""
+
+    def test_loads_as_enabled_generic_html_source(self):
+        sources = {s.source_id: s for s in load_active_sources()}
+
+        league = sources["jointheleague"]
+        assert league.org_name == "The LEAGUE of Amazing Programmers"
+        assert league.adapter_type == "generic_html"
+        assert league.enabled is True
+
+    def test_config_matches_live_confirmed_values(self):
+        sources = {s.source_id: s for s in load_active_sources()}
+
+        league = sources["jointheleague"]
+        assert league.config["site_url"] == "https://www.jointheleague.org"
+        # Hyphenated -- confirmed live during sprint 005 planning; set
+        # explicitly so this source doesn't depend on probing order even
+        # after ticket 001's parse-based-acceptance hardening.
+        assert league.config["sitemap_url"] == "https://www.jointheleague.org/sitemap-index.xml"
+
+    def test_no_invalid_source_config_raised_loading_the_real_registry(self):
+        # SUC-003's precondition: registry/sources/jointheleague.toml is
+        # registered and loads with no InvalidSourceConfig -- proven
+        # simply by load_active_sources() completing and including it
+        # (InvalidSourceConfig would have been logged-and-skipped, not
+        # raised, so the real assertion is presence, matching this
+        # class's other tests).
+        sources = {s.source_id: s for s in load_active_sources()}
+        assert "jointheleague" in sources
