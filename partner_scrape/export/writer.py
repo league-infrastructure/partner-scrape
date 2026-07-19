@@ -34,7 +34,7 @@ from pathlib import Path
 from typing import Any, Iterable
 
 from partner_scrape.config import get_site_dir
-from partner_scrape.normalize.run import Opportunity
+from partner_scrape.normalize.run import WORK_BASED_LEARNING_TYPE, Opportunity
 
 #: The exact field set written to `opportunities.json` -- every
 #: `Opportunity` field except `sources`, which is normalize's internal
@@ -52,7 +52,22 @@ def _is_current_or_upcoming(opportunity: Opportunity, today: date) -> bool:
     today or later (SUC-007 main flow step 1). Undated records (neither
     `date_start` nor `date_end` set) are excluded -- matching
     `dev/export_site.py`'s equivalent string comparison, an unset date
-    can never be judged "today or later"."""
+    can never be judged "today or later".
+
+    `opportunity_type == "Work-based Learning"` (internship) records get
+    a different rule (sprint 006 Design Rationale, SUC-004): `date_start`
+    is redefined as the posting-observed date, which is routinely in the
+    past for a still-open, no-deadline internship -- the ordinary
+    `date_end or date_start >= today` rule would wrongly expire it. Such
+    a record is current if `date_end` (the application deadline) is
+    unset or still in the future; every other `opportunity_type` keeps
+    the exact rule above, unchanged.
+    """
+    if opportunity.opportunity_type == WORK_BASED_LEARNING_TYPE:
+        if not opportunity.date_end:
+            return True
+        return date.fromisoformat(opportunity.date_end[:10]) >= today
+
     date_str = opportunity.date_end or opportunity.date_start
     if not date_str:
         return False

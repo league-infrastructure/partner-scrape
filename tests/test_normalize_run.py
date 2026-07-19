@@ -14,7 +14,12 @@ from datetime import datetime
 from pathlib import Path
 
 from partner_scrape.model import Event
-from partner_scrape.normalize.run import Opportunity, run
+from partner_scrape.normalize.run import (
+    DEFAULT_OPPORTUNITY_TYPE,
+    WORK_BASED_LEARNING_TYPE,
+    Opportunity,
+    run,
+)
 
 FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures"
 PARTNERS_PATH = FIXTURES_DIR / "partners.json"
@@ -29,8 +34,10 @@ def _event(
     confidence: float = 1.0,
     description: str = "",
     cost: str = "",
+    kind: str = "event",
+    external_id: str = "",
 ) -> Event:
-    event = Event(source_id=source_id)
+    event = Event(source_id=source_id, kind=kind, external_id=external_id)
     event.set("title", title, source="fixture", confidence=confidence)
     if start is not None:
         event.set("start", start, source="fixture", confidence=confidence)
@@ -286,3 +293,172 @@ class TestRecurringCollapse:
         [opportunity] = run([event], PARTNERS_PATH)
 
         assert opportunity.availability == ""
+
+
+class TestInternshipCollapseDedupBypass:
+    """`kind="internship"` Events are routed around both
+    `collapse_recurring` and `dedup_cross_source` (sprint.md Design
+    Rationale: "kind='internship' Events bypass both..."), since neither
+    stage's identity assumption holds for distinct job requisitions."""
+
+    def test_same_title_same_source_distinct_external_id_both_survive(self):
+        """Would collapse under `collapse_recurring`'s `(source_id,
+        normalized title)` grouping if internships were not bypassed."""
+        a = _event(
+            source_id="acme",
+            title="Software Engineering Intern",
+            start=datetime(2026, 8, 1, 9, 0),
+            kind="internship",
+            external_id="gh-1001",
+        )
+        b = _event(
+            source_id="acme",
+            title="Software Engineering Intern",
+            start=datetime(2026, 8, 1, 9, 0),
+            kind="internship",
+            external_id="gh-1002",
+        )
+
+        opportunities = run([a, b], PARTNERS_PATH)
+
+        assert len(opportunities) == 2
+        assert all(o.opportunity_type == WORK_BASED_LEARNING_TYPE for o in opportunities)
+
+    def test_same_title_same_date_same_location_different_source_both_survive(self):
+        """Would merge under `dedup_cross_source`'s `(title, date, venue)`
+        identity if internships were not bypassed."""
+        a = _event(
+            source_id="acme",
+            title="Software Engineering Intern",
+            start=datetime(2026, 8, 1, 9, 0),
+            location="San Diego, CA",
+            kind="internship",
+            external_id="gh-1001",
+        )
+        b = _event(
+            source_id="widgetco",
+            title="Software Engineering Intern",
+            start=datetime(2026, 8, 1, 9, 0),
+            location="San Diego, CA",
+            kind="internship",
+            external_id="lever-9",
+        )
+
+        opportunities = run([a, b], PARTNERS_PATH)
+
+        assert len(opportunities) == 2
+
+    def test_internship_never_shows_repeats_text(self):
+        event = _event(
+            source_id="acme",
+            title="Software Engineering Intern",
+            start=datetime(2026, 8, 1, 9, 0),
+            kind="internship",
+            external_id="gh-1001",
+        )
+
+        [opportunity] = run([event], PARTNERS_PATH)
+
+        assert "Repeats" not in opportunity.availability
+
+    def test_non_internship_collapse_and_dedup_still_apply_unchanged(self):
+        """Guards against a broken partition that accidentally routes
+        ordinary events around collapse/dedup too."""
+        recurring = [
+            _event(source_id="crf", title="Farm Camp", start=datetime(2026, 8, 1, 9, 0)),
+            _event(source_id="crf", title="Farm Camp", start=datetime(2026, 8, 8, 9, 0)),
+        ]
+        internship = _event(
+            source_id="acme",
+            title="Software Engineering Intern",
+            start=datetime(2026, 8, 1, 9, 0),
+            kind="internship",
+            external_id="gh-1001",
+        )
+
+        opportunities = run(recurring + [internship], PARTNERS_PATH)
+
+        assert len(opportunities) == 2
+        by_title = {o.title: o for o in opportunities}
+        assert "Repeats 2 times" in by_title["Farm Camp"].availability
+        assert by_title["Software Engineering Intern"].opportunity_type == WORK_BASED_LEARNING_TYPE
+
+
+class TestInternshipOpportunityType:
+    def test_internship_kind_maps_to_work_based_learning(self):
+        event = _event(
+            title="Data Science Intern",
+            start=datetime(2026, 8, 1, 9, 0),
+            kind="internship",
+            external_id="gh-42",
+        )
+
+        [opportunity] = run([event], PARTNERS_PATH)
+
+        assert opportunity.opportunity_type == WORK_BASED_LEARNING_TYPE
+
+    def test_event_kind_keeps_default_opportunity_type_unchanged(self):
+        event = _event(title="Farm Tour", start=datetime(2026, 8, 1, 9, 0))
+
+        [opportunity] = run([event], PARTNERS_PATH)
+
+        assert opportunity.opportunity_type == DEFAULT_OPPORTUNITY_TYPE
+
+
+class TestInternshipDateAndAvailability:
+    def test_known_deadline_sets_iso_date_end_and_apply_by_text(self):
+        event = _event(
+            title="Biology Research Intern",
+            start=datetime(2026, 8, 1, 9, 0),
+            end=datetime(2026, 9, 15, 0, 0),
+            kind="internship",
+            external_id="gh-7",
+        )
+
+        [opportunity] = run([event], PARTNERS_PATH)
+
+        assert opportunity.date_end.startswith("2026-09-15")
+        assert opportunity.availability == "Apply by 2026-09-15"
+
+    def test_no_deadline_leaves_date_end_blank_and_reads_rolling(self):
+        event = _event(
+            title="Biology Research Intern",
+            start=datetime(2026, 8, 1, 9, 0),
+            kind="internship",
+            external_id="gh-8",
+        )
+
+        [opportunity] = run([event], PARTNERS_PATH)
+
+        assert opportunity.date_end == ""
+        assert opportunity.availability == "Rolling — apply anytime"
+
+
+class TestInternshipCostRange:
+    def test_cost_range_stays_blank_when_event_never_set_cost(self):
+        """This ticket must not introduce a forced 'Free' (or any other)
+        default cost_range for internships (sprint.md Architecture
+        self-review note) -- a missing cost signal must stay blank."""
+        event = _event(
+            title="Data Science Intern",
+            start=datetime(2026, 8, 1, 9, 0),
+            kind="internship",
+            external_id="gh-9",
+        )
+
+        [opportunity] = run([event], PARTNERS_PATH)
+
+        assert opportunity.cost_range == ""
+
+    def test_cost_range_is_honored_when_the_event_explicitly_set_it(self):
+        event = _event(
+            title="Data Science Intern",
+            start=datetime(2026, 8, 1, 9, 0),
+            kind="internship",
+            external_id="gh-10",
+            cost="Free",
+        )
+
+        [opportunity] = run([event], PARTNERS_PATH)
+
+        assert opportunity.cost_range == "Free"
