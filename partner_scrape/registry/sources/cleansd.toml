@@ -1,0 +1,19 @@
+# I Love A Clean San Diego -- The Events Calendar REST API.
+# Endpoint verified working in dev/fetch_tec_api.py's TEC_SITES list.
+# Note: the API is served from the cleansd.org domain, while the
+# partner list / mirrored site use ilacsd.org -- see
+# dev/SCRAPER_GUIDELINES.md Section 8 ("Sites requiring special
+# handling").
+
+org_name = "I Love A Clean San Diego"
+adapter_type = "tec_rest"
+enabled = true
+
+[config]
+api_base = "https://www.cleansd.org/wp-json/tribe/events/v1/events/"
+domain = "www.cleansd.org"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "dev/fetch_tec_api.py"

@@ -1,0 +1,13 @@
+# Synthetic well-formed fixture -- not a real organization. Uses a
+# different adapter_type and includes taxonomy_defaults, to exercise
+# both "optional field present" and "different config shape".
+
+org_name = "Fixture Org Two"
+adapter_type = "wp_rest"
+enabled = true
+
+[config]
+posts_url = "https://example2.org/wp-json/wp/v2/posts"
+
+[taxonomy_defaults]
+areas_of_interest = ["environment"]

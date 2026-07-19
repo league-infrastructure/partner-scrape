@@ -1,0 +1,9 @@
+# Synthetic well-formed but disabled fixture -- exercises "enabled:
+# false is still parseable but excluded from the active-sources result".
+
+org_name = "Fixture Org Disabled"
+adapter_type = "ical"
+enabled = false
+
+[config]
+feed_url = "https://example3.org/events.ics"

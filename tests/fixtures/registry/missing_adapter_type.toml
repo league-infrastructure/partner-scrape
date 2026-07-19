@@ -1,0 +1,9 @@
+# Synthetic malformed fixture -- valid TOML syntax, but missing the
+# required `adapter_type` field. Must be skipped with a logged warning,
+# not raise out of the directory loader.
+
+org_name = "Fixture Org Missing Adapter Type"
+enabled = true
+
+[config]
+api_base = "https://example4.org/wp-json/tribe/events/v1/events/"
