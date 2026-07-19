@@ -1,6 +1,10 @@
 ---
-status: pending
+status: done
 sprint: '005'
+tickets:
+- 005-001
+- 005-003
+- 005-004
 ---
 
 # Other aggregators as discovery, not as a data source

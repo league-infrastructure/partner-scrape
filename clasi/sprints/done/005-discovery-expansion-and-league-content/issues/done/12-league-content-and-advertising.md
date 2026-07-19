@@ -1,6 +1,10 @@
 ---
-status: pending
+status: done
 sprint: '005'
+tickets:
+- 005-001
+- 005-002
+- 005-005
 ---
 
 # League content + sidebar advertising
