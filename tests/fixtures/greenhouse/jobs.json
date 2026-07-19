@@ -1,0 +1,63 @@
+{
+  "jobs": [
+    {
+      "id": 8632329001,
+      "title": "Software Engineering Intern",
+      "updated_at": "2026-06-01T09:30:00-07:00",
+      "location": {"name": "San Diego, California, United States"},
+      "absolute_url": "https://boards.greenhouse.io/fixtureco/jobs/8632329001",
+      "content": "<p>Join our engineering team for a summer internship. Wear closed-toe shoes &amp; bring a laptop.</p>",
+      "departments": [{"name": "Engineering"}],
+      "offices": [{"name": "San Diego"}]
+    },
+    {
+      "id": 8632329002,
+      "title": "Senior Software Engineer",
+      "updated_at": "2026-05-15T14:00:00-07:00",
+      "location": {"name": "San Diego, California, United States"},
+      "absolute_url": "https://boards.greenhouse.io/fixtureco/jobs/8632329002",
+      "content": "<p>Full-time senior engineering role, not an internship.</p>",
+      "departments": [{"name": "Engineering"}],
+      "offices": [{"name": "San Diego"}]
+    },
+    {
+      "id": 8632329003,
+      "title": "Data Science Intern",
+      "updated_at": "2026-06-02T10:00:00-05:00",
+      "location": {"name": "Austin, Texas, United States"},
+      "absolute_url": "https://boards.greenhouse.io/fixtureco/jobs/8632329003",
+      "content": "<p>Data science internship based in our Austin office.</p>",
+      "departments": [{"name": "Data"}],
+      "offices": [{"name": "Austin"}]
+    },
+    {
+      "id": 8632329004,
+      "title": "Marketing Intern",
+      "updated_at": "2026-06-03T11:00:00-07:00",
+      "location": {"name": "San Diego, California, United States"},
+      "absolute_url": "https://boards.greenhouse.io/fixtureco/jobs/8632329004",
+      "content": "<p>Support our marketing team with campaigns and social media.</p>",
+      "departments": [{"name": "Marketing"}],
+      "offices": [{"name": "San Diego"}]
+    },
+    {
+      "id": 8632329005,
+      "updated_at": "2026-06-04T12:00:00-07:00",
+      "location": {"name": "San Diego, California, United States"},
+      "absolute_url": "https://boards.greenhouse.io/fixtureco/jobs/8632329005",
+      "content": "<p>This record has no title and must be skipped.</p>",
+      "departments": [{"name": "Engineering"}],
+      "offices": [{"name": "San Diego"}]
+    },
+    {
+      "id": 8632329006,
+      "title": "Bioinformatics Intern",
+      "updated_at": "2026-06-05T13:00:00-07:00",
+      "location": {"name": "La Jolla, California, United States"},
+      "absolute_url": "https://boards.greenhouse.io/fixtureco/jobs/8632329006",
+      "content": "<p>Bioinformatics internship in our La Jolla research office.</p>",
+      "departments": [{"name": "Research"}],
+      "offices": [{"name": "La Jolla"}]
+    }
+  ]
+}
