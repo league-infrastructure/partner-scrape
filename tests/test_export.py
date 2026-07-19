@@ -17,7 +17,7 @@ import pytest
 
 from partner_scrape.export import writer
 from partner_scrape.export.writer import export_opportunities
-from partner_scrape.normalize.run import Opportunity
+from partner_scrape.normalize.run import WORK_BASED_LEARNING_TYPE, Opportunity
 
 #: The exact field set documented in
 #: stem-ecosystem/docs/site-implementation-spec.md's Opportunities
@@ -159,6 +159,68 @@ class TestCurrentUpcomingFilter:
         )
 
         assert [o["title"] for o in payload] == ["Upcoming Event"]
+
+
+class TestInternshipCurrentUpcomingFilter:
+    """`opportunity_type == "Work-based Learning"` records get a
+    non-event-shaped current/upcoming rule (sprint.md Design Rationale,
+    SUC-004): `date_start` is the posting-observed date and routinely in
+    the past, so it must not drive expiry the way it does for an
+    ordinary event."""
+
+    def test_no_deadline_internship_with_past_start_is_included(self, tmp_path):
+        """Would be wrongly excluded under the pre-ticket
+        `date_end or date_start >= today` rule."""
+        site_dir = _site_dir(tmp_path)
+        opp = _opportunity(
+            date_start="2026-06-19T09:00:00-07:00",  # 30 days before `today` below
+            date_end="",
+            opportunity_type=WORK_BASED_LEARNING_TYPE,
+        )
+
+        payload = export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+
+        assert len(payload) == 1
+
+    def test_future_deadline_internship_is_included(self, tmp_path):
+        site_dir = _site_dir(tmp_path)
+        opp = _opportunity(
+            date_start="2026-06-19T09:00:00-07:00",
+            date_end="2026-08-01T09:00:00-07:00",
+            opportunity_type=WORK_BASED_LEARNING_TYPE,
+        )
+
+        payload = export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+
+        assert len(payload) == 1
+
+    def test_past_deadline_internship_is_excluded(self, tmp_path):
+        site_dir = _site_dir(tmp_path)
+        opp = _opportunity(
+            date_start="2026-06-19T09:00:00-07:00",
+            date_end="2026-07-01T09:00:00-07:00",
+            opportunity_type=WORK_BASED_LEARNING_TYPE,
+        )
+
+        payload = export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+
+        assert payload == []
+
+    def test_ordinary_event_with_past_start_and_no_end_is_still_excluded(self, tmp_path):
+        """Guards against a partition bug that accidentally applies the
+        internship rule to `opportunity_type="Out-of-school Programs"`
+        (the default) too -- must keep matching
+        `TestCurrentUpcomingFilter`'s equivalent, non-internship case."""
+        site_dir = _site_dir(tmp_path)
+        opp = _opportunity(
+            date_start="2026-06-19T09:00:00-07:00",
+            date_end="",
+            opportunity_type="Out-of-school Programs",
+        )
+
+        payload = export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+
+        assert payload == []
 
 
 class TestSlugDedup:

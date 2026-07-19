@@ -45,6 +45,14 @@ from partner_scrape.normalize.taxonomy import (
 #: rule derives this field this sprint (issue 04, sprint 2+).
 DEFAULT_OPPORTUNITY_TYPE = "Out-of-school Programs"
 
+#: The site's existing `opportunity_type` enum value
+#: (`stem-ecosystem/docs/site-implementation-spec.md`) reused, unmodified,
+#: as the internship discriminator (sprint 006 Design Rationale: "reuse
+#: the existing opportunity_type field ... instead of adding a new
+#: field"). Exported so `export/writer.py` can key its current/upcoming
+#: branch on the same constant rather than a duplicated string literal.
+WORK_BASED_LEARNING_TYPE = "Work-based Learning"
+
 #: TZ offset embedded on naive display-only ISO datetimes so the site
 #: shows the correct San Diego calendar day -- matches
 #: `dev/export_site.py`'s `TZ`. Every adapter this sprint produces naive
@@ -120,6 +128,17 @@ def _availability(instance: Instance) -> str:
     return ""
 
 
+def _internship_availability(event: Event) -> str:
+    """"Apply by <date>" when `event.end` (the application deadline) is set;
+    "Rolling -- apply anytime" otherwise (sprint.md Design Rationale: reuse
+    `date_start`/`date_end`/`availability` with redefined internship-specific
+    meaning -- most ATS postings expose no reliable deadline, so "still
+    present in the feed" is itself the "still open" signal, not a date)."""
+    if event.end is not None:
+        return f"Apply by {event.end.date().isoformat()}"
+    return "Rolling — apply anytime"
+
+
 def _date_slug_part(instance: Instance) -> str:
     event = instance.event
     if event.start is not None:
@@ -175,6 +194,10 @@ def _to_opportunity(
         else derive_time_of_day(event.start, event.all_day)
     )
 
+    is_internship = event.kind == "internship"
+    availability = _internship_availability(event) if is_internship else _availability(instance)
+    opportunity_type = WORK_BASED_LEARNING_TYPE if is_internship else DEFAULT_OPPORTUNITY_TYPE
+
     return Opportunity(
         slug=slug,
         title=event.title,
@@ -182,13 +205,13 @@ def _to_opportunity(
         partner_id=partner.get("id"),
         description=event.description,
         link=event.registration_url or event.url,
-        availability=_availability(instance),
+        availability=availability,
         date_start=_iso(event.start),
         date_end=_iso(event.end),
         age_grade_level=age_grade_level,
         cost_range=cost_range,
         time_of_day=time_of_day,
-        opportunity_type=DEFAULT_OPPORTUNITY_TYPE,
+        opportunity_type=opportunity_type,
         areas_of_interest=areas_of_interest,
         specific_attention=[],
         financial_support="No",
@@ -235,11 +258,36 @@ def run(
     source_org_names = source_org_names or {}
     partners_by_norm = load_partners(partners_path)
 
-    collapsed = collapse_recurring(events)
+    internship_events: list[Event] = []
+    other_events: list[Event] = []
+    for event in events:
+        (internship_events if event.kind == "internship" else other_events).append(event)
+
+    collapsed = collapse_recurring(other_events)
     deduped = dedup_cross_source(collapsed)
 
+    # kind="internship" Events bypass both collapse_recurring and
+    # dedup_cross_source entirely (sprint.md Design Rationale:
+    # "kind='internship' Events bypass both collapse_recurring and
+    # dedup_cross_source") -- both stages' identity assumptions (same
+    # source+title recurs; same title+date+venue across sources is the
+    # same real-world event) don't hold for distinct job requisitions,
+    # so each internship Event is wrapped 1:1 into its own Instance
+    # instead of being routed through either stage.
+    internship_instances = [
+        Instance(
+            event=event,
+            sources=frozenset({event.source_id}),
+            repeat_count=1,
+            last_seen=(event.start.date() if event.start is not None else None),
+        )
+        for event in internship_events
+    ]
+
+    all_instances = deduped + internship_instances
+
     opportunities: list[Opportunity] = []
-    for instance in deduped:
+    for instance in all_instances:
         org_name = source_org_names.get(instance.event.source_id, instance.event.source_id)
         opportunities.append(_to_opportunity(instance, partners_by_norm, org_name))
     return opportunities

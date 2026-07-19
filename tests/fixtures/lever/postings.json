@@ -1,0 +1,72 @@
+[
+  {
+    "id": "1a2b3c4d-0001-4a1a-9c1a-000000000001",
+    "text": "Robotics Software Associate",
+    "categories": {
+      "location": "San Diego, CA",
+      "commitment": "Internship",
+      "team": "Engineering",
+      "department": "Robotics"
+    },
+    "descriptionPlain": "Join our robotics software team for a hands-on internship building autonomous systems for San Diego Bay operations.",
+    "description": "<p>Join our robotics software team...</p>",
+    "hostedUrl": "https://jobs.lever.co/fixtureco/1a2b3c4d-0001-4a1a-9c1a-000000000001",
+    "applyUrl": "https://jobs.lever.co/fixtureco/1a2b3c4d-0001-4a1a-9c1a-000000000001/apply",
+    "createdAt": 1780329000000
+  },
+  {
+    "id": "1a2b3c4d-0002-4a1a-9c1a-000000000002",
+    "text": "Senior Backend Engineer",
+    "categories": {
+      "location": "San Diego, CA",
+      "commitment": "Full Time Employee",
+      "team": "Engineering",
+      "department": "Backend"
+    },
+    "descriptionPlain": "Full-time senior backend engineering role, not an internship.",
+    "hostedUrl": "https://jobs.lever.co/fixtureco/1a2b3c4d-0002-4a1a-9c1a-000000000002",
+    "applyUrl": "https://jobs.lever.co/fixtureco/1a2b3c4d-0002-4a1a-9c1a-000000000002/apply",
+    "createdAt": 1780000000000
+  },
+  {
+    "id": "1a2b3c4d-0003-4a1a-9c1a-000000000003",
+    "text": "Data Science Intern",
+    "categories": {
+      "location": "Austin, TX",
+      "commitment": "Intern",
+      "team": "Data",
+      "department": "Data Science"
+    },
+    "descriptionPlain": "Data science internship based in our Austin office.",
+    "hostedUrl": "https://jobs.lever.co/fixtureco/1a2b3c4d-0003-4a1a-9c1a-000000000003",
+    "applyUrl": "https://jobs.lever.co/fixtureco/1a2b3c4d-0003-4a1a-9c1a-000000000003/apply",
+    "createdAt": 1780100000000
+  },
+  {
+    "id": "1a2b3c4d-0004-4a1a-9c1a-000000000004",
+    "text": "Marketing Intern",
+    "categories": {
+      "location": "San Diego, CA",
+      "commitment": "Intern",
+      "team": "Marketing",
+      "department": "Marketing"
+    },
+    "descriptionPlain": "Support our marketing team with campaigns and social media.",
+    "hostedUrl": "https://jobs.lever.co/fixtureco/1a2b3c4d-0004-4a1a-9c1a-000000000004",
+    "applyUrl": "https://jobs.lever.co/fixtureco/1a2b3c4d-0004-4a1a-9c1a-000000000004/apply",
+    "createdAt": 1780200000000
+  },
+  {
+    "id": "1a2b3c4d-0005-4a1a-9c1a-000000000005",
+    "categories": {
+      "location": "San Diego, CA",
+      "commitment": "Internship",
+      "team": "Engineering",
+      "department": "Engineering"
+    },
+    "descriptionPlain": "This record has no text/title and must be skipped.",
+    "hostedUrl": "https://jobs.lever.co/fixtureco/1a2b3c4d-0005-4a1a-9c1a-000000000005",
+    "applyUrl": "https://jobs.lever.co/fixtureco/1a2b3c4d-0005-4a1a-9c1a-000000000005/apply",
+    "createdAt": 1780300000000
+  }
+]

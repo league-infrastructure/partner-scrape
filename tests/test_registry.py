@@ -119,6 +119,10 @@ class TestLoadSources:
             "birch-aquarium",
             "fleet-science-center",
             "jointheleague",
+            "boundlessbio",
+            "gossamerbio",
+            "elementbiosciences",
+            "shieldai",
         }
 
 
@@ -255,3 +259,86 @@ class TestRealJoinTheLeagueSource:
         # class's other tests).
         sources = {s.source_id: s for s in load_active_sources()}
         assert "jointheleague" in sources
+
+
+class TestRealCompanySeedSources:
+    """The four real company sources (ticket 006, SUC-007): three
+    Greenhouse-backed, one Lever-backed -- ``ADAPTERS`` resolution and
+    config-key correctness proven via ``SourceConfig.from_toml`` +
+    ``load_active_sources()``, entirely offline (no network call)."""
+
+    def test_three_greenhouse_and_one_lever_company_source_are_enabled(self):
+        sources = {s.source_id: s for s in load_active_sources()}
+
+        boundlessbio = sources["boundlessbio"]
+        assert boundlessbio.org_name == "Boundless Bio"
+        assert boundlessbio.adapter_type == "greenhouse"
+        assert boundlessbio.enabled is True
+
+        gossamerbio = sources["gossamerbio"]
+        assert gossamerbio.org_name == "Gossamer Bio"
+        assert gossamerbio.adapter_type == "greenhouse"
+        assert gossamerbio.enabled is True
+
+        elementbiosciences = sources["elementbiosciences"]
+        assert elementbiosciences.org_name == "Element Biosciences"
+        assert elementbiosciences.adapter_type == "greenhouse"
+        assert elementbiosciences.enabled is True
+
+        shieldai = sources["shieldai"]
+        assert shieldai.org_name == "Shield AI"
+        assert shieldai.adapter_type == "lever"
+        assert shieldai.enabled is True
+
+    def test_greenhouse_sources_carry_the_confirmed_live_board_tokens(self):
+        sources = {s.source_id: s for s in load_active_sources()}
+
+        assert sources["boundlessbio"].config["board_token"] == "boundlessbio"
+        assert sources["gossamerbio"].config["board_token"] == "gossamerbio"
+        assert (
+            sources["elementbiosciences"].config["board_token"] == "elementbiosciences"
+        )
+
+    def test_lever_source_carries_the_confirmed_live_company_slug(self):
+        sources = {s.source_id: s for s in load_active_sources()}
+        assert sources["shieldai"].config["company"] == "shieldai"
+
+    def test_la_jolla_san_diego_mixed_boards_override_location_keywords(self):
+        # Boundless Bio and Element Biosciences are both La Jolla/San
+        # Diego -- the default ["San Diego"] substring match alone would
+        # miss a posting whose ATS location text reads "La Jolla, CA".
+        sources = {s.source_id: s for s in load_active_sources()}
+
+        assert sources["boundlessbio"].config["location_keywords"] == [
+            "San Diego",
+            "La Jolla",
+        ]
+        assert sources["elementbiosciences"].config["location_keywords"] == [
+            "San Diego",
+            "La Jolla",
+        ]
+
+    def test_gossamerbio_and_shieldai_use_the_default_location_keywords(self):
+        # Every posting observed live during planning was already
+        # labeled "San Diego" -- no override needed, matching
+        # ats_filters.DEFAULT_LOCATION_KEYWORDS (["San Diego"]).
+        sources = {s.source_id: s for s in load_active_sources()}
+
+        assert "location_keywords" not in sources["gossamerbio"].config
+        assert "location_keywords" not in sources["shieldai"].config
+
+    def test_each_source_records_how_and_when_it_was_verified_live(self):
+        # Mirrors sprint 005's discovered_via convention (this ticket's
+        # Acceptance Criteria).
+        sources = {s.source_id: s for s in load_active_sources()}
+
+        for source_id in ("boundlessbio", "gossamerbio", "elementbiosciences", "shieldai"):
+            discovered_via = sources[source_id].acquisition_policy["discovered_via"]
+            assert "sprint 006 planning" in discovered_via
+
+    def test_boundless_bio_is_enabled_despite_zero_open_postings_at_planning_time(self):
+        # SUC-007's own Acceptance Criteria: a company with zero
+        # currently-open matching postings is registered and enabled
+        # anyway -- a legitimate zero-result state, not an error.
+        sources = {s.source_id: s for s in load_active_sources()}
+        assert sources["boundlessbio"].enabled is True

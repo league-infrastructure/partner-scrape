@@ -1,0 +1,24 @@
+{
+  "jobs": [
+    {
+      "id": 9101,
+      "title": "Software Engineering Intern",
+      "updated_at": "2026-06-01T09:30:00-07:00",
+      "location": {"name": "San Diego, California, United States"},
+      "absolute_url": "https://boards.greenhouse.io/fixturerobotics/jobs/9101",
+      "content": "<p>Summer internship building robotics software.</p>",
+      "departments": [{"name": "Engineering"}],
+      "offices": [{"name": "San Diego"}]
+    },
+    {
+      "id": 9102,
+      "title": "Senior Robotics Engineer",
+      "updated_at": "2026-05-15T14:00:00-07:00",
+      "location": {"name": "San Diego, California, United States"},
+      "absolute_url": "https://boards.greenhouse.io/fixturerobotics/jobs/9102",
+      "content": "<p>Full-time role, not an internship -- must be filtered out.</p>",
+      "departments": [{"name": "Engineering"}],
+      "offices": [{"name": "San Diego"}]
+    }
+  ]
+}

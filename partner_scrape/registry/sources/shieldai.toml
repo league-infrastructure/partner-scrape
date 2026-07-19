@@ -1,0 +1,27 @@
+# Shield AI -- San Diego HQ defense/AI company, Lever-backed careers
+# board. Company slug "shieldai" was confirmed live during sprint 006
+# planning (HTTP 200, valid JSON, 8 postings -- see sprint.md's
+# Architecture table). This ticket's own implementation pass could not
+# re-run that live check itself (no network access in the execution/
+# test environment, per this project's offline/hermetic test
+# convention) -- it re-seeds the planning pass's confirmed slug as
+# static config unchanged. Operator should re-confirm the board is
+# still reachable (``curl -s https://api.lever.co/v0/postings/shieldai
+# ?mode=json``) before fully trusting production output.
+#
+# No location_keywords override: Shield AI's San Diego HQ postings are
+# expected to use "San Diego" in their location text, matching the
+# default keyword; revisit if a future run shows local postings being
+# missed.
+
+org_name = "Shield AI"
+adapter_type = "lever"
+enabled = true
+
+[config]
+company = "shieldai"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "sprint 006 planning (live Lever company-slug verification)"
