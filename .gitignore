@@ -35,3 +35,7 @@ scrapy.log
 # OS
 .DS_Store
 Thumbs.db
+# dotconfig — assembled env files contain decrypted secrets
+.env
+.env.*
+!.env.example
