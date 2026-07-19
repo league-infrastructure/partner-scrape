@@ -1,0 +1,133 @@
+"""Tests for partner_scrape.model: Event, provenance, and identity keys."""
+
+from datetime import datetime
+
+import pytest
+
+from partner_scrape.model import Event, Provenance, identity_key, normalize_title, same_record
+
+
+class TestEventDefaults:
+    def test_kind_defaults_to_event(self):
+        event = Event()
+        assert event.kind == "event"
+
+    def test_content_fields_have_sane_empty_defaults(self):
+        event = Event()
+        assert event.title == ""
+        assert event.description == ""
+        assert event.start is None
+        assert event.end is None
+        assert event.all_day is False
+        assert event.location == ""
+        assert event.latitude is None
+        assert event.longitude is None
+        assert event.cost == ""
+        assert event.registration_url == ""
+        assert event.image_url == ""
+        assert event.categories == []
+        assert event.tags == []
+        assert event.field_provenance == {}
+
+    def test_kind_can_be_program_or_internship(self):
+        assert Event(kind="program").kind == "program"
+        assert Event(kind="internship").kind == "internship"
+
+    def test_default_list_fields_are_not_shared_between_instances(self):
+        a = Event()
+        b = Event()
+        a.categories.append("stem")
+        assert b.categories == []
+
+
+class TestEventSet:
+    def test_set_updates_value_and_provenance(self):
+        event = Event()
+        event.set("title", "Robotics Night", source="tec_rest", confidence=0.95)
+
+        assert event.title == "Robotics Night"
+        assert event.field_provenance["title"] == Provenance(source="tec_rest", confidence=0.95)
+
+    def test_set_multiple_fields_records_provenance_independently(self):
+        event = Event()
+        event.set("title", "Robotics Night", source="tec_rest", confidence=0.95)
+        event.set("cost", "Free", source="tec_rest", confidence=0.6)
+
+        assert set(event.field_provenance.keys()) == {"title", "cost"}
+        assert event.field_provenance["cost"].confidence == 0.6
+
+    def test_unset_fields_have_no_provenance_entry(self):
+        event = Event()
+        event.set("title", "Robotics Night", source="tec_rest", confidence=0.95)
+
+        assert "description" not in event.field_provenance
+        assert "cost" not in event.field_provenance
+
+    def test_set_unknown_field_raises(self):
+        event = Event()
+        with pytest.raises(AttributeError):
+            event.set("not_a_real_field", "x", source="tec_rest", confidence=1.0)
+
+
+class TestNormalizeTitle:
+    def test_lowercases_and_strips_punctuation(self):
+        assert normalize_title("Robotics Night!!") == "robotics night"
+
+    def test_collapses_whitespace(self):
+        assert normalize_title("  Robotics   Night  ") == "robotics night"
+
+    def test_handles_mixed_punctuation_and_case(self):
+        assert normalize_title("STEM Fair: Grades 6-8 (Free!)") == "stem fair grades 68 free"
+
+
+class TestIdentityKey:
+    def test_uses_source_and_external_id_when_present(self):
+        event = Event(source_id="tlc", external_id="evt-123", title="Whatever")
+        assert identity_key(event) == ("tlc", "evt-123")
+
+    def test_falls_back_to_normalized_title_and_start_date_without_external_id(self):
+        event = Event(
+            source_id="tlc",
+            external_id="",
+            title="Beach Cleanup!",
+            start=datetime(2026, 8, 1, 9, 0),
+        )
+        assert identity_key(event) == ("tlc", "beach cleanup", datetime(2026, 8, 1).date())
+
+    def test_fallback_with_no_start_uses_none_for_date(self):
+        event = Event(source_id="tlc", external_id="", title="Beach Cleanup!")
+        assert identity_key(event) == ("tlc", "beach cleanup", None)
+
+    def test_event_identity_key_method_matches_module_function(self):
+        event = Event(source_id="tlc", external_id="evt-123")
+        assert event.identity_key() == identity_key(event)
+
+
+class TestSameRecord:
+    def test_same_identity_key_is_same_record(self):
+        a = Event(source_id="tlc", external_id="evt-123", title="A")
+        b = Event(source_id="tlc", external_id="evt-123", title="A (updated)")
+        assert same_record(a, b) is True
+
+    def test_different_identity_key_is_not_same_record(self):
+        a = Event(source_id="tlc", external_id="evt-123")
+        b = Event(source_id="tlc", external_id="evt-456")
+        assert same_record(a, b) is False
+
+    def test_fallback_identity_matches_on_title_and_date(self):
+        a = Event(
+            source_id="tlc",
+            title="Beach Cleanup",
+            start=datetime(2026, 8, 1, 9, 0),
+        )
+        b = Event(
+            source_id="tlc",
+            title="beach cleanup!!",
+            start=datetime(2026, 8, 1, 15, 0),
+        )
+        assert same_record(a, b) is True
+
+    def test_fallback_identity_differs_on_different_dates(self):
+        a = Event(source_id="tlc", title="Beach Cleanup", start=datetime(2026, 8, 1))
+        b = Event(source_id="tlc", title="Beach Cleanup", start=datetime(2026, 8, 2))
+        assert same_record(a, b) is False
