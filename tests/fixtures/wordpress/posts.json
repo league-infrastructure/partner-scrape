@@ -1,0 +1,26 @@
+[
+  {
+    "id": 101,
+    "date": "2026-07-01T10:00:00",
+    "link": "https://example.org/summer-camp-registration-open/",
+    "title": {"rendered": "Summer Camp Registration Is Open!"},
+    "excerpt": {"rendered": "<p>Sign your kids up for our STEM summer camp &#8211; spots are limited.</p>"},
+    "content": {"rendered": "<p>Sign your kids up for our STEM summer camp &#8211; spots are limited. Full details on ages, dates, and pricing are below.</p>"}
+  },
+  {
+    "id": 102,
+    "date": "2026-06-15T08:30:00",
+    "link": "https://example.org/volunteer-spotlight/",
+    "title": {"rendered": "Volunteer Spotlight: Meet Dr. Rivera"},
+    "excerpt": {"rendered": ""},
+    "content": {"rendered": "<p>This month we&#8217;re highlighting one of our longtime volunteers.</p>"}
+  },
+  {
+    "id": 103,
+    "date": "2026-06-01T09:00:00",
+    "link": "https://example.org/untitled-draft/",
+    "title": {"rendered": ""},
+    "excerpt": {"rendered": "<p>This record has no title and must be skipped.</p>"},
+    "content": {"rendered": "<p>This record has no title and must be skipped.</p>"}
+  }
+]
