@@ -1,5 +1,10 @@
 ---
-status: pending
+status: done
+sprint: '001'
+tickets:
+- 001-006
+- 001-007
+- 001-008
 ---
 
 # Normalization, cross-source dedup, and site export contract

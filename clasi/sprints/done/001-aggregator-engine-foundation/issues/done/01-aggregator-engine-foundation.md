@@ -1,5 +1,11 @@
 ---
-status: pending
+status: done
+sprint: '001'
+tickets:
+- 001-001
+- 001-002
+- 001-003
+- 001-008
 ---
 
 # Rearchitect into an aggregator engine (foundation)
