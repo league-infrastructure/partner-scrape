@@ -1,6 +1,8 @@
 ---
-status: pending
+status: done
 sprint: '004'
+tickets:
+- 004-004
 ---
 
 # Self-updating scheduled loop + deploy
