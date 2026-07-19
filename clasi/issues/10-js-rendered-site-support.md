@@ -1,5 +1,6 @@
 ---
 status: pending
+sprint: '003'
 ---
 
 # JS-rendered site support (headless fetch)

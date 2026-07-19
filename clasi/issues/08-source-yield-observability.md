@@ -1,5 +1,6 @@
 ---
 status: pending
+sprint: '004'
 ---
 
 # Source-yield observability + zero-yield alerts

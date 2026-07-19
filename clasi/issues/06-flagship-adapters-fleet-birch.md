@@ -1,5 +1,6 @@
 ---
 status: pending
+sprint: '003'
 ---
 
 # Flagship source adapters: Fleet Science Center + Birch Aquarium
