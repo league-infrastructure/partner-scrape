@@ -19,6 +19,7 @@ from partner_scrape.adapters.base import (
     get_adapter,
     run,
 )
+from partner_scrape.adapters.generic_html import GenericHtmlAdapter
 from partner_scrape.adapters.ical import ICalAdapter
 from partner_scrape.adapters.tec import TecRestAdapter
 from partner_scrape.adapters.wordpress import WordPressRestAdapter
@@ -26,6 +27,7 @@ from partner_scrape.adapters.wordpress import WordPressRestAdapter
 ADAPTERS["tec_rest"] = TecRestAdapter
 ADAPTERS["wp_rest"] = WordPressRestAdapter
 ADAPTERS["ical"] = ICalAdapter
+ADAPTERS["generic_html"] = GenericHtmlAdapter
 
 __all__ = [
     "Adapter",
@@ -38,4 +40,5 @@ __all__ = [
     "TecRestAdapter",
     "WordPressRestAdapter",
     "ICalAdapter",
+    "GenericHtmlAdapter",
 ]
