@@ -1,6 +1,9 @@
 ---
-status: pending
+status: done
 sprint: '003'
+tickets:
+- 003-001
+- 003-005
 ---
 
 # JS-rendered site support (headless fetch)
