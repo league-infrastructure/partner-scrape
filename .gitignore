@@ -39,3 +39,7 @@ Thumbs.db
 .env
 .env.*
 !.env.example
+
+# CLASI local state
+.clasi/.clasi.db
+.clasi/log/
