@@ -42,7 +42,7 @@ from typing import Any, Callable, Protocol, Sequence
 
 from partner_scrape.adapters import run as run_adapter
 from partner_scrape.config import get_site_dir
-from partner_scrape.export import export_opportunities
+from partner_scrape.export import export_ads, export_opportunities, load_ad_configs
 from partner_scrape.fetch import Fetcher, PlaywrightFetcher, PoliteFetcher
 from partner_scrape.model import Event
 from partner_scrape.normalize import run as normalize_run
@@ -157,6 +157,7 @@ def run(
     registry_dir: str | Path | None = None,
     site_dir: str | Path | None = None,
     *,
+    ads_dir: str | Path | None = None,
     fetcher: Fetcher | None = None,
     headless_fetcher_factory: Callable[[], Fetcher] | None = None,
     enrichers: Sequence[Enricher] = (),
@@ -179,6 +180,12 @@ def run(
             Defaults to `Config.get_site_dir()` (`../stem-ecosystem`, or
             `$SITE_DIR`) when omitted. Tests should always pass an
             explicit `tmp_path`-based directory here.
+        ads_dir: directory of hand-authored ad-config TOML files (Ad
+            Content Export, sprint 005 ticket 005). Defaults to the real
+            seed ad registry (`partner_scrape/registry/ads/`) when
+            omitted -- see `export.ads.load_ad_configs`. Tests that don't
+            care about the exact seeded ad content may pass an explicit
+            fixture directory here.
         fetcher: the `Fetcher` each source flagged `static` (the
             registry default, `acquisition_policy.fetch_strategy` unset
             or `"static"`) retrieves raw content through. Defaults to a
@@ -222,12 +229,16 @@ def run(
             for determinism.
         dry_run: when `True`, compute and return the would-be-written
             export payload without touching disk (`export_opportunities`
-            `dry_run`).
+            and `export_ads` both respect this the same way).
 
     Returns:
         The list of opportunity dicts that were (or, for `dry_run`,
         would have been) written -- `export_opportunities`'s return
-        value, passed through unchanged.
+        value, passed through unchanged. `export_ads()` is also called
+        (writing/returning `ads.json`'s payload as a side effect) but its
+        return value is not part of `run()`'s own return value -- this
+        keeps every existing caller/test that only cares about
+        opportunities unaffected by this addition.
     """
     sources = load_active_sources(Path(registry_dir) if registry_dir is not None else None)
 
@@ -289,9 +300,22 @@ def run(
     )
     active_reporter.record_opportunities(opportunities)
 
-    return export_opportunities(
+    result = export_opportunities(
         opportunities,
         site_dir=resolved_site_dir,
         today=today,
         dry_run=dry_run,
     )
+
+    # Ad Content Export (sprint 005 ticket 005): one more "write a site
+    # data-contract file" sequencing step, structurally identical to the
+    # Site Export call above -- see sprint.md's self-review note on
+    # Pipeline's fan-out. Additive: existing callers/tests that only
+    # inspect run()'s own return value are unaffected.
+    export_ads(
+        load_ad_configs(Path(ads_dir) if ads_dir is not None else None),
+        site_dir=resolved_site_dir,
+        dry_run=dry_run,
+    )
+
+    return result

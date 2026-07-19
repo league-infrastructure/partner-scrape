@@ -1,0 +1,4 @@
+headline = "Fixture Ad One"
+body = "Fixture pitch text for ad one."
+link = "https://fixture-advertiser-one.example/"
+logo_src = "fixture_ad_one.png"
