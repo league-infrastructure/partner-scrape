@@ -313,6 +313,147 @@ class TestEnricherHook:
         assert len(payload) == 2
 
 
+@dataclass
+class SpyReporter:
+    """A spy `Reporter` double -- records every call it receives
+    verbatim, no computation -- proving ticket 004-001's two hook call
+    sites actually fire, with the right data, over a real
+    `pipeline.run()` call (sprint.md SUC-018's own acceptance
+    criterion)."""
+
+    source_calls: list[tuple[str, str, list[Event], Exception | None]] = field(
+        default_factory=list
+    )
+    opportunities_calls: list[list[object]] = field(default_factory=list)
+
+    def record_source(self, source_id, org_name, events, error=None):
+        self.source_calls.append((source_id, org_name, list(events), error))
+
+    def record_opportunities(self, opportunities):
+        self.opportunities_calls.append(list(opportunities))
+
+
+class TestReporterHook:
+    """Ticket 004-001: the `Reporter` hook is exercised the same way
+    `Enricher` already is -- a real `pipeline.run()` call over the
+    existing `e2e_registry` fixtures (which include `brokensource.toml`,
+    the deliberately-failing source), with a spy double asserting both
+    call sites fire with correct data."""
+
+    def test_reporter_defaults_to_none_and_is_a_no_op(self, tmp_path):
+        # No reporter passed at all -- proves the new parameter is
+        # truly additive/optional, same shape as TestEnricherHook's own
+        # "defaults to empty and is a no-op" case above.
+        site_dir = _site_dir(tmp_path)
+        fetcher = _fixture_fetcher()
+
+        payload = run(
+            registry_dir=E2E_REGISTRY_DIR, site_dir=site_dir, fetcher=fetcher, today=TODAY
+        )
+
+        assert len(payload) == 2
+
+    def test_record_source_called_once_per_active_source_with_correct_data(self, tmp_path):
+        site_dir = _site_dir(tmp_path)
+        fetcher = _fixture_fetcher()
+        spy = SpyReporter()
+
+        run(
+            registry_dir=E2E_REGISTRY_DIR,
+            site_dir=site_dir,
+            fetcher=fetcher,
+            reporter=spy,
+            today=TODAY,
+        )
+
+        # E2E_REGISTRY_DIR has exactly three active sources: brokensource
+        # (fails), coastalrootsfarm, thelivingcoast.
+        called_source_ids = {source_id for source_id, *_ in spy.source_calls}
+        assert called_source_ids == {"brokensource", "coastalrootsfarm", "thelivingcoast"}
+        assert len(spy.source_calls) == 3
+
+        by_source = {source_id: (org, events, error) for source_id, org, events, error in spy.source_calls}
+
+        # Success branch: real events, no error.
+        coastal_org, coastal_events, coastal_error = by_source["coastalrootsfarm"]
+        assert coastal_error is None
+        assert coastal_org == "Coastal Roots Farm"
+        assert len(coastal_events) == 2  # tide pool + spring planting (see TestEnricherHook)
+        assert all(isinstance(e, Event) for e in coastal_events)
+
+        living_org, living_events, living_error = by_source["thelivingcoast"]
+        assert living_error is None
+        assert len(living_events) == 4  # tide pool dup + 3 recurring story time occurrences
+
+        # Failure-isolation branch: [] + the caught exception, run still
+        # continues -- proves the isolated exception is reported, not
+        # swallowed silently or allowed to abort the run.
+        broken_org, broken_events, broken_error = by_source["brokensource"]
+        assert broken_events == []
+        assert isinstance(broken_error, Exception)
+
+    def test_record_opportunities_called_once_with_final_opportunity_list(self, tmp_path):
+        site_dir = _site_dir(tmp_path)
+        fetcher = _fixture_fetcher()
+        spy = SpyReporter()
+
+        payload = run(
+            registry_dir=E2E_REGISTRY_DIR,
+            site_dir=site_dir,
+            fetcher=fetcher,
+            reporter=spy,
+            today=TODAY,
+        )
+
+        assert len(spy.opportunities_calls) == 1
+        reported_opportunities = spy.opportunities_calls[0]
+        # normalize_run()'s own output includes "Spring Planting Day"
+        # (a past event) -- export_opportunities()'s current/upcoming
+        # filter is what drops it to the final 2-record payload, and
+        # that filter runs *after* this hook fires (sprint.md: "before
+        # export_opportunities() strips .sources"). So the reported
+        # list is a superset of payload's titles, not an exact match.
+        payload_titles = {r["title"] for r in payload}
+        reported_titles = {opp.title for opp in reported_opportunities}
+        assert payload_titles <= reported_titles
+        assert "Spring Planting Day" in reported_titles
+
+        # .sources is still present at report time (export strips it
+        # only afterward) -- proves the hook fires before the strip.
+        for opp in reported_opportunities:
+            assert hasattr(opp, "sources")
+            assert opp.sources  # non-empty frozenset of contributing source_ids
+
+    def test_a_source_that_raises_still_reports_and_does_not_abort_the_run(self, tmp_path):
+        # brokensource.toml is alphabetically first (see
+        # TestLimitAndSourceFilters' own comment) -- limit=1 runs only
+        # it, isolating the failure-reporting assertion from the two
+        # healthy sources entirely.
+        site_dir = _site_dir(tmp_path)
+        fetcher = _fixture_fetcher()
+        spy = SpyReporter()
+
+        payload = run(
+            registry_dir=E2E_REGISTRY_DIR,
+            site_dir=site_dir,
+            fetcher=fetcher,
+            reporter=spy,
+            limit=1,
+            today=TODAY,
+        )
+
+        assert payload == []  # run continues, produces empty (valid) output
+        assert len(spy.source_calls) == 1
+        source_id, _org, events, error = spy.source_calls[0]
+        assert source_id == "brokensource"
+        assert events == []
+        assert isinstance(error, Exception)
+        # And record_opportunities still fires exactly once, with an
+        # empty list -- the run completed its full sequence, it just
+        # had nothing to normalize.
+        assert spy.opportunities_calls == [[]]
+
+
 class TestNoNetworkAccess:
     def test_fetcher_only_ever_serves_known_fixture_urls(self, tmp_path):
         site_dir = _site_dir(tmp_path)
