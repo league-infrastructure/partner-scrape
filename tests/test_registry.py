@@ -100,6 +100,7 @@ class TestLoadSources:
             "cleansd",
             "oceanconnectors",
             "visitcmod",
+            "birch-aquarium",
         }
 
 
@@ -164,3 +165,24 @@ class TestRealSeedRegistry:
         assert sources["visitcmod"].config["api_base"] == (
             "https://visitcmod.org/wp-json/tribe/events/v1/events/"
         )
+
+
+class TestRealBirchAquariumSource:
+    """The real birch-aquarium.toml Localist source (ticket 002)."""
+
+    def test_loads_as_enabled_localist_source(self):
+        sources = {s.source_id: s for s in load_active_sources()}
+
+        birch = sources["birch-aquarium"]
+        assert birch.org_name == "Birch Aquarium at Scripps"
+        assert birch.adapter_type == "localist"
+        assert birch.enabled is True
+
+    def test_config_matches_live_confirmed_values(self):
+        sources = {s.source_id: s for s in load_active_sources()}
+
+        birch = sources["birch-aquarium"]
+        assert birch.config["api_base"] == "https://calendar.ucsd.edu/api/2/events"
+        assert birch.config["group_id"] == "49845193640602"
+        assert birch.config["days"] == 180
+        assert birch.config["pp"] == 50

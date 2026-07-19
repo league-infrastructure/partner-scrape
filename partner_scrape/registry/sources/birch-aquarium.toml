@@ -1,0 +1,24 @@
+# Birch Aquarium at Scripps -- UCSD Localist calendar API, filtered to
+# Birch's group_id. Endpoint and group_id confirmed live during sprint
+# 003 planning (see sprint.md's Architecture > Localist Adapter):
+# id=52950294007943 ("Shark Summer") was observed as 9 separate
+# same-id day-rows across a days=180 window, which the localist
+# adapter's extract() dedupes within each fetched page.
+
+org_name = "Birch Aquarium at Scripps"
+adapter_type = "localist"
+enabled = true
+
+[config]
+api_base = "https://calendar.ucsd.edu/api/2/events"
+group_id = "49845193640602"
+# Generous query window (sprint.md Open Question 3): Site Export's own
+# current/upcoming filter does the real date-relevance trimming
+# downstream, matching TEC's start_date=now-then-filter precedent.
+days = 180
+pp = 50
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "sprint 003 planning (live UCSD Localist API investigation)"
