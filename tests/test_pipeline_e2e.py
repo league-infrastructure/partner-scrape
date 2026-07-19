@@ -27,7 +27,7 @@ import json
 import shutil
 import sys
 from dataclasses import dataclass, field
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
 
 import pytest
@@ -35,6 +35,7 @@ import pytest
 from partner_scrape.fetch import PlaywrightFetcher, PoliteFetcher, Throttle
 from partner_scrape.fetch.fetcher import FetchResponse
 from partner_scrape.model import Event
+from partner_scrape.observability import YieldReporter, load_snapshot, save_snapshot
 from partner_scrape.pipeline import run
 
 FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures"
@@ -452,6 +453,76 @@ class TestReporterHook:
         # empty list -- the run completed its full sequence, it just
         # had nothing to normalize.
         assert spy.opportunities_calls == [[]]
+
+
+class TestYieldReporterEndToEnd:
+    """Ticket 004-002's own end-to-end acceptance criterion (sprint.md
+    SUC-018): a real `YieldReporter` -- not the spy `SpyReporter` above
+    -- run twice over the same fixture registry, second run with
+    coastalrootsfarm's fixture responses swapped to a real, well-formed
+    zero-event TEC page, must flag that source zero-yield in the second
+    run's report. This is the exact Fleet/Birch safety net sprint.md's
+    Goals section names: a previously-productive source silently going
+    to zero must be visible without an operator comparing runs by hand.
+    """
+
+    def test_second_run_flags_a_previously_productive_source_as_zero_yield(self, tmp_path):
+        site_dir = _site_dir(tmp_path)
+        first_now = datetime(2026, 7, 19, 8, 0)
+        second_now = datetime(2026, 7, 26, 8, 0)
+
+        # First run: normal fixture responses -- coastalrootsfarm finds
+        # its usual 2 events (tide pool + spring planting; see
+        # TestReporterHook's own assertion of this count above).
+        first_reporter = YieldReporter()
+        run(
+            registry_dir=E2E_REGISTRY_DIR,
+            site_dir=site_dir,
+            fetcher=_fixture_fetcher(),
+            reporter=first_reporter,
+            today=TODAY,
+        )
+        first_report = first_reporter.report(previous_snapshot={}, now=first_now)
+
+        by_id_1 = {s.source_id: s for s in first_report.sources}
+        assert by_id_1["coastalrootsfarm"].found == 2
+        assert by_id_1["coastalrootsfarm"].zero_yield is False
+
+        snapshot_path = tmp_path / "yield-history.json"
+        save_snapshot(snapshot_path, first_report)
+
+        # Second run: coastalrootsfarm's fixture responses swapped to a
+        # real, well-formed zero-event TEC page (not the fetch failure
+        # brokensource.toml exercises) -- a genuine "found nothing this
+        # week" run, while the other two sources are unchanged.
+        empty_tec_body = json.dumps({"total": 0, "total_pages": 0, "events": []})
+        second_fetcher = _fixture_fetcher()
+        second_fetcher.responses[TEC_PROBE_URL] = _response(empty_tec_body)
+        second_fetcher.responses[TEC_PAGE1_URL] = _response(empty_tec_body)
+
+        second_reporter = YieldReporter()
+        run(
+            registry_dir=E2E_REGISTRY_DIR,
+            site_dir=site_dir,
+            fetcher=second_fetcher,
+            reporter=second_reporter,
+            today=TODAY,
+        )
+        previous_snapshot = load_snapshot(snapshot_path)
+        second_report = second_reporter.report(previous_snapshot=previous_snapshot, now=second_now)
+
+        by_id_2 = {s.source_id: s for s in second_report.sources}
+        coastal = by_id_2["coastalrootsfarm"]
+        assert coastal.found == 0
+        assert coastal.previous_found == 2
+        assert coastal.zero_yield is True
+        # A genuine empty response, not an adapter failure -- distinct
+        # from brokensource's error-carrying SourceYield.
+        assert coastal.error is None
+
+        # The other two sources are unaffected by coastalrootsfarm's
+        # swap -- proves per-source isolation in the report too.
+        assert by_id_2["thelivingcoast"].zero_yield is False
 
 
 class TestNoNetworkAccess:
