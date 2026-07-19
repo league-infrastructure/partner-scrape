@@ -16,6 +16,24 @@ from pathlib import Path
 import pytest
 
 from partner_scrape import cli
+from partner_scrape.enrich.enricher import LLMEnricher
+from partner_scrape.enrich.llm_client import AnthropicLLMClient
+
+
+@pytest.fixture(autouse=True)
+def _cache_dir(tmp_path, monkeypatch):
+    """Point SCRAPE_CACHE_DIR at a tmp_path for every test in this file.
+
+    `cli.main()` instantiates a real `EnrichmentCache()` by default
+    (enrichment-on is the new default, ticket 006) *before* the
+    monkeypatched `cli.run` is ever reached -- `EnrichmentCache()`
+    reads `SCRAPE_CACHE_DIR` eagerly at construction (see
+    `config.get_scrape_cache_dir`'s "no sane default" `RuntimeError`),
+    so every test in this file needs it set even though none of them
+    ever touch the real configured cache directory.
+    """
+    monkeypatch.setenv("SCRAPE_CACHE_DIR", str(tmp_path))
+    return tmp_path
 
 
 class TestArgumentWiring:
@@ -31,6 +49,7 @@ class TestArgumentWiring:
         exit_code = cli.main([])
 
         assert exit_code == 0
+        enrichers = captured.pop("enrichers")
         assert captured == {
             "registry_dir": None,
             "site_dir": None,
@@ -38,6 +57,13 @@ class TestArgumentWiring:
             "limit": None,
             "dry_run": False,
         }
+        # Enrichment defaults to on (sprint.md Open Question 5): a real
+        # LLMEnricher(AnthropicLLMClient(), EnrichmentCache()) is built
+        # and passed through, with no --no-enrich flag given.
+        assert len(enrichers) == 1
+        [enricher] = enrichers
+        assert isinstance(enricher, LLMEnricher)
+        assert isinstance(enricher.llm_client, AnthropicLLMClient)
 
     def test_flags_are_parsed_and_forwarded(self, monkeypatch, tmp_path):
         captured = {}
@@ -88,6 +114,44 @@ class TestArgumentWiring:
 
         out = capsys.readouterr().out
         assert "dry run" in out.lower()
+
+
+class TestNoEnrichFlag:
+    def test_no_enrich_passes_an_empty_enrichers_tuple(self, monkeypatch):
+        captured = {}
+
+        def fake_run(**kwargs):
+            captured.update(kwargs)
+            return []
+
+        monkeypatch.setattr(cli, "run", fake_run)
+
+        exit_code = cli.main(["--no-enrich"])
+
+        assert exit_code == 0
+        # Preserves sprint 001's exact original enrichers=() behavior --
+        # the escape hatch from real Anthropic API cost/ANTHROPIC_API_KEY.
+        assert captured["enrichers"] == ()
+
+    def test_no_enrich_never_constructs_an_anthropic_client(self, monkeypatch):
+        def _boom(*args, **kwargs):
+            raise AssertionError(
+                "AnthropicLLMClient must not be constructed under --no-enrich"
+            )
+
+        monkeypatch.setattr(cli, "AnthropicLLMClient", _boom)
+        monkeypatch.setattr(cli, "run", lambda **kwargs: [])
+
+        exit_code = cli.main(["--no-enrich"])  # must not raise
+
+        assert exit_code == 0
+
+    def test_no_enrich_flag_appears_in_help_text(self, capsys):
+        with pytest.raises(SystemExit):
+            cli.main(["--help"])
+
+        out = capsys.readouterr().out
+        assert "--no-enrich" in out
 
 
 class TestHelp:

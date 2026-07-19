@@ -1,0 +1,13 @@
+# Synthetic generic_html fixture for ticket 006's end-to-end
+# discovery+enrichment test -- not a real organization's site. Reuses
+# ticket 001/002's own sitemap-diff and extraction-ladder fixtures
+# (tests/fixtures/sitemaps/events_sitemap.xml, tests/fixtures/html/)
+# rather than authoring a third fixture set for the same site_url --
+# see this ticket's Implementation Plan Approach.
+
+org_name = "Example STEM Org"
+adapter_type = "generic_html"
+enabled = true
+
+[config]
+site_url = "https://example.org"

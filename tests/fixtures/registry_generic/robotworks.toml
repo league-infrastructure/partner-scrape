@@ -1,0 +1,16 @@
+# Synthetic tec_rest fixture standing in for a sprint-001-style
+# structured source, run in the same registry as this ticket's new
+# generic_html source (exampleorg.toml) -- not a real organization's
+# endpoint. Its own event title ("Robotics Workshop") is deliberately
+# distinct from every generic_html fixture event's title so cross-source
+# dedup (normalize/dedup.py, keyed on title+date+venue) never merges
+# them -- this test's job is proving both extraction paths reach export
+# independently, not exercising dedup (sprint 001's own e2e test already
+# covers that).
+
+org_name = "Robot Works"
+adapter_type = "tec_rest"
+enabled = true
+
+[config]
+api_base = "https://robotworks.example/wp-json/tribe/events/v1/events/"
