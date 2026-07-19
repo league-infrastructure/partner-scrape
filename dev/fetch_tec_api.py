@@ -42,6 +42,13 @@ TEC_SITES = [
         "organization": "Ocean Connectors",
         "api_base": "https://oceanconnectors.org/wp-json/tribe/events/v1/events/",
     },
+    {
+        # sdcdm.org redirects to visitcmod.org; domain kept as sdcdm.org to
+        # match the website column in data/partners_viable.csv
+        "domain": "sdcdm.org",
+        "organization": "San Diego Children's Discovery Museum",
+        "api_base": "https://visitcmod.org/wp-json/tribe/events/v1/events/",
+    },
 ]
 
 

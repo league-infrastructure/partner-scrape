@@ -1,0 +1,1 @@
+/Volumes/Proj/proj/league-projects/infrastructure/partner-scrape/.agents/skills/auto-approve/SKILL.md
