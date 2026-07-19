@@ -14,7 +14,10 @@ import logging
 import sys
 from pathlib import Path
 
-from partner_scrape.pipeline import run
+from partner_scrape.enrich.cache import EnrichmentCache
+from partner_scrape.enrich.enricher import LLMEnricher
+from partner_scrape.enrich.llm_client import AnthropicLLMClient
+from partner_scrape.pipeline import Enricher, run
 
 
 def _build_parser() -> argparse.ArgumentParser:
@@ -63,6 +66,18 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Only run this single source (matches the registry TOML file's stem).",
     )
     parser.add_argument(
+        "--no-enrich",
+        action="store_true",
+        help=(
+            "Skip LLM enrichment and the relevance gate entirely (no "
+            "ANTHROPIC_API_KEY needed, no Anthropic API cost). Sources are "
+            "still discovered, extracted, normalized, and exported -- "
+            "just without LLM-recovered fields, classification, or "
+            "relevance filtering. Matches sprint 001's original "
+            "(pre-enrichment) behavior exactly."
+        ),
+    )
+    parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
@@ -81,12 +96,25 @@ def main(argv: list[str] | None = None) -> int:
         format="%(levelname)s %(name)s: %(message)s",
     )
 
+    # Enrichment defaults to on (sprint.md's Architecture Open Question 5:
+    # matches issue 04's framing of enrichment as normal production
+    # behavior, not an opt-in extra). --no-enrich is the escape hatch --
+    # preserves sprint 001's exact original enrichers=() behavior for
+    # local/dry-run usage that wants to avoid real Anthropic API cost and
+    # the ANTHROPIC_API_KEY requirement.
+    enrichers: tuple[Enricher, ...]
+    if args.no_enrich:
+        enrichers = ()
+    else:
+        enrichers = (LLMEnricher(AnthropicLLMClient(), EnrichmentCache()),)
+
     payload = run(
         registry_dir=args.registry_dir,
         site_dir=args.site_dir,
         source_id=args.source_id,
         limit=args.limit,
         dry_run=args.dry_run,
+        enrichers=enrichers,
     )
 
     noun = "opportunity" if len(payload) == 1 else "opportunities"

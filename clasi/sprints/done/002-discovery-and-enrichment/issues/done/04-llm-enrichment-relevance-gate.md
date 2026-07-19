@@ -1,5 +1,11 @@
 ---
-status: pending
+status: done
+sprint: '002'
+tickets:
+- 002-003
+- 002-004
+- 002-005
+- 002-006
 ---
 
 # LLM enrichment + relevance gate (keystone)

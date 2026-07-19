@@ -1,0 +1,25 @@
+{
+  "total": 1,
+  "total_pages": 1,
+  "events": [
+    {
+      "id": 7001,
+      "title": "Robotics Workshop",
+      "description": "<p>Hands-on robotics building for kids.</p>",
+      "start_date": "2026-08-20 13:00:00",
+      "end_date": "2026-08-20 15:00:00",
+      "all_day": false,
+      "cost": "$10",
+      "url": "https://robotworks.example/events/robotics-workshop/",
+      "image": {},
+      "venue": {
+        "venue": "Robot Works Lab",
+        "address": "",
+        "city": "San Diego",
+        "state": "CA"
+      },
+      "categories": [],
+      "tags": []
+    }
+  ]
+}

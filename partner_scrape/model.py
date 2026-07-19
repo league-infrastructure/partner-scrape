@@ -89,6 +89,19 @@ class Event:
     categories: list[str] = field(default_factory=list)
     tags: list[str] = field(default_factory=list)
 
+    # LLM-derived classification/relevance fields (sprint 002, issue 04).
+    # Additive: default values reproduce sprint 001 behavior exactly (no
+    # field_provenance entry until something calls .set() for one of
+    # these -- see normalize/run.py's fallback-to-taxonomy.py logic and
+    # sprint.md's Design Rationale for why these live directly on Event
+    # rather than a separate wrapper type).
+    relevant: bool | None = None
+    relevance_reason: str = ""
+    areas_of_interest: list[str] = field(default_factory=list)
+    age_grade_level: list[str] = field(default_factory=list)
+    cost_range: str = ""
+    time_of_day: list[str] = field(default_factory=list)
+
     # Side-car provenance/confidence map, keyed by field name.
     field_provenance: dict[str, Provenance] = field(default_factory=dict)
 

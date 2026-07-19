@@ -1,0 +1,14 @@
+{
+  "start": "2026-08-15T18:00:00",
+  "end": "2026-08-15T20:00:00",
+  "all_day": false,
+  "location": "Fixture Library, San Diego, CA",
+  "cost": "Free",
+  "registration_url": "https://example.org/register",
+  "areas_of_interest": ["Coding/Computer Science/Cyber Security", "Engineering"],
+  "age_grade_level": ["Grades 6-8"],
+  "cost_range": "Free",
+  "time_of_day": ["Evening"],
+  "relevant": true,
+  "relevance_reason": "Hands-on youth robotics program at a public library."
+}

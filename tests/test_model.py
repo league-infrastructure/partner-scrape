@@ -69,6 +69,105 @@ class TestEventSet:
             event.set("not_a_real_field", "x", source="tec_rest", confidence=1.0)
 
 
+class TestEventClassificationFields:
+    """The six LLM-enrichment fields added in sprint 002 ticket 003.
+
+    Additive-only: defaults must reproduce sprint 001 behavior (no
+    provenance entry, empty/None values) until something calls
+    ``Event.set(...)`` for one of them -- see normalize/run.py's
+    fallback-to-taxonomy.py conditional, which keys off exactly this
+    default/provenance distinction.
+    """
+
+    def test_defaults_are_unset(self):
+        event = Event()
+        assert event.relevant is None
+        assert event.relevance_reason == ""
+        assert event.areas_of_interest == []
+        assert event.age_grade_level == []
+        assert event.cost_range == ""
+        assert event.time_of_day == []
+        assert event.field_provenance == {}
+
+    def test_default_list_fields_are_not_shared_between_instances(self):
+        a = Event()
+        b = Event()
+        a.areas_of_interest.append("Engineering")
+        a.age_grade_level.append("Family")
+        a.time_of_day.append("Morning")
+        assert b.areas_of_interest == []
+        assert b.age_grade_level == []
+        assert b.time_of_day == []
+
+    def test_relevant_and_relevance_reason_round_trip_through_set(self):
+        event = Event()
+        event.set("relevant", True, source="llm_enrichment", confidence=0.9)
+        event.set(
+            "relevance_reason",
+            "STEM robotics camp for youth",
+            source="llm_enrichment",
+            confidence=0.9,
+        )
+
+        assert event.relevant is True
+        assert event.relevance_reason == "STEM robotics camp for youth"
+        assert event.field_provenance["relevant"] == Provenance(
+            source="llm_enrichment", confidence=0.9
+        )
+        assert event.field_provenance["relevance_reason"] == Provenance(
+            source="llm_enrichment", confidence=0.9
+        )
+
+    def test_relevant_can_be_set_false(self):
+        event = Event()
+        event.set("relevant", False, source="llm_enrichment", confidence=0.9)
+        assert event.relevant is False
+
+    def test_areas_of_interest_round_trips_through_set(self):
+        event = Event()
+        event.set(
+            "areas_of_interest", ["Engineering", "Physics"], source="llm_enrichment", confidence=0.85
+        )
+        assert event.areas_of_interest == ["Engineering", "Physics"]
+        assert event.field_provenance["areas_of_interest"] == Provenance(
+            source="llm_enrichment", confidence=0.85
+        )
+
+    def test_age_grade_level_round_trips_through_set(self):
+        event = Event()
+        event.set("age_grade_level", ["Grades 6-8"], source="llm_enrichment", confidence=0.85)
+        assert event.age_grade_level == ["Grades 6-8"]
+        assert event.field_provenance["age_grade_level"] == Provenance(
+            source="llm_enrichment", confidence=0.85
+        )
+
+    def test_cost_range_round_trips_through_set(self):
+        event = Event()
+        event.set("cost_range", "Free", source="llm_enrichment", confidence=0.85)
+        assert event.cost_range == "Free"
+        assert event.field_provenance["cost_range"] == Provenance(
+            source="llm_enrichment", confidence=0.85
+        )
+
+    def test_time_of_day_round_trips_through_set(self):
+        event = Event()
+        event.set("time_of_day", ["Evening"], source="llm_enrichment", confidence=0.85)
+        assert event.time_of_day == ["Evening"]
+        assert event.field_provenance["time_of_day"] == Provenance(
+            source="llm_enrichment", confidence=0.85
+        )
+
+    def test_each_classification_field_provenance_recorded_independently(self):
+        event = Event()
+        event.set("cost_range", "Free", source="llm_enrichment", confidence=0.85)
+
+        assert set(event.field_provenance.keys()) == {"cost_range"}
+        assert "areas_of_interest" not in event.field_provenance
+        assert "age_grade_level" not in event.field_provenance
+        assert "time_of_day" not in event.field_provenance
+        assert "relevant" not in event.field_provenance
+
+
 class TestNormalizeTitle:
     def test_lowercases_and_strips_punctuation(self):
         assert normalize_title("Robotics Night!!") == "robotics night"

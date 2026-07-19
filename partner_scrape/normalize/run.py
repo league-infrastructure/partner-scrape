@@ -147,6 +147,34 @@ def _to_opportunity(
     latitude = str(event.latitude) if event.latitude is not None else str(partner.get("latitude", ""))
     longitude = str(event.longitude) if event.longitude is not None else str(partner.get("longitude", ""))
 
+    # Prefer an Event's own LLM-set classification fields (sprint 002,
+    # issue 04) over taxonomy.py's keyword fallback, checked
+    # independently per field via field_provenance -- an Event can have
+    # an LLM-set cost_range but no LLM-set areas_of_interest and get the
+    # LLM value for one, the keyword-derived value for the other. Four
+    # explicit branches, not a loop-driven helper: two different
+    # fallback shapes (list[str] vs str) for exactly four call sites
+    # isn't worth abstracting (sprint.md's speculative-generality
+    # guidance).
+    areas_of_interest = (
+        event.areas_of_interest
+        if "areas_of_interest" in event.field_provenance
+        else derive_areas_of_interest(text)
+    )
+    age_grade_level = (
+        event.age_grade_level
+        if "age_grade_level" in event.field_provenance
+        else derive_age_grade_level(text)
+    )
+    cost_range = (
+        event.cost_range if "cost_range" in event.field_provenance else map_cost(event.cost)
+    )
+    time_of_day = (
+        event.time_of_day
+        if "time_of_day" in event.field_provenance
+        else derive_time_of_day(event.start, event.all_day)
+    )
+
     return Opportunity(
         slug=slug,
         title=event.title,
@@ -157,11 +185,11 @@ def _to_opportunity(
         availability=_availability(instance),
         date_start=_iso(event.start),
         date_end=_iso(event.end),
-        age_grade_level=derive_age_grade_level(text),
-        cost_range=map_cost(event.cost),
-        time_of_day=derive_time_of_day(event.start, event.all_day),
+        age_grade_level=age_grade_level,
+        cost_range=cost_range,
+        time_of_day=time_of_day,
         opportunity_type=DEFAULT_OPPORTUNITY_TYPE,
-        areas_of_interest=derive_areas_of_interest(text),
+        areas_of_interest=areas_of_interest,
         specific_attention=[],
         financial_support="No",
         ngss_aligned="No",

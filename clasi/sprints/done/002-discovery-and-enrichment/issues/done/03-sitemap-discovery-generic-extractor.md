@@ -1,5 +1,10 @@
 ---
-status: pending
+status: done
+sprint: '002'
+tickets:
+- 002-001
+- 002-002
+- 002-006
 ---
 
 # Sitemap-diff discovery + generic page extractor

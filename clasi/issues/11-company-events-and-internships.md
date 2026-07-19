@@ -1,5 +1,6 @@
 ---
 status: pending
+sprint: '006'
 ---
 
 # Expansion: San Diego STEM companies — events and internships
