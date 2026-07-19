@@ -1,9 +1,29 @@
 [project]
 name = "partner-scrape"
-version = "0.1.0"
+version = "0.20260719.1"
 requires-python = ">=3.13"
 dependencies = [
+    "icalendar>=7.2.0",
     "lxml>=5.0",
+    "python-dateutil>=2.9.0.post0",
     "scrapy>=2.13",
     "w3lib>=2.1",
 ]
+
+[project.scripts]
+partner-scrape = "partner_scrape.cli:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["partner_scrape"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,5 +1,10 @@
 ---
-status: pending
+status: done
+sprint: '001'
+tickets:
+- 001-004
+- 001-005
+- 001-008
 ---
 
 # Adapter framework + structured-API adapters

@@ -1,0 +1,13 @@
+# Synthetic well-formed fixture for the pipeline walking-skeleton test
+# (ticket 008) -- not a real organization's endpoint. Its feed
+# deliberately includes one event that duplicates coastalrootsfarm.toml's
+# TEC event (same title/date/venue) to exercise cross-source dedup, and
+# one recurring event to exercise recurring collapse, in the same
+# end-to-end run.
+
+org_name = "The Living Coast Discovery Center"
+adapter_type = "ical"
+enabled = true
+
+[config]
+feed_url = "https://thelivingcoast.example/events/?ical=1"

@@ -1,0 +1,12 @@
+# Synthetic well-formed fixture for the pipeline walking-skeleton test
+# (ticket 008) -- not a real organization's endpoint. Deliberately named
+# after a real seed source_id so the e2e test also exercises the
+# partner-join against tests/fixtures/partners.json's "Coastal Roots
+# Farm" entry.
+
+org_name = "Coastal Roots Farm"
+adapter_type = "tec_rest"
+enabled = true
+
+[config]
+api_base = "https://coastalrootsfarm.example/wp-json/tribe/events/v1/events/"

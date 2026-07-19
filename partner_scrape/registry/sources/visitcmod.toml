@@ -1,0 +1,18 @@
+# San Diego Children's Discovery Museum -- The Events Calendar REST API.
+# Endpoint verified working in dev/fetch_tec_api.py's TEC_SITES list.
+# Note: sdcdm.org redirects to visitcmod.org; the API is only reachable
+# at visitcmod.org, while the partner list uses sdcdm.org -- kept here
+# in `domain` for reference.
+
+org_name = "San Diego Children's Discovery Museum"
+adapter_type = "tec_rest"
+enabled = true
+
+[config]
+api_base = "https://visitcmod.org/wp-json/tribe/events/v1/events/"
+domain = "sdcdm.org"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "dev/fetch_tec_api.py"

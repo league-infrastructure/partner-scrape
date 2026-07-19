@@ -1,0 +1,15 @@
+# Ocean Connectors -- The Events Calendar REST API.
+# Endpoint verified working in dev/fetch_tec_api.py's TEC_SITES list.
+
+org_name = "Ocean Connectors"
+adapter_type = "tec_rest"
+enabled = true
+
+[config]
+api_base = "https://oceanconnectors.org/wp-json/tribe/events/v1/events/"
+domain = "www.oceanconnectors.org"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "dev/fetch_tec_api.py"

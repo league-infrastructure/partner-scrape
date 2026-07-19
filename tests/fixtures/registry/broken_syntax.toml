@@ -1,0 +1,6 @@
+# Synthetic malformed fixture -- not valid TOML at all (unterminated
+# string). Must be skipped with a logged warning, not raise out of the
+# directory loader.
+
+org_name = "Fixture Org Broken
+adapter_type = tec_rest

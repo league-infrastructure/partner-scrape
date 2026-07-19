@@ -1,0 +1,8 @@
+# Synthetic well-formed fixture -- not a real organization.
+
+org_name = "Fixture Org One"
+adapter_type = "tec_rest"
+enabled = true
+
+[config]
+api_base = "https://example.org/wp-json/tribe/events/v1/events/"
