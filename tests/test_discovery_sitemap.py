@@ -75,6 +75,15 @@ def _source() -> SourceConfig:
     )
 
 
+def _source_with_sitemap_url(sitemap_url: str) -> SourceConfig:
+    return SourceConfig(
+        source_id="fixture_org",
+        org_name="Fixture Org",
+        adapter_type="generic_html",
+        config={"site_url": SITE_URL, "sitemap_url": sitemap_url},
+    )
+
+
 @pytest.fixture(autouse=True)
 def _cache_dir(tmp_path, monkeypatch):
     """Point SCRAPE_CACHE_DIR at a tmp_path for every test in this file
@@ -148,21 +157,34 @@ class TestSitemapIndexRecursion:
 
 
 class TestMalformedSitemap:
-    def test_malformed_sitemap_yields_zero_refs_and_logs_warning(self, caplog):
-        fetcher = FixtureFetcher(
-            {ROOT_SITEMAP_URL: _response(_read_fixture("malformed.xml"))}
+    """Every candidate parses as malformed XML -- probing exhausts all
+    three conventional filenames (this is now a fall-through scenario,
+    not an immediate-stop one) and the existing None-return/logged-
+    warning error flow still holds once nothing is left to try.
+    """
+
+    @staticmethod
+    def _all_malformed() -> FixtureFetcher:
+        malformed = _response(_read_fixture("malformed.xml"))
+        return FixtureFetcher(
+            {
+                ROOT_SITEMAP_URL: malformed,
+                f"{SITE_URL}/sitemap.xml": malformed,
+                f"{SITE_URL}/sitemap-index.xml": malformed,
+            }
         )
+
+    def test_malformed_sitemap_yields_zero_refs_and_logs_warning(self, caplog):
+        fetcher = self._all_malformed()
 
         with caplog.at_level(logging.WARNING):
             refs = discover_changed_urls(_source(), fetcher)
 
         assert refs == []
-        assert "not valid XML" in caplog.text
+        assert "no reachable sitemap" in caplog.text.lower()
 
     def test_malformed_sitemap_does_not_raise(self):
-        fetcher = FixtureFetcher(
-            {ROOT_SITEMAP_URL: _response(_read_fixture("malformed.xml"))}
-        )
+        fetcher = self._all_malformed()
 
         discover_changed_urls(_source(), fetcher)  # must not raise
 
@@ -170,9 +192,7 @@ class TestMalformedSitemap:
         _write_snapshot(tmp_path, CURRENT_LASTMODS)
         snapshot_path = tmp_path / "sitemap_snapshots" / "fixture_org.json"
         before = snapshot_path.read_text()
-        fetcher = FixtureFetcher(
-            {ROOT_SITEMAP_URL: _response(_read_fixture("malformed.xml"))}
-        )
+        fetcher = self._all_malformed()
 
         discover_changed_urls(_source(), fetcher)
 
@@ -180,11 +200,12 @@ class TestMalformedSitemap:
 
 
 class TestUnreachableSitemap:
-    def test_non_200_status_on_both_candidates_yields_zero_refs_and_warns(self, caplog):
+    def test_non_200_status_on_all_candidates_yields_zero_refs_and_warns(self, caplog):
         fetcher = FixtureFetcher(
             {
                 ROOT_SITEMAP_URL: _response("", status=404),
                 f"{SITE_URL}/sitemap.xml": _response("", status=404),
+                f"{SITE_URL}/sitemap-index.xml": _response("", status=404),
             }
         )
 
@@ -228,3 +249,130 @@ class TestRoundTrip:
 
         snapshot_path = tmp_path / "sitemap_snapshots" / "fixture_org.json"
         assert json.loads(snapshot_path.read_text()) == CURRENT_LASTMODS
+
+
+class TestParseBasedAcceptance:
+    """Sprint 005 ticket 001 / SUC-005: acceptance is "first candidate
+    that parses as sitemap XML with a recognized root element", not
+    "first HTTP 200" -- reproduces jointheleague.org's real, live-
+    confirmed failure mode: an Astro-generated static site that returns
+    HTTP 200 with an HTML "not found" body for every path, including
+    conventional sitemap filenames that don't actually exist. Its real
+    sitemap lives at the third, hyphenated candidate.
+    """
+
+    def test_falls_through_false_200_html_candidates_to_a_parseable_one(self):
+        fetcher = FixtureFetcher(
+            {
+                # First two conventional candidates: HTTP 200, but the
+                # body is the site's catch-all "not found" HTML page --
+                # must not be accepted as the sitemap.
+                ROOT_SITEMAP_URL: _response(_read_fixture("not_found.html")),
+                f"{SITE_URL}/sitemap.xml": _response(_read_fixture("not_found.html")),
+                # Third candidate (hyphenated): HTTP 200 with a real
+                # <sitemapindex> body -- jointheleague.org's actual shape.
+                f"{SITE_URL}/sitemap-index.xml": _response(
+                    _read_fixture("sitemap_index.xml")
+                ),
+                "https://example.org/events-sitemap.xml": _response(
+                    _read_fixture("events_sitemap.xml")
+                ),
+                # Deliberately no entry for page-sitemap.xml -- KeyError
+                # if discovery ever tries to fetch it.
+            }
+        )
+
+        refs = discover_changed_urls(_source(), fetcher)
+
+        assert sorted(r.url for r in refs) == sorted(EVENT_URLS)
+        assert fetcher.calls[:3] == [
+            ROOT_SITEMAP_URL,
+            f"{SITE_URL}/sitemap.xml",
+            f"{SITE_URL}/sitemap-index.xml",
+        ]
+
+    def test_a_200_response_that_fails_to_parse_is_logged_and_not_fatal(self, caplog):
+        fetcher = FixtureFetcher(
+            {
+                ROOT_SITEMAP_URL: _response(_read_fixture("not_found.html")),
+                f"{SITE_URL}/sitemap.xml": _response(
+                    _read_fixture("events_sitemap.xml")
+                ),
+            }
+        )
+
+        with caplog.at_level(logging.INFO):
+            refs = discover_changed_urls(_source(), fetcher)
+
+        assert [r.url for r in refs] == EVENT_URLS
+        assert "did not parse as" in caplog.text
+
+
+class TestSitemapUrlOverride:
+    """Sprint 005 ticket 001: ``config.sitemap_url`` -- when set, that
+    exact URL is fetched directly and conventional-filename probing is
+    skipped entirely.
+    """
+
+    def test_override_is_used_directly_and_probing_is_skipped(self):
+        override_url = f"{SITE_URL}/feeds/real-sitemap.xml"
+        source = _source_with_sitemap_url(override_url)
+        fetcher = FixtureFetcher(
+            {
+                # Only the override URL has a registered response -- if
+                # discovery probes any conventional candidate first, it
+                # raises KeyError and fails the test loudly.
+                override_url: _response(_read_fixture("events_sitemap.xml")),
+            }
+        )
+
+        refs = discover_changed_urls(source, fetcher)
+
+        assert [r.url for r in refs] == EVENT_URLS
+        assert fetcher.calls == [override_url]
+
+    def test_override_used_even_when_every_conventional_filename_would_fail(self):
+        """Belt-and-suspenders: every conventional candidate is
+        registered with the false-200 HTML body (would fail to parse if
+        probed), proving the override is used directly rather than
+        merely tried first.
+        """
+        override_url = f"{SITE_URL}/feeds/real-sitemap.xml"
+        source = _source_with_sitemap_url(override_url)
+        fetcher = FixtureFetcher(
+            {
+                ROOT_SITEMAP_URL: _response(_read_fixture("not_found.html")),
+                f"{SITE_URL}/sitemap.xml": _response(_read_fixture("not_found.html")),
+                f"{SITE_URL}/sitemap-index.xml": _response(
+                    _read_fixture("not_found.html")
+                ),
+                override_url: _response(_read_fixture("events_sitemap.xml")),
+            }
+        )
+
+        refs = discover_changed_urls(source, fetcher)
+
+        assert [r.url for r in refs] == EVENT_URLS
+        assert fetcher.calls == [override_url]
+
+    def test_override_that_fails_to_parse_yields_none_and_warns_without_probing(
+        self, caplog
+    ):
+        """Every candidate (here, just the explicit override -- probing
+        is skipped) fails to parse: the existing None-return, logged-
+        warning error-flow contract still holds.
+        """
+        override_url = f"{SITE_URL}/feeds/real-sitemap.xml"
+        source = _source_with_sitemap_url(override_url)
+        fetcher = FixtureFetcher(
+            {override_url: _response(_read_fixture("not_found.html"))}
+        )
+
+        with caplog.at_level(logging.WARNING):
+            refs = discover_changed_urls(source, fetcher)
+
+        assert refs == []
+        assert "sitemap_url" in caplog.text
+        # Probing was skipped entirely -- no conventional candidate was
+        # ever fetched (fetcher.calls would raise KeyError if it had been).
+        assert fetcher.calls == [override_url]

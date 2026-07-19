@@ -1,0 +1,8 @@
+# Fixture Hub Registry entry for tests/test_cli.py's genuine
+# end-to-end `partner-scrape discover-candidates` test -- points at the
+# same fixture hub page (tests/fixtures/hubs/example_hub.html) that
+# tests/test_discovery_hub_scan.py and
+# tests/test_discovery_candidate_pipeline.py already exercise.
+
+hub_name = "Example Hub (CLI fixture)"
+page_urls = ["https://examplehub.org/calendar"]

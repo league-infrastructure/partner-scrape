@@ -1,0 +1,13 @@
+# Synthetic well-formed fixture -- not a real hub. Has two page_urls and
+# an optional [config] section, to exercise both "multiple pages" and
+# "optional field present".
+
+hub_name = "Fixture Hub Two"
+
+page_urls = [
+    "https://fixturehub2.org/events/a",
+    "https://fixturehub2.org/events/b",
+]
+
+[config]
+note = "irrelevant hub-specific scan hint"

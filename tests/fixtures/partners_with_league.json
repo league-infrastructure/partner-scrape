@@ -1,0 +1,13 @@
+[
+  {
+    "id": 287,
+    "name": "The LEAGUE of Amazing Programmers",
+    "organization_type": "Afterschool/Out-of-School Time",
+    "description": "A synthetic fixture partner for tests -- mirrors stem-ecosystem's real partners.json entry (id 287) by name only, not the real record's other fields.",
+    "location": "San Diego, California",
+    "latitude": 32.7,
+    "longitude": -117.15,
+    "website": "https://www.jointheleague.org",
+    "logo_src": "league.jpg"
+  }
+]

@@ -1,0 +1,6 @@
+# Synthetic malformed fixture -- not valid TOML at all (unterminated
+# string). Must be skipped with a logged warning, not raise out of the
+# directory loader.
+
+hub_name = "Fixture Hub Broken
+page_urls = ["https://example.org/calendar"]

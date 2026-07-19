@@ -1,10 +1,18 @@
 """Sitemap-diff discovery: resolves a source's sitemap into new/changed URLs.
 
-See ``sprint.md``'s Architecture > Sitemap Discovery, SUC-009. Fetches a
-source's ``sitemap_index.xml`` (falling back to ``sitemap.xml``) via the
-injected ``Fetcher``, identifies event/program-related URLs by sitemap
-child-filename pattern (recursing into a ``<sitemapindex>``) or by
-URL-path pattern for sites with no dedicated event sitemap, and diffs
+See ``sprint.md``'s Architecture > Sitemap Discovery, SUC-009, and sprint
+005's Architecture > Design Rationale (root-sitemap probing hardening,
+SUC-005). Fetches a source's root sitemap via the injected ``Fetcher`` --
+either ``SourceConfig.config["sitemap_url"]`` directly, when set, or by
+probing :data:`_ROOT_SITEMAP_FILENAMES` in order and accepting the first
+candidate whose body both returns HTTP 200 *and* parses as recognized
+sitemap XML (``<urlset>``/``<sitemapindex>``) -- a 200 response with a
+non-parseable or wrong-root-element body (e.g. some static-site
+generators serve a catch-all "not found" HTML page with status 200 for
+any path) is logged and skipped rather than accepted, falling through to
+the next candidate. It then identifies event/program-related URLs by
+sitemap child-filename pattern (recursing into a ``<sitemapindex>``) or
+by URL-path pattern for sites with no dedicated event sitemap, and diffs
 the resulting ``{url: lastmod}`` set against a persisted snapshot for
 ``source.source_id`` under ``SCRAPE_CACHE_DIR`` -- only new or
 ``<lastmod>``-changed URLs come back as ``EventRef``s, and the snapshot
@@ -71,8 +79,16 @@ EVENT_PATH_RE = re.compile(
 )
 
 #: Candidate root sitemap filenames, tried in order against
-#: ``{site_url}/{filename}`` (this ticket's Scope).
-_ROOT_SITEMAP_FILENAMES = ("sitemap_index.xml", "sitemap.xml")
+#: ``{site_url}/{filename}``. ``sitemap-index.xml`` (hyphenated) is a
+#: real-world variant confirmed live on jointheleague.org (an
+#: Astro-generated static site) alongside the more common underscored
+#: ``sitemap_index.xml`` -- sprint 005's Design Rationale.
+_ROOT_SITEMAP_FILENAMES = ("sitemap_index.xml", "sitemap.xml", "sitemap-index.xml")
+
+#: Root elements a sitemap document is recognized by (sitemaps.org
+#: protocol) -- used to decide root-sitemap *acceptance*: an HTTP 200
+#: alone is not sufficient evidence a candidate URL is a real sitemap.
+_SITEMAP_ROOT_TAGS = ("urlset", "sitemapindex")
 
 #: Subdirectory of ``SCRAPE_CACHE_DIR`` snapshots are stored under.
 _SNAPSHOT_SUBDIR = "sitemap_snapshots"
@@ -188,19 +204,80 @@ def _parse_sitemap_index(root: ET.Element, fetcher: Fetcher) -> dict[str, str]:
     return urls
 
 
-def _fetch_root_sitemap(site_url: str, fetcher: Fetcher) -> tuple[str, str] | None:
-    """Fetch the first of :data:`_ROOT_SITEMAP_FILENAMES` that resolves
-    with a 200 status.
+def _parse_sitemap_root(body: str) -> ET.Element | None:
+    """Parse ``body`` as sitemap XML, returning its root element if it
+    parses successfully with a recognized root tag
+    (:data:`_SITEMAP_ROOT_TAGS`), or ``None`` otherwise.
 
-    Returns ``(url, body)`` for whichever candidate succeeded first, or
-    ``None`` if neither candidate is reachable.
+    This is the acceptance test for a root-sitemap candidate -- an HTTP
+    200 status alone is not sufficient evidence a candidate URL is a
+    real sitemap: some sites (e.g. Astro-generated static sites like
+    jointheleague.org) return 200 with a catch-all "not found" HTML body
+    for any path, including conventional sitemap filenames that don't
+    actually exist.
     """
+    try:
+        root = ET.fromstring(body)
+    except ET.ParseError:
+        return None
+    if _local_name(root.tag) not in _SITEMAP_ROOT_TAGS:
+        return None
+    return root
+
+
+def _fetch_root_sitemap(
+    site_url: str, fetcher: Fetcher, sitemap_url: str | None = None
+) -> tuple[str, ET.Element] | None:
+    """Resolve the root sitemap URL and its already-parsed root element
+    to hand to :func:`_resolve_event_urls`.
+
+    If ``sitemap_url`` is given (``SourceConfig.config["sitemap_url"]``),
+    probing is skipped entirely: that exact URL is fetched and accepted
+    only if it returns 200 *and* parses as sitemap XML
+    (:func:`_parse_sitemap_root`). An override that fails is a final
+    failure, not a trigger to fall back into normal probing -- this
+    ticket's Acceptance Criteria ("skips probing entirely").
+
+    Otherwise, probes each of :data:`_ROOT_SITEMAP_FILENAMES` in order
+    and accepts the first candidate whose body returns 200 *and* parses
+    as sitemap XML -- a 200 response that fails to parse (or parses with
+    an unrecognized root element) is logged and treated as a miss,
+    falling through to the next candidate instead of stopping discovery
+    on a wrong body.
+
+    Returns ``(url, root)`` for whichever candidate was accepted, or
+    ``None`` if every candidate (or the override) failed. The caller
+    never needs to re-parse the body: acceptance already proved it
+    parses with a recognized sitemap root element.
+    """
+    if sitemap_url is not None:
+        response = fetcher.get(sitemap_url)
+        root = _parse_sitemap_root(response.body) if response.status == 200 else None
+        if root is not None:
+            return sitemap_url, root
+        logger.info(
+            "Configured sitemap_url %s returned status %s or did not parse as "
+            "sitemap XML",
+            sitemap_url,
+            response.status,
+        )
+        return None
+
     for filename in _ROOT_SITEMAP_FILENAMES:
         url = f"{site_url}/{filename}"
         response = fetcher.get(url)
-        if response.status == 200:
-            return url, response.body
-        logger.info("Sitemap probe %s returned status %s", url, response.status)
+        if response.status != 200:
+            logger.info("Sitemap probe %s returned status %s", url, response.status)
+            continue
+        root = _parse_sitemap_root(response.body)
+        if root is None:
+            logger.info(
+                "Sitemap probe %s returned status 200 but did not parse as "
+                "sitemap XML (recognized root element); trying next candidate",
+                url,
+            )
+            continue
+        return url, root
     return None
 
 
@@ -208,49 +285,46 @@ def _resolve_event_urls(source: SourceConfig, fetcher: Fetcher) -> dict[str, str
     """Resolve ``source``'s sitemap(s) into ``{url: lastmod}`` for every
     discovered event/program page.
 
-    Returns ``None`` (with a logged warning) on any unreachable,
-    malformed, or unrecognized-root-element sitemap -- never raises,
-    per SUC-009's Error Flow. A distinct return value from ``{}`` (a
-    reachable, well-formed sitemap that simply matched no event URLs)
-    matters to the caller: only a genuine failure should leave a prior
-    snapshot untouched rather than overwriting it with an empty one.
+    Resolution order: if ``source.config["sitemap_url"]`` is set, that
+    exact URL is fetched directly and probing is skipped entirely.
+    Otherwise, :data:`_ROOT_SITEMAP_FILENAMES` are probed in order and
+    the first candidate whose body parses as recognized sitemap XML is
+    accepted (see :func:`_fetch_root_sitemap`).
+
+    Returns ``None`` (with a logged warning) once every candidate (or
+    the explicit override) fails to resolve to a reachable, parseable
+    sitemap -- never raises, per SUC-009's Error Flow. A distinct return
+    value from ``{}`` (a reachable, well-formed sitemap that simply
+    matched no event URLs) matters to the caller: only a genuine failure
+    should leave a prior snapshot untouched rather than overwriting it
+    with an empty one.
     """
     site_url = source.config["site_url"].rstrip("/")
+    sitemap_url = source.config.get("sitemap_url")
 
-    fetched = _fetch_root_sitemap(site_url, fetcher)
+    fetched = _fetch_root_sitemap(site_url, fetcher, sitemap_url=sitemap_url)
     if fetched is None:
-        logger.warning(
-            "No reachable sitemap for source %r at %s (tried %s)",
-            source.source_id,
-            site_url,
-            ", ".join(_ROOT_SITEMAP_FILENAMES),
-        )
+        if sitemap_url is not None:
+            logger.warning(
+                "Configured sitemap_url %s for source %r is not a reachable, "
+                "parseable sitemap",
+                sitemap_url,
+                source.source_id,
+            )
+        else:
+            logger.warning(
+                "No reachable sitemap for source %r at %s (tried %s)",
+                source.source_id,
+                site_url,
+                ", ".join(_ROOT_SITEMAP_FILENAMES),
+            )
         return None
-    root_url, body = fetched
-
-    try:
-        root = ET.fromstring(body)
-    except ET.ParseError:
-        logger.warning(
-            "Sitemap %s for source %r is not valid XML; skipping discovery",
-            root_url,
-            source.source_id,
-        )
-        return None
+    _root_url, root = fetched
 
     tag = _local_name(root.tag)
     if tag == "sitemapindex":
         return _parse_sitemap_index(root, fetcher)
-    if tag == "urlset":
-        return _parse_urlset(root, path_filter=True)
-
-    logger.warning(
-        "Sitemap %s for source %r has unrecognized root element %r; skipping discovery",
-        root_url,
-        source.source_id,
-        root.tag,
-    )
-    return None
+    return _parse_urlset(root, path_filter=True)
 
 
 def discover_changed_urls(source: SourceConfig, fetcher: Fetcher) -> list[EventRef]:

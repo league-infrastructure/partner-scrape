@@ -1,0 +1,19 @@
+# The LEAGUE of Amazing Programmers -- hand-authored ad-slot copy for the
+# site's sponsor placement (sprint 005 issue 12: representing the
+# League's sponsorship -- the business model funding this project -- in
+# the site's own data flow, "the ad placement it's owed in exchange").
+#
+# This is standalone marketing copy the League wants to run, not scraped
+# from jointheleague.org -- see export/ads.py's module docstring and
+# sprint.md ticket 005's Description ("ad copy the League wants to run
+# ... is a different concern from what's literally published on their
+# site").
+#
+# logo_src reuses stem-ecosystem's existing partners.json entry (id 287,
+# "The LEAGUE of Amazing Programmers") logo filename, so the ad and the
+# partner listing stay visually consistent.
+
+headline = "Give Your Kid a Head Start in Code"
+body = "The LEAGUE of Amazing Programmers teaches real Java programming to San Diego County kids in grades 5-12 through after-school classes and camps -- building toward an industry-recognized certification, not just a coding intro. Enroll today at jointheleague.org."
+link = "https://www.jointheleague.org/"
+logo_src = "the_league_of_amazing.png"

@@ -1,0 +1,33 @@
+# The LEAGUE of Amazing Programmers -- jointheleague.org, a static Astro
+# v5 site (confirmed live during sprint 005 planning: <meta name="generator"
+# content="Astro v5.16.0">, no WordPress, no /wp-json/ REST payload, no TEC
+# signature -- see sprint.md's Architecture > Design Rationale). Reuses the
+# existing generic_html adapter rather than a bespoke adapter type.
+#
+# Its real sitemap is at /sitemap-index.xml (hyphenated, not the more
+# common underscored sitemap_index.xml) -- set explicitly via
+# config.sitemap_url so this source doesn't depend on probing order even
+# after ticket 001's parse-based-acceptance hardening. It resolves to one
+# child, sitemap-0.xml, a flat <urlset> listing /classes/{slug}/ pages
+# (the League's actual offerings) and /news/{yyyy}/{mm}/{dd}/{slug}/ pages
+# (a migrated blog, not offerings) -- discovery/sitemap.py's existing
+# EVENT_PATH_RE already includes literal "classes" in its alternation, so
+# /classes/* is included and /news/*//about/* are excluded with zero
+# pattern changes.
+#
+# org_name matches stem-ecosystem's partners.json's existing entry (id
+# 287, "The LEAGUE of Amazing Programmers") so normalize.partners.find_partner
+# joins automatically -- no site-repo change needed.
+
+org_name = "The LEAGUE of Amazing Programmers"
+adapter_type = "generic_html"
+enabled = true
+
+[config]
+site_url = "https://www.jointheleague.org"
+sitemap_url = "https://www.jointheleague.org/sitemap-index.xml"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "sprint 005 planning (live jointheleague.org investigation)"

@@ -1,0 +1,11 @@
+# Synthetic well-formed fixture -- not a real organization. A third
+# registered source unrelated to any link on the fixture hub page, just
+# to prove the dedup check scans the whole registry directory (not only
+# the first file) without producing any false-positive filtering.
+
+org_name = "Unrelated Third Source"
+adapter_type = "ical"
+enabled = true
+
+[config]
+feed_url = "https://unrelatedthirdsource.org/events.ics"

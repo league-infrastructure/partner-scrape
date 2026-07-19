@@ -1,0 +1,12 @@
+# Synthetic well-formed fixture -- not a real organization. Used by
+# test_discovery_hub_scan.py to prove hub_scan.scan_hub() filters out a
+# hub-observed candidate whose link *domain* matches this source's
+# config.site_url, even though the hub-observed org_name text differs
+# slightly from this file's org_name.
+
+org_name = "Existing Org By Domain"
+adapter_type = "tec_rest"
+enabled = true
+
+[config]
+site_url = "https://existingdomain.org"
