@@ -1,0 +1,13 @@
+# Synthetic well-formed fixture -- not a real organization. Used by
+# test_discovery_hub_scan.py to prove hub_scan.scan_hub() filters out a
+# hub-observed candidate by *normalized org name* even when its link
+# domain (totally-different-domain.org, the hub-observed candidate_url)
+# does not match this source's own config.site_url at all -- the name
+# match alone must be sufficient to dedup.
+
+org_name = "Existing Org By Name"
+adapter_type = "generic_html"
+enabled = true
+
+[config]
+site_url = "https://existing-by-name-real-site.org"

@@ -1,0 +1,26 @@
+# ILLUSTRATIVE TEMPLATE / PROOF-OF-CONCEPT -- NOT a live, investigated
+# hub. Every URL below is a placeholder, not a real reachable site.
+#
+# This is sprint 005's one seed hub definition (issue 09 / SUC-001),
+# proving Hub Registry + Hub Scan's shape end to end. Populating the
+# real hub roster the issue names as examples (a Balboa Park-style
+# calendar, county library systems, the Barrio Logan/Southeastern SD
+# Cureo network, university calendars) needs the same kind of live-site
+# investigation this sprint performed for jointheleague.org -- deferred
+# to operator/follow-up backlog (sprint.md's Open Question 1). Do not
+# point ``page_urls`` at a real site without first confirming its
+# robots.txt/ToS permit this kind of automated lead-gen browsing
+# (sprint.md's Open Question 4).
+
+hub_name = "Example Regional Calendar (template -- not live)"
+
+page_urls = [
+    "https://example-regional-calendar.invalid/calendar",
+]
+
+[config]
+# Free-form, hub-specific scan hints -- unused by Hub Scan today
+# (ticket 003 doesn't read anything from this section yet); documented
+# here so a future hub with unusual page structure has somewhere to put
+# a hint without a schema change.
+note = "Template only -- replace page_urls with a real, ToS-checked hub before enabling."

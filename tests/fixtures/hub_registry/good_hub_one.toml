@@ -1,0 +1,7 @@
+# Synthetic well-formed fixture -- not a real hub.
+
+hub_name = "Fixture Hub One"
+
+page_urls = [
+    "https://fixturehub1.org/calendar",
+]

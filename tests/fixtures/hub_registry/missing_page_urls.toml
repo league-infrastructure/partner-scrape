@@ -1,0 +1,5 @@
+# Synthetic malformed fixture -- valid TOML syntax, but missing the
+# required `page_urls` field. Must be skipped with a logged warning,
+# not raise out of the directory loader.
+
+hub_name = "Fixture Hub Missing Page URLs"
