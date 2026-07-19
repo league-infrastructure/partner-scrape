@@ -101,6 +101,7 @@ class TestLoadSources:
             "oceanconnectors",
             "visitcmod",
             "birch-aquarium",
+            "fleet-science-center",
         }
 
 
@@ -186,3 +187,22 @@ class TestRealBirchAquariumSource:
         assert birch.config["group_id"] == "49845193640602"
         assert birch.config["days"] == 180
         assert birch.config["pp"] == 50
+
+
+class TestRealFleetScienceCenterSource:
+    """The real fleet-science-center.toml listing_html source (ticket 004)."""
+
+    def test_loads_as_enabled_listing_html_source(self):
+        sources = {s.source_id: s for s in load_active_sources()}
+
+        fleet = sources["fleet-science-center"]
+        assert fleet.org_name == "Fleet Science Center"
+        assert fleet.adapter_type == "listing_html"
+        assert fleet.enabled is True
+
+    def test_config_matches_live_confirmed_values(self):
+        sources = {s.source_id: s for s in load_active_sources()}
+
+        fleet = sources["fleet-science-center"]
+        assert fleet.config["site_url"] == "https://www.fleetscience.org"
+        assert fleet.config["listing_urls"] == ["/events"]
