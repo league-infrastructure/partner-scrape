@@ -96,6 +96,63 @@ class Enricher(Protocol):
         ...
 
 
+class Reporter(Protocol):
+    """Observability seam (sprint 004's Architecture > `Reporter`
+    protocol + hook): an optional observer handed the raw facts
+    `run()` already produces at two points it already visits them,
+    structurally parallel to `Enricher` above -- same "hands over
+    facts it already has, computes nothing itself" boundary that keeps
+    this module from becoming a god component.
+
+    Ships with zero implementations in this ticket -- `reporter`
+    defaults to `None` (no-op). `observability.YieldReporter` (ticket
+    002) is expected to implement this protocol with no import of
+    `pipeline.py` at all, satisfying it structurally exactly as
+    `enrich.enricher.LLMEnricher` already satisfies `Enricher`.
+    """
+
+    def record_source(
+        self,
+        source_id: str,
+        org_name: str,
+        events: list[Event],
+        error: Exception | None = None,
+    ) -> None:
+        """Called once per active source, in both branches of the
+        existing per-source try/except: on success, ``events`` is that
+        source's real, unmodified `list[Event]` and ``error`` is
+        `None`; on the adapter's isolated exception, ``events`` is
+        `[]` and ``error`` is the caught exception -- so a fetch
+        failure and a genuine zero-event run are both reported, never
+        conflated."""
+        ...
+
+    def record_opportunities(self, opportunities: list[Any]) -> None:
+        """Called exactly once, after `normalize_run()` produces the
+        final `Opportunity` list and before `export_opportunities()`
+        strips its `.sources` attribution."""
+        ...
+
+
+class _NoOpReporter:
+    """`run()`'s default `reporter` -- both hook calls are no-ops, so
+    every existing caller/test is unaffected without any change on
+    their part (sprint.md's Migration Concerns: "Backward
+    compatibility")."""
+
+    def record_source(
+        self,
+        source_id: str,
+        org_name: str,
+        events: list[Event],
+        error: Exception | None = None,
+    ) -> None:
+        return None
+
+    def record_opportunities(self, opportunities: list[Any]) -> None:
+        return None
+
+
 def run(
     registry_dir: str | Path | None = None,
     site_dir: str | Path | None = None,
@@ -103,6 +160,7 @@ def run(
     fetcher: Fetcher | None = None,
     headless_fetcher_factory: Callable[[], Fetcher] | None = None,
     enrichers: Sequence[Enricher] = (),
+    reporter: Reporter | None = None,
     partners_path: str | Path | None = None,
     source_id: str | None = None,
     limit: int | None = None,
@@ -145,6 +203,11 @@ def run(
         enrichers: an ordered sequence of `Enricher`s applied to the
             collected Event stream before normalization. Empty by
             default (see `Enricher`'s docstring).
+        reporter: an optional observability hook, called once per
+            source (both branches of the per-source try/except) and
+            once after normalization with the final `Opportunity`
+            list. Defaults to a no-op when omitted -- see `Reporter`'s
+            docstring.
         partners_path: path to the site's `partners.json`. Defaults to
             `{site_dir}/src/data/partners.json` (sprint.md's documented
             location) when omitted.
@@ -181,6 +244,7 @@ def run(
     # sources (ticket 005's Acceptance Criteria: constructed at most
     # once, and only when at least one active source needs it).
     headless_fetcher: Fetcher | None = None
+    active_reporter = reporter if reporter is not None else _NoOpReporter()
 
     events: list[Event] = []
     for source in sources:
@@ -194,7 +258,7 @@ def run(
 
         try:
             source_events = run_adapter(source, source_fetcher)
-        except Exception:
+        except Exception as exc:
             # Per-source error isolation (SUC-008): one broken source is
             # logged and skipped, never fatal to the rest of the run.
             logger.exception(
@@ -203,8 +267,10 @@ def run(
                 source.source_id,
                 source.adapter_type,
             )
+            active_reporter.record_source(source.source_id, source.org_name, [], error=exc)
             continue
         logger.info("Source %r yielded %d event(s)", source.source_id, len(source_events))
+        active_reporter.record_source(source.source_id, source.org_name, source_events)
         events.extend(source_events)
 
     for enricher in enrichers:
@@ -221,6 +287,7 @@ def run(
     opportunities = normalize_run(
         events, resolved_partners_path, source_org_names=source_org_names
     )
+    active_reporter.record_opportunities(opportunities)
 
     return export_opportunities(
         opportunities,

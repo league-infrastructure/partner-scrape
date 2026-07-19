@@ -14,9 +14,13 @@ import logging
 import sys
 from pathlib import Path
 
+from partner_scrape.config import get_site_dir
 from partner_scrape.enrich.cache import EnrichmentCache
 from partner_scrape.enrich.enricher import LLMEnricher
 from partner_scrape.enrich.llm_client import AnthropicLLMClient
+from partner_scrape.observability.render import render_text
+from partner_scrape.observability.reporter import YieldReporter
+from partner_scrape.observability.snapshot import load_snapshot, save_snapshot
 from partner_scrape.pipeline import Enricher, run
 
 
@@ -78,6 +82,28 @@ def _build_parser() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument(
+        "--yield-history",
+        type=Path,
+        default=None,
+        metavar="PATH",
+        help=(
+            "Path to the per-source yield-history snapshot JSON file "
+            "(default: {site-dir}/src/data/yield-history.json, resolved "
+            "the same way --site-dir resolves against Config.get_site_dir()). "
+            "Ignored when --no-report is given."
+        ),
+    )
+    parser.add_argument(
+        "--no-report",
+        action="store_true",
+        help=(
+            "Skip constructing a YieldReporter entirely -- run() behaves "
+            "exactly as it did before sprint 004 (reporter=None): no yield "
+            "report is printed, and yield-history.json is neither read nor "
+            "written."
+        ),
+    )
+    parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
@@ -108,6 +134,26 @@ def main(argv: list[str] | None = None) -> int:
     else:
         enrichers = (LLMEnricher(AnthropicLLMClient(), EnrichmentCache()),)
 
+    # Yield reporting defaults to on (sprint 004's Architecture > CLI
+    # wiring: cli.py plays the same "constructs the default concrete
+    # implementation" role for YieldReporter it already plays for
+    # LLMEnricher). --no-report is the escape hatch that restores
+    # run()'s exact pre-sprint-004 behavior (reporter=None) -- used by
+    # tests and any local usage that doesn't want yield-history.json
+    # read or written at all.
+    yield_reporter: YieldReporter | None = None
+    yield_history_path: Path | None = None
+    previous_snapshot: dict[str, object] = {}
+    if not args.no_report:
+        resolved_site_dir = args.site_dir if args.site_dir is not None else get_site_dir()
+        yield_history_path = (
+            args.yield_history
+            if args.yield_history is not None
+            else resolved_site_dir / "src" / "data" / "yield-history.json"
+        )
+        previous_snapshot = load_snapshot(yield_history_path)
+        yield_reporter = YieldReporter()
+
     payload = run(
         registry_dir=args.registry_dir,
         site_dir=args.site_dir,
@@ -115,11 +161,24 @@ def main(argv: list[str] | None = None) -> int:
         limit=args.limit,
         dry_run=args.dry_run,
         enrichers=enrichers,
+        reporter=yield_reporter,
     )
 
     noun = "opportunity" if len(payload) == 1 else "opportunities"
     suffix = " (dry run -- nothing written)" if args.dry_run else ""
     print(f"partner-scrape: wrote {len(payload)} {noun}{suffix}.")
+
+    if yield_reporter is not None:
+        report = yield_reporter.report(previous_snapshot)
+        print(render_text(report))
+        # --dry-run computes the would-be export payload without writing
+        # anything to --site-dir (run()'s own dry_run contract); the
+        # yield-history snapshot is site-dir-adjacent output, so it
+        # follows the same "nothing written" promise here.
+        if not args.dry_run:
+            assert yield_history_path is not None  # set above whenever yield_reporter is
+            save_snapshot(yield_history_path, report)
+
     return 0
 
 

@@ -1,6 +1,6 @@
 [project]
 name = "partner-scrape"
-version = "0.20260719.3"
+version = "0.20260719.4"
 requires-python = ">=3.13"
 dependencies = [
     "anthropic>=0.69.0",

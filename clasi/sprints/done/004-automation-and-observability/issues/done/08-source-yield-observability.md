@@ -1,6 +1,10 @@
 ---
-status: pending
+status: done
 sprint: '004'
+tickets:
+- 004-001
+- 004-002
+- 004-003
 ---
 
 # Source-yield observability + zero-yield alerts

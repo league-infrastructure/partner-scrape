@@ -27,7 +27,7 @@ import json
 import shutil
 import sys
 from dataclasses import dataclass, field
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
 
 import pytest
@@ -35,6 +35,7 @@ import pytest
 from partner_scrape.fetch import PlaywrightFetcher, PoliteFetcher, Throttle
 from partner_scrape.fetch.fetcher import FetchResponse
 from partner_scrape.model import Event
+from partner_scrape.observability import YieldReporter, load_snapshot, save_snapshot
 from partner_scrape.pipeline import run
 
 FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures"
@@ -311,6 +312,217 @@ class TestEnricherHook:
         assert all(isinstance(e, Event) for e in enricher.received)
         # And the (identity) transformation's output still reaches export.
         assert len(payload) == 2
+
+
+@dataclass
+class SpyReporter:
+    """A spy `Reporter` double -- records every call it receives
+    verbatim, no computation -- proving ticket 004-001's two hook call
+    sites actually fire, with the right data, over a real
+    `pipeline.run()` call (sprint.md SUC-018's own acceptance
+    criterion)."""
+
+    source_calls: list[tuple[str, str, list[Event], Exception | None]] = field(
+        default_factory=list
+    )
+    opportunities_calls: list[list[object]] = field(default_factory=list)
+
+    def record_source(self, source_id, org_name, events, error=None):
+        self.source_calls.append((source_id, org_name, list(events), error))
+
+    def record_opportunities(self, opportunities):
+        self.opportunities_calls.append(list(opportunities))
+
+
+class TestReporterHook:
+    """Ticket 004-001: the `Reporter` hook is exercised the same way
+    `Enricher` already is -- a real `pipeline.run()` call over the
+    existing `e2e_registry` fixtures (which include `brokensource.toml`,
+    the deliberately-failing source), with a spy double asserting both
+    call sites fire with correct data."""
+
+    def test_reporter_defaults_to_none_and_is_a_no_op(self, tmp_path):
+        # No reporter passed at all -- proves the new parameter is
+        # truly additive/optional, same shape as TestEnricherHook's own
+        # "defaults to empty and is a no-op" case above.
+        site_dir = _site_dir(tmp_path)
+        fetcher = _fixture_fetcher()
+
+        payload = run(
+            registry_dir=E2E_REGISTRY_DIR, site_dir=site_dir, fetcher=fetcher, today=TODAY
+        )
+
+        assert len(payload) == 2
+
+    def test_record_source_called_once_per_active_source_with_correct_data(self, tmp_path):
+        site_dir = _site_dir(tmp_path)
+        fetcher = _fixture_fetcher()
+        spy = SpyReporter()
+
+        run(
+            registry_dir=E2E_REGISTRY_DIR,
+            site_dir=site_dir,
+            fetcher=fetcher,
+            reporter=spy,
+            today=TODAY,
+        )
+
+        # E2E_REGISTRY_DIR has exactly three active sources: brokensource
+        # (fails), coastalrootsfarm, thelivingcoast.
+        called_source_ids = {source_id for source_id, *_ in spy.source_calls}
+        assert called_source_ids == {"brokensource", "coastalrootsfarm", "thelivingcoast"}
+        assert len(spy.source_calls) == 3
+
+        by_source = {source_id: (org, events, error) for source_id, org, events, error in spy.source_calls}
+
+        # Success branch: real events, no error.
+        coastal_org, coastal_events, coastal_error = by_source["coastalrootsfarm"]
+        assert coastal_error is None
+        assert coastal_org == "Coastal Roots Farm"
+        assert len(coastal_events) == 2  # tide pool + spring planting (see TestEnricherHook)
+        assert all(isinstance(e, Event) for e in coastal_events)
+
+        living_org, living_events, living_error = by_source["thelivingcoast"]
+        assert living_error is None
+        assert len(living_events) == 4  # tide pool dup + 3 recurring story time occurrences
+
+        # Failure-isolation branch: [] + the caught exception, run still
+        # continues -- proves the isolated exception is reported, not
+        # swallowed silently or allowed to abort the run.
+        broken_org, broken_events, broken_error = by_source["brokensource"]
+        assert broken_events == []
+        assert isinstance(broken_error, Exception)
+
+    def test_record_opportunities_called_once_with_final_opportunity_list(self, tmp_path):
+        site_dir = _site_dir(tmp_path)
+        fetcher = _fixture_fetcher()
+        spy = SpyReporter()
+
+        payload = run(
+            registry_dir=E2E_REGISTRY_DIR,
+            site_dir=site_dir,
+            fetcher=fetcher,
+            reporter=spy,
+            today=TODAY,
+        )
+
+        assert len(spy.opportunities_calls) == 1
+        reported_opportunities = spy.opportunities_calls[0]
+        # normalize_run()'s own output includes "Spring Planting Day"
+        # (a past event) -- export_opportunities()'s current/upcoming
+        # filter is what drops it to the final 2-record payload, and
+        # that filter runs *after* this hook fires (sprint.md: "before
+        # export_opportunities() strips .sources"). So the reported
+        # list is a superset of payload's titles, not an exact match.
+        payload_titles = {r["title"] for r in payload}
+        reported_titles = {opp.title for opp in reported_opportunities}
+        assert payload_titles <= reported_titles
+        assert "Spring Planting Day" in reported_titles
+
+        # .sources is still present at report time (export strips it
+        # only afterward) -- proves the hook fires before the strip.
+        for opp in reported_opportunities:
+            assert hasattr(opp, "sources")
+            assert opp.sources  # non-empty frozenset of contributing source_ids
+
+    def test_a_source_that_raises_still_reports_and_does_not_abort_the_run(self, tmp_path):
+        # brokensource.toml is alphabetically first (see
+        # TestLimitAndSourceFilters' own comment) -- limit=1 runs only
+        # it, isolating the failure-reporting assertion from the two
+        # healthy sources entirely.
+        site_dir = _site_dir(tmp_path)
+        fetcher = _fixture_fetcher()
+        spy = SpyReporter()
+
+        payload = run(
+            registry_dir=E2E_REGISTRY_DIR,
+            site_dir=site_dir,
+            fetcher=fetcher,
+            reporter=spy,
+            limit=1,
+            today=TODAY,
+        )
+
+        assert payload == []  # run continues, produces empty (valid) output
+        assert len(spy.source_calls) == 1
+        source_id, _org, events, error = spy.source_calls[0]
+        assert source_id == "brokensource"
+        assert events == []
+        assert isinstance(error, Exception)
+        # And record_opportunities still fires exactly once, with an
+        # empty list -- the run completed its full sequence, it just
+        # had nothing to normalize.
+        assert spy.opportunities_calls == [[]]
+
+
+class TestYieldReporterEndToEnd:
+    """Ticket 004-002's own end-to-end acceptance criterion (sprint.md
+    SUC-018): a real `YieldReporter` -- not the spy `SpyReporter` above
+    -- run twice over the same fixture registry, second run with
+    coastalrootsfarm's fixture responses swapped to a real, well-formed
+    zero-event TEC page, must flag that source zero-yield in the second
+    run's report. This is the exact Fleet/Birch safety net sprint.md's
+    Goals section names: a previously-productive source silently going
+    to zero must be visible without an operator comparing runs by hand.
+    """
+
+    def test_second_run_flags_a_previously_productive_source_as_zero_yield(self, tmp_path):
+        site_dir = _site_dir(tmp_path)
+        first_now = datetime(2026, 7, 19, 8, 0)
+        second_now = datetime(2026, 7, 26, 8, 0)
+
+        # First run: normal fixture responses -- coastalrootsfarm finds
+        # its usual 2 events (tide pool + spring planting; see
+        # TestReporterHook's own assertion of this count above).
+        first_reporter = YieldReporter()
+        run(
+            registry_dir=E2E_REGISTRY_DIR,
+            site_dir=site_dir,
+            fetcher=_fixture_fetcher(),
+            reporter=first_reporter,
+            today=TODAY,
+        )
+        first_report = first_reporter.report(previous_snapshot={}, now=first_now)
+
+        by_id_1 = {s.source_id: s for s in first_report.sources}
+        assert by_id_1["coastalrootsfarm"].found == 2
+        assert by_id_1["coastalrootsfarm"].zero_yield is False
+
+        snapshot_path = tmp_path / "yield-history.json"
+        save_snapshot(snapshot_path, first_report)
+
+        # Second run: coastalrootsfarm's fixture responses swapped to a
+        # real, well-formed zero-event TEC page (not the fetch failure
+        # brokensource.toml exercises) -- a genuine "found nothing this
+        # week" run, while the other two sources are unchanged.
+        empty_tec_body = json.dumps({"total": 0, "total_pages": 0, "events": []})
+        second_fetcher = _fixture_fetcher()
+        second_fetcher.responses[TEC_PROBE_URL] = _response(empty_tec_body)
+        second_fetcher.responses[TEC_PAGE1_URL] = _response(empty_tec_body)
+
+        second_reporter = YieldReporter()
+        run(
+            registry_dir=E2E_REGISTRY_DIR,
+            site_dir=site_dir,
+            fetcher=second_fetcher,
+            reporter=second_reporter,
+            today=TODAY,
+        )
+        previous_snapshot = load_snapshot(snapshot_path)
+        second_report = second_reporter.report(previous_snapshot=previous_snapshot, now=second_now)
+
+        by_id_2 = {s.source_id: s for s in second_report.sources}
+        coastal = by_id_2["coastalrootsfarm"]
+        assert coastal.found == 0
+        assert coastal.previous_found == 2
+        assert coastal.zero_yield is True
+        # A genuine empty response, not an adapter failure -- distinct
+        # from brokensource's error-carrying SourceYield.
+        assert coastal.error is None
+
+        # The other two sources are unaffected by coastalrootsfarm's
+        # swap -- proves per-source isolation in the report too.
+        assert by_id_2["thelivingcoast"].zero_yield is False
 
 
 class TestNoNetworkAccess:
