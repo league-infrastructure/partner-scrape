@@ -1,0 +1,153 @@
+name: Scheduled scrape and publish
+
+# Sprint 004 / SUC-017 / issue 07: unattended weekly run of the
+# partner-scrape pipeline (scrape -> enrich -> normalize -> export),
+# publishing the refreshed site data across the repo boundary into the
+# sibling `stem-ecosystem` checkout. Pushing to `stem-ecosystem`'s
+# `master` is the entire "trigger a deploy" step -- its existing,
+# UNMODIFIED `deploy.yml` already rebuilds/deploys GitHub Pages on any
+# push to `master`; nothing here duplicates or calls that workflow.
+#
+# Secrets required (referenced by name only -- never a literal value in
+# this file). See docs/deploy/scheduled-run.md for the one-time operator
+# setup that provisions them; that setup is NOT performed by this file:
+#   ANTHROPIC_API_KEY  - LLM enrichment (already used for local runs)
+#   SITE_REPO_TOKEN    - fine-grained PAT, `contents: write` on
+#                        stem-ecosystem only, used both to check out
+#                        stem-ecosystem and to push back to it
+#
+# NOTE: GitHub only fires `schedule` triggers for workflow files that
+# exist on the repository's *default* branch, so this file has no effect
+# until this sprint's branch is merged to master -- see the runbook.
+
+on:
+  schedule:
+    # Weekly: every Monday at 13:00 UTC (~06:00 America/Los_Angeles).
+    # A uniform weekly cadence is this sprint's deliberate scope cut --
+    # see sprint.md's Design Rationale / Open Questions re: per-source
+    # differential cadence, deferred to a follow-up issue.
+    - cron: '0 13 * * 1'
+  workflow_dispatch: {}
+
+# Manual activation/testing and the weekly cron should never race each
+# other into two concurrent cross-repo publishes.
+concurrency:
+  group: scheduled-run
+  cancel-in-progress: false
+
+# The default GITHUB_TOKEN only needs to read this repo; all writes to
+# stem-ecosystem go through SITE_REPO_TOKEN instead.
+permissions:
+  contents: read
+
+jobs:
+  scrape-and-publish:
+    name: Scrape, enrich, export, publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout partner-scrape
+        uses: actions/checkout@v4
+        with:
+          path: partner-scrape
+
+      # A fine-grained PAT is required here: the default GITHUB_TOKEN a
+      # workflow receives is scoped to the repo it runs in only, and
+      # cannot check out (let alone later push to) a different repo.
+      - name: Checkout stem-ecosystem
+        uses: actions/checkout@v4
+        with:
+          repository: league-infrastructure/stem-ecosystem
+          ref: master
+          token: ${{ secrets.SITE_REPO_TOKEN }}
+          path: stem-ecosystem
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install dependencies
+        working-directory: partner-scrape
+        run: uv sync --locked
+
+      # CI runners are ephemeral -- config/prod/public.env's
+      # SCRAPE_CACHE_DIR is a local Mac path that does not exist here, so
+      # it is deliberately never inherited. This value lives under the
+      # runner's own temp directory, sibling to both checkouts, and is
+      # discarded when the job ends regardless of the actions/cache step
+      # below.
+      - name: Configure runner-local scrape cache directory
+        run: echo "SCRAPE_CACHE_DIR=${{ runner.temp }}/scrape-cache" >> "$GITHUB_ENV"
+
+      # Only the LLM enrichment cache is restored across runs -- NOT the
+      # raw-HTML mirror portion of SCRAPE_CACHE_DIR, which should
+      # deliberately re-fetch fresh content every week. Without this,
+      # EnrichmentCache (which also persists under SCRAPE_CACHE_DIR)
+      # would start every scheduled run from empty and silently re-pay
+      # full LLM enrichment cost for every event, not just new/changed
+      # ones -- caught during this sprint's architecture self-review.
+      #
+      # The save key is suffixed with the run ID (not content-derived --
+      # a plain content hash would defeat restoration entirely, since
+      # the cache's own content changes every run) so each run's newly
+      # enriched entries are always persisted forward: actions/cache
+      # only saves on a cache-key *miss*, so a single unchanging key
+      # would restore once and then never update again. restore-keys
+      # falls back to the most recent previous run's cache by prefix.
+      - name: Restore LLM enrichment cache
+        id: restore-enrichment-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ env.SCRAPE_CACHE_DIR }}/enrichment_cache
+          key: enrichment-cache-${{ github.run_id }}
+          restore-keys: |
+            enrichment-cache-
+
+      - name: Run partner-scrape
+        working-directory: partner-scrape
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          uv run partner-scrape --site-dir "${{ github.workspace }}/stem-ecosystem" \
+            | tee "${{ runner.temp }}/yield-report.txt"
+
+      - name: Save LLM enrichment cache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ env.SCRAPE_CACHE_DIR }}/enrichment_cache
+          key: enrichment-cache-${{ github.run_id }}
+
+      - name: Append yield report to job summary
+        if: always()
+        run: |
+          {
+            echo '## partner-scrape yield report'
+            echo
+            echo '```'
+            cat "${{ runner.temp }}/yield-report.txt" 2>/dev/null || echo '(no report -- the run step failed before printing one)'
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      # Skipped entirely (no commit, no push) when the run produced no
+      # change to the checked-out tree, so an unchanged week never
+      # creates an empty commit or a spurious deploy.yml trigger.
+      # `git add -A` before diffing is required, not optional: a
+      # first-ever yield-history.json (or any other brand-new file) is
+      # untracked, and a plain `git diff --quiet` (without staging
+      # first) does not see untracked files at all -- only `git diff
+      # --cached --quiet` after `git add -A` correctly reports "no
+      # changes" vs. "new file to publish" in that case.
+      - name: Publish refreshed site data to stem-ecosystem
+        working-directory: stem-ecosystem
+        run: |
+          git config user.name "partner-scrape-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No data changes this run -- nothing to publish."
+          else
+            git commit -m "chore: scheduled partner-scrape data refresh"
+            git push origin HEAD:master
+          fi
