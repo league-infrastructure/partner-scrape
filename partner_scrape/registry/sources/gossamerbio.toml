@@ -1,0 +1,27 @@
+# Gossamer Bio -- San Diego biopharmaceutical company (3013 Science Park
+# Rd), Greenhouse-backed careers board. Board token "gossamerbio" was
+# confirmed live during sprint 006 planning (HTTP 200, valid JSON; 2
+# jobs, both located "San Diego, California, United States" -- see
+# sprint.md's Architecture table). This ticket's own implementation pass
+# could not re-run that live check itself (no network access in the
+# execution/test environment, per this project's offline/hermetic test
+# convention) -- it re-seeds the planning pass's confirmed token as
+# static config unchanged. Operator should re-confirm the board is
+# still reachable (``curl -s https://boards-api.greenhouse.io/v1/boards/
+# gossamerbio/jobs``) before fully trusting production output.
+#
+# No location_keywords override: every posting observed during the
+# planning-pass check was already labeled "San Diego, California,
+# United States", so the default ["San Diego"] match is sufficient.
+
+org_name = "Gossamer Bio"
+adapter_type = "greenhouse"
+enabled = true
+
+[config]
+board_token = "gossamerbio"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "sprint 006 planning (live Greenhouse board-token verification)"

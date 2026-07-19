@@ -1,0 +1,31 @@
+# Boundless Bio -- San Diego precision oncology biotech, Greenhouse-
+# backed careers board. Board token "boundlessbio" was confirmed live
+# during sprint 006 planning (HTTP 200, valid JSON; 0 open jobs at
+# check time -- a legitimate empty-board state, not an error, see
+# sprint.md's Architecture table and SUC-007's Acceptance Criteria: "A
+# company source with zero currently-open matching postings is not an
+# error"). This ticket's own implementation pass could not re-run that
+# live check itself (no network access in the execution/test
+# environment, per this project's offline/hermetic test convention) --
+# it re-seeds the planning pass's confirmed tokens as static config
+# unchanged. Operator should re-confirm the board is still reachable
+# (``curl -s https://boards-api.greenhouse.io/v1/boards/boundlessbio/
+# jobs``) before treating a persistent zero-result run as meaningful
+# signal, rather than solely trusting this planning-pass snapshot.
+
+org_name = "Boundless Bio"
+adapter_type = "greenhouse"
+enabled = true
+
+[config]
+board_token = "boundlessbio"
+# Boundless Bio's office is in the La Jolla/Sorrento-Valley part of San
+# Diego -- ATS location text sometimes reads "La Jolla, CA" rather than
+# "San Diego, CA", which the default ["San Diego"] substring match alone
+# would miss.
+location_keywords = ["San Diego", "La Jolla"]
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "sprint 006 planning (live Greenhouse board-token verification)"

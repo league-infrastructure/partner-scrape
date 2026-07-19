@@ -1,0 +1,12 @@
+# Synthetic well-formed fixture for the company pipeline end-to-end test
+# (ticket 006) -- not a real company's board. Exercises the Greenhouse
+# adapter (ticket 003) through a real pipeline.run() call, alongside
+# lever_fixtureco.toml, proving tickets 001-005 compose correctly
+# end-to-end.
+
+org_name = "Fixture Robotics Co"
+adapter_type = "greenhouse"
+enabled = true
+
+[config]
+board_token = "fixturerobotics"

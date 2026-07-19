@@ -1,0 +1,28 @@
+[
+  {
+    "id": "e2e-lever-0001",
+    "text": "Bioinformatics Research Associate",
+    "categories": {
+      "location": "San Diego, CA",
+      "commitment": "Internship",
+      "team": "Research"
+    },
+    "descriptionPlain": "Summer internship supporting our bioinformatics research team.",
+    "hostedUrl": "https://jobs.lever.co/fixturebiotech/e2e-lever-0001",
+    "applyUrl": "https://jobs.lever.co/fixturebiotech/e2e-lever-0001/apply",
+    "createdAt": 1780329000000
+  },
+  {
+    "id": "e2e-lever-0002",
+    "text": "Director of Sales",
+    "categories": {
+      "location": "San Diego, CA",
+      "commitment": "Full Time Employee",
+      "team": "Sales"
+    },
+    "descriptionPlain": "Full-time sales role, not STEM and not an internship -- must be filtered out.",
+    "hostedUrl": "https://jobs.lever.co/fixturebiotech/e2e-lever-0002",
+    "applyUrl": "https://jobs.lever.co/fixturebiotech/e2e-lever-0002/apply",
+    "createdAt": 1780000000000
+  }
+]
