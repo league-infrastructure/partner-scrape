@@ -1,0 +1,70 @@
+{
+  "total": 4,
+  "total_pages": 2,
+  "events": [
+    {
+      "id": 4501,
+      "title": "Tide Pool Exploration",
+      "description": "<p>Explore local tide pools with a naturalist guide. Wear closed-toe shoes &amp; bring water.</p>",
+      "excerpt": "<p>Explore local tide pools with a naturalist guide.</p>",
+      "start_date": "2026-08-15 09:00:00",
+      "end_date": "2026-08-15 11:00:00",
+      "start_date_details": {"year": "2026", "month": "08", "day": "15", "hour": "9", "minutes": "00"},
+      "end_date_details": {"year": "2026", "month": "08", "day": "15", "hour": "11", "minutes": "00"},
+      "all_day": false,
+      "timezone": "America/Los_Angeles",
+      "cost": "$5",
+      "cost_details": {"type": "fixed", "values": [5], "currency_symbol": "$", "currency_position": "prefix"},
+      "url": "https://example.org/event/tide-pool-exploration/",
+      "website": "https://example.org",
+      "image": {"url": "https://example.org/wp-content/uploads/tide-pool.jpg"},
+      "venue": {
+        "venue": "Cabrillo Tide Pools",
+        "address": "1800 Cabrillo Memorial Dr",
+        "city": "San Diego",
+        "state": "CA",
+        "zip": "92106",
+        "country": "United States",
+        "url": ""
+      },
+      "organizer": [
+        {
+          "organizer": "Ocean Connectors",
+          "email": "info@oceanconnectors.org",
+          "phone": "",
+          "website": "https://oceanconnectors.org"
+        }
+      ],
+      "categories": [{"name": "Marine Science"}, {"name": "Family"}],
+      "tags": [{"name": "tide pools"}, {"name": "outdoor"}],
+      "modified_date": "2026-07-01 12:00:00"
+    },
+    {
+      "id": 4502,
+      "description": "<p>This record has no title and must be skipped.</p>",
+      "start_date": "2026-08-16 09:00:00",
+      "end_date": "2026-08-16 10:00:00",
+      "all_day": false,
+      "cost": "",
+      "url": "https://example.org/event/missing-title/",
+      "venue": {},
+      "organizer": [],
+      "categories": [],
+      "tags": []
+    },
+    {
+      "id": 4503,
+      "title": "Corrupted Date Event",
+      "description": "<p>This record has an unparseable start_date and must be skipped.</p>",
+      "start_date": "not-a-valid-date",
+      "end_date": "2026-08-17 10:00:00",
+      "all_day": false,
+      "cost": "",
+      "url": "https://example.org/event/corrupted-date/",
+      "venue": {},
+      "organizer": [],
+      "categories": [],
+      "tags": []
+    }
+  ]
+}
