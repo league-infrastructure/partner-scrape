@@ -1,0 +1,12 @@
+# Regression fixture (ticket 005): a pre-existing (sprint 001/002-era)
+# fixture source with NO [acquisition_policy] section at all -- proves
+# a source with no fetch_strategy key keeps using the run's default
+# Fetcher, unaffected by the flagship/headless sources also present in
+# this same registry directory.
+
+org_name = "Coastal Roots Farm"
+adapter_type = "tec_rest"
+enabled = true
+
+[config]
+api_base = "https://coastalrootsfarm.fixture/wp-json/tribe/events/v1/events/"

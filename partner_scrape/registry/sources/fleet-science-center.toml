@@ -1,0 +1,24 @@
+# Fleet Science Center -- server-rendered Drupal 9 site with no sitemap
+# at any conventional path (sitemap_index.xml, sitemap.xml, /sitemap,
+# /sitemaps/sitemap.xml all 404 -- confirmed live during sprint 003
+# planning; see sprint.md's Architecture > Design Rationale). Its
+# /events listing page is a Drupal Views listing with ~10 outbound
+# /events/{slug} links, resolved via Listing-Page Discovery
+# (discovery/listing.py) instead of sitemap diffing. Detail pages carry
+# no JSON-LD or <time> markup, so in practice the extraction ladder's
+# OpenGraph/title-fallback rungs -- and sprint 002's existing LLM
+# Enricher -- recover most fields, not the ladder's top JSON-LD/<time>
+# rungs.
+
+org_name = "Fleet Science Center"
+adapter_type = "listing_html"
+enabled = true
+
+[config]
+site_url = "https://www.fleetscience.org"
+listing_urls = ["/events"]
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "sprint 003 planning (live fleetscience.org investigation)"

@@ -1,0 +1,24 @@
+{
+  "page": {
+    "current": 2,
+    "total": 2
+  },
+  "events": [
+    {
+      "event": {
+        "id": 70000000000001,
+        "title": "Ocean Explorers Camp",
+        "description_text": "A week-long day camp for young ocean explorers.",
+        "first_date": "2026-07-20",
+        "last_date": "2026-07-24",
+        "location_name": "Birch Aquarium at Scripps",
+        "room_number": "",
+        "ticket_cost": "$350",
+        "url": "https://calendar.example.edu/event/ocean_explorers_camp",
+        "urlname": "ocean_explorers_camp",
+        "tags": ["camp"],
+        "keywords": ["youth", "summer"]
+      }
+    }
+  ]
+}

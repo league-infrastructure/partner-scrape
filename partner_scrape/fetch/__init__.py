@@ -18,6 +18,7 @@ from partner_scrape.fetch.fetcher import (
     Fetcher,
     UrllibFetcher,
 )
+from partner_scrape.fetch.headless import NETWORK_IDLE_TIMEOUT_MS, PlaywrightFetcher, PlaywrightNotInstalledError
 from partner_scrape.fetch.robots import RobotsDisallowed, is_allowed
 from partner_scrape.fetch.throttle import DEFAULT_RATE_LIMIT_SECONDS, Throttle
 
@@ -27,6 +28,9 @@ __all__ = [
     "FetchResponse",
     "UrllibFetcher",
     "DEFAULT_USER_AGENT",
+    "PlaywrightFetcher",
+    "PlaywrightNotInstalledError",
+    "NETWORK_IDLE_TIMEOUT_MS",
     "RobotsDisallowed",
     "is_allowed",
     "Throttle",

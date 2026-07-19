@@ -1,0 +1,25 @@
+{
+  "total": 1,
+  "total_pages": 1,
+  "events": [
+    {
+      "id": 8001,
+      "title": "Wix Fixture Event",
+      "description": "<p>A fixture event proving a headless-flagged source is routed through the headless Fetcher chain end to end.</p>",
+      "start_date": "2026-08-06 09:00:00",
+      "end_date": "2026-08-06 11:00:00",
+      "all_day": false,
+      "cost": "Free",
+      "url": "https://wix-fixture.example/events/wix-fixture-event/",
+      "image": {},
+      "venue": {
+        "venue": "Wix Fixture Venue",
+        "address": "",
+        "city": "San Diego",
+        "state": "CA"
+      },
+      "categories": [],
+      "tags": []
+    }
+  ]
+}

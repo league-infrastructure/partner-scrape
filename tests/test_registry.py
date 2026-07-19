@@ -44,7 +44,23 @@ class TestSourceConfigFromToml:
             "rate_limit_seconds": 1.0,
             "respect_robots": True,
             "discovered_via": "manual",
+            # ticket 005: additive default -- a file with no
+            # [acquisition_policy] section at all (good_one.toml) still
+            # resolves fetch_strategy to "static", today's exact
+            # pre-ticket-005 fetch behavior.
+            "fetch_strategy": "static",
         }
+
+    def test_fetch_strategy_defaults_to_static_when_acquisition_policy_omits_it(self):
+        # A source with an [acquisition_policy] section that sets other
+        # keys but not fetch_strategy must still default it to "static"
+        # -- the merge in SourceConfig.from_toml is per-key, not
+        # all-or-nothing.
+        source = SourceConfig.from_toml(
+            FIXTURES_DIR.parent / "registry_fetch_strategy" / "partial_acquisition_policy.toml"
+        )
+        assert source.acquisition_policy["rate_limit_seconds"] == 2.5
+        assert source.acquisition_policy["fetch_strategy"] == "static"
 
     def test_taxonomy_defaults_read_when_present(self):
         source = SourceConfig.from_toml(FIXTURES_DIR / "good_two.toml")
@@ -100,6 +116,8 @@ class TestLoadSources:
             "cleansd",
             "oceanconnectors",
             "visitcmod",
+            "birch-aquarium",
+            "fleet-science-center",
         }
 
 
@@ -164,3 +182,43 @@ class TestRealSeedRegistry:
         assert sources["visitcmod"].config["api_base"] == (
             "https://visitcmod.org/wp-json/tribe/events/v1/events/"
         )
+
+
+class TestRealBirchAquariumSource:
+    """The real birch-aquarium.toml Localist source (ticket 002)."""
+
+    def test_loads_as_enabled_localist_source(self):
+        sources = {s.source_id: s for s in load_active_sources()}
+
+        birch = sources["birch-aquarium"]
+        assert birch.org_name == "Birch Aquarium at Scripps"
+        assert birch.adapter_type == "localist"
+        assert birch.enabled is True
+
+    def test_config_matches_live_confirmed_values(self):
+        sources = {s.source_id: s for s in load_active_sources()}
+
+        birch = sources["birch-aquarium"]
+        assert birch.config["api_base"] == "https://calendar.ucsd.edu/api/2/events"
+        assert birch.config["group_id"] == "49845193640602"
+        assert birch.config["days"] == 180
+        assert birch.config["pp"] == 50
+
+
+class TestRealFleetScienceCenterSource:
+    """The real fleet-science-center.toml listing_html source (ticket 004)."""
+
+    def test_loads_as_enabled_listing_html_source(self):
+        sources = {s.source_id: s for s in load_active_sources()}
+
+        fleet = sources["fleet-science-center"]
+        assert fleet.org_name == "Fleet Science Center"
+        assert fleet.adapter_type == "listing_html"
+        assert fleet.enabled is True
+
+    def test_config_matches_live_confirmed_values(self):
+        sources = {s.source_id: s for s in load_active_sources()}
+
+        fleet = sources["fleet-science-center"]
+        assert fleet.config["site_url"] == "https://www.fleetscience.org"
+        assert fleet.config["listing_urls"] == ["/events"]

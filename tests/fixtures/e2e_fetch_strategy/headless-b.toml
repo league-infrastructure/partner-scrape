@@ -1,0 +1,13 @@
+# See headless-a.toml's comment -- a second headless-flagged fixture
+# source, used to prove the headless Fetcher is built at most once per
+# run() call even when more than one active source needs it.
+
+org_name = "Headless Fixture Org B"
+adapter_type = "tec_rest"
+enabled = true
+
+[config]
+api_base = "https://headless-b.example/wp-json/tribe/events/v1/events/"
+
+[acquisition_policy]
+fetch_strategy = "headless"

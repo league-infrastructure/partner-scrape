@@ -21,6 +21,8 @@ from partner_scrape.adapters.base import (
 )
 from partner_scrape.adapters.generic_html import GenericHtmlAdapter
 from partner_scrape.adapters.ical import ICalAdapter
+from partner_scrape.adapters.listing_html import ListingHtmlAdapter
+from partner_scrape.adapters.localist import LocalistAdapter
 from partner_scrape.adapters.tec import TecRestAdapter
 from partner_scrape.adapters.wordpress import WordPressRestAdapter
 
@@ -28,6 +30,8 @@ ADAPTERS["tec_rest"] = TecRestAdapter
 ADAPTERS["wp_rest"] = WordPressRestAdapter
 ADAPTERS["ical"] = ICalAdapter
 ADAPTERS["generic_html"] = GenericHtmlAdapter
+ADAPTERS["localist"] = LocalistAdapter
+ADAPTERS["listing_html"] = ListingHtmlAdapter
 
 __all__ = [
     "Adapter",
@@ -41,4 +45,6 @@ __all__ = [
     "WordPressRestAdapter",
     "ICalAdapter",
     "GenericHtmlAdapter",
+    "LocalistAdapter",
+    "ListingHtmlAdapter",
 ]

@@ -25,12 +25,14 @@ from __future__ import annotations
 
 import json
 import shutil
+import sys
 from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
 
 import pytest
 
+from partner_scrape.fetch import PlaywrightFetcher, PoliteFetcher, Throttle
 from partner_scrape.fetch.fetcher import FetchResponse
 from partner_scrape.model import Event
 from partner_scrape.pipeline import run
@@ -38,6 +40,13 @@ from partner_scrape.pipeline import run
 FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures"
 E2E_REGISTRY_DIR = FIXTURES_DIR / "e2e_registry"
 PARTNERS_FIXTURE = FIXTURES_DIR / "partners.json"
+
+#: Ticket 005 fixture directories -- see this file's bottom two test
+#: classes (per-source fetch_strategy selection, and the flagship
+#: end-to-end proof).
+FETCH_STRATEGY_REGISTRY_DIR = FIXTURES_DIR / "e2e_fetch_strategy"
+FLAGSHIP_REGISTRY_DIR = FIXTURES_DIR / "e2e_flagship_registry"
+FETCH_FIXTURES_DIR = FIXTURES_DIR / "fetch"
 
 TODAY = date(2026, 7, 19)
 
@@ -400,3 +409,381 @@ class TestNoFixtureResponseIsARealFailure:
         fetcher = FixtureFetcher({})
         with pytest.raises(NoFixtureResponse):
             fetcher.get("https://example.org/never-configured/")
+
+
+# =============================================================================
+# Ticket 005: per-source fetch_strategy wiring + flagship end-to-end proof
+#
+# Two concerns, two fixture registries:
+#
+# 1. Pipeline's per-source Fetcher *selection* mechanics (lazy, at-most-
+#    once headless construction; isolation of a headless failure; a
+#    pre-existing static source's fetch path staying untouched) --
+#    exercised over tests/fixtures/e2e_fetch_strategy/, a small
+#    tec_rest-only registry chosen to keep these tests focused purely on
+#    Pipeline's own selection logic, decoupled from any particular
+#    adapter's discovery mechanics.
+# 2. The sprint's own Success Criteria/SUC-016 proof -- Birch Aquarium
+#    (localist), Fleet Science Center (listing_html), a pre-existing
+#    regression source (tec_rest, static), and a headless-flagged
+#    fixture source, all run through one real `pipeline.run()` call --
+#    exercised over tests/fixtures/e2e_flagship_registry/.
+#
+# Both use tec_rest for their headless-flagged fixture source(s) rather
+# than generic_html: SUC-015's own Main Flow is explicit that headless
+# routing is a Fetch-layer concern, exercised identically "for any
+# adapter type" -- tec_rest just needs the fewest fixture URLs to prove
+# it, and the real Wix sites this capability targets are explicitly out
+# of this sprint's registration scope (sprint.md's Open Question 1).
+# =============================================================================
+
+HEADLESS_A_API_BASE = "https://headless-a.example/wp-json/tribe/events/v1/events/"
+HEADLESS_A_PROBE_URL = f"{HEADLESS_A_API_BASE}?per_page=1&status=publish&start_date=now"
+HEADLESS_A_PAGE1_URL = f"{HEADLESS_A_API_BASE}?per_page=50&page=1&status=publish&start_date=now"
+
+HEADLESS_B_API_BASE = "https://headless-b.example/wp-json/tribe/events/v1/events/"
+HEADLESS_B_PROBE_URL = f"{HEADLESS_B_API_BASE}?per_page=1&status=publish&start_date=now"
+HEADLESS_B_PAGE1_URL = f"{HEADLESS_B_API_BASE}?per_page=50&page=1&status=publish&start_date=now"
+
+WORKING_API_BASE = "https://workingsource.example/wp-json/tribe/events/v1/events/"
+WORKING_PROBE_URL = f"{WORKING_API_BASE}?per_page=1&status=publish&start_date=now"
+WORKING_PAGE1_URL = f"{WORKING_API_BASE}?per_page=50&page=1&status=publish&start_date=now"
+
+
+@dataclass
+class _FixtureNavigationResponse:
+    """Stand-in for a real Playwright navigation ``Response`` -- the only
+    piece of it ``PlaywrightFetcher`` reads is ``status``.
+
+    Mirrors ``test_fetch_headless.py``'s own fixture double; kept as a
+    separate, file-local definition rather than importing across test
+    files, matching this suite's existing per-file fixture-double
+    convention (every other test file in this suite defines its own
+    ``FixtureFetcher`` rather than sharing one).
+    """
+
+    status: int
+    headers: dict[str, str] = field(default_factory=dict)
+
+
+@dataclass
+class FixtureHeadlessPage:
+    """``HeadlessPage`` test double -- returns canned rendered HTML per
+    URL, no real browser process involved. See
+    ``partner_scrape.fetch.headless.HeadlessPage`` and
+    ``test_fetch_headless.py``'s identically-shaped double.
+    """
+
+    pages: dict[str, tuple[int, str]]
+    calls: list[dict[str, object]] = field(default_factory=list)
+    _current_url: str | None = field(default=None, repr=False)
+
+    def goto(self, url: str, timeout: float | None = None, wait_until: str | None = None):
+        self.calls.append({"url": url, "timeout": timeout, "wait_until": wait_until})
+        status, _html = self.pages[url]
+        self._current_url = url
+        return _FixtureNavigationResponse(status=status)
+
+    def content(self) -> str:
+        assert self._current_url is not None
+        _status, html = self.pages[self._current_url]
+        return html
+
+
+class _CountingHeadlessFactory:
+    """Spy ``headless_fetcher_factory``: records how many times Pipeline
+    actually invoked it (ticket 005's "constructed at most once per
+    run(), only when at least one active source needs it" Acceptance
+    Criterion) and returns a fixed fetcher on every call.
+    """
+
+    def __init__(self, fetcher: object) -> None:
+        self._fetcher = fetcher
+        self.call_count = 0
+
+    def __call__(self):
+        self.call_count += 1
+        return self._fetcher
+
+
+class TestPerSourceFetchStrategySelectionLaziness:
+    """Pipeline reads ``acquisition_policy.get("fetch_strategy",
+    "static")`` per source (registry/schema.py's new default, also
+    ticket 005) and constructs the headless Fetcher lazily -- never
+    eagerly, never more than once per ``run()`` call.
+    """
+
+    def test_headless_factory_never_called_when_no_source_is_flagged_headless(self, tmp_path):
+        # Reuses sprint 001's own e2e registry (TestWalkingSkeletonEndToEnd's
+        # E2E_REGISTRY_DIR) -- every source there predates fetch_strategy
+        # entirely, so this also doubles as this ticket's "byte-identical
+        # behavior for a pre-existing fixture source" proof: the default
+        # Fetcher path runs exactly as it did before this ticket, and the
+        # headless construction path is never even touched.
+        site_dir = _site_dir(tmp_path)
+        fetcher = _fixture_fetcher()
+        spy = _CountingHeadlessFactory(FixtureFetcher({}))
+
+        payload = run(
+            registry_dir=E2E_REGISTRY_DIR,
+            site_dir=site_dir,
+            fetcher=fetcher,
+            headless_fetcher_factory=spy,
+            today=TODAY,
+        )
+
+        assert spy.call_count == 0
+        # And the run's own (unrelated to this ticket) behavior is
+        # completely unaffected -- the same two opportunities as every
+        # other test in this file's walking-skeleton class.
+        assert len(payload) == 2
+
+    def test_headless_factory_is_called_exactly_once_for_two_headless_sources(self, tmp_path):
+        # headless-a.toml and headless-b.toml are the two
+        # alphabetically-first source_ids in FETCH_STRATEGY_REGISTRY_DIR
+        # (ahead of workingsource.toml) -- limit=2 activates exactly
+        # those two, both flagged headless, and nothing else.
+        site_dir = _site_dir(tmp_path)
+        static_fetcher = FixtureFetcher({})  # must never be touched
+        a_body = (FETCH_STRATEGY_REGISTRY_DIR / "headless_a_events.json").read_text()
+        b_body = (FETCH_STRATEGY_REGISTRY_DIR / "headless_b_events.json").read_text()
+        headless_fetcher = FixtureFetcher(
+            {
+                HEADLESS_A_PROBE_URL: _response(a_body),
+                HEADLESS_A_PAGE1_URL: _response(a_body),
+                HEADLESS_B_PROBE_URL: _response(b_body),
+                HEADLESS_B_PAGE1_URL: _response(b_body),
+            }
+        )
+        spy = _CountingHeadlessFactory(headless_fetcher)
+
+        payload = run(
+            registry_dir=FETCH_STRATEGY_REGISTRY_DIR,
+            site_dir=site_dir,
+            fetcher=static_fetcher,
+            headless_fetcher_factory=spy,
+            limit=2,
+            today=TODAY,
+        )
+
+        assert spy.call_count == 1
+        assert static_fetcher.calls == []
+        titles = {r["title"] for r in payload}
+        assert titles == {"Headless Fixture A Event", "Headless Fixture B Event"}
+
+
+class TestHeadlessSourceFailureIsolation:
+    """SUC-015's Error Flow: ``playwright`` unavailable for a source
+    flagged ``headless`` fails only that source's ``adapters.run(...)``
+    call -- caught by Pipeline's existing per-source try/except
+    (SUC-008), no new error-handling code. Exercises the REAL default
+    ``headless_fetcher_factory`` (no factory injected), with the
+    deferred ``import playwright`` forced to fail exactly as
+    ``test_fetch_headless.py``'s own ``TestPlaywrightNotInstalled``
+    does -- proving the production wiring itself, not just a test
+    double standing in for it.
+    """
+
+    def test_playwright_not_installed_is_isolated_others_still_produce_output(
+        self, tmp_path, monkeypatch, caplog
+    ):
+        import logging
+
+        # PoliteFetcher()'s default cache_dir (built by Pipeline's real
+        # `_build_default_headless_fetcher`, since no
+        # headless_fetcher_factory is injected below) reads
+        # SCRAPE_CACHE_DIR -- point it at a tmp_path so this test never
+        # touches the real configured cache directory.
+        monkeypatch.setenv("SCRAPE_CACHE_DIR", str(tmp_path / "scrape_cache"))
+        # Force the deferred `from playwright.sync_api import
+        # sync_playwright` import to fail deterministically, matching
+        # test_fetch_headless.py's TestPlaywrightNotInstalled.
+        monkeypatch.setitem(sys.modules, "playwright", None)
+        monkeypatch.setitem(sys.modules, "playwright.sync_api", None)
+
+        site_dir = _site_dir(tmp_path)
+        working_body = (FETCH_STRATEGY_REGISTRY_DIR / "workingsource_events.json").read_text()
+        static_fetcher = FixtureFetcher(
+            {
+                WORKING_PROBE_URL: _response(working_body),
+                WORKING_PAGE1_URL: _response(working_body),
+            }
+        )
+
+        with caplog.at_level(logging.ERROR, logger="partner_scrape.pipeline"):
+            payload = run(
+                registry_dir=FETCH_STRATEGY_REGISTRY_DIR,
+                site_dir=site_dir,
+                fetcher=static_fetcher,
+                # headless_fetcher_factory omitted -- exercises Pipeline's
+                # real default production path.
+                today=TODAY,
+            )
+
+        # Both headless-flagged sources (headless-a, headless-b) fail --
+        # logged, isolated -- while the static-strategy workingsource.toml
+        # still produces output.
+        titles = {r["title"] for r in payload}
+        assert titles == {"Working Source Event"}
+        assert "headless-a" in caplog.text
+        assert "headless-b" in caplog.text
+
+
+class TestFlagshipEndToEnd:
+    """SUC-016: Birch Aquarium (localist) + Fleet Science Center
+    (listing_html) + a pre-existing regression source (tec_rest,
+    static) + a headless-flagged fixture source (tec_rest, headless),
+    run through the real Pipeline end to end -- discovery -> fetch ->
+    extract -> (empty) enrich -> normalize -> export -- asserting both
+    flagship organizations' events reach the final opportunities.json-
+    shaped output. Entirely offline and without playwright installed:
+    the headless-flagged source's Fetcher chain is exercised through
+    ticket 001's fixture page_factory double (FixtureHeadlessPage
+    above), wrapped by a real PoliteFetcher+PlaywrightFetcher pair --
+    never a real browser, never a real socket.
+    """
+
+    BIRCH_API_BASE = "https://calendar.fixture.edu/api/2/events"
+    BIRCH_GROUP_ID = "49845193640602"
+    BIRCH_DAYS = 180
+    BIRCH_PROBE_URL = f"{BIRCH_API_BASE}?group_id={BIRCH_GROUP_ID}&days={BIRCH_DAYS}&pp=1&page=1"
+    BIRCH_PAGE1_URL = f"{BIRCH_API_BASE}?group_id={BIRCH_GROUP_ID}&days={BIRCH_DAYS}&pp=50&page=1"
+
+    FLEET_SITE_URL = "https://fleetscience.fixture"
+    FLEET_LISTING_URL = f"{FLEET_SITE_URL}/events"
+    FLEET_DYNAMIC_EARTH_URL = f"{FLEET_SITE_URL}/events/dynamic-earth"
+    FLEET_ROBOT_REVOLUTION_URL = f"{FLEET_SITE_URL}/events/robot-revolution"
+
+    COASTAL_API_BASE = "https://coastalrootsfarm.fixture/wp-json/tribe/events/v1/events/"
+    COASTAL_PROBE_URL = f"{COASTAL_API_BASE}?per_page=1&status=publish&start_date=now"
+    COASTAL_PAGE1_URL = f"{COASTAL_API_BASE}?per_page=50&page=1&status=publish&start_date=now"
+
+    WIX_API_BASE = "https://wix-fixture.example/wp-json/tribe/events/v1/events/"
+    WIX_PROBE_URL = f"{WIX_API_BASE}?per_page=1&status=publish&start_date=now"
+    WIX_PAGE1_URL = f"{WIX_API_BASE}?per_page=50&page=1&status=publish&start_date=now"
+    WIX_ROBOTS_URL = "https://wix-fixture.example/robots.txt"
+
+    def _static_fetcher(self) -> FixtureFetcher:
+        birch_body = (FLAGSHIP_REGISTRY_DIR / "birch_events.json").read_text()
+        fleet_listing_body = (FLAGSHIP_REGISTRY_DIR / "fleet_listing.html").read_text()
+        fleet_dynamic_earth_body = (
+            FLAGSHIP_REGISTRY_DIR / "fleet_detail_dynamic_earth.html"
+        ).read_text()
+        fleet_robot_revolution_body = (
+            FLAGSHIP_REGISTRY_DIR / "fleet_detail_robot_revolution.html"
+        ).read_text()
+        coastal_body = (FLAGSHIP_REGISTRY_DIR / "coastalrootsfarm_events.json").read_text()
+
+        return FixtureFetcher(
+            {
+                self.BIRCH_PROBE_URL: _response(birch_body),
+                self.BIRCH_PAGE1_URL: _response(birch_body),
+                self.FLEET_LISTING_URL: _response(fleet_listing_body),
+                self.FLEET_DYNAMIC_EARTH_URL: _response(fleet_dynamic_earth_body),
+                self.FLEET_ROBOT_REVOLUTION_URL: _response(fleet_robot_revolution_body),
+                self.COASTAL_PROBE_URL: _response(coastal_body),
+                self.COASTAL_PAGE1_URL: _response(coastal_body),
+                # WIX_* URLs deliberately absent -- the headless-flagged
+                # source must never be reachable through this (static)
+                # Fetcher; see test_headless_source_never_reaches_the_
+                # static_fetcher_and_vice_versa below.
+            }
+        )
+
+    def _headless_page(self) -> FixtureHeadlessPage:
+        wix_body = (FLAGSHIP_REGISTRY_DIR / "wix_events.json").read_text()
+        robots_body = (FETCH_FIXTURES_DIR / "robots_allow_all.txt").read_text()
+        return FixtureHeadlessPage(
+            pages={
+                self.WIX_ROBOTS_URL: (200, robots_body),
+                self.WIX_PROBE_URL: (200, wix_body),
+                self.WIX_PAGE1_URL: (200, wix_body),
+            }
+        )
+
+    def _run(self, tmp_path):
+        site_dir = _site_dir(tmp_path)
+        static_fetcher = self._static_fetcher()
+        headless_page = self._headless_page()
+        factory_calls: list[int] = []
+
+        def headless_fetcher_factory():
+            factory_calls.append(1)
+            # A real PoliteFetcher wrapping a real PlaywrightFetcher --
+            # only page_factory is a fixture double -- so this exercises
+            # the exact same robots.txt/rate-limit/cache path a real
+            # headless fetch would (SUC-015's own acceptance criterion),
+            # not a bypass of it. The Throttle's clock/sleep are faked
+            # (matching test_fetch_cache.py's own convention) so this
+            # test never real-sleeps for per-domain rate limiting.
+            return PoliteFetcher(
+                cache_dir=tmp_path / "headless_cache",
+                fetcher=PlaywrightFetcher(page_factory=lambda: headless_page),
+                throttle=Throttle(clock=lambda: 0.0, sleep=lambda seconds: None),
+            )
+
+        payload = run(
+            registry_dir=FLAGSHIP_REGISTRY_DIR,
+            site_dir=site_dir,
+            fetcher=static_fetcher,
+            headless_fetcher_factory=headless_fetcher_factory,
+            today=TODAY,
+        )
+        return payload, static_fetcher, headless_page, factory_calls
+
+    def test_birch_and_fleet_events_reach_the_final_opportunities_output(self, tmp_path):
+        payload, _static_fetcher, _headless_page, factory_calls = self._run(tmp_path)
+
+        partner_names = {r["partner_name"] for r in payload}
+        assert "Birch Aquarium at Scripps" in partner_names
+        assert "Fleet Science Center" in partner_names
+
+        titles = {r["title"] for r in payload}
+        # Birch (localist): id-based dedup within the fetched page
+        # collapses the two "Shark Summer" rows to one Event -- SUC-013's
+        # own acceptance criterion, reconfirmed here in the full chain.
+        assert "Shark Summer" in titles
+        assert "Tide Pool Discovery Lab" in titles
+        # Fleet (listing_html): both discovered/extracted pages.
+        assert "Dynamic Earth" in titles
+        assert "Robot Revolution" in titles
+
+        # The headless Fetcher is built lazily, at most once per run().
+        assert factory_calls == [1]
+
+    def test_regression_and_headless_sources_also_reach_export(self, tmp_path):
+        # Not SUC-016's own required assertion, but this ticket's other
+        # two Acceptance Criteria bullets (the pre-existing regression
+        # source's fetch path is unaffected; the headless-flagged
+        # source's Events survive the same chain) -- proven in the same
+        # single real pipeline.run() call as the flagship proof above.
+        payload, _static_fetcher, _headless_page, _factory_calls = self._run(tmp_path)
+
+        titles = {r["title"] for r in payload}
+        assert "Regenerative Farming Day" in titles
+        assert "Wix Fixture Event" in titles
+
+    def test_headless_source_never_reaches_the_static_fetcher_and_vice_versa(self, tmp_path):
+        _payload, static_fetcher, headless_page, _factory_calls = self._run(tmp_path)
+
+        assert self.WIX_PROBE_URL not in static_fetcher.calls
+        assert self.WIX_PAGE1_URL not in static_fetcher.calls
+
+        navigated = {call["url"] for call in headless_page.calls}
+        assert self.WIX_PROBE_URL in navigated
+        assert self.BIRCH_PROBE_URL not in navigated
+        assert self.FLEET_LISTING_URL not in navigated
+        assert self.COASTAL_PROBE_URL not in navigated
+
+    def test_no_network_access_every_static_fetch_is_a_known_fixture_url(self, tmp_path):
+        _payload, static_fetcher, _headless_page, _factory_calls = self._run(tmp_path)
+
+        assert set(static_fetcher.calls) <= {
+            self.BIRCH_PROBE_URL,
+            self.BIRCH_PAGE1_URL,
+            self.FLEET_LISTING_URL,
+            self.FLEET_DYNAMIC_EARTH_URL,
+            self.FLEET_ROBOT_REVOLUTION_URL,
+            self.COASTAL_PROBE_URL,
+            self.COASTAL_PAGE1_URL,
+        }

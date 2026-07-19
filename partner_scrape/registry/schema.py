@@ -27,10 +27,19 @@ _REQUIRED_FIELDS = ("org_name", "adapter_type", "config")
 #: Ticket 003 (Fetch & Cache) is the actual consumer of these values;
 #: this module only owns supplying sane defaults so hand-authored TOML
 #: files aren't required to repeat this boilerplate in every file.
+#: ``fetch_strategy`` defaults to ``"static"`` -- ticket 005's Pipeline
+#: reads this key (``source.acquisition_policy.get("fetch_strategy",
+#: "static")``) to pick between the run's default ``Fetcher`` and a
+#: lazily-constructed headless one (``"headless"``, ``fetch/headless.py``
+#: ``PlaywrightFetcher``). Purely additive: every source TOML file
+#: written before this key existed has no ``fetch_strategy`` line and
+#: resolves to ``"static"`` here, identical to its pre-ticket-005 fetch
+#: behavior -- see sprint.md's Migration Concerns.
 _ACQUISITION_POLICY_DEFAULTS: dict[str, Any] = {
     "rate_limit_seconds": 1.0,
     "respect_robots": True,
     "discovered_via": "manual",
+    "fetch_strategy": "static",
 }
 
 

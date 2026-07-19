@@ -1,0 +1,19 @@
+# Synthetic well-formed fixture -- not a real organization. Sets one
+# [acquisition_policy] key explicitly (rate_limit_seconds) but omits
+# fetch_strategy, to exercise ticket 005's per-key default merge (a
+# source that customizes some acquisition_policy keys must still get
+# fetch_strategy="static" for the ones it doesn't set, not lose every
+# default the moment it sets any one of them). Kept in its own
+# directory rather than tests/fixtures/registry/ so it doesn't disturb
+# that directory's own fixed-file-count assertions
+# (TestLoadSources.test_bad_files_do_not_prevent_the_rest_of_the_directory_loading).
+
+org_name = "Fixture Org Partial Policy"
+adapter_type = "tec_rest"
+enabled = true
+
+[config]
+api_base = "https://example3.org/wp-json/tribe/events/v1/events/"
+
+[acquisition_policy]
+rate_limit_seconds = 2.5

@@ -1,0 +1,59 @@
+{
+  "page": {
+    "current": 1,
+    "total": 1
+  },
+  "events": [
+    {
+      "event": {
+        "id": 70000000000001,
+        "title": "Shark Summer",
+        "description_text": "Dive into shark-themed activities all summer long.",
+        "first_date": "2026-08-01",
+        "last_date": "2026-08-01",
+        "location_name": "Birch Aquarium at Scripps",
+        "room_number": "",
+        "ticket_cost": "Included with admission",
+        "url": "https://calendar.fixture.edu/event/shark_summer",
+        "urlname": "shark_summer",
+        "photo_url": "https://calendar.fixture.edu/photos/shark_summer.jpg",
+        "tags": ["marine life", "summer"],
+        "keywords": ["sharks", "family"]
+      }
+    },
+    {
+      "event": {
+        "id": 70000000000001,
+        "title": "Shark Summer",
+        "description_text": "Dive into shark-themed activities all summer long.",
+        "first_date": "2026-08-02",
+        "last_date": "2026-08-02",
+        "location_name": "Birch Aquarium at Scripps",
+        "room_number": "",
+        "ticket_cost": "Included with admission",
+        "url": "https://calendar.fixture.edu/event/shark_summer",
+        "urlname": "shark_summer",
+        "photo_url": "https://calendar.fixture.edu/photos/shark_summer.jpg",
+        "tags": ["marine life", "summer"],
+        "keywords": ["sharks", "family"]
+      }
+    },
+    {
+      "event": {
+        "id": 70000000000002,
+        "title": "Tide Pool Discovery Lab",
+        "description_text": "Hands-on exploration of local tide pool ecosystems.",
+        "first_date": "2026-08-10",
+        "last_date": "2026-08-10",
+        "location_name": "Birch Aquarium at Scripps",
+        "room_number": "Tide Pool Plaza",
+        "ticket_cost": "$5",
+        "url": "https://calendar.fixture.edu/event/tide_pool_lab",
+        "urlname": "tide_pool_lab",
+        "photo_url": "",
+        "tags": ["tide pools"],
+        "keywords": ["marine science", "family"]
+      }
+    }
+  ]
+}

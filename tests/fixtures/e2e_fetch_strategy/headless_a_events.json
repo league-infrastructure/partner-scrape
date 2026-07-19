@@ -1,0 +1,25 @@
+{
+  "total": 1,
+  "total_pages": 1,
+  "events": [
+    {
+      "id": 5001,
+      "title": "Headless Fixture A Event",
+      "description": "<p>A fixture event for fetch-strategy selection tests.</p>",
+      "start_date": "2026-08-01 09:00:00",
+      "end_date": "2026-08-01 11:00:00",
+      "all_day": false,
+      "cost": "Free",
+      "url": "https://headless-a.example/events/fixture-event/",
+      "image": {},
+      "venue": {
+        "venue": "Fixture Venue A",
+        "address": "",
+        "city": "San Diego",
+        "state": "CA"
+      },
+      "categories": [],
+      "tags": []
+    }
+  ]
+}

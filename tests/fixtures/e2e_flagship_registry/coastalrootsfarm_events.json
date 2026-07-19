@@ -1,0 +1,25 @@
+{
+  "total": 1,
+  "total_pages": 1,
+  "events": [
+    {
+      "id": 9101,
+      "title": "Regenerative Farming Day",
+      "description": "<p>A regression-check event proving pre-existing static sources are unaffected by ticket 005.</p>",
+      "start_date": "2026-08-04 09:00:00",
+      "end_date": "2026-08-04 11:00:00",
+      "all_day": false,
+      "cost": "Free",
+      "url": "https://coastalrootsfarm.fixture/events/regenerative-farming-day/",
+      "image": {},
+      "venue": {
+        "venue": "Coastal Roots Farm",
+        "address": "",
+        "city": "Encinitas",
+        "state": "CA"
+      },
+      "categories": [],
+      "tags": []
+    }
+  ]
+}

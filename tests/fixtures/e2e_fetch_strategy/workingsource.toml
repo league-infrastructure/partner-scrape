@@ -1,0 +1,12 @@
+# Synthetic fixture with no [acquisition_policy] section at all --
+# ticket 005's regression case: a pre-existing (sprint 001/002-era)
+# style source with no fetch_strategy key must keep using the run's
+# default Fetcher, unaffected by any headless-flagged sibling source
+# also present in the same registry directory.
+
+org_name = "Working Fixture Org"
+adapter_type = "tec_rest"
+enabled = true
+
+[config]
+api_base = "https://workingsource.example/wp-json/tribe/events/v1/events/"
