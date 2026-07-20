@@ -41,9 +41,15 @@ SOURCE_NAME = "tec_rest"
 CONFIDENCE = 1.0
 
 #: Events per page for the real paginated fetches (matches
-#: dev/fetch_tec_api.py's proven value). The initial probe uses
-#: ``per_page=1`` instead -- see ``discover()``.
+#: dev/fetch_tec_api.py's proven value). The probe uses this same size
+#: so ``total_pages`` reflects the real page count -- see ``discover()``.
 PAGE_SIZE = 50
+
+#: Hard cap on pages enumerated for a single source, as a backstop
+#: against an API that reports a pathological ``total_pages``. At
+#: PAGE_SIZE=50 this is 5,000 events -- far beyond any real partner
+#: calendar -- so hitting it means the source is misreporting.
+MAX_PAGES = 100
 
 _TAG_RE = re.compile(r"<[^>]+>")
 _WHITESPACE_RE = re.compile(r"\s+")
@@ -178,16 +184,24 @@ class TecRestAdapter:
     """``Adapter`` for The Events Calendar's public REST API (``tec_rest``)."""
 
     def discover(self, source: SourceConfig, fetcher: Fetcher) -> list[EventRef]:
-        """Probe ``{api_base}?per_page=1`` to learn ``total_pages``, then
+        """Probe ``{api_base}?per_page=50`` to learn ``total_pages``, then
         enumerate one ``EventRef`` per real (``per_page=50``) page.
 
+        The probe uses ``PAGE_SIZE`` (not ``per_page=1``): TEC's
+        ``total_pages`` is ``ceil(total / per_page)``, so probing with
+        ``per_page=1`` returns ``total_pages == total_events`` and makes
+        this enumerate ~50x too many pages -- almost all of which 404
+        past the real data (one wasted fetch each, at the rate limit).
+        Probing at the real page size makes ``total_pages`` correct.
+
         A probe that fails to fetch or parse is treated as "exactly one
-        page" rather than raising -- this ticket's per-source failure
-        isolation belongs to the Pipeline (ticket 008); this adapter
-        degrades gracefully rather than crashing the whole run.
+        page" rather than raising; per-source failure isolation belongs
+        to the Pipeline, so this adapter degrades gracefully. ``total_pages``
+        is also capped at ``MAX_PAGES`` as a backstop against a source
+        that misreports it.
         """
         api_base = source.config["api_base"]
-        probe_url = f"{api_base}?per_page=1&status=publish&start_date=now"
+        probe_url = f"{api_base}?per_page={PAGE_SIZE}&status=publish&start_date=now"
         probe = fetcher.get(probe_url)
 
         total_pages = 1
@@ -203,6 +217,13 @@ class TecRestAdapter:
             logger.warning(
                 "TEC probe for %s returned status %s; assuming 1 page", api_base, probe.status
             )
+
+        if total_pages > MAX_PAGES:
+            logger.warning(
+                "TEC source %s reports %d pages; capping at %d",
+                api_base, total_pages, MAX_PAGES,
+            )
+            total_pages = MAX_PAGES
 
         return [EventRef(url=_page_url(api_base, page)) for page in range(1, total_pages + 1)]
 

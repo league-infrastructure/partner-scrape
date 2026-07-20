@@ -52,7 +52,7 @@ FETCH_FIXTURES_DIR = FIXTURES_DIR / "fetch"
 TODAY = date(2026, 7, 19)
 
 TEC_API_BASE = "https://coastalrootsfarm.example/wp-json/tribe/events/v1/events/"
-TEC_PROBE_URL = f"{TEC_API_BASE}?per_page=1&status=publish&start_date=now"
+TEC_PROBE_URL = f"{TEC_API_BASE}?per_page=50&status=publish&start_date=now"
 TEC_PAGE1_URL = f"{TEC_API_BASE}?per_page=50&page=1&status=publish&start_date=now"
 ICAL_FEED_URL = "https://thelivingcoast.example/events/?ical=1"
 
@@ -60,7 +60,7 @@ ICAL_FEED_URL = "https://thelivingcoast.example/events/?ical=1"
 # FixtureFetcher this test builds, so fetching it always raises
 # NoFixtureResponse (see brokensource.toml's comment).
 BROKEN_API_BASE = "https://broken-source.example/wp-json/tribe/events/v1/events/"
-BROKEN_PROBE_URL = f"{BROKEN_API_BASE}?per_page=1&status=publish&start_date=now"
+BROKEN_PROBE_URL = f"{BROKEN_API_BASE}?per_page=50&status=publish&start_date=now"
 
 
 class NoFixtureResponse(RuntimeError):
@@ -650,15 +650,15 @@ class TestNoFixtureResponseIsARealFailure:
 # =============================================================================
 
 HEADLESS_A_API_BASE = "https://headless-a.example/wp-json/tribe/events/v1/events/"
-HEADLESS_A_PROBE_URL = f"{HEADLESS_A_API_BASE}?per_page=1&status=publish&start_date=now"
+HEADLESS_A_PROBE_URL = f"{HEADLESS_A_API_BASE}?per_page=50&status=publish&start_date=now"
 HEADLESS_A_PAGE1_URL = f"{HEADLESS_A_API_BASE}?per_page=50&page=1&status=publish&start_date=now"
 
 HEADLESS_B_API_BASE = "https://headless-b.example/wp-json/tribe/events/v1/events/"
-HEADLESS_B_PROBE_URL = f"{HEADLESS_B_API_BASE}?per_page=1&status=publish&start_date=now"
+HEADLESS_B_PROBE_URL = f"{HEADLESS_B_API_BASE}?per_page=50&status=publish&start_date=now"
 HEADLESS_B_PAGE1_URL = f"{HEADLESS_B_API_BASE}?per_page=50&page=1&status=publish&start_date=now"
 
 WORKING_API_BASE = "https://workingsource.example/wp-json/tribe/events/v1/events/"
-WORKING_PROBE_URL = f"{WORKING_API_BASE}?per_page=1&status=publish&start_date=now"
+WORKING_PROBE_URL = f"{WORKING_API_BASE}?per_page=50&status=publish&start_date=now"
 WORKING_PAGE1_URL = f"{WORKING_API_BASE}?per_page=50&page=1&status=publish&start_date=now"
 
 
@@ -867,11 +867,11 @@ class TestFlagshipEndToEnd:
     FLEET_ROBOT_REVOLUTION_URL = f"{FLEET_SITE_URL}/events/robot-revolution"
 
     COASTAL_API_BASE = "https://coastalrootsfarm.fixture/wp-json/tribe/events/v1/events/"
-    COASTAL_PROBE_URL = f"{COASTAL_API_BASE}?per_page=1&status=publish&start_date=now"
+    COASTAL_PROBE_URL = f"{COASTAL_API_BASE}?per_page=50&status=publish&start_date=now"
     COASTAL_PAGE1_URL = f"{COASTAL_API_BASE}?per_page=50&page=1&status=publish&start_date=now"
 
     WIX_API_BASE = "https://wix-fixture.example/wp-json/tribe/events/v1/events/"
-    WIX_PROBE_URL = f"{WIX_API_BASE}?per_page=1&status=publish&start_date=now"
+    WIX_PROBE_URL = f"{WIX_API_BASE}?per_page=50&status=publish&start_date=now"
     WIX_PAGE1_URL = f"{WIX_API_BASE}?per_page=50&page=1&status=publish&start_date=now"
     WIX_ROBOTS_URL = "https://wix-fixture.example/robots.txt"
 

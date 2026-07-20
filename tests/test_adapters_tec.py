@@ -24,7 +24,7 @@ from partner_scrape.registry.schema import SourceConfig
 FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures" / "tec"
 
 API_BASE = "https://example.org/wp-json/tribe/events/v1/events/"
-PROBE_URL = f"{API_BASE}?per_page=1&status=publish&start_date=now"
+PROBE_URL = f"{API_BASE}?per_page={PAGE_SIZE}&status=publish&start_date=now"
 PAGE1_URL = f"{API_BASE}?per_page={PAGE_SIZE}&page=1&status=publish&start_date=now"
 PAGE2_URL = f"{API_BASE}?per_page={PAGE_SIZE}&page=2&status=publish&start_date=now"
 
@@ -66,7 +66,7 @@ def _two_page_fetcher() -> FixtureFetcher:
     page1_body = _read_fixture("events_page1.json")
     return FixtureFetcher(
         {
-            # The probe (per_page=1) only needs a parseable total_pages --
+            # The probe (per_page=50) only needs a parseable total_pages --
             # reusing page1's body is fine, its total_pages value (2) is
             # what discover() actually reads.
             PROBE_URL: _response(page1_body),

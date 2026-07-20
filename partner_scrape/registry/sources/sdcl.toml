@@ -15,7 +15,7 @@
 
 org_name = "San Diego County Library"
 adapter_type = "bibliocommons"
-enabled = true
+enabled = false  # temp: re-enable after BiblioCommons audience/STEM pre-filter (avoid enriching ~7k library events)
 
 [config]
 subdomain = "sdcl"

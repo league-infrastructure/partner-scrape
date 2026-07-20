@@ -33,7 +33,7 @@ PARTNERS_FIXTURE = FIXTURES_DIR / "partners.json"
 TODAY = date(2026, 7, 19)
 
 TEC_API_BASE = "https://coastalrootsfarm.example/wp-json/tribe/events/v1/events/"
-TEC_PROBE_URL = f"{TEC_API_BASE}?per_page=1&status=publish&start_date=now"
+TEC_PROBE_URL = f"{TEC_API_BASE}?per_page=50&status=publish&start_date=now"
 TEC_PAGE1_URL = f"{TEC_API_BASE}?per_page=50&page=1&status=publish&start_date=now"
 ICAL_FEED_URL = "https://thelivingcoast.example/events/?ical=1"
 
