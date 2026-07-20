@@ -8,7 +8,7 @@
 
 org_name = "Olivewood Gardens"
 adapter_type = "generic_html"
-enabled = true
+enabled = false  # disabled: over-mirrors ~700 blog pages for ~1 real event; needs URL-filter tuning
 
 [config]
 site_url = "https://www.olivewoodgardens.org"
