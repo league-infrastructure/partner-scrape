@@ -2,6 +2,8 @@
 import SocialIcon from './SocialIcon.astro';
 import scrapeMeta from '../data/scrape-meta.json';
 
+const base = import.meta.env.BASE_URL.replace(/\/+$/, ''); // normalized: "" or "/partner-scrape"
+
 const lastUpdated = new Date(scrapeMeta.last_updated).toLocaleDateString('en-US', {
   year: 'numeric',
   month: 'long',
@@ -12,16 +14,16 @@ const lastUpdated = new Date(scrapeMeta.last_updated).toLocaleDateString('en-US'
 <footer class="site-footer">
   <div class="footer-inner">
     <div class="footer-brand">
-      <img src="/images/logo.svg" alt="SD STEM Ecosystem" width="100" />
+      <img src={`${base}/images/logo.svg`} alt="SD STEM Ecosystem" width="100" />
       <p class="footer-tagline">Creating a San Diego where everyone is connected to STEM learning opportunities.</p>
     </div>
     <div class="footer-nav">
       <h4>Explore</h4>
       <ul>
-        <li><a href="/opportunities">Opportunities</a></li>
-        <li><a href="/partners">Partners</a></li>
-        <li><a href="/about">About</a></li>
-        <li><a href="/contact">Contact</a></li>
+        <li><a href={`${base}/opportunities`}>Opportunities</a></li>
+        <li><a href={`${base}/partners`}>Partners</a></li>
+        <li><a href={`${base}/about`}>About</a></li>
+        <li><a href={`${base}/contact`}>Contact</a></li>
       </ul>
     </div>
     <div class="footer-contact">

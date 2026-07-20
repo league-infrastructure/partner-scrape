@@ -23,6 +23,7 @@ interface Props {
 }
 
 const { opportunity: opp } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/+$/, ''); // "" or "/partner-scrape"
 const logoPath = getLogoPath(opp.logo_src);
 const dateDisplay = formatDate(opp.date_start);
 ---
@@ -46,7 +47,7 @@ const dateDisplay = formatDate(opp.date_start);
     <img src={logoPath} alt={opp.partner_name} class="opp-card-logo" loading="lazy" />
     <span class="tag tag-purple">{opp.opportunity_type}</span>
   </div>
-  <h3><a href={`/opportunities/${opp.slug}`}>{opp.title}</a></h3>
+  <h3><a href={`${base}/opportunities/${opp.slug}`}>{opp.title}</a></h3>
   <p class="opp-card-partner">{opp.partner_name}</p>
   <div class="opp-card-meta">
     <span class="opp-card-date">{dateDisplay}</span>
@@ -59,7 +60,7 @@ const dateDisplay = formatDate(opp.date_start);
     {opp.age_grade_level?.map(a => <span class="tag tag-teal">{a}</span>)}
   </div>
   <p class="opp-card-desc">{truncate(opp.description, 120)}</p>
-  <a href={`/opportunities/${opp.slug}`} class="opp-card-link">Learn More →</a>
+  <a href={`${base}/opportunities/${opp.slug}`} class="opp-card-link">Learn More →</a>
 </article>
 
 <style>

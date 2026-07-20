@@ -12,6 +12,7 @@ export function getStaticPaths() {
 }
 
 const { opportunity: opp } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/+$/, ''); // "" or "/partner-scrape"
 const logoPath = getLogoPath(opp.logo_src);
 const dateRange = formatDateRange(opp.date_start, opp.date_end);
 
@@ -25,14 +26,14 @@ const hasLocation = opp.latitude && opp.longitude && !isNaN(parseFloat(opp.latit
   description={opp.description?.slice(0, 160)}
 >
   <div class="detail-page">
-    <a href="/opportunities" class="back-link">← Back to Opportunities</a>
+    <a href={`${base}/opportunities`} class="back-link">← Back to Opportunities</a>
 
     <div class="detail-header">
       <div class="detail-partner-row">
         <img src={logoPath} alt={opp.partner_name} class="detail-logo" />
         <div>
           {partner
-            ? <a href={`/partners/${partner.id}`} class="detail-partner-link">{opp.partner_name}</a>
+            ? <a href={`${base}/partners/${partner.id}`} class="detail-partner-link">{opp.partner_name}</a>
             : <span class="detail-partner-link">{opp.partner_name}</span>
           }
         </div>

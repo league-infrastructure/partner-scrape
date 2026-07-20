@@ -1,35 +1,38 @@
 /* === Fonts === */
+/* Font files live under src/fonts/ so Vite processes these relative url()s and
+   emits base-aware, hashed assets. Absolute /fonts/... paths 404 under a GitHub
+   Pages base path (e.g. /partner-scrape/), so they must stay relative here. */
 @font-face {
   font-family: 'Camphor';
-  src: url('/fonts/CamphorLight.woff2') format('woff2'), url('/fonts/CamphorLight.woff') format('woff');
+  src: url('../fonts/CamphorLight.woff2') format('woff2'), url('../fonts/CamphorLight.woff') format('woff');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Camphor';
-  src: url('/fonts/CamphorRegular.woff2') format('woff2'), url('/fonts/CamphorRegular.woff') format('woff');
+  src: url('../fonts/CamphorRegular.woff2') format('woff2'), url('../fonts/CamphorRegular.woff') format('woff');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Camphor';
-  src: url('/fonts/CamphorMedium.woff2') format('woff2'), url('/fonts/CamphorMedium.woff') format('woff');
+  src: url('../fonts/CamphorMedium.woff2') format('woff2'), url('../fonts/CamphorMedium.woff') format('woff');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Camphor';
-  src: url('/fonts/CamphorBold.woff2') format('woff2'), url('/fonts/CamphorBold.woff') format('woff');
+  src: url('../fonts/CamphorBold.woff2') format('woff2'), url('../fonts/CamphorBold.woff') format('woff');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'FontAwesome';
-  src: url('/fonts/fontawesome-webfont.woff2') format('woff2'), url('/fonts/fontawesome-webfont.woff') format('woff');
+  src: url('../fonts/fontawesome-webfont.woff2') format('woff2'), url('../fonts/fontawesome-webfont.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;

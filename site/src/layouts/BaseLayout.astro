@@ -9,8 +9,12 @@ interface Props {
   ogImage?: string;
 }
 
-const { title, description = 'San Diego STEM Ecosystem — Connecting everyone to STEM learning opportunities.', ogImage = '/images/logo.svg' } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/+$/, ''); // normalized: "" or "/partner-scrape"
+const { title, description = 'San Diego STEM Ecosystem — Connecting everyone to STEM learning opportunities.', ogImage = `${base}/images/logo.svg` } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://www.sdstemecosystem.org');
+// og:image must be an absolute URL for social scrapers; resolve the base-aware
+// path against the canonical origin (leaves already-absolute http(s) URLs intact).
+const ogImageURL = new URL(ogImage, canonicalURL).href;
 ---
 
 <!doctype html>
@@ -19,11 +23,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://www.sdst
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
     <link rel="canonical" href={canonicalURL} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={ogImage} />
+    <meta property="og:image" content={ogImageURL} />
     <meta property="og:type" content="website" />
     <title>{title}</title>
   </head>

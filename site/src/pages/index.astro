@@ -5,6 +5,8 @@ import opportunities from '../data/opportunities.json';
 import partners from '../data/partners.json';
 import { getLogoPath } from '../lib/helpers';
 
+const base = import.meta.env.BASE_URL.replace(/\/+$/, ''); // "" or "/partner-scrape"
+
 // Featured: soonest upcoming, prefer free
 const now = new Date();
 const upcoming = opportunities
@@ -36,13 +38,13 @@ const logoPartners = partners
       <h1>We are creating a San Diego where everyone is connected to STEM learning opportunities.</h1>
       <p class="hero-sub">Find programs, workshops, camps, and events for learners of all ages across San Diego County.</p>
       <div class="hero-actions">
-        <a href="/opportunities" class="btn">Find Opportunities</a>
-        <a href="/partners" class="btn btn-outline-hero">View Partners</a>
+        <a href={`${base}/opportunities`} class="btn">Find Opportunities</a>
+        <a href={`${base}/partners`} class="btn btn-outline-hero">View Partners</a>
       </div>
       <div class="hero-quick">
-        <a href="/opportunities?cost=Free" class="hero-tag">Free Programs</a>
-        <a href="/opportunities?age=Family" class="hero-tag">For Families</a>
-        <a href="/opportunities?type=Online" class="hero-tag">Online</a>
+        <a href={`${base}/opportunities?cost=Free`} class="hero-tag">Free Programs</a>
+        <a href={`${base}/opportunities?age=Family`} class="hero-tag">For Families</a>
+        <a href={`${base}/opportunities?type=Online`} class="hero-tag">Online</a>
       </div>
     </div>
   </section>
@@ -56,7 +58,7 @@ const logoPartners = partners
           {upcoming.map(opp => <OpportunityCard opportunity={opp} />)}
         </div>
         <div class="text-center mt-3">
-          <a href="/opportunities" class="btn">View All Opportunities</a>
+          <a href={`${base}/opportunities`} class="btn">View All Opportunities</a>
         </div>
       </div>
     </section>
@@ -92,13 +94,13 @@ const logoPartners = partners
       <h2 class="text-center mb-3">Our Partners</h2>
       <div class="logo-grid">
         {logoPartners.map(p => (
-          <a href={`/partners/${p.id}`} title={p.name}>
+          <a href={`${base}/partners/${p.id}`} title={p.name}>
             <img src={getLogoPath(p.logo_src)} alt={p.name} loading="lazy" />
           </a>
         ))}
       </div>
       <div class="text-center mt-3">
-        <a href="/partners" class="btn btn-secondary">View All Partners</a>
+        <a href={`${base}/partners`} class="btn btn-secondary">View All Partners</a>
       </div>
     </div>
   </section>
@@ -108,7 +110,7 @@ const logoPartners = partners
     <div class="container">
       <h2>Are you a STEM organization?</h2>
       <p class="mt-1 mb-2">Join the San Diego STEM Ecosystem and help connect learners with opportunities.</p>
-      <a href="/contact" class="btn" style="background-image: linear-gradient(90deg, #c83e8e, #db8969);">Get In Touch</a>
+      <a href={`${base}/contact`} class="btn" style="background-image: linear-gradient(90deg, #c83e8e, #db8969);">Get In Touch</a>
     </div>
   </section>
 </BaseLayout>

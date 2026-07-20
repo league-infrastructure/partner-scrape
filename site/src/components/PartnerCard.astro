@@ -15,6 +15,7 @@ interface Props {
 }
 
 const { partner } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/+$/, ''); // "" or "/partner-scrape"
 const logoPath = getLogoPath(partner.logo_src);
 const city = parseCity(partner.location);
 ---
@@ -27,7 +28,7 @@ const city = parseCity(partner.location);
   data-lat={partner.latitude}
   data-lng={partner.longitude}
 >
-  <a href={`/partners/${partner.id}`} class="partner-card-link">
+  <a href={`${base}/partners/${partner.id}`} class="partner-card-link">
     <img src={logoPath} alt={partner.name} class="partner-card-logo" loading="lazy" />
     <h3>{partner.name}</h3>
     <span class="tag tag-pink">{partner.organization_type}</span>

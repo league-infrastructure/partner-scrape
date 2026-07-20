@@ -1,5 +1,9 @@
 ---
-const currentPath = Astro.url.pathname;
+const base = import.meta.env.BASE_URL.replace(/\/+$/, ''); // normalized: "" or "/partner-scrape"
+const rawPath = Astro.url.pathname;
+// Strip the base prefix so active-state matching works whether or not
+// Astro.url.pathname includes the base. navItems hrefs stay base-relative.
+const currentPath = base && rawPath.startsWith(base) ? rawPath.slice(base.length) || '/' : rawPath;
 
 const navItems = [
   { label: 'Opportunities', href: '/opportunities' },
@@ -11,8 +15,8 @@ const navItems = [
 
 <header class="site-header">
   <div class="header-inner">
-    <a href="/" class="header-logo">
-      <img src="/images/logo.svg" alt="SD STEM Ecosystem" width="117" />
+    <a href={`${base}/`} class="header-logo">
+      <img src={`${base}/images/logo.svg`} alt="SD STEM Ecosystem" width="117" />
     </a>
     <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
       <span class="nav-toggle-bar"></span>
@@ -24,7 +28,7 @@ const navItems = [
         {navItems.map(item => (
           <li>
             <a
-              href={item.href}
+              href={`${base}${item.href}`}
               class:list={[{ active: currentPath.startsWith(item.href) }]}
             >
               {item.label}
