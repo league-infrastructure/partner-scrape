@@ -9,6 +9,7 @@ network socket, per sprint.md's test strategy for Fetch & Cache.
 
 from __future__ import annotations
 
+import threading
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
@@ -389,3 +390,225 @@ class TestPoliteFetcherWiring:
     def test_default_throttle_is_a_real_throttle(self, tmp_path):
         polite = PoliteFetcher(cache_dir=tmp_path)
         assert isinstance(polite.throttle, Throttle)
+
+
+def _run_threads(targets: list[threading.Thread]) -> None:
+    for t in targets:
+        t.start()
+    for t in targets:
+        t.join()
+
+
+class TestThrottleThreadSafety:
+    """Source-level concurrency (multiple sources' `Fetcher` calls now run
+    on different threads at once) means a single `Throttle` instance is
+    shared across those threads. These tests use only an injected fake
+    clock/sleep -- never a real wall-clock wait -- but do use real
+    `threading.Thread`s (and a `threading.Barrier` to force them to race)
+    so the assertions exercise `Throttle`'s actual locking, not just its
+    single-threaded logic.
+    """
+
+    def test_concurrent_calls_to_the_same_domain_are_serialized_and_still_wait_the_full_interval(
+        self,
+    ):
+        clock = FakeClock(start=0.0)
+        sleeps: list[float] = []
+        sleeps_lock = threading.Lock()
+
+        def fake_sleep(seconds: float) -> None:
+            with sleeps_lock:
+                sleeps.append(seconds)
+            clock.advance(seconds)
+
+        throttle = Throttle(clock=clock, sleep=fake_sleep)
+        thread_count = 6
+        barrier = threading.Barrier(thread_count)
+
+        def worker() -> None:
+            barrier.wait()  # every thread reaches throttle.wait() at once
+            throttle.wait("example.org", rate_limit_seconds=5.0)
+
+        _run_threads([threading.Thread(target=worker) for _ in range(thread_count)])
+
+        # Whichever thread the OS happened to schedule first becomes
+        # "the first ever call for this domain" (no sleep needed); every
+        # other one of the 6 must still wait the *full* configured
+        # interval -- never a smaller, corrupted, or skipped amount.
+        # Without per-domain locking, two threads could both read
+        # `_last_fetch["example.org"]` before either had written it and
+        # both skip sleeping (or sleep a wrong, too-short amount) --
+        # exactly the corruption a per-domain lock rules out.
+        assert len(sleeps) == thread_count - 1
+        assert sleeps == [5.0] * (thread_count - 1)
+        # And the bookkeeping itself ends up exactly where a fully
+        # sequential run of the same 6 calls would leave it -- one
+        # domain, one float, no torn/lost update.
+        assert throttle._last_fetch == {"example.org": 5.0 * (thread_count - 1)}
+
+    def test_concurrent_calls_to_different_domains_never_corrupt_shared_state(self):
+        clock = FakeClock(start=0.0)
+
+        def fake_sleep(seconds: float) -> None:
+            clock.advance(seconds)
+
+        throttle = Throttle(clock=clock, sleep=fake_sleep)
+        domains = [f"domain-{i}.example" for i in range(12)]
+        calls_per_domain = 8
+        barrier = threading.Barrier(len(domains))
+        errors: list[BaseException] = []
+        errors_lock = threading.Lock()
+
+        def worker(domain: str) -> None:
+            try:
+                barrier.wait()  # all 12 domains race Throttle at once
+                for _ in range(calls_per_domain):
+                    throttle.wait(domain, rate_limit_seconds=0.01)
+            except BaseException as exc:  # pragma: no cover - failure path
+                with errors_lock:
+                    errors.append(exc)
+
+        _run_threads(
+            [threading.Thread(target=worker, args=(domain,)) for domain in domains]
+        )
+
+        assert errors == []
+        # Every domain got its own, correctly-typed entry in the shared
+        # `_last_fetch`/`_locks` maps -- no lost, duplicated, or
+        # cross-contaminated keys despite 12 threads racing on those
+        # dicts at once (this is the "different domains ... doesn't
+        # corrupt state" half of this ticket's requirement; the previous
+        # test proves the "each domain still waits its interval" half).
+        assert set(throttle._last_fetch.keys()) == set(domains)
+        assert all(isinstance(v, float) for v in throttle._last_fetch.values())
+        assert set(throttle._locks.keys()) == set(domains)
+
+
+class TestCacheWriteThreadSafety:
+    """`PoliteFetcher` is shared across every worker thread processing a
+    `static`-strategy source (and a second shared instance for every
+    `headless`-strategy source) -- see `pipeline.py`'s source-level
+    `ThreadPoolExecutor`. These tests use real `threading.Thread`s
+    (there's no timing logic here to fake) to prove the on-disk cache
+    survives concurrent writes intact.
+    """
+
+    def test_concurrent_fetches_of_different_urls_each_write_their_own_valid_cache_file(
+        self, tmp_path
+    ):
+        urls = [f"https://example.org/api/events/{i}" for i in range(20)]
+        fetcher = FixtureFetcher(
+            {url: _response(url, body=f"body-{i}") for i, url in enumerate(urls)}
+        )
+        # Every URL here shares one domain, and this test's whole point
+        # is exercising cache-file safety, not per-domain rate limiting
+        # -- a no-op fake Throttle keeps 20 real threads from actually
+        # blocking on the real default Throttle's 1 req/sec-per-domain
+        # wait (which would make this test take real, ticking seconds).
+        polite = PoliteFetcher(
+            cache_dir=tmp_path,
+            fetcher=fetcher,
+            throttle=Throttle(clock=lambda: 0.0, sleep=lambda seconds: None),
+        )
+        errors: list[BaseException] = []
+        errors_lock = threading.Lock()
+        barrier = threading.Barrier(len(urls))
+
+        def worker(url: str) -> None:
+            try:
+                barrier.wait()
+                polite.get(url, respect_robots=False)
+            except BaseException as exc:  # pragma: no cover - failure path
+                with errors_lock:
+                    errors.append(exc)
+
+        _run_threads([threading.Thread(target=worker, args=(url,)) for url in urls])
+
+        assert errors == []
+        # sha256(url)-keyed filenames mean 20 different URLs always
+        # write 20 different files -- each one must still contain
+        # exactly its own body, never another URL's.
+        for i, url in enumerate(urls):
+            entry = read_cache_entry(tmp_path, url)
+            assert entry is not None
+            assert entry["url"] == url
+            assert entry["body"] == f"body-{i}"
+
+    def test_concurrent_fetches_of_the_same_url_do_not_corrupt_its_cache_file(self, tmp_path):
+        url = "https://example.org/api/events"
+        body = "shared-body"
+        # Every thread gets the identical canned 200 response -- every
+        # one of them reaches write_cache_entry() for the *same* file,
+        # maximizing contention on it (the "shared path" hazard this
+        # ticket calls out: two different URLs never collide, but two
+        # threads fetching the same URL do target the same file).
+        fetcher = FixtureFetcher({url: _response(url, status=200, body=body)})
+        polite = PoliteFetcher(
+            cache_dir=tmp_path,
+            fetcher=fetcher,
+            throttle=Throttle(clock=lambda: 0.0, sleep=lambda seconds: None),
+        )
+        thread_count = 16
+        barrier = threading.Barrier(thread_count)
+        errors: list[BaseException] = []
+        errors_lock = threading.Lock()
+
+        def worker() -> None:
+            try:
+                barrier.wait()
+                polite.get(url, respect_robots=False)
+            except BaseException as exc:  # pragma: no cover - failure path
+                with errors_lock:
+                    errors.append(exc)
+
+        _run_threads([threading.Thread(target=worker) for _ in range(thread_count)])
+
+        assert errors == []
+        # The file must remain valid, parseable JSON reflecting a
+        # complete write -- never a half-written/interleaved file from
+        # two threads' write_cache_entry() calls overlapping mid-write.
+        entry = read_cache_entry(tmp_path, url)
+        assert entry is not None
+        assert entry["url"] == url
+        assert entry["body"] == body
+        assert entry["status"] == 200
+
+    def test_concurrent_304_touches_do_not_corrupt_the_cache_file(self, tmp_path):
+        url = "https://example.org/api/events"
+        etag = '"abc123"'
+        fixed_time = datetime(2026, 1, 1, tzinfo=timezone.utc)
+        polite = PoliteFetcher(
+            cache_dir=tmp_path,
+            fetcher=FixtureFetcher(
+                {url: _response(url, status=200, headers={"ETag": etag}, body="v1")}
+            ),
+            clock=lambda: fixed_time,
+            throttle=Throttle(clock=lambda: 0.0, sleep=lambda seconds: None),
+        )
+        polite.get(url, respect_robots=False)  # primes the cache with a real 200
+
+        # Every concurrent call from here on gets a 304 -- every one of
+        # them hits touch_fetch_timestamp()'s read-modify-write, the
+        # explicit hazard this ticket calls out ("if there's any shared
+        # path or read-modify-write, guard it").
+        polite.fetcher = FixtureFetcher({url: _response(url, status=304, body="")})
+        thread_count = 12
+        barrier = threading.Barrier(thread_count)
+        errors: list[BaseException] = []
+        errors_lock = threading.Lock()
+
+        def worker() -> None:
+            try:
+                barrier.wait()
+                polite.get(url, respect_robots=False)
+            except BaseException as exc:  # pragma: no cover - failure path
+                with errors_lock:
+                    errors.append(exc)
+
+        _run_threads([threading.Thread(target=worker) for _ in range(thread_count)])
+
+        assert errors == []
+        entry = read_cache_entry(tmp_path, url)
+        assert entry is not None
+        assert entry["body"] == "v1"  # untouched by the 304 path
+        assert entry["status"] == 200

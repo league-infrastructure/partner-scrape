@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import threading
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
@@ -144,6 +145,29 @@ class PoliteFetcher:
     dependency diagram. Tests always pass ``cache_dir`` explicitly (a
     ``tmp_path``) or monkeypatch ``SCRAPE_CACHE_DIR`` first; neither
     path ever touches the real configured cache directory.
+
+    Thread-safety: one ``PoliteFetcher`` instance is shared across every
+    worker thread in the pipeline's source-level concurrency (every
+    ``static``-strategy source uses the same instance; every
+    ``headless``-strategy source shares one more). ``self.throttle`` is
+    already safe to call concurrently (see ``Throttle``'s own
+    docstring). The on-disk cache is keyed by ``sha256(url)``, so two
+    different URLs -- even fetched by two different threads at the same
+    instant -- always write to two different files and never collide.
+    The one real hazard is two threads fetching the *same* URL at the
+    same time (e.g. two sources that happen to reference an identical
+    URL): both would read (``read_cache_entry``), and then
+    read-then-write (``touch_fetch_timestamp``) or write
+    (``write_cache_entry``), the same file concurrently. Two concurrent
+    writes could interleave two partial writes into one corrupted JSON
+    file; worse, a plain read can land in the middle of a write (which
+    truncates the file to zero bytes before writing a single new byte)
+    and raise ``json.JSONDecodeError`` instead of a normal cache-miss
+    ``None``. ``_cache_lock`` serializes every one of this file's reads
+    and writes against each other -- not the network fetch or the
+    throttle wait, which stay fully concurrent across domains -- so a
+    same-URL race can, at worst, read stale data or write the same file
+    twice in a row, never observe or produce a corrupted one.
     """
 
     def __init__(
@@ -159,6 +183,7 @@ class PoliteFetcher:
         self.throttle = throttle or Throttle()
         self.user_agent = user_agent
         self._clock = clock
+        self._cache_lock = threading.Lock()
 
     def get(
         self,
@@ -178,7 +203,20 @@ class PoliteFetcher:
                 f"{url} is disallowed by robots.txt for {self.user_agent!r}"
             )
 
-        cached_entry = read_cache_entry(self.cache_dir, url)
+        # Guarded by `_cache_lock`, same as the write/touch calls below --
+        # `write_cache_entry()` opens its target file in `"w"` mode,
+        # which truncates it to zero bytes *before* writing a single new
+        # byte. An unguarded read here can land in exactly that window
+        # (this URL is being concurrently written/touched by another
+        # thread -- e.g. two sources that happen to reference the same
+        # URL) and see a truncated, zero-byte file, raising
+        # `json.JSONDecodeError` instead of a normal cache-miss `None`.
+        # The lock is only ever held for this one fast, in-memory-sized
+        # file read/write -- never across the network `fetcher.get()`
+        # call below, so unrelated domains' fetches stay fully
+        # concurrent.
+        with self._cache_lock:
+            cached_entry = read_cache_entry(self.cache_dir, url)
         headers = conditional_headers(cached_entry)
 
         self.throttle.wait(domain_of(url), rate_limit_seconds)
@@ -186,14 +224,16 @@ class PoliteFetcher:
 
         if response.status == 304 and cached_entry is not None:
             fetched_at = self._clock()
-            touch_fetch_timestamp(self.cache_dir, url, fetched_at)
+            with self._cache_lock:
+                touch_fetch_timestamp(self.cache_dir, url, fetched_at)
             reused = entry_to_response(cached_entry)
             reused.fetched_at = fetched_at
             return reused
 
         if 200 <= response.status < 300:
             response.fetched_at = self._clock()
-            write_cache_entry(self.cache_dir, url, response)
+            with self._cache_lock:
+                write_cache_entry(self.cache_dir, url, response)
             return response
 
         return response

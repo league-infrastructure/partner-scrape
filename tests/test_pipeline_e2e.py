@@ -999,3 +999,147 @@ class TestFlagshipEndToEnd:
             self.COASTAL_PROBE_URL,
             self.COASTAL_PAGE1_URL,
         }
+
+
+# =============================================================================
+# Source-level concurrency: `run()`'s new `max_source_workers` parameter.
+#
+# Each active source's discover -> fetch -> extract chain can now run
+# across a bounded `ThreadPoolExecutor` instead of strictly sequentially.
+# These tests prove concurrency changes *only* wall-clock behavior, never
+# the observable result: same events, same order, same reporter calls,
+# same failure isolation, regardless of how many workers processed a run
+# or in what order they happened to finish. Reuses E2E_REGISTRY_DIR (the
+# walking-skeleton fixture registry -- brokensource/coastalrootsfarm/
+# thelivingcoast) so these tests exercise the exact same real
+# discover/fetch/extract/normalize/export chain every other test in this
+# file does, just with concurrency turned on.
+# =============================================================================
+
+
+class TestSourceLevelConcurrency:
+    def test_same_events_and_order_with_one_worker_and_many_workers(self, tmp_path):
+        site_dir_sequential = _site_dir(tmp_path / "sequential")
+        site_dir_concurrent = _site_dir(tmp_path / "concurrent")
+
+        payload_sequential = run(
+            registry_dir=E2E_REGISTRY_DIR,
+            site_dir=site_dir_sequential,
+            fetcher=_fixture_fetcher(),
+            today=TODAY,
+            max_source_workers=1,
+        )
+        payload_concurrent = run(
+            registry_dir=E2E_REGISTRY_DIR,
+            site_dir=site_dir_concurrent,
+            fetcher=_fixture_fetcher(),
+            today=TODAY,
+            max_source_workers=8,
+        )
+
+        # Same events, in the same order -- byte-for-byte identical
+        # payloads -- regardless of how many worker threads processed
+        # the run or which source's worker happened to finish first.
+        assert payload_concurrent == payload_sequential
+        assert len(payload_sequential) == 2
+
+    def test_failure_isolation_holds_under_concurrency(self, tmp_path, caplog):
+        import logging
+
+        site_dir = _site_dir(tmp_path)
+        fetcher = _fixture_fetcher()
+
+        with caplog.at_level(logging.ERROR, logger="partner_scrape.pipeline"):
+            payload = run(
+                registry_dir=E2E_REGISTRY_DIR,
+                site_dir=site_dir,
+                fetcher=fetcher,
+                today=TODAY,
+                max_source_workers=8,
+            )
+
+        # brokensource.toml's worker raises inside the ThreadPoolExecutor
+        # -- must still be logged and skipped, never abort the run or
+        # affect the other two sources' output.
+        assert len(payload) == 2, "the two healthy sources must still produce output"
+        assert "brokensource" in caplog.text
+
+    def test_reporter_called_once_per_source_with_correct_data_under_concurrency(self, tmp_path):
+        site_dir = _site_dir(tmp_path)
+        fetcher = _fixture_fetcher()
+        spy = SpyReporter()
+
+        run(
+            registry_dir=E2E_REGISTRY_DIR,
+            site_dir=site_dir,
+            fetcher=fetcher,
+            reporter=spy,
+            today=TODAY,
+            max_source_workers=8,
+        )
+
+        called_source_ids = [source_id for source_id, *_ in spy.source_calls]
+        # Exactly once per active source, AND in the registry's own
+        # source order -- never completion order -- no matter how many
+        # workers processed them concurrently or which one finished
+        # first (record_source() calls are made on the main thread,
+        # after every worker has joined, in registry order).
+        assert called_source_ids == ["brokensource", "coastalrootsfarm", "thelivingcoast"]
+
+        by_source = {
+            source_id: (org, events, error) for source_id, org, events, error in spy.source_calls
+        }
+
+        coastal_org, coastal_events, coastal_error = by_source["coastalrootsfarm"]
+        assert coastal_error is None
+        assert coastal_org == "Coastal Roots Farm"
+        assert len(coastal_events) == 2
+        assert all(isinstance(e, Event) for e in coastal_events)
+
+        living_org, living_events, living_error = by_source["thelivingcoast"]
+        assert living_error is None
+        assert len(living_events) == 4
+
+        # Failure-isolation branch still reports correctly under
+        # concurrency: [] events + the caught exception, never swallowed.
+        broken_org, broken_events, broken_error = by_source["brokensource"]
+        assert broken_events == []
+        assert isinstance(broken_error, Exception)
+
+    def test_headless_factory_still_called_exactly_once_under_concurrency(self, tmp_path):
+        # Reuses TestPerSourceFetchStrategySelectionLaziness's own
+        # two-headless-source fixture registry, but with
+        # max_source_workers=8 -- both headless-a and headless-b can now
+        # reach "I need the headless Fetcher, is it built yet?" on two
+        # different worker threads at (as close as real OS scheduling
+        # allows) the same instant. `_LazyHeadlessFetcher`'s
+        # double-checked locking must still guarantee the factory is
+        # invoked at most once.
+        site_dir = _site_dir(tmp_path)
+        static_fetcher = FixtureFetcher({})  # must never be touched
+        a_body = (FETCH_STRATEGY_REGISTRY_DIR / "headless_a_events.json").read_text()
+        b_body = (FETCH_STRATEGY_REGISTRY_DIR / "headless_b_events.json").read_text()
+        headless_fetcher = FixtureFetcher(
+            {
+                HEADLESS_A_PROBE_URL: _response(a_body),
+                HEADLESS_A_PAGE1_URL: _response(a_body),
+                HEADLESS_B_PROBE_URL: _response(b_body),
+                HEADLESS_B_PAGE1_URL: _response(b_body),
+            }
+        )
+        spy = _CountingHeadlessFactory(headless_fetcher)
+
+        payload = run(
+            registry_dir=FETCH_STRATEGY_REGISTRY_DIR,
+            site_dir=site_dir,
+            fetcher=static_fetcher,
+            headless_fetcher_factory=spy,
+            limit=2,
+            today=TODAY,
+            max_source_workers=8,
+        )
+
+        assert spy.call_count == 1
+        assert static_fetcher.calls == []
+        titles = {r["title"] for r in payload}
+        assert titles == {"Headless Fixture A Event", "Headless Fixture B Event"}

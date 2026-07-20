@@ -17,12 +17,15 @@ TecRestAdapter``) -- never a change to :func:`run` or :func:`get_adapter`.
 
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass, field
 from typing import Any, Iterable, Protocol
 
 from partner_scrape.fetch import Fetcher
 from partner_scrape.model import Event
-from partner_scrape.registry.schema import SourceConfig
+from partner_scrape.registry.schema import DEFAULT_MAX_URLS_PER_SOURCE, SourceConfig
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -124,13 +127,44 @@ def run(source: SourceConfig, fetcher: Fetcher) -> list[Event]:
     new ``adapter_type`` never requires touching this function -- only
     :data:`ADAPTERS`.
 
+    Per-source URL cap: ``discover()``'s output is truncated to at most
+    ``source.acquisition_policy.get("max_urls", DEFAULT_MAX_URLS_PER_SOURCE)``
+    refs (registry/schema.py's ``max_urls`` default, ~300) before any of
+    them are fetched. This is a generic, adapter-agnostic backstop
+    against one pathological source (e.g. a sitemap-derived source whose
+    "event" sitemap is actually hundreds of unrelated blog posts)
+    dominating a run's wall-clock time -- every ``discover()``
+    implementation in this package already returns a plain, eagerly-
+    computed ``list[EventRef]`` (never a generator with per-item side
+    effects), so materializing it here to measure/truncate its length
+    changes nothing about how any adapter's own discovery logic runs.
+    Truncation is never silent: a source that exceeds its cap logs
+    exactly how many refs it discovered and how many were dropped.
+
     Raises:
         UnknownAdapterType: ``source.adapter_type`` has no registered
             adapter.
     """
     adapter = get_adapter(source.adapter_type)
+    refs = list(adapter.discover(source, fetcher))
+
+    max_urls = source.acquisition_policy.get("max_urls", DEFAULT_MAX_URLS_PER_SOURCE)
+    if len(refs) > max_urls:
+        dropped = len(refs) - max_urls
+        logger.warning(
+            "Source %r (adapter_type=%r) discovered %d URL(s), exceeding its "
+            "max_urls cap of %d -- fetching only the first %d and dropping %d",
+            source.source_id,
+            source.adapter_type,
+            len(refs),
+            max_urls,
+            max_urls,
+            dropped,
+        )
+        refs = refs[:max_urls]
+
     events: list[Event] = []
-    for ref in adapter.discover(source, fetcher):
+    for ref in refs:
         raw = adapter.fetch(ref, fetcher)
         events.extend(adapter.extract(raw, source))
     return events

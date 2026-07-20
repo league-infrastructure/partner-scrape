@@ -49,6 +49,10 @@ class TestSourceConfigFromToml:
             # resolves fetch_strategy to "static", today's exact
             # pre-ticket-005 fetch behavior.
             "fetch_strategy": "static",
+            # Source-level concurrency + per-source URL cap: additive
+            # default -- a file with no [acquisition_policy] section at
+            # all still resolves max_urls to the package default (300).
+            "max_urls": 300,
         }
 
     def test_fetch_strategy_defaults_to_static_when_acquisition_policy_omits_it(self):
@@ -151,11 +155,17 @@ class TestRealSeedRegistry:
         assert DEFAULT_SOURCES_DIR.name == "sources"
         assert DEFAULT_SOURCES_DIR.parent.name == "registry"
 
-    def test_six_known_tec_sites_load_as_enabled(self):
+    def test_known_tec_sites_load_as_enabled(self):
+        # Pre-existing count, updated for the "Bulk-register 73 tier-1/2
+        # partner sources (27 -> 100 sources)" registry growth (unrelated
+        # to source-level concurrency/URL cap): one more tec_rest source
+        # was added to the real seed registry, so the known-good count
+        # grew from 6 to 7. Not a behavior change -- this test just
+        # asserts against the real, current registry contents.
         sources = load_active_sources()
         tec_sources = [s for s in sources if s.adapter_type == "tec_rest"]
 
-        assert len(tec_sources) == 6
+        assert len(tec_sources) == 7
         assert all(s.enabled for s in tec_sources)
 
     def test_seed_source_org_names_match_dev_fetch_tec_api(self):

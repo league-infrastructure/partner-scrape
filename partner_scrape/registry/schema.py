@@ -23,6 +23,22 @@ from typing import Any
 #: registry load (SUC-001 Acceptance Criteria).
 _REQUIRED_FIELDS = ("org_name", "adapter_type", "config")
 
+#: Default cap on how many ``EventRef``s a single source will fetch in
+#: one run (``adapters/base.py``'s ``run()`` is the actual consumer --
+#: it truncates ``discover()``'s output to this many refs, logging how
+#: many were dropped, unless the source overrides it via
+#: ``acquisition_policy.max_urls``). Public (unlike the private
+#: ``_ACQUISITION_POLICY_DEFAULTS`` dict below) so ``adapters/base.py``
+#: can import it directly as its own defensive fallback for a
+#: directly-constructed ``SourceConfig`` (e.g. in tests) whose
+#: ``acquisition_policy`` never went through :meth:`SourceConfig.from_toml`
+#: and so was never merged with these defaults. 300 is generous headroom
+#: over every real registered source's typical event-page count while
+#: still bounding a pathological outlier (e.g. a sitemap-derived source
+#: whose "event" sitemap is actually hundreds of unrelated blog posts)
+#: from dominating a run's wall-clock time.
+DEFAULT_MAX_URLS_PER_SOURCE = 300
+
 #: Defaults applied to ``acquisition_policy`` keys a source file omits.
 #: Ticket 003 (Fetch & Cache) is the actual consumer of these values;
 #: this module only owns supplying sane defaults so hand-authored TOML
@@ -35,11 +51,14 @@ _REQUIRED_FIELDS = ("org_name", "adapter_type", "config")
 #: written before this key existed has no ``fetch_strategy`` line and
 #: resolves to ``"static"`` here, identical to its pre-ticket-005 fetch
 #: behavior -- see sprint.md's Migration Concerns.
+#: ``max_urls`` defaults to :data:`DEFAULT_MAX_URLS_PER_SOURCE` -- see
+#: its own docstring above.
 _ACQUISITION_POLICY_DEFAULTS: dict[str, Any] = {
     "rate_limit_seconds": 1.0,
     "respect_robots": True,
     "discovered_via": "manual",
     "fetch_strategy": "static",
+    "max_urls": DEFAULT_MAX_URLS_PER_SOURCE,
 }
 
 
