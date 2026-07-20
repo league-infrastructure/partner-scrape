@@ -269,8 +269,17 @@ class LLMEnricher:
             else:
                 result = results[index]
                 assert result is not None  # no error -> future.result() succeeded
-                _apply_result(event, result, source=LLM_SOURCE, confidence=LLM_CONFIDENCE)
+                # Store BEFORE applying: cache.store() hashes the Event's
+                # enrichable content (and keys on its identity), and
+                # _apply_result() mutates exactly those enrichable fields
+                # (start/end/cost/location recovered from the result).
+                # Hashing after apply would store the hash of the
+                # *post-enrichment* Event, but next run's lookup hashes the
+                # *pre-enrichment* Event fresh from the adapter -- so every
+                # Event whose date/cost/location the LLM recovered would
+                # miss the cache forever and be re-billed. Store first.
                 self.cache.store(event, result)
+                _apply_result(event, result, source=LLM_SOURCE, confidence=LLM_CONFIDENCE)
 
         # Relevance Gate (SUC-012), applied once over the full input in
         # its original order -- identical membership/order to the fully

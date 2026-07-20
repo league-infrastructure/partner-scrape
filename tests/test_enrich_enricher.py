@@ -194,6 +194,23 @@ class TestCacheSkipsUnchangedEvents:
 
         assert len(llm_client.calls) == 1
 
+    def test_second_call_hits_cache_even_when_the_result_recovered_a_field(self, tmp_path):
+        # Regression: the enricher must store the cache entry keyed on the
+        # Event's PRE-enrichment content. _apply_result mutates the very
+        # fields content_hash covers (here it recovers `start`), so storing
+        # after apply would hash the post-enrichment Event -- and next run,
+        # which hashes the pre-enrichment Event fresh from the adapter,
+        # would miss and re-bill the LLM. This is the exact bug that
+        # re-billed ~5.5k events on the second full run.
+        result = EnrichmentResult(start=datetime(2026, 8, 15, 18, 0, 0), relevant=True)
+        llm_client = FixtureLLMClient(responses={"Robotics Night": result})
+        enricher = LLMEnricher(llm_client, EnrichmentCache(cache_dir=tmp_path))
+
+        enricher.enrich([_event()])  # start=None -> LLM recovers 2026-08-15
+        enricher.enrich([_event()])  # fresh event, start=None again: must hit cache
+
+        assert len(llm_client.calls) == 1
+
     def test_cache_hit_still_reapplies_the_cached_result_to_the_event(self, tmp_path):
         result = EnrichmentResult(
             start=datetime(2026, 8, 15, 18, 0, 0), relevant=True, cost_range="Free"
