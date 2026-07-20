@@ -462,3 +462,22 @@ class TestInternshipCostRange:
         [opportunity] = run([event], PARTNERS_PATH)
 
         assert opportunity.cost_range == "Free"
+
+
+class TestMixedDatetimeAwareness:
+    """Regression: adapters emit a mix of naive (TEC/iCal) and tz-aware
+    (BiblioCommons/Lever) datetimes; run() must not crash comparing them."""
+
+    def test_naive_and_aware_starts_do_not_crash_collapse(self):
+        from datetime import timezone
+
+        naive = _event(source_id="tec_src", title="Tide Pools",
+                       start=datetime(2099, 8, 15, 10, 0))
+        aware = _event(source_id="lib_src", title="Story Time",
+                       start=datetime(2099, 8, 16, 10, 0, tzinfo=timezone.utc))
+
+        opps = run([naive, aware], PARTNERS_PATH)
+
+        # Both survive, and every emitted date_start is naive-ISO (no offset).
+        assert len(opps) == 2
+        assert all("+" not in o.date_start and "Z" not in o.date_start for o in opps)

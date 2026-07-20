@@ -258,6 +258,20 @@ def run(
     source_org_names = source_org_names or {}
     partners_by_norm = load_partners(partners_path)
 
+    # Enforce a single datetime convention before any date comparison.
+    # Adapters are supposed to emit naive, San-Diego-wall-clock datetimes
+    # (the iCal adapter documents this), but some structured-API adapters
+    # (BiblioCommons, Lever) emit timezone-aware datetimes. Mixing naive
+    # and aware datetimes makes collapse_recurring/dedup's min()/max()
+    # raise "can't compare offset-naive and offset-aware datetimes", which
+    # crashes the whole run. Coerce every aware datetime to naive here, in
+    # one place, so no single adapter's tz-awareness can break the pipeline.
+    for event in events:
+        if event.start is not None and event.start.tzinfo is not None:
+            event.start = event.start.replace(tzinfo=None)
+        if event.end is not None and event.end.tzinfo is not None:
+            event.end = event.end.replace(tzinfo=None)
+
     internship_events: list[Event] = []
     other_events: list[Event] = []
     for event in events:
