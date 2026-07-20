@@ -1,0 +1,19 @@
+# Escondido Creek Conservancy -- registered as a generic_html source for the real-scrape
+# exercise (2026-07-19). Event URLs are discovered via the site's
+# sitemap (discovery/sitemap.py probes sitemap_index.xml / sitemap.xml /
+# sitemap-index.xml in order) and extracted with the standard ladder.
+# Land trust with nature/education programs along Escondido Creek watershed.
+# org_name matches the exact name in data/partners_viable.csv so the
+# stem-ecosystem partner join resolves.
+
+org_name = "Escondido Creek Conservancy"
+adapter_type = "generic_html"
+enabled = true
+
+[config]
+site_url = "https://escondidocreek.org"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "partners_viable.csv batch (real scrape exercise 2026-07-19)"

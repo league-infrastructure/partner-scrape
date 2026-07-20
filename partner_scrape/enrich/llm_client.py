@@ -37,11 +37,16 @@ import anthropic
 
 from partner_scrape.model import Event
 
-#: Single named model-ID constant (sprint.md Open Question 1: this is
-#: the current-guidance default, not a final cost decision). Every real
-#: request uses this constant -- never inlined at more than one call
-#: site -- so a later downgrade is a one-line change.
-MODEL_ID = "claude-opus-4-8"
+#: Single named model-ID constant. Every real request uses this constant
+#: -- never inlined at more than one call site -- so changing tiers is a
+#: one-line change. Haiku is the default because enrichment is a
+#: high-volume, per-event date-extraction + controlled-vocabulary
+#: classification task run across the whole corpus on every scheduled
+#: refresh; Haiku 4.5 handles it well at ~1/10th the cost of Opus, which
+#: keeps a "refresh thousands of events weekly" pipeline affordable.
+#: Bump to "claude-opus-4-8" only if classification quality proves
+#: insufficient in practice.
+MODEL_ID = "claude-haiku-4-5-20251001"
 
 #: Controlled vocabularies mirrored (not imported, see module docstring)
 #: from ``normalize/taxonomy.py``'s ``AREA_KEYWORDS``/``AGE_KEYWORDS``

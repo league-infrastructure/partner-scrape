@@ -1,0 +1,19 @@
+# Solana Center for Environmental Innovation -- registered as a generic_html source for the real-scrape
+# exercise (2026-07-19). Event URLs are discovered via the site's
+# sitemap (discovery/sitemap.py probes sitemap_index.xml / sitemap.xml /
+# sitemap-index.xml in order) and extracted with the standard ladder.
+# Environmental-innovation nonprofit (composting/zero-waste); workshops and events.
+# org_name matches the exact name in data/partners_viable.csv so the
+# stem-ecosystem partner join resolves.
+
+org_name = "Solana Center for Environmental Innovation"
+adapter_type = "generic_html"
+enabled = true
+
+[config]
+site_url = "https://www.solanacenter.org"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "partners_viable.csv batch (real scrape exercise 2026-07-19)"

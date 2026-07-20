@@ -108,8 +108,12 @@ class TestLoadSources:
         assert disabled[0].enabled is False
 
     def test_defaults_to_the_real_registry_directory_when_no_argument_given(self):
+        # Superset (not exact-equality) check: the registry grows as
+        # operational partner sources are added, so pin only the core
+        # seed sources each sprint established rather than the full set.
         sources = load_sources()
-        assert {s.source_id for s in sources} == {
+        source_ids = {s.source_id for s in sources}
+        assert {
             "coastalrootsfarm",
             "thelivingcoast",
             "eefkids",
@@ -123,7 +127,7 @@ class TestLoadSources:
             "gossamerbio",
             "elementbiosciences",
             "shieldai",
-        }
+        } <= source_ids
 
 
 class TestLoadActiveSources:
