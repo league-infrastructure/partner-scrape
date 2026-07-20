@@ -21,12 +21,16 @@ name: Scheduled scrape and publish
 # until this sprint's branch is merged to master -- see the runbook.
 
 on:
-  schedule:
-    # Weekly: every Monday at 13:00 UTC (~06:00 America/Los_Angeles).
-    # A uniform weekly cadence is this sprint's deliberate scope cut --
-    # see sprint.md's Design Rationale / Open Questions re: per-source
-    # differential cadence, deferred to a follow-up issue.
-    - cron: '0 13 * * 1'
+  # The weekly auto-scrape is DISABLED until an operator configures
+  # SITE_REPO_TOKEN (a fine-grained PAT with contents:write on
+  # stem-ecosystem) -- see docs/deploy/scheduled-run.md. Without that
+  # secret this job cannot check out or push to the sibling repo, so a
+  # scheduled run just fails every Monday. Re-enable the cron below once
+  # the token is set.
+  #
+  # schedule:
+  #   # Weekly: every Monday at 13:00 UTC (~06:00 America/Los_Angeles).
+  #   - cron: '0 13 * * 1'
   workflow_dispatch: {}
 
 # Manual activation/testing and the weekly cron should never race each
@@ -46,6 +50,22 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
+      # Fail fast with an actionable message if the cross-repo PAT is
+      # missing, instead of the opaque "Input required and not supplied:
+      # token" that actions/checkout throws on the stem-ecosystem step.
+      - name: Verify SITE_REPO_TOKEN is configured
+        env:
+          SITE_REPO_TOKEN: ${{ secrets.SITE_REPO_TOKEN }}
+        run: |
+          if [ -z "$SITE_REPO_TOKEN" ]; then
+            echo "::error::SITE_REPO_TOKEN is not set. This workflow publishes"
+            echo "::error::scraped data to league-infrastructure/stem-ecosystem and"
+            echo "::error::needs a fine-grained PAT with contents:write on that repo."
+            echo "::error::Set it via 'dotconfig gh-push' (see docs/deploy/scheduled-run.md),"
+            echo "::error::then re-enable the weekly schedule in this workflow."
+            exit 1
+          fi
+
       - name: Checkout partner-scrape
         uses: actions/checkout@v4
         with:
