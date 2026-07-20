@@ -40,7 +40,7 @@
           "nonBranchLocationId": null,
           "locationDetails": null,
           "featuredImageId": null,
-          "audienceIds": ["aud_adults"],
+          "audienceIds": ["aud_adults", "aud_family"],
           "typeIds": ["type_tech"],
           "programId": null,
           "isCancelled": false
@@ -62,7 +62,7 @@
           "nonBranchLocationId": null,
           "locationDetails": null,
           "featuredImageId": null,
-          "audienceIds": ["aud_older"],
+          "audienceIds": ["aud_older", "aud_family"],
           "typeIds": ["type_wellness"],
           "programId": null,
           "isCancelled": false
@@ -84,7 +84,7 @@
           "nonBranchLocationId": null,
           "locationDetails": null,
           "featuredImageId": null,
-          "audienceIds": ["aud_older"],
+          "audienceIds": ["aud_older", "aud_family"],
           "typeIds": ["type_wellness"],
           "programId": null,
           "isCancelled": false
@@ -142,7 +142,8 @@
     "eventAudiences": {
       "aud_kids": {"id": "aud_kids", "name": "Kids", "imageId": null},
       "aud_adults": {"id": "aud_adults", "name": "Adults", "imageId": null},
-      "aud_older": {"id": "aud_older", "name": "Older Adults 55+", "imageId": null}
+      "aud_older": {"id": "aud_older", "name": "Older Adults 55+", "imageId": null},
+      "aud_family": {"id": "aud_family", "name": "Family", "imageId": null}
     },
     "eventTypes": {
       "type_steam": {"id": "type_steam", "name": "STEAM", "imageId": null},

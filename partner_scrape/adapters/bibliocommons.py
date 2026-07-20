@@ -62,6 +62,20 @@ project's convention):
   audience taxonomy ("Kids", "Teens", "Birth to Five", "Older Adults
   55+", ...) is an explicit, first-party age/audience signal, exactly
   what this field is for.
+
+**Deterministic YOUTH/FAMILY audience pre-filter** (cost-avoidance,
+added once SDCL volume was measured live): ``extract()`` drops any
+record whose resolved ``eventAudiences`` names carry no YOUTH/FAMILY
+signal, *before* building an ``Event`` for it -- see
+:data:`YOUTH_FAMILY_AUDIENCE_KEYWORDS`, :data:`KEEP_IF_UNKNOWN_AUDIENCE`,
+and :func:`_passes_audience_prefilter`. SDCL alone returns ~7,287
+events, the large majority adult book clubs, tech-help sessions, and
+wellness classes -- this filter keeps that volume from ever reaching
+the (paid) LLM relevance gate, which still makes the final
+STEM-for-youth call on whatever survives. Events with no resolvable
+audience data are kept, not dropped (keep-if-unknown), and the whole
+filter can be disabled per-source via the
+``audience_prefilter: false`` config key.
 - ``eventPrograms`` (an event's optional named program, e.g. "Summer at
   Your Library") -> ``Event.tags``, kept a separate list from
   categories per the existing tags/categories split.
@@ -219,6 +233,104 @@ def _names_for_ids(ids: Iterable[Any], catalog: dict[str, Any]) -> list[str]:
 def _registration_url(subdomain: str, event_id: str) -> str:
     """BiblioCommons' own event detail page -- see module docstring."""
     return f"https://{subdomain}.bibliocommons.com/events/{event_id}"
+
+
+#: Case-insensitive substring keywords that identify a resolved
+#: BiblioCommons ``eventAudiences`` name (e.g. "Kids", "Teens", "Birth
+#: to Five", "Family Storytime") as YOUTH/FAMILY-oriented. San Diego
+#: County Library's ``sdcl`` subdomain alone returns ~7,287 events, the
+#: vast majority adult book clubs, tech-help sessions, and wellness
+#: classes that would otherwise all be paid to LLM-enrich before the
+#: *existing* relevance gate (``normalize``'s STEM-for-youth decision)
+#: ever gets a chance to reject them. This pre-filter runs cheaper and
+#: earlier, right here in :func:`extract`, before an ``Event`` is even
+#: built for a record that clearly doesn't need one.
+#:
+#: Matching is deliberately broad (substring, not whole-word) since
+#: BiblioCommons' real-world audience labels vary by library system
+#: ("Kids" vs. "School Age (6-11)" vs. "Children") and a missed keyword
+#: silently drops a good event -- the worse failure mode. See
+#: :data:`KEEP_IF_UNKNOWN_AUDIENCE` for the same keep-leaning bias
+#: applied to *absent* audience data.
+YOUTH_FAMILY_AUDIENCE_KEYWORDS: list[str] = [
+    "child",
+    "children",
+    "kid",
+    "kids",
+    "family",
+    "families",
+    "teen",
+    "tween",
+    "baby",
+    "babies",
+    "toddler",
+    "preschool",
+    "pre-k",
+    "prek",
+    "youth",
+    "school age",
+    "school-age",
+    "all ages",
+    "grade",
+    "birth",
+]
+
+#: An event with no resolvable ``eventAudiences`` data (empty/absent
+#: ``audienceIds``, or ids that fail to resolve against the response's
+#: own ``entities.eventAudiences`` catalog) is **kept** by default
+#: rather than dropped. BiblioCommons does not guarantee every event
+#: carries an audience tag, and silently discarding unlabeled events
+#: would lose good ones with no way to recover them downstream -- the
+#: existing LLM relevance gate still gets the final say on these
+#: survivors. Named here (rather than inlined) so the choice is a
+#: visible, documented default instead of an implicit side effect of
+#: how :func:`_passes_audience_prefilter` happens to be written.
+KEEP_IF_UNKNOWN_AUDIENCE = True
+
+#: Per-source ``SourceConfig.config`` override key. Set ``False`` to
+#: disable this adapter's audience pre-filter entirely (every fetched
+#: event becomes an ``Event``, exactly as before this filter existed)
+#: -- mirrors ``ats_filters.py``'s ``location_keywords`` override
+#: convention: a config-level escape hatch needing no code change.
+AUDIENCE_PREFILTER_CONFIG_KEY = "audience_prefilter"
+
+
+def is_youth_family_audience(audience_names: Iterable[str]) -> bool:
+    """Report whether any of ``audience_names`` signals YOUTH/FAMILY.
+
+    Case-insensitive substring match against
+    :data:`YOUTH_FAMILY_AUDIENCE_KEYWORDS`. An empty/no-name iterable
+    returns ``False`` -- callers needing the keep-if-unknown behavior
+    for *absent* audience data apply that separately (see
+    :func:`_passes_audience_prefilter`), since "no data at all" and
+    "data that doesn't match" are different states this function does
+    not need to distinguish.
+    """
+    for name in audience_names:
+        lowered = name.lower()
+        if any(keyword in lowered for keyword in YOUTH_FAMILY_AUDIENCE_KEYWORDS):
+            return True
+    return False
+
+
+def _passes_audience_prefilter(raw_event: dict[str, Any], entities: dict[str, Any]) -> bool:
+    """Decide whether one raw event record survives the audience pre-filter.
+
+    Resolves the event's ``audienceIds`` to names the same way
+    ``_extract_one`` does for ``age_grade_level`` (via
+    :func:`_names_for_ids`). No resolvable names at all (absent/empty
+    ``audienceIds``, or ids missing from the catalog) keeps the event,
+    per :data:`KEEP_IF_UNKNOWN_AUDIENCE`. Otherwise the event is kept
+    iff :func:`is_youth_family_audience` matches at least one resolved
+    name.
+    """
+    definition = raw_event.get("definition") or {}
+    audience_names = _names_for_ids(
+        definition.get("audienceIds"), entities.get("eventAudiences") or {}
+    )
+    if not audience_names:
+        return KEEP_IF_UNKNOWN_AUDIENCE
+    return is_youth_family_audience(audience_names)
 
 
 def _extract_one(
@@ -385,9 +497,12 @@ class BiblioCommonsAdapter:
         subdomain = source.config["subdomain"]
         entities = data.get("entities") or {}
         raw_events = entities.get("events") or {}
+        prefilter_enabled = bool(source.config.get(AUDIENCE_PREFILTER_CONFIG_KEY, True))
 
         events: list[Event] = []
         seen_ids: set[str] = set()
+        kept_count = 0
+        filtered_count = 0
         for event_id in (data.get("events") or {}).get("items") or []:
             if event_id in seen_ids:
                 # Defensive within-page dedup, matching localist.py's
@@ -399,6 +514,17 @@ class BiblioCommonsAdapter:
             if not raw_event:
                 continue
 
+            seen_ids.add(event_id)
+
+            if prefilter_enabled and not _passes_audience_prefilter(raw_event, entities):
+                # Deterministic YOUTH/FAMILY audience pre-filter -- see
+                # YOUTH_FAMILY_AUDIENCE_KEYWORDS/KEEP_IF_UNKNOWN_AUDIENCE
+                # above. Filtered here, before an Event is even built,
+                # so these records never reach (and never pay for) LLM
+                # enrichment.
+                filtered_count += 1
+                continue
+
             try:
                 event = _extract_one(raw_event, source, subdomain, entities)
             except (ValueError, TypeError) as exc:
@@ -407,7 +533,14 @@ class BiblioCommonsAdapter:
                 )
                 continue
 
-            seen_ids.add(event_id)
             events.append(event)
+            kept_count += 1
+
+        logger.debug(
+            "BiblioCommons audience pre-filter on %s: kept %d, filtered %d (non-youth/family)",
+            raw.ref.url,
+            kept_count,
+            filtered_count,
+        )
 
         return events

@@ -1,0 +1,113 @@
+{
+  "events": {
+    "items": ["evt101", "evt102", "evt103", "evt104"],
+    "pagination": {"count": 4, "pages": 1, "page": 1, "limit": 50}
+  },
+  "entities": {
+    "events": {
+      "evt101": {
+        "id": "evt101",
+        "key": "2026-09-05T16:00:00",
+        "seriesId": "series101",
+        "definition": {
+          "title": "Family STEM Night",
+          "description": "<p>Hands-on science for the whole family.</p>",
+          "start": "2026-09-05T16:00",
+          "end": "2026-09-05T17:30",
+          "branchLocationId": "23",
+          "nonBranchLocationId": null,
+          "locationDetails": null,
+          "featuredImageId": null,
+          "audienceIds": ["aud_family"],
+          "typeIds": [],
+          "programId": null,
+          "isCancelled": false
+        },
+        "indexStart": "2026-09-05T23:00:00Z",
+        "indexEnd": "2026-09-06T00:30:00Z",
+        "isRecurring": false
+      },
+      "evt102": {
+        "id": "evt102",
+        "key": "2026-09-06T18:00:00",
+        "seriesId": "series102",
+        "definition": {
+          "title": "Wine Tasting for Grown-Ups",
+          "description": "<p>An adults-only evening tasting.</p>",
+          "start": "2026-09-06T18:00",
+          "end": "2026-09-06T19:30",
+          "branchLocationId": "23",
+          "nonBranchLocationId": null,
+          "locationDetails": null,
+          "featuredImageId": null,
+          "audienceIds": ["aud_adults"],
+          "typeIds": [],
+          "programId": null,
+          "isCancelled": false
+        },
+        "indexStart": "2026-09-07T01:00:00Z",
+        "indexEnd": "2026-09-07T02:30:00Z",
+        "isRecurring": false
+      },
+      "evt103": {
+        "id": "evt103",
+        "key": "2026-09-07T12:00:00",
+        "seriesId": "series103",
+        "definition": {
+          "title": "Board Meeting",
+          "description": "",
+          "start": "2026-09-07T12:00",
+          "end": "2026-09-07T13:00",
+          "branchLocationId": null,
+          "nonBranchLocationId": null,
+          "locationDetails": null,
+          "featuredImageId": null,
+          "audienceIds": [],
+          "typeIds": [],
+          "programId": null,
+          "isCancelled": false
+        },
+        "indexStart": "2026-09-07T19:00:00Z",
+        "indexEnd": "2026-09-07T20:00:00Z",
+        "isRecurring": false
+      },
+      "evt104": {
+        "id": "evt104",
+        "key": "2026-09-08T15:00:00",
+        "seriesId": "series104",
+        "definition": {
+          "title": "Teen Anime Club",
+          "description": "<p>Anime screening and discussion for teens.</p>",
+          "start": "2026-09-08T15:00",
+          "end": "2026-09-08T16:30",
+          "branchLocationId": "23",
+          "nonBranchLocationId": null,
+          "locationDetails": null,
+          "featuredImageId": null,
+          "audienceIds": ["aud_teens"],
+          "typeIds": [],
+          "programId": null,
+          "isCancelled": false
+        },
+        "indexStart": "2026-09-08T22:00:00Z",
+        "indexEnd": "2026-09-08T23:30:00Z",
+        "isRecurring": false
+      }
+    },
+    "eventSeries": {},
+    "eventAudiences": {
+      "aud_family": {"id": "aud_family", "name": "Family", "imageId": null},
+      "aud_adults": {"id": "aud_adults", "name": "Adults", "imageId": null},
+      "aud_teens": {"id": "aud_teens", "name": "Teens", "imageId": null}
+    },
+    "eventTypes": {},
+    "eventPrograms": {},
+    "eventLanguages": {},
+    "locations": {
+      "23": {"id": "23", "name": "Lemon Grove"}
+    },
+    "specialHours": {},
+    "places": {},
+    "images": {}
+  }
+}

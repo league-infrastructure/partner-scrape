@@ -15,7 +15,16 @@ that share a ``seriesId`` but have distinct ids/dates (proving they are
 *not* collapsed away), a malformed record with no title (per-record
 isolation), and a sparse record with no location/image/categories/
 audience/program. It also repeats one id at the end of ``items`` to
-exercise the within-page defensive dedup.
+exercise the within-page defensive dedup. Its two adult-audience events
+("Digital Literacy and Tech Support", "Tai Chi Exercise Class") also
+carry a second "Family" ``audienceIds`` entry, added alongside their
+original adult one -- not because that reflects a real BiblioCommons
+record, but so both keep surviving the youth/family audience
+pre-filter (see bibliocommons.py's YOUTH_FAMILY_AUDIENCE_KEYWORDS)
+while these tests exercise unrelated behavior (all-day detection,
+recurring-occurrence dedup). ``TestAudiencePrefilter`` below, backed by
+``events_audience_mix.json``, is the dedicated test of the filter
+itself, including a genuinely adult-only (filtered) event.
 
 ``events_feature_unavailable.json`` reproduces, verbatim, the real
 HTTP 403 body live-observed from San Diego Public Library's BiblioCommons
@@ -30,9 +39,17 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 
+import pytest
+
 from partner_scrape.adapters import run
 from partner_scrape.adapters.base import EventRef, RawResponse
-from partner_scrape.adapters.bibliocommons import PAGE_SIZE, BiblioCommonsAdapter
+from partner_scrape.adapters.bibliocommons import (
+    KEEP_IF_UNKNOWN_AUDIENCE,
+    PAGE_SIZE,
+    YOUTH_FAMILY_AUDIENCE_KEYWORDS,
+    BiblioCommonsAdapter,
+    is_youth_family_audience,
+)
 from partner_scrape.fetch.fetcher import FetchResponse
 from partner_scrape.model import Provenance
 from partner_scrape.registry.schema import SourceConfig
@@ -140,7 +157,12 @@ class TestFieldMapping:
         assert tech.all_day is True
         assert tech.location == "Fallbrook"
         assert tech.categories == ["Computers and Technology"]
-        assert tech.age_grade_level == ["Adults"]
+        # audienceIds carries both "Adults" and "Family" -- the latter
+        # is what keeps this event past the youth/family audience
+        # pre-filter (see TestAudiencePrefilter / bibliocommons.py's
+        # YOUTH_FAMILY_AUDIENCE_KEYWORDS); both resolved names are
+        # still recorded on age_grade_level.
+        assert tech.age_grade_level == ["Adults", "Family"]
 
     def test_sparse_event_leaves_optional_fields_unset(self):
         events = run(_source(), _two_page_fetcher())
@@ -345,3 +367,106 @@ class TestDiscoverProbeFailureHandling:
         refs = adapter.discover(_source(), fetcher)
 
         assert [r.url for r in refs] == [PAGE1_URL]
+
+
+class TestIsYouthFamilyAudience:
+    """Direct unit tests of the pure predicate -- no Fetcher, no Event.
+
+    Mirrors ``test_adapters_ats_filters.py``'s table-driven style for
+    its analogous pure-function predicates.
+    """
+
+    @pytest.mark.parametrize(
+        "audience_names",
+        [
+            ["Kids"],
+            ["Teens"],
+            ["Birth to Five"],
+            ["Family"],
+            ["Tweens"],
+            ["Babies"],
+            ["Toddler Time"],
+            ["Preschool Storytime"],
+            ["Pre-K Readiness"],
+            ["School Age (6-11)"],
+            ["All Ages"],
+            ["4th Grade Book Club"],
+            ["Children's Programs"],
+            ["Adults", "Kids"],  # any match is enough
+        ],
+    )
+    def test_positive_audience_names_match(self, audience_names):
+        assert is_youth_family_audience(audience_names) is True
+
+    @pytest.mark.parametrize(
+        "audience_names",
+        [
+            ["Adults"],
+            ["Older Adults 55+"],
+            ["Seniors"],
+            [],
+        ],
+    )
+    def test_negative_audience_names_do_not_match(self, audience_names):
+        assert is_youth_family_audience(audience_names) is False
+
+    def test_matching_is_case_insensitive(self):
+        assert is_youth_family_audience(["KIDS"]) is True
+        assert is_youth_family_audience(["kids"]) is True
+
+    def test_keep_if_unknown_default_is_true(self):
+        # Documents the module's default -- extract()'s
+        # _passes_audience_prefilter relies on this constant being True
+        # so absent audience data keeps (not drops) an event.
+        assert KEEP_IF_UNKNOWN_AUDIENCE is True
+
+    def test_keyword_set_is_lowercase(self):
+        # is_youth_family_audience lowercases the *name* it matches
+        # against, not the keyword list -- the keywords themselves must
+        # already be lowercase or a keyword could fail to match its own
+        # mixed-case self.
+        assert all(keyword == keyword.lower() for keyword in YOUTH_FAMILY_AUDIENCE_KEYWORDS)
+
+
+class TestAudiencePrefilter:
+    """The deterministic YOUTH/FAMILY audience pre-filter, end to end
+    through ``extract()`` -- see bibliocommons.py's
+    YOUTH_FAMILY_AUDIENCE_KEYWORDS / KEEP_IF_UNKNOWN_AUDIENCE /
+    AUDIENCE_PREFILTER_CONFIG_KEY.
+
+    ``events_audience_mix.json`` mixes four records: a family event
+    (kept -- matches "family"), an adult-only event (filtered -- no
+    youth/family audience at all), an event with no audience data
+    whatsoever (kept, per keep-if-unknown), and a teen event (kept --
+    matches "teen").
+    """
+
+    def _fetcher(self) -> FixtureFetcher:
+        body = _read_fixture("events_audience_mix.json")
+        return FixtureFetcher({PROBE_URL: _response(body), PAGE1_URL: _response(body)})
+
+    def test_only_youth_family_and_unknown_audience_events_survive(self):
+        events = run(_source(), self._fetcher())
+
+        titles = {e.title for e in events}
+        assert titles == {"Family STEM Night", "Board Meeting", "Teen Anime Club"}
+        assert "Wine Tasting for Grown-Ups" not in titles
+
+    def test_filtered_adult_only_event_never_becomes_an_event(self):
+        events = run(_source(), self._fetcher())
+
+        assert all(e.external_id != "evt102" for e in events)
+
+    def test_config_override_disables_the_prefilter(self):
+        # audience_prefilter=False is the documented per-source escape
+        # hatch -- every fetched record becomes an Event, including the
+        # adult-only one that is normally filtered.
+        events = run(_source(audience_prefilter=False), self._fetcher())
+
+        titles = {e.title for e in events}
+        assert titles == {
+            "Family STEM Night",
+            "Wine Tasting for Grown-Ups",
+            "Board Meeting",
+            "Teen Anime Club",
+        }
