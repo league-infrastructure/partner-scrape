@@ -34,6 +34,7 @@ from partner_scrape.normalize.instance import Instance
 from partner_scrape.normalize.partners import find_partner, load_partners
 from partner_scrape.normalize.taxonomy import (
     build_taxonomy_text,
+    classify_opportunity_type,
     derive_age_grade_level,
     derive_areas_of_interest,
     derive_time_of_day,
@@ -196,7 +197,13 @@ def _to_opportunity(
 
     is_internship = event.kind == "internship"
     availability = _internship_availability(event) if is_internship else _availability(instance)
-    opportunity_type = WORK_BASED_LEARNING_TYPE if is_internship else DEFAULT_OPPORTUNITY_TYPE
+    # Internships force Work-based Learning by kind; everything else is
+    # classified from its own text rather than blindly stamped with the
+    # default (which flattened every event into "Out-of-school Programs"
+    # and left 7 of the site's 8 type filters permanently empty).
+    opportunity_type = (
+        WORK_BASED_LEARNING_TYPE if is_internship else classify_opportunity_type(event.title)
+    )
 
     return Opportunity(
         slug=slug,

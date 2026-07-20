@@ -68,6 +68,44 @@ AGE_KEYWORDS: list[tuple[str, str]] = [
 #: ["General Science"]` default in `build_opportunity`.
 DEFAULT_AREA = "General Science"
 
+#: `opportunity_type` classification rules, checked in order (first match
+#: wins), mapping to the site's controlled vocabulary.
+#:
+#: These are matched against the event TITLE ONLY, deliberately. Matching
+#: descriptions produced badly wrong results in practice: "Bird Walk at
+#: Grant Park" and half the Anza-Borrego hikes classified as "Funding
+#: Opportunities" (the word "grant"), and any event whose blurb said
+#: "led by volunteers" became "Volunteering". A title is a curated,
+#: high-signal label; a description is prose full of incidental words.
+#:
+#: Only high-confidence signals are encoded -- anything unmatched keeps
+#: the `DEFAULT_OPPORTUNITY_TYPE` rather than being force-fit into a
+#: bucket. There is deliberately NO "Funding Opportunities" rule: an
+#: events calendar carries events, not grant announcements, and every
+#: keyword for it (grant/scholarship/fellowship) is a false-positive
+#: magnet. Bare "school" is likewise avoided -- it matches the
+#: "preschool"/"school-age" AUDIENCE terms -- so phrases are used.
+#:
+#: Internships are handled separately by kind in normalize/run.py (they
+#: force "Work-based Learning") and never reach this function.
+OPPORTUNITY_TYPE_KEYWORDS: list[tuple[str, str]] = [
+    (r"\b(clean[\s-]?up|litter|street sweep|beach sweep|restoration|"
+     r"stewardship|volunteer day|service learning|trail work)\b", "Volunteering"),
+    (r"\b(virtual|webinar|online|livestream|live stream)\b", "Online"),
+    (r"\b(professional development|conference|symposium|colloquium|"
+     r"educator workshop|teacher (?:training|workshop))\b",
+     "Professional Development / Conferences"),
+    (r"\b(career fair|job fair|college fair|career day|internship fair)\b",
+     "Career Connections"),
+    (r"\b(field trip|school program|in-school|school group|for schools|"
+     r"school assembly)\b", "School Programs"),
+]
+
+#: Default `opportunity_type` when no `OPPORTUNITY_TYPE_KEYWORDS` rule
+#: matches -- the site's most general bucket, and what every event was
+#: blindly stamped before this classifier existed.
+DEFAULT_OPPORTUNITY_TYPE = "Out-of-school Programs"
+
 _COST_AMOUNT_RE = re.compile(r"\$\s*(\d+(?:\.\d{1,2})?)")
 
 
@@ -91,6 +129,26 @@ def derive_areas_of_interest(text: str) -> list[str]:
     `dev/export_site.py`'s `build_opportunity` default.
     """
     return tag_by_keywords(text, AREA_KEYWORDS) or [DEFAULT_AREA]
+
+
+def classify_opportunity_type(title: str) -> str:
+    """Classify an event's `opportunity_type` from its TITLE into the
+    site's controlled vocabulary via `OPPORTUNITY_TYPE_KEYWORDS`.
+
+    Title only, on purpose -- see `OPPORTUNITY_TYPE_KEYWORDS` for why
+    matching descriptions produced badly wrong classifications. First
+    matching rule wins; an unmatched title returns
+    ``DEFAULT_OPPORTUNITY_TYPE`` ("Out-of-school Programs"), which is the
+    honest answer for most of this corpus rather than a forced guess.
+
+    Deterministic and free -- unlike the other classification fields
+    there is no LLM path for this yet, so it always runs at normalize
+    time. An LLM pass would classify the long tail better.
+    """
+    for pattern, label in OPPORTUNITY_TYPE_KEYWORDS:
+        if re.search(pattern, title, re.I):
+            return label
+    return DEFAULT_OPPORTUNITY_TYPE
 
 
 def derive_age_grade_level(text: str) -> list[str]:

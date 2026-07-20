@@ -12,6 +12,7 @@ from __future__ import annotations
 from datetime import datetime
 
 from partner_scrape.normalize.taxonomy import (
+    classify_opportunity_type,
     AGE_KEYWORDS,
     AREA_KEYWORDS,
     build_taxonomy_text,
@@ -133,3 +134,27 @@ class TestBuildTaxonomyText:
     def test_empty_categories_and_tags_still_joins_cleanly(self):
         text = build_taxonomy_text("Title", "Description", [], [])
         assert text == "Title Description  "
+
+
+class TestClassifyOpportunityType:
+    """opportunity_type must be classified from text, not blindly defaulted."""
+
+    def test_volunteering_signals(self):
+        for text in ["Beach Cleanup at Mission Bay", "Habitat Restoration volunteer day",
+                     "Creek to Bay Clean-up", "Trail work and stewardship"]:
+            assert classify_opportunity_type(text) == "Volunteering", text
+
+    def test_online_signals(self):
+        assert classify_opportunity_type("Virtual webinar on native bees") == "Online"
+
+    def test_school_program_signals(self):
+        assert classify_opportunity_type("Field trip for schools") == "School Programs"
+        assert classify_opportunity_type("Classroom curriculum workshop") == "School Programs"
+
+    def test_bare_school_words_do_not_false_positive(self):
+        # "preschool"/"school-age" are AUDIENCE terms, not School Programs
+        assert classify_opportunity_type("Preschool story time") == "Out-of-school Programs"
+        assert classify_opportunity_type("School-age science club") == "Out-of-school Programs"
+
+    def test_unmatched_text_falls_back_to_default(self):
+        assert classify_opportunity_type("Tide Pool Exploration") == "Out-of-school Programs"
