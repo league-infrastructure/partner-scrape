@@ -10,6 +10,8 @@ sprint.md's testing policy.
 from __future__ import annotations
 
 import logging
+import threading
+import time
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
@@ -70,6 +72,56 @@ class _KeyedLLMClient:
         if isinstance(outcome, type) and issubclass(outcome, Exception):
             raise outcome("boom")
         return outcome
+
+
+@dataclass
+class _LockedFixtureLLMClient(FixtureLLMClient):
+    """`FixtureLLMClient` with its `calls` append guarded by a lock.
+
+    `list.append` is already atomic under CPython's GIL, but the
+    concurrency tests below assert precisely on `calls` (count,
+    membership) from a real `ThreadPoolExecutor`, so guard it
+    explicitly rather than lean on a CPython implementation detail --
+    the bounded-concurrency ticket's own testing note ("guard the
+    calls list with a lock if you assert on it").
+    """
+
+    _calls_lock: threading.Lock = field(default_factory=threading.Lock, repr=False, compare=False)
+
+    def enrich_event(self, event: Event) -> EnrichmentResult:
+        with self._calls_lock:
+            self.calls.append(event)
+        return self.responses[self.key_fn(event)]
+
+
+@dataclass
+class _LockedKeyedLLMClient(_KeyedLLMClient):
+    """`_KeyedLLMClient` with a lock-guarded `calls` append and an
+    optional per-title `delays` sleep, so a test can force a specific
+    completion order under a real thread pool (e.g. reverse the
+    completion order relative to submission order) and still assert
+    safely on `calls`.
+    """
+
+    delays: dict[str, float] = field(default_factory=dict)
+    _calls_lock: threading.Lock = field(default_factory=threading.Lock, repr=False, compare=False)
+
+    def enrich_event(self, event: Event) -> EnrichmentResult:
+        time.sleep(self.delays.get(event.title, 0.0))
+        with self._calls_lock:
+            self.calls.append(event)
+        outcome = self.responses[event.title]
+        if isinstance(outcome, type) and issubclass(outcome, Exception):
+            raise outcome("boom")
+        return outcome
+
+
+def _relevant_source(event: Event) -> str | None:
+    """The provenance `source` recorded for ``event``'s `relevant`
+    field, or ``None`` if it was never set (e.g. an internship bypass).
+    """
+    provenance = event.field_provenance.get("relevant")
+    return provenance.source if provenance is not None else None
 
 
 # ---------------------------------------------------------------------
@@ -375,3 +427,197 @@ class TestInternshipEventsBypassTheRelevanceGate:
 
         assert survivors == []
         assert event.relevant is False
+
+
+# ---------------------------------------------------------------------
+# AC (bounded concurrency, ThreadPoolExecutor): the LLM-call pass runs
+# across a thread pool but every previously-tested behavior above is
+# unaffected. These tests use `max_workers` > 1 (a real thread pool,
+# not a trivially-sequential one) and, where timing matters, force
+# completion order to *differ* from submission order so a passing test
+# proves the Enricher's apply pass -- not incidental completion timing
+# -- is what determines the result.
+# ---------------------------------------------------------------------
+
+
+class TestConcurrentOrderPreservation:
+    def test_output_order_matches_input_order_even_when_llm_calls_complete_out_of_order(
+        self, tmp_path
+    ):
+        n = 20
+        # Shuffle which title lands at which index so nothing here
+        # coincides with alphabetical/numeric title order.
+        titles = [f"Event {i:02d}" for i in range(n)]
+        shuffled_titles = titles[1::2] + titles[0::2]  # deterministic, non-trivial shuffle
+        events = [_event(title=shuffled_titles[i]) for i in range(n)]
+
+        # Delay is largest for the *earliest* submitted event and
+        # smallest for the last, so completion order is roughly the
+        # reverse of submission order under real concurrency.
+        delays = {shuffled_titles[i]: (n - i) * 0.005 for i in range(n)}
+        responses = {
+            title: EnrichmentResult(relevant=True, relevance_reason="stem") for title in shuffled_titles
+        }
+        llm_client = _LockedKeyedLLMClient(responses=responses, delays=delays)
+        enricher = LLMEnricher(llm_client, EnrichmentCache(cache_dir=tmp_path), max_workers=n)
+
+        survivors = enricher.enrich(events)
+
+        assert [e.title for e in survivors] == shuffled_titles
+        assert len(llm_client.calls) == n
+
+
+class TestConcurrentCacheSkipAndExactlyOneCallPerMiss:
+    def test_cached_events_are_never_sent_to_the_llm_and_each_miss_is_called_exactly_once(
+        self, tmp_path
+    ):
+        n = 16
+        titles = [f"Event {i:02d}" for i in range(n)]
+        cached_titles = titles[: n // 2]
+        miss_titles = titles[n // 2 :]
+
+        # Pass 1: populate the cache for the first half only.
+        cache = EnrichmentCache(cache_dir=tmp_path)
+        warm_up_client = _LockedKeyedLLMClient(
+            responses={t: EnrichmentResult(relevant=True) for t in cached_titles}
+        )
+        LLMEnricher(warm_up_client, cache, max_workers=4).enrich(
+            [_event(title=t) for t in cached_titles]
+        )
+
+        # Pass 2: a fresh batch mixing the now-cached titles (same
+        # content -> cache hit) with brand-new titles (misses), run
+        # through a *new* client that only has responses registered
+        # for the miss titles -- if a cache hit were mistakenly
+        # re-sent to the LLM it would raise KeyError inside a worker
+        # thread, which the Enricher's fail-open path would silently
+        # convert into a fallback result, so this test asserts
+        # directly on `calls` rather than relying on that KeyError.
+        second_client = _LockedKeyedLLMClient(
+            responses={t: EnrichmentResult(relevant=True) for t in miss_titles}
+        )
+        events = [_event(title=t) for t in titles]  # same content as pass 1 for cached_titles
+        enricher = LLMEnricher(second_client, cache, max_workers=8)
+
+        survivors = enricher.enrich(events)
+
+        called_titles = [e.title for e in second_client.calls]
+        assert sorted(called_titles) == sorted(miss_titles)
+        assert len(called_titles) == len(miss_titles)  # exactly one call per miss, no duplicates
+        assert [e.title for e in survivors] == titles
+
+
+class TestConcurrentPerEventExceptionIsolation:
+    def test_one_failing_event_among_many_falls_back_without_affecting_the_others(self, tmp_path):
+        n = 10
+        titles = [f"Event {i:02d}" for i in range(n)]
+        failing_title = titles[n // 2]
+        responses: dict[str, Any] = {t: EnrichmentResult(relevant=True) for t in titles}
+        responses[failing_title] = LLMEnrichmentError
+
+        events = [_event(title=t) for t in titles]
+        llm_client = _LockedKeyedLLMClient(responses=responses)
+        enricher = LLMEnricher(llm_client, EnrichmentCache(cache_dir=tmp_path), max_workers=8)
+
+        survivors = enricher.enrich(events)
+
+        # Nothing is dropped (the fallback is always relevant=True too).
+        assert [e.title for e in survivors] == titles
+        for event in events:
+            if event.title == failing_title:
+                assert _relevant_source(event) == FALLBACK_SOURCE
+            else:
+                assert _relevant_source(event) == LLM_SOURCE
+        assert len(llm_client.calls) == n
+
+
+class TestConcurrentRelevanceGateAndInternshipBypass:
+    def test_mixed_batch_gates_correctly_and_internship_never_touches_cache_or_llm(self, tmp_path):
+        internship = _event(title="Data Science Intern", kind="internship")
+        relevant_event = _event(title="Robotics Night")
+        not_relevant_event = _event(title="Adult Wine Tasting")
+        erroring_event = _event(title="Mystery Program", description="robot coding camp for kids")
+
+        llm_client = _LockedKeyedLLMClient(
+            responses={
+                "Robotics Night": EnrichmentResult(relevant=True, relevance_reason="stem"),
+                "Adult Wine Tasting": EnrichmentResult(relevant=False, relevance_reason="not stem"),
+                "Mystery Program": LLMEnrichmentError,
+            }
+        )
+        cache = _SpyCache(cache_dir=tmp_path)
+        enricher = LLMEnricher(llm_client, cache, max_workers=8)
+
+        survivors = enricher.enrich(
+            [internship, relevant_event, not_relevant_event, erroring_event]
+        )
+
+        assert [e.title for e in survivors] == [
+            "Data Science Intern",
+            "Robotics Night",
+            "Mystery Program",
+        ]
+        assert internship.field_provenance == {}
+        assert not_relevant_event.relevant is False
+        assert _relevant_source(erroring_event) == FALLBACK_SOURCE
+        assert _relevant_source(relevant_event) == LLM_SOURCE
+        # Internship never reaches the cache or the LLM client.
+        assert all(e.title != "Data Science Intern" for e in cache.lookup_calls)
+        assert all(e.title != "Data Science Intern" for e in cache.store_calls)
+        assert all(e.title != "Data Science Intern" for e in llm_client.calls)
+
+
+class TestMaxWorkersConfigurable:
+    def test_max_workers_one_produces_identical_results_to_a_real_thread_pool(self, tmp_path):
+        def build_scenario() -> tuple[list[Event], dict[str, Any]]:
+            events = [
+                _event(title="Robotics Night"),
+                _event(title="Adult Wine Tasting"),
+                _event(title="Mystery Program", description="robot coding camp for kids"),
+                _event(title="Data Science Intern", kind="internship"),
+            ]
+            responses: dict[str, Any] = {
+                "Robotics Night": EnrichmentResult(relevant=True, relevance_reason="stem"),
+                "Adult Wine Tasting": EnrichmentResult(relevant=False, relevance_reason="not stem"),
+                "Mystery Program": LLMEnrichmentError,
+            }
+            return events, responses
+
+        def snapshot(events: list[Event]) -> list[tuple[str, bool | None, str | None]]:
+            return [(e.title, e.relevant, _relevant_source(e)) for e in events]
+
+        outcomes = {}
+        for workers in (1, 8):
+            events, responses = build_scenario()
+            llm_client = _LockedKeyedLLMClient(responses=responses)
+            cache = EnrichmentCache(cache_dir=tmp_path / f"cache_{workers}")
+            enricher = LLMEnricher(llm_client, cache, max_workers=workers)
+
+            survivors = enricher.enrich(events)
+
+            outcomes[workers] = ([e.title for e in survivors], snapshot(events))
+
+        assert outcomes[1] == outcomes[8]
+
+
+class TestConcurrentUsesFixtureLLMClient:
+    """The concurrency tests above use a locked local double, but
+    production code and most of this module's other tests use
+    `FixtureLLMClient` directly -- confirm the standard double also
+    behaves correctly (and its `calls` list stays intact) when driven
+    through a real thread pool.
+    """
+
+    def test_fixture_llm_client_under_a_real_thread_pool(self, tmp_path):
+        n = 12
+        titles = [f"Event {i:02d}" for i in range(n)]
+        responses = {t: EnrichmentResult(relevant=True, relevance_reason="stem") for t in titles}
+        events = [_event(title=t) for t in titles]
+        llm_client = _LockedFixtureLLMClient(responses=responses)
+        enricher = LLMEnricher(llm_client, EnrichmentCache(cache_dir=tmp_path), max_workers=6)
+
+        survivors = enricher.enrich(events)
+
+        assert [e.title for e in survivors] == titles
+        assert len(llm_client.calls) == n
+        assert sorted(e.title for e in llm_client.calls) == titles

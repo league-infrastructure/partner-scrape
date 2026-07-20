@@ -30,17 +30,42 @@ Per-Event flow (SUC-011's Main Flow):
    degraded result).
 5. Filter the returned list: exclude any Event with `relevant=False`
    (SUC-012's gate). One Event's gating/error never affects any other
-   Event in the same batch -- each is handled independently inside the
-   loop, matching `pipeline.py`'s own per-source isolation convention.
+   Event in the same batch -- each is handled independently, matching
+   `pipeline.py`'s own per-source isolation convention.
 
-Sequential, one LLM call per new/changed Event, no batching/concurrency
--- sprint.md's Open Question 6 flags this as a real latency question at
-production scale and explicitly defers a parallelizing fast-follow
-behind this same `LLMClient` interface, not a gap in this ticket.
+Bounded-concurrency fast-follow (sprint.md's Open Question 6: a full
+corpus refresh made ~100 minutes of pure sequential LLM latency): the
+LLM calls themselves -- the only slow, independent-per-Event step --
+run in a `ThreadPoolExecutor`, everything else stays sequential on the
+main thread:
+
+1. SEQUENTIAL pass over ``events`` in order: internship bypass (kind 0
+   above, no LLM/cache touch at all), cache hits (applied immediately,
+   no LLM call), or a "miss" collected for the concurrent pass. This
+   pass does all cache reads -- reads are safe to keep on the main
+   thread and this keeps `EnrichmentCache.lookup` single-threaded too.
+2. CONCURRENT pass: every miss's `llm_client.enrich_event()` call is
+   submitted to a `ThreadPoolExecutor(max_workers=self.max_workers)`.
+   Each call only reads its own Event and returns a fresh
+   `EnrichmentResult` (or raises) -- no shared mutable state crosses
+   threads except each future's own return value/exception.
+3. SEQUENTIAL apply pass, back on the main thread, iterating the
+   misses in their *original* order (not completion order): apply the
+   result (or the fail-open taxonomy fallback, same as before) via
+   `Event.set(...)`, and call `EnrichmentCache.store()` -- cache writes
+   stay strictly single-threaded to avoid file races, matching
+   `EnrichmentCache`'s one-JSON-file-per-Event on-disk layout.
+4. The relevance gate is then applied once, over the full input
+   ``events`` list in its original order -- so the returned list's
+   order and membership are identical to the fully-sequential
+   implementation for any given input; concurrency only changes how
+   fast the LLM calls happen, never the result. `max_workers=1` behaves
+   identically to the old strictly-sequential code path.
 """
 
 from __future__ import annotations
 
+import concurrent.futures
 import logging
 
 from partner_scrape.enrich.cache import EnrichmentCache
@@ -55,6 +80,14 @@ from partner_scrape.normalize.taxonomy import (
 )
 
 logger = logging.getLogger(__name__)
+
+#: Default `max_workers` for the concurrent LLM-call pass (see
+#: `LLMEnricher.__init__`). Bounds how many `llm_client.enrich_event()`
+#: calls run in flight at once -- high enough to cut a full-corpus
+#: refresh's wall-clock time down substantially, low enough not to
+#: hammer the Anthropic API with an unbounded burst of concurrent
+#: requests from one process.
+DEFAULT_MAX_WORKERS = 8
 
 #: Provenance `source` recorded for fields set from a real or
 #: cache-reapplied LLM enrichment result -- matches SUC-011's
@@ -137,19 +170,36 @@ class LLMEnricher:
     EnrichmentCache())`; tests pass `FixtureLLMClient`/an
     `EnrichmentCache(cache_dir=tmp_path)`, never touching a socket or the
     real `SCRAPE_CACHE_DIR`.
+
+    `max_workers` bounds the `ThreadPoolExecutor` used for the
+    concurrent LLM-call pass (see the module docstring's numbered
+    steps) -- defaults to `DEFAULT_MAX_WORKERS`. `max_workers=1` is a
+    valid, fully-supported setting: it behaves identically to the old
+    strictly-sequential implementation, just still going through the
+    executor machinery.
     """
 
-    def __init__(self, llm_client: LLMClient, cache: EnrichmentCache) -> None:
+    def __init__(
+        self,
+        llm_client: LLMClient,
+        cache: EnrichmentCache,
+        max_workers: int = DEFAULT_MAX_WORKERS,
+    ) -> None:
         self.llm_client = llm_client
         self.cache = cache
+        self.max_workers = max_workers
 
     def enrich(self, events: list[Event]) -> list[Event]:
         """Enrich and relevance-gate ``events`` (fulfills `pipeline.Enricher`).
 
         Returns every Event except those verdicted `relevant=False` --
-        see this module's docstring for the full per-Event flow.
+        see this module's docstring for the full per-Event flow and its
+        SEQUENTIAL / CONCURRENT / SEQUENTIAL structure.
         """
-        survivors: list[Event] = []
+        # --- Pass 1 (sequential): internship bypass, cache hits applied
+        # in place, everything else collected as a "miss" needing an LLM
+        # call. `misses` preserves `events`' relative order.
+        misses: list[Event] = []
         for event in events:
             if event.kind == "internship":
                 # Relevance Gate bypass (sprint 006 ticket 005, SUC-005):
@@ -162,40 +212,67 @@ class LLMEnricher:
                 # `_apply_result()` call, no field or field_provenance
                 # mutation. Every other `kind` keeps the exact behavior
                 # below, unchanged.
-                survivors.append(event)
                 continue
 
             cached_result = self.cache.lookup(event)
             if cached_result is not None:
                 _apply_result(event, cached_result, source=LLM_SOURCE, confidence=LLM_CONFIDENCE)
             else:
-                try:
-                    result = self.llm_client.enrich_event(event)
-                except Exception:
-                    # Fail open (sprint.md Design Rationale): any LLM/API
-                    # failure -- malformed response, network error, or
-                    # anything else the call raises -- degrades to the
-                    # keyword fallback rather than dropping the Event or
-                    # failing the run. No cache entry is written, so the
-                    # next run retries the LLM instead of caching a
-                    # degraded result.
-                    logger.warning(
-                        "LLM enrichment failed for event %r (source_id=%r); falling back to "
-                        "keyword classification and marking relevant=True",
-                        event.title,
-                        event.source_id,
-                        exc_info=True,
-                    )
-                    _apply_result(
-                        event,
-                        _fallback_result(event),
-                        source=FALLBACK_SOURCE,
-                        confidence=FALLBACK_CONFIDENCE,
-                    )
-                else:
-                    _apply_result(event, result, source=LLM_SOURCE, confidence=LLM_CONFIDENCE)
-                    self.cache.store(event, result)
+                misses.append(event)
 
-            if event.relevant is not False:
-                survivors.append(event)
-        return survivors
+        # --- Pass 2 (concurrent): one `llm_client.enrich_event()` call
+        # per miss, run across a bounded thread pool. Each future's
+        # result/exception is recorded by index -- no other shared
+        # mutable state crosses threads here.
+        results: list[EnrichmentResult | None] = [None] * len(misses)
+        errors: list[BaseException | None] = [None] * len(misses)
+        if misses:
+            with concurrent.futures.ThreadPoolExecutor(max_workers=self.max_workers) as executor:
+                future_to_index = {
+                    executor.submit(self.llm_client.enrich_event, event): index
+                    for index, event in enumerate(misses)
+                }
+                for future in concurrent.futures.as_completed(future_to_index):
+                    index = future_to_index[future]
+                    try:
+                        results[index] = future.result()
+                    except Exception as exc:
+                        errors[index] = exc
+
+        # --- Pass 3 (sequential apply, back on the main thread): walk
+        # `misses` in their *original* order (not completion order) so
+        # behavior never depends on which LLM call happened to finish
+        # first. `cache.store()` only ever runs here, single-threaded.
+        for index, event in enumerate(misses):
+            error = errors[index]
+            if error is not None:
+                # Fail open (sprint.md Design Rationale): any LLM/API
+                # failure -- malformed response, network error, or
+                # anything else the call raises -- degrades to the
+                # keyword fallback rather than dropping the Event or
+                # failing the run. No cache entry is written, so the
+                # next run retries the LLM instead of caching a
+                # degraded result.
+                logger.warning(
+                    "LLM enrichment failed for event %r (source_id=%r); falling back to "
+                    "keyword classification and marking relevant=True",
+                    event.title,
+                    event.source_id,
+                    exc_info=error,
+                )
+                _apply_result(
+                    event,
+                    _fallback_result(event),
+                    source=FALLBACK_SOURCE,
+                    confidence=FALLBACK_CONFIDENCE,
+                )
+            else:
+                result = results[index]
+                assert result is not None  # no error -> future.result() succeeded
+                _apply_result(event, result, source=LLM_SOURCE, confidence=LLM_CONFIDENCE)
+                self.cache.store(event, result)
+
+        # Relevance Gate (SUC-012), applied once over the full input in
+        # its original order -- identical membership/order to the fully
+        # sequential implementation regardless of `max_workers`.
+        return [event for event in events if event.relevant is not False]
