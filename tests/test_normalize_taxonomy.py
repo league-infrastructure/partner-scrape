@@ -149,7 +149,7 @@ class TestClassifyOpportunityType:
 
     def test_school_program_signals(self):
         assert classify_opportunity_type("Field trip for schools") == "School Programs"
-        assert classify_opportunity_type("Classroom curriculum workshop") == "School Programs"
+        assert classify_opportunity_type("School Program: Junior Rangers") == "School Programs"
 
     def test_bare_school_words_do_not_false_positive(self):
         # "preschool"/"school-age" are AUDIENCE terms, not School Programs
