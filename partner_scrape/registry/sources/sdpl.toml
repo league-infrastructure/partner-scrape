@@ -1,0 +1,39 @@
+# San Diego Public Library -- registered against BiblioCommons like
+# SDCL, but its Events feature is confirmed DISABLED there: live
+# probing (2026-07-19) found SDPL's real BiblioCommons subdomain is
+# "sandiego" (via the same select_library dropdown SDCL's subdomain was
+# confirmed against -- <option value="sandiego">San Diego Public
+# Library</option>), but
+# https://gateway.bibliocommons.com/v2/libraries/sandiego/events
+# returns HTTP 403 with {"error": {"message": "The Events feature is
+# not available at San Diego Public Library"}}. SDPL evidently runs its
+# real events program elsewhere -- dev/SCRAPER_GUIDELINES.md Section 3
+# separately documents a Drupal-based extractor for sandiego.gov, which
+# this source does not attempt (out of scope for this bibliocommons
+# adapter; a future ticket could register sandiego.gov under
+# generic_html/listing_html instead).
+#
+# Registered here anyway, with the real confirmed subdomain, rather
+# than omitted: adapters/bibliocommons.py's existing non-200 handling
+# (identical to tec_rest/localist's "probe fails -> degrade to one
+# page; non-200 page -> log and yield zero events, never raise") already
+# copes with this correctly -- it yields zero events today without
+# crashing the run, and will start working with no code changes the day
+# BiblioCommons enables Events for SDPL. See
+# tests/test_adapters_bibliocommons.py's TestSourceWithEventsFeatureUnavailable
+# for the fixture-backed proof of this exact real response shape.
+#
+# org_name matches the exact name in data/partners_viable.csv so the
+# stem-ecosystem partner join resolves.
+
+org_name = "San Diego Public Library"
+adapter_type = "bibliocommons"
+enabled = true
+
+[config]
+subdomain = "sandiego"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "live BiblioCommons gateway API investigation (2026-07-19)"

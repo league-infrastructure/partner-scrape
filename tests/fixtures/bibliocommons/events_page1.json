@@ -1,0 +1,176 @@
+{
+  "events": {
+    "items": ["evt001", "evt002", "evt003a", "evt003b", "evt004", "evt005", "evt001"],
+    "pagination": {"count": 12, "pages": 2, "page": 1, "limit": 50}
+  },
+  "entities": {
+    "events": {
+      "evt001": {
+        "id": "evt001",
+        "key": "2026-08-10T14:00:00",
+        "seriesId": "series001",
+        "definition": {
+          "title": "Tide Pool STEAM Lab",
+          "description": "<p>Hands-on <strong>tide pool</strong> exploration for kids.</p>",
+          "start": "2026-08-10T14:00",
+          "end": "2026-08-10T15:30",
+          "branchLocationId": "23",
+          "nonBranchLocationId": null,
+          "locationDetails": "Community Room",
+          "featuredImageId": "img1",
+          "audienceIds": ["aud_kids"],
+          "typeIds": ["type_steam"],
+          "programId": "prog_summer",
+          "isCancelled": false
+        },
+        "indexStart": "2026-08-10T21:00:00Z",
+        "indexEnd": "2026-08-10T22:30:00Z",
+        "isRecurring": false
+      },
+      "evt002": {
+        "id": "evt002",
+        "key": "2026-12-03T00:00:00",
+        "seriesId": "series002",
+        "definition": {
+          "title": "Digital Literacy and Tech Support",
+          "description": "<p>Learn how to use your smart phone, tablet, and laptop.</p>",
+          "start": "2026-12-03",
+          "end": "2026-12-03",
+          "branchLocationId": "15",
+          "nonBranchLocationId": null,
+          "locationDetails": null,
+          "featuredImageId": null,
+          "audienceIds": ["aud_adults"],
+          "typeIds": ["type_tech"],
+          "programId": null,
+          "isCancelled": false
+        },
+        "indexStart": "2026-12-03T08:00:00Z",
+        "indexEnd": "2026-12-04T07:59:59Z",
+        "isRecurring": true
+      },
+      "evt003a": {
+        "id": "evt003a",
+        "key": "2026-10-29T12:00:00",
+        "seriesId": "seriesTaiChi",
+        "definition": {
+          "title": "Tai Chi Exercise Class",
+          "description": "<p>Gentle exercise for older adults.</p>",
+          "start": "2026-10-29T12:00",
+          "end": "2026-10-29T13:00",
+          "branchLocationId": "15",
+          "nonBranchLocationId": null,
+          "locationDetails": null,
+          "featuredImageId": null,
+          "audienceIds": ["aud_older"],
+          "typeIds": ["type_wellness"],
+          "programId": null,
+          "isCancelled": false
+        },
+        "indexStart": "2026-10-29T19:00:00Z",
+        "indexEnd": "2026-10-29T20:00:00Z",
+        "isRecurring": true
+      },
+      "evt003b": {
+        "id": "evt003b",
+        "key": "2026-12-29T12:00:00",
+        "seriesId": "seriesTaiChi",
+        "definition": {
+          "title": "Tai Chi Exercise Class",
+          "description": "<p>Gentle exercise for older adults.</p>",
+          "start": "2026-12-29T12:00",
+          "end": "2026-12-29T13:00",
+          "branchLocationId": "15",
+          "nonBranchLocationId": null,
+          "locationDetails": null,
+          "featuredImageId": null,
+          "audienceIds": ["aud_older"],
+          "typeIds": ["type_wellness"],
+          "programId": null,
+          "isCancelled": false
+        },
+        "indexStart": "2026-12-29T20:00:00Z",
+        "indexEnd": "2026-12-29T21:00:00Z",
+        "isRecurring": true
+      },
+      "evt004": {
+        "id": "evt004",
+        "key": "2026-09-15T10:00:00",
+        "seriesId": "series004",
+        "definition": {
+          "title": "",
+          "description": "A malformed record with no usable title.",
+          "start": "2026-09-15T10:00",
+          "end": "2026-09-15T11:00",
+          "branchLocationId": "23",
+          "nonBranchLocationId": null,
+          "locationDetails": null,
+          "featuredImageId": null,
+          "audienceIds": [],
+          "typeIds": [],
+          "programId": null,
+          "isCancelled": false
+        },
+        "indexStart": "2026-09-15T17:00:00Z",
+        "indexEnd": "2026-09-15T18:00:00Z",
+        "isRecurring": false
+      },
+      "evt005": {
+        "id": "evt005",
+        "key": "2026-09-01T18:00:00",
+        "seriesId": "series005",
+        "definition": {
+          "title": "Members Meeting",
+          "description": "",
+          "start": "2026-09-01T18:00",
+          "end": "2026-09-01T19:00",
+          "branchLocationId": null,
+          "nonBranchLocationId": null,
+          "locationDetails": null,
+          "featuredImageId": null,
+          "audienceIds": [],
+          "typeIds": [],
+          "programId": null,
+          "isCancelled": false
+        },
+        "indexStart": "2026-09-02T01:00:00Z",
+        "indexEnd": "2026-09-02T02:00:00Z",
+        "isRecurring": false
+      }
+    },
+    "eventSeries": {},
+    "eventAudiences": {
+      "aud_kids": {"id": "aud_kids", "name": "Kids", "imageId": null},
+      "aud_adults": {"id": "aud_adults", "name": "Adults", "imageId": null},
+      "aud_older": {"id": "aud_older", "name": "Older Adults 55+", "imageId": null}
+    },
+    "eventTypes": {
+      "type_steam": {"id": "type_steam", "name": "STEAM", "imageId": null},
+      "type_tech": {"id": "type_tech", "name": "Computers and Technology", "imageId": null},
+      "type_wellness": {"id": "type_wellness", "name": "Health & Wellness", "imageId": null}
+    },
+    "eventPrograms": {
+      "prog_summer": {
+        "id": "prog_summer",
+        "name": "Summer at Your Library",
+        "audienceIds": [],
+        "imageId": null
+      }
+    },
+    "eventLanguages": {},
+    "locations": {
+      "23": {"id": "23", "name": "Lemon Grove"},
+      "15": {"id": "15", "name": "Fallbrook"}
+    },
+    "specialHours": {},
+    "places": {},
+    "images": {
+      "img1": {
+        "id": "img1",
+        "title": "Tide Pool Lab",
+        "url": "https://fixturelib.bibliocommons.com/events/uploads/images/full/abc/tidepool.jpg",
+        "sizes": []
+      }
+    }
+  }
+}

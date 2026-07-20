@@ -1,0 +1,18 @@
+{
+  "events": {
+    "items": [],
+    "pagination": {"count": 0, "pages": 1, "page": 1, "limit": 50}
+  },
+  "entities": {
+    "events": {},
+    "eventSeries": {},
+    "eventAudiences": {},
+    "eventTypes": {},
+    "eventPrograms": {},
+    "eventLanguages": {},
+    "locations": {},
+    "specialHours": {},
+    "places": {},
+    "images": {}
+  }
+}

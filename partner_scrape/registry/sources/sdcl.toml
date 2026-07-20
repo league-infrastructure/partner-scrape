@@ -1,0 +1,26 @@
+# San Diego County Library -- BiblioCommons events gateway API.
+# Subdomain confirmed live (2026-07-19) by probing
+# https://sdpl.bibliocommons.com/info/select_library's library-picker
+# dropdown, which lists <option value="sdcl">San Diego County Library
+# </option>. https://gateway.bibliocommons.com/v2/libraries/sdcl/events
+# returned HTTP 200 structured JSON with thousands of dated upcoming
+# events across 33 branches (see adapters/bibliocommons.py's module
+# docstring) -- per dev/SCRAPER_GUIDELINES.md Section 3, SDCL alone
+# accounted for ~1,173 dated events in the earlier HTML-scrape analysis,
+# making this the single biggest event-volume source this project
+# handles.
+#
+# org_name matches the exact name in data/partners_viable.csv so the
+# stem-ecosystem partner join resolves.
+
+org_name = "San Diego County Library"
+adapter_type = "bibliocommons"
+enabled = true
+
+[config]
+subdomain = "sdcl"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "live BiblioCommons gateway API investigation (2026-07-19)"

@@ -1,0 +1,47 @@
+{
+  "events": {
+    "items": ["evt006"],
+    "pagination": {"count": 12, "pages": 2, "page": 2, "limit": 50}
+  },
+  "entities": {
+    "events": {
+      "evt006": {
+        "id": "evt006",
+        "key": "2026-08-12T10:30:00",
+        "seriesId": "series006",
+        "definition": {
+          "title": "Storytime with Ms. Dana",
+          "description": "<p>Songs, stories, and rhymes for little ones.</p>",
+          "start": "2026-08-12T10:30",
+          "end": "2026-08-12T11:00",
+          "branchLocationId": "23",
+          "nonBranchLocationId": null,
+          "locationDetails": "Children's Area",
+          "featuredImageId": null,
+          "audienceIds": ["aud_birth5"],
+          "typeIds": ["type_story"],
+          "programId": null,
+          "isCancelled": false
+        },
+        "indexStart": "2026-08-12T17:30:00Z",
+        "indexEnd": "2026-08-12T18:00:00Z",
+        "isRecurring": true
+      }
+    },
+    "eventSeries": {},
+    "eventAudiences": {
+      "aud_birth5": {"id": "aud_birth5", "name": "Birth to Five", "imageId": null}
+    },
+    "eventTypes": {
+      "type_story": {"id": "type_story", "name": "Storytime", "imageId": null}
+    },
+    "eventPrograms": {},
+    "eventLanguages": {},
+    "locations": {
+      "23": {"id": "23", "name": "Lemon Grove"}
+    },
+    "specialHours": {},
+    "places": {},
+    "images": {}
+  }
+}

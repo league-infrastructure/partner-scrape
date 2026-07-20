@@ -19,6 +19,7 @@ from partner_scrape.adapters.base import (
     get_adapter,
     run,
 )
+from partner_scrape.adapters.bibliocommons import BiblioCommonsAdapter
 from partner_scrape.adapters.generic_html import GenericHtmlAdapter
 from partner_scrape.adapters.greenhouse import GreenhouseAdapter
 from partner_scrape.adapters.ical import ICalAdapter
@@ -36,6 +37,7 @@ ADAPTERS["localist"] = LocalistAdapter
 ADAPTERS["listing_html"] = ListingHtmlAdapter
 ADAPTERS["greenhouse"] = GreenhouseAdapter
 ADAPTERS["lever"] = LeverAdapter
+ADAPTERS["bibliocommons"] = BiblioCommonsAdapter
 
 __all__ = [
     "Adapter",
@@ -53,4 +55,5 @@ __all__ = [
     "ListingHtmlAdapter",
     "GreenhouseAdapter",
     "LeverAdapter",
+    "BiblioCommonsAdapter",
 ]
