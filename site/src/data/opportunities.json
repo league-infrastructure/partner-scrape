@@ -1,42 +1,5 @@
 [
  {
-  "slug": "anza_borrego_foundation_mountain_sea_and_desert_birding_tour_20240419",
-  "title": "Mountain, Sea and Desert Birding Tour",
-  "partner_name": "Anza-Borrego Foundation",
-  "partner_id": 646,
-  "description": "Explore Southern California’s rich birdlife on a guided journey from the mountains to the Salton Sea to the desert.  Join expert birders Gjon Hazard and Thomas Myers for an unforgettable birding experience as we explore and learn about the rich diversity of inland southern California (130+ species possible).    What to Expect:   Three days of guided birding across diverse habitats:    Friday: Salton Sea and the Imperial Valley    Saturday: Cuyamaca Rancho State Park    Sunday: Borrego Valley    Expert instruction on bird identification, ecology, conservation, and taxonomy    Daily meetups at the Anza-Borrego Foundation office with carpooling to each location    Opportunities for both rare and common bird sightings, guided by two of the region’s top birding experts    Easy to moderate, slow-paced walking with some uneven or rocky terrain    Variations in temperature, from hotter desert temperatures to cooler mountain mornings     Who Should Attend:   Birders of all levels—primarily beginner to intermediate, but all skill levels welcome     Nature lovers looking to deepen their understanding of regional birdlife    Anyone ready for three rewarding days outdoors in varied landscapes     What to Bring:   Binoculars    Lunch, snacks, and water each day    Comfortable clothing and shoes for outdoor conditions    Lodging arrangements (participants are responsible for their own accommodations)    Drivers should start with a (mostly) full tank of gas     REGISTER TODAY! Date &amp; Time: (This event is three days)  Friday, November 20, 2026, 6:00 a.m.–3:00 p.m.   Saturday, November 21, 2026, 6:00 a.m.–3:00 p.m.  Sunday, November 22, 2026, 6:30 a.m.–3:00 p.m.     Location:    Meet at the ABF office in the Mall: 587 Palm Canyon Dr. #122, Borrego Springs, CA, 92004   (in The Mall, park in the eastside lot). We’ll then carpool and/or caravan to our birding locations.    Cost:   ABF Members: $213 (Become a Member for only $35 and save!)  Non-Members: $250  Students: $125     Cancellation Policy &amp; Scholarships: Please see our FAQs page to read our cancellation policy and learn about scholarship options.      What Past Participants Have Said:     “Great group. Excellent guides, fun participants and great learning experience. Love the Mountain, Sea, Desert concept.”    “Great way to sample San Diego County's diversity in just three days.”    “Great locations- the guides really knew where to go”    “From beginning to the end of the 3 days, it was packed with good information, great guides, enlightening insights in the world of birds in the area. Loved the trip and the camaraderie. Gjon and Thomas were wonderful guides.”    “Learned about many great birding locations I wouldn't have known to visit with plenty of species, many of which were new sightings for me.”     About The Tour Leaders:  Gjon Hazard is a life-long California birder. He has led birding tours and field trips for the San Diego Bird Festival, Western Field Ornithologists, various Audubon societies, and other groups. Gjon is also a wildlife biologist with the U.S. Fish and Wildlife Service where, for more than 20 years, he has worked with listed and at-risk plant and animal species. Prior to that, he conducted ornithological field surveys for the Smithsonian Migratory Bird Center, the U.S. Forest Service, academia, and biological consulting firms.      Thomas Myers has been birding for over 25 years and has led birding tours for Andiamo Travel (based out of Ensenada, Baja Norte Mexico). He has been working as a Wildlife Biologist for the San Diego Zoo, San Diego Natural History Museum, and other local consulting firms concentrating on field work with listed vertebrate species in the southwest including reptiles, amphibians, mammals, and, of course, birds!                                     how your support for nocturnal wildlife with the “I’m an Owl Ally” vinyl sticker, celebrating the owls that thrive beneath the star-filled skies of Anza-Borrego Desert State Park®, an official International Dark Sky Park. This bold design captures the mystery of desert nights, where owls silently patrol the moonlit landscape as vital members of the park’s ecosystem.",
-  "link": "https://theabf.org/events/mountain-sea-and-desert-birding-tour-3/",
-  "availability": "Repeats 2 times through 2026-11-22",
-  "date_start": "2024-04-19T06:00:00-07:00",
-  "date_end": "2026-11-22T15:00:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Grades 9-12",
-   "Grades 6-8",
-   "Adult"
-  ],
-  "cost_range": "Less than $200",
-  "time_of_day": [
-   "Morning",
-   "Afternoon"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Biology / LifeSciences",
-   "Earth Science/Ecology"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "587 Palm Canyon Dr. #122, Borrego Springs, CA, 92004",
-  "latitude": "None",
-  "longitude": "None",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "anzaborrego_foundation.jpeg"
- },
- {
   "slug": "anza_borrego_foundation_astrophotography_workshop_galleta_meadows_20250425",
   "title": "Astrophotography Workshop: Galleta Meadows",
   "partner_name": "Anza-Borrego Foundation",
@@ -57,19 +20,56 @@
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
-   "Earth Science/Ecology",
-   "Physics"
+   "Physics",
+   "Earth Science/Ecology"
   ],
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "587 Palm Canyon Dr. #122, Borrego Springs, CA 92004",
+  "location": "587 Palm Canyon Dr. #122, Borrego Springs, CA 92004 and Galleta Meadows",
   "latitude": "None",
   "longitude": "None",
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
   "logo_src": "anzaborrego_foundation.jpeg"
+ },
+ {
+  "slug": "uss_midway_museum_overnight_adventure_uss_midway_museum_20260207",
+  "title": "Overnight Adventure | USS Midway Museum",
+  "partner_name": "USS Midway Museum",
+  "partner_id": 56,
+  "description": "Spend the night on the longest-serving aircraft carrier of the 20th century!",
+  "link": "https://www.midway.org/event/aviation-overnight-july-10-2026",
+  "availability": "Repeats 16 times through 2026-08-22",
+  "date_start": "2026-02-07T00:00:00-07:00",
+  "date_end": "2026-08-22T00:00:00-07:00",
+  "age_grade_level": [
+   "Family",
+   "Grades 6-8",
+   "Grades 9-12"
+  ],
+  "cost_range": "",
+  "time_of_day": [
+   "Evening",
+   "All Day"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "General Science",
+   "Earth Science/Ecology",
+   "Engineering"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "USS Midway Museum, San Diego, CA",
+  "latitude": "32.7137622",
+  "longitude": "-117.175658",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
  },
  {
   "slug": "birch_aquarium_at_scripps_birch_aquarium_is_open_late_sundays_20260215",
@@ -84,7 +84,7 @@
   "age_grade_level": [
    "Family"
   ],
-  "cost_range": "",
+  "cost_range": "Less than $50",
   "time_of_day": [
    "Evening"
   ],
@@ -120,7 +120,7 @@
   ],
   "cost_range": "",
   "time_of_day": [],
-  "opportunity_type": "Out-of-school Programs",
+  "opportunity_type": "Volunteering",
   "areas_of_interest": [
    "Earth Science/Ecology",
    "Biology / LifeSciences"
@@ -232,40 +232,6 @@
   "logo_src": "the_san_diego_river.jpg"
  },
  {
-  "slug": "anza_borrego_foundation_march_sunset_nature_photography_workshop_with_paulette_donne_20260314",
-  "title": "March Sunset Nature Photography Workshop With Paulette Donnellon",
-  "partner_name": "Anza-Borrego Foundation",
-  "partner_id": 646,
-  "description": "Discover the Art of Sunset Photography in Anza-Borrego  Join us for a one-of-a-kind opportunity to learn from award-winning photographer Paulette Donnellon as you explore the stunning beauty of the Anza-Borrego Desert at sunset.  What to Expect:   We’ll begin the afternoon at the Anza-Borrego Foundation Administrative Office, where Paulette will share her expert techniques for photographing desert wildlife, intricate plant life, and breathtaking landscapes.     She’ll then demonstrate her photo-editing process in Lightroom, with time for questions and discussion.    Afterward, we’ll caravan to a picturesque field location in time for sunset, where Paulette will guide you through shooting during the Golden Hour and Blue Hour, helping you refine your composition, optimize your camera settings, and frame that perfect shot.    You’ll also gain valuable insight into staying safe while exploring the desert, along with tips for photographing its rare and rugged beauty.    Who Should Attend:   Photography enthusiasts looking to improve their skills.    Nature lovers interested in capturing the desert's beauty.    Anyone interested in learning from a seasoned professional in a breathtaking, hands-on environment.     REGISTER TODAY!   Date: Saturday, March 14, 2026  Time: 3:30 p.m.- 8:30 p.m. (End time is approximate)  Location: Meet at the Anza-Borrego Foundation Administrative Office: 587 Palm Canyon Dr. #122, Borrego Springs, CA, 92004. This location is different from the State Park store and is located next to Kendall’s Café. We’ll then carpool and/or caravan to the field site in Anza-Borrego Desert State Park.     Cost:   ABF Member: $85  Non-Member: $100  Student: $50    Cancellation Policy &amp; Scholarships: Please see our FAQs page to read our cancellation policy and learn about scholarship options.      What Previous Attendees Are Saying:  “…loved the location, the instructor, so knowledgeable and so talented! So passionate about the area and her photography!...Paulette is a treasure!”  “This was my first opportunity for such an event and I thoroughly enjoyed it. [Paulette’s] knowledge of the area plants and animals is invaluable my biggest take away was all the hitting hidden beauty in the desert!”  “I was able to see the beauty of the desert in a new way. Plus, with Paulette's help, I was able to capture the magic in photographs.”    About the Instructor:  Paulette Donnellon is an award-winning nature and wildlife photographer whose image of an Eastern Collared Lizard is featured on the 2024 America the Beautiful National Park Pass.  When she isn’t out in nature taking photos, she is employed by LEGO® Education and has served as a trustee for the San Diego County Board of Education for eight years and as an Executive Board member of Anza-Borrego Foundation. Paulette served nine years in the U.S. Army and was deployed during Desert Storm. She is incredibly knowledgeable about the flora, fauna and landscape features of Anza-Borrego. You can check out her photos on Instagram at @photogpaulette.                                     Capture the untamed spirit of Anza-Borrego Desert State Park with this 100% cotton unisex tee, featuring a bold silhouette of a howling coyote set against a fiery desert sunset.",
-  "link": "https://theabf.org/events/march-sunset-nature-photography-workshop-with-paulette-donnellon/",
-  "availability": "Repeats 2 times through 2027-03-27",
-  "date_start": "2026-03-14T15:30:00-07:00",
-  "date_end": "2027-03-27T20:30:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Adult"
-  ],
-  "cost_range": "Less than $100",
-  "time_of_day": [
-   "Afternoon",
-   "Evening"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Earth Science/Ecology"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Anza-Borrego Foundation Administrative Office, 587 Palm Canyon Dr. #122, Borrego Springs, CA 92004",
-  "latitude": "None",
-  "longitude": "None",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "anzaborrego_foundation.jpeg"
- },
- {
   "slug": "the_san_diego_river_park_foundation_bird_walk_at_grant_park_20260419",
   "title": "Bird Walk at Grant Park",
   "partner_name": "The San Diego River Park Foundation",
@@ -318,7 +284,8 @@
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
-   "Earth Science/Ecology"
+   "Earth Science/Ecology",
+   "General Science"
   ],
   "specific_attention": [],
   "financial_support": "No",
@@ -330,40 +297,6 @@
   "contact_email": "",
   "contact_phone": "",
   "logo_src": "the_san_diego_river.jpg"
- },
- {
-  "slug": "anza_borrego_foundation_anza_borrego_night_hike_20260425",
-  "title": "Anza-Borrego Night Hike",
-  "partner_name": "Anza-Borrego Foundation",
-  "partner_id": 646,
-  "description": "Join us for a peaceful moonlit hike through the desert, where wide-open skies, rugged terrain, and the quiet beauty of the landscape come alive after dark.&nbsp;    What to Expect:&nbsp;     Under the glow of the moon and stars, we’ll experience the sights and sounds of the desert at night—from shifting shadows across the landscape to the subtle movement of nocturnal wildlife.     We’ll hike approximately 2-3 miles roundtrip across natural terrain.     Along the trail, you might see nocturnal creatures that thrive after dark, such as scorpions, bats, and owls.     This easy-paced night hike will be led by a wilderness first responder, ensuring a safe and fun experience for all ages.      Who Should Attend:&nbsp;     Nature lovers interested in experiencing the desert in a new and unique way.     Stargazers and those who appreciate wide, dark skies.     Hikers in moderate physical condition, comfortable walking several miles over sand or dirt trails.     Anyone looking for a memorable outdoor adventure at night.      &nbsp;    REGISTER TODAY!    &nbsp;    Date: Saturday, April 25, 2026&nbsp;    Time: 6:30 p.m.-9:15 p.m. (end time is approximate)&nbsp;    Location: Meet at the ABF store at 587 Palm Canyon Dr. #110, Borrego Springs, CA 92004 (in The Mall next to Calico’s). From there we’ll carpool/caravan to the trailhead (location to be determined).&nbsp;    &nbsp;    Cost:&nbsp;    ABF Member: $25 Not a member? Join today for as little as $35 and save!&nbsp;    Non-Member: $30&nbsp;    Student: $15&nbsp;    &nbsp;    Cancellation Policy:  Please see our FAQs page to read our cancellation policy and learn about scholarship options. &nbsp;&nbsp;    &nbsp;    What Past Participants Are Saying: &nbsp;    “Well organized. Educated and educating guides.” &nbsp;    “I appreciated the opportunity to be outdoors and experience the desert in a different way via a night hike.” &nbsp;    “It was a perfect evening under the stars” &nbsp;    &nbsp;    Hike Leader:&nbsp;    Matt Nagy is a San Diego native who had the unique experience of growing up across the world. Before graduating high school, he lived in five different countries, including the USA. His global travels have given him the opportunity to see much of the planet, but without a doubt, San Diego County (especially Anza Borrego) remains his favorite place. In his free time, Matt enjoys long hikes, bike rides, and live music. When he has a few weeks off, he embarks on extended adventures such as river trips, bikepacking, or backpacking. Having spent many months under the stars, Matt is always planning his next adventure. He is excited to explore and appreciate the wonders of Anza Borrego with others, creating unforgettable memories along the way. &nbsp;         &nbsp;",
-  "link": "https://theabf.org/events/anza-borrego-night-hike/",
-  "availability": "Repeats 2 times through 2026-08-29",
-  "date_start": "2026-04-25T18:30:00-07:00",
-  "date_end": "2026-08-29T21:30:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Grades 6-8",
-   "Grades 9-12"
-  ],
-  "cost_range": "Less than $50",
-  "time_of_day": [
-   "Evening"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Earth Science/Ecology"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "587 Palm Canyon Dr. #110, Borrego Springs, CA 92004",
-  "latitude": "None",
-  "longitude": "None",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "anzaborrego_foundation.jpeg"
  },
  {
   "slug": "san_diego_county_library_under_the_sea_i_spy_20260601",
@@ -380,7 +313,6 @@
   ],
   "cost_range": "Free",
   "time_of_day": [
-   "Morning",
    "Afternoon",
    "Evening"
   ],
@@ -400,6 +332,38 @@
   "logo_src": ""
  },
  {
+  "slug": "san_diego_county_library_summer_learning_lego_fun_hour_20260605",
+  "title": "Summer Learning Lego Fun Hour",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Spend Summer at Your Library and join us for our Lego Fun hour @1pm every Thursday until August 27",
+  "link": "https://sdcl.bibliocommons.com/events/6a2c8fa5ba0ec7dc2260e2be",
+  "availability": "Repeats 6 times through 2026-08-20",
+  "date_start": "2026-06-05T13:00:00-07:00",
+  "date_end": "2026-08-20T14:00:00-07:00",
+  "age_grade_level": [
+   "Family"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Afternoon"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Engineering"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Jacumba",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
   "slug": "san_diego_county_library_u_s_a_scavenger_hunt_20260629",
   "title": "U.S.A. Scavenger Hunt",
   "partner_name": "San Diego County Library",
@@ -410,17 +374,16 @@
   "date_start": "2026-06-29T10:00:00-07:00",
   "date_end": "2026-07-31T17:00:00-07:00",
   "age_grade_level": [
+   "Grades 6-8",
    "Family"
   ],
-  "cost_range": "",
+  "cost_range": "Free",
   "time_of_day": [
    "Morning",
    "Afternoon"
   ],
   "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "General Science"
-  ],
+  "areas_of_interest": [],
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
@@ -447,7 +410,7 @@
    "Grades 6-8",
    "Grades 9-12"
   ],
-  "cost_range": "Less than $50",
+  "cost_range": "",
   "time_of_day": [
    "All Day"
   ],
@@ -479,8 +442,8 @@
   "date_end": "2026-07-31T23:59:59-07:00",
   "age_grade_level": [
    "Family",
-   "Pre-K",
-   "Grades 6-8"
+   "Grades 6-8",
+   "Pre-K"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -488,7 +451,7 @@
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
-   "Biology / LifeSciences"
+   "Earth Science/Ecology"
   ],
   "specific_attention": [],
   "financial_support": "No",
@@ -550,6 +513,7 @@
   "date_end": "2027-03-01T15:30:00-07:00",
   "age_grade_level": [
    "Family",
+   "Pre-K",
    "Grades 6-8"
   ],
   "cost_range": "Free",
@@ -615,7 +579,8 @@
   "date_end": "2026-12-21T17:00:00-07:00",
   "age_grade_level": [
    "Family",
-   "Pre-K"
+   "Pre-K",
+   "Grades 6-8"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -642,13 +607,13 @@
   "partner_name": "San Diego County Library",
   "partner_id": 251,
   "description": "Bring your young children to explore, learn, and play in this free-play space. We provide a variety of sensory and educational toys and activities.",
-  "link": "https://sdcl.bibliocommons.com/events/6a469bda20e06486019585d2",
+  "link": "https://sdcl.bibliocommons.com/events/6a469bda20e06486019585aa",
   "availability": "Repeats 132 times through 2027-01-17",
   "date_start": "2026-07-21T00:00:00-07:00",
   "date_end": "2027-01-17T00:00:00-07:00",
   "age_grade_level": [
-   "Pre-K",
-   "Family"
+   "Family",
+   "Pre-K"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -675,15 +640,12 @@
   "partner_name": "San Diego Children's Discovery Museum",
   "partner_id": 16,
   "description": "Join us every Tuesday from 8:30 a.m. - 9:30 a.m. for our Member's Only Hours.",
-  "link": "https://visitcmod.org/events/members-only-hours-2/2026-07-21/",
-  "availability": "Repeats 17 times through 2026-12-29",
+  "link": "https://visitcmod.org/events/members-only-hours-2/2026-08-11/",
+  "availability": "Repeats 18 times through 2026-12-29",
   "date_start": "2026-07-21T08:30:00-07:00",
   "date_end": "2026-12-29T09:30:00-07:00",
   "age_grade_level": [
-   "Family",
-   "Pre-K",
-   "Grades 6-8",
-   "Grades 9-12"
+   "Family"
   ],
   "cost_range": "",
   "time_of_day": [
@@ -748,9 +710,7 @@
   "date_start": "2026-07-21T10:00:00-07:00",
   "date_end": "2026-10-31T10:30:00-07:00",
   "age_grade_level": [
-   "Family",
-   "Pre-K",
-   "Grades 6-8"
+   "Family"
   ],
   "cost_range": "",
   "time_of_day": [
@@ -782,7 +742,9 @@
   "date_start": "2026-07-21T11:00:00-07:00",
   "date_end": "2026-12-30T14:30:00-07:00",
   "age_grade_level": [
-   "Family"
+   "Family",
+   "Pre-K",
+   "Grades 6-8"
   ],
   "cost_range": "",
   "time_of_day": [
@@ -857,7 +819,7 @@
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
    "Biology / LifeSciences",
-   "Earth Science/Ecology"
+   "General Science"
   ],
   "specific_attention": [],
   "financial_support": "No",
@@ -894,7 +856,7 @@
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "San Marcos Library, Kids & Family Room",
+  "location": "San Marcos, Kids and Family Room",
   "latitude": "32.834727",
   "longitude": "-117.1306115",
   "contact_name": "",
@@ -922,8 +884,7 @@
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
-   "Engineering",
-   "Physics"
+   "Engineering"
   ],
   "specific_attention": [],
   "financial_support": "No",
@@ -947,6 +908,39 @@
   "date_start": "2026-07-21T15:00:00-07:00",
   "date_end": "2026-07-21T16:30:00-07:00",
   "age_grade_level": [
+   "Grades 6-8"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Afternoon"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Engineering",
+   "Physical Science"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "4S Ranch",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
+  "slug": "san_diego_county_library_summer_learning_teen_video_game_tournament_20260721",
+  "title": "Summer Learning - Teen Video Game Tournament",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Teens, ages 10-17. Come have fun and compete in a video game tournament.",
+  "link": "https://sdcl.bibliocommons.com/events/69fe5d031ed2c2bb2e2cb1c5",
+  "availability": "",
+  "date_start": "2026-07-21T16:00:00-07:00",
+  "date_end": "2026-07-21T17:30:00-07:00",
+  "age_grade_level": [
    "Grades 6-8",
    "Grades 9-12"
   ],
@@ -956,14 +950,12 @@
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
-   "Coding/Computer Science/Cyber Security",
-   "Engineering",
-   "Physical Science"
+   "Coding/Computer Science/Cyber Security"
   ],
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "4S Ranch",
+  "location": "Ramona",
   "latitude": "32.834727",
   "longitude": "-117.1306115",
   "contact_name": "",
@@ -1022,8 +1014,8 @@
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
-   "Earth Science/Ecology",
-   "Biology / LifeSciences"
+   "Biology / LifeSciences",
+   "Earth Science/Ecology"
   ],
   "specific_attention": [],
   "financial_support": "No",
@@ -1055,13 +1047,43 @@
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
-   "General Science",
-   "Earth Science/Ecology"
+   "General Science"
   ],
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
   "location": "UCI - Steele/Burnand Anza-Borrego Desert Research Center, 401 Tilting T. Drive, Borrego Springs, CA 92004",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
+  "slug": "san_diego_county_library_pre_k_play_20260722",
+  "title": "Pre-K Play",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Bring your littles to meet and have fun! The library will provide toys and a play space for kids to play together and socialize. For ages 0-5. Parent/caregiver supervision required.",
+  "link": "https://sdcl.bibliocommons.com/events/69fa945ef56bd86e00add570",
+  "availability": "Repeats 12 times through 2027-05-26",
+  "date_start": "2026-07-22T10:30:00-07:00",
+  "date_end": "2027-05-26T11:30:00-07:00",
+  "age_grade_level": [
+   "Pre-K",
+   "Family"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Imperial Beach, Children's Area",
   "latitude": "32.834727",
   "longitude": "-117.1306115",
   "contact_name": "",
@@ -1082,7 +1104,7 @@
   "age_grade_level": [
    "Family"
   ],
-  "cost_range": "Unknown",
+  "cost_range": "",
   "time_of_day": [
    "Morning"
   ],
@@ -1144,7 +1166,8 @@
   "date_start": "2026-07-22T13:00:00-07:00",
   "date_end": "2026-12-30T16:00:00-07:00",
   "age_grade_level": [
-   "Family"
+   "Family",
+   "Grades 6-8"
   ],
   "cost_range": "",
   "time_of_day": [
@@ -1177,6 +1200,7 @@
   "date_end": "2026-12-31T14:00:00-07:00",
   "age_grade_level": [
    "Family",
+   "Pre-K",
    "Grades 6-8",
    "Grades 9-12"
   ],
@@ -1243,7 +1267,10 @@
   "date_start": "2026-07-22T14:30:00-07:00",
   "date_end": "2026-12-31T15:00:00-07:00",
   "age_grade_level": [
-   "Family"
+   "Family",
+   "Grades 6-8",
+   "Grades 9-12",
+   "Pre-K"
   ],
   "cost_range": "",
   "time_of_day": [
@@ -1251,7 +1278,8 @@
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
-   "Biology / LifeSciences"
+   "Biology / LifeSciences",
+   "Earth Science/Ecology"
   ],
   "specific_attention": [],
   "financial_support": "No",
@@ -1275,9 +1303,8 @@
   "date_start": "2026-07-22T15:00:00-07:00",
   "date_end": "2026-10-07T16:00:00-07:00",
   "age_grade_level": [
-   "Grades 6-8",
-   "Grades 9-12",
-   "Family"
+   "Family",
+   "Grades 6-8"
   ],
   "cost_range": "",
   "time_of_day": [
@@ -1300,49 +1327,19 @@
   "logo_src": ""
  },
  {
-  "slug": "san_diego_county_library_doggie_tales_20260722",
-  "title": "Doggie Tales",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Friendly, Love on a Leash, therapy dogs are waiting patiently to hear stories! Children of all ages are welcomed to come practice their reading skills and make a furry friend!",
-  "link": "https://sdcl.bibliocommons.com/events/69582b26e3e3999b5c0572a7",
-  "availability": "Repeats 2 times through 2026-12-23",
-  "date_start": "2026-07-22T15:00:00-07:00",
-  "date_end": "2026-12-23T16:00:00-07:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Afternoon"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Encinitas, Community Room",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
   "slug": "san_diego_county_library_brick_builders_20260722",
   "title": "Brick Builders",
   "partner_name": "San Diego County Library",
   "partner_id": 251,
   "description": "Use your imagination to complete a brick building challenge with Lego bricks or build whatever you'd like! Hosted in partnership with the City of Imperial Beach Parks, Recreation, and Community Services department. For ages 6-12.",
-  "link": "https://sdcl.bibliocommons.com/events/69fa9600f56bd86e00add5c7",
+  "link": "https://sdcl.bibliocommons.com/events/69fa9600f56bd86e00add5c2",
   "availability": "Repeats 21 times through 2027-05-26",
   "date_start": "2026-07-22T15:00:00-07:00",
   "date_end": "2027-05-26T16:30:00-07:00",
   "age_grade_level": [
    "Grades 6-8"
   ],
-  "cost_range": "Free",
+  "cost_range": "",
   "time_of_day": [
    "Afternoon"
   ],
@@ -1372,7 +1369,8 @@
   "date_start": "2026-07-22T15:30:00-07:00",
   "date_end": "2026-07-22T16:30:00-07:00",
   "age_grade_level": [
-   "Family"
+   "Family",
+   "Grades 6-8"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -1380,7 +1378,8 @@
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
-   "General Science"
+   "General Science",
+   "Engineering"
   ],
   "specific_attention": [],
   "financial_support": "No",
@@ -1436,8 +1435,7 @@
   "date_start": "2026-07-23T10:30:00-07:00",
   "date_end": "2026-12-10T11:15:00-07:00",
   "age_grade_level": [
-   "Pre-K",
-   "Family"
+   "Pre-K"
   ],
   "cost_range": "",
   "time_of_day": [
@@ -1470,49 +1468,20 @@
    "Pre-K",
    "Family"
   ],
-  "cost_range": "",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Biology / LifeSciences"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Imperial Beach, Community Room",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "san_diego_county_library_toddler_storytime_20260723",
-  "title": "Toddler Storytime",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Join us for stories, songs, playtime and fun in the library!  Toddler storytime focuses on helping our littlest library visitors learn to love reading, become comfortable in the library setting, and build social skills. Geared towards ages Birth-3.",
-  "link": "https://sdcl.bibliocommons.com/events/6a0b8856f6bd012f0068beca",
-  "availability": "Repeats 5 times through 2027-04-01",
-  "date_start": "2026-07-23T10:30:00-07:00",
-  "date_end": "2027-04-01T11:00:00-07:00",
-  "age_grade_level": [
-   "Pre-K",
-   "Family"
-  ],
   "cost_range": "Free",
   "time_of_day": [
    "Morning"
   ],
   "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [],
+  "areas_of_interest": [
+   "Biology / LifeSciences",
+   "Earth Science/Ecology",
+   "General Science"
+  ],
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "Santee",
+  "location": "Imperial Beach, Community Room",
   "latitude": "32.834727",
   "longitude": "-117.1306115",
   "contact_name": "",
@@ -1541,13 +1510,75 @@
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
-   "Biology / LifeSciences",
-   "Earth Science/Ecology"
+   "Earth Science/Ecology",
+   "Biology / LifeSciences"
   ],
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
   "location": "San Marcos, Kids and Family Room",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
+  "slug": "san_diego_county_library_microphone_doctor_20260723",
+  "title": "Microphone Doctor",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Come join us for this hilarious interactive kids concert!",
+  "link": "https://sdcl.bibliocommons.com/events/69fa8ed9e13d3b4603b373c5",
+  "availability": "",
+  "date_start": "2026-07-23T10:30:00-07:00",
+  "date_end": "2026-07-23T11:30:00-07:00",
+  "age_grade_level": [
+   "Family"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Physics"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "4S Ranch",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
+  "slug": "san_diego_county_library_kids_summer_reading_christopher_t_magician_20260723",
+  "title": "Kids Summer Reading: Christopher T Magician",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Totally amazing magic and so very funny!",
+  "link": "https://sdcl.bibliocommons.com/events/6a3d841d296ea565de2ebf0e",
+  "availability": "",
+  "date_start": "2026-07-23T10:30:00-07:00",
+  "date_end": "2026-07-23T11:30:00-07:00",
+  "age_grade_level": [
+   "Family"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Poway",
   "latitude": "32.834727",
   "longitude": "-117.1306115",
   "contact_name": "",
@@ -1579,7 +1610,7 @@
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "Crest",
+  "location": "Crest Library, San Diego County",
   "latitude": "32.834727",
   "longitude": "-117.1306115",
   "contact_name": "",
@@ -1598,9 +1629,7 @@
   "date_start": "2026-07-23T11:00:00-07:00",
   "date_end": "2026-12-31T14:30:00-07:00",
   "age_grade_level": [
-   "Family",
-   "Pre-K",
-   "Grades 6-8"
+   "Family"
   ],
   "cost_range": "",
   "time_of_day": [
@@ -1609,7 +1638,7 @@
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
    "Earth Science/Ecology",
-   "Biology / LifeSciences"
+   "General Science"
   ],
   "specific_attention": [],
   "financial_support": "No",
@@ -1653,41 +1682,6 @@
   "contact_email": "",
   "contact_phone": "",
   "logo_src": "san_diego_childrens_discovery.jpg"
- },
- {
-  "slug": "san_diego_county_library_summer_learning_lego_fun_hour_20260723",
-  "title": "Summer Learning Lego Fun Hour",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Spend Summer at Your Library and join us for our Lego Fun hour @1pm every Thursday until August 27",
-  "link": "https://sdcl.bibliocommons.com/events/6a2c8fa5ba0ec7dc2260e2be",
-  "availability": "Repeats 6 times through 2026-08-27",
-  "date_start": "2026-07-23T13:00:00-07:00",
-  "date_end": "2026-08-27T14:00:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Grades 6-8",
-   "Grades 9-12",
-   "Pre-K"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Afternoon"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Engineering"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Jacumba",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
  },
  {
   "slug": "san_diego_county_library_stem_workshop_electricity_light_20260723",
@@ -1756,36 +1750,6 @@
   "logo_src": ""
  },
  {
-  "slug": "san_diego_county_library_tween_craft_button_making_20260723",
-  "title": "Tween Craft - Button Making",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Design and make a variety of buttons.",
-  "link": "https://sdcl.bibliocommons.com/events/69d7ef1d4dacf581ff87ab72",
-  "availability": "",
-  "date_start": "2026-07-23T15:00:00-07:00",
-  "date_end": "2026-07-23T16:00:00-07:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Afternoon"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Rancho San Diego",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
   "slug": "san_diego_county_library_homework_help_20260723",
   "title": "Homework Help",
   "partner_name": "San Diego County Library",
@@ -1796,10 +1760,10 @@
   "date_start": "2026-07-23T15:00:00-07:00",
   "date_end": "2026-12-31T16:00:00-07:00",
   "age_grade_level": [
-   "Family",
-   "Grades 6-8"
+   "Grades 6-8",
+   "Grades 9-12"
   ],
-  "cost_range": "Free",
+  "cost_range": "",
   "time_of_day": [
    "Afternoon"
   ],
@@ -1830,9 +1794,9 @@
   "date_start": "2026-07-23T15:00:00-07:00",
   "date_end": "2026-12-31T16:00:00-07:00",
   "age_grade_level": [
-   "Family",
    "Grades 6-8",
-   "Grades 9-12"
+   "Grades 9-12",
+   "Family"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -1896,10 +1860,10 @@
   "date_start": "2026-07-23T16:00:00-07:00",
   "date_end": "2026-07-30T17:00:00-07:00",
   "age_grade_level": [
-   "Family",
+   "Grades 6-8",
    "Grades 9-12"
   ],
-  "cost_range": "",
+  "cost_range": "Free",
   "time_of_day": [
    "Afternoon"
   ],
@@ -1931,8 +1895,6 @@
   "date_start": "2026-07-23T16:00:00-07:00",
   "date_end": "2026-12-17T17:00:00-07:00",
   "age_grade_level": [
-   "Pre-K",
-   "Grades 6-8",
    "Family"
   ],
   "cost_range": "Free",
@@ -1970,7 +1932,7 @@
   ],
   "cost_range": "Free",
   "time_of_day": [
-   "Afternoon"
+   "Evening"
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
@@ -1980,6 +1942,40 @@
   "financial_support": "No",
   "ngss_aligned": "No",
   "location": "Poway",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
+  "slug": "san_diego_county_library_youth_chess_club_20260723",
+  "title": "Youth Chess Club",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Join us for a game of chess and practice for our Summer Chess Tournament ! For ages 6-17.",
+  "link": "https://sdcl.bibliocommons.com/events/6a1e2fb743b41b3d006aed87",
+  "availability": "",
+  "date_start": "2026-07-23T16:30:00-07:00",
+  "date_end": "2026-07-23T17:30:00-07:00",
+  "age_grade_level": [
+   "Family",
+   "Grades 6-8",
+   "Grades 9-12"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Afternoon"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Mathematics"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "El Cajon",
   "latitude": "32.834727",
   "longitude": "-117.1306115",
   "contact_name": "",
@@ -2026,8 +2022,8 @@
   "partner_name": "San Diego County Library",
   "partner_id": 251,
   "description": "Enjoy an open sensory play program with your toddler or preschooler with play-doh, blocks, sensory sand, shakers, and more!",
-  "link": "https://sdcl.bibliocommons.com/events/6a594440fa641fe01af3b1dd",
-  "availability": "Repeats 16 times through 2026-12-18",
+  "link": "https://sdcl.bibliocommons.com/events/6a594440fa641fe01af3b1de",
+  "availability": "Repeats 12 times through 2026-12-18",
   "date_start": "2026-07-24T10:30:00-07:00",
   "date_end": "2026-12-18T12:00:00-07:00",
   "age_grade_level": [
@@ -2039,72 +2035,13 @@
    "Morning"
   ],
   "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [],
+  "areas_of_interest": [
+   "General Science"
+  ],
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
   "location": "Cardiff-by-the-Sea",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "san_diego_county_library_hot_air_balloon_windchimes_20260724",
-  "title": "Hot Air Balloon windchimes",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Come join in the fun and paint a sun catcher hot air balloon windchime!",
-  "link": "https://sdcl.bibliocommons.com/events/69fbab335a8c322f03c74bd5",
-  "availability": "",
-  "date_start": "2026-07-24T10:30:00-07:00",
-  "date_end": "2026-07-24T11:30:00-07:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "4S Ranch",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "san_diego_county_library_preschool_play_20260724",
-  "title": "Preschool Play",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Music and early learning activities for toddlers and preschoolers.",
-  "link": "https://sdcl.bibliocommons.com/events/6958224f8b29ea2800c720c6",
-  "availability": "Repeats 12 times through 2026-12-25",
-  "date_start": "2026-07-24T10:30:00-07:00",
-  "date_end": "2026-12-25T11:30:00-07:00",
-  "age_grade_level": [
-   "Pre-K",
-   "Family"
-  ],
-  "cost_range": "",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Poway",
   "latitude": "32.834727",
   "longitude": "-117.1306115",
   "contact_name": "",
@@ -2124,9 +2061,7 @@
   "date_end": "2026-07-24T11:15:00-07:00",
   "age_grade_level": [
    "Family",
-   "Grades 6-8",
-   "Grades 9-12",
-   "Pre-K"
+   "Grades 6-8"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -2134,8 +2069,7 @@
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
-   "Biology / LifeSciences",
-   "Earth Science/Ecology"
+   "Biology / LifeSciences"
   ],
   "specific_attention": [],
   "financial_support": "No",
@@ -2154,7 +2088,7 @@
   "partner_name": "San Diego County Library",
   "partner_id": 251,
   "description": "Little ones and their caregivers can socialize with one another while playing with educational toys at the library.",
-  "link": "https://sdcl.bibliocommons.com/events/691f703a0d45944c9e679e84",
+  "link": "https://sdcl.bibliocommons.com/events/691f703a0d45944c9e679e8c",
   "availability": "Repeats 22 times through 2026-12-18",
   "date_start": "2026-07-24T10:30:00-07:00",
   "date_end": "2026-12-18T11:30:00-07:00",
@@ -2167,7 +2101,9 @@
    "Morning"
   ],
   "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [],
+  "areas_of_interest": [
+   "General Science"
+  ],
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
@@ -2280,38 +2216,6 @@
   "logo_src": "solana_center_for_environmental.png"
  },
  {
-  "slug": "san_diego_county_library_wildfire_safety_fair_20260725",
-  "title": "Wildfire Safety Fair",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Learn how you can continue to prepare and protect your family and property. You’ll receive information about stocking an emergency kit, developing an emergency plan, designing or modifying the space around your home to resist wildfire and more.",
-  "link": "https://sdcl.bibliocommons.com/events/6a46c1a50e851028002ed183",
-  "availability": "",
-  "date_start": "2026-07-25T10:00:00-07:00",
-  "date_end": "2026-07-25T13:00:00-07:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Earth Science/Ecology"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Valley Center",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
   "slug": "the_living_coast_discovery_center_national_zookeeper_week_20260725",
   "title": "National Zookeeper Week",
   "partner_name": "Living Coast Discovery Center",
@@ -2331,7 +2235,8 @@
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
-   "Biology / LifeSciences"
+   "Biology / LifeSciences",
+   "Earth Science/Ecology"
   ],
   "specific_attention": [],
   "financial_support": "No",
@@ -2410,6 +2315,38 @@
   "logo_src": ""
  },
  {
+  "slug": "san_diego_county_library_clay_sculpture_class_for_kids_20260725",
+  "title": "Clay Sculpture Class for Kids",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Sign Ups are required, please Sign Up at the service desk. Class is geared towards kids K-5",
+  "link": "https://sdcl.bibliocommons.com/events/6a0611e9c7d3cd58005933ed",
+  "availability": "",
+  "date_start": "2026-07-25T11:00:00-07:00",
+  "date_end": "2026-07-25T12:30:00-07:00",
+  "age_grade_level": [
+   "Family"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "General Science"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Bonita-Sunnyside",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
   "slug": "san_diego_county_library_radical_raptors_birds_of_the_world_20260725",
   "title": "Radical Raptors: Birds of the World",
   "partner_name": "San Diego County Library",
@@ -2461,8 +2398,8 @@
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
-   "Biology / LifeSciences",
-   "Earth Science/Ecology"
+   "Earth Science/Ecology",
+   "Biology / LifeSciences"
   ],
   "specific_attention": [],
   "financial_support": "No",
@@ -2520,9 +2457,9 @@
   "date_start": "2026-07-25T13:00:00-07:00",
   "date_end": "2026-07-25T16:30:00-07:00",
   "age_grade_level": [
+   "Grades 1-5",
    "Grades 6-8",
-   "Grades 9-12",
-   "Family"
+   "Grades 9-12"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -2564,7 +2501,7 @@
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
    "Chemistry",
-   "Engineering"
+   "General Science"
   ],
   "specific_attention": [],
   "financial_support": "No",
@@ -2588,9 +2525,7 @@
   "date_start": "2026-07-25T19:00:00-07:00",
   "date_end": "2026-07-25T22:00:00-07:00",
   "age_grade_level": [
-   "Family",
-   "Grades 6-8",
-   "Grades 9-12"
+   "Family"
   ],
   "cost_range": "Less than $50",
   "time_of_day": [
@@ -2613,69 +2548,6 @@
   "logo_src": "anzaborrego_foundation.jpeg"
  },
  {
-  "slug": "san_diego_county_library_baby_storytime_20260727",
-  "title": "Baby Storytime",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Join us for stories, songs and movement activities for babies and toddlers 18 months and younger.",
-  "link": "https://sdcl.bibliocommons.com/events/6a1dcba846d5f64f7dcd9804",
-  "availability": "Repeats 13 times through 2027-04-16",
-  "date_start": "2026-07-27T10:30:00-07:00",
-  "date_end": "2027-04-16T11:30:00-07:00",
-  "age_grade_level": [
-   "Pre-K"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Julian",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "san_diego_county_library_community_partner_storytime_20260727",
-  "title": "Community Partner Storytime",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Community Partner Storytime takes place on Mondays, 10:30am-11am. Join us as we about our community. Events are subject to change and cancellation. Monday, June 8: County of San Diego, Parks & Recreation, Birds of Prey Monday, June 15: Vista Community Clinic Monday, June 22: San Diego County, Vector Control Monday, June 29: San Diego County Sheriff, Canine Search and Rescue Monday, July 6: WWM Financial Monday, July 13: San Diego County Sheriff Monday, July 20: WIC Red Cross Monday, July 27: San Diego Humane Society San Diego County Library partners with community-based organizations, schools, and government agencies that support our mission, guiding principles, and values.",
-  "link": "https://sdcl.bibliocommons.com/events/69f3a7ef5c04bc0fc063fd11",
-  "availability": "",
-  "date_start": "2026-07-27T10:30:00-07:00",
-  "date_end": "2026-07-27T11:00:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Pre-K"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "General Science"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Vista",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
   "slug": "san_diego_county_library_zovargo_animal_show_20260727",
   "title": "Zovargo Animal Show",
   "partner_name": "San Diego County Library",
@@ -2686,10 +2558,7 @@
   "date_start": "2026-07-27T13:30:00-07:00",
   "date_end": "2026-07-27T14:30:00-07:00",
   "age_grade_level": [
-   "Family",
-   "Pre-K",
-   "Grades 6-8",
-   "Grades 9-12"
+   "Family"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -2731,7 +2600,7 @@
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
    "Mathematics",
-   "General Science"
+   "Engineering"
   ],
   "specific_attention": [],
   "financial_support": "No",
@@ -2752,12 +2621,46 @@
   "description": "For ages 8-10. Monday, July 28th thru Friday, August 1st. Get a jump start to the school year with fun math and reading exercises. Limited seats. First come, first serve. Please contact Youth Services Librarian, Kelly Dunn at kelly.dunn@sdcounty.ca.gov for more details.",
   "link": "https://sdcl.bibliocommons.com/events/6a4298e75f884f9a10d9b692",
   "availability": "Repeats 5 times through 2026-08-01",
-  "date_start": "2026-07-28T09:00:00-07:00",
-  "date_end": "2026-08-01T17:00:00-07:00",
+  "date_start": "2026-07-28T00:00:00-07:00",
+  "date_end": "2026-08-01T23:59:59-07:00",
   "age_grade_level": [
    "Grades 6-8"
   ],
   "cost_range": "",
+  "time_of_day": [
+   "All Day"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Mathematics"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Ramona",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
+  "slug": "san_diego_county_library_knights_of_the_chess_table_20260728",
+  "title": "Knights of the Chess Table",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "A seat is waiting for you at the Chess Table. Come and test your skills against other players. Playing chess offers a lot of benefits . Players of all ages and skill levels are welcome. Instruction is offered the first half hour for children. Children should have a basic knowledge of how to move the pieces. Adults will meet in the community room. Chess sets will be provided. Children 8 or younger must be accompanied by someone who is 12 or older. ",
+  "link": "https://sdcl.bibliocommons.com/events/69473f4c7ed7c62f00ab74e6",
+  "availability": "Repeats 2 times through 2026-11-03",
+  "date_start": "2026-07-28T15:30:00-07:00",
+  "date_end": "2026-11-03T17:30:00-07:00",
+  "age_grade_level": [
+   "Family",
+   "Grades 6-8",
+   "Grades 9-12"
+  ],
+  "cost_range": "Free",
   "time_of_day": [
    "Afternoon"
   ],
@@ -2768,7 +2671,7 @@
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "Ramona",
+  "location": "San Marcos",
   "latitude": "32.834727",
   "longitude": "-117.1306115",
   "contact_name": "",
@@ -2820,7 +2723,10 @@
   "date_start": "2026-07-29T10:30:00-07:00",
   "date_end": "2026-07-29T11:15:00-07:00",
   "age_grade_level": [
-   "Family"
+   "Family",
+   "Pre-K",
+   "Grades 6-8",
+   "Grades 9-12"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -2842,29 +2748,31 @@
   "logo_src": ""
  },
  {
-  "slug": "san_diego_county_library_pre_k_play_20260729",
-  "title": "Pre-K Play",
+  "slug": "san_diego_county_library_craig_newton_20260729",
+  "title": "Craig Newton",
   "partner_name": "San Diego County Library",
   "partner_id": 251,
-  "description": "Bring your littles to meet and have fun! The library will provide toys and a play space for kids to play together and socialize. For ages 0-5. Parent/caregiver supervision required.",
-  "link": "https://sdcl.bibliocommons.com/events/69fa945ef56bd86e00add568",
-  "availability": "Repeats 12 times through 2027-05-26",
+  "description": "Join us to sing fun and silly folk songs and learn about different types of musical instruments with the multi-talented Craig Newton! This program is made possible by the Friends of the Del Mar Library. Please be advised that due to space limitations, we will be limiting the number of people in the building to 80 on a first-come, first-serve basis.",
+  "link": "https://sdcl.bibliocommons.com/events/69fe2deb278f7c2f008bf562",
+  "availability": "",
   "date_start": "2026-07-29T10:30:00-07:00",
-  "date_end": "2027-05-26T11:30:00-07:00",
+  "date_end": "2026-07-29T11:00:00-07:00",
   "age_grade_level": [
-   "Pre-K",
-   "Family"
+   "Family",
+   "Pre-K"
   ],
   "cost_range": "Free",
   "time_of_day": [
    "Morning"
   ],
   "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [],
+  "areas_of_interest": [
+   "General Science"
+  ],
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "Imperial Beach, Children's Area",
+  "location": "Del Mar",
   "latitude": "32.834727",
   "longitude": "-117.1306115",
   "contact_name": "",
@@ -2916,15 +2824,15 @@
   "date_end": "2026-07-29T13:00:00-07:00",
   "age_grade_level": [
    "Family",
-   "Grades 6-8",
    "Grades 9-12",
+   "Grades 6-8",
    "Adult"
   ],
   "cost_range": "Less than $25",
   "time_of_day": [
    "Afternoon"
   ],
-  "opportunity_type": "Out-of-school Programs",
+  "opportunity_type": "Online",
   "areas_of_interest": [
    "Biology / LifeSciences",
    "Earth Science/Ecology"
@@ -2999,7 +2907,7 @@
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "San Marcos Public Library, Kids and Family Room",
+  "location": "San Marcos, Kids and Family Room",
   "latitude": "32.834727",
   "longitude": "-117.1306115",
   "contact_name": "",
@@ -3018,7 +2926,8 @@
   "date_start": "2026-07-29T15:30:00-07:00",
   "date_end": "2026-07-29T16:30:00-07:00",
   "age_grade_level": [
-   "Family"
+   "Family",
+   "Grades 6-8"
   ],
   "cost_range": "",
   "time_of_day": [
@@ -3027,8 +2936,8 @@
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
    "Chemistry",
-   "Engineering",
-   "General Science"
+   "Physical Science",
+   "Engineering"
   ],
   "specific_attention": [],
   "financial_support": "No",
@@ -3053,7 +2962,6 @@
   "date_end": "2026-07-30T11:30:00-07:00",
   "age_grade_level": [
    "Family",
-   "Pre-K",
    "Grades 6-8",
    "Grades 9-12"
   ],
@@ -3187,7 +3095,7 @@
   "age_grade_level": [
    "Family"
   ],
-  "cost_range": "Free",
+  "cost_range": "",
   "time_of_day": [
    "Morning"
   ],
@@ -3221,7 +3129,7 @@
    "Grades 9-12",
    "Family"
   ],
-  "cost_range": "Free",
+  "cost_range": "",
   "time_of_day": [
    "Afternoon"
   ],
@@ -3274,40 +3182,6 @@
   "logo_src": ""
  },
  {
-  "slug": "san_diego_county_library_youth_chess_club_20260730",
-  "title": "Youth Chess Club",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Join us for a game of chess and practice for our Summer Chess Tournament ! For ages 6-17.",
-  "link": "https://sdcl.bibliocommons.com/events/6a1e2fb743b41b3d006aed88",
-  "availability": "",
-  "date_start": "2026-07-30T16:30:00-07:00",
-  "date_end": "2026-07-30T17:30:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Grades 6-8",
-   "Grades 9-12"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Afternoon"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Mathematics"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "El Cajon",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
   "slug": "san_diego_county_library_fleet_science_center_superhero_science_20260731",
   "title": "Fleet Science Center Superhero Science",
   "partner_name": "San Diego County Library",
@@ -3318,10 +3192,7 @@
   "date_start": "2026-07-31T09:30:00-07:00",
   "date_end": "2026-07-31T10:30:00-07:00",
   "age_grade_level": [
-   "Family",
-   "Grades 6-8",
-   "Grades 9-12",
-   "Pre-K"
+   "Family"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -3329,13 +3200,13 @@
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
-   "Physics",
-   "General Science"
+   "General Science",
+   "Physics"
   ],
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "Santee",
+  "location": "Mast Park, Santee",
   "latitude": "32.834727",
   "longitude": "-117.1306115",
   "contact_name": "",
@@ -3354,7 +3225,10 @@
   "date_start": "2026-07-31T10:00:00-07:00",
   "date_end": "2026-07-31T11:30:00-07:00",
   "age_grade_level": [
-   "Family"
+   "Family",
+   "Pre-K",
+   "Grades 6-8",
+   "Grades 9-12"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -3374,6 +3248,37 @@
   "contact_email": "",
   "contact_phone": "",
   "logo_src": "san_diego_childrens_discovery.jpg"
+ },
+ {
+  "slug": "san_diego_county_library_baby_storytime_20260731",
+  "title": "Baby Storytime",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Babies experience the sounds and structure of language through rhythm, rhyme, and repetition. Plan on a fifteen-minute program with time for baby and caregiver socializing afterwards. Geared toward pre-walkers.",
+  "link": "https://sdcl.bibliocommons.com/events/69d818a8ad384e40edb9f1b1",
+  "availability": "Repeats 12 times through 2027-04-23",
+  "date_start": "2026-07-31T10:30:00-07:00",
+  "date_end": "2027-04-23T11:30:00-07:00",
+  "age_grade_level": [
+   "Pre-K",
+   "Family"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Alpine",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
  },
  {
   "slug": "san_diego_county_library_slime_party_20260731",
@@ -3396,7 +3301,7 @@
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
-   "General Science"
+   "Chemistry"
   ],
   "specific_attention": [],
   "financial_support": "No",
@@ -3442,36 +3347,6 @@
   "logo_src": ""
  },
  {
-  "slug": "san_diego_county_library_summer_scavenger_hunt_kids_trivia_20260801",
-  "title": "Summer Scavenger Hunt: Kids Trivia",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Enjoy a special themed scavenger hunt in the children's area! August's theme will be kids trivia. Complete the scavenger hunt to win a small prize. For children ages 4-12. While supplies last; one prize per day.",
-  "link": "https://sdcl.bibliocommons.com/events/69fbb0a8703c33630025eb58",
-  "availability": "",
-  "date_start": "2026-08-01T00:00:00-07:00",
-  "date_end": "2026-08-31T00:00:00-07:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "All Day"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Imperial Beach, Children's Area",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
   "slug": "ocean_connectors_wildin_8217_mission_bay_kayak_eco_tour_20260801",
   "title": "Wildin&#8217; Mission Bay Kayak Eco Tour",
   "partner_name": "Ocean Connectors",
@@ -3490,8 +3365,8 @@
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
-   "Earth Science/Ecology",
-   "Biology / LifeSciences"
+   "Biology / LifeSciences",
+   "Earth Science/Ecology"
   ],
   "specific_attention": [],
   "financial_support": "No",
@@ -3549,8 +3424,7 @@
   "date_end": "2026-08-01T11:00:00-07:00",
   "age_grade_level": [
    "Family",
-   "Pre-K",
-   "Grades 6-8"
+   "Pre-K"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -3573,51 +3447,18 @@
   "logo_src": "the_san_diego_river.jpg"
  },
  {
-  "slug": "san_diego_county_library_resin_jewelry_workshop_20260801",
-  "title": "Resin Jewelry Workshop",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Learn the tips and tricks to resin jewelry and create your very own earrings, necklace, charm or brooch. For ages 13 and up. Registration required at sdcl.org/alpine for this FREE class.",
-  "link": "https://sdcl.bibliocommons.com/events/6a03b450c7d3cd580058d33c",
-  "availability": "",
-  "date_start": "2026-08-01T10:00:00-07:00",
-  "date_end": "2026-08-01T11:00:00-07:00",
-  "age_grade_level": [
-   "Grades 6-8",
-   "Grades 9-12"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Engineering"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Alpine",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
   "slug": "san_diego_county_library_discover_play_saturday_free_play_20260801",
   "title": "Discover & Play Saturday - Free Play",
   "partner_name": "San Diego County Library",
   "partner_id": 251,
   "description": "Come and enjoy a variety of activity stations.",
-  "link": "https://sdcl.bibliocommons.com/events/69d8123fbd9a3c316a51e9fa",
+  "link": "https://sdcl.bibliocommons.com/events/69d8123fbd9a3c316a51e9fc",
   "availability": "Repeats 10 times through 2026-12-19",
   "date_start": "2026-08-01T10:30:00-07:00",
   "date_end": "2026-12-19T11:30:00-07:00",
   "age_grade_level": [
-   "Family",
-   "Pre-K"
+   "Pre-K",
+   "Family"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -3649,9 +3490,12 @@
   "date_start": "2026-08-01T11:00:00-07:00",
   "date_end": "2026-08-01T12:00:00-07:00",
   "age_grade_level": [
-   "Family"
+   "Family",
+   "Grades 9-12",
+   "Grades 6-8",
+   "Pre-K"
   ],
-  "cost_range": "",
+  "cost_range": "Free",
   "time_of_day": [
    "Morning"
   ],
@@ -3671,29 +3515,28 @@
   "logo_src": ""
  },
  {
-  "slug": "san_diego_county_library_paws_and_tales_read_to_a_sd_humane_society_canine_ambassador_20260801",
-  "title": "Paws and Tales: Read to a SD Humane Society Canine Ambassador",
+  "slug": "san_diego_county_library_paws_to_read_20260801",
+  "title": "Paws to Read",
   "partner_name": "San Diego County Library",
   "partner_id": 251,
-  "description": "Read aloud to a trained Canine Ambassador from the San Diego Humane Society. Program geared toward school aged children. Build confidence and practice reading with a friendly furry friend!",
-  "link": "https://sdcl.bibliocommons.com/events/69f61de4f29b90618e0028d5",
-  "availability": "Repeats 4 times through 2026-12-05",
+  "description": "Paws to Read encourages children to practice their reading skills by reading aloud to certified therapy dogs. This partnership allows children to bolster their self-confidence, reduce reading anxiety and enjoy the experience of reading to calming therapy dogs.  Each 15-minute session will include a child, parent or guardian, a dog handler and a licensed therapy dog. Children read aloud for about 10 minutes followed by time to interact with the dog. In-person sign up is required and available at the Service Desk in the Kids & Family section starting at 3:30 pm on the day of the event . Parent or guardian supervision is required during the entire reading session. Space is limited.",
+  "link": "https://sdcl.bibliocommons.com/events/6a56799a71ef136200522d49",
+  "availability": "Repeats 7 times through 2027-04-03",
   "date_start": "2026-08-01T11:00:00-07:00",
-  "date_end": "2026-12-05T12:00:00-07:00",
+  "date_end": "2027-04-03T12:00:00-07:00",
   "age_grade_level": [
-   "Grades 6-8",
-   "Grades 9-12"
+   "Family"
   ],
   "cost_range": "Free",
   "time_of_day": [
-   "Morning"
+   "Afternoon"
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [],
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "Vista, Community Room",
+  "location": "San Marcos, Children's Discovery Zone",
   "latitude": "32.834727",
   "longitude": "-117.1306115",
   "contact_name": "",
@@ -3746,7 +3589,9 @@
   "date_start": "2026-08-01T14:00:00-07:00",
   "date_end": "2026-08-01T15:15:00-07:00",
   "age_grade_level": [
-   "Family"
+   "Family",
+   "Grades 6-8",
+   "Grades 9-12"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -3774,7 +3619,7 @@
   "partner_id": 16,
   "description": "Join us every Sunday from 9:00 a.m. - 10:30 a.m. for early mornings geared for families with children on the spectrum or with sensory sensitivities: Join a welcoming, comfortable environment Enjoy the Museum in a quiet and accepting setting Make connections and share resources with other families Free with Museum admission.",
   "link": "https://visitcmod.org/events/sensory-friendly-mornings-2/2026-08-02/",
-  "availability": "Repeats 12 times through 2026-12-27",
+  "availability": "Repeats 10 times through 2026-12-27",
   "date_start": "2026-08-02T09:00:00-07:00",
   "date_end": "2026-12-27T10:30:00-07:00",
   "age_grade_level": [
@@ -3798,6 +3643,37 @@
   "logo_src": "san_diego_childrens_discovery.jpg"
  },
  {
+  "slug": "san_diego_county_library_family_free_play_20260803",
+  "title": "Family Free Play",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Storytime is on break during August. During the break, join us for Family Free Play! Kids and caregivers are invited to play with educational and creative play items while socializing with other attendees. All Ages Storytime returns on Thursday, September 3. Baby Storytime returns on Monday, September 7.",
+  "link": "https://sdcl.bibliocommons.com/events/69fcd2918e677a28001a83ea",
+  "availability": "Repeats 5 times through 2026-08-27",
+  "date_start": "2026-08-03T10:30:00-07:00",
+  "date_end": "2026-08-27T12:00:00-07:00",
+  "age_grade_level": [
+   "Family",
+   "Pre-K"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "La Mesa, Kids area",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
   "slug": "san_diego_county_library_summer_steam_marshmallow_structures_20260803",
   "title": "Summer STEAM: Marshmallow Structures",
   "partner_name": "San Diego County Library",
@@ -3808,8 +3684,7 @@
   "date_start": "2026-08-03T15:00:00-07:00",
   "date_end": "2026-08-03T16:00:00-07:00",
   "age_grade_level": [
-   "Family",
-   "Grades 6-8"
+   "Family"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -3841,10 +3716,7 @@
   "date_start": "2026-08-04T12:30:00-07:00",
   "date_end": "2026-08-04T13:30:00-07:00",
   "age_grade_level": [
-   "Family",
-   "Grades 9-12",
-   "Grades 6-8",
-   "Pre-K"
+   "Family"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -3916,7 +3788,7 @@
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
-   "Engineering"
+   "General Science"
   ],
   "specific_attention": [],
   "financial_support": "No",
@@ -3943,16 +3815,52 @@
    "Grades 6-8",
    "Grades 9-12"
   ],
-  "cost_range": "",
+  "cost_range": "Free",
   "time_of_day": [
    "Afternoon"
   ],
   "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [],
+  "areas_of_interest": [
+   "General Science",
+   "Mathematics"
+  ],
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
   "location": "La Mesa",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
+  "slug": "san_diego_county_library_play_to_learn_20260805",
+  "title": "Play to Learn",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Join us for open play time. Toys will be provided to help kids learn.  Recommended for ages 18 months+",
+  "link": "https://sdcl.bibliocommons.com/events/6a5951b30d65ac3600403b79",
+  "availability": "Repeats 5 times through 2027-03-31",
+  "date_start": "2026-08-05T10:00:00-07:00",
+  "date_end": "2027-03-31T11:00:00-07:00",
+  "age_grade_level": [
+   "Pre-K",
+   "Family"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "General Science"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Solana Beach",
   "latitude": "32.834727",
   "longitude": "-117.1306115",
   "contact_name": "",
@@ -3966,10 +3874,10 @@
   "partner_name": "San Diego County Library",
   "partner_id": 251,
   "description": "Join us for stories, songs, and fun with friends! The first Wednesday of each month will be bilingual preschool storytime.",
-  "link": "https://sdcl.bibliocommons.com/events/685f2eccd234473d0022fb23",
-  "availability": "Repeats 5 times through 2026-12-09",
+  "link": "https://sdcl.bibliocommons.com/events/685f2eccd234473d0022fb18",
+  "availability": "Repeats 3 times through 2026-09-23",
   "date_start": "2026-08-05T10:30:00-07:00",
-  "date_end": "2026-12-09T11:00:00-07:00",
+  "date_end": "2026-09-23T11:00:00-07:00",
   "age_grade_level": [
    "Pre-K",
    "Family"
@@ -4002,7 +3910,10 @@
   "date_start": "2026-08-05T11:00:00-07:00",
   "date_end": "2026-08-05T12:00:00-07:00",
   "age_grade_level": [
-   "Family"
+   "Family",
+   "Grades 6-8",
+   "Grades 9-12",
+   "Pre-K"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -4034,7 +3945,9 @@
   "date_start": "2026-08-06T10:30:00-07:00",
   "date_end": "2026-08-06T11:00:00-07:00",
   "age_grade_level": [
-   "Family"
+   "Family",
+   "Pre-K",
+   "Grades 6-8"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -4042,13 +3955,43 @@
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
-   "Biology / LifeSciences",
    "Earth Science/Ecology"
   ],
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
   "location": "San Marcos, Kids and Family Room",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
+  "slug": "san_diego_county_library_loot_lore_20260806",
+  "title": "Loot & Lore",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Join us every Thursday for Loot & Lore -- a fantasy adventure club where brave heroes go on exciting quests, face magical dangers, discover hidden treasure, and make new friends along the way. Every session is a chance to work together, use your imagination, and create an unforgettable story.",
+  "link": "https://sdcl.bibliocommons.com/events/69dd3be6fca21471b7ef188b",
+  "availability": "Repeats 4 times through 2026-11-26",
+  "date_start": "2026-08-06T14:30:00-07:00",
+  "date_end": "2026-11-26T16:30:00-07:00",
+  "age_grade_level": [
+   "Grades 6-8",
+   "Family"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Afternoon"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Julian",
   "latitude": "32.834727",
   "longitude": "-117.1306115",
   "contact_name": "",
@@ -4067,8 +4010,7 @@
   "date_start": "2026-08-06T14:30:00-07:00",
   "date_end": "2027-12-02T16:30:00-07:00",
   "age_grade_level": [
-   "Grades 6-8",
-   "Family"
+   "Grades 6-8"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -4100,7 +4042,8 @@
   "date_start": "2026-08-06T15:30:00-07:00",
   "date_end": "2026-08-06T16:30:00-07:00",
   "age_grade_level": [
-   "Family"
+   "Family",
+   "Grades 6-8"
   ],
   "cost_range": "",
   "time_of_day": [
@@ -4108,8 +4051,8 @@
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
-   "Earth Science/Ecology",
-   "Chemistry"
+   "Chemistry",
+   "Earth Science/Ecology"
   ],
   "specific_attention": [],
   "financial_support": "No",
@@ -4156,69 +4099,6 @@
   "logo_src": ""
  },
  {
-  "slug": "san_diego_county_library_button_mashers_video_game_club_20260807",
-  "title": "Button Mashers Video Game Club!",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Join us for a free gaming hour of Nintendo Switch video games!",
-  "link": "https://sdcl.bibliocommons.com/events/69bc55f6b6c4ac1fedc6e7d3",
-  "availability": "Repeats 2 times through 2026-09-04",
-  "date_start": "2026-08-07T15:00:00-07:00",
-  "date_end": "2026-09-04T16:30:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Grades 6-8",
-   "Grades 9-12"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Afternoon"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Bonita-Sunnyside",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "san_diego_county_library_pok_mon_club_20260807",
-  "title": "Pokémon Club!",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Join our Fallbrook Pokémon Trainers Club! Meet and battle with fellow Pokémon fans while you learn how to play and how to build your own deck. Enter opportunity drawings to win cards and game supplies!",
-  "link": "https://sdcl.bibliocommons.com/events/6a2989fd2ea730c17ab5d6e7",
-  "availability": "",
-  "date_start": "2026-08-07T15:00:00-07:00",
-  "date_end": "2026-08-07T16:30:00-07:00",
-  "age_grade_level": [
-   "Grades 6-8",
-   "Grades 9-12"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Afternoon"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Fallbrook",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
   "slug": "i_love_a_clean_san_diego_watershed_warriors_el_cajon_8211_flinn_springs_county_park_20260808",
   "title": "Watershed Warriors: El Cajon &#8211; Flinn Springs County Park",
   "partner_name": "I Love A Clean San Diego",
@@ -4229,7 +4109,9 @@
   "date_start": "2026-08-08T09:00:00-07:00",
   "date_end": "2026-08-08T11:00:00-07:00",
   "age_grade_level": [
-   "Family"
+   "Family",
+   "Grades 6-8",
+   "Grades 9-12"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -4269,7 +4151,8 @@
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
-   "Biology / LifeSciences"
+   "Biology / LifeSciences",
+   "Earth Science/Ecology"
   ],
   "specific_attention": [],
   "financial_support": "No",
@@ -4294,7 +4177,7 @@
   "date_end": "2026-08-08T16:00:00-07:00",
   "age_grade_level": [
    "Grades 9-12",
-   "Adult"
+   "Family"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -4316,50 +4199,18 @@
   "logo_src": ""
  },
  {
-  "slug": "san_diego_county_library_chess_club_20260808",
-  "title": "Chess Club",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Drop-In and practice your gambit, kids and teens grades 1 through 12!   Drop-In Chess Matches every 2nd & 4th Saturday of the the month, 3-4:30pm.",
-  "link": "https://sdcl.bibliocommons.com/events/6a24ad957b73be6a1b1ac684",
-  "availability": "Repeats 14 times through 2027-05-08",
-  "date_start": "2026-08-08T15:00:00-07:00",
-  "date_end": "2027-05-08T16:30:00-07:00",
-  "age_grade_level": [
-   "Grades 6-8",
-   "Grades 9-12"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Afternoon"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Mathematics"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "4S Ranch, in the Community Room",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
   "slug": "anza_borrego_foundation_anza_borrego_under_the_stars_20260808",
   "title": "Anza-Borrego Under the Stars",
   "partner_name": "Anza-Borrego Foundation",
   "partner_id": 646,
   "description": "Join Us for a Stargazing Adventure in Anza-Borrego!  Experience the night sky like never before at Anza-Borrego Desert State Park—an official International Dark Sky Park. Explore stars, planets, and constellations through telescopes guided by an astronomer.  What to expect:   A Stunning Night Sky: Experience the awe of a star-filled sky in one of California’s premier Dark Sky Parks—perfect for spotting constellations, planets, and even the Milky Way.    Guided Stargazing: Learn the basics of stargazing, including how to identify major stars, constellations, and planets visible this time of year – with and without a telescope.    Relaxed Atmosphere: Bring your camp chair, snacks, and beverages. You're welcome to hang out, ask questions, and simply enjoy the desert night.    Optional Camping: Extend your visit by camping nearby (this portion is not hosted).   Who should attend:   Nature lovers, astronomy enthusiasts, and anyone curious about the night sky who wants to experience stargazing in a world-class dark-sky location.    Anyone interested in learning how to identify stars, planets, and constellations with guidance from an astronomer.    Photographers, campers, and outdoor adventurers who enjoy desert landscapes and immersive nighttime experiences.    Anyone seeking a peaceful escape from city lights to connect with nature and enjoy the beauty of the cosmos.   REGISTER TODAY! Date: Saturday, August 8, 2026  Time: 8:30 p.m.-10:30 p.m.  Location: Anza-Borrego Desert State Park (location to be determined)  Cost:  ABF Member: $20 Not a member? Join today for as little as $35 and save!  Non-Member: $24  Student: $12  Cancellation Policy &amp; Scholarships: Please see our FAQs page to read our cancellation policy and learn about scholarship options.",
   "link": "https://theabf.org/events/anza-borrego-under-the-stars/",
-  "availability": "Repeats 6 times through 2027-06-05",
+  "availability": "Repeats 3 times through 2026-10-09",
   "date_start": "2026-08-08T20:30:00-07:00",
-  "date_end": "2027-06-05T22:30:00-07:00",
+  "date_end": "2026-10-09T22:00:00-07:00",
   "age_grade_level": [
    "Family",
+   "Grades 6-8",
    "Grades 9-12",
    "Adult"
   ],
@@ -4403,12 +4254,12 @@
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
    "Earth Science/Ecology",
-   "General Science"
+   "Biology / LifeSciences"
   ],
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "Coastal Roots Farm, San Diego, CA",
+  "location": "Coastal Roots Farm",
   "latitude": "33.0560503",
   "longitude": "-117.2834447",
   "contact_name": "",
@@ -4461,9 +4312,7 @@
   "date_start": "2026-08-11T13:15:00-07:00",
   "date_end": "2026-08-11T14:15:00-07:00",
   "age_grade_level": [
-   "Family",
-   "Pre-K",
-   "Grades 6-8"
+   "Family"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -4496,9 +4345,9 @@
   "date_start": "2026-08-11T14:30:00-07:00",
   "date_end": "2026-12-15T15:30:00-07:00",
   "age_grade_level": [
+   "Family",
    "Grades 6-8",
-   "Grades 9-12",
-   "Family"
+   "Grades 9-12"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -4506,10 +4355,14 @@
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
+   "Biology / LifeSciences",
+   "Earth Science/Ecology",
+   "Coding/Computer Science/Cyber Security",
    "Engineering",
-   "Mathematics",
    "Physical Science",
-   "Coding/Computer Science/Cyber Security"
+   "Mathematics",
+   "Chemistry",
+   "Physics"
   ],
   "specific_attention": [],
   "financial_support": "No",
@@ -4534,6 +4387,7 @@
   "date_end": "2026-08-12T12:00:00-07:00",
   "age_grade_level": [
    "Family",
+   "Pre-K",
    "Grades 6-8",
    "Grades 9-12"
   ],
@@ -4548,7 +4402,38 @@
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "Fallbrook Library, San Diego",
+  "location": "Fallbrook",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
+  "slug": "san_diego_county_library_ralph_s_world_20260812",
+  "title": "Ralph's World",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Join Ralph for an acoustic concert and summer learning event. There will be singing, dancing, games, and all kinds of happy silliness! This program is made possible by the support of the Del Mar Foundation. Please be advised that due to space limitations, we will be limiting the number of people in the building to 80 on a first-come, first-serve basis.",
+  "link": "https://sdcl.bibliocommons.com/events/69fd31cfc6a1dc3d00d24b24",
+  "availability": "",
+  "date_start": "2026-08-12T10:30:00-07:00",
+  "date_end": "2026-08-12T11:00:00-07:00",
+  "age_grade_level": [
+   "Family",
+   "Pre-K"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Del Mar",
   "latitude": "32.834727",
   "longitude": "-117.1306115",
   "contact_name": "",
@@ -4568,9 +4453,9 @@
   "date_end": "2026-08-12T12:00:00-07:00",
   "age_grade_level": [
    "Family",
-   "Pre-K",
    "Grades 6-8",
-   "Grades 9-12"
+   "Grades 9-12",
+   "Pre-K"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -4593,18 +4478,48 @@
   "logo_src": ""
  },
  {
-  "slug": "san_diego_county_library_family_free_play_20260813",
-  "title": "Family Free Play",
+  "slug": "san_diego_county_library_doggie_tales_20260812",
+  "title": "Doggie Tales",
   "partner_name": "San Diego County Library",
   "partner_id": 251,
-  "description": "Storytime is on break during August. During the break, join us for Family Free Play! Kids and caregivers are invited to play with educational and creative play items while socializing with other attendees. All Ages Storytime returns on Thursday, September 3. Baby Storytime returns on Monday, September 7.",
-  "link": "https://sdcl.bibliocommons.com/events/69fcd2918e677a28001a83ee",
-  "availability": "Repeats 5 times through 2026-08-31",
-  "date_start": "2026-08-13T10:30:00-07:00",
-  "date_end": "2026-08-31T12:00:00-07:00",
+  "description": "Friendly, Love on a Leash, therapy dogs are waiting patiently to hear stories! Children of all ages are welcomed to come practice their reading skills and make a furry friend!",
+  "link": "https://sdcl.bibliocommons.com/events/69582b26e3e3999b5c0572a8",
+  "availability": "Repeats 5 times through 2026-10-22",
+  "date_start": "2026-08-12T15:00:00-07:00",
+  "date_end": "2026-10-22T16:00:00-07:00",
   "age_grade_level": [
-   "Family",
-   "Pre-K"
+   "Family"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Afternoon"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Encinitas, Community Room",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
+  "slug": "san_diego_county_library_play_to_learn_20260813",
+  "title": "Play-to-Learn",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Join us on Thursdays where your child can explore independent learning stations and participate in activities that promote socialization, motor skills, and more through play.  Geared to children 0-5.",
+  "link": "https://sdcl.bibliocommons.com/events/694f2b47d875af6300d1b8a0",
+  "availability": "Repeats 9 times through 2026-12-17",
+  "date_start": "2026-08-13T10:30:00-07:00",
+  "date_end": "2026-12-17T11:30:00-07:00",
+  "age_grade_level": [
+   "Pre-K",
+   "Family"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -4615,7 +4530,7 @@
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "La Mesa, Kids area",
+  "location": "Valley Center, Discovery Zone",
   "latitude": "32.834727",
   "longitude": "-117.1306115",
   "contact_name": "",
@@ -4634,10 +4549,7 @@
   "date_start": "2026-08-13T10:30:00-07:00",
   "date_end": "2026-08-13T12:00:00-07:00",
   "age_grade_level": [
-   "Family",
-   "Pre-K",
-   "Grades 6-8",
-   "Grades 9-12"
+   "Family"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -4702,9 +4614,7 @@
   "date_start": "2026-08-14T11:00:00-07:00",
   "date_end": "2026-08-14T12:00:00-07:00",
   "age_grade_level": [
-   "Family",
-   "Pre-K",
-   "Grades 6-8"
+   "Family"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -4712,8 +4622,7 @@
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
-   "Biology / LifeSciences",
-   "Earth Science/Ecology"
+   "Biology / LifeSciences"
   ],
   "specific_attention": [],
   "financial_support": "No",
@@ -4732,7 +4641,7 @@
   "partner_name": "San Diego County Library",
   "partner_id": 251,
   "description": "Curious about how 3D printing works?  Drop off your creations at our computer lab where you can learn how to choose and print objects using our 3D printer.",
-  "link": "https://sdcl.bibliocommons.com/events/696041490c4aad14d37422e1",
+  "link": "https://sdcl.bibliocommons.com/events/6a19e6cbcaf93436005f395c",
   "availability": "Repeats 5 times through 2026-12-11",
   "date_start": "2026-08-14T14:00:00-07:00",
   "date_end": "2026-12-11T16:00:00-07:00",
@@ -4747,13 +4656,13 @@
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
-   "Engineering",
-   "Coding/Computer Science/Cyber Security"
+   "Coding/Computer Science/Cyber Security",
+   "Engineering"
   ],
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "Cardiff-by-the-Sea, computer lab",
+  "location": "Cardiff-by-the-Sea",
   "latitude": "32.834727",
   "longitude": "-117.1306115",
   "contact_name": "",
@@ -4773,7 +4682,8 @@
   "date_end": "2026-08-14T16:30:00-07:00",
   "age_grade_level": [
    "Family",
-   "Grades 6-8"
+   "Grades 6-8",
+   "Grades 9-12"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -4873,9 +4783,9 @@
   "date_start": "2026-08-18T13:15:00-07:00",
   "date_end": "2026-08-18T14:15:00-07:00",
   "age_grade_level": [
-   "Family",
    "Grades 6-8",
-   "Grades 9-12"
+   "Grades 9-12",
+   "Family"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -4884,7 +4794,7 @@
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
    "Engineering",
-   "Physics",
+   "Physical Science",
    "General Science"
   ],
   "specific_attention": [],
@@ -4899,47 +4809,17 @@
   "logo_src": ""
  },
  {
-  "slug": "san_diego_county_library_play_to_learn_20260819",
-  "title": "Play to Learn",
+  "slug": "san_diego_county_library_chess_20260819",
+  "title": "Chess",
   "partner_name": "San Diego County Library",
   "partner_id": 251,
-  "description": "Join us for open play time. Toys will be provided to help kids learn.  Recommended for ages 18 months+",
-  "link": "https://sdcl.bibliocommons.com/events/6a5951b30d65ac3600403b86",
-  "availability": "Repeats 5 times through 2027-04-21",
-  "date_start": "2026-08-19T10:00:00-07:00",
-  "date_end": "2027-04-21T11:00:00-07:00",
-  "age_grade_level": [
-   "Pre-K",
-   "Family"
-  ],
-  "cost_range": "",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Solana Beach",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "san_diego_county_library_loot_lore_dungeons_dragons_daggerheart_warriors_pok_mon_magi_20260819",
-  "title": "LOOT & LORE (Dungeons & Dragons, Daggerheart, Warriors, POKÉMON & Magic: The Gathering)",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Join us for  LOOT & LORE every Wednesday afternoon at the 4S Ranch Library! Featuring: Dungeons & Dragons, Daggerheart, Warriors, POKÉMON & Magic: The Gathering  GRADES 4-12!  Make new friends! Play tabletop games, trading cards, roleplaying and more! Dive into epic quests, discover hidden treasures, and forge new friendships in a thrilling fantasy adventure. Fun awaits every adventurer!",
-  "link": "https://sdcl.bibliocommons.com/events/6a3c564b7e16a03d00e7dabe",
-  "availability": "Repeats 9 times through 2027-05-26",
+  "description": "Join us for a game of chess.   All ages and abilities are welcome.",
+  "link": "https://sdcl.bibliocommons.com/events/68bb57e6af27753600ef5fa2",
+  "availability": "Repeats 4 times through 2026-12-09",
   "date_start": "2026-08-19T16:00:00-07:00",
-  "date_end": "2027-05-26T18:00:00-07:00",
+  "date_end": "2026-12-09T17:00:00-07:00",
   "age_grade_level": [
+   "Family",
    "Grades 6-8",
    "Grades 9-12"
   ],
@@ -4948,11 +4828,13 @@
    "Afternoon"
   ],
   "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [],
+  "areas_of_interest": [
+   "Mathematics"
+  ],
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "4S Ranch Library, San Diego, CA",
+  "location": "Bonita-Sunnyside",
   "latitude": "32.834727",
   "longitude": "-117.1306115",
   "contact_name": "",
@@ -4961,115 +4843,21 @@
   "logo_src": ""
  },
  {
-  "slug": "san_diego_county_library_storytime_with_mr_dave_20260820",
-  "title": "Storytime with Mr. Dave!",
+  "slug": "san_diego_county_library_preschool_play_20260821",
+  "title": "Preschool Play",
   "partner_name": "San Diego County Library",
   "partner_id": 251,
-  "description": "Join Mr. Dave for some great stories, music, dancing, and loads of fun! After storytime, stay for a craft.",
-  "link": "https://sdcl.bibliocommons.com/events/6949d6bf111b9da65ca8973f",
-  "availability": "",
-  "date_start": "2026-08-20T10:30:00-07:00",
-  "date_end": "2026-08-20T11:15:00-07:00",
-  "age_grade_level": [
-   "Pre-K",
-   "Family"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Casa de Oro",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "san_diego_county_library_loot_lore_20260820",
-  "title": "Loot & Lore",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Join us every Thursday for Loot & Lore -- a fantasy adventure club where brave heroes go on exciting quests, face magical dangers, discover hidden treasure, and make new friends along the way. Every session is a chance to work together, use your imagination, and create an unforgettable story.",
-  "link": "https://sdcl.bibliocommons.com/events/69dd3be6fca21471b7ef188b",
-  "availability": "Repeats 3 times through 2026-11-26",
-  "date_start": "2026-08-20T14:30:00-07:00",
-  "date_end": "2026-11-26T16:30:00-07:00",
-  "age_grade_level": [
-   "Grades 6-8",
-   "Grades 9-12",
-   "Family"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Afternoon"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Julian",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "san_diego_county_library_tiny_tots_art_20260821",
-  "title": "Tiny Tots Art",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "A fun art program for toddlers and preschoolers to explore colors, crafts, and creativity with their caregivers. ",
-  "link": "https://sdcl.bibliocommons.com/events/6a57e6980d65ac36003feeea",
-  "availability": "Repeats 3 times through 2026-11-13",
+  "description": "Music and early learning activities for toddlers and preschoolers.",
+  "link": "https://sdcl.bibliocommons.com/events/6958224f8b29ea2800c720c5",
+  "availability": "Repeats 10 times through 2026-12-18",
   "date_start": "2026-08-21T10:30:00-07:00",
-  "date_end": "2026-11-13T11:30:00-07:00",
+  "date_end": "2026-12-18T11:30:00-07:00",
   "age_grade_level": [
-   "Pre-K",
-   "Family"
+   "Pre-K"
   ],
   "cost_range": "",
   "time_of_day": [
    "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Lemon Grove, Children's Area",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "san_diego_county_library_love_on_a_leash_20260821",
-  "title": "Love on a Leash",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Read to dogs with Love on a Leash. This program is geared toward children ages 6-10.",
-  "link": "https://sdcl.bibliocommons.com/events/6958247b8b29ea2800c72218",
-  "availability": "Repeats 5 times through 2026-11-06",
-  "date_start": "2026-08-21T14:30:00-07:00",
-  "date_end": "2026-11-06T15:30:00-07:00",
-  "age_grade_level": [
-   "Grades 6-8"
-  ],
-  "cost_range": "",
-  "time_of_day": [
-   "Afternoon"
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [],
@@ -5103,12 +4891,45 @@
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
+   "Earth Science/Ecology",
+   "Biology / LifeSciences"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Chollas Lake, Gloria's Mesa Park, San Diego, CA (32.735533726595804, -117.06466452810379)",
+  "latitude": "32.8388819",
+  "longitude": "-117.1291064",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "i_love_a_clean.png"
+ },
+ {
+  "slug": "i_love_a_clean_san_diego_compost_and_mulch_giveaway_8211_8_22_at_chollas_lake_gloria__20260822_2",
+  "title": "Compost and Mulch Giveaway &#8211; 8/22 at Chollas Lake, Gloria&#8217;s Mesa Park",
+  "partner_name": "I Love A Clean San Diego",
+  "partner_id": 361,
+  "description": "Join us for our upcoming Compost and Mulch Giveaway Event! This event is available for City of San Diego residents ONLY! Have you ever wondered what happens after you toss yard trimmings and food scraps into your green bin? The organic waste is collected and brought to the Miramar Greenery (located at the Miramar Landfill) where it is turned into compost and mulch! These products available at no cost to residents of the City of San Diego and can be picked up during normal business hours. To increase opportunities for residents to pick up compost, I Love A Clean San Diego and the City of San Diego are partnering to host Compost and Mulch Giveaways on select weekends. Get your hands on some nutrient-rich compost for your garden at no cost. Whether you're a seasoned gardener or just starting out, this event is perfect for anyone looking to give their plants a boost. Swing by and grab some compost to help your garden thrive! Things to bring: Shovel Gloves Containers Tarp and bungees for truck beds (ALL TRUCK BEDS MUST BE COVERED!) Things to know: Be prepared to self load compost All participants are REQUIRED to sign a release waiver Enter driveway from College Grove Drive in the Southeast corner of the park. Exact coordinates : (32.735533726595804, -117.06466452810379) Please be aware, in order to collect compost you are REQUIRED to sign a waiver. All participants will need to sign a waiver upon entering the event. About the Miramar Greenery: At the Miramar Greenery, compost is made from yard trimmings and food scraps that have been ground, placed in windrows, turned and watered for 70 days. During this time, microorganisms digest the carbon and nitrogen rich mixture, causing the windrow to sustain temperatures of 140-165 F. This process eliminates most weed seeds and pathogens while breaking down the organic material into beneficial soil nutrients. Finished compost is screened to a particle size of one-half inch or less which also removes film plastic from the final product. For more information, visit https://www.sandiego.gov/environmental-services/miramar Practical Application and Benefits : Compost can be used as an amendment to improve soil texture and increase nutrient and water holding capacity. In San Diego, where soil lacks many essential plant nutrients, mixing compost in with the soil is one of the best things you can do for your yard and garden. Note: This event will occur rain or shine, however if severe weather occurs the days leading up to the event, the event will be rescheduled or canceled. If needed, registrants will receive electronic communication as soon as possible before the event. This event is made possible by the City of San Diego Environmental Services Department and facilitated by I Love A Clean San Diego.",
+  "link": "https://www.cleansd.org/events/compost-and-mulch-giveaway-8-22-at-chollas-lake-glorias-mesa-park/",
+  "availability": "",
+  "date_start": "2026-08-22T08:00:00-07:00",
+  "date_end": "2026-08-22T12:00:00-07:00",
+  "age_grade_level": [
+   "Family"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
    "Earth Science/Ecology"
   ],
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "Chollas Lake, Gloria's Mesa Park, San Diego, CA",
+  "location": "Gloria's Mesa Park, Chollas Lake, San Diego, CA",
   "latitude": "32.8388819",
   "longitude": "-117.1291064",
   "contact_name": "",
@@ -5133,7 +4954,7 @@
   "time_of_day": [
    "Morning"
   ],
-  "opportunity_type": "Out-of-school Programs",
+  "opportunity_type": "Volunteering",
   "areas_of_interest": [
    "Earth Science/Ecology"
   ],
@@ -5179,37 +5000,6 @@
   "contact_email": "",
   "contact_phone": "",
   "logo_src": "i_love_a_clean.png"
- },
- {
-  "slug": "san_diego_county_library_discover_play_saturday_storytime_20260822",
-  "title": "Discover & Play Saturday - Storytime",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Enjoy stories, songs, and movement activities.",
-  "link": "https://sdcl.bibliocommons.com/events/69d8115dbd9a3c316a51e9e6",
-  "availability": "Repeats 3 times through 2026-12-12",
-  "date_start": "2026-08-22T10:30:00-07:00",
-  "date_end": "2026-12-12T11:00:00-07:00",
-  "age_grade_level": [
-   "Pre-K",
-   "Family"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Rancho San Diego",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
  },
  {
   "slug": "san_diego_county_library_full_steam_ahead_tbd_20260822",
@@ -5312,6 +5102,69 @@
   "logo_src": "the_san_diego_river.jpg"
  },
  {
+  "slug": "san_diego_county_library_free_play_20260826",
+  "title": "Free Play",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Come and enjoy a variety of activity stations.",
+  "link": "https://sdcl.bibliocommons.com/events/69d819ea4dacf581ff87b801",
+  "availability": "Repeats 6 times through 2026-12-02",
+  "date_start": "2026-08-26T10:30:00-07:00",
+  "date_end": "2026-12-02T11:30:00-07:00",
+  "age_grade_level": [
+   "Pre-K",
+   "Family"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "General Science"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Rancho San Diego",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
+  "slug": "san_diego_county_library_tween_time_20260826",
+  "title": "Tween Time",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "A creative space for 4th–8th graders to explore art and connect with like-minded peers through fun crafts and activities.",
+  "link": "https://sdcl.bibliocommons.com/events/6a5577a50e562e280099affd",
+  "availability": "",
+  "date_start": "2026-08-26T15:00:00-07:00",
+  "date_end": "2026-08-26T16:00:00-07:00",
+  "age_grade_level": [
+   "Grades 6-8"
+  ],
+  "cost_range": "",
+  "time_of_day": [
+   "Afternoon"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Rancho Santa Fe",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
   "slug": "san_diego_county_library_afterschool_adventures_pompom_maze_race_20260827",
   "title": "Afterschool Adventures - Pompom Maze Race",
   "partner_name": "San Diego County Library",
@@ -5356,6 +5209,8 @@
   "date_start": "2026-08-27T15:30:00-07:00",
   "date_end": "2026-08-27T16:30:00-07:00",
   "age_grade_level": [
+   "Grades 6-8",
+   "Grades 9-12",
    "Family"
   ],
   "cost_range": "Free",
@@ -5363,7 +5218,9 @@
    "Afternoon"
   ],
   "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [],
+  "areas_of_interest": [
+   "General Science"
+  ],
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
@@ -5526,7 +5383,8 @@
   ],
   "cost_range": "Free",
   "time_of_day": [
-   "Afternoon"
+   "Afternoon",
+   "Evening"
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
@@ -5545,29 +5403,29 @@
   "logo_src": ""
  },
  {
-  "slug": "san_diego_county_library_little_storytime_20260903",
-  "title": "Little Storytime",
+  "slug": "san_diego_county_library_loot_lore_dungeons_dragons_daggerheart_warriors_pok_mon_magi_20260902",
+  "title": "LOOT & LORE (Dungeons & Dragons, Daggerheart, Warriors, POKÉMON & Magic: The Gathering)",
   "partner_name": "San Diego County Library",
   "partner_id": 251,
-  "description": "Join us for stories, songs, and playtime in the library! Little Storytime helps foster a love of reading, build social skills, and promotes physical activity. This activity is friendly towards babies and toddlers along with their families.",
-  "link": "https://sdcl.bibliocommons.com/events/69e27e56c1cf6f9a75860837",
-  "availability": "",
-  "date_start": "2026-09-03T11:00:00-07:00",
-  "date_end": "2026-09-03T12:00:00-07:00",
+  "description": "Join us for  LOOT & LORE every Wednesday afternoon at the 4S Ranch Library! Featuring: Dungeons & Dragons, Daggerheart, Warriors, POKÉMON & Magic: The Gathering  GRADES 4-12!  Make new friends! Play tabletop games, trading cards, roleplaying and more! Dive into epic quests, discover hidden treasures, and forge new friendships in a thrilling fantasy adventure. Fun awaits every adventurer!",
+  "link": "https://sdcl.bibliocommons.com/events/6a3c564b7e16a03d00e7daae",
+  "availability": "Repeats 14 times through 2027-06-23",
+  "date_start": "2026-09-02T16:00:00-07:00",
+  "date_end": "2027-06-23T18:00:00-07:00",
   "age_grade_level": [
-   "Family",
-   "Pre-K"
+   "Grades 6-8",
+   "Grades 9-12"
   ],
   "cost_range": "Free",
   "time_of_day": [
-   "Morning"
+   "Afternoon"
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [],
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "Crest",
+  "location": "4S Ranch Library",
   "latitude": "32.834727",
   "longitude": "-117.1306115",
   "contact_name": "",
@@ -5609,30 +5467,60 @@
   "logo_src": ""
  },
  {
-  "slug": "san_diego_county_library_craft_chill_with_toshwerks_upcycled_glass_etching_workshop_20260904",
-  "title": "Craft & Chill with ToshWerks: Upcycled Glass Etching Workshop",
+  "slug": "san_diego_county_library_tiny_tots_art_20260904",
+  "title": "Tiny Tots Art",
   "partner_name": "San Diego County Library",
   "partner_id": 251,
-  "description": "For this month's crafting session, we'll be etching our own glassworks to create a unique container to take home!  For ages 13+; registration is required, please sign up at the front desk.  Sign-ups begin on Saturday, August 1st at 10 am.",
-  "link": "https://sdcl.bibliocommons.com/events/6a5815df88e9bf280031280a",
-  "availability": "",
-  "date_start": "2026-09-04T15:30:00-07:00",
-  "date_end": "2026-09-04T16:30:00-07:00",
+  "description": "A fun art program for toddlers and preschoolers to explore colors, crafts, and creativity with their caregivers. ",
+  "link": "https://sdcl.bibliocommons.com/events/6a57e6980d65ac36003feef0",
+  "availability": "Repeats 2 times through 2026-11-27",
+  "date_start": "2026-09-04T10:30:00-07:00",
+  "date_end": "2026-11-27T11:30:00-07:00",
   "age_grade_level": [
-   "Grades 9-12"
+   "Pre-K",
+   "Family"
   ],
-  "cost_range": "",
+  "cost_range": "Free",
   "time_of_day": [
-   "Afternoon"
+   "Morning"
   ],
   "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Engineering"
-  ],
+  "areas_of_interest": [],
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "Cardiff-by-the-Sea",
+  "location": "Lemon Grove, Children's Area",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
+  "slug": "san_diego_county_library_discover_play_saturday_storytime_20260905",
+  "title": "Discover & Play Saturday - Storytime",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Enjoy stories, songs, and movement activities.",
+  "link": "https://sdcl.bibliocommons.com/events/69d8115dbd9a3c316a51e9e6",
+  "availability": "Repeats 4 times through 2026-10-31",
+  "date_start": "2026-09-05T10:30:00-07:00",
+  "date_end": "2026-10-31T11:00:00-07:00",
+  "age_grade_level": [
+   "Pre-K",
+   "Family"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Rancho San Diego",
   "latitude": "32.834727",
   "longitude": "-117.1306115",
   "contact_name": "",
@@ -5651,7 +5539,9 @@
   "date_start": "2026-09-05T11:00:00-07:00",
   "date_end": "2026-09-05T12:00:00-07:00",
   "age_grade_level": [
-   "Family"
+   "Family",
+   "Grades 6-8",
+   "Grades 9-12"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -5673,47 +5563,17 @@
   "logo_src": ""
  },
  {
-  "slug": "san_diego_county_library_paws_to_read_20260905",
-  "title": "Paws to Read",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Paws to Read encourages children to practice their reading skills by reading aloud to certified therapy dogs. This partnership allows children to bolster their self-confidence, reduce reading anxiety and enjoy the experience of reading to calming therapy dogs.  Each 15-minute session will include a child, parent or guardian, a dog handler and a licensed therapy dog. Children read aloud for about 10 minutes followed by time to interact with the dog. In-person sign up is required and available at the Service Desk in the Kids & Family section starting at 3:30 pm on the day of the event . Parent or guardian supervision is required during the entire reading session. Space is limited.",
-  "link": "https://sdcl.bibliocommons.com/events/6a56799a71ef136200522d4d",
-  "availability": "Repeats 8 times through 2027-06-05",
-  "date_start": "2026-09-05T11:00:00-07:00",
-  "date_end": "2027-06-05T12:00:00-07:00",
+  "slug": "i_love_a_clean_san_diego_shoreline_sweep_pacific_beach_taylor_branch_library_20260908",
+  "title": "Shoreline Sweep- Pacific Beach Taylor Branch Library",
+  "partner_name": "I Love A Clean San Diego",
+  "partner_id": 361,
+  "description": "Join I Love A Clean San Diego and partners for a litter cleanup! We will be cleaning up Pacific Beach after the Labor Day celebrations. All supplies are provided. Register at the button below to sign up!",
+  "link": "https://www.cleansd.org/events/shoreline-sweep-pacific-beach-taylor-branch-library/",
+  "availability": "",
+  "date_start": "2026-09-08T15:00:00-07:00",
+  "date_end": "2026-09-08T17:00:00-07:00",
   "age_grade_level": [
    "Family"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Evening"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "San Marcos, Children's Discovery Zone",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "san_diego_county_library_lakeside_kids_crew_chess_20260908",
-  "title": "Lakeside Kids' Crew: Chess",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Join us for a fun afternoon of chess, all skill levels welcome. Engage in a game or learn how to play with your library friends.",
-  "link": "https://sdcl.bibliocommons.com/events/6a56b94eaa34e23600ef2b1f",
-  "availability": "Repeats 7 times through 2027-06-08",
-  "date_start": "2026-09-08T15:30:00-07:00",
-  "date_end": "2027-06-08T16:15:00-07:00",
-  "age_grade_level": [
-   "Grades 6-8"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -5721,18 +5581,18 @@
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
-   "Mathematics"
+   "Earth Science/Ecology"
   ],
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "Lakeside",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
+  "location": "Pacific Beach/ Taylor Library, 4275 Cass St, San Diego, CA",
+  "latitude": "32.8388819",
+  "longitude": "-117.1291064",
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "i_love_a_clean.png"
  },
  {
   "slug": "san_diego_county_library_project_nextech_natural_sciences_workshop_20260908",
@@ -5745,23 +5605,55 @@
   "date_start": "2026-09-08T16:30:00-07:00",
   "date_end": "2026-11-17T18:00:00-07:00",
   "age_grade_level": [
-   "Grades 6-8",
-   "Family"
+   "Family",
+   "Grades 6-8"
   ],
   "cost_range": "Free",
   "time_of_day": [
-   "Afternoon"
+   "Afternoon",
+   "Evening"
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
    "Engineering",
+   "Earth Science/Ecology",
    "Biology / LifeSciences",
-   "General Science"
+   "Physical Science"
   ],
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
   "location": "Cardiff-by-the-Sea",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
+  "slug": "san_diego_county_library_teen_service_learning_orientation_20260908",
+  "title": "Teen Service Learning Orientation",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Do you need hours for high school requirements, college applications, scholarships, or work experience? Then consider interviewing to be a Teen Service Learner at the Vista Library. Pickup an application at the library, fill it out, and show up to be informally interviewed alongside your peers. Interview will cover the requirements, duties/responsibilities, and opportunities offered by the Vista Library’s Teen Service Learner program. The Teen Service Learner Program is open to teens ages 13-17 and requires a minimum 40-hour service commitment from each participant. For more details please contact the Teen Service Learner Coordinator Daniel Aguilar at vistalibrary@sdcounty.ca.gov or call 760-643-5100.",
+  "link": "https://sdcl.bibliocommons.com/events/6a52b47d64ed854800a51d4a",
+  "availability": "",
+  "date_start": "2026-09-08T17:30:00-07:00",
+  "date_end": "2026-09-08T18:45:00-07:00",
+  "age_grade_level": [
+   "Grades 9-12"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Evening"
+  ],
+  "opportunity_type": "Volunteering",
+  "areas_of_interest": [],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Vista Library, Study Room A",
   "latitude": "32.834727",
   "longitude": "-117.1306115",
   "contact_name": "",
@@ -5776,9 +5668,9 @@
   "partner_id": 251,
   "description": "Compete in 60-second challenges using every-day household items. Play in teams and/or individually with fellow teens. Winner receives a gift card. For teens ages 13-17.",
   "link": "https://sdcl.bibliocommons.com/events/6a52baa064ed854800a51e77",
-  "availability": "Repeats 2 times through 2026-10-14",
+  "availability": "Repeats 3 times through 2026-12-09",
   "date_start": "2026-09-09T15:45:00-07:00",
-  "date_end": "2026-10-14T17:45:00-07:00",
+  "date_end": "2026-12-09T17:45:00-07:00",
   "age_grade_level": [
    "Grades 9-12"
   ],
@@ -5792,36 +5684,6 @@
   "financial_support": "No",
   "ngss_aligned": "No",
   "location": "Vista, Teen Area",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "san_diego_county_library_wiggles_and_giggles_storytime_20260910",
-  "title": "Wiggles and Giggles Storytime",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Designed for babies and toddlers, this action-packed storytime focuses on the development of our youngest friends and helps them form an early love of reading. Each week we'll have 30 minutes of engaging activities and 30 minutes of play.",
-  "link": "https://sdcl.bibliocommons.com/events/6a56c29682c03c5c17d8056a",
-  "availability": "",
-  "date_start": "2026-09-10T10:30:00-07:00",
-  "date_end": "2026-09-10T11:30:00-07:00",
-  "age_grade_level": [
-   "Pre-K"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Lakeside",
   "latitude": "32.834727",
   "longitude": "-117.1306115",
   "contact_name": "",
@@ -5848,6 +5710,7 @@
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
+   "Biology / LifeSciences",
    "Earth Science/Ecology"
   ],
   "specific_attention": [],
@@ -5862,6 +5725,69 @@
   "logo_src": "san_diego_childrens_discovery.jpg"
  },
  {
+  "slug": "san_diego_county_library_love_on_a_leash_20260911",
+  "title": "Love on a Leash",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Read to dogs with Love on a Leash. This program is geared toward children ages 6-10.",
+  "link": "https://sdcl.bibliocommons.com/events/6958247b8b29ea2800c72224",
+  "availability": "Repeats 2 times through 2026-11-13",
+  "date_start": "2026-09-11T14:30:00-07:00",
+  "date_end": "2026-11-13T15:30:00-07:00",
+  "age_grade_level": [
+   "Grades 6-8"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Afternoon"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Poway",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
+  "slug": "san_diego_county_library_crest_library_scavenger_hunt_20260912",
+  "title": "Crest Library Scavenger Hunt",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Find all 9 pictures hiding in the Crest library and claim a prize! Youngsters, kids, teens, and families are encouraged to visit the library to find them all! Scavenger hunt images will change monthly with different themes and hiding places.",
+  "link": "https://sdcl.bibliocommons.com/events/6a1f8cbb40f528ac04dfe85f",
+  "availability": "",
+  "date_start": "2026-09-12T00:00:00-07:00",
+  "date_end": "2026-09-12T23:59:59-07:00",
+  "age_grade_level": [
+   "Family",
+   "Pre-K",
+   "Grades 6-8",
+   "Grades 9-12"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "All Day"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Crest Library",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
   "slug": "i_love_a_clean_san_diego_watershed_warriors_ramona_8211_main_street_sweep_20260912",
   "title": "Watershed Warriors: Ramona &#8211; Main Street Sweep",
   "partner_name": "I Love A Clean San Diego",
@@ -5872,28 +5798,122 @@
   "date_start": "2026-09-12T09:00:00-07:00",
   "date_end": "2026-09-12T11:00:00-07:00",
   "age_grade_level": [
-   "Family",
-   "Grades 6-8",
-   "Grades 9-12"
+   "Family"
   ],
   "cost_range": "Free",
   "time_of_day": [
    "Morning"
   ],
-  "opportunity_type": "Out-of-school Programs",
+  "opportunity_type": "Volunteering",
   "areas_of_interest": [
    "Earth Science/Ecology"
   ],
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "Ramona Main Street, San Diego, CA",
+  "location": "Ramona, Main Street, San Diego, CA",
   "latitude": "32.8388819",
   "longitude": "-117.1291064",
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
   "logo_src": "i_love_a_clean.png"
+ },
+ {
+  "slug": "i_love_a_clean_san_diego_watershed_warriors_ramona_8211_main_street_sweep_20260912_2",
+  "title": "Watershed Warriors: Ramona &#8211; Main Street Sweep",
+  "partner_name": "I Love A Clean San Diego",
+  "partner_id": 361,
+  "description": "Join I Love A Clean San Diego and the County of San Diego for a litter cleanup! We will divert litter from our watersheds and keep it from traveling to the Pacific Ocean. Our staff will have check-in ready for you on-site. Be sure to wear comfortable clothes, closed-toed shoes, some form of sun protection (sunscreen or a hat), and bring a water bottle or two! Staff will be providing everything else you will need! Click the register below for more information and to get signed up!",
+  "link": "https://www.cleansd.org/events/watershed-warriors-ramona-main-street-sweep-3/",
+  "availability": "",
+  "date_start": "2026-09-12T09:00:00-07:00",
+  "date_end": "2026-09-12T11:00:00-07:00",
+  "age_grade_level": [
+   "Family"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Volunteering",
+  "areas_of_interest": [
+   "Earth Science/Ecology"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Ramona, Main Street, San Diego",
+  "latitude": "32.8388819",
+  "longitude": "-117.1291064",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "i_love_a_clean.png"
+ },
+ {
+  "slug": "san_diego_county_library_dungeons_dragons_group_20260912",
+  "title": "Dungeons & Dragons Group",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Come play the classic table top roleplaying game with other willing adventurers and staff.",
+  "link": "https://sdcl.bibliocommons.com/events/6a454c776db61d28009943c3",
+  "availability": "Repeats 2 times through 2026-11-21",
+  "date_start": "2026-09-12T13:30:00-07:00",
+  "date_end": "2026-11-21T16:30:00-07:00",
+  "age_grade_level": [
+   "Family"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Afternoon"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Campo-Morena Village",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
+  "slug": "san_diego_county_library_chess_club_20260912",
+  "title": "Chess Club",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Drop-In and practice your gambit, kids and teens grades 1 through 12!   Drop-In Chess Matches every 2nd & 4th Saturday of the the month, 3-4:30pm.",
+  "link": "https://sdcl.bibliocommons.com/events/6a24ad957b73be6a1b1ac685",
+  "availability": "Repeats 15 times through 2027-06-12",
+  "date_start": "2026-09-12T15:00:00-07:00",
+  "date_end": "2027-06-12T16:30:00-07:00",
+  "age_grade_level": [
+   "Family",
+   "Grades 6-8",
+   "Grades 9-12"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Afternoon"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Mathematics"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "4S Ranch, in the Community Room",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
  },
  {
   "slug": "san_diego_county_library_preschool_playtime_20260914",
@@ -5906,7 +5926,8 @@
   "date_start": "2026-09-14T10:30:00-07:00",
   "date_end": "2027-05-24T11:00:00-07:00",
   "age_grade_level": [
-   "Pre-K"
+   "Pre-K",
+   "Family"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -5928,6 +5949,36 @@
   "logo_src": ""
  },
  {
+  "slug": "san_diego_county_library_dungeons_dragons_dragon_heist_20260915",
+  "title": "Dungeons & Dragons: Dragon Heist",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Join the party as we bring the Dungeons & Dragons: Dragon Heist adventure to life! Feel free to bring your own materials if you have them, but character sheets, books, and dice will be provided. Ages 14+",
+  "link": "https://sdcl.bibliocommons.com/events/69aa19f4403a4e5652de50b1",
+  "availability": "",
+  "date_start": "2026-09-15T17:00:00-07:00",
+  "date_end": "2026-09-15T18:45:00-07:00",
+  "age_grade_level": [
+   "Grades 9-12"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Evening"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "El Cajon",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
   "slug": "san_diego_county_library_storytime_special_vector_control_mosquito_storytime_20260916",
   "title": "Storytime - Special Vector Control Mosquito Storytime",
   "partner_name": "San Diego County Library",
@@ -5938,8 +5989,8 @@
   "date_start": "2026-09-16T10:30:00-07:00",
   "date_end": "2026-09-16T11:00:00-07:00",
   "age_grade_level": [
-   "Family",
-   "Pre-K"
+   "Pre-K",
+   "Family"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -5962,71 +6013,6 @@
   "logo_src": ""
  },
  {
-  "slug": "san_diego_county_library_blood_drive_american_red_cross_20260916",
-  "title": "Blood Drive (American Red Cross)",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Give the gift of life and donate blood! Eligible minors may donate blood with parental/guardian consent by filling out and signing the Parental Consent Blood Donation form. Form can be located at the following link: https://www.redcrossblood.org/content/dam/redcrossblood/controlled-documents/Parental-Consent-Blood-Donation-EN.pdf",
-  "link": "https://sdcl.bibliocommons.com/events/69432e551e64afd01e4f98c4",
-  "availability": "",
-  "date_start": "2026-09-16T12:00:00-07:00",
-  "date_end": "2026-09-16T18:00:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Grades 9-12"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Afternoon",
-   "Evening"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Biology / LifeSciences"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Vista",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "san_diego_county_library_play_to_learn_20260917",
-  "title": "Play-to-Learn",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Join us on Thursdays where your child can explore independent learning stations and participate in activities that promote socialization, motor skills, and more through play.  Geared to children 0-5.",
-  "link": "https://sdcl.bibliocommons.com/events/694f2b47d875af6300d1b8a4",
-  "availability": "Repeats 6 times through 2026-12-10",
-  "date_start": "2026-09-17T10:30:00-07:00",
-  "date_end": "2026-12-10T11:30:00-07:00",
-  "age_grade_level": [
-   "Pre-K",
-   "Family"
-  ],
-  "cost_range": "",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Valley Center, Discovery Zone",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
   "slug": "i_love_a_clean_san_diego_42nd_annual_coastal_cleanup_day_20260919",
   "title": "42nd Annual Coastal Cleanup Day",
   "partner_name": "I Love A Clean San Diego",
@@ -6038,15 +6024,14 @@
   "date_end": "2026-09-19T12:00:00-07:00",
   "age_grade_level": [
    "Family",
-   "Grades 6-8",
    "Grades 9-12",
-   "Adult"
+   "Grades 6-8"
   ],
   "cost_range": "Free",
   "time_of_day": [
    "Morning"
   ],
-  "opportunity_type": "Out-of-school Programs",
+  "opportunity_type": "Volunteering",
   "areas_of_interest": [
    "Earth Science/Ecology"
   ],
@@ -6054,6 +6039,40 @@
   "financial_support": "No",
   "ngss_aligned": "No",
   "location": "Multiple locations throughout San Diego County",
+  "latitude": "32.8388819",
+  "longitude": "-117.1291064",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "i_love_a_clean.png"
+ },
+ {
+  "slug": "i_love_a_clean_san_diego_42nd_annual_coastal_cleanup_day_20260919_2",
+  "title": "42nd Annual Coastal Cleanup Day",
+  "partner_name": "I Love A Clean San Diego",
+  "partner_id": 361,
+  "description": "The Ocean Conservancy and the California Coastal Commission partner with volunteer organizations, such as I Love A Clean San Diego to create the largest, international cleanup day. I Love A Clean San Diego leads the efforts for this day in San Diego County for the 42nd year in a row. Data collected from this event feeds into the world’s largest database on marine debris. Join our efforts this year to be a part of this global event! This year, our countywide Coastal Cleanup Day will have around 100 + locations for volunteers to choose from, inland and coastal. Each site is hosted by a site captain (a specially trained volunteer) who will manage volunteers on site, properly dispose of the trash, and report back totals. Click the registration link below to see our main page for more details and the map of locations to choose from.",
+  "link": "https://www.cleansd.org/events/42nd-annual-coastal-cleanup-day/",
+  "availability": "",
+  "date_start": "2026-09-19T09:00:00-07:00",
+  "date_end": "2026-09-19T12:00:00-07:00",
+  "age_grade_level": [
+   "Family",
+   "Grades 6-8",
+   "Grades 9-12"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Volunteering",
+  "areas_of_interest": [
+   "Earth Science/Ecology"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "San Diego County, multiple locations",
   "latitude": "32.8388819",
   "longitude": "-117.1291064",
   "contact_name": "",
@@ -6072,8 +6091,7 @@
   "date_start": "2026-09-20T10:00:00-07:00",
   "date_end": "2026-10-18T11:00:00-07:00",
   "age_grade_level": [
-   "Family",
-   "Grades 6-8"
+   "Family"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -6106,8 +6124,6 @@
   "date_start": "2026-09-21T10:30:00-07:00",
   "date_end": "2026-09-21T11:00:00-07:00",
   "age_grade_level": [
-   "Pre-K",
-   "Grades 6-8",
    "Family"
   ],
   "cost_range": "Free",
@@ -6140,8 +6156,8 @@
   "date_start": "2026-09-22T15:30:00-07:00",
   "date_end": "2027-05-25T16:15:00-07:00",
   "age_grade_level": [
-   "Grades 6-8",
-   "Family"
+   "Family",
+   "Grades 6-8"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -6173,7 +6189,11 @@
   "date_start": "2026-09-26T10:30:00-07:00",
   "date_end": "2026-09-26T13:30:00-07:00",
   "age_grade_level": [
-   "Family"
+   "Family",
+   "Pre-K",
+   "Grades 6-8",
+   "Grades 9-12",
+   "Adult"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -6207,7 +6227,6 @@
   "date_end": "2026-09-26T21:00:00-07:00",
   "age_grade_level": [
    "Family",
-   "Grades 6-8",
    "Grades 9-12",
    "Adult"
   ],
@@ -6296,6 +6315,37 @@
   "logo_src": "the_san_diego_river.jpg"
  },
  {
+  "slug": "san_diego_county_library_paws_and_tales_read_to_a_sd_humane_society_canine_ambassador_20261003",
+  "title": "Paws and Tales: Read to a SD Humane Society Canine Ambassador",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Read aloud to a trained Canine Ambassador from the San Diego Humane Society. Program geared toward school aged children. Build confidence and practice reading with a friendly furry friend!",
+  "link": "https://sdcl.bibliocommons.com/events/69f61de4f29b90618e0028d8",
+  "availability": "Repeats 2 times through 2026-11-07",
+  "date_start": "2026-10-03T11:00:00-07:00",
+  "date_end": "2026-11-07T12:00:00-07:00",
+  "age_grade_level": [
+   "Grades 6-8",
+   "Grades 9-12"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Vista, Community Room",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
   "slug": "the_san_diego_river_park_foundation_halloween_edition_nature_nights_bat_walk_and_moths_20261003",
   "title": "Halloween Edition Nature Nights: Bat Walk and Moths",
   "partner_name": "The San Diego River Park Foundation",
@@ -6331,62 +6381,29 @@
   "logo_src": "the_san_diego_river.jpg"
  },
  {
-  "slug": "san_diego_county_library_family_play_time_hour_20261007",
-  "title": "Family Play Time Hour",
+  "slug": "san_diego_county_library_lakeside_kids_crew_kids_arcade_20261006",
+  "title": "Lakeside Kids' Crew: Kids Arcade",
   "partner_name": "San Diego County Library",
   "partner_id": 251,
-  "description": "Please join us for Family Play Time Hour, a chance for our little ones to play with our toys and make new friends! Children and their families are welcome to join in the fun! Geared towards ages 0-5.",
-  "link": "https://sdcl.bibliocommons.com/events/691529dca6fedec95308d6b9",
-  "availability": "Repeats 4 times through 2027-09-01",
-  "date_start": "2026-10-07T10:30:00-07:00",
-  "date_end": "2027-09-01T11:30:00-07:00",
+  "description": "Do you love games of all kinds? Do you wish you had some friends to play those games with? Join us each month as we play board games, card games, Nintendo Switch options, and Pokemon card games.",
+  "link": "https://sdcl.bibliocommons.com/events/6a56ba27fb418a28009b01a8",
+  "availability": "Repeats 2 times through 2026-11-03",
+  "date_start": "2026-10-06T15:30:00-07:00",
+  "date_end": "2026-11-03T16:15:00-07:00",
   "age_grade_level": [
    "Family",
-   "Pre-K"
+   "Grades 6-8"
   ],
   "cost_range": "Free",
   "time_of_day": [
-   "Morning"
+   "Afternoon"
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [],
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "Fletcher Hills",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "san_diego_county_library_free_play_20261007",
-  "title": "Free Play",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Come and enjoy a variety of activity stations.",
-  "link": "https://sdcl.bibliocommons.com/events/69d819ea4dacf581ff87b803",
-  "availability": "Repeats 3 times through 2026-12-02",
-  "date_start": "2026-10-07T10:30:00-07:00",
-  "date_end": "2026-12-02T11:30:00-07:00",
-  "age_grade_level": [
-   "Pre-K",
-   "Family"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "General Science"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Rancho San Diego",
+  "location": "Lakeside",
   "latitude": "32.834727",
   "longitude": "-117.1306115",
   "contact_name": "",
@@ -6411,7 +6428,7 @@
   "time_of_day": [
    "Morning"
   ],
-  "opportunity_type": "Out-of-school Programs",
+  "opportunity_type": "Volunteering",
   "areas_of_interest": [
    "Earth Science/Ecology"
   ],
@@ -6443,7 +6460,7 @@
   "time_of_day": [
    "Morning"
   ],
-  "opportunity_type": "Out-of-school Programs",
+  "opportunity_type": "School Programs",
   "areas_of_interest": [
    "Earth Science/Ecology"
   ],
@@ -6459,82 +6476,19 @@
   "logo_src": "the_san_diego_river.jpg"
  },
  {
-  "slug": "san_diego_county_library_perler_beads_20261015",
-  "title": "Perler Beads",
+  "slug": "san_diego_county_library_lakeside_kids_crew_chess_20261013",
+  "title": "Lakeside Kids' Crew: Chess",
   "partner_name": "San Diego County Library",
   "partner_id": 251,
-  "description": "Join us for making fun designs with perler beads.",
-  "link": "https://sdcl.bibliocommons.com/events/6a1a06504dc267647dab1291",
-  "availability": "",
-  "date_start": "2026-10-15T15:30:00-07:00",
-  "date_end": "2026-10-15T16:30:00-07:00",
+  "description": "Join us for a fun afternoon of chess, all skill levels welcome. Engage in a game or learn how to play with your library friends.",
+  "link": "https://sdcl.bibliocommons.com/events/6a56b94eaa34e23600ef2b24",
+  "availability": "Repeats 8 times through 2027-06-08",
+  "date_start": "2026-10-13T15:30:00-07:00",
+  "date_end": "2027-06-08T16:15:00-07:00",
   "age_grade_level": [
-   "Family",
-   "Grades 6-8"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Afternoon"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Rancho San Diego, Community Room",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "san_diego_county_library_cryptid_scavenger_hunt_20261020",
-  "title": "Cryptid Scavenger Hunt",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Take part in a Cryptid Scavenger Hunt. Bigfoot, Mothman, and some of their friends are visiting the library! They have been spotted in the Children's Area. Can you find them? Ongoing from 10/20 to 10/31.",
-  "link": "https://sdcl.bibliocommons.com/events/6a5aa26ee9de6536001c75a3",
-  "availability": "",
-  "date_start": "2026-10-20T00:00:00-07:00",
-  "date_end": "2026-10-31T23:59:59-07:00",
-  "age_grade_level": [
-   "Family",
-   "Grades 6-8"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "All Day"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Alpine",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "san_diego_county_library_knights_of_the_chess_table_20261020",
-  "title": "Knights of the Chess Table",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "A seat is waiting for you at the Chess Table. Come and test your skills against other players. Playing chess offers a lot of benefits . Players of all ages and skill levels are welcome. Instruction is offered the first half hour for children. Children should have a basic knowledge of how to move the pieces. Adults will meet in the community room. Chess sets will be provided. Children 8 or younger must be accompanied by someone who is 12 or older. ",
-  "link": "https://sdcl.bibliocommons.com/events/69473f4c7ed7c62f00ab74f2",
-  "availability": "Repeats 3 times through 2026-11-17",
-  "date_start": "2026-10-20T15:30:00-07:00",
-  "date_end": "2026-11-17T17:30:00-07:00",
-  "age_grade_level": [
-   "Family",
    "Grades 6-8",
    "Grades 9-12",
-   "Adult"
+   "Family"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -6547,7 +6501,71 @@
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "San Marcos",
+  "location": "Lakeside",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
+  "slug": "san_diego_county_library_chimes_an_early_childhood_music_program_20261014",
+  "title": "ChIMES: An Early Childhood Music Program",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Join us once a month for an engaging, interactive music program with the San Diego Youth Symphony!  ChIMES is a music program for ages 0-5 that supports the crucial phase of child growth and development with interactive music classes that encourage family bonding, at-home learning, and future musical development.  Registration is required for this program; please sign up at the front desk to register.",
+  "link": "https://sdcl.bibliocommons.com/events/6a1f4f378ea300e2631a95e7",
+  "availability": "",
+  "date_start": "2026-10-14T10:30:00-07:00",
+  "date_end": "2026-10-14T11:30:00-07:00",
+  "age_grade_level": [
+   "Family",
+   "Pre-K"
+  ],
+  "cost_range": "",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Cardiff-by-the-Sea",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
+  "slug": "san_diego_county_library_teen_game_day_20261020",
+  "title": "Teen Game Day",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Come play a variety of video games.",
+  "link": "https://sdcl.bibliocommons.com/events/69d8151f4dacf581ff87b640",
+  "availability": "",
+  "date_start": "2026-10-20T15:30:00-07:00",
+  "date_end": "2026-10-20T17:00:00-07:00",
+  "age_grade_level": [
+   "Grades 6-8",
+   "Grades 9-12"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Afternoon"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Coding/Computer Science/Cyber Security"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Rancho San Diego",
   "latitude": "32.834727",
   "longitude": "-117.1306115",
   "contact_name": "",
@@ -6622,6 +6640,38 @@
   "logo_src": "i_love_a_clean.png"
  },
  {
+  "slug": "the_living_coast_discovery_center_farm_to_bay_20261024",
+  "title": "Farm to Bay",
+  "partner_name": "Living Coast Discovery Center",
+  "partner_id": 46,
+  "description": "Get your tastebuds and fall cocktail attire ready for Living Coast’s premier fundraising event of the year! We’ll feature fun food, bubbly beverages, animal ambassadors, and spectacular sunset views, all in support of our mission to inspire the community to connect with and care for our coastal environment. As part of our commitment to a thriving natural coast, a key pillar of Farm to Bay is our Zero Waste goal. Partners use compostable or reusable serving materials, and a team led by graduates from our Master Composter Training Course sorts through any waste produced throughout the event. More details about our food and beverage partners are to come , but until then Save the Date for Saturday, October 24, from 3:00-6:30 PM.  ",
+  "link": "https://www.thelivingcoast.org/programs-events-upcoming-events/farm-to-bay-2026/",
+  "availability": "",
+  "date_start": "2026-10-24T15:00:00-07:00",
+  "date_end": "2026-10-24T18:30:00-07:00",
+  "age_grade_level": [
+   "Family"
+  ],
+  "cost_range": "",
+  "time_of_day": [
+   "Afternoon"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Earth Science/Ecology"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Living Coast Discovery Center, 1000 Gunpowder Point Dr., Chula Vista, CA",
+  "latitude": "32.6401018",
+  "longitude": "-117.1103432",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "living_coast_discovery_center.jpg"
+ },
+ {
   "slug": "the_san_diego_river_park_foundation_halloween_edition_nature_nights_bat_walk_and_moths_haunted_t_20261024",
   "title": "Halloween Edition Nature Nights: Bat Walk and Moths Haunted Trail at Peutz Creek!",
   "partner_name": "The San Diego River Park Foundation",
@@ -6653,6 +6703,39 @@
   "contact_email": "",
   "contact_phone": "",
   "logo_src": "the_san_diego_river.jpg"
+ },
+ {
+  "slug": "san_diego_county_library_haunted_chess_tournament_youth_ages_8_17_20261027",
+  "title": "Haunted Chess Tournament: Youth Ages 8-17",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Test your skills against other players in a speed round chess tournament at 4PM in four, 30 minute matches. This registration is for youth ages 8-17. Please register online, in person, or by phone.  Costumes encouraged!  ",
+  "link": "https://sdcl.bibliocommons.com/events/692646e4e80c50300038bf99",
+  "availability": "",
+  "date_start": "2026-10-27T16:00:00-07:00",
+  "date_end": "2026-10-27T18:30:00-07:00",
+  "age_grade_level": [
+   "Grades 6-8",
+   "Grades 9-12"
+  ],
+  "cost_range": "",
+  "time_of_day": [
+   "Afternoon"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Mathematics"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "El Cajon, Community Room",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
  },
  {
   "slug": "i_love_a_clean_san_diego_compost_and_mulch_giveaway_8211_10_31_at_los_penasquitos_ran_20261031",
@@ -6687,69 +6770,6 @@
   "logo_src": "i_love_a_clean.png"
  },
  {
-  "slug": "anza_borrego_foundation_november_sunrise_nature_photography_workshop_with_paulette_d_20261101",
-  "title": "November Sunrise Nature Photography Workshop with Paulette Donnellon",
-  "partner_name": "Anza-Borrego Foundation",
-  "partner_id": 646,
-  "description": "Capture the Magic of Sunrise in Anza-Borrego with Award-Winning Photographer Paulette Donnellon  Experience the desert at its most magical hour in this inspiring sunrise photography workshop led by Paulette Donnellon. Learn to capture Anza-Borrego’s breathtaking light, dramatic landscapes, and unique wildlife while gaining expert techniques to elevate your nature photography.  What to expect:   Learn professional tips for capturing the desert’s captivating wildlife, intricate plant life, and expansive landscapes.     Master timing for the Golden Hour and Blue Hour and refine your composition and cropping techniques.    Discover essential safety practices for desert photography and ways to photograph responsibly while protecting this fragile ecosystem.    Return to the ABF office for a post-session presentation, where Paulette will review the morning’s lessons and demonstrate photo-editing techniques to enhance your images.   Who should attend:    Photographers of all levels    Nature enthusiasts interested in landscape, wildlife, or plant photography    Those looking to perfect their photo editing skills    Anyone eager to explore Anza-Borrego Desert State Park through a photographic lens   REGISTER TODAY! Date: Sunday, November 1, 2026  Time: 5:00 a.m.-10:30 a.m. (End time is approximate)  Location: Meet at the Anza-Borrego Foundation Administrative Office: 587 Palm Canyon Dr. #122, Borrego Springs, CA, 92004. We’ll then carpool and/or caravan to the field site in Anza-Borrego Desert State Park.  Cost:   ABF Member: $90  Non-Member: $106  Student: $53  Cancellation Policy &amp; Scholarships: Please see our FAQs page to read our cancellation policy and learn about scholarship options.    What Previous Attendees Are Saying:  “Paulette's photography workshop is worth the early rise as the desert wakes up into a blossom of color and beauty. It's a busy morning, bring everything you have as Paulette points out the shifting lights and colors.”  “This was my first opportunity for such an event and I thoroughly enjoyed it. [Paulette’s] knowledge of the area plants and animals is invaluable my biggest take away was all the hitting hidden beauty in the desert!”  “Paulette was very generous about sharing her expertise. Her suggestions for compositions in the field and her immediate feedback onsite were terrific. I appreciated her sharing post processing techniques as well. It was stunning to see the amazing range of color and beauty in the desert. I look forward to attending more workshops in the future. Thank you for an amazing day.”  About the Instructor:  Paulette Donnellon is an award-winning nature and wildlife photographer whose image of an Eastern Collared Lizard is featured on the 2024 America the Beautiful National Park Pass.  When she isn’t out in nature taking photos, she is employed by LEGO® Education and has served as a trustee for eight years for the San Diego County Board of Education and as an Executive Board member of Anza-Borrego Foundation. Paulette served nine years in the U.S. Army and was deployed during Desert Storm. She is incredibly knowledgeable about the flora, fauna and landscape features of Anza-Borrego. You can check out her photos on Instagram at @photogpaulette.                                     Keep cozy and stylish with this marbled green beanie, featuring a faux leather patch adorned with a vintage-inspired bighorn sheep design.     Ideal for cool mornings, hikes, or everyday wear, this beanie offers both warmth and a nod to the iconic bighorn sheep that roam the park’s rugged landscapes.",
-  "link": "https://theabf.org/events/november-sunrise-nature-photography-workshop-with-paulette-donnellon/",
-  "availability": "",
-  "date_start": "2026-11-01T05:00:00-07:00",
-  "date_end": "2026-11-01T10:30:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Adult"
-  ],
-  "cost_range": "Less than $200",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Earth Science/Ecology"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "587 Palm Canyon Dr. #122, Borrego Springs, CA 92004",
-  "latitude": "None",
-  "longitude": "None",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "anzaborrego_foundation.jpeg"
- },
- {
-  "slug": "san_diego_county_library_teen_service_learning_orientation_20261103",
-  "title": "Teen Service Learning Orientation",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Do you need hours for high school requirements, college applications, scholarships, or work experience? Then consider interviewing to be a Teen Service Learner at the Vista Library. Pickup an application at the library, fill it out, and show up to be informally interviewed alongside your peers. Interview will cover the requirements, duties/responsibilities, and opportunities offered by the Vista Library’s Teen Service Learner program. The Teen Service Learner Program is open to teens ages 13-17 and requires a minimum 40-hour service commitment from each participant. For more details please contact the Teen Service Learner Coordinator Daniel Aguilar at vistalibrary@sdcounty.ca.gov or call 760-643-5100.",
-  "link": "https://sdcl.bibliocommons.com/events/6a52b47d64ed854800a51d4e",
-  "availability": "",
-  "date_start": "2026-11-03T17:30:00-07:00",
-  "date_end": "2026-11-03T18:45:00-07:00",
-  "age_grade_level": [
-   "Grades 9-12"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Evening"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Vista, Study Room A",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
   "slug": "i_love_a_clean_san_diego_stay_classy_o_8217_side_ron_ortega_park_cleanup_20261105",
   "title": "Stay Classy O&#8217;Side: Ron Ortega Park Cleanup",
   "partner_name": "I Love A Clean San Diego",
@@ -6766,7 +6786,7 @@
   "time_of_day": [
    "Afternoon"
   ],
-  "opportunity_type": "Out-of-school Programs",
+  "opportunity_type": "Volunteering",
   "areas_of_interest": [
    "Earth Science/Ecology"
   ],
@@ -6792,9 +6812,7 @@
   "date_start": "2026-11-06T10:00:00-07:00",
   "date_end": "2026-11-06T12:00:00-07:00",
   "age_grade_level": [
-   "Family",
-   "Pre-K",
-   "Grades 6-8"
+   "Family"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -6830,7 +6848,7 @@
   "time_of_day": [
    "Morning"
   ],
-  "opportunity_type": "Out-of-school Programs",
+  "opportunity_type": "Volunteering",
   "areas_of_interest": [
    "Earth Science/Ecology"
   ],
@@ -6857,7 +6875,8 @@
   "date_end": "2026-11-07T11:00:00-07:00",
   "age_grade_level": [
    "Family",
-   "Pre-K"
+   "Pre-K",
+   "Grades 6-8"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -6878,6 +6897,37 @@
   "contact_email": "",
   "contact_phone": "",
   "logo_src": "the_san_diego_river.jpg"
+ },
+ {
+  "slug": "san_diego_county_library_toddler_storytime_20261111",
+  "title": "Toddler Storytime",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Come sing, dance, and hear some good stories with us on Wednesdays! This storytime is geared toward children ages 0-5.",
+  "link": "https://sdcl.bibliocommons.com/events/691f644a64ad59251cbbf14f",
+  "availability": "Repeats 2 times through 2027-04-29",
+  "date_start": "2026-11-11T10:30:00-07:00",
+  "date_end": "2027-04-29T11:00:00-07:00",
+  "age_grade_level": [
+   "Pre-K",
+   "Family"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Del Mar",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
  },
  {
   "slug": "anza_borrego_foundation_intermediate_hike_domelands_20261114",
@@ -6901,13 +6951,12 @@
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
-   "Earth Science/Ecology",
-   "General Science"
+   "Earth Science/Ecology"
   ],
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "Anza-Borrego Desert State Park, Borrego Springs",
+  "location": "Anza-Borrego Desert State Park, trailhead off S-22, Borrego Springs",
   "latitude": "None",
   "longitude": "None",
   "contact_name": "",
@@ -6948,18 +6997,18 @@
   "logo_src": "i_love_a_clean.png"
  },
  {
-  "slug": "san_diego_county_library_rocking_toddler_storytime_20261126",
+  "slug": "san_diego_county_library_rocking_toddler_storytime_20261119",
   "title": "Rocking Toddler Storytime",
   "partner_name": "San Diego County Library",
   "partner_id": 251,
   "description": "Enjoy storytime for your toddler every Thursday!",
-  "link": "https://sdcl.bibliocommons.com/events/695822fe6f926136000de8d5",
-  "availability": "Repeats 2 times through 2026-12-10",
-  "date_start": "2026-11-26T10:30:00-07:00",
-  "date_end": "2026-12-10T11:00:00-07:00",
+  "link": "https://sdcl.bibliocommons.com/events/695822fe6f926136000de8d7",
+  "availability": "Repeats 3 times through 2026-12-24",
+  "date_start": "2026-11-19T10:30:00-07:00",
+  "date_end": "2026-12-24T11:00:00-07:00",
   "age_grade_level": [
-   "Family",
-   "Pre-K"
+   "Pre-K",
+   "Family"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -6971,6 +7020,68 @@
   "financial_support": "No",
   "ngss_aligned": "No",
   "location": "Poway",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
+  "slug": "san_diego_county_library_children_activities_20261120",
+  "title": "Children Activities",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Join us to make a fun craft & DIY for children",
+  "link": "https://sdcl.bibliocommons.com/events/696a92d84a9fd98b7f780443",
+  "availability": "",
+  "date_start": "2026-11-20T15:30:00-07:00",
+  "date_end": "2026-11-20T16:30:00-07:00",
+  "age_grade_level": [
+   "Family"
+  ],
+  "cost_range": "",
+  "time_of_day": [
+   "Afternoon"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Engineering"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Campo-Morena Village",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
+  "slug": "san_diego_county_library_baby_bounce_20261202",
+  "title": "Baby Bounce",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Join us for baby rhymes, songs, and playtime. Best for ages 0-2.",
+  "link": "https://sdcl.bibliocommons.com/events/6a56ae97fa641fe01af3769e",
+  "availability": "",
+  "date_start": "2026-12-02T10:30:00-07:00",
+  "date_end": "2026-12-02T11:30:00-07:00",
+  "age_grade_level": [
+   "Pre-K"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Bonita-Sunnyside",
   "latitude": "32.834727",
   "longitude": "-117.1306115",
   "contact_name": "",
@@ -7014,95 +7125,28 @@
   "logo_src": "the_san_diego_river.jpg"
  },
  {
-  "slug": "anza_borrego_foundation_december_anza_borrego_watercolor_workshop_20261206",
-  "title": "December Anza-Borrego Watercolor Workshop",
-  "partner_name": "Anza-Borrego Foundation",
-  "partner_id": 646,
-  "description": "Connect with the desert and your creativity!  Unleash your inner artist in this hands-on watercolor painting workshop led by local artist Shirley Spencer. Whether you're a beginner or experienced painter, you'll learn how to beautifully capture Anza-Borrego’s unique landscape.  What to Expect:   Step-by-step instruction in watercolor techniques, composition, pigments, washes, design, and equipment usage    Inspiration from the desert’s natural beauty    A relaxed, creative atmosphere to explore your artistic side    All painting materials provided (optional to bring your own)    Take home your own desert-inspired masterpiece!    Casual, paint-friendly attire recommended   Who Should Attend:   Nature lovers with a creative spark    Beginner and experienced watercolor artists    Anyone looking to unwind and connect with the desert landscape through art     REGISTER TODAY!   Date: Sunday, December 6, 2026  Time: 9:30 a.m.—12:30 p.m.  Location: Steele/Burnand Anza-Borrego Desert Research Center (401 Tilting T Dr. Borrego Springs, CA 92004)    Cost:  ABF Member: $60  Non-Member: $71  Student: $36    Cancellation Policy &amp; Scholarships: Please see our FAQs page to read our cancellation policy and learn about scholarship options.       What Past Participants Are Saying:  “Shirley was amazing. I've never seen one person give such a comprehensive introduction to Watercolor in such a short time. The location was beautiful and it was just a wonderful day to paint.”  “Shirley was a great instructor with a wealth of knowledge.”    Instructor:  Shirley Spencer earned her B.A. in Life Science and Biology from Pacific Union College and her Master’s Degree in Environmental Studies from Fresno Pacific University. She has published three books as an author and artist. Her book “Flowering Shrubs of Yosemite and the Sierra Nevada” was published by Heyday Books, with 40 of her original watercolors and scientific descriptions of each plant. “Our National Parks Alphabet Book” was published by Condor Designs to commemorate the 100th Anniversary of the National Park Service and includes vivid paintings of each park with endemic flora and fauna found in each iconic place. Her most recent book, “Living Among Giants; Botanical Treasures of a Sequoia Grove” was published in 2017 by Yosemite Conservancy. She divides her time between her winter haven in Borrego Springs, California and summer home in Fish Camp, California.                                                         Carry the spirit of the desert wherever you go with this heavyweight canvas tote featuring the bold silhouette of Indianhead Mountain. Crafted from durable, eco-friendly cotton canvas, it’s built to handle everyday errands or weekend adventures. Spacious, sturdy, and beautifully designed—a practical keepsake inspired by Anza-Borrego’s rugged beauty.",
-  "link": "https://theabf.org/events/december-anza-borrego-watercolor-workshop/",
-  "availability": "",
-  "date_start": "2026-12-06T09:30:00-07:00",
-  "date_end": "2026-12-06T12:30:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Grades 6-8",
-   "Grades 9-12",
-   "Adult"
-  ],
-  "cost_range": "Less than $100",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Earth Science/Ecology"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Steele/Burnand Anza-Borrego Desert Research Center, 401 Tilting T Drive, Borrego Springs, CA",
-  "latitude": "None",
-  "longitude": "None",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "anzaborrego_foundation.jpeg"
- },
- {
-  "slug": "san_diego_county_library_toddler_me_music_class_20261207",
-  "title": "Toddler & Me Music Class",
+  "slug": "san_diego_county_library_kid_s_dnd_20261209",
+  "title": "Kid's DnD",
   "partner_name": "San Diego County Library",
   "partner_id": 251,
-  "description": "Join us for a morning of music, movements, and fun with Miss Lisa! This program is designed for ages 2-5 years old. Caregivers must attend and be engaged. Sponsored by the Friends of the Fallbrook Library and the Fallbrook Music Society. ",
-  "link": "https://sdcl.bibliocommons.com/events/6a32ceb8c7d3cd580060ff08",
+  "description": "A new adventure club for kids ages 8-14. Come roll a D20 and immerse yourself in the world of Dungeons & Dragons!  ",
+  "link": "https://sdcl.bibliocommons.com/events/694f00389fb47cac989f6c5c",
   "availability": "",
-  "date_start": "2026-12-07T10:30:00-07:00",
-  "date_end": "2026-12-07T11:00:00-07:00",
+  "date_start": "2026-12-09T16:00:00-07:00",
+  "date_end": "2026-12-09T17:00:00-07:00",
   "age_grade_level": [
-   "Pre-K",
-   "Family"
+   "Grades 6-8"
   ],
   "cost_range": "Free",
   "time_of_day": [
-   "Morning"
+   "Afternoon"
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [],
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "Fallbrook",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "san_diego_county_library_chimes_an_early_childhood_music_program_20261209",
-  "title": "ChIMES: An Early Childhood Music Program",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Join us once a month for an engaging, interactive music program with the San Diego Youth Symphony!  ChIMES is a music program for ages 0-5 that supports the crucial phase of child growth and development with interactive music classes that encourage family bonding, at-home learning, and future musical development.  Registration is required for this program; please sign up at the front desk to register.",
-  "link": "https://sdcl.bibliocommons.com/events/6a1f4f378ea300e2631a95e9",
-  "availability": "",
-  "date_start": "2026-12-09T10:30:00-07:00",
-  "date_end": "2026-12-09T11:30:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Pre-K"
-  ],
-  "cost_range": "",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Cardiff-by-the-Sea",
+  "location": "Valley Center, Valley Center Room",
   "latitude": "32.834727",
   "longitude": "-117.1306115",
   "contact_name": "",
@@ -7136,7 +7180,7 @@
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "Anza-Borrego Desert State Park / Meet at ABF Store (587 Palm Canyon Dr. #110, Borrego Springs, CA 92204)",
+  "location": "587 Palm Canyon Dr. #110, Borrego Springs, CA 92204",
   "latitude": "None",
   "longitude": "None",
   "contact_name": "",
@@ -7163,8 +7207,6 @@
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
-   "Chemistry",
-   "Physical Science",
    "General Science"
   ],
   "specific_attention": [],
@@ -7177,6 +7219,98 @@
   "contact_email": "",
   "contact_phone": "",
   "logo_src": "the_san_diego_river.jpg"
+ },
+ {
+  "slug": "san_diego_county_library_preschool_story_time_20261218",
+  "title": "Preschool Story Time",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Join us on Fridays for stories, songs, and crafts.  Geared for children aged 3-5 years.",
+  "link": "https://sdcl.bibliocommons.com/events/6680837fe3e1ee3000462f78",
+  "availability": "",
+  "date_start": "2026-12-18T10:30:00-07:00",
+  "date_end": "2026-12-18T11:30:00-07:00",
+  "age_grade_level": [
+   "Pre-K"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Valley Center, Community Room",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
+  "slug": "san_diego_county_library_storytime_and_craft_20261226",
+  "title": "Storytime and Craft",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Enjoy stories followed by a craft to make here or take home!",
+  "link": "https://sdcl.bibliocommons.com/events/695045a38b29ea2800c63337",
+  "availability": "",
+  "date_start": "2026-12-26T11:00:00-07:00",
+  "date_end": "2026-12-26T12:00:00-07:00",
+  "age_grade_level": [
+   "Family",
+   "Pre-K"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Jacumba",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
+  "slug": "san_diego_county_library_family_play_time_hour_20270106",
+  "title": "Family Play Time Hour",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Please join us for Family Play Time Hour, a chance for our little ones to play with our toys and make new friends! Children and their families are welcome to join in the fun! Geared towards ages 0-5.",
+  "link": "https://sdcl.bibliocommons.com/events/691529dca6fedec95308d6ba",
+  "availability": "Repeats 6 times through 2027-12-01",
+  "date_start": "2027-01-06T10:30:00-07:00",
+  "date_end": "2027-12-01T11:30:00-07:00",
+  "age_grade_level": [
+   "Family",
+   "Pre-K"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Fletcher Hills",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
  },
  {
   "slug": "i_love_a_clean_san_diego_stay_classy_o_8217_side_martin_luther_king_jr_park_cleanup_20270123",
@@ -7195,7 +7329,7 @@
   "time_of_day": [
    "Morning"
   ],
-  "opportunity_type": "Out-of-school Programs",
+  "opportunity_type": "Volunteering",
   "areas_of_interest": [
    "Earth Science/Ecology"
   ],
@@ -7216,14 +7350,14 @@
   "partner_name": "San Diego County Library",
   "partner_id": 251,
   "description": "We’ll provide a theme and materials, you bring your imagination! Stations will be set up for kids to create and experiment with the craft of the day, which they can take home to enjoy. For kids ages 4 to 12. Parent/guardian supervision required.",
-  "link": "https://sdcl.bibliocommons.com/events/69fa9219703c33630025b823",
-  "availability": "Repeats 2 times through 2027-02-08",
+  "link": "https://sdcl.bibliocommons.com/events/69fa9219703c33630025b821",
+  "availability": "",
   "date_start": "2027-01-25T15:00:00-07:00",
-  "date_end": "2027-02-08T17:00:00-07:00",
+  "date_end": "2027-01-25T17:00:00-07:00",
   "age_grade_level": [
    "Family"
   ],
-  "cost_range": "",
+  "cost_range": "Free",
   "time_of_day": [
    "Afternoon"
   ],
@@ -7259,7 +7393,7 @@
   "time_of_day": [
    "Afternoon"
   ],
-  "opportunity_type": "Out-of-school Programs",
+  "opportunity_type": "Volunteering",
   "areas_of_interest": [
    "Earth Science/Ecology"
   ],
@@ -7291,7 +7425,7 @@
   "time_of_day": [
    "Afternoon"
   ],
-  "opportunity_type": "Out-of-school Programs",
+  "opportunity_type": "Volunteering",
   "areas_of_interest": [
    "Earth Science/Ecology"
   ],
@@ -7323,7 +7457,7 @@
   "time_of_day": [
    "Morning"
   ],
-  "opportunity_type": "Out-of-school Programs",
+  "opportunity_type": "Volunteering",
   "areas_of_interest": [
    "Earth Science/Ecology"
   ],
@@ -7337,37 +7471,5 @@
   "contact_email": "",
   "contact_phone": "",
   "logo_src": "i_love_a_clean.png"
- },
- {
-  "slug": "san_diego_county_library_kids_crafternoon_20270512",
-  "title": "Kids' Crafternoon",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Join us at the library on Wednesdays for a fun afternoon craft!  Geared toward children ages 6-10 yrs. old.",
-  "link": "https://sdcl.bibliocommons.com/events/6a5401c6c7e02e3d0068aeba",
-  "availability": "",
-  "date_start": "2027-05-12T15:00:00-07:00",
-  "date_end": "2027-05-12T16:00:00-07:00",
-  "age_grade_level": [
-   "Grades 6-8"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Afternoon"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "General Science"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Vista, Children's Area",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
  }
 ]
