@@ -1,0 +1,11 @@
+org_name = "North American Marine Environment Protaction Association"
+adapter_type = "generic_html"
+enabled = true
+
+[config]
+site_url = "https://namepa.net"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "partners_viable.csv tier-2 bulk registration (2026-07-20)"

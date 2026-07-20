@@ -1,0 +1,11 @@
+org_name = "DETOUR - FANCY Teen Girls Leadership Academy"
+adapter_type = "generic_html"
+enabled = true
+
+[config]
+site_url = "https://www.detourempowers.org"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "partners_viable.csv tier-1B bulk registration (2026-07-20)"

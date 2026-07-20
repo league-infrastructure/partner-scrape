@@ -1,0 +1,11 @@
+org_name = "I Love A Clean San Diego"
+adapter_type = "tec_rest"
+enabled = true
+
+[config]
+api_base = "https://www.ilacsd.org/wp-json/tribe/events/v1/events/"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "partners_viable.csv tier-1A bulk registration (2026-07-20)"

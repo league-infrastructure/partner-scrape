@@ -1,0 +1,11 @@
+org_name = "UC San Diego Sanford Institute for Empathy and Compassion, Center for Empathy and Technology"
+adapter_type = "generic_html"
+enabled = true
+
+[config]
+site_url = "https://empathyandcompassion.ucsd.edu"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "partners_viable.csv tier-2 bulk registration (2026-07-20)"
