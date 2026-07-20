@@ -17,7 +17,6 @@ import logging
 from typing import Iterable
 
 from partner_scrape.adapters.base import EventRef, RawResponse
-from partner_scrape.discovery.sitemap import discover_changed_urls
 from partner_scrape.extract.ladder import extract_fields
 from partner_scrape.fetch import Fetcher
 from partner_scrape.model import Event
@@ -35,9 +34,16 @@ class GenericHtmlAdapter:
     """``Adapter`` for arbitrary sitemap-discoverable sites (``generic_html``)."""
 
     def discover(self, source: SourceConfig, fetcher: Fetcher) -> Iterable[EventRef]:
-        """Resolve ``source`` into new/changed event ``EventRef``s via
-        ticket 001's sitemap-diff discovery -- no logic of its own.
+        """Resolve ``source`` into event ``EventRef``s via sitemap
+        discovery -- no logic of its own.
+
+        The import is deferred to call time to break the import cycle
+        between ``adapters`` (whose package ``__init__`` eagerly imports
+        every adapter, including this one) and ``discovery.sitemap``
+        (which imports ``EventRef`` from ``adapters.base``).
         """
+        from partner_scrape.discovery.sitemap import discover_changed_urls
+
         return discover_changed_urls(source, fetcher)
 
     def fetch(self, ref: EventRef, fetcher: Fetcher) -> RawResponse:

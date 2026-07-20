@@ -327,23 +327,32 @@ def _resolve_event_urls(source: SourceConfig, fetcher: Fetcher) -> dict[str, str
     return _parse_urlset(root, path_filter=True)
 
 
-def discover_changed_urls(source: SourceConfig, fetcher: Fetcher) -> list[EventRef]:
-    """Resolve ``source``'s sitemap into the ``EventRef``s that are new
-    or ``<lastmod>``-changed since the last run.
+def discover_changed_urls(
+    source: SourceConfig, fetcher: Fetcher, *, changed_only: bool = False
+) -> list[EventRef]:
+    """Resolve ``source``'s sitemap into event ``EventRef``s.
 
-    Diffs the current ``{url: lastmod}`` set against a persisted
-    snapshot for ``source.source_id`` under ``SCRAPE_CACHE_DIR``
-    (``Config.get_scrape_cache_dir()``), then rewrites the snapshot to
-    the current full state on success -- the next call against an
-    unchanged sitemap yields zero ``EventRef``s (SUC-009's Main Flow;
-    this ticket's round-trip testing requirement).
+    By default (``changed_only=False``) this returns EVERY discovered
+    event URL each run. That is the correct behavior for an aggregator
+    that republishes the complete current set of opportunities on every
+    run and has no persistent per-event store: returning only
+    ``<lastmod>``-changed URLs here would silently drop every unchanged
+    event from the export (and would empty out most of the site on the
+    second scheduled run). Bandwidth efficiency is already provided one
+    layer down by the fetch cache's conditional GET (ETag/304), so a
+    full URL list does not mean re-downloading unchanged pages.
+
+    The snapshot is still read and rewritten so the incremental
+    ``changed_only=True`` mode remains available for a future design
+    that pairs it with a persistent opportunity store; in that mode this
+    returns only the new or ``<lastmod>``-changed URLs since the last
+    run (the original SUC-009 diff behavior).
 
     No prior snapshot (first run for this source) treats every
     discovered URL as new. A malformed or unreachable sitemap yields an
     empty list and a logged warning rather than raising, and leaves any
-    existing snapshot untouched (SUC-009's Error Flow) -- this function
-    must never propagate an exception up through the calling adapter's
-    ``discover()``.
+    existing snapshot untouched -- this function must never propagate an
+    exception up through the calling adapter's ``discover()``.
 
     Each returned ``EventRef``'s ``context`` carries the sitemap's own
     ``lastmod`` value under the ``"lastmod"`` key, for adapters that
@@ -356,12 +365,12 @@ def discover_changed_urls(source: SourceConfig, fetcher: Fetcher) -> list[EventR
     snapshot_path = _snapshot_path(source.source_id)
     previous = _read_snapshot(snapshot_path)
 
-    changed = [
+    refs = [
         EventRef(url=url, context={"lastmod": lastmod})
         for url, lastmod in current.items()
-        if previous.get(url) != lastmod
+        if not changed_only or previous.get(url) != lastmod
     ]
 
     _write_snapshot(snapshot_path, current)
 
-    return changed
+    return refs

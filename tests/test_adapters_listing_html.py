@@ -119,7 +119,7 @@ class TestDiscoverDelegatesToListingDiscovery:
             return sentinel_refs
 
         monkeypatch.setattr(
-            "partner_scrape.adapters.listing_html.discover_via_listing",
+            "partner_scrape.discovery.listing.discover_via_listing",
             fake_discover_via_listing,
         )
 

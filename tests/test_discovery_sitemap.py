@@ -100,7 +100,20 @@ def _write_snapshot(tmp_path: Path, lastmods: dict[str, str]) -> None:
 
 
 class TestUnchangedSnapshot:
-    def test_all_unchanged_lastmod_yields_zero_refs(self, tmp_path):
+    def test_all_unchanged_lastmod_yields_zero_refs_in_changed_only_mode(self, tmp_path):
+        _write_snapshot(tmp_path, CURRENT_LASTMODS)
+        fetcher = FixtureFetcher(
+            {ROOT_SITEMAP_URL: _response(_read_fixture("events_sitemap.xml"))}
+        )
+
+        refs = discover_changed_urls(_source(), fetcher, changed_only=True)
+
+        assert refs == []
+
+    def test_default_mode_returns_all_urls_even_when_unchanged(self, tmp_path):
+        # Default (changed_only=False): an aggregator with no persistent
+        # store must re-emit every event each run, or unchanged events
+        # vanish from the export. Conditional-GET handles bandwidth.
         _write_snapshot(tmp_path, CURRENT_LASTMODS)
         fetcher = FixtureFetcher(
             {ROOT_SITEMAP_URL: _response(_read_fixture("events_sitemap.xml"))}
@@ -108,11 +121,11 @@ class TestUnchangedSnapshot:
 
         refs = discover_changed_urls(_source(), fetcher)
 
-        assert refs == []
+        assert {r.url for r in refs} == set(CURRENT_LASTMODS)
 
 
 class TestChangedLastmod:
-    def test_one_bumped_lastmod_yields_exactly_that_ref(self, tmp_path):
+    def test_one_bumped_lastmod_yields_exactly_that_ref_in_changed_only_mode(self, tmp_path):
         stale = dict(CURRENT_LASTMODS)
         stale[EVENT_URLS[2]] = "2025-01-01"  # stale -- live sitemap has 2026-06-10
         _write_snapshot(tmp_path, stale)
@@ -120,7 +133,7 @@ class TestChangedLastmod:
             {ROOT_SITEMAP_URL: _response(_read_fixture("events_sitemap.xml"))}
         )
 
-        refs = discover_changed_urls(_source(), fetcher)
+        refs = discover_changed_urls(_source(), fetcher, changed_only=True)
 
         assert [r.url for r in refs] == [EVENT_URLS[2]]
         assert refs[0].context["lastmod"] == "2026-06-10"
@@ -229,16 +242,26 @@ class TestUnreachableSitemap:
 
 
 class TestRoundTrip:
-    def test_second_call_against_unchanged_fixture_yields_zero_refs(self):
+    def test_second_call_against_unchanged_fixture_yields_zero_refs_in_changed_only_mode(self):
         fetcher = FixtureFetcher(
             {ROOT_SITEMAP_URL: _response(_read_fixture("events_sitemap.xml"))}
         )
 
-        first_refs = discover_changed_urls(_source(), fetcher)
-        second_refs = discover_changed_urls(_source(), fetcher)
+        first_refs = discover_changed_urls(_source(), fetcher, changed_only=True)
+        second_refs = discover_changed_urls(_source(), fetcher, changed_only=True)
 
         assert [r.url for r in first_refs] == EVENT_URLS
         assert second_refs == []
+
+    def test_default_mode_second_call_still_returns_all_urls(self):
+        fetcher = FixtureFetcher(
+            {ROOT_SITEMAP_URL: _response(_read_fixture("events_sitemap.xml"))}
+        )
+
+        discover_changed_urls(_source(), fetcher)
+        second_refs = discover_changed_urls(_source(), fetcher)
+
+        assert [r.url for r in second_refs] == EVENT_URLS
 
     def test_snapshot_written_after_first_run_matches_live_sitemap(self, tmp_path):
         fetcher = FixtureFetcher(

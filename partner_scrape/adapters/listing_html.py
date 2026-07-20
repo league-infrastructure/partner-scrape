@@ -19,7 +19,6 @@ import logging
 from typing import Iterable
 
 from partner_scrape.adapters.base import EventRef, RawResponse
-from partner_scrape.discovery.listing import discover_via_listing
 from partner_scrape.extract.ladder import extract_fields
 from partner_scrape.fetch import Fetcher
 from partner_scrape.model import Event
@@ -43,9 +42,16 @@ class ListingHtmlAdapter:
     """
 
     def discover(self, source: SourceConfig, fetcher: Fetcher) -> Iterable[EventRef]:
-        """Resolve ``source`` into event ``EventRef``s via ticket 003's
-        listing-page discovery -- no discovery logic of its own.
+        """Resolve ``source`` into event ``EventRef``s via listing-page
+        discovery -- no discovery logic of its own.
+
+        The import is deferred to call time to break the import cycle
+        between ``adapters`` (whose package ``__init__`` eagerly imports
+        every adapter, including this one) and ``discovery.listing``
+        (which imports ``EventRef`` from ``adapters.base``).
         """
+        from partner_scrape.discovery.listing import discover_via_listing
+
         return discover_via_listing(source, fetcher)
 
     def fetch(self, ref: EventRef, fetcher: Fetcher) -> RawResponse:
