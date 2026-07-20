@@ -1,0 +1,212 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getLogoPath, formatDateRange } from '../../lib/helpers';
+import opportunities from '../../data/opportunities.json';
+import partners from '../../data/partners.json';
+
+export function getStaticPaths() {
+  return opportunities.map(opp => ({
+    params: { slug: opp.slug },
+    props: { opportunity: opp },
+  }));
+}
+
+const { opportunity: opp } = Astro.props;
+const logoPath = getLogoPath(opp.logo_src);
+const dateRange = formatDateRange(opp.date_start, opp.date_end);
+
+// Find matching partner
+const partner = partners.find(p => p.name === opp.partner_name);
+const hasLocation = opp.latitude && opp.longitude && !isNaN(parseFloat(opp.latitude));
+---
+
+<BaseLayout
+  title={`${opp.title} | SD STEM Ecosystem`}
+  description={opp.description?.slice(0, 160)}
+>
+  <div class="detail-page">
+    <a href="/opportunities" class="back-link">← Back to Opportunities</a>
+
+    <div class="detail-header">
+      <div class="detail-partner-row">
+        <img src={logoPath} alt={opp.partner_name} class="detail-logo" />
+        <div>
+          {partner
+            ? <a href={`/partners/${partner.id}`} class="detail-partner-link">{opp.partner_name}</a>
+            : <span class="detail-partner-link">{opp.partner_name}</span>
+          }
+        </div>
+      </div>
+      <h1>{opp.title}</h1>
+    </div>
+
+    <div class="detail-body">
+      <div class="detail-content">
+        <p>{opp.description}</p>
+
+        {opp.link && (
+          <div class="mt-3">
+            <a href={opp.link} target="_blank" rel="noopener" class="btn">
+              Register / Learn More
+            </a>
+          </div>
+        )}
+
+        {(opp.contact_name || opp.contact_email || opp.contact_phone) && (
+          <div class="detail-contact mt-3">
+            <h3>Contact</h3>
+            {opp.contact_name && <p>{opp.contact_name}</p>}
+            {opp.contact_email && <p><a href={`mailto:${opp.contact_email}`}>{opp.contact_email}</a></p>}
+            {opp.contact_phone && <p><a href={`tel:${opp.contact_phone}`}>{opp.contact_phone}</a></p>}
+          </div>
+        )}
+      </div>
+
+      <aside class="detail-sidebar">
+        <dl>
+          <dt>Date</dt>
+          <dd>{dateRange}</dd>
+
+          {opp.availability && (
+            <>
+              <dt>Availability</dt>
+              <dd>{opp.availability}</dd>
+            </>
+          )}
+
+          <dt>Cost</dt>
+          <dd>
+            {opp.cost_range === 'Free'
+              ? <span class="tag tag-free">Free</span>
+              : opp.cost_range
+            }
+          </dd>
+
+          {opp.age_grade_level?.length > 0 && (
+            <>
+              <dt>Age / Grade</dt>
+              <dd class="detail-tags">
+                {opp.age_grade_level.map(a => <span class="tag tag-teal">{a}</span>)}
+              </dd>
+            </>
+          )}
+
+          {opp.areas_of_interest?.length > 0 && (
+            <>
+              <dt>Areas of Interest</dt>
+              <dd class="detail-tags">
+                {opp.areas_of_interest.map(a => <span class="tag tag-purple">{a}</span>)}
+              </dd>
+            </>
+          )}
+
+          {opp.time_of_day?.length > 0 && (
+            <>
+              <dt>Time of Day</dt>
+              <dd>{opp.time_of_day.join(', ')}</dd>
+            </>
+          )}
+
+          <dt>Type</dt>
+          <dd><span class="tag tag-pink">{opp.opportunity_type}</span></dd>
+
+          {opp.financial_support === 'Yes' && (
+            <>
+              <dt>Financial Support</dt>
+              <dd><span class="tag tag-green">Available</span></dd>
+            </>
+          )}
+
+          {opp.ngss_aligned === 'Yes' && (
+            <>
+              <dt>NGSS Aligned</dt>
+              <dd><span class="tag tag-green">Yes</span></dd>
+            </>
+          )}
+
+          {opp.location && (
+            <>
+              <dt>Location</dt>
+              <dd>{opp.location}</dd>
+            </>
+          )}
+        </dl>
+
+        {hasLocation && (
+          <div class="detail-mini-map" id="detail-map" data-lat={opp.latitude} data-lng={opp.longitude}></div>
+        )}
+      </aside>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  const mapEl = document.getElementById('detail-map');
+  if (mapEl) {
+    const lat = parseFloat(mapEl.dataset.lat || '0');
+    const lng = parseFloat(mapEl.dataset.lng || '0');
+    if (!isNaN(lat) && !isNaN(lng) && lat !== 0) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+      document.head.appendChild(link);
+
+      const script = document.createElement('script');
+      script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+      script.onload = () => {
+        // @ts-ignore
+        const L = window.L;
+        const map = L.map('detail-map').setView([lat, lng], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; OpenStreetMap',
+        }).addTo(map);
+        L.marker([lat, lng]).addTo(map);
+      };
+      document.head.appendChild(script);
+    }
+  }
+</script>
+
+<style>
+  .detail-partner-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .detail-logo {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+    border-radius: 6px;
+    background: #f8f8fc;
+  }
+
+  .detail-partner-link {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--purple);
+  }
+
+  .detail-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .detail-contact h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+  .detail-contact p {
+    margin-bottom: 4px;
+  }
+
+  .detail-mini-map {
+    height: 200px;
+    border-radius: 6px;
+    margin-top: 20px;
+    overflow: hidden;
+  }
+</style>

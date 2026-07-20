@@ -1,0 +1,89 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="About | SD STEM Ecosystem">
+  <section class="hero hero-sm">
+    <h1>About the SD STEM Ecosystem</h1>
+  </section>
+
+  <div class="about-page container">
+    <section class="about-section">
+      <h2>Our Mission</h2>
+      <p>We are creating a San Diego where everyone is connected to STEM learning opportunities. The San Diego STEM Ecosystem brings together organizations, businesses, schools, and community groups to expand access to science, technology, engineering, and mathematics for learners of all ages and backgrounds.</p>
+    </section>
+
+    <section class="about-section">
+      <h2>Why a STEM Ecosystem?</h2>
+      <p>San Diego as a STEM-rich region needs to be ready for the challenges and opportunities of tomorrow. The next generation must be equipped to become the thinkers, problem solvers, and innovators we need today and in the future. We want all learners to have a chance to be immersed in Science, Technology, Engineering, and Math—to make our world a better place.</p>
+    </section>
+
+    <section class="about-section">
+      <h2>What We Do</h2>
+      <div class="about-grid">
+        <div class="card">
+          <h3>Connect</h3>
+          <p>We connect learners, families, educators, and organizations with STEM opportunities and resources across San Diego County.</p>
+        </div>
+        <div class="card">
+          <h3>Collaborate</h3>
+          <p>Through our semi-annual Collab Labs and ongoing partnerships, Ecosystem members work together to support STEM learning in our community.</p>
+        </div>
+        <div class="card">
+          <h3>Catalyze</h3>
+          <p>We catalyze new partnerships and programs that address gaps in STEM access, particularly for underserved communities.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-section">
+      <h2>Our Partners</h2>
+      <p>The SD STEM Ecosystem is a collective impact initiative hosted by the Fleet Science Center. We are supported by a network of over 150 organizations including museums, schools, universities, businesses, nonprofits, and government agencies.</p>
+      <p class="mt-2">
+        <a href="/partners" class="btn">View Our Partners</a>
+      </p>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .hero-sm {
+    min-height: auto;
+    padding: 100px 20px 40px;
+  }
+
+  .about-page {
+    padding: 40px 15px 60px;
+    max-width: 800px;
+  }
+
+  .about-section {
+    margin-bottom: 40px;
+  }
+
+  .about-section h2 {
+    margin-bottom: 16px;
+  }
+
+  .about-section p {
+    line-height: 1.8;
+    margin-bottom: 12px;
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin-top: 16px;
+  }
+
+  .about-grid .card {
+    text-align: left;
+    padding: 24px;
+  }
+
+  .about-grid h3 {
+    margin-bottom: 8px;
+    color: var(--purple);
+  }
+</style>

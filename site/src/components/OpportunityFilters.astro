@@ -1,0 +1,103 @@
+---
+import opportunities from '../data/opportunities.json';
+
+const opportunityTypes = [
+  'Out-of-school Programs', 'Online', 'Professional Development / Conferences',
+  'School Programs', 'Career Connections', 'Work-based Learning',
+  'Volunteering', 'Funding Opportunities',
+];
+const ageGrades = [
+  'Pre-K', 'TK/K', 'Grades 1-2', 'Grades 3-5', 'Grades 6-8',
+  'Grades 9-12', 'Undergraduate', 'Graduate', 'Adult', 'Family',
+];
+const areasOfInterest = [
+  'Biology / LifeSciences', 'General Science', 'Engineering', 'Technology',
+  'Earth Science/Ecology', 'Coding/Computer Science/Cyber Security',
+  'Mathematics', 'Social Science', 'Physical Science', 'Chemistry', 'Physics',
+];
+const costs = [
+  'Free', 'Less than $25', 'Less than $50', 'Less than $100',
+  'Less than $200', 'Greater than $200',
+];
+const timesOfDay = [
+  'Morning', 'Afternoon', 'Evening', 'All Day', 'Online/Hybrid', 'Overnight',
+];
+
+// === Build-time facet counts ===
+// For array fields (age, areas, time) count membership; for scalar fields
+// (type, cost) count equality. Computed once at build from opportunities.json.
+function tally(field: string, isArray: boolean): Map<string, number> {
+  const map = new Map<string, number>();
+  for (const opp of opportunities as any[]) {
+    const raw = opp[field];
+    const values = isArray ? (Array.isArray(raw) ? raw : []) : [raw];
+    for (const v of values) {
+      if (v == null || v === '') continue;
+      map.set(v, (map.get(v) ?? 0) + 1);
+    }
+  }
+  return map;
+}
+
+const typeCounts = tally('opportunity_type', false);
+const ageCounts = tally('age_grade_level', true);
+const areasCounts = tally('areas_of_interest', true);
+const costCounts = tally('cost_range', false);
+const timeCounts = tally('time_of_day', true);
+const financialYesCount = (opportunities as any[]).filter(o => o.financial_support === 'Yes').length;
+const ngssYesCount = (opportunities as any[]).filter(o => o.ngss_aligned === 'Yes').length;
+
+// Checkbox facet sections (rendered uniformly with counts + per-section clear).
+const groups = [
+  { title: 'Opportunity Type', filter: 'type', options: opportunityTypes, counts: typeCounts },
+  { title: 'Age / Grade Level', filter: 'age', options: ageGrades, counts: ageCounts },
+  { title: 'Areas of Interest', filter: 'areas', options: areasOfInterest, counts: areasCounts },
+  { title: 'Cost', filter: 'cost', options: costs, counts: costCounts },
+  { title: 'Time of Day', filter: 'time', options: timesOfDay, counts: timeCounts },
+];
+---
+
+<aside class="filter-sidebar collapsed" id="opp-filters">
+  <button class="btn filter-toggle" id="filter-toggle-btn">Filter Opportunities</button>
+
+  <div class="filter-group">
+    <div class="filter-group-title">Search</div>
+    <input type="text" class="filter-search" placeholder="Search title or description…" data-filter="search" />
+  </div>
+
+  {groups.map(group => (
+    <div class="filter-group">
+      <div class="filter-group-title">{group.title}</div>
+      {group.options.map(v => {
+        const c = group.counts.get(v) ?? 0;
+        return (
+          <label class:list={['filter-option', { 'is-empty': c === 0 }]}>
+            <input type="checkbox" data-filter={group.filter} value={v} disabled={c === 0} />
+            <span class="facet-name">{v}</span>
+            <span class="facet-count">({c})</span>
+          </label>
+        );
+      })}
+      <a href="#" class="filter-clear-section" data-clear-section>Clear</a>
+    </div>
+  ))}
+
+  <div class="filter-group">
+    <div class="filter-group-title">Other</div>
+    <label class:list={['filter-option', { 'is-empty': financialYesCount === 0 }]}>
+      <input type="checkbox" data-filter="financial" value="Yes" disabled={financialYesCount === 0} />
+      <span class="facet-name">Financial Support Available</span>
+      <span class="facet-count">({financialYesCount})</span>
+    </label>
+    <label class:list={['filter-option', { 'is-empty': ngssYesCount === 0 }]}>
+      <input type="checkbox" data-filter="ngss" value="Yes" disabled={ngssYesCount === 0} />
+      <span class="facet-name">NGSS Aligned</span>
+      <span class="facet-count">({ngssYesCount})</span>
+    </label>
+    <a href="#" class="filter-clear-section" data-clear-section>Clear</a>
+  </div>
+
+  <div class="filter-actions">
+    <a href="#" class="filter-clear-all" id="clear-filters" data-clear-all>Clear all filters</a>
+  </div>
+</aside>

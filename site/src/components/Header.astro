@@ -1,0 +1,153 @@
+---
+const currentPath = Astro.url.pathname;
+
+const navItems = [
+  { label: 'Opportunities', href: '/opportunities' },
+  { label: 'Partners', href: '/partners' },
+  { label: 'About', href: '/about' },
+  { label: 'Contact', href: '/contact' },
+];
+---
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="/" class="header-logo">
+      <img src="/images/logo.svg" alt="SD STEM Ecosystem" width="117" />
+    </a>
+    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+    </button>
+    <nav class="header-nav" id="main-nav" aria-label="Main navigation">
+      <ul>
+        {navItems.map(item => (
+          <li>
+            <a
+              href={item.href}
+              class:list={[{ active: currentPath.startsWith(item.href) }]}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const toggle = document.querySelector('.nav-toggle');
+  const nav = document.getElementById('main-nav');
+  toggle?.addEventListener('click', () => {
+    const isOpen = nav?.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', String(isOpen));
+  });
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--white);
+    box-shadow: 0 2px 8px rgba(50, 50, 93, 0.1);
+  }
+
+  .header-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 70px;
+  }
+
+  .header-logo img {
+    height: 45px;
+    width: auto;
+  }
+
+  .header-nav ul {
+    list-style: none;
+    display: flex;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  .header-nav a {
+    display: block;
+    padding: 8px 20px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: color 200ms ease;
+    text-decoration: none;
+  }
+
+  .header-nav a:hover,
+  .header-nav a.active {
+    color: var(--purple);
+  }
+
+  .header-nav a.active {
+    border-bottom: 3px solid var(--purple);
+  }
+
+  .nav-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+  }
+
+  .nav-toggle-bar {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--text-dark);
+    transition: all 200ms ease;
+  }
+
+  @media (max-width: 767px) {
+    .nav-toggle {
+      display: flex;
+    }
+
+    .header-nav {
+      display: none;
+      position: absolute;
+      top: 70px;
+      left: 0;
+      right: 0;
+      background: var(--white);
+      box-shadow: 0 4px 12px rgba(50, 50, 93, 0.15);
+      padding: 10px 0;
+    }
+
+    .header-nav.open {
+      display: block;
+    }
+
+    .header-nav ul {
+      flex-direction: column;
+    }
+
+    .header-nav a {
+      padding: 12px 20px;
+    }
+
+    .header-nav a.active {
+      border-bottom: none;
+      color: var(--purple);
+      background: var(--body-bg);
+    }
+  }
+</style>

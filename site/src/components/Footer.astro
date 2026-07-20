@@ -1,0 +1,148 @@
+---
+import SocialIcon from './SocialIcon.astro';
+import scrapeMeta from '../data/scrape-meta.json';
+
+const lastUpdated = new Date(scrapeMeta.last_updated).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <img src="/images/logo.svg" alt="SD STEM Ecosystem" width="100" />
+      <p class="footer-tagline">Creating a San Diego where everyone is connected to STEM learning opportunities.</p>
+    </div>
+    <div class="footer-nav">
+      <h4>Explore</h4>
+      <ul>
+        <li><a href="/opportunities">Opportunities</a></li>
+        <li><a href="/partners">Partners</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-contact">
+      <h4>Contact</h4>
+      <p>1875 El Prado<br />San Diego, CA 92101</p>
+      <p><a href="tel:619-238-1233">(619) 238-1233</a></p>
+    </div>
+    <div class="footer-social">
+      <h4>Follow Us</h4>
+      <div class="footer-social-icons">
+        <SocialIcon platform="facebook" url="https://www.facebook.com/groups/1462184020556689/about/" size={22} />
+        <SocialIcon platform="instagram" url="https://www.instagram.com/sdstemecosystem" size={22} />
+        <SocialIcon platform="linkedin" url="https://www.linkedin.com/groups/7054524" size={22} />
+        <SocialIcon platform="twitter" url="https://twitter.com/SDstemecosystem" size={22} />
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>Copyright &copy; {new Date().getFullYear()} Fleet Science Center. All Rights Reserved.</p>
+    <p class="footer-updated">Last updated: {lastUpdated}</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--dark-deep);
+    color: rgba(255, 255, 255, 0.7);
+    padding: 50px 15px 0;
+    margin-top: 60px;
+  }
+
+  .footer-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 40px;
+    padding-bottom: 40px;
+  }
+
+  .footer-brand img {
+    margin-bottom: 12px;
+  }
+
+  .footer-tagline {
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .site-footer h4 {
+    color: var(--white);
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+
+  .footer-nav ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .footer-nav a {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+    display: block;
+    padding: 4px 0;
+  }
+  .footer-nav a:hover {
+    color: var(--white);
+  }
+
+  .footer-contact p {
+    font-size: 14px;
+    line-height: 1.7;
+    margin-bottom: 8px;
+  }
+  .footer-contact a {
+    color: rgba(255, 255, 255, 0.6);
+  }
+  .footer-contact a:hover {
+    color: var(--white);
+  }
+
+  .footer-social-icons {
+    display: flex;
+    gap: 14px;
+  }
+  .footer-social-icons :global(.social-icon) {
+    color: rgba(255, 255, 255, 0.6);
+  }
+  .footer-social-icons :global(.social-icon:hover) {
+    color: var(--white);
+  }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 20px 0;
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  .footer-updated {
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  @media (max-width: 767px) {
+    .footer-inner {
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+
+    .footer-bottom {
+      flex-direction: column;
+      gap: 4px;
+      text-align: center;
+    }
+  }
+</style>

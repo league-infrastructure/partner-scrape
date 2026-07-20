@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <rect width="128" height="128" rx="16" fill="#1a1a2e"/>
+  <text x="64" y="78" text-anchor="middle" font-family="Impact, sans-serif" font-size="72" font-weight="bold" fill="#ffe66d" stroke="#e63946" stroke-width="3">L</text>
+  <polygon points="64,8 70,28 90,28 74,40 80,60 64,48 48,60 54,40 38,28 58,28" fill="#ffe66d" opacity="0.8"/>
+</svg>

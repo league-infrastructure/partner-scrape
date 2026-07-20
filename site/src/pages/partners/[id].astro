@@ -1,0 +1,202 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import OpportunityCard from '../../components/OpportunityCard.astro';
+import SocialIcon from '../../components/SocialIcon.astro';
+import { getLogoPath } from '../../lib/helpers';
+import partners from '../../data/partners.json';
+import opportunities from '../../data/opportunities.json';
+
+export function getStaticPaths() {
+  return partners.map(p => ({
+    params: { id: String(p.id) },
+    props: { partner: p },
+  }));
+}
+
+const { partner } = Astro.props;
+const logoPath = getLogoPath(partner.logo_src);
+const hasLocation = partner.latitude && partner.longitude;
+
+// Opportunities from this partner
+const partnerOpps = opportunities.filter(
+  o => o.partner_name === partner.name
+);
+
+const socialEntries = [
+  { url: partner.website, platform: 'website' as const },
+  { url: partner.facebook, platform: 'facebook' as const },
+  { url: partner.twitter, platform: 'twitter' as const },
+  { url: partner.linkedin, platform: 'linkedin' as const },
+  { url: partner.instagram, platform: 'instagram' as const },
+].filter(s => s.url);
+---
+
+<BaseLayout
+  title={`${partner.name} | SD STEM Ecosystem`}
+  description={partner.description?.slice(0, 160)}
+>
+  <div class="detail-page">
+    <a href="/partners" class="back-link">← Back to Partners</a>
+
+    <div class="partner-detail-header">
+      <img src={logoPath} alt={partner.name} class="partner-detail-logo" />
+      <div>
+        <h1>{partner.name}</h1>
+        <span class="tag tag-pink">{partner.organization_type}</span>
+      </div>
+    </div>
+
+    <div class="detail-body">
+      <div class="detail-content">
+        <p>{partner.description}</p>
+      </div>
+
+      <aside class="detail-sidebar">
+        <dl>
+          {partner.phone && (
+            <>
+              <dt>Phone</dt>
+              <dd><a href={`tel:${partner.phone}`}>{partner.phone}</a></dd>
+            </>
+          )}
+
+          {partner.email && (
+            <>
+              <dt>Email</dt>
+              <dd><a href={`mailto:${partner.email}`}>{partner.email}</a></dd>
+            </>
+          )}
+
+          {partner.website && (
+            <>
+              <dt>Website</dt>
+              <dd><a href={partner.website} target="_blank" rel="noopener">{partner.website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}</a></dd>
+            </>
+          )}
+
+          {partner.location && (
+            <>
+              <dt>Location</dt>
+              <dd>{partner.location}</dd>
+            </>
+          )}
+        </dl>
+
+        {socialEntries.length > 1 && (
+          <div class="partner-social mt-2">
+            <div class="social-label">Connect</div>
+            <div class="social-icons-row">
+              {socialEntries.filter(s => s.platform !== 'website').map(s => (
+                <SocialIcon platform={s.platform} url={s.url} size={22} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {hasLocation && (
+          <div class="detail-mini-map" id="detail-map" data-lat={partner.latitude} data-lng={partner.longitude}></div>
+        )}
+      </aside>
+    </div>
+
+    <!-- Opportunities from this partner -->
+    {partnerOpps.length > 0 ? (
+      <section class="partner-opps mt-3">
+        <h2>Opportunities from {partner.name}</h2>
+        <div class="results-grid mt-2">
+          {partnerOpps.map(opp => <OpportunityCard opportunity={opp} />)}
+        </div>
+      </section>
+    ) : (
+      <section class="partner-opps mt-3">
+        <h2>Opportunities</h2>
+        <p>No current opportunities listed for this partner.</p>
+      </section>
+    )}
+  </div>
+</BaseLayout>
+
+<script>
+  const mapEl = document.getElementById('detail-map');
+  if (mapEl) {
+    const lat = parseFloat(mapEl.dataset.lat || '0');
+    const lng = parseFloat(mapEl.dataset.lng || '0');
+    if (!isNaN(lat) && !isNaN(lng) && lat !== 0) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+      document.head.appendChild(link);
+      const script = document.createElement('script');
+      script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+      script.onload = () => {
+        // @ts-ignore
+        const L = window.L;
+        const map = L.map('detail-map').setView([lat, lng], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; OpenStreetMap',
+        }).addTo(map);
+        L.marker([lat, lng]).addTo(map);
+      };
+      document.head.appendChild(script);
+    }
+  }
+</script>
+
+<style>
+  .partner-detail-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+
+  .partner-detail-logo {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    border-radius: var(--radius);
+    background: #f8f8fc;
+    padding: 8px;
+  }
+
+  .partner-detail-header h1 {
+    margin-bottom: 8px;
+  }
+
+  .social-label {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-dark);
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+
+  .social-icons-row {
+    display: flex;
+    gap: 14px;
+  }
+
+  .detail-mini-map {
+    height: 200px;
+    border-radius: 6px;
+    margin-top: 20px;
+    overflow: hidden;
+  }
+
+  .partner-opps {
+    border-top: 1px solid var(--border-light);
+    padding-top: 30px;
+  }
+
+  .partner-opps h2 {
+    font-size: 24px;
+  }
+
+  @media (max-width: 767px) {
+    .partner-detail-header {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+</style>

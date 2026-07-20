@@ -43,3 +43,8 @@ Thumbs.db
 # CLASI local state
 .clasi/.clasi.db
 .clasi/log/
+
+# Beta site build artifacts
+site/node_modules/
+site/dist/
+site/.astro/

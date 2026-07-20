@@ -1,0 +1,120 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import OpportunityFilters from '../../components/OpportunityFilters.astro';
+import OpportunityCard from '../../components/OpportunityCard.astro';
+import opportunities from '../../data/opportunities.json';
+
+// Sort by date_start ascending (soonest first), undated at end
+const sorted = [...opportunities].sort((a, b) => {
+  if (!a.date_start && !b.date_start) return 0;
+  if (!a.date_start) return 1;
+  if (!b.date_start) return -1;
+  return new Date(a.date_start).getTime() - new Date(b.date_start).getTime();
+});
+---
+
+<BaseLayout title="Find STEM Opportunities | SD STEM Ecosystem">
+  <section class="hero hero-sm">
+    <h1>Find STEM Opportunities</h1>
+    <p>Discover programs, workshops, camps, and events across San Diego County.</p>
+  </section>
+
+  <div class="listing-layout">
+    <OpportunityFilters />
+    <div class="results-area">
+      <div class="results-header">
+        <span class="results-count">Showing {sorted.length} of {sorted.length}</span>
+        <div class="view-toggle">
+          <button class="active" data-view="grid">List</button>
+          <button data-view="map">Map</button>
+        </div>
+      </div>
+      <div class="results-grid" id="results-grid">
+        {sorted.map(opp => <OpportunityCard opportunity={opp} />)}
+      </div>
+      <div class="map-container" id="map-container" style="display:none;"></div>
+    </div>
+  </div>
+</BaseLayout>
+
+<script src="../../scripts/filters.js"></script>
+
+<script>
+  // Map/list toggle
+  const viewBtns = document.querySelectorAll('.view-toggle button');
+  const grid = document.getElementById('results-grid');
+  const mapContainer = document.getElementById('map-container');
+
+  viewBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      viewBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      if (btn.dataset.view === 'map') {
+        if (grid) grid.style.display = 'none';
+        if (mapContainer) {
+          mapContainer.style.display = 'block';
+          initMap();
+        }
+      } else {
+        if (grid) grid.style.display = '';
+        if (mapContainer) mapContainer.style.display = 'none';
+      }
+    });
+  });
+
+  let mapInit = false;
+  function initMap() {
+    if (mapInit) return;
+    mapInit = true;
+    // Leaflet loaded via CDN in head - lazy init
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+    document.head.appendChild(link);
+
+    const script = document.createElement('script');
+    script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    script.onload = () => {
+      // @ts-ignore
+      const L = window.L;
+      const map = L.map('map-container').setView([32.7157, -117.1611], 10);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
+      }).addTo(map);
+
+      // San Diego County bounding box
+      const SD_BOUNDS = { latMin: 32.4, latMax: 33.5, lngMin: -117.7, lngMax: -116.0 };
+      const sdBounds = [[SD_BOUNDS.latMin, SD_BOUNDS.lngMin], [SD_BOUNDS.latMax, SD_BOUNDS.lngMax]];
+      map.setMaxBounds(sdBounds);
+      map.fitBounds(sdBounds);
+
+      const cards = document.querySelectorAll('.opp-card');
+      cards.forEach(card => {
+        if (card.hasAttribute('data-hidden')) return;
+        const lat = parseFloat(card.dataset.lat);
+        const lng = parseFloat(card.dataset.lng);
+        if (isNaN(lat) || isNaN(lng)) return;
+        if (lat < SD_BOUNDS.latMin || lat > SD_BOUNDS.latMax || lng < SD_BOUNDS.lngMin || lng > SD_BOUNDS.lngMax) return;
+        const title = card.querySelector('h3')?.textContent || '';
+        const href = card.querySelector('h3 a')?.getAttribute('href') || '#';
+        L.circleMarker([lat, lng], { radius: 5, color: '#c83e8e', fillColor: '#c83e8e', fillOpacity: 0.9, weight: 1 })
+          .addTo(map).bindPopup(`<a href="${href}">${title}</a>`);
+      });
+    };
+    document.head.appendChild(script);
+  }
+</script>
+
+<style>
+  .hero-sm {
+    min-height: auto;
+    padding: 100px 20px 40px;
+  }
+  .hero-sm h1 {
+    font-size: 36px;
+  }
+  .hero-sm p {
+    margin-top: 8px;
+    opacity: 0.85;
+  }
+</style>

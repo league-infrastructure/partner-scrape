@@ -1,0 +1,142 @@
+---
+import { getLogoPath, formatDate, truncate } from '../lib/helpers';
+
+interface Props {
+  opportunity: {
+    slug: string;
+    title: string;
+    partner_name: string;
+    description: string;
+    opportunity_type: string;
+    date_start: string;
+    cost_range: string;
+    age_grade_level: string[];
+    areas_of_interest: string[];
+    time_of_day: string[];
+    specific_attention: string[];
+    financial_support: string;
+    ngss_aligned: string;
+    logo_src: string;
+    latitude: string;
+    longitude: string;
+  };
+}
+
+const { opportunity: opp } = Astro.props;
+const logoPath = getLogoPath(opp.logo_src);
+const dateDisplay = formatDate(opp.date_start);
+---
+
+<article
+  class="opp-card card"
+  data-type={opp.opportunity_type}
+  data-age={opp.age_grade_level?.join(',')}
+  data-areas={opp.areas_of_interest?.join(',')}
+  data-cost={opp.cost_range}
+  data-time={opp.time_of_day?.join(',')}
+  data-financial={opp.financial_support}
+  data-ngss={opp.ngss_aligned}
+  data-attention={opp.specific_attention?.join(',')}
+  data-title={opp.title?.toLowerCase()}
+  data-desc={opp.description?.toLowerCase()?.slice(0, 300)}
+  data-lat={opp.latitude}
+  data-lng={opp.longitude}
+>
+  <div class="opp-card-top">
+    <img src={logoPath} alt={opp.partner_name} class="opp-card-logo" loading="lazy" />
+    <span class="tag tag-purple">{opp.opportunity_type}</span>
+  </div>
+  <h3><a href={`/opportunities/${opp.slug}`}>{opp.title}</a></h3>
+  <p class="opp-card-partner">{opp.partner_name}</p>
+  <div class="opp-card-meta">
+    <span class="opp-card-date">{dateDisplay}</span>
+    {opp.cost_range === 'Free'
+      ? <span class="tag tag-free">Free</span>
+      : <span class="opp-card-cost">{opp.cost_range}</span>
+    }
+  </div>
+  <div class="opp-card-tags">
+    {opp.age_grade_level?.map(a => <span class="tag tag-teal">{a}</span>)}
+  </div>
+  <p class="opp-card-desc">{truncate(opp.description, 120)}</p>
+  <a href={`/opportunities/${opp.slug}`} class="opp-card-link">Learn More →</a>
+</article>
+
+<style>
+  .opp-card {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+  }
+
+  .opp-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .opp-card-logo {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    border-radius: 4px;
+    background: #f8f8fc;
+  }
+
+  .opp-card h3 {
+    font-size: 18px;
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+  .opp-card h3 a {
+    color: var(--text-dark);
+  }
+  .opp-card h3 a:hover {
+    color: var(--purple);
+  }
+
+  .opp-card-partner {
+    font-size: 13px;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+
+  .opp-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+
+  .opp-card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 10px;
+  }
+
+  .opp-card-desc {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text);
+    flex-grow: 1;
+    margin-bottom: 12px;
+  }
+
+  .opp-card-link {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--purple);
+  }
+  .opp-card-link:hover {
+    color: var(--pink);
+  }
+
+  .opp-card[data-hidden] {
+    display: none;
+  }
+</style>

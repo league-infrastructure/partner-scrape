@@ -1,0 +1,34 @@
+---
+const orgTypes = [
+  'Afterschool/Out-of-School Time',
+  'Business & Industry',
+  'Museums, Science Centers & Zoos',
+  'Colleges, Universities, and Certificate/Credential Programs',
+  'Advocacy/Philanthropy & Government',
+  'CBOs, Family/Parent Organizations, Youth Organizing & Advisory Groups',
+  'District/School',
+  'Professional, Trade & Student Associations',
+  'Libraries',
+  'Curriculum Provider',
+];
+---
+
+<aside class="filter-sidebar collapsed" id="partner-filters">
+  <button class="btn filter-toggle" id="filter-toggle-btn">Filter Partners</button>
+
+  <div class="filter-group">
+    <div class="filter-group-title">Search</div>
+    <input type="text" class="filter-search" placeholder="Search name or description…" data-filter="search" />
+  </div>
+
+  <div class="filter-group">
+    <div class="filter-group-title">Organization Type</div>
+    {orgTypes.map(v => (
+      <label><input type="checkbox" data-filter="type" value={v} /> {v}</label>
+    ))}
+  </div>
+
+  <div class="filter-actions">
+    <button class="filter-clear" id="clear-filters">Clear All Filters</button>
+  </div>
+</aside>

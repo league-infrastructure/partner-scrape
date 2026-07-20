@@ -1,0 +1,216 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import OpportunityCard from '../components/OpportunityCard.astro';
+import opportunities from '../data/opportunities.json';
+import partners from '../data/partners.json';
+import { getLogoPath } from '../lib/helpers';
+
+// Featured: soonest upcoming, prefer free
+const now = new Date();
+const upcoming = opportunities
+  .filter(o => o.date_start && new Date(o.date_start) >= now)
+  .sort((a, b) => {
+    const aFree = a.cost_range === 'Free' ? 0 : 1;
+    const bFree = b.cost_range === 'Free' ? 0 : 1;
+    if (aFree !== bFree) return aFree - bFree;
+    return new Date(a.date_start).getTime() - new Date(b.date_start).getTime();
+  })
+  .slice(0, 4);
+
+// Partner logos: prefer those with active opportunities, take up to 16
+const activePartnerNames = new Set(opportunities.map(o => o.partner_name));
+const logoPartners = partners
+  .filter(p => p.logo_src)
+  .sort((a, b) => {
+    const aActive = activePartnerNames.has(a.name) ? 0 : 1;
+    const bActive = activePartnerNames.has(b.name) ? 0 : 1;
+    return aActive - bActive;
+  })
+  .slice(0, 16);
+---
+
+<BaseLayout title="SD STEM Ecosystem — Find STEM Opportunities in San Diego">
+  <!-- Hero -->
+  <section class="hero hero-home">
+    <div class="hero-inner">
+      <h1>We are creating a San Diego where everyone is connected to STEM learning opportunities.</h1>
+      <p class="hero-sub">Find programs, workshops, camps, and events for learners of all ages across San Diego County.</p>
+      <div class="hero-actions">
+        <a href="/opportunities" class="btn">Find Opportunities</a>
+        <a href="/partners" class="btn btn-outline-hero">View Partners</a>
+      </div>
+      <div class="hero-quick">
+        <a href="/opportunities?cost=Free" class="hero-tag">Free Programs</a>
+        <a href="/opportunities?age=Family" class="hero-tag">For Families</a>
+        <a href="/opportunities?type=Online" class="hero-tag">Online</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Opportunities -->
+  {upcoming.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <h2 class="text-center mb-3">Upcoming Opportunities</h2>
+        <div class="results-grid">
+          {upcoming.map(opp => <OpportunityCard opportunity={opp} />)}
+        </div>
+        <div class="text-center mt-3">
+          <a href="/opportunities" class="btn">View All Opportunities</a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- What We Do -->
+  <section class="section what-we-do">
+    <div class="container">
+      <h2 class="text-center mb-3">Why We Build a STEM Ecosystem</h2>
+      <div class="info-grid">
+        <div class="info-card card">
+          <div class="info-icon">🔍</div>
+          <h3>Find Opportunities</h3>
+          <p>Discover STEM programs—from camps to workshops—for learners of every age and background across San Diego.</p>
+        </div>
+        <div class="info-card card">
+          <div class="info-icon">🤝</div>
+          <h3>Connect Partners</h3>
+          <p>We bring together organizations, businesses, schools, and community groups to expand STEM access for all.</p>
+        </div>
+        <div class="info-card card">
+          <div class="info-icon">🚀</div>
+          <h3>Empower Tomorrow</h3>
+          <p>The next generation must be equipped to become the thinkers, problem solvers and innovators we need today and in the future.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Partner Logos -->
+  <section class="section">
+    <div class="container">
+      <h2 class="text-center mb-3">Our Partners</h2>
+      <div class="logo-grid">
+        {logoPartners.map(p => (
+          <a href={`/partners/${p.id}`} title={p.name}>
+            <img src={getLogoPath(p.logo_src)} alt={p.name} loading="lazy" />
+          </a>
+        ))}
+      </div>
+      <div class="text-center mt-3">
+        <a href="/partners" class="btn btn-secondary">View All Partners</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="ribbon ribbon-purple">
+    <div class="container">
+      <h2>Are you a STEM organization?</h2>
+      <p class="mt-1 mb-2">Join the San Diego STEM Ecosystem and help connect learners with opportunities.</p>
+      <a href="/contact" class="btn" style="background-image: linear-gradient(90deg, #c83e8e, #db8969);">Get In Touch</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero-home {
+    min-height: 500px;
+    padding: 140px 40px 80px;
+    background-image: linear-gradient(180deg, #101a33, #2e2255);
+  }
+
+  .hero-inner {
+    max-width: 650px;
+  }
+
+  .hero-sub {
+    font-size: 18px;
+    font-weight: 400;
+    margin-top: 16px;
+    opacity: 0.9;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 30px;
+    flex-wrap: wrap;
+  }
+
+  .btn-outline-hero {
+    background: transparent;
+    background-image: none;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    color: var(--white);
+    box-shadow: none;
+  }
+  .btn-outline-hero:hover {
+    background-image: none;
+    border-color: var(--white);
+    color: var(--white);
+  }
+
+  .hero-quick {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--white);
+    transition: background 200ms ease;
+  }
+  .hero-tag:hover {
+    background: rgba(255, 255, 255, 0.3);
+    color: var(--white);
+  }
+
+  .section {
+    padding: 60px 0;
+  }
+
+  .what-we-do {
+    background: var(--white);
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+
+  .info-icon {
+    font-size: 40px;
+    margin-bottom: 12px;
+  }
+
+  .info-card {
+    padding: 30px;
+    text-align: center;
+  }
+
+  .info-card h3 {
+    margin-bottom: 8px;
+  }
+
+  @media (max-width: 767px) {
+    .hero-home {
+      padding: 100px 20px 60px;
+      min-height: auto;
+    }
+    .hero-actions {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+</style>

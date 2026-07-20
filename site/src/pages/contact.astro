@@ -1,0 +1,120 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SocialIcon from '../components/SocialIcon.astro';
+---
+
+<BaseLayout title="Contact | SD STEM Ecosystem">
+  <section class="hero hero-sm">
+    <h1>Contact Us</h1>
+  </section>
+
+  <div class="contact-page container">
+    <div class="contact-grid">
+      <div class="contact-info">
+        <h2>Get In Touch</h2>
+        <p>Have questions about the SD STEM Ecosystem? Want to learn more about our programs or partner opportunities? We'd love to hear from you.</p>
+
+        <div class="contact-details">
+          <div class="contact-item">
+            <h3>Address</h3>
+            <p>1875 El Prado<br />San Diego, CA 92101</p>
+          </div>
+          <div class="contact-item">
+            <h3>Phone</h3>
+            <p><a href="tel:619-238-1233">(619) 238-1233</a></p>
+          </div>
+          <div class="contact-item">
+            <h3>Social</h3>
+            <div class="contact-social-icons">
+              <SocialIcon platform="facebook" url="https://www.facebook.com/groups/1462184020556689/about/" size={24} />
+              <SocialIcon platform="instagram" url="https://www.instagram.com/sdstemecosystem" size={24} />
+              <SocialIcon platform="linkedin" url="https://www.linkedin.com/groups/7054524" size={24} />
+              <SocialIcon platform="twitter" url="https://twitter.com/SDstemecosystem" size={24} />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-cta card">
+        <h2>Want to Add Your Organization?</h2>
+        <p>If you're a STEM organization in San Diego County and would like to be listed in our partner directory or share your opportunities, we'd love to connect with you.</p>
+        <p class="mt-2">Reach out to us by phone or through our social channels to learn how to join the ecosystem.</p>
+        <div class="mt-2">
+          <a href="https://donatenow.networkforgood.org/stemecosystem" target="_blank" rel="noopener" class="btn btn-secondary">Donate</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .hero-sm {
+    min-height: auto;
+    padding: 100px 20px 40px;
+  }
+
+  .contact-page {
+    padding: 40px 15px 60px;
+    max-width: 900px;
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    align-items: start;
+  }
+
+  .contact-info h2 {
+    margin-bottom: 12px;
+  }
+
+  .contact-info > p {
+    line-height: 1.8;
+    margin-bottom: 24px;
+  }
+
+  .contact-details {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .contact-item h3 {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    color: var(--purple);
+  }
+
+  .contact-social-icons {
+    display: flex;
+    gap: 14px;
+    margin-top: 4px;
+  }
+
+  .contact-item p {
+    line-height: 1.6;
+  }
+
+  .contact-cta {
+    text-align: left;
+    padding: 30px;
+  }
+
+  .contact-cta h2 {
+    font-size: 24px;
+    margin-bottom: 12px;
+  }
+
+  .contact-cta p {
+    line-height: 1.7;
+  }
+
+  @media (max-width: 767px) {
+    .contact-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
