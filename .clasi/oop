@@ -1,9 +1,0 @@
-Out-of-process mode for the iterative "make the site good" work phase.
-Stakeholder (Eric) authorized autonomous direct work: "I'm going to defer
-to you... you just keep going on making it a good site." (2026-07-19)
-
-Operational/tuning changes (model choice, source registry, running
-scrapes, loading the site) are made directly rather than through a sprint
-per change. Substantial new features still get tested code.
-
-Delete this file to re-enable the full CLASI SE process gates.
