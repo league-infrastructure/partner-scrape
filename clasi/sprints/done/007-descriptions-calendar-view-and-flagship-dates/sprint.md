@@ -1,7 +1,7 @@
 ---
 id: '007'
 title: Descriptions, calendar view, and flagship dates
-status: planning-docs
+status: closed
 branch: sprint/007-descriptions-calendar-view-and-flagship-dates
 worktree: false
 use-cases:
