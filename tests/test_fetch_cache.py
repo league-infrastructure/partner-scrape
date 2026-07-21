@@ -285,6 +285,71 @@ class TestConditionalGet:
         }
 
 
+class TestExtraHeaders:
+    """``PoliteFetcher.get(..., headers=...)`` -- added for the
+    leaguesync adapter's ``Authorization: Bearer ...`` requirement (see
+    adapters/leaguesync.py). Every caller before this addition passed no
+    ``headers`` at all; these tests cover the new optional argument
+    without touching any of that existing behavior.
+    """
+
+    def test_caller_supplied_headers_are_forwarded_to_the_underlying_fetcher(self, tmp_path):
+        url = "https://sync.jtlapp.net/query?sql=SELECT+1"
+        robots_url = "https://sync.jtlapp.net/robots.txt"
+        fetcher = FixtureFetcher(
+            {
+                robots_url: _response(robots_url, status=404),
+                url: _response(url, status=200, body='[{"ok":1}]'),
+            }
+        )
+        polite = PoliteFetcher(cache_dir=tmp_path, fetcher=fetcher)
+
+        polite.get(url, headers={"Authorization": "Bearer test-token"})
+
+        url_calls = [headers for call_url, headers in fetcher.calls if call_url == url]
+        assert url_calls == [{"Authorization": "Bearer test-token"}]
+
+    def test_no_headers_argument_still_sends_empty_dict_as_before(self, tmp_path):
+        url = "https://example.org/api/events"
+        robots_url = "https://example.org/robots.txt"
+        fetcher = FixtureFetcher(
+            {
+                robots_url: _response(robots_url, body=_read_fixture("robots_allow_all.txt")),
+                url: _response(url, status=200, body="body"),
+            }
+        )
+        polite = PoliteFetcher(cache_dir=tmp_path, fetcher=fetcher)
+
+        polite.get(url)
+
+        url_calls = [headers for call_url, headers in fetcher.calls if call_url == url]
+        assert url_calls == [{}]
+
+    def test_caller_headers_merge_with_conditional_headers_on_a_repeat_fetch(self, tmp_path):
+        url = "https://sync.jtlapp.net/query?sql=SELECT+1"
+        robots_url = "https://sync.jtlapp.net/robots.txt"
+        etag = '"abc123"'
+        first = _response(url, status=200, headers={"ETag": etag}, body="body-v1")
+        second = _response(url, status=304, headers={}, body="")
+        fetcher = FixtureFetcher(
+            {
+                robots_url: _response(robots_url, status=404),
+                url: [first, second],
+            }
+        )
+        polite = PoliteFetcher(cache_dir=tmp_path, fetcher=fetcher)
+
+        polite.get(url, headers={"Authorization": "Bearer test-token"})
+        polite.get(url, headers={"Authorization": "Bearer test-token"})
+
+        url_calls = [headers for call_url, headers in fetcher.calls if call_url == url]
+        assert url_calls[0] == {"Authorization": "Bearer test-token"}
+        assert url_calls[1] == {
+            "If-None-Match": etag,
+            "Authorization": "Bearer test-token",
+        }
+
+
 class TestReuseOn304:
     def test_304_reuses_cached_body_and_does_not_rewrite_it(self, tmp_path):
         url = "https://example.org/api/events"

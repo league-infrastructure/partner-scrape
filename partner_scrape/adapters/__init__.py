@@ -23,6 +23,7 @@ from partner_scrape.adapters.bibliocommons import BiblioCommonsAdapter
 from partner_scrape.adapters.generic_html import GenericHtmlAdapter
 from partner_scrape.adapters.greenhouse import GreenhouseAdapter
 from partner_scrape.adapters.ical import ICalAdapter
+from partner_scrape.adapters.leaguesync import LeagueSyncAdapter
 from partner_scrape.adapters.lever import LeverAdapter
 from partner_scrape.adapters.listing_html import ListingHtmlAdapter
 from partner_scrape.adapters.localist import LocalistAdapter
@@ -38,6 +39,7 @@ ADAPTERS["listing_html"] = ListingHtmlAdapter
 ADAPTERS["greenhouse"] = GreenhouseAdapter
 ADAPTERS["lever"] = LeverAdapter
 ADAPTERS["bibliocommons"] = BiblioCommonsAdapter
+ADAPTERS["leaguesync"] = LeagueSyncAdapter
 
 __all__ = [
     "Adapter",
@@ -56,4 +58,5 @@ __all__ = [
     "GreenhouseAdapter",
     "LeverAdapter",
     "BiblioCommonsAdapter",
+    "LeagueSyncAdapter",
 ]

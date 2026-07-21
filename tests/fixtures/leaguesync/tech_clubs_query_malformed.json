@@ -1,0 +1,32 @@
+[
+  {
+    "id": "900201",
+    "title": "",
+    "description": "This row has no title and must be skipped.",
+    "date_time": "2026-09-03T18:00:00-07:00",
+    "event_url": "https://www.meetup.com/the-league-tech-club/events/900201/",
+    "featured_photo_url": "",
+    "venue_id": "90003",
+    "venue_name": "Synthetic Venue",
+    "address": "1 Synthetic Way",
+    "city": "San Diego",
+    "state": "CA",
+    "lat": 32.8,
+    "lon": -117.2
+  },
+  {
+    "id": "900202",
+    "title": "Synthetic Valid Tech Club",
+    "description": "A hand-authored valid row, for per-record error isolation coverage.",
+    "date_time": "2026-09-04T18:00:00-07:00",
+    "event_url": "https://www.meetup.com/the-league-tech-club/events/900202/",
+    "featured_photo_url": "https://secure-content.meetupstatic.com/images/classic-events/synthetic.jpg",
+    "venue_id": "90004",
+    "venue_name": "Robot Garage",
+    "address": "1370 Wilbur Ave",
+    "city": "San Diego",
+    "state": "CA",
+    "lat": 32.806553,
+    "lon": -117.24726
+  }
+]

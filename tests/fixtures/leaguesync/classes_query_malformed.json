@@ -1,0 +1,38 @@
+[
+  {
+    "service_id": 900001,
+    "name": "",
+    "description": "This row has no name and must be skipped.",
+    "description_short": "",
+    "category_name": "Camps",
+    "service_type": "Course",
+    "occurrence_id": 900101,
+    "start_at": "2026-09-01T17:00:00Z",
+    "end_at": "2026-09-01T19:00:00Z",
+    "location_id": 90001,
+    "location_name": "Synthetic Campus",
+    "city": "San Diego",
+    "latitude": 32.9,
+    "longitude": -117.2,
+    "formatted_address": "",
+    "timezone": "America/Los_Angeles"
+  },
+  {
+    "service_id": 900002,
+    "name": "Synthetic Valid Class",
+    "description": "<p>A hand-authored valid row, for per-record error isolation coverage.</p>",
+    "description_short": "",
+    "category_name": "Camps",
+    "service_type": "Course",
+    "occurrence_id": 900102,
+    "start_at": "2026-09-02T17:00:00Z",
+    "end_at": "2026-09-02T19:00:00Z",
+    "location_id": 90002,
+    "location_name": "Synthetic Campus 2",
+    "city": "San Diego",
+    "latitude": 32.91,
+    "longitude": -117.21,
+    "formatted_address": "",
+    "timezone": "America/Los_Angeles"
+  }
+]

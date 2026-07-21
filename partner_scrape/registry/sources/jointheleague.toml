@@ -18,10 +18,19 @@
 # org_name matches stem-ecosystem's partners.json's existing entry (id
 # 287, "The LEAGUE of Amazing Programmers") so normalize.partners.find_partner
 # joins automatically -- no site-repo change needed.
+#
+# DISABLED (OOP, 2026-07-20): superseded by registry/sources/leaguesync.toml,
+# the adapter_type="leaguesync" source pulling directly from the League's
+# own sync.jtlapp.net query API. This generic_html scrape of
+# jointheleague.org/classes could recover titles/descriptions but never
+# real schedules or dates -- the static site's /classes/* pages don't
+# publish occurrence dates, only Pike13's booking widget (which
+# sync.jtlapp.net syncs from directly) does. Left registered-but-disabled
+# rather than deleted so its config/history stays in the repo.
 
 org_name = "The LEAGUE of Amazing Programmers"
 adapter_type = "generic_html"
-enabled = true
+enabled = false
 
 [config]
 site_url = "https://www.jointheleague.org"

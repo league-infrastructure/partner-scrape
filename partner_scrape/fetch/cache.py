@@ -190,8 +190,18 @@ class PoliteFetcher:
         url: str,
         rate_limit_seconds: float = DEFAULT_RATE_LIMIT_SECONDS,
         respect_robots: bool = True,
+        headers: dict[str, str] | None = None,
     ) -> FetchResponse:
         """Politely, cache-aware-ly retrieve ``url``.
+
+        ``headers`` are caller-supplied extras (e.g. an authenticated
+        adapter's ``Authorization: Bearer ...``) merged on top of the
+        conditional-GET headers this method derives from the on-disk
+        cache -- added for the ``leaguesync`` adapter, whose queries
+        require a Bearer token the shared ``Fetcher`` protocol already
+        supports (``Fetcher.get(url, headers=...)``) but this class's
+        signature didn't yet expose to callers. Every existing caller
+        passes no ``headers`` and is unaffected.
 
         Raises:
             RobotsDisallowed: ``respect_robots`` is true and ``url`` is
@@ -217,10 +227,10 @@ class PoliteFetcher:
         # concurrent.
         with self._cache_lock:
             cached_entry = read_cache_entry(self.cache_dir, url)
-        headers = conditional_headers(cached_entry)
+        request_headers = {**conditional_headers(cached_entry), **(headers or {})}
 
         self.throttle.wait(domain_of(url), rate_limit_seconds)
-        response = self.fetcher.get(url, headers=headers)
+        response = self.fetcher.get(url, headers=request_headers)
 
         if response.status == 304 and cached_entry is not None:
             fetched_at = self._clock()

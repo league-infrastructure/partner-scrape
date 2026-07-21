@@ -28,6 +28,23 @@ SCRAPE_CACHE_DIR_ENV_VAR = "SCRAPE_CACHE_DIR"
 #: path used by Site Export (ticket 007).
 SITE_DIR_ENV_VAR = "SITE_DIR"
 
+#: Environment variable holding the Bearer token for the League's own
+#: sync.jtlapp.net query API (``leaguesync`` adapter). Assembled by
+#: dotconfig into ``config/prod/secrets.env`` -- there is no sane
+#: default, so it must be set explicitly, matching
+#: ``get_scrape_cache_dir``'s convention.
+LEAGUESYNC_API_KEY_ENV_VAR = "LEAGUESYNC_API_KEY"
+
+#: Environment variable overriding the ``leaguesync`` adapter's API base
+#: URL. Overridable so a future staging/mirror deployment of
+#: sync.jtlapp.net doesn't require a code change.
+LEAGUESYNC_URL_ENV_VAR = "LEAGUESYNC_URL"
+
+#: Default base URL for the League's sync.jtlapp.net query API --
+#: confirmed live (``GET /query?sql=...``) during the leaguesync
+#: adapter's build.
+DEFAULT_LEAGUESYNC_URL = "https://sync.jtlapp.net"
+
 # This package's own directory, e.g. .../partner-scrape/partner_scrape
 _PACKAGE_DIR = Path(__file__).resolve().parent
 
@@ -73,3 +90,43 @@ def get_site_dir() -> Path:
     if value:
         return Path(value)
     return DEFAULT_SITE_DIR
+
+
+def get_leaguesync_api_key() -> str:
+    """Return the Bearer token for sync.jtlapp.net, stripped of quotes.
+
+    Reads ``LEAGUESYNC_API_KEY`` from the environment on every call (no
+    caching), matching ``get_scrape_cache_dir``'s pattern so tests can
+    monkeypatch ``os.environ`` freely. The value observed in the
+    assembled ``.env`` carries surrounding single quotes (dotconfig's
+    round-trip of a SOPS-decrypted secret, e.g. ``LEAGUESYNC_API_KEY='abc123'``)
+    -- stripped here so callers get the bare token, never the quote
+    characters.
+
+    Raises:
+        RuntimeError: if ``LEAGUESYNC_API_KEY`` is not set (or is empty
+            after stripping) -- there is no safe default for an API
+            credential, matching ``get_scrape_cache_dir``'s convention.
+    """
+    value = os.environ.get(LEAGUESYNC_API_KEY_ENV_VAR)
+    if value is not None:
+        value = value.strip().strip("'\"").strip()
+    if not value:
+        raise RuntimeError(
+            f"{LEAGUESYNC_API_KEY_ENV_VAR} is not set. Configure it via the "
+            "assembled .env (see config/prod/secrets.env) before running "
+            "the leaguesync adapter."
+        )
+    return value
+
+
+def get_leaguesync_url() -> str:
+    """Return the ``leaguesync`` adapter's API base URL.
+
+    Reads ``LEAGUESYNC_URL`` from the environment if set; otherwise
+    returns :data:`DEFAULT_LEAGUESYNC_URL`.
+    """
+    value = os.environ.get(LEAGUESYNC_URL_ENV_VAR)
+    if value:
+        return value
+    return DEFAULT_LEAGUESYNC_URL

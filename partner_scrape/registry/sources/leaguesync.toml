@@ -1,0 +1,35 @@
+# The LEAGUE of Amazing Programmers -- authoritative source for League
+# classes AND free tech clubs, via the League's own read-only query API
+# (sync.jtlapp.net) over its Pike13 (classes) + Meetup (tech clubs) data.
+#
+# Supersedes registry/sources/jointheleague.toml's generic_html scrape
+# of jointheleague.org/classes: that source (now disabled, see its own
+# file) could recover titles/descriptions from the static site but never
+# real schedules/dates -- jointheleague.org's public pages don't publish
+# occurrence dates, only Pike13's booking widget does. This API exposes
+# exactly that data directly.
+#
+# org_name matches stem-ecosystem's partners.json's existing entry (id
+# 287, "The LEAGUE of Amazing Programmers" -- same string
+# jointheleague.toml already used) so normalize.partners.find_partner
+# joins automatically, no site-repo change needed.
+#
+# Auth: Authorization: Bearer <token> -- config.get_leaguesync_api_key()
+# reads LEAGUESYNC_API_KEY from the assembled .env (config/prod/secrets.env,
+# SOPS-encrypted). Confirmed live: GET /query?sql=SELECT 1 as ok ->
+# [{"ok":1}].
+
+org_name = "The LEAGUE of Amazing Programmers"
+adapter_type = "leaguesync"
+enabled = true
+
+[config]
+api_base = "https://sync.jtlapp.net"
+
+[acquisition_policy]
+# Not a scraped HTML site -- no robots.txt to respect (sync.jtlapp.net/robots.txt
+# 404s live, which is_allowed() already treats as allow-all, but set
+# explicitly here since this is a same-origin API call, not a page fetch).
+respect_robots = false
+rate_limit_seconds = 1.0
+discovered_via = "OOP build, 2026-07-20 -- live-verified against sync.jtlapp.net (classes: Java/Python/Robotics/Camps; tech clubs: FTC robot-driving workshops)"

@@ -244,18 +244,29 @@ class TestRealFleetScienceCenterSource:
 
 
 class TestRealJoinTheLeagueSource:
-    """The real jointheleague.toml generic_html source (sprint 005 ticket 002)."""
+    """The real jointheleague.toml generic_html source (sprint 005 ticket 002).
 
-    def test_loads_as_enabled_generic_html_source(self):
-        sources = {s.source_id: s for s in load_active_sources()}
+    Disabled (OOP, 2026-07-20) by the leaguesync adapter's addition: this
+    generic_html scrape of jointheleague.org/classes could recover
+    titles/descriptions but never real schedules/dates, so
+    registry/sources/leaguesync.toml (adapter_type="leaguesync", pulling
+    directly from the League's own sync.jtlapp.net query API) is now the
+    authoritative source for League classes. This source stays
+    registered -- config/history preserved -- just disabled, so these
+    tests read via ``load_sources()`` (includes disabled entries) rather
+    than ``load_active_sources()``.
+    """
+
+    def test_loads_as_disabled_generic_html_source(self):
+        sources = {s.source_id: s for s in load_sources()}
 
         league = sources["jointheleague"]
         assert league.org_name == "The LEAGUE of Amazing Programmers"
         assert league.adapter_type == "generic_html"
-        assert league.enabled is True
+        assert league.enabled is False
 
     def test_config_matches_live_confirmed_values(self):
-        sources = {s.source_id: s for s in load_active_sources()}
+        sources = {s.source_id: s for s in load_sources()}
 
         league = sources["jointheleague"]
         assert league.config["site_url"] == "https://www.jointheleague.org"
@@ -264,15 +275,44 @@ class TestRealJoinTheLeagueSource:
         # after ticket 001's parse-based-acceptance hardening.
         assert league.config["sitemap_url"] == "https://www.jointheleague.org/sitemap-index.xml"
 
+    def test_excluded_from_active_sources(self):
+        # Disabled sources must never be dispatched by a real run --
+        # load_active_sources() is the Pipeline's actual enumeration
+        # call (pipeline.py), so this is the real behavioral guarantee
+        # "disabled" provides.
+        sources = {s.source_id: s for s in load_active_sources()}
+        assert "jointheleague" not in sources
+
     def test_no_invalid_source_config_raised_loading_the_real_registry(self):
         # SUC-003's precondition: registry/sources/jointheleague.toml is
         # registered and loads with no InvalidSourceConfig -- proven
-        # simply by load_active_sources() completing and including it
+        # simply by load_sources() completing and including it
         # (InvalidSourceConfig would have been logged-and-skipped, not
         # raised, so the real assertion is presence, matching this
         # class's other tests).
-        sources = {s.source_id: s for s in load_active_sources()}
+        sources = {s.source_id: s for s in load_sources()}
         assert "jointheleague" in sources
+
+
+class TestRealLeagueSyncSource:
+    """The real leaguesync.toml source (OOP, 2026-07-20): the League's own
+    sync.jtlapp.net query API, now authoritative for League classes +
+    free tech clubs -- see registry/sources/leaguesync.toml.
+    """
+
+    def test_loads_as_enabled_leaguesync_source(self):
+        sources = {s.source_id: s for s in load_active_sources()}
+
+        leaguesync = sources["leaguesync"]
+        assert leaguesync.org_name == "The LEAGUE of Amazing Programmers"
+        assert leaguesync.adapter_type == "leaguesync"
+        assert leaguesync.enabled is True
+
+    def test_config_matches_live_confirmed_api_base(self):
+        sources = {s.source_id: s for s in load_active_sources()}
+
+        leaguesync = sources["leaguesync"]
+        assert leaguesync.config["api_base"] == "https://sync.jtlapp.net"
 
 
 class TestRealCompanySeedSources:
