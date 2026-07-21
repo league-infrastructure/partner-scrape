@@ -1,5 +1,6 @@
 ---
 import { getLogoPath, formatDate, truncate } from '../lib/helpers';
+import { descriptionToPlainText } from '../lib/markdown';
 
 interface Props {
   opportunity: {
@@ -59,7 +60,7 @@ const dateDisplay = formatDate(opp.date_start);
   <div class="opp-card-tags">
     {opp.age_grade_level?.map(a => <span class="tag tag-teal">{a}</span>)}
   </div>
-  <p class="opp-card-desc">{truncate(opp.description, 120)}</p>
+  <p class="opp-card-desc">{truncate(descriptionToPlainText(opp.description), 120)}</p>
   <a href={`${base}/opportunities/${opp.slug}`} class="opp-card-link">Learn More →</a>
 </article>
 

@@ -1,8 +1,9 @@
 ---
 id: '001'
 title: Markdown & entity rendering for opportunity descriptions
-status: open
-use-cases: [SUC-001]
+status: done
+use-cases:
+- SUC-001
 depends-on: []
 github-issue: ''
 issue: 15-render-markdown-in-descriptions.md
@@ -74,22 +75,22 @@ network fetch or external CDN/font.
 
 ## Acceptance Criteria
 
-- [ ] A LeagueSync/Pike13 class detail page renders real bold text and
+- [x] A LeagueSync/Pike13 class detail page renders real bold text and
       paragraph breaks — not literal `**` or run-on text with no breaks.
-- [ ] A description containing `&#8211;`/`&#8217;` (or similar numeric
+- [x] A description containing `&#8211;`/`&#8217;` (or similar numeric
       entities) shows the real em-dash/curly-apostrophe character, on
       both the detail page and the card preview.
-- [ ] Card previews never show `**`, a literal `\n`, or a raw numeric
+- [x] Card previews never show `**`, a literal `\n`, or a raw numeric
       HTML entity — only clean truncated plain text.
-- [ ] No unescaped third-party HTML reaches the DOM: feed
+- [x] No unescaped third-party HTML reaches the DOM: feed
       `renderDescriptionHtml` a description containing a deliberately
       unsafe fragment (e.g. `<script>alert(1)</script>` or an inline
       `onerror=` handler) and confirm the sanitizer strips it from the
       output.
-- [ ] A description that is empty, `null`, or has no Markdown/entity
+- [x] A description that is empty, `null`, or has no Markdown/entity
       content renders exactly as it does today (no regression, no
       crash) — both functions handle this input without throwing.
-- [ ] `npm run build` (in `site/`) succeeds with no errors or warnings
+- [x] `npm run build` (in `site/`) succeeds with no errors or warnings
       about the new dependency.
 
 ## Testing

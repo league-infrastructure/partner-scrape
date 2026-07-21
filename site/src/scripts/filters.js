@@ -9,7 +9,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const sidebar = document.querySelector('.filter-sidebar');
   if (!sidebar) return;
 
-  const cards = document.querySelectorAll('[data-type]');
+  // Scoped to the card grid only. Do NOT widen this back to a page-wide
+  // `[data-type]` selector: the Opportunities page (sprint 007, ticket
+  // 007-002) also renders a Calendar view whose day-entries carry the
+  // same data-* attributes so they can be filtered by the same
+  // mechanism. If `cards` swept those up too, "Showing X of Y" would
+  // double-count every dated opportunity whenever Calendar is present in
+  // the DOM. Calendar entries are queried separately below and kept out
+  // of this count on purpose — see sprint.md's Design Rationale.
+  const cards = document.querySelectorAll('#results-grid [data-type]');
+  // Calendar view's day-entries (absent on pages with no calendar), kept
+  // as a separate element set from `cards` for the same reason as above.
+  const calendarEntries = document.querySelectorAll('#calendar-container [data-type]');
   const checkboxes = sidebar.querySelectorAll('input[type="checkbox"]');
   const searchInput = sidebar.querySelector('.filter-search');
   const clearBtn = document.getElementById('clear-filters');
@@ -36,40 +47,45 @@ document.addEventListener('DOMContentLoaded', () => {
     link.addEventListener('click', (e) => { e.preventDefault(); clearSection(link); });
   });
 
+  // Shared match predicate for one element (a card OR a calendar entry).
+  // Extracted so List's cards and Calendar's day-entries are filtered by
+  // exactly one algorithm — see the `cards`/`calendarEntries` comment
+  // above for why they're still queried, counted, and shown/hidden as
+  // two separate element sets.
+  function matchesFilters(el, activeFilters, searchTerm) {
+    // Text search: match against title+desc or name+desc
+    if (searchTerm) {
+      const title = el.dataset.title || el.dataset.name || '';
+      const desc = el.dataset.desc || '';
+      if (!title.includes(searchTerm) && !desc.includes(searchTerm)) {
+        return false;
+      }
+    }
+
+    // Checkbox filters: AND across groups, OR within
+    for (const [filterKey, checkedValues] of Object.entries(activeFilters)) {
+      if (checkedValues.length === 0) continue;
+
+      const elValue = el.dataset[filterKey] || '';
+      const elValues = elValue.split(',').map(v => v.trim());
+
+      // OR within group: element must have at least one matching value
+      const hasMatch = checkedValues.some(cv => elValues.includes(cv));
+      if (!hasMatch) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   function applyFilters() {
     const activeFilters = getActiveFilters();
     const searchTerm = searchInput?.value.toLowerCase().trim() || '';
     let visibleCount = 0;
 
     cards.forEach(card => {
-      let show = true;
-
-      // Text search: match against title+desc or name+desc
-      if (searchTerm) {
-        const title = card.dataset.title || card.dataset.name || '';
-        const desc = card.dataset.desc || '';
-        if (!title.includes(searchTerm) && !desc.includes(searchTerm)) {
-          show = false;
-        }
-      }
-
-      // Checkbox filters: AND across groups, OR within
-      if (show) {
-        for (const [filterKey, checkedValues] of Object.entries(activeFilters)) {
-          if (checkedValues.length === 0) continue;
-
-          const cardValue = card.dataset[filterKey] || '';
-          const cardValues = cardValue.split(',').map(v => v.trim());
-
-          // OR within group: card must have at least one matching value
-          const hasMatch = checkedValues.some(cv => cardValues.includes(cv));
-          if (!hasMatch) {
-            show = false;
-            break;
-          }
-        }
-      }
-
+      const show = matchesFilters(card, activeFilters, searchTerm);
       if (show) {
         card.removeAttribute('data-hidden');
         card.style.display = '';
@@ -80,9 +96,25 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
+    // `cards.length` is the denominator on purpose: it must reflect only
+    // the card grid, unaffected by whether Calendar is open or how many
+    // (duplicate, per-day) entries it renders for the same opportunities.
     if (countEl) {
       countEl.textContent = `Showing ${visibleCount} of ${cards.length}`;
     }
+
+    // Second pass: same predicate, applied to Calendar's day-entries.
+    // Deliberately NOT folded into visibleCount/cards.length above.
+    calendarEntries.forEach(entry => {
+      const show = matchesFilters(entry, activeFilters, searchTerm);
+      if (show) {
+        entry.removeAttribute('data-hidden');
+        entry.style.display = '';
+      } else {
+        entry.setAttribute('data-hidden', '');
+        entry.style.display = 'none';
+      }
+    });
   }
 
   function getActiveFilters() {

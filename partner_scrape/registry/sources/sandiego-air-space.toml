@@ -1,17 +1,45 @@
-# San Diego Air & Space Museum -- registered as a generic_html source for the real-scrape
-# exercise (2026-07-19). Event URLs are discovered via the site's
-# sitemap (discovery/sitemap.py probes sitemap_index.xml / sitemap.xml /
-# sitemap-index.xml in order) and extracted with the standard ladder.
+# San Diego Air & Space Museum -- registered as a listing_html source
+# (sprint 007 ticket 004; originally registered generic_html/sitemap-only
+# for the real-scrape exercise on 2026-07-19). Sprint 007 ticket 003's
+# live investigation confirmed sitemap_index.xml, sitemap.xml,
+# sitemap-index.xml, and wp-sitemap.xml all return a clean HTTP 404 (no
+# real sitemap at any conventional path, and robots.txt declares none),
+# so sitemap-based Discovery always resolved zero candidate URLs for this
+# source. The real events listing is /calendar (HTTP 200), linking to
+# genuine per-event detail pages under /calendar/event/{slug} -- resolved
+# via Listing-Page Discovery (discovery/listing.py), mirroring
+# fleet-science-center.toml's pattern. Detail pages carry no JSON-LD or
+# <time> markup; their genuine event date is plain server-rendered body
+# text recovered by the extraction ladder's body-regex rung (no headless
+# fetch needed -- ticket 003 confirmed every date found was present in
+# the raw, non-JS-rendered HTML).
+#
+# Known noise (verified live, ticket 004, 2026-07-21): the /calendar
+# page's own month-navigation and filter tabs (e.g. /calendar/2026/06,
+# /calendar/featured, /calendar/virtual-events, /calendar/past-events)
+# also match the shared EVENT_PATH_RE "calendar" pattern and get
+# discovered alongside the real /calendar/event/{slug} pages -- shared
+# discovery/sitemap.py pattern, not narrowed per-source (would risk
+# breaking sdnhm.toml's sitemap discovery, whose real event pages are
+# themselves bare /calendar/{slug} with no "/event/" segment). These
+# extra pages mostly resolve undated or past-dated and are excluded the
+# same way SDNHM's non-instance /calendar/* pages already are (SUC-003's
+# Alternate Flow) -- tolerated noise, not a discovery bug. Detail pages
+# (real and noise alike) also inherit the site's generic sitewide
+# title/description in meta tags rather than an event-specific one
+# (ticket 003's finding); sprint 002's LLM Enricher is the existing,
+# already-built mechanism for improving this in non-`--no-enrich` runs.
 # Balboa Park aerospace museum; STEM programs, exhibitions, events.
 # org_name matches the exact name in data/partners_viable.csv so the
 # stem-ecosystem partner join resolves.
 
 org_name = "San Diego Air & Space Museum"
-adapter_type = "generic_html"
+adapter_type = "listing_html"
 enabled = true
 
 [config]
 site_url = "https://sandiegoairandspace.org"
+listing_urls = ["/calendar"]
 
 [acquisition_policy]
 rate_limit_seconds = 1.0

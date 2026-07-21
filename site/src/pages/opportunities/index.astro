@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import OpportunityFilters from '../../components/OpportunityFilters.astro';
 import OpportunityCard from '../../components/OpportunityCard.astro';
+import CalendarView from '../../components/CalendarView.astro';
 import opportunities from '../../data/opportunities.json';
 
 // Sort by date_start ascending (soonest first), undated at end
@@ -26,11 +27,15 @@ const sorted = [...opportunities].sort((a, b) => {
         <span class="results-count">Showing {sorted.length} of {sorted.length}</span>
         <div class="view-toggle">
           <button class="active" data-view="grid">List</button>
+          <button data-view="calendar">Calendar</button>
           <button data-view="map">Map</button>
         </div>
       </div>
       <div class="results-grid" id="results-grid">
         {sorted.map(opp => <OpportunityCard opportunity={opp} />)}
+      </div>
+      <div class="calendar-container" id="calendar-container" style="display:none;">
+        <CalendarView opportunities={sorted} />
       </div>
       <div class="map-container" id="map-container" style="display:none;"></div>
     </div>
@@ -40,25 +45,23 @@ const sorted = [...opportunities].sort((a, b) => {
 <script src="../../scripts/filters.js"></script>
 
 <script>
-  // Map/list toggle
+  // List/Calendar/Map toggle
   const viewBtns = document.querySelectorAll('.view-toggle button');
   const grid = document.getElementById('results-grid');
+  const calendarContainer = document.getElementById('calendar-container');
   const mapContainer = document.getElementById('map-container');
 
   viewBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       viewBtns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      if (btn.dataset.view === 'map') {
-        if (grid) grid.style.display = 'none';
-        if (mapContainer) {
-          mapContainer.style.display = 'block';
-          initMap();
-        }
-      } else {
-        if (grid) grid.style.display = '';
-        if (mapContainer) mapContainer.style.display = 'none';
-      }
+
+      const view = (btn as HTMLElement).dataset.view;
+      if (grid) grid.style.display = view === 'grid' ? '' : 'none';
+      if (calendarContainer) calendarContainer.style.display = view === 'calendar' ? '' : 'none';
+      if (mapContainer) mapContainer.style.display = view === 'map' ? 'block' : 'none';
+
+      if (view === 'map') initMap();
     });
   });
 
