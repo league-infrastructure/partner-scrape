@@ -135,6 +135,81 @@ class TestBodyRegexRung:
         assert fields["title"] == ("Astronomy Talk", CONFIDENCE_TITLE_FALLBACK)
 
 
+class TestBodyRegexScriptStyleExcluded:
+    """Sprint 007 ticket 004: ``_extract_body_regex`` must not treat
+    ``<script>``/``<style>`` element text as visible page content --
+    ticket 003's investigation found ``lxml``'s ``text_content()``
+    includes it by default, which can surface a stale/irrelevant
+    "date" (e.g. a JS comment) ahead of the genuine one in scan order.
+    """
+
+    def test_date_inside_script_tag_is_ignored_in_favor_of_the_real_body_date(self):
+        html = _read_fixture("body_regex_script_excluded.html")
+
+        fields = extract_fields(html, "https://example.org/events/planetarium-night/")
+
+        # "January 1, 2020" lives inside a <script> comment ahead of the
+        # real date in document order; the old raw text_content()-based
+        # scan would have matched it first. It must never win.
+        assert fields["start"] == (datetime(2026, 8, 29), CONFIDENCE_BODY_REGEX)
+
+
+class TestBodyRegexCommentExcluded:
+    """Sprint 007 ticket 004: a date living inside an HTML *comment*
+    (``<!--...-->``) must never be treated as page content.
+
+    This is the exact real-world failure caught during this ticket's
+    live verification against SDNHM: a dead "From the blog" sidebar
+    widget, wrapped in an HTML comment (a stale/placeholder "March 9,
+    2015" post), appears -- commented out -- on genuinely undated,
+    evergreen program pages across the site. lxml's tree iteration
+    yields ``Comment`` nodes as ordinary children, and a comment node's
+    ``.text`` holds its *entire* raw body -- an early version of
+    :func:`_visible_text_parts` that only checked element *tags*
+    (``script``/``style``) missed this and surfaced the buried 2015
+    date as if it were the real event date on nearly every SDNHM page.
+    """
+
+    def test_date_inside_html_comment_is_ignored_leaving_page_undated(self):
+        html = _read_fixture("body_regex_comment_excluded.html")
+
+        fields = extract_fields(html, "https://example.org/calendar/camp-o-saurus/")
+
+        # The only "Month DD, YYYY"-shaped text anywhere on this page is
+        # the commented-out widget's stale date -- correctly finding
+        # nothing (not the stale 2015 date) matches ticket 003's own
+        # finding that genuinely evergreen program pages have no
+        # instance date and must stay undated, not get a fabricated one.
+        assert "start" not in fields
+        assert fields["title"] == ("Camp-o-Saurus", CONFIDENCE_TITLE_FALLBACK)
+
+
+class TestBodyRegexWidenedWindow:
+    """Sprint 007 ticket 004: the fix for SDNHM/Air & Space/Fleet's
+    missed dates -- ticket 003 found genuine dates at *visible*-text
+    offsets of 3274-9357 characters, past the original unconditional
+    3000-character raw-text cutoff. This reproduces that shape: an
+    inline ``<style>`` block plus a large repeated nav menu ahead of a
+    real event date, pushing it past 3000 characters of *visible* text
+    too -- proving script/style exclusion alone would not have been
+    enough; the widened scan window is what recovers it.
+    """
+
+    def test_date_past_the_old_3000_char_window_behind_style_and_nav_noise_is_found(self):
+        html = _read_fixture("body_regex_past_old_window.html")
+
+        fields = extract_fields(
+            html,
+            "https://example.org/calendar/event/kit-model-aviation-collectible-swap-meet-2026",
+        )
+
+        assert fields["start"] == (datetime(2026, 6, 13), CONFIDENCE_BODY_REGEX)
+        assert fields["title"] == (
+            "Kit Model Aviation Collectible Swap Meet",
+            CONFIDENCE_TITLE_FALLBACK,
+        )
+
+
 class TestNoTitleAnywhere:
     def test_no_title_page_yields_no_title_field(self):
         html = _read_fixture("no_title.html")

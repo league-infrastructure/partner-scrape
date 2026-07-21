@@ -94,6 +94,26 @@ _BODY_DATE_RE = re.compile(
     re.IGNORECASE,
 )
 
+#: Element tags whose text is never visible to a reader -- excluded when
+#: computing the body-regex rung's scan text (see :func:`_visible_body_text`).
+_HIDDEN_TEXT_TAGS = frozenset({"script", "style"})
+
+#: Body-text scan limit for the body-regex rung, applied *after*
+#: stripping ``<script>``/``<style>`` text (see :func:`_visible_body_text`).
+#: Sprint 007's investigation (ticket 003) fetched five real pages across
+#: three different flagship-museum sites and found a genuine, correctly
+#: formatted "Month DD, YYYY" date on every one -- always past the
+#: original unconditional 3000-character raw ``text_content()`` cutoff
+#: (which never excluded invisible script/style text to begin with), at
+#: measured *visible*-text offsets ranging 3274-9357 characters. This
+#: limit is set well past the highest offset found, with headroom for
+#: normal page drift, while still bounding the rung's exposure to
+#: content deep in a page's footer/"related articles" widgets on
+#: pathologically long pages -- unbounded scanning was considered and
+#: rejected in favor of this generous-but-bounded window (ticket 003's
+#: Findings, "Cross-source recommendation").
+_BODY_SCAN_LIMIT = 20000
+
 
 def _parse_iso(value: str | None) -> datetime | None:
     """Parse an ISO-ish datetime string (JSON-LD ``startDate``/``endDate``,
@@ -314,16 +334,86 @@ def _extract_url_date(tree: HtmlElement, url: str) -> dict[str, Any]:
         return {}
 
 
+def _visible_text_parts(el: HtmlElement) -> Any:
+    """Yield ``el``'s text fragments in document order, the same way
+    ``HtmlElement.text_content()`` does, except ``<script>``/``<style>``
+    element text is excluded (see :data:`_HIDDEN_TEXT_TAGS`).
+
+    lxml's built-in ``text_content()`` includes script/style text by
+    default -- on real pages this burns a large share of any fixed scan
+    window on invisible CSS/JS text before any genuine content (ticket
+    003's finding: one sampled page's first ~700 characters of "body
+    text" were raw inline CSS rule bodies like
+    ``.btnlinks { background: #249a8c; ... }``, never visible to a real
+    reader). A hidden element's *tail* text -- content immediately after
+    its closing tag -- is still visible and is still yielded.
+
+    Also excludes HTML comment (and processing-instruction) nodes --
+    confirmed necessary during this rung's live testing (sprint 007
+    ticket 004): ``lxml``'s tree iteration yields ``Comment`` nodes as
+    ordinary children, and a ``Comment`` node's ``.text`` holds its
+    *entire* raw comment body (unlike ``text_content()``, which already
+    knows to skip these). Without this check, a genuinely commented-out
+    widget (e.g. SDNHM's dead "From the blog" sidebar block ticket 003
+    found, which also turned out to be a live, un-commented, sitewide
+    placeholder widget with a static 2015 date on most other SDNHM
+    pages) would have its buried text mistaken for real page content.
+    ``Comment``/processing-instruction nodes are the only ``lxml``
+    node kinds whose ``.tag`` is not a plain string -- that is the
+    general, element-name-independent test used here.
+
+    A skipped node (hidden element or comment/PI) yields a single space
+    in place of its excluded content, rather than nothing -- defensive
+    against gluing two visible text fragments together into a false
+    regex match that never existed in the original markup (e.g. visible
+    text ending "...March " immediately followed by a ``<script>`` tag
+    and then visible text starting "5, 2020..." must not concatenate
+    into "March 5, 2020"). ``text_content()`` has no equivalent risk
+    since it never skips anything.
+    """
+    if isinstance(el.tag, str):
+        if el.tag not in _HIDDEN_TEXT_TAGS:
+            if el.text:
+                yield el.text
+            for child in el:
+                yield from _visible_text_parts(child)
+        else:
+            yield " "
+    else:
+        yield " "
+    if el.tail:
+        yield el.tail
+
+
+def _visible_body_text(body: HtmlElement) -> str:
+    """``body``'s visible text -- like ``body.text_content()`` but with
+    ``<script>``/``<style>`` element content excluded (see
+    :func:`_visible_text_parts`).
+    """
+    return "".join(_visible_text_parts(body))
+
+
 def _extract_body_regex(tree: HtmlElement, url: str) -> dict[str, Any]:
     """Rung 6 (lowest confidence): a "Month DD, YYYY" date string
-    (optionally weekday-prefixed) found in the page's body text --
-    matches ``dev/extract_events.py``'s ``parse_date_text`` pattern 1,
-    scanning only the first 3000 characters like that module does.
+    (optionally weekday-prefixed) found in the page's visible body text
+    -- matches ``dev/extract_events.py``'s ``parse_date_text`` pattern 1.
+
+    Scans up to :data:`_BODY_SCAN_LIMIT` characters of *visible* body
+    text (:func:`_visible_body_text`), not the original port's raw first
+    3000 characters of ``text_content()``. Sprint 007's investigation
+    (ticket 003) found that original window was, on every real page
+    sampled across three different flagship-museum sites, exhausted by
+    invisible ``<script>``/``<style>`` text plus a repeated nav/header
+    block before ever reaching a genuine date -- the real date was
+    always present, always past the cutoff (see :data:`_BODY_SCAN_LIMIT`
+    for the measured offsets). Still returns only the *first* match in
+    scan order, matching the original rung's semantics exactly for every
+    page that already worked.
     """
     body = tree.find(".//body")
     if body is None:
         return {}
-    text = body.text_content()[:3000]
+    text = _visible_body_text(body)[:_BODY_SCAN_LIMIT]
     match = _BODY_DATE_RE.search(text)
     if not match:
         return {}

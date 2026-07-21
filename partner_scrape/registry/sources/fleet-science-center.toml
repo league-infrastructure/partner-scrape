@@ -4,11 +4,23 @@
 # planning; see sprint.md's Architecture > Design Rationale). Its
 # /events listing page is a Drupal Views listing with ~10 outbound
 # /events/{slug} links, resolved via Listing-Page Discovery
-# (discovery/listing.py) instead of sitemap diffing. Detail pages carry
-# no JSON-LD or <time> markup, so in practice the extraction ladder's
-# OpenGraph/title-fallback rungs -- and sprint 002's existing LLM
-# Enricher -- recover most fields, not the ladder's top JSON-LD/<time>
-# rungs.
+# (discovery/listing.py) instead of sitemap diffing.
+#
+# Detail pages are NOT uniformly markup-free (corrected 2026-07-20/21,
+# sprint 007 ticket 003's live re-check -- this comment previously
+# claimed otherwise): /events/camps carries 20 real, valid ISO
+# <time datetime="..."> tags with upcoming dates, so the ladder's
+# <time>-tag rung (confidence 0.8) fires and recovers it directly, no
+# OpenGraph/title-fallback/body-regex/enricher needed. Other detail
+# pages (e.g. /events/annual-gala, /events/sky-tonight) genuinely have
+# no JSON-LD/<time>/og: date field -- for those, the body-regex rung
+# (widened in ticket 004 to scan the page's full visible body text
+# rather than a fixed 3000-character raw-text window) recovers the date
+# from plain body text. A handful of remaining pages (e.g.
+# /events/candlelight-concerts) are genuinely undated, evergreen program
+# pages with no per-instance date signal anywhere -- correctly excluded,
+# not a bug. Sprint 002's LLM Enricher still backstops whichever fields
+# no ladder rung supplies (title/description primarily, not dates).
 
 org_name = "Fleet Science Center"
 adapter_type = "listing_html"

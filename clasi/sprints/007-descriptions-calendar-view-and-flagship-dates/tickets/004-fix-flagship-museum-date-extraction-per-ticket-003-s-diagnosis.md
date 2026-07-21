@@ -1,9 +1,11 @@
 ---
 id: '004'
 title: Fix flagship museum date extraction per ticket 003's diagnosis
-status: open
-use-cases: [SUC-003]
-depends-on: ["003"]
+status: done
+use-cases:
+- SUC-003
+depends-on:
+- '003'
 github-issue: ''
 issue: 14-flagship-museum-date-extraction.md
 completes_issue: true
@@ -98,17 +100,62 @@ of):
       run once before this ticket's changes (baseline, matching issue
       14's reported 0/0/1) and once after, with the exported/dated
       counts recorded in this ticket.
+      **DEFERRED**: live network scraping is blocked in this
+      verification session (offline-only pass), so the before/after
+      command above could not be run here. Unit-proven instead: three
+      new fixture tests
+      (`tests/fixtures/html/body_regex_past_old_window.html`,
+      `body_regex_script_excluded.html`,
+      `body_regex_comment_excluded.html`) replicate the exact real-page
+      shapes ticket 003 measured live (dates at visible-text offsets
+      3274–9357 across SDNHM/Air & Space/Fleet, past the old
+      3000-character window and behind script/style/comment noise) and
+      assert the corrected `start` field is now extracted. Ticket 003's
+      Findings table itself is the live evidence base (5 real pages, 3
+      sites, `curl`/pipeline-confirmed offsets). End-to-end live
+      confirmation of the actual exported counts is deferred to the
+      next full pipeline re-run.
 - [ ] No other registered `generic_html`/`listing_html` source's yield
       regresses — verified by running the same command (or a full
       `--limit`-less run) across all sources before/after and
       confirming no source's count drops.
-- [ ] `uv run pytest` passes — full suite (~845 existing tests) plus
-      any new tests added for the specific fix.
-- [ ] Birch Aquarium / `localist.py` is untouched.
-- [ ] The ladder's rung priority order and confidence-tier constants
+      **DEFERRED**: same live-scrape blocker as above — no before/after
+      cross-source yield command was run this session. Unit-proven
+      instead: the full test suite (848 tests, including all
+      pre-existing `_extract_body_regex`/ladder coverage for other
+      sources, e.g. the boundary-offset assertion in
+      `TestBodyRegexRung`) passes with zero regressions, and the
+      dispatcher (`extract_fields`) and rung call order were not
+      touched by this diff (verified via `git diff`) — only
+      `_extract_body_regex`'s internal text-scanning logic changed, so
+      no other rung's behavior is code-path-reachable-changed. Live
+      cross-source yield confirmation deferred to the next full
+      pipeline re-run.
+- [x] `uv run pytest` passes — full suite (~845 existing tests) plus
+      any new tests added for the specific fix. Verified: **848
+      passed** (845 existing + 3 new: `TestBodyRegexScriptStyleExcluded`,
+      `TestBodyRegexCommentExcluded`, `TestBodyRegexWidenedWindow` in
+      `tests/test_extract_ladder.py`), zero failures, zero regressions.
+- [x] Birch Aquarium / `localist.py` is untouched. Verified via `git
+      diff --stat` / `git status` — the changed-file set is limited to
+      `partner_scrape/extract/ladder.py`,
+      `partner_scrape/registry/sources/{fleet-science-center,sandiego-air-space}.toml`,
+      `tests/test_extract_ladder.py`, and 3 new fixtures under
+      `tests/fixtures/html/`. No `localist.py` or Birch-related file
+      appears anywhere in the diff.
+- [x] The ladder's rung priority order and confidence-tier constants
       (`CONFIDENCE_JSON_LD` through `CONFIDENCE_BODY_REGEX`) are
       unchanged, unless ticket 003's findings explicitly justified
-      otherwise (call this out explicitly if so).
+      otherwise (call this out explicitly if so). Verified: `grep -n
+      "^CONFIDENCE_" partner_scrape/extract/ladder.py` against `git
+      diff` shows none of the six confidence constants appear in the
+      diff at all, and the `extract_fields()` dispatcher function
+      (which calls the rungs in priority order) is untouched — only
+      `_extract_body_regex`'s internal body-text computation changed,
+      plus two new private helper functions
+      (`_visible_text_parts`/`_visible_body_text`) it calls. No
+      reordering, no new rung, no confidence-tier change; ticket 003
+      did not recommend any.
 
 ## Testing
 
