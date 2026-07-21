@@ -29,9 +29,13 @@ Per-Event flow (SUC-011's Main Flow):
    cache entry (so the next run retries the LLM rather than caching a
    degraded result).
 5. Filter the returned list: exclude any Event with `relevant=False`
-   (SUC-012's gate). One Event's gating/error never affects any other
-   Event in the same batch -- each is handled independently, matching
-   `pipeline.py`'s own per-source isolation convention.
+   (SUC-012's gate) -- unless `event.trusted` is set (OOP, 2026-07-20:
+   a first-party curated source, e.g. `adapters/leaguesync.py`'s
+   classes, that must never be gate-dropped even though it is still
+   enriched/classified normally). One Event's gating/error never
+   affects any other Event in the same batch -- each is handled
+   independently, matching `pipeline.py`'s own per-source isolation
+   convention.
 
 Bounded-concurrency fast-follow (sprint.md's Open Question 6: a full
 corpus refresh made ~100 minutes of pure sequential LLM latency): the
@@ -284,4 +288,15 @@ class LLMEnricher:
         # Relevance Gate (SUC-012), applied once over the full input in
         # its original order -- identical membership/order to the fully
         # sequential implementation regardless of `max_workers`.
-        return [event for event in events if event.relevant is not False]
+        #
+        # Trusted-source bypass (OOP, 2026-07-20): `event.trusted` events
+        # (e.g. adapters/leaguesync.py's classes -- first-party, curated
+        # League youth programming) still go through the full enrichment
+        # pass above (cache lookup, LLM call/fallback, classification
+        # fields applied) so `areas_of_interest`/`age_grade_level`/
+        # `cost_range`/`time_of_day` get populated -- only the *gate*
+        # is bypassed. Distinct from the internship bypass above (which
+        # skips enrichment entirely): a trusted Event's `relevant`
+        # verdict is still computed and stored, just never allowed to
+        # drop it from the returned list.
+        return [event for event in events if event.trusted or event.relevant is not False]

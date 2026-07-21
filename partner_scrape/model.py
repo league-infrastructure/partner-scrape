@@ -74,6 +74,19 @@ class Event:
     external_id: str = ""
     url: str = ""
 
+    # Acquisition-trust flag (OOP, 2026-07-20): set by an adapter, never
+    # by enrichment, for a source whose records are first-party and
+    # curated enough that the LLM relevance gate (enrich/enricher.py)
+    # must never drop them outright -- e.g. adapters/leaguesync.py's
+    # classes, pulled straight from the League's own booking data.
+    # Additive default (False) reproduces every pre-existing adapter's
+    # and test's behavior exactly -- only an adapter that opts in by
+    # setting it True changes gating behavior at all. Deliberately a
+    # plain attribute, not tracked via Event.set()/field_provenance --
+    # it is acquisition metadata about the record's source, not a
+    # value with its own provenance to record.
+    trusted: bool = False
+
     # Content fields
     title: str = ""
     description: str = ""

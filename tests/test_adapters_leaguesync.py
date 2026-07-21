@@ -10,7 +10,11 @@ including two live edge cases worth noting: "Java Online"/"Python
 Online"/"League Labs" (virtual classes with a location name but no
 lat/long) and both live upcoming tech-club rows having a ``venue_id``
 that has no matching ``meetup_venues`` row (``venue_name`` etc. all
-``null`` via the adapter's ``LEFT JOIN``). ``classes_query_malformed.json``
+``null`` via the adapter's ``LEFT JOIN``). ``classes_query.json`` was
+re-captured (OOP, 2026-07-20) using ``CLASSES_SQL`` *after* the teacher/
+staff/professional-development exclusion was added -- it has 14 rows,
+not 15; "Teacher Development" (service_id 357780) is confirmed absent
+at the source, not filtered client-side. ``classes_query_malformed.json``
 and ``tech_clubs_query_malformed.json`` are hand-authored (not live
 data) to exercise per-record error isolation with a controlled bad
 record, matching ``adapters/tec.py``'s test convention.
@@ -222,11 +226,14 @@ class TestFieldMappingClasses:
     def test_one_event_per_service_matches_fixture_row_count(self):
         class_events = _extract_classes_only()
 
-        # classes_query.json has 15 distinct service rows -- one Event
+        # classes_query.json has 14 distinct service rows -- one Event
         # each, no client-side grouping needed (the SQL's window
         # function already picked one "next occurrence" row per service).
-        assert len(class_events) == 15
-        assert len({e.external_id for e in class_events}) == 15
+        # (Was 15 before the teacher/staff/PD exclusion added to
+        # CLASSES_SQL removed "Teacher Development" -- see
+        # TestTeacherServiceExclusion below.)
+        assert len(class_events) == 14
+        assert len({e.external_id for e in class_events}) == 14
 
     def test_every_field_the_adapter_sets_has_leaguesync_provenance_at_full_confidence(self):
         events = run(_source(), _real_fetcher())
@@ -288,8 +295,8 @@ class TestEndToEnd:
     def test_run_produces_both_classes_and_tech_clubs(self):
         events = run(_source(), _real_fetcher())
 
-        # 15 classes + 2 tech clubs from the real captured fixtures.
-        assert len(events) == 17
+        # 14 classes + 2 tech clubs from the real captured fixtures.
+        assert len(events) == 16
 
 
 class TestMalformedRecordIsolation:
@@ -387,3 +394,83 @@ class TestQueryUrlBuilding:
     def test_query_url_strips_trailing_slash_on_api_base(self):
         url = _query_url("https://sync.jtlapp.net/", "SELECT 1")
         assert url.startswith("https://sync.jtlapp.net/query?sql=")
+
+
+# ---------------------------------------------------------------------
+# AC (OOP, 2026-07-20): every leaguesync Event is Event.trusted=True --
+# first-party, curated League content that must survive the relevance
+# gate (see enrich/enricher.py's trusted bypass) regardless of its LLM
+# verdict.
+# ---------------------------------------------------------------------
+
+
+class TestTrustedFlag:
+    def test_every_class_event_is_trusted(self):
+        class_events = _extract_classes_only()
+
+        assert class_events
+        assert all(e.trusted is True for e in class_events)
+
+    def test_every_tech_club_event_is_trusted(self):
+        events = run(_source(), _real_fetcher())
+
+        tech_club_events = [e for e in events if "Robot Drivers" in e.title]
+        assert tech_club_events
+        assert all(e.trusted is True for e in tech_club_events)
+
+    def test_end_to_end_run_marks_every_event_trusted(self):
+        events = run(_source(), _real_fetcher())
+
+        assert events
+        assert all(e.trusted is True for e in events)
+
+
+# ---------------------------------------------------------------------
+# AC (OOP, 2026-07-20): CLASSES_SQL excludes teacher/staff/professional-
+# development services at the SQL level -- the site's parent-facing
+# audience must never see a service like "Teacher Development", and
+# since Event.trusted bypasses the relevance gate, this SQL filter is
+# the only thing standing in the way once a class becomes an Event.
+# ---------------------------------------------------------------------
+
+
+class TestTeacherServiceExclusion:
+    def test_classes_sql_excludes_teacher_staff_and_professional_development(self):
+        stripped = CLASSES_SQL.upper()
+
+        assert "NOT LIKE '%TEACHER%'" in stripped
+        assert "NOT LIKE '%STAFF%'" in stripped
+        assert "NOT LIKE '%PROFESSIONAL DEVELOPMENT%'" in stripped
+        # Applied to both the service's own name and its category --
+        # a staff-facing service could carry either signal.
+        assert stripped.count("NOT LIKE '%TEACHER%'") == 2
+        assert stripped.count("NOT LIKE '%STAFF%'") == 2
+        assert stripped.count("NOT LIKE '%PROFESSIONAL DEVELOPMENT%'") == 2
+
+    def test_null_category_name_does_not_silently_exclude_a_real_class(self):
+        # A bare `s.category_name NOT LIKE '%Teacher%'` is NULL (not
+        # TRUE) when category_name is NULL, which SQL's WHERE clause
+        # treats as exclusion -- COALESCE guards against that trap.
+        assert "COALESCE(S.CATEGORY_NAME" in CLASSES_SQL.upper()
+
+    def test_real_captured_fixture_has_no_teacher_service_left(self):
+        # classes_query.json was captured live using the adapter's own
+        # (post-exclusion) CLASSES_SQL -- "Teacher Development"
+        # (service_id 357780), present before the exclusion was added,
+        # is confirmed gone from the live API response itself, not just
+        # filtered client-side.
+        class_events = _extract_classes_only()
+
+        titles = {e.title for e in class_events}
+        assert "Teacher Development" not in titles
+        assert not any("teacher" in t.lower() for t in titles)
+
+    def test_youth_classes_with_thin_titles_are_not_excluded(self):
+        # The exclusion must be tight enough that real youth classes --
+        # including the two the LLM relevance gate previously dropped
+        # for having thin titles -- are unaffected.
+        class_events = _extract_classes_only()
+
+        titles = {e.title for e in class_events}
+        assert "Summer Camps@SFA" in titles
+        assert "Python@GA" in titles

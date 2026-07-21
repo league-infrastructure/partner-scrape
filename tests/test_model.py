@@ -40,6 +40,33 @@ class TestEventDefaults:
         assert b.categories == []
 
 
+class TestEventTrustedFlag:
+    """``Event.trusted`` (OOP, 2026-07-20): an adapter-set acquisition-
+    trust flag, currently opted into only by ``adapters/leaguesync.py``,
+    that tells the LLM relevance gate (``enrich/enricher.py``) never to
+    drop the Event outright even if it verdicts ``relevant=False``.
+    """
+
+    def test_defaults_to_false(self):
+        assert Event().trusted is False
+
+    def test_can_be_set_via_constructor(self):
+        assert Event(trusted=True).trusted is True
+
+    def test_can_be_set_via_plain_attribute_assignment(self):
+        event = Event()
+        event.trusted = True
+        assert event.trusted is True
+
+    def test_trusted_is_independent_of_relevant(self):
+        # trusted is acquisition metadata, not a relevance verdict --
+        # the two are orthogonal, not aliases of each other.
+        event = Event(trusted=True)
+        event.relevant = False
+        assert event.trusted is True
+        assert event.relevant is False
+
+
 class TestEventSet:
     def test_set_updates_value_and_provenance(self):
         event = Event()

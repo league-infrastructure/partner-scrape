@@ -306,6 +306,81 @@ class TestRelevanceGate:
 
 
 # ---------------------------------------------------------------------
+# AC (OOP, 2026-07-20): `event.trusted` Events (e.g. adapters/leaguesync.py's
+# first-party League classes) are never dropped by the relevance gate,
+# even when the LLM verdicts them `relevant=False` -- but, unlike the
+# internship bypass below, they still go through the full enrichment
+# pass: cache lookup, LLM call/fallback, and classification fields all
+# still apply normally. Only the final gate is bypassed.
+# ---------------------------------------------------------------------
+
+
+class TestTrustedEventsBypassTheRelevanceGate:
+    def test_trusted_event_survives_a_not_relevant_verdict(self, tmp_path):
+        event = _event(title="Summer Camps@SFA", trusted=True)
+        result = EnrichmentResult(
+            relevant=False, relevance_reason="Title too thin to classify confidently."
+        )
+        llm_client = FixtureLLMClient(responses={"Summer Camps@SFA": result})
+        enricher = LLMEnricher(llm_client, EnrichmentCache(cache_dir=tmp_path))
+
+        survivors = enricher.enrich([event])
+
+        assert survivors == [event]
+        # Still actually enriched/classified -- the verdict is computed
+        # and recorded, just never allowed to drop the Event.
+        assert event.relevant is False
+        assert event.field_provenance["relevant"].source == LLM_SOURCE
+
+    def test_trusted_event_is_still_enriched_not_skipped_like_an_internship(self, tmp_path):
+        event = _event(title="Python@GA", trusted=True)
+        result = EnrichmentResult(
+            relevant=False,
+            relevance_reason="not sure",
+            areas_of_interest=["Coding/Computer Science/Cyber Security"],
+            age_grade_level=["Grades 6-8"],
+        )
+        llm_client = FixtureLLMClient(responses={"Python@GA": result})
+        enricher = LLMEnricher(llm_client, EnrichmentCache(cache_dir=tmp_path))
+
+        survivors = enricher.enrich([event])
+
+        assert survivors == [event]
+        assert llm_client.calls == [event]
+        assert event.areas_of_interest == ["Coding/Computer Science/Cyber Security"]
+        assert event.age_grade_level == ["Grades 6-8"]
+
+    def test_non_trusted_not_relevant_event_is_still_dropped_alongside_a_trusted_one(
+        self, tmp_path
+    ):
+        trusted_event = _event(title="Summer Camps@SFA", trusted=True)
+        not_relevant_event = _event(title="Adult Wine Tasting", trusted=False)
+
+        llm_client = _KeyedLLMClient(
+            responses={
+                "Summer Camps@SFA": EnrichmentResult(relevant=False, relevance_reason="thin title"),
+                "Adult Wine Tasting": EnrichmentResult(relevant=False, relevance_reason="not stem"),
+            }
+        )
+        enricher = LLMEnricher(llm_client, EnrichmentCache(cache_dir=tmp_path))
+
+        survivors = enricher.enrich([trusted_event, not_relevant_event])
+
+        assert survivors == [trusted_event]
+
+    def test_trusted_relevant_event_survives_as_normal(self, tmp_path):
+        event = _event(title="Java Classes", trusted=True)
+        result = EnrichmentResult(relevant=True, relevance_reason="stem")
+        llm_client = FixtureLLMClient(responses={"Java Classes": result})
+        enricher = LLMEnricher(llm_client, EnrichmentCache(cache_dir=tmp_path))
+
+        survivors = enricher.enrich([event])
+
+        assert survivors == [event]
+        assert event.relevant is True
+
+
+# ---------------------------------------------------------------------
 # AC: mixed batch -- relevant, not-relevant, and erroring events are
 # handled independently
 # ---------------------------------------------------------------------

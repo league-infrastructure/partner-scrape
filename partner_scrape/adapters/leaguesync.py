@@ -30,6 +30,20 @@ Every field this adapter sets is high-trust -- like ``tec_rest`` and
 sync of its own Pike13/Meetup data), so every ``Event.set(...)`` call
 below uses :data:`CONFIDENCE` (1.0).
 
+Every ``Event`` this adapter emits also sets ``Event.trusted = True``
+(OOP, 2026-07-20): live-observed that the LLM relevance gate
+(``enrich/enricher.py``) dropped real League youth classes with thin
+titles ("Summer Camps@SFA", "Python@GA") as apparently not-relevant.
+The League's own beta site requires all of its curated youth
+programming to show regardless of that verdict -- ``trusted`` tells the
+Enricher to still classify the Event (areas/age/cost still wanted) but
+never let the relevance gate drop it. Because the gate can no longer
+catch a wrongly-included non-youth service, :data:`CLASSES_SQL` itself
+excludes teacher/staff/professional-development services (see its own
+comment) -- the SQL filter is the only thing standing between a
+"Teacher Development" service and the parent-facing site once
+``trusted`` is set.
+
 Auth: the API requires ``Authorization: Bearer <token>`` (see
 ``config.get_leaguesync_api_key()``) -- passed as an explicit
 ``headers`` argument to ``fetcher.get()`` on every fetch, per the
@@ -82,6 +96,17 @@ KIND_TECH_CLUBS = "tech_clubs"
 #: the service and its chosen occurrence. eo.state='active' additionally
 #: excludes canceled occurrences (confirmed live: 6 of 356 near-term
 #: occurrences are state='canceled') from ever being picked as "next".
+#:
+#: Teacher/staff/professional-development exclusion (OOP, 2026-07-20):
+#: confirmed live that "Teacher Development" (a staff-facing service,
+#: not a youth class) otherwise passes every filter above and -- once
+#: `Event.trusted` bypasses the LLM relevance gate -- would surface on
+#: the parent-facing site with no downstream check to catch it. Excluded
+#: here, at the source, on both `s.name` and `s.category_name` so it
+#: never becomes an Event at all; kept to the specific
+#: Teacher/Staff/Professional Development vocabulary (not e.g. a bare
+#: "%Staff%" alone) so a legitimate class that happens to mention staff
+#: in passing isn't accidentally excluded.
 CLASSES_SQL = """
 WITH next_occ AS (
   SELECT eo.service_id, eo.id AS occurrence_id, eo.start_at, eo.end_at, eo.location_id,
@@ -102,6 +127,12 @@ LEFT JOIN locations l ON l.id = no.location_id
 WHERE s.service_type IN ('Course', 'GroupClass')
   AND s.visitors_can_view = 1
   AND s.deleted_at IS NULL
+  AND s.name NOT LIKE '%Teacher%'
+  AND s.name NOT LIKE '%Staff%'
+  AND s.name NOT LIKE '%Professional Development%'
+  AND COALESCE(s.category_name, '') NOT LIKE '%Teacher%'
+  AND COALESCE(s.category_name, '') NOT LIKE '%Staff%'
+  AND COALESCE(s.category_name, '') NOT LIKE '%Professional Development%'
 ORDER BY no.start_at ASC
 """.strip()
 
@@ -221,7 +252,7 @@ def _extract_class(row: dict[str, Any], source: SourceConfig) -> Event:
     if not title:
         raise ValueError("service record has no name")
 
-    event = Event(kind="event", source_id=source.source_id)
+    event = Event(kind="event", source_id=source.source_id, trusted=True)
     event.external_id = str(row.get("service_id") or "")
 
     event.set("title", title, source=SOURCE_NAME, confidence=CONFIDENCE)
@@ -281,7 +312,7 @@ def _extract_tech_club(row: dict[str, Any], source: SourceConfig) -> Event:
     if not title:
         raise ValueError("meetup event record has no title")
 
-    event = Event(kind="event", source_id=source.source_id)
+    event = Event(kind="event", source_id=source.source_id, trusted=True)
     event.external_id = str(row.get("id") or "")
 
     event.set("title", title, source=SOURCE_NAME, confidence=CONFIDENCE)

@@ -250,23 +250,5 @@
     "longitude": -117.264,
     "formatted_address": "623 South Nardo Avenue, Solana Beach, CA, 92075, United States",
     "timezone": "America/Los_Angeles"
-  },
-  {
-    "service_id": 357780,
-    "name": "Teacher Development",
-    "description": null,
-    "description_short": null,
-    "category_name": "Community Tech",
-    "service_type": "Course",
-    "occurrence_id": 287513891,
-    "start_at": "2026-08-21T23:30:00Z",
-    "end_at": "2026-08-22T01:00:00Z",
-    "location_id": 44884,
-    "location_name": "Geeks Academy (GA)",
-    "city": "Tijuana",
-    "latitude": 32.4993,
-    "longitude": -116.985,
-    "formatted_address": "C. Vallarta 101, Hipodromo Dos, Tijuana, BCN, 22195, Mexico",
-    "timezone": "America/Los_Angeles"
   }
 ]
