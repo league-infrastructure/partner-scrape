@@ -1,409 +1,13 @@
 [
  {
-  "slug": "anza_borrego_foundation_astrophotography_workshop_galleta_meadows_20250425",
-  "title": "Astrophotography Workshop: Galleta Meadows",
-  "partner_name": "Anza-Borrego Foundation",
-  "partner_id": 646,
-  "description": "Capture the Cosmos in Borrego Springs   Unlock the secrets of astrophotography and learn how to capture stunning Milky Way shots in just one session! Join us just outside the Park in the breathtaking Galleta Meadows and discover the essentials of night sky photography, from planning to execution, in one of the best dark sky spots in the country.     &nbsp;    What to Expect:       Hands-on astrophotography guidance in an iconic dark sky location         Step-by-step tips on camera settings, composition, and photo planning         Access to unique, easy-to-reach spots perfect for Milky Way shots         Personalized, small-group instruction to ensure individual attention         Minimal walking—just under 1/10 of a mile from parking to photo locations     &nbsp;    Who Should Attend:       Beginners with a basic understanding of camera settings         Anyone eager to capture the beauty of the night sky         Photography enthusiasts looking to improve their astrophotography skills     &nbsp;    What to Bring:       DSLR or mirrorless camera         Tripod and lens suitable for night photography         Sturdy closed-toe shoes         Head lamp     &nbsp;    Get ready to elevate your photography game under the stars!     &nbsp;  REGISTER TODAY!  &nbsp;    Date: Friday, October 24, 2025     Time: 6:30 p.m.-8:30 p.m.     Location: Meet at the ABF office at 587 Palm Canyon Dr. #122 Borrego Springs, CA 92004 (in The Mall next to Kendall’s Café). We’ll then carpool/caravan to Galleta Meadows.     &nbsp;    Cost:     ABF Member: $60     Non-Member: $70     Student: $35     Cancellation Policy &amp; Scholarships: Please see our FAQs page to read our cancellation policy and learn about scholarship options.      &nbsp;    What Previous Attendees Are Saying:     “Chris was a great instructor. He really set a great tone at the beginning of the workshop, and he adapted his approach to each student based on their needs. It was a really great workshop! I walked away learning a lot.”     “Great experience for my three-generation family”          About the Instructor: Chris Olivas is an award-winning landscape photographer and professional videographer. He was born and raised in San Diego, California. His education and photography have taken him all over the world. He also has been a science educator for over 14 years. He has an extensive background in astronomy and photography and has won numerous awards for his photography work. He loves the combination of science and art that astrophotography entails and loves to spread his passion for the night sky. He specializes in photographing the Milky Way in adventurous locations and sharing his experiences through educational workshops.",
-  "link": "https://theabf.org/events/astrophotography-workshop-galleta-meadows-2/",
-  "availability": "Repeats 3 times through 2026-10-03",
-  "date_start": "2025-04-25T20:30:00-07:00",
-  "date_end": "2026-10-03T21:00:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Grades 9-12",
-   "Adult"
-  ],
-  "cost_range": "Less than $100",
-  "time_of_day": [
-   "Evening"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Physics",
-   "Earth Science/Ecology"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "587 Palm Canyon Dr. #122, Borrego Springs, CA 92004 and Galleta Meadows",
-  "latitude": "None",
-  "longitude": "None",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "anzaborrego_foundation.jpeg"
- },
- {
-  "slug": "uss_midway_museum_overnight_adventure_uss_midway_museum_20260207",
-  "title": "Overnight Adventure | USS Midway Museum",
-  "partner_name": "USS Midway Museum",
-  "partner_id": 56,
-  "description": "Spend the night on the longest-serving aircraft carrier of the 20th century!",
-  "link": "https://www.midway.org/event/aviation-overnight-july-10-2026",
-  "availability": "Repeats 16 times through 2026-08-22",
-  "date_start": "2026-02-07T00:00:00-07:00",
-  "date_end": "2026-08-22T00:00:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Grades 6-8",
-   "Grades 9-12"
-  ],
-  "cost_range": "",
-  "time_of_day": [
-   "Evening",
-   "All Day"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "General Science",
-   "Earth Science/Ecology",
-   "Engineering"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "USS Midway Museum, San Diego, CA",
-  "latitude": "32.7137622",
-  "longitude": "-117.175658",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "birch_aquarium_at_scripps_birch_aquarium_is_open_late_sundays_20260215",
-  "title": "Birch Aquarium is Open Late Sundays",
-  "partner_name": "Birch Aquarium at Scripps",
-  "partner_id": null,
-  "description": "Looking for the perfect way to wind down after the weekend? Birch Aquarium is open late every Sunday evening from 5 – 7 p.m. Enjoy an all-ages experience featuring discounted tickets and a fun, relaxing vibe!",
-  "link": "https://aquarium.ucsd.edu/events/birch-after-hours",
-  "availability": "",
-  "date_start": "2026-02-15T17:00:00-07:00",
-  "date_end": "2027-02-28T19:00:00-07:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "Less than $50",
-  "time_of_day": [
-   "Evening"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Biology / LifeSciences"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Birch Aquarium",
-  "latitude": "",
-  "longitude": "",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "nature_collective_habitat_restoration_nature_collective_san_elijo_lagoon_20260221",
-  "title": "Habitat Restoration | Nature Collective | San Elijo Lagoon",
-  "partner_name": "Nature Collective",
-  "partner_id": 375,
-  "description": "Join Nature Collective for hands-on fun to help improve coastal sage scrub habitats for plants + animals indigenous to the area.",
-  "link": "https://naturecollective.org/event/volunteer-restoration-event-2026-08-05/",
-  "availability": "Repeats 11 times through 2026-09-19",
-  "date_start": "2026-02-21T00:00:00-07:00",
-  "date_end": "2026-09-19T00:00:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Grades 6-8",
-   "Grades 9-12"
-  ],
-  "cost_range": "",
-  "time_of_day": [],
-  "opportunity_type": "Volunteering",
-  "areas_of_interest": [
-   "Earth Science/Ecology",
-   "Biology / LifeSciences"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "San Elijo Lagoon",
-  "latitude": "32.9817462",
-  "longitude": "-117.2700457",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "nature_collective.png"
- },
- {
-  "slug": "the_san_diego_river_park_foundation_mountain_lions_101_20260221",
-  "title": "Mountain Lions 101",
-  "partner_name": "The San Diego River Park Foundation",
-  "partner_id": 323,
-  "description": "&lt;p&gt;Overview Join Mountain Lion Foundation volunteer and mountain lion expert Robin Parks for an engaging presentation about mountain lions. This session provides a broad introduction to these remarkable animals, offering [&hellip;]&lt;/p&gt;\\n",
-  "link": "https://sandiegoriver.org/event/mountain-lions-101-3/",
-  "availability": "Repeats 3 times through 2026-08-22",
-  "date_start": "2026-02-21T10:00:00-07:00",
-  "date_end": "2026-08-22T11:30:00-07:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Biology / LifeSciences",
-   "Earth Science/Ecology"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Grant Park, 2310 Camino Del Rio N., San Diego",
-  "latitude": "32.7639275",
-  "longitude": "-117.2033498",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "the_san_diego_river.jpg"
- },
- {
-  "slug": "nature_collective_san_diego_activities_family_fun_day_nature_collective_20260301",
-  "title": "San Diego Activities | Family Fun Day | Nature Collective",
-  "partner_name": "Nature Collective",
-  "partner_id": 375,
-  "description": "",
-  "link": "https://naturecollective.org/event/spring-nature-festival-april-19-2026/",
-  "availability": "Repeats 5 times through 2026-08-02",
-  "date_start": "2026-03-01T00:00:00-07:00",
-  "date_end": "2026-08-02T00:00:00-07:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "",
-  "time_of_day": [],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Earth Science/Ecology"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "777 So. Hwy 101, Suite 112, Solana Beach, California, 92075",
-  "latitude": "32.9817462",
-  "longitude": "-117.2700457",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "nature_collective.png"
- },
- {
-  "slug": "the_san_diego_river_park_foundation_lunch_with_a_raptor_and_project_wildlife_coexisting_with_wil_20260306",
-  "title": "Lunch with a Raptor and Project Wildlife: Coexisting with Wildlife",
-  "partner_name": "The San Diego River Park Foundation",
-  "partner_id": 323,
-  "description": "&lt;p&gt;Join Project Wildlife for a brown-bag lunch info session with their amazing animal ambassadors! Raptors are found in all kinds of habitats on land — provided there is enough food! [&hellip;]&lt;/p&gt;\\n",
-  "link": "https://sandiegoriver.org/event/lunch-with-a-raptor-and-project-wildlife-coexisting-with-wildlife-2/",
-  "availability": "Repeats 2 times through 2026-09-11",
-  "date_start": "2026-03-06T12:00:00-07:00",
-  "date_end": "2026-09-11T13:00:00-07:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Afternoon"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Biology / LifeSciences"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Grant Park, 2310 Camino Del Rio N., San Diego",
-  "latitude": "32.7639275",
-  "longitude": "-117.2033498",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "the_san_diego_river.jpg"
- },
- {
-  "slug": "the_san_diego_river_park_foundation_bird_walk_at_grant_park_20260419",
-  "title": "Bird Walk at Grant Park",
-  "partner_name": "The San Diego River Park Foundation",
-  "partner_id": 323,
-  "description": "&lt;p&gt;Embark on a fun-filled walk with bird experts Cindy Pencek and Ian Swirka to observe and count the amazing biodiversity of birds that call this section of the river home! [&hellip;]&lt;/p&gt;\\n",
-  "link": "https://sandiegoriver.org/event/bird-walk-at-grant-park-2/",
-  "availability": "Repeats 9 times through 2026-12-20",
-  "date_start": "2026-04-19T08:00:00-07:00",
-  "date_end": "2026-12-20T09:30:00-07:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Biology / LifeSciences",
-   "Earth Science/Ecology"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Grant Park, 2310 Camino Del Rio N., San Diego",
-  "latitude": "32.7639275",
-  "longitude": "-117.2033498",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "the_san_diego_river.jpg"
- },
- {
-  "slug": "the_san_diego_river_park_foundation_river_readers_nature_storytime_20260421",
-  "title": "River Readers Nature Storytime",
-  "partner_name": "The San Diego River Park Foundation",
-  "partner_id": 323,
-  "description": "&lt;p&gt;Located at Grant Park in Mission Valley, the River Readers Nature Storytime will feature books, activities, and crafts celebrating the [&hellip;]&lt;/p&gt;\\n",
-  "link": "https://sandiegoriver.org/events/",
-  "availability": "Repeats 3 times through 2026-07-21",
-  "date_start": "2026-04-21T09:30:00-07:00",
-  "date_end": "2026-07-21T10:30:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Pre-K"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Earth Science/Ecology",
-   "General Science"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Grant Park, 2310 Camino Del Rio N., San Diego",
-  "latitude": "32.7639275",
-  "longitude": "-117.2033498",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "the_san_diego_river.jpg"
- },
- {
-  "slug": "san_diego_county_library_under_the_sea_i_spy_20260601",
-  "title": "Under the Sea I SPY",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Can you \"sea\" some of your favorite underwater characters and creatures on our I SPY wall? Try to find them all! Earn one prize a day while supplies last. Recommended for kids ages 10 and under.",
-  "link": "https://sdcl.bibliocommons.com/events/6a1de8bf40f528ac04dfbade",
-  "availability": "",
-  "date_start": "2026-06-01T10:00:00-07:00",
-  "date_end": "2026-08-31T18:00:00-07:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Afternoon",
-   "Evening"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "General Science"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Solana Beach",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "san_diego_county_library_summer_learning_lego_fun_hour_20260605",
-  "title": "Summer Learning Lego Fun Hour",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Spend Summer at Your Library and join us for our Lego Fun hour @1pm every Thursday until August 27",
-  "link": "https://sdcl.bibliocommons.com/events/6a2c8fa5ba0ec7dc2260e2be",
-  "availability": "Repeats 6 times through 2026-08-20",
-  "date_start": "2026-06-05T13:00:00-07:00",
-  "date_end": "2026-08-20T14:00:00-07:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Afternoon"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Engineering"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Jacumba",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "san_diego_county_library_u_s_a_scavenger_hunt_20260629",
-  "title": "U.S.A. Scavenger Hunt",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Come learn facts about the United States of America symbols. Earn one prize a day while supplies last. Recommended for kids ages 10 and under.",
-  "link": "https://sdcl.bibliocommons.com/events/6a430b28f56bd86e00b9f0f7",
-  "availability": "",
-  "date_start": "2026-06-29T10:00:00-07:00",
-  "date_end": "2026-07-31T17:00:00-07:00",
-  "age_grade_level": [
-   "Grades 6-8",
-   "Family"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Morning",
-   "Afternoon"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Solana Beach",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "birch_aquarium_at_scripps_shark_summer_at_birch_aquarium_20260701",
+  "slug": "birch_aquarium_at_scripps_shark_summer_at_birch_aquarium_20260721",
   "title": "Shark Summer at Birch Aquarium",
   "partner_name": "Birch Aquarium at Scripps",
   "partner_id": null,
   "description": "This summer, Birch Aquarium is making a splash with the return of Shark Summer! Dive into the world of these amazing animals, with fin-tastic fun for shark fans of all ages! Shark Summer celebrates the vital role sharks play in the ecosystem, while shining a light on the important conservation work and research being done to protect them. Shark Summer kicks off on July 1 and runs through August 2. Offerings vary by day, check the Daily Schedule for the latest.",
   "link": "https://aquarium.ucsd.edu/events/shark-summer",
   "availability": "",
-  "date_start": "2026-07-01T00:00:00-07:00",
+  "date_start": "2026-07-21T00:00:00-07:00",
   "date_end": "2026-08-02T23:59:59-07:00",
   "age_grade_level": [
    "Family",
@@ -431,34 +35,32 @@
   "logo_src": ""
  },
  {
-  "slug": "san_diego_county_library_summer_scavenger_hunt_dinosaurs_20260701",
-  "title": "Summer Scavenger Hunt: Dinosaurs",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Enjoy a special themed scavenger hunt in the children's area! July's theme will be dinosaurs. Complete the scavenger hunt to win a small prize. For children ages 4-12. While supplies last; one prize per day.",
-  "link": "https://sdcl.bibliocommons.com/events/69fbb06c703c33630025eb4d",
+  "slug": "birch_aquarium_at_scripps_birch_aquarium_is_open_late_sundays_20260721",
+  "title": "Birch Aquarium is Open Late Sundays",
+  "partner_name": "Birch Aquarium at Scripps",
+  "partner_id": null,
+  "description": "Looking for the perfect way to wind down after the weekend? Birch Aquarium is open late every Sunday evening from 5 – 7 p.m. Enjoy an all-ages experience featuring discounted tickets and a fun, relaxing vibe!",
+  "link": "https://aquarium.ucsd.edu/events/birch-after-hours",
   "availability": "",
-  "date_start": "2026-07-01T00:00:00-07:00",
-  "date_end": "2026-07-31T23:59:59-07:00",
+  "date_start": "2026-07-21T00:00:00-07:00",
+  "date_end": "2027-02-28T19:00:00-07:00",
   "age_grade_level": [
-   "Family",
-   "Grades 6-8",
-   "Pre-K"
+   "Family"
   ],
-  "cost_range": "Free",
+  "cost_range": "Less than $50",
   "time_of_day": [
-   "All Day"
+   "Evening"
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
-   "Earth Science/Ecology"
+   "Biology / LifeSciences"
   ],
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "Imperial Beach, Children's Area",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
+  "location": "Birch Aquarium",
+  "latitude": "",
+  "longitude": "",
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
@@ -490,6 +92,105 @@
   "financial_support": "No",
   "ngss_aligned": "No",
   "location": "Crest",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
+  "slug": "san_diego_county_library_under_the_sea_i_spy_20260721",
+  "title": "Under the Sea I SPY",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Can you \"sea\" some of your favorite underwater characters and creatures on our I SPY wall? Try to find them all! Earn one prize a day while supplies last. Recommended for kids ages 10 and under.",
+  "link": "https://sdcl.bibliocommons.com/events/6a1de8bf40f528ac04dfbade",
+  "availability": "",
+  "date_start": "2026-07-21T00:00:00-07:00",
+  "date_end": "2026-08-31T18:00:00-07:00",
+  "age_grade_level": [
+   "Family"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Afternoon",
+   "Evening"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "General Science"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Solana Beach",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
+  "slug": "san_diego_county_library_summer_scavenger_hunt_dinosaurs_20260721",
+  "title": "Summer Scavenger Hunt: Dinosaurs",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Enjoy a special themed scavenger hunt in the children's area! July's theme will be dinosaurs. Complete the scavenger hunt to win a small prize. For children ages 4-12. While supplies last; one prize per day.",
+  "link": "https://sdcl.bibliocommons.com/events/69fbb06c703c33630025eb4d",
+  "availability": "",
+  "date_start": "2026-07-21T00:00:00-07:00",
+  "date_end": "2026-07-31T23:59:59-07:00",
+  "age_grade_level": [
+   "Family",
+   "Grades 6-8",
+   "Pre-K"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "All Day"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Earth Science/Ecology"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Imperial Beach, Children's Area",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
+  "slug": "san_diego_county_library_u_s_a_scavenger_hunt_20260721",
+  "title": "U.S.A. Scavenger Hunt",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Come learn facts about the United States of America symbols. Earn one prize a day while supplies last. Recommended for kids ages 10 and under.",
+  "link": "https://sdcl.bibliocommons.com/events/6a430b28f56bd86e00b9f0f7",
+  "availability": "",
+  "date_start": "2026-07-21T00:00:00-07:00",
+  "date_end": "2026-07-31T17:00:00-07:00",
+  "age_grade_level": [
+   "Grades 6-8",
+   "Family"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Morning",
+   "Afternoon"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Solana Beach",
   "latitude": "32.834727",
   "longitude": "-117.1306115",
   "contact_name": "",
@@ -1885,6 +1586,38 @@
   "logo_src": "san_diego_childrens_discovery.jpg"
  },
  {
+  "slug": "san_diego_county_library_summer_learning_lego_fun_hour_20260723",
+  "title": "Summer Learning Lego Fun Hour",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Spend Summer at Your Library and join us for our Lego Fun hour @1pm every Thursday until August 27",
+  "link": "https://sdcl.bibliocommons.com/events/6a2c8fa5ba0ec7dc2260e2be",
+  "availability": "Repeats 6 times through 2026-08-20",
+  "date_start": "2026-07-23T13:00:00-07:00",
+  "date_end": "2026-08-20T14:00:00-07:00",
+  "age_grade_level": [
+   "Family"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Afternoon"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Engineering"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Jacumba",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
   "slug": "san_diego_county_library_stem_workshop_electricity_light_20260723",
   "title": "STEM WORKSHOP (Electricity & Light)",
   "partner_name": "San Diego County Library",
@@ -2195,16 +1928,17 @@
   "date_start": "2026-07-23T18:00:00-07:00",
   "date_end": "2026-07-23T21:00:00-07:00",
   "age_grade_level": [
-   "Family"
+   "Family",
+   "Adult"
   ],
-  "cost_range": "Less than $25",
+  "cost_range": "Less than $50",
   "time_of_day": [
    "Evening"
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
    "Earth Science/Ecology",
-   "Biology / LifeSciences"
+   "General Science"
   ],
   "specific_attention": [],
   "financial_support": "No",
@@ -2749,39 +2483,6 @@
   "logo_src": ""
  },
  {
-  "slug": "anza_borrego_foundation_anza_borrego_night_hike_coyote_canyon_20260725",
-  "title": "Anza-Borrego Night Hike: Coyote Canyon",
-  "partner_name": "Anza-Borrego Foundation",
-  "partner_id": 646,
-  "description": "Venture into the desert after dark for a family-friendly&nbsp;night hike through Coyote Canyon’s Ocotillo Flat!&nbsp;We’ll&nbsp;watch the&nbsp;desert transform after sunset and explore the sights&nbsp;and&nbsp;sounds&nbsp;that make this landscape come alive under the stars.&nbsp;&nbsp;    What to Expect:&nbsp;     We’ll&nbsp;begin our adventure at Ocotillo Flats, surrounded by the silhouettes of ocotillo and creosote under the rising moon.&nbsp;We’ll hike&nbsp;roughly 3&nbsp;miles roundtrip across&nbsp;gentle&nbsp;(though uneven) terrain.&nbsp;      Along the trail,&nbsp;we’ll&nbsp;look for&nbsp;nocturnal creatures&nbsp;that thrive after dark,&nbsp;such as scorpions.&nbsp;      This easy-paced&nbsp;night hike&nbsp;is led by&nbsp;an ABF staff member&nbsp;and&nbsp;certified Wilderness&nbsp;First&nbsp;Responder, ensuring a safe&nbsp;and fun&nbsp;experience for all ages.&nbsp;     Who Should Attend:&nbsp;     Families and friends&nbsp;looking&nbsp;for a unique way to&nbsp;enjoy summer&nbsp;in the desert.&nbsp;      Nature lovers&nbsp;eager&nbsp;to experience the desert at night and learn about its nocturnal life.&nbsp;      Hikers&nbsp;comfortable&nbsp;with&nbsp;a&nbsp;relatively easy&nbsp;3-mile walk on sandy, uneven terrain.&nbsp;             REGISTER TODAY!            Date:&nbsp;Saturday,&nbsp;July&nbsp;25, 2026&nbsp;    Time: 7:00 p.m.-10:00 p.m. (end time is approximate)     Location:&nbsp;Meet at the ABF&nbsp;store&nbsp;at 587 Palm Canyon&nbsp;Dr. #110, Borrego Springs, CA 92004&nbsp;(in The Mall&nbsp;next to&nbsp;Calico’s). From there&nbsp;we’ll&nbsp;carpool/caravan to the trailhead.&nbsp;&nbsp;        Cost:&nbsp;    ABF Member: $28     Non-Member: $33     Student: $17     Cancellation Policy: Please see&nbsp;our FAQs page to read our cancellation policy and learn about scholarship options. &nbsp;    &nbsp;    What Past Participants Are Saying: &nbsp;    “Great&nbsp;guides. Fun and informative. It&nbsp;wasn’t&nbsp;something I would have done on my&nbsp;own.” &nbsp;    “Well organized. Educated and educating guides.” &nbsp;    “I appreciated the opportunity to be outdoors and experience the desert in a different way via a night hike.” &nbsp;    “It was a perfect evening under the stars” &nbsp;            Hike Leader: &nbsp;    Born and raised between Thermal and the San Fernando Valley in California,&nbsp;Stacy Valdez’s&nbsp;journey is characterized by a blend of academic achievements, professional roles, and a profound dedication to social causes. Stacy has built a diverse and impactful career with&nbsp;a strong foundation&nbsp;in education and a commitment to community engagement and service. They have been involved in humanitarian efforts through Border Kindness since 2018, reflecting their passion for the outdoors, advocacy, language, and cultural studies. Their love for the environment began at an early age, growing once she moved to the San Fernando Valley, where she&nbsp;identified&nbsp;her love for the mountains and hiking and camping. Stacy is dedicated to promoting the outdoors to underserved youth and their communities.&nbsp;",
-  "link": "https://theabf.org/events/anza-borrego-night-hike-coyote-canyon/",
-  "availability": "",
-  "date_start": "2026-07-25T19:00:00-07:00",
-  "date_end": "2026-07-25T22:00:00-07:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "Less than $50",
-  "time_of_day": [
-   "Evening"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Earth Science/Ecology",
-   "Biology / LifeSciences"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "587 Palm Canyon Dr. #110, Borrego Springs, CA 92004",
-  "latitude": "None",
-  "longitude": "None",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "anzaborrego_foundation.jpeg"
- },
- {
   "slug": "the_league_of_amazing_programmers_robot_garage_20260725",
   "title": "Robot Garage",
   "partner_name": "The LEAGUE of Amazing Programmers",
@@ -3244,42 +2945,6 @@
   "logo_src": ""
  },
  {
-  "slug": "anza_borrego_foundation_the_a_bee_cs_of_california_s_native_bees_with_national_geogr_20260729",
-  "title": "The A, Bee, Cs of California’s Native Bees with National Geographic Explorer, Krystle Hickman (Webinar)",
-  "partner_name": "Anza-Borrego Foundation",
-  "partner_id": 646,
-  "description": "Join National Geographic Explorer Krystle Hickman for this presentation on native bees, their relationships with native plants, and community science engagement.      What to Expect:&nbsp;     Learn how&nbsp;California is home to over 1,600 species of native bees&nbsp;and&nbsp;how they are a vital part of the ecosystem.&nbsp;      Get to know more about these important pollinators through Krystle's stunning macro photography.       Discover what makes them special&nbsp;and how to&nbsp;support a healthy garden.&nbsp;         Who Should Attend:&nbsp;     Home gardeners and native plant enthusiasts interested in supporting pollinators&nbsp;&nbsp;      Nature lovers, photographers, and anyone curious about California’s native bees&nbsp;&nbsp;      Teachers, students, and environmental educators&nbsp;&nbsp;      Community science volunteers and conservation-minded residents&nbsp;&nbsp;      Beekeepers, master gardeners, and habitat restoration volunteers&nbsp;         REGISTER TODAY!        Date: Wednesday,&nbsp;July 29, 2026&nbsp;    Time: 12:00 p.m.–1:00 p.m. &nbsp;    Location: Online via Zoom. Instructions to access the&nbsp;webinar&nbsp;will be&nbsp;sent&nbsp;the week of the event. &nbsp;        Cost:  &nbsp;    ABF Member: FREE     Not a member? Join today for as little as $35 and save!     Non-Member: $10 &nbsp;    Student: $5 &nbsp;    Cancellation Policy &amp; Scholarships:&nbsp;Please see&nbsp;our FAQs page to read our cancellation policy and learn about scholarship options.   &nbsp;        What Past Participants Are Saying:&nbsp;    “Depth, thoroughness and clarity of information as well as intriguing videos”&nbsp;    “I always eagerly anticipate upcoming virtual programs…they are terrific.”&nbsp;&nbsp;    “The presenter was articulate, well-paced, and really knew the topic.”&nbsp;        Bio:&nbsp;    Krystle Hickman is a National Geographic Explorer, community scientist, conservation photographer, and multi-award-winning author based in Los Angeles, California. Through her photography, she raises awareness about the decline of native bee species while highlighting the ecosystems they&nbsp;reside&nbsp;in. &nbsp;    Hickman’s work has taken her across the globe, where she documents native bees without using lethal collection methods. This approach has enabled her to document behaviors new to science and capture some of the first images of living representatives of many species. &nbsp;    Her work has been featured across television, digital platforms, and podcasts, including Ologies, and she has presented internationally, including at the 2024 United Nations Biodiversity Conference (COP16) in Colombia. Hickman has also lectured at institutions such as Harvard University, UCLA, and more.&nbsp;",
-  "link": "https://theabf.org/events/the-a-bee-cs-of-californias-native-bees-webinar/",
-  "availability": "",
-  "date_start": "2026-07-29T12:00:00-07:00",
-  "date_end": "2026-07-29T13:00:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Grades 9-12",
-   "Grades 6-8",
-   "Adult"
-  ],
-  "cost_range": "Less than $25",
-  "time_of_day": [
-   "Afternoon"
-  ],
-  "opportunity_type": "Online",
-  "areas_of_interest": [
-   "Biology / LifeSciences",
-   "Earth Science/Ecology"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Online via Zoom",
-  "latitude": "None",
-  "longitude": "None",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "anzaborrego_foundation.jpeg"
- },
- {
   "slug": "san_diego_county_library_projectpatho_skeletal_system_event_20260729",
   "title": "ProjectPatho: Skeletal System Event!",
   "partner_name": "San Diego County Library",
@@ -3613,6 +3278,43 @@
   "logo_src": ""
  },
  {
+  "slug": "uss_midway_museum_overnight_adventure_uss_midway_museum_20260731",
+  "title": "Overnight Adventure | USS Midway Museum",
+  "partner_name": "USS Midway Museum",
+  "partner_id": 56,
+  "description": "Spend the night on the longest-serving aircraft carrier of the 20th century!",
+  "link": "https://www.midway.org/event/aviation-overnight-july-10-2026",
+  "availability": "Repeats 16 times through 2026-08-22",
+  "date_start": "2026-07-31T00:00:00-07:00",
+  "date_end": "2026-08-22T00:00:00-07:00",
+  "age_grade_level": [
+   "Family",
+   "Grades 6-8",
+   "Grades 9-12"
+  ],
+  "cost_range": "",
+  "time_of_day": [
+   "Evening",
+   "All Day"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "General Science",
+   "Earth Science/Ecology",
+   "Engineering"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "USS Midway Museum, San Diego, CA",
+  "latitude": "32.7137622",
+  "longitude": "-117.175658",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
   "slug": "san_diego_county_library_fleet_science_center_superhero_science_20260731",
   "title": "Fleet Science Center Superhero Science",
   "partner_name": "San Diego County Library",
@@ -3778,6 +3480,37 @@
   "logo_src": ""
  },
  {
+  "slug": "nature_collective_san_elijo_lagoon_discovery_tour_nature_collective_20260801",
+  "title": "San Elijo Lagoon | Discovery Tour | Nature Collective",
+  "partner_name": "Nature Collective",
+  "partner_id": 375,
+  "description": "Learn about your San Elijo Lagoon – where migratory and resident birds share a sanctuary, and where many animals find a home.",
+  "link": "https://naturecollective.org/event/discovery-tour-july-4/",
+  "availability": "Repeats 8 times through 2026-08-01",
+  "date_start": "2026-08-01T00:00:00-07:00",
+  "date_end": "",
+  "age_grade_level": [
+   "Family"
+  ],
+  "cost_range": "",
+  "time_of_day": [],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Biology / LifeSciences",
+   "Earth Science/Ecology"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "San Elijo Lagoon",
+  "latitude": "32.9817462",
+  "longitude": "-117.2700457",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "nature_collective.png"
+ },
+ {
   "slug": "ocean_connectors_wildin_8217_mission_bay_kayak_eco_tour_20260801",
   "title": "Wildin&#8217; Mission Bay Kayak Eco Tour",
   "partner_name": "Ocean Connectors",
@@ -3809,73 +3542,6 @@
   "contact_email": "",
   "contact_phone": "",
   "logo_src": "ocean_connectors.jpg"
- },
- {
-  "slug": "the_san_diego_river_park_foundation_friends_and_neighbors_open_house_celebration_20260801",
-  "title": "Friends and Neighbors Open House Celebration",
-  "partner_name": "The San Diego River Park Foundation",
-  "partner_id": 323,
-  "description": "&lt;p&gt;You\\'re invited to our special Friends and Neighbors Open House community celebration on Saturday, August 1, 2026 from 10:00 am to 2:00 pm. Come learn about San Diego River Park [&hellip;]&lt;/p&gt;\\n",
-  "link": "https://sandiegoriver.org/event/friends-and-neighbors-open-house-celebration/",
-  "availability": "",
-  "date_start": "2026-08-01T10:00:00-07:00",
-  "date_end": "2026-08-01T14:00:00-07:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Morning",
-   "Afternoon"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Earth Science/Ecology"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Grant Park, 2310 Camino Del Rio N., San Diego",
-  "latitude": "32.7639275",
-  "longitude": "-117.2033498",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "the_san_diego_river.jpg"
- },
- {
-  "slug": "the_san_diego_river_park_foundation_the_bbbbbs_bothersome_but_beneficial_backyard_bandits_8211_0_20260801",
-  "title": "The BBBBBs: Bothersome But Beneficial Backyard Bandits&#8211;&#038; one wears a mask!",
-  "partner_name": "The San Diego River Park Foundation",
-  "partner_id": 323,
-  "description": "&lt;p&gt;THIS CLASS IS PART OF OUR FRIENDS AND NEIGHBORS OPEN HOUSE CELEBRATION LINDA HAWLEY’S NATURE ADVENTURES! FREE—ages 4-10 with an adult Ravenous Rabbits, Sneaky Squirrels, Stinky Skunks Rascally Raccoons &amp; [&hellip;]&lt;/p&gt;\\n",
-  "link": "https://sandiegoriver.org/event/the-bbbbbs-bothersome-but-beneficial-backyard-bandits-one-wears-a-mask/",
-  "availability": "",
-  "date_start": "2026-08-01T10:00:00-07:00",
-  "date_end": "2026-08-01T11:00:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Pre-K"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Biology / LifeSciences",
-   "Earth Science/Ecology"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Grant Park, 2310 Camino Del Rio N., San Diego",
-  "latitude": "32.7639275",
-  "longitude": "-117.2033498",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "the_san_diego_river.jpg"
  },
  {
   "slug": "the_living_coast_discovery_center_international_owl_awareness_20260801",
@@ -4077,6 +3743,38 @@
   "logo_src": ""
  },
  {
+  "slug": "nature_collective_san_diego_activities_family_fun_day_nature_collective_20260802",
+  "title": "San Diego Activities | Family Fun Day | Nature Collective",
+  "partner_name": "Nature Collective",
+  "partner_id": 375,
+  "description": "",
+  "link": "https://naturecollective.org/event/spring-nature-festival-april-19-2026/",
+  "availability": "Repeats 5 times through 2026-08-02",
+  "date_start": "2026-08-02T00:00:00-07:00",
+  "date_end": "",
+  "age_grade_level": [
+   "Family"
+  ],
+  "cost_range": "",
+  "time_of_day": [
+   "All Day"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "General Science"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "777 So. Hwy 101, Suite 112, Solana Beach, California, 92075",
+  "latitude": "32.9817462",
+  "longitude": "-117.2700457",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "nature_collective.png"
+ },
+ {
   "slug": "san_diego_children_s_discovery_museum_sensory_friendly_mornings_20260802",
   "title": "Sensory Friendly Mornings",
   "partner_name": "San Diego Children's Discovery Museum",
@@ -4168,6 +3866,43 @@
   "contact_email": "",
   "contact_phone": "",
   "logo_src": ""
+ },
+ {
+  "slug": "san_diego_natural_history_museum_residents_free_days_20260804",
+  "title": "Residents Free Days",
+  "partner_name": "San Diego Natural History Museum",
+  "partner_id": 24,
+  "description": "Residents of San Diego County receive general admission to The Nat the first Tuesday of every month. Here's what you need to know.",
+  "link": "https://www.sdnhm.org/calendar/residents-free-days/",
+  "availability": "",
+  "date_start": "2026-08-04T00:00:00-07:00",
+  "date_end": "",
+  "age_grade_level": [
+   "Family",
+   "Grades 9-12",
+   "Grades 6-8",
+   "Pre-K"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "All Day"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "General Science",
+   "Biology / LifeSciences",
+   "Earth Science/Ecology"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "San Diego Natural History Museum",
+  "latitude": "32.7320808",
+  "longitude": "-117.1473395",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "san_diego_natural_history.png"
  },
  {
   "slug": "san_diego_county_library_wild_animals_and_park_rangers_20260804",
@@ -4298,6 +4033,39 @@
   "contact_email": "",
   "contact_phone": "",
   "logo_src": ""
+ },
+ {
+  "slug": "nature_collective_habitat_restoration_nature_collective_san_elijo_lagoon_20260805",
+  "title": "Habitat Restoration | Nature Collective | San Elijo Lagoon",
+  "partner_name": "Nature Collective",
+  "partner_id": 375,
+  "description": "Join Nature Collective for hands-on fun to help improve coastal sage scrub habitats for plants + animals indigenous to the area.",
+  "link": "https://naturecollective.org/event/volunteer-restoration-event-2026-08-05/",
+  "availability": "Repeats 11 times through 2026-09-19",
+  "date_start": "2026-08-05T00:00:00-07:00",
+  "date_end": "2026-09-19T00:00:00-07:00",
+  "age_grade_level": [
+   "Family",
+   "Grades 6-8",
+   "Grades 9-12"
+  ],
+  "cost_range": "",
+  "time_of_day": [],
+  "opportunity_type": "Volunteering",
+  "areas_of_interest": [
+   "Earth Science/Ecology",
+   "Biology / LifeSciences"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "San Elijo Lagoon",
+  "latitude": "32.9817462",
+  "longitude": "-117.2700457",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "nature_collective.png"
  },
  {
   "slug": "san_diego_county_library_play_to_learn_20260805",
@@ -4558,6 +4326,38 @@
   "logo_src": ""
  },
  {
+  "slug": "san_diego_natural_history_museum_summer_camp_20260807",
+  "title": "Summer Camp",
+  "partner_name": "San Diego Natural History Museum",
+  "partner_id": 24,
+  "description": "San Diego Natural History Museum Summer Camp Program",
+  "link": "https://www.sdnhm.org/calendar/summer-camp/",
+  "availability": "",
+  "date_start": "2026-08-07T00:00:00-07:00",
+  "date_end": "",
+  "age_grade_level": [
+   "Family"
+  ],
+  "cost_range": "",
+  "time_of_day": [],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Biology / LifeSciences",
+   "Earth Science/Ecology",
+   "General Science"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "San Diego Natural History Museum, San Diego, CA",
+  "latitude": "32.7320808",
+  "longitude": "-117.1473395",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "san_diego_natural_history.png"
+ },
+ {
   "slug": "san_diego_county_library_projectpatho_cardiovascular_system_event_20260807",
   "title": "ProjectPatho: Cardiovascular System Event!",
   "partner_name": "San Diego County Library",
@@ -4589,6 +4389,39 @@
   "contact_email": "",
   "contact_phone": "",
   "logo_src": ""
+ },
+ {
+  "slug": "nature_collective_san_elijo_lagoon_wildlife_tour_nature_collective_20260808",
+  "title": "San Elijo Lagoon | Wildlife Tour | Nature Collective",
+  "partner_name": "Nature Collective",
+  "partner_id": 375,
+  "description": "Learn about your San Elijo Lagoon – where migratory and resident birds share a sanctuary, and where many animals find a home.",
+  "link": "https://naturecollective.org/event/wildlife-tour-august-8-2026/",
+  "availability": "Repeats 8 times through 2026-08-08",
+  "date_start": "2026-08-08T00:00:00-07:00",
+  "date_end": "",
+  "age_grade_level": [
+   "Family"
+  ],
+  "cost_range": "",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Biology / LifeSciences",
+   "Earth Science/Ecology"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "San Elijo Lagoon",
+  "latitude": "32.9817462",
+  "longitude": "-117.2700457",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "nature_collective.png"
  },
  {
   "slug": "i_love_a_clean_san_diego_watershed_warriors_el_cajon_8211_flinn_springs_county_park_20260808",
@@ -4689,42 +4522,6 @@
   "contact_email": "",
   "contact_phone": "",
   "logo_src": ""
- },
- {
-  "slug": "anza_borrego_foundation_anza_borrego_under_the_stars_20260808",
-  "title": "Anza-Borrego Under the Stars",
-  "partner_name": "Anza-Borrego Foundation",
-  "partner_id": 646,
-  "description": "Join Us for a Stargazing Adventure in Anza-Borrego!  Experience the night sky like never before at Anza-Borrego Desert State Park—an official International Dark Sky Park. Explore stars, planets, and constellations through telescopes guided by an astronomer.  What to expect:   A Stunning Night Sky: Experience the awe of a star-filled sky in one of California’s premier Dark Sky Parks—perfect for spotting constellations, planets, and even the Milky Way.    Guided Stargazing: Learn the basics of stargazing, including how to identify major stars, constellations, and planets visible this time of year – with and without a telescope.    Relaxed Atmosphere: Bring your camp chair, snacks, and beverages. You're welcome to hang out, ask questions, and simply enjoy the desert night.    Optional Camping: Extend your visit by camping nearby (this portion is not hosted).   Who should attend:   Nature lovers, astronomy enthusiasts, and anyone curious about the night sky who wants to experience stargazing in a world-class dark-sky location.    Anyone interested in learning how to identify stars, planets, and constellations with guidance from an astronomer.    Photographers, campers, and outdoor adventurers who enjoy desert landscapes and immersive nighttime experiences.    Anyone seeking a peaceful escape from city lights to connect with nature and enjoy the beauty of the cosmos.   REGISTER TODAY! Date: Saturday, August 8, 2026  Time: 8:30 p.m.-10:30 p.m.  Location: Anza-Borrego Desert State Park (location to be determined)  Cost:  ABF Member: $20 Not a member? Join today for as little as $35 and save!  Non-Member: $24  Student: $12  Cancellation Policy &amp; Scholarships: Please see our FAQs page to read our cancellation policy and learn about scholarship options.",
-  "link": "https://theabf.org/events/anza-borrego-under-the-stars/",
-  "availability": "Repeats 3 times through 2026-10-09",
-  "date_start": "2026-08-08T20:30:00-07:00",
-  "date_end": "2026-10-09T22:00:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Grades 6-8",
-   "Grades 9-12",
-   "Adult"
-  ],
-  "cost_range": "Less than $25",
-  "time_of_day": [
-   "Evening"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Physics",
-   "Earth Science/Ecology"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Anza-Borrego Desert State Park",
-  "latitude": "None",
-  "longitude": "None",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "anzaborrego_foundation.jpeg"
  },
  {
   "slug": "coastal_roots_farm_monthly_farm_tour_8211_august_2026_20260809",
@@ -5237,7 +5034,7 @@
   "partner_id": 412,
   "description": "Coastal Roots Farm invites people of all ages and backgrounds to our free and festive Summer Shabbat series—Great Outdoor Shabbat! It's a true picnic-style Shabbat: bring a picnic dinner, drinks, and blankets or chairs . We'll provide live music, a fun craft for kids, a brief 10–15 minute tour of the Farm, playtime in Nature Play, and optional learning opportunities. As the sun sets over the fields, we’ll welcome Shabbat together in the beauty of the great outdoors . 🗓️ Friday, August 14 ⏰ 5-7 p.m. 🎟️ FREE Facilitated By: Sharone Oren, Education Manager Our Shabbat experience will be uplifted by the music of the Kol Tefillah band. What’s Included: Live music, challah wine and grape juice, a craft, and a chance to learn about the intersection of Judaism and farming. Who Should Join: Anyone and everyone! Whether celebrating Shabbat is part of your weekly ritual or this will be your first time, join us at the Farm for a magical evening of friendship, laughter, and live music—all while looking at the beautiful scenery of the Farm.",
   "link": "https://coastalrootsfarm.org/event/great-outdoor-shabbat-august-2026/",
-  "availability": "",
+  "availability": "Repeats 2 times through 2026-08-14",
   "date_start": "2026-08-14T17:00:00-07:00",
   "date_end": "2026-08-14T19:00:00-07:00",
   "age_grade_level": [
@@ -5329,41 +5126,6 @@
   "logo_src": "living_coast_discovery_center.jpg"
  },
  {
-  "slug": "the_san_diego_river_park_foundation_bird_drawing_workshop_with_art_form_20260816",
-  "title": "Bird Drawing Workshop with Art FORM",
-  "partner_name": "The San Diego River Park Foundation",
-  "partner_id": 323,
-  "description": "&lt;p&gt;Go birding with the San Diego River Park Foundation and take a closer look at native birds that live on the San Diego River, followed by a bird drawing workshop [&hellip;]&lt;/p&gt;\\n",
-  "link": "https://sandiegoriver.org/event/bird-drawing-workshop-with-art-form/",
-  "availability": "Repeats 2 times through 2026-12-20",
-  "date_start": "2026-08-16T10:00:00-07:00",
-  "date_end": "2026-12-20T11:30:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Grades 6-8",
-   "Grades 9-12"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Biology / LifeSciences",
-   "General Science"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Grant Park, 2310 Camino Del Rio N., San Diego",
-  "latitude": "32.7639275",
-  "longitude": "-117.2033498",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "the_san_diego_river.jpg"
- },
- {
   "slug": "san_diego_county_library_air_space_museum_bus_20260818",
   "title": "Air & Space Museum Bus",
   "partner_name": "San Diego County Library",
@@ -5398,6 +5160,43 @@
   "contact_email": "",
   "contact_phone": "",
   "logo_src": ""
+ },
+ {
+  "slug": "san_diego_natural_history_museum_talks_and_workshops_20260819",
+  "title": "Talks and Workshops",
+  "partner_name": "San Diego Natural History Museum",
+  "partner_id": 24,
+  "description": "Find out what the experts are saying. The Nat offers talks, classes, film festivals, and other ways of learning and engaging with weird, fascinating, and inspiring subjects.",
+  "link": "https://www.sdnhm.org/",
+  "availability": "",
+  "date_start": "2026-08-19T00:00:00-07:00",
+  "date_end": "",
+  "age_grade_level": [
+   "Family",
+   "Grades 6-8",
+   "Grades 9-12"
+  ],
+  "cost_range": "",
+  "time_of_day": [
+   "All Day"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Biology / LifeSciences",
+   "Earth Science/Ecology",
+   "Physical Science",
+   "Chemistry"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "San Diego Natural History Museum",
+  "latitude": "32.7320808",
+  "longitude": "-117.1473395",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "san_diego_natural_history.png"
  },
  {
   "slug": "san_diego_county_library_chess_20260819",
@@ -5658,41 +5457,6 @@
   "logo_src": ""
  },
  {
-  "slug": "the_san_diego_river_park_foundation_nature_nights_bat_walk_and_moths_20260822",
-  "title": "Nature Nights: Bat Walk and Moths",
-  "partner_name": "The San Diego River Park Foundation",
-  "partner_id": 323,
-  "description": "&lt;p&gt;Join us for a fun evening adventure as we stroll along the river, listen and look for bats and moths, and explore the nighttime world. We’ll eavesdrop on echolocation calls [&hellip;]&lt;/p&gt;\\n",
-  "link": "https://sandiegoriver.org/event/nature-nights-bat-walk-and-moths-3/",
-  "availability": "Repeats 2 times through 2026-09-12",
-  "date_start": "2026-08-22T19:00:00-07:00",
-  "date_end": "2026-09-12T21:00:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Grades 6-8",
-   "Grades 9-12"
-  ],
-  "cost_range": "",
-  "time_of_day": [
-   "Evening"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Biology / LifeSciences",
-   "Earth Science/Ecology"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Grant Park, 2310 Camino Del Rio N., San Diego",
-  "latitude": "32.7639275",
-  "longitude": "-117.2033498",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "the_san_diego_river.jpg"
- },
- {
   "slug": "san_diego_county_library_free_play_20260826",
   "title": "Free Play",
   "partner_name": "San Diego County Library",
@@ -5854,6 +5618,41 @@
   "contact_email": "",
   "contact_phone": "",
   "logo_src": "san_diego_childrens_discovery.jpg"
+ },
+ {
+  "slug": "fleet_science_center_the_sky_tonight_20260829",
+  "title": "The Sky Tonight",
+  "partner_name": "Fleet Science Center",
+  "partner_id": 121,
+  "description": "Connecting our community to the wonders above.",
+  "link": "https://www.fleetscience.org/events/sky-tonight",
+  "availability": "",
+  "date_start": "2026-08-29T00:00:00-07:00",
+  "date_end": "",
+  "age_grade_level": [
+   "Family",
+   "Grades 6-8",
+   "Grades 9-12"
+  ],
+  "cost_range": "",
+  "time_of_day": [
+   "Evening"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Earth Science/Ecology",
+   "Physics"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "1875 El Prado, San Diego, CA, 92101",
+  "latitude": "32.7308603",
+  "longitude": "-117.1469718",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "fleet_science_center.jpg"
  },
  {
   "slug": "i_love_a_clean_san_diego_watershed_warriors_spring_valley_8211_sweetwater_lane_county_20260829",
@@ -6672,39 +6471,6 @@
   "logo_src": "i_love_a_clean.png"
  },
  {
-  "slug": "the_san_diego_river_park_foundation_wingspan_and_ecologies_game_time_20260920",
-  "title": "Wingspan and Ecologies Game Time!",
-  "partner_name": "The San Diego River Park Foundation",
-  "partner_id": 323,
-  "description": "&lt;p&gt;Join San Diego Bird Alliance and Jessica Ullyott, founder of Nature Needs SD and local trail guide for a deeper dive into ecosystems. Learn how plants, animals and other factors [&hellip;]&lt;/p&gt;\\n",
-  "link": "https://sandiegoriver.org/event/wingspan-and-ecologies-game-time-2/",
-  "availability": "Repeats 2 times through 2026-10-18",
-  "date_start": "2026-09-20T10:00:00-07:00",
-  "date_end": "2026-10-18T11:00:00-07:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Biology / LifeSciences",
-   "Earth Science/Ecology"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Grant Park, 2310 Camino Del Rio N., San Diego",
-  "latitude": "32.7639275",
-  "longitude": "-117.2033498",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "the_san_diego_river.jpg"
- },
- {
   "slug": "san_diego_county_library_special_storytime_with_breanne_reid_dds_20260921",
   "title": "SPECIAL: Storytime with Breanne Reid DDS",
   "partner_name": "San Diego County Library",
@@ -6807,40 +6573,6 @@
   "logo_src": ""
  },
  {
-  "slug": "anza_borrego_foundation_september_anza_borrego_night_hike_20260926",
-  "title": "September Anza-Borrego Night Hike",
-  "partner_name": "Anza-Borrego Foundation",
-  "partner_id": 646,
-  "description": "Join us for a peaceful moonlit hike through the desert, where wide-open skies, rugged terrain, and the quiet beauty of the landscape come alive after dark.  What to Expect:   Under the glow of the moon and stars, we’ll experience the sights and sounds of the desert at night—from shifting shadows across the landscape to the subtle movement of nocturnal wildlife.    We’ll hike approximately 2-3 miles roundtrip across natural terrain.    Along the trail, you might see nocturnal creatures that thrive after dark, such as scorpions, bats, and owls.    This easy-paced night hike will be led by a wilderness first responder, ensuring a safe and fun experience for all ages.   Who Should Attend:   Nature lovers interested in experiencing the desert in a new and unique way.    Stargazers and those who appreciate wide, dark skies.    Hikers in moderate physical condition, comfortable walking several miles over sand or dirt trails.    Anyone looking for a memorable outdoor adventure at night.      REGISTER TODAY!   Date: Saturday, September 26, 2026  Time: 6:00 p.m.-9:00 p.m. (start and end times are approximate and will be confirmed)  Location: Meet at the ABF store at 587 Palm Canyon Dr. #110, Borrego Springs, CA 92004 (in The Mall next to Calico’s). From there we’ll carpool/caravan to the trailhead (location to be determined).    Cost:  ABF Member: $28 Not a member? Join today for as little as $35 and save!  Non-Member: $33  Student: $17  Cancellation Policy: Please see our FAQs page to read our cancellation policy and learn about scholarship options.     What Past Participants Are Saying:   “Well organized. Educated and educating guides.”   “I appreciated the opportunity to be outdoors and experience the desert in a different way via a night hike.”   “It was a perfect evening under the stars”     Hike Leader:  Matt Nagy is a San Diego native who had the unique experience of growing up across the world. Before graduating high school, he lived in five different countries, including the USA. His global travels have given him the opportunity to see much of the planet, but without a doubt, San Diego County (especially Anza Borrego) remains his favorite place. In his free time, Matt enjoys long hikes, bike rides, and live music. When he has a few weeks off, he embarks on extended adventures such as river trips, bikepacking, or backpacking. Having spent many months under the stars, Matt is always planning his next adventure. He is excited to explore and appreciate the wonders of Anza Borrego with others, creating unforgettable memories along the way.              Don't forget a night sky guide before you head out!",
-  "link": "https://theabf.org/events/september-anza-borrego-night-hike/",
-  "availability": "",
-  "date_start": "2026-09-26T18:00:00-07:00",
-  "date_end": "2026-09-26T21:00:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Grades 9-12",
-   "Adult"
-  ],
-  "cost_range": "Less than $50",
-  "time_of_day": [
-   "Evening"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Earth Science/Ecology"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "587 Palm Canyon Dr. #110, Borrego Springs, CA 92004",
-  "latitude": "None",
-  "longitude": "None",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "anzaborrego_foundation.jpeg"
- },
- {
   "slug": "i_love_a_clean_san_diego_compost_038_mulch_giveaway_8211_10_3_at_sun_runner_lot_20261003",
   "title": "Compost &#038; Mulch Giveaway &#8211; 10/3 at Sun Runner Lot",
   "partner_name": "I Love A Clean San Diego",
@@ -6873,39 +6605,6 @@
   "logo_src": "i_love_a_clean.png"
  },
  {
-  "slug": "the_san_diego_river_park_foundation_beastly_bats_038_spooky_spiders_20261003",
-  "title": "BEASTLY BATS &#038; SPOOKY SPIDERS!",
-  "partner_name": "The San Diego River Park Foundation",
-  "partner_id": 323,
-  "description": "&lt;p&gt;LINDA HAWLEY’S NATURE ADVENTURES! FREE—Ages 4-10, with an adult. EEEK! SHRIEK! SCREAM! SO SCARY! No! They are both MYTH-understood. Bats do not make nests in your hair or suck your [&hellip;]&lt;/p&gt;\\n",
-  "link": "https://sandiegoriver.org/event/beastly-bats-spooky-spiders-linda-hawleys-nature-adventures/",
-  "availability": "",
-  "date_start": "2026-10-03T10:00:00-07:00",
-  "date_end": "2026-10-03T11:00:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Pre-K"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Biology / LifeSciences"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Grant Park, 2310 Camino Del Rio N., San Diego",
-  "latitude": "32.7639275",
-  "longitude": "-117.2033498",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "the_san_diego_river.jpg"
- },
- {
   "slug": "san_diego_county_library_paws_and_tales_read_to_a_sd_humane_society_canine_ambassador_20261003",
   "title": "Paws and Tales: Read to a SD Humane Society Canine Ambassador",
   "partner_name": "San Diego County Library",
@@ -6935,41 +6634,6 @@
   "contact_email": "",
   "contact_phone": "",
   "logo_src": ""
- },
- {
-  "slug": "the_san_diego_river_park_foundation_halloween_edition_nature_nights_bat_walk_and_moths_20261003",
-  "title": "Halloween Edition Nature Nights: Bat Walk and Moths",
-  "partner_name": "The San Diego River Park Foundation",
-  "partner_id": 323,
-  "description": "&lt;p&gt;Are you in a Halloween mood? Join us for a fun evening Halloween adventure! Stroll along the river as we listen and look for bats and moths and explore the [&hellip;]&lt;/p&gt;\\n",
-  "link": "https://sandiegoriver.org/event/halloween-edition-nature-nights-bat-walk-and-moths/",
-  "availability": "",
-  "date_start": "2026-10-03T19:00:00-07:00",
-  "date_end": "2026-10-03T21:00:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Grades 6-8",
-   "Grades 9-12"
-  ],
-  "cost_range": "Less than $25",
-  "time_of_day": [
-   "Evening"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Biology / LifeSciences",
-   "Earth Science/Ecology"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Grant Park, 2310 Camino Del Rio N., San Diego",
-  "latitude": "32.7639275",
-  "longitude": "-117.2033498",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "the_san_diego_river.jpg"
  },
  {
   "slug": "san_diego_county_library_lakeside_kids_crew_kids_arcade_20261006",
@@ -7033,38 +6697,6 @@
   "contact_email": "",
   "contact_phone": "",
   "logo_src": "i_love_a_clean.png"
- },
- {
-  "slug": "the_san_diego_river_park_foundation_family_field_trip_community_event_tracking_038_field_20261010",
-  "title": "Family Field Trip Community Event, TRACKING &#038; FIELD",
-  "partner_name": "The San Diego River Park Foundation",
-  "partner_id": 323,
-  "description": "&lt;p&gt;Introducing Natural LAW Field Trips for the Whole Family! Land • Air • Water – Your Family’s Adventure Starts Here! REGISTRATION AND INFORMATION: https://sandiegoriver.galaxydigital.com/need/detail/?need_id=1178009 For years, parents and chaperones have [&hellip;]&lt;/p&gt;\\n",
-  "link": "https://sandiegoriver.galaxydigital.com/need/detail/?need_id=1178009",
-  "availability": "",
-  "date_start": "2026-10-10T10:00:00-07:00",
-  "date_end": "2026-10-10T12:00:00-07:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "School Programs",
-  "areas_of_interest": [
-   "Earth Science/Ecology"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Grant Park, 2310 Camino Del Rio N., San Diego",
-  "latitude": "32.7639275",
-  "longitude": "-117.2033498",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "the_san_diego_river.jpg"
  },
  {
   "slug": "san_diego_county_library_lakeside_kids_crew_chess_20261013",
@@ -7263,39 +6895,6 @@
   "logo_src": "living_coast_discovery_center.jpg"
  },
  {
-  "slug": "the_san_diego_river_park_foundation_halloween_edition_nature_nights_bat_walk_and_moths_haunted_t_20261024",
-  "title": "Halloween Edition Nature Nights: Bat Walk and Moths Haunted Trail at Peutz Creek!",
-  "partner_name": "The San Diego River Park Foundation",
-  "partner_id": 323,
-  "description": "&lt;p&gt;Are you in a Halloween mood? Join us for a fun evening Halloween adventure! Stroll along Peutz Creek as we listen and look for bats and moths and explore the [&hellip;]&lt;/p&gt;\\n",
-  "link": "https://sandiegoriver.org/event/halloween-edition-nature-nights-bat-walk-and-moths-2/",
-  "availability": "",
-  "date_start": "2026-10-24T19:00:00-07:00",
-  "date_end": "2026-10-24T21:00:00-07:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "Less than $25",
-  "time_of_day": [
-   "Evening"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Biology / LifeSciences",
-   "Earth Science/Ecology"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Peutz Creek, 966 Peutz Valley Rd, Alpine",
-  "latitude": "32.7639275",
-  "longitude": "-117.2033498",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "the_san_diego_river.jpg"
- },
- {
   "slug": "san_diego_county_library_haunted_chess_tournament_youth_ages_8_17_20261027",
   "title": "Haunted Chess Tournament: Youth Ages 8-17",
   "partner_name": "San Diego County Library",
@@ -7455,41 +7054,6 @@
   "logo_src": "i_love_a_clean.png"
  },
  {
-  "slug": "the_san_diego_river_park_foundation_the_wondrous_woodrat_mice_038_moles_shrews_038_voles_038_gop_20261107",
-  "title": "THE WONDROUS WOODRAT! … MICE &#038; MOLES, SHREWS &#038; VOLES &#038; GOPHERS IN HOLES!",
-  "partner_name": "The San Diego River Park Foundation",
-  "partner_id": 323,
-  "description": "&lt;p&gt;LINDA HAWLEY’S NATURE ADVENTURES! FREE—ages 4-10 with an adult Not your ordinary sewer rats, woodrats are the original PACKRATS, building huge, intricate houses that last for centuries! How do they [&hellip;]&lt;/p&gt;\\n",
-  "link": "https://sandiegoriver.org/event/the-wondrous-woodrat-mice-moles-shrews-voles-gophers-in-holes/",
-  "availability": "",
-  "date_start": "2026-11-07T10:00:00-07:00",
-  "date_end": "2026-11-07T11:00:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Pre-K",
-   "Grades 6-8"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Biology / LifeSciences",
-   "Earth Science/Ecology"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Grant Park, 2310 Camino Del Rio N., San Diego",
-  "latitude": "32.7639275",
-  "longitude": "-117.2033498",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "the_san_diego_river.jpg"
- },
- {
   "slug": "san_diego_county_library_toddler_storytime_20261111",
   "title": "Toddler Storytime",
   "partner_name": "San Diego County Library",
@@ -7519,41 +7083,6 @@
   "contact_email": "",
   "contact_phone": "",
   "logo_src": ""
- },
- {
-  "slug": "anza_borrego_foundation_intermediate_hike_domelands_20261114",
-  "title": "Intermediate Hike: Domelands",
-  "partner_name": "Anza-Borrego Foundation",
-  "partner_id": 646,
-  "description": "Journey through the sculpted wonders of Anza-Borrego  Explore the otherworldly terrain of the Domelands on this intermediate-level hike through Anza-Borrego Desert State Park. Discover wind and water-carved formations, slot canyons, and sweeping desert views that make this area a true geological treasure.  What to Expect:   Approximately 7 miles of moderate hiking with ~1,200 ft elevation gain, some uneven terrain, off-trail sections and light scrambling    Dramatic badlands, natural arches, and sculpted sandstone domes    Panoramic views of the Carrizo Badlands and Imperial Valley    A chance to see desert wildlife and seasonal blooms    Interpretive insights into the area’s unique geology and desert ecology   Who Should Attend:   Hikers with some experience looking for a moderate challenge    Nature and geology enthusiasts eager to explore off-the-beaten-path areas    Visitors eager to experience one of Anza-Borrego’s most fascinating natural features     REGISTER TODAY!   Date: Saturday, November 14, 2026  Time: 7:00 a.m.-2:00 p.m.  Location: Meet at the trailhead off of S-22. Precise meeting location will be sent before the event.    Cost:  ABF Member: $30  Non-Member: $35  Student: $18    Cancellation Policy &amp; Scholarships: Please see our FAQs page to read our cancellation policy and learn about scholarship options.  What Previous Attendees Are Saying about Our Hikes:  “I loved the hike choice and challenge. I will definitely be on another hike with the foundation soon!”  “I so enjoyed getting \"off trail\" and exploring with the Anza Borrego Foundation. The camaraderie, physical challenge, and education around Anza Borrego was beyond my expectations.”  “Expertise was great. cohesiveness of group was good. location excellent.”  Hike Leader:  In his professional life, Sergey Kuhsch has spent over 16 years in software development across different industries. In contrast, much of his free time is dedicated to exploring the natural world. As much as he enjoys hiking in chaparral or exploring the local mountains, he feels that Anza Borrego is a very special place. The sheer size and accessibility of the park are unlike any other in the region. The rugged landscape, endless vistas, and hidden oases offer unique opportunities to explore. Sergey feels that supporting the Anza Borrego Foundation is the most impactful way to support Anza Borrego Desert State Park.                                              You’re invited to explore the scientific detective story in San Diego’s diverse mountains and deserts spanning over 200 million years.&nbsp; This includes the expansive landscapes of Anza-Borrego Desert State Park which is rich with ancient geological wonders.&nbsp;",
-  "link": "https://theabf.org/events/intermediate-hike-domelands/",
-  "availability": "",
-  "date_start": "2026-11-14T07:00:00-07:00",
-  "date_end": "2026-11-14T14:00:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Grades 9-12",
-   "Adult"
-  ],
-  "cost_range": "Less than $50",
-  "time_of_day": [
-   "Morning",
-   "Afternoon"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Earth Science/Ecology"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Anza-Borrego Desert State Park, trailhead off S-22, Borrego Springs",
-  "latitude": "None",
-  "longitude": "None",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "anzaborrego_foundation.jpeg"
  },
  {
   "slug": "i_love_a_clean_san_diego_compost_038_mulch_giveaway_8211_11_14_at_sun_runner_lot_20261114",
@@ -7712,41 +7241,6 @@
   "logo_src": ""
  },
  {
-  "slug": "the_san_diego_river_park_foundation_reindeer_here_no_mule_deer_20261205",
-  "title": "REINDEER HERE? NO, MULE DEER!",
-  "partner_name": "The San Diego River Park Foundation",
-  "partner_id": 323,
-  "description": "&lt;p&gt;Linda Hawley’s Nature Adventures! FREE—ages 4-10 with an adult These beautiful, elegant mammals stand taller than all other San Diego native animals. Why are they called Mule deer? How are [&hellip;]&lt;/p&gt;\\n",
-  "link": "https://sandiegoriver.org/event/reindeer-here-no-mule-deer/",
-  "availability": "",
-  "date_start": "2026-12-05T10:00:00-07:00",
-  "date_end": "2026-12-05T11:00:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Pre-K",
-   "Grades 6-8"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Biology / LifeSciences",
-   "Earth Science/Ecology"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Grant Park, 2310 Camino Del Rio N., San Diego",
-  "latitude": "32.7639275",
-  "longitude": "-117.2033498",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "the_san_diego_river.jpg"
- },
- {
   "slug": "san_diego_county_library_kid_s_dnd_20261209",
   "title": "Kid's DnD",
   "partner_name": "San Diego County Library",
@@ -7775,72 +7269,6 @@
   "contact_email": "",
   "contact_phone": "",
   "logo_src": ""
- },
- {
-  "slug": "anza_borrego_foundation_desert_trails_a_primitive_camping_adventure_20261212",
-  "title": "Desert Trails: A Primitive Camping Adventure",
-  "partner_name": "Anza-Borrego Foundation",
-  "partner_id": 646,
-  "description": "Explore, Hike, and Camp Under the Stars in the Heart of the Desert  Get off the beaten path and discover the rugged beauty of the desert! This two-day adventure combines a scenic driving tour, invigorating hikes, and hands-on primitive camping skills for an unforgettable outdoor experience.  What to Expect:   Guided 4WD/AWD driving tour through Anza-Borrego Desert State Park    Two moderate-level hikes through stunning desert terrain    Learn primitive camping techniques—from setting up camp to outdoor cooking (we’ll provide a list of what to bring!)    Camp under a blanket of desert stars    Connect with fellow outdoor enthusiasts and nature lovers   Who Should Attend:   Adventurers eager to try primitive camping for the first time    Hikers and off-road explorers seeking a new challenge    Anyone who loves the desert and wants to learn wilderness basics     REGISTER TODAY!   Date/Time: 9:00 a.m. Saturday, December 12 – 12:00 p.m. Sunday, December 13, 2026    Location: Meet at the ABF Store (587 Palm Canyon Dr. #110, Borrego Springs, CA 92204). We’ll then carpool/caravan to the start of our driving tour.    Cost:  ABF Member: $102/person Not a member? Join today for as little as $35 and save!  Non-Member: $120/person  Student: $60/person    Cancellation &amp; Scholarship Policy: Please see our FAQs page to read our cancellation policy and learn about scholarship options.      Tour Leaders:  Todd Linke is a resident of San Diego and just finished his 25th year in education, 23 of them with the Grossmont Union High School District. Todd grew up in Ohio and has been exploring, hiking and camping since he was a child. His earliest outdoor memories include hiking in the caves in Hocking Hills, sailing on Lake Atwood, swimming in Lake Erie, and camping at the seaside at Myrtle Beach.  Todd fell in love with the desert several years ago and makes the 2-hour drive to the park every chance he gets. He has visited the park over 100 times and has hiked and driven many of its well-known and more obscure trails and roads, but as always discovering more. Todd brings his love for science and his passion for the desert to any excursion in the park.       In his professional life, Sergey Kuhsch has spent over 16 years in software development across different industries. In contrast, much of his free time is dedicated to exploring the natural world. As much as he enjoys hiking in chaparral or exploring the local mountains, he feels that Anza Borrego is a very special place. The sheer size and accessibility of the park are unlike any other in the region. The rugged landscape, endless vistas, and hidden oases offer unique opportunities to explore. Sergey feels that supporting the Anza Borrego Foundation is the most impactful way to support AnzaBorrego Desert State Park.",
-  "link": "https://theabf.org/events/desert-trails-a-primitive-camping-adventure-2/",
-  "availability": "",
-  "date_start": "2026-12-12T09:00:00-07:00",
-  "date_end": "2026-12-13T12:00:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Grades 9-12",
-   "Adult"
-  ],
-  "cost_range": "Less than $200",
-  "time_of_day": [
-   "All Day"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Earth Science/Ecology"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "587 Palm Canyon Dr. #110, Borrego Springs, CA 92204",
-  "latitude": "None",
-  "longitude": "None",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "anzaborrego_foundation.jpeg"
- },
- {
-  "slug": "the_san_diego_river_park_foundation_make_your_own_sustainable_gifts_workshop_diy_personal_care_p_20261212",
-  "title": "Make your Own Sustainable Gifts Workshop: DIY Personal Care Products",
-  "partner_name": "The San Diego River Park Foundation",
-  "partner_id": 323,
-  "description": "&lt;p&gt;Just in time for the Holidays! Are you looking for that special gift for that special, sustainability minded person? Would you like to save money and the planet at the [&hellip;]&lt;/p&gt;\\n",
-  "link": "https://sandiegoriver.org/event/make-your-own-sustainable-gifts-workshop-dyi-personal-care-products/",
-  "availability": "",
-  "date_start": "2026-12-12T10:00:00-07:00",
-  "date_end": "2026-12-12T11:30:00-07:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "General Science"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Grant Park, 2310 Camino Del Rio N., San Diego",
-  "latitude": "32.7639275",
-  "longitude": "-117.2033498",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "the_san_diego_river.jpg"
  },
  {
   "slug": "san_diego_county_library_preschool_story_time_20261218",
