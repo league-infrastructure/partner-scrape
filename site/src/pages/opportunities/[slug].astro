@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getLogoPath, formatDateRange } from '../../lib/helpers';
+import { renderDescriptionHtml } from '../../lib/markdown';
 import opportunities from '../../data/opportunities.json';
 import partners from '../../data/partners.json';
 
@@ -19,6 +20,7 @@ const dateRange = formatDateRange(opp.date_start, opp.date_end);
 // Find matching partner
 const partner = partners.find(p => p.name === opp.partner_name);
 const hasLocation = opp.latitude && opp.longitude && !isNaN(parseFloat(opp.latitude));
+const descriptionHtml = renderDescriptionHtml(opp.description);
 ---
 
 <BaseLayout
@@ -43,7 +45,7 @@ const hasLocation = opp.latitude && opp.longitude && !isNaN(parseFloat(opp.latit
 
     <div class="detail-body">
       <div class="detail-content">
-        <p>{opp.description}</p>
+        <div class="detail-description" set:html={descriptionHtml} />
 
         {opp.link && (
           <div class="mt-3">
