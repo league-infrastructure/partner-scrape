@@ -465,143 +465,6 @@
   "logo_src": ""
  },
  {
-  "slug": "san_diego_children_s_discovery_museum_summer_camp_20260720",
-  "title": "Summer Camp",
-  "partner_name": "San Diego Children's Discovery Museum",
-  "partner_id": 16,
-  "description": "Are you a creative and curious problem solver? Spend the summer exploring with the Children's Museum of Discovery! Each day of camp includes access to Museum exhibits, hands-on exploration with trained education staff, and an opportunity to make new friends. Explore engineering, practice your paleontology skills, and blast off into outer space with endless opportunities to explore, imagine, and experiment. Register now to join us for a summer of FUN!   Little Explorers Camp Ages: 4 - 5 years old Hours: 9:00 a.m. - 2:30 p.m. Big Explorers Camp Ages: 6 - 8 years old Hours: 9:00 a.m. - 2:30 p.m. Register Here",
-  "link": "https://visitcmod.org/events/summer-camp-4/2026-07-20/",
-  "availability": "Repeats 20 times through 2026-08-14",
-  "date_start": "2026-07-20T09:00:00-07:00",
-  "date_end": "2026-08-14T14:30:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Pre-K",
-   "Grades 6-8"
-  ],
-  "cost_range": "",
-  "time_of_day": [
-   "Morning",
-   "Afternoon"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Engineering",
-   "Earth Science/Ecology",
-   "Physics"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Children's Museum of Discovery, 320 North Broadway, Escondido, CA",
-  "latitude": "33.124517",
-  "longitude": "-117.082351",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "san_diego_childrens_discovery.jpg"
- },
- {
-  "slug": "san_diego_county_library_lego_club_20260720",
-  "title": "Lego Club",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Play and build with Lego bricks! We provide the Legos, and you bring your imagination. Take on one of our building challenges or make your own creations! Open to builders ages 5-12. ",
-  "link": "https://sdcl.bibliocommons.com/events/69ea6b28bd9a3c316a54e975",
-  "availability": "Repeats 66 times through 2027-03-01",
-  "date_start": "2026-07-20T14:30:00-07:00",
-  "date_end": "2027-03-01T15:30:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Pre-K",
-   "Grades 6-8"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Afternoon"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Engineering"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Fallbrook",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "san_diego_county_library_summer_steam_make_your_own_zine_20260720",
-  "title": "Summer STEAM: Make your own Zine!",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Create your own mini zine! Kids will explore artistic expression, use layout and visual design principles, practice sequencing and informational thinking, and apply measurement, structure, and patterning to create their own stories. ",
-  "link": "https://sdcl.bibliocommons.com/events/6a2869fe43b41b3d006d1609",
-  "availability": "",
-  "date_start": "2026-07-20T15:00:00-07:00",
-  "date_end": "2026-07-20T16:00:00-07:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Afternoon"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "General Science"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "San Marcos",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "san_diego_county_library_construction_club_20260720",
-  "title": "Construction Club",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Craft activities and building challenges with LEGO bricks, geared for kids ages 4 and up. Offered by local high school students. No registration required.",
-  "link": "https://sdcl.bibliocommons.com/events/6a1e2f1343b41b3d006aed7c",
-  "availability": "Repeats 30 times through 2026-12-21",
-  "date_start": "2026-07-20T16:00:00-07:00",
-  "date_end": "2026-12-21T17:00:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Pre-K",
-   "Grades 6-8"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Afternoon"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Engineering"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "El Cajon",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
   "slug": "san_diego_county_library_explore_learn_and_play_20260721",
   "title": "Explore, Learn, and Play",
   "partner_name": "San Diego County Library",
@@ -698,6 +561,43 @@
   "contact_email": "",
   "contact_phone": "",
   "logo_src": "ocean_connectors.jpg"
+ },
+ {
+  "slug": "san_diego_children_s_discovery_museum_summer_camp_20260721",
+  "title": "Summer Camp",
+  "partner_name": "San Diego Children's Discovery Museum",
+  "partner_id": 16,
+  "description": "Are you a creative and curious problem solver? Spend the summer exploring with the Children's Museum of Discovery! Each day of camp includes access to Museum exhibits, hands-on exploration with trained education staff, and an opportunity to make new friends. Explore engineering, practice your paleontology skills, and blast off into outer space with endless opportunities to explore, imagine, and experiment. Register now to join us for a summer of FUN!   Little Explorers Camp Ages: 4 - 5 years old Hours: 9:00 a.m. - 2:30 p.m. Big Explorers Camp Ages: 6 - 8 years old Hours: 9:00 a.m. - 2:30 p.m. Register Here",
+  "link": "https://visitcmod.org/events/summer-camp-4/2026-07-21/",
+  "availability": "Repeats 19 times through 2026-08-14",
+  "date_start": "2026-07-21T09:00:00-07:00",
+  "date_end": "2026-08-14T14:30:00-07:00",
+  "age_grade_level": [
+   "Family",
+   "Pre-K",
+   "Grades 6-8"
+  ],
+  "cost_range": "",
+  "time_of_day": [
+   "Morning",
+   "Afternoon"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Engineering",
+   "Earth Science/Ecology",
+   "Physics"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Children's Museum of Discovery, 320 North Broadway, Escondido, CA",
+  "latitude": "33.124517",
+  "longitude": "-117.082351",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "san_diego_childrens_discovery.jpg"
  },
  {
   "slug": "san_diego_children_s_discovery_museum_tortoise_talk_20260721",
@@ -986,6 +886,107 @@
   "financial_support": "No",
   "ngss_aligned": "No",
   "location": "La Mesa",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
+  "slug": "the_league_of_amazing_programmers_game_making_cv_20260721",
+  "title": "Game Making@CV",
+  "partner_name": "The LEAGUE of Amazing Programmers",
+  "partner_id": 287,
+  "description": "Game Making at Carmel Valley Give your child the thrill of making their very first video game with block coding, a beginner friendly way to learn coding. Kids in grades 3 through 12 will work alongside a live instructor to design a main character, add movement, and create simple challenges--then watch their game come to life. It’s a fun, beginner-friendly way to spark creativity, build problem-solving skills, and get them excited about technology. For programmers from 2nd to 6th grade. Price: $375 Location: The League of Amazing Programmers 12625 High Bluff Dr #113, San Diego, CA 92130 Sign Up Below!",
+  "link": "https://jtl.pike13.com",
+  "availability": "",
+  "date_start": "2026-07-21T17:00:00-07:00",
+  "date_end": "2026-07-21T19:00:00-07:00",
+  "age_grade_level": [
+   "Grades 6-8",
+   "Grades 9-12"
+  ],
+  "cost_range": "Less than $400",
+  "time_of_day": [
+   "Evening"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Coding/Computer Science/Cyber Security"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "The League of Amazing Programmers, 12625 High Bluff Dr #113, San Diego, CA 92130",
+  "latitude": "32.9474",
+  "longitude": "-117.239",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "the_league_of_amazing.png"
+ },
+ {
+  "slug": "the_league_of_amazing_programmers_competitive_robotics_summer_warm_up_20260721",
+  "title": "Competitive Robotics Summer Warm Up",
+  "partner_name": "The LEAGUE of Amazing Programmers",
+  "partner_id": 287,
+  "description": "Students gain hands-on experience with robot design, build, and programming fundamentals aligned with competitive robotics. This summer session, we'll work together to learn what it takes to compete — meeting you where you are and pushing you further, whether you're picking up a wrench for the first time or refining your autonomous code. What you'll gain: Hands-on experience with robot design, build, and programming Greater confidence heading into the season Stronger teamwork and collaboration skills A real competitive edge for the upcoming season",
+  "link": "https://jtl.pike13.com",
+  "availability": "",
+  "date_start": "2026-07-21T17:00:00-07:00",
+  "date_end": "2026-07-21T19:00:00-07:00",
+  "age_grade_level": [
+   "Grades 6-8",
+   "Grades 9-12"
+  ],
+  "cost_range": "",
+  "time_of_day": [
+   "Evening"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Engineering",
+   "Coding/Computer Science/Cyber Security"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Robot Garage (RG), San Diego",
+  "latitude": "32.8066",
+  "longitude": "-117.247",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "the_league_of_amazing.png"
+ },
+ {
+  "slug": "san_diego_county_library_construction_club_20260721",
+  "title": "Construction Club",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Craft activities and building challenges with LEGO bricks, geared for kids ages 4 and up. Offered by local high school students. No registration required.",
+  "link": "https://sdcl.bibliocommons.com/events/6a1e2f1343b41b3d006aed7c",
+  "availability": "Repeats 29 times through 2026-12-21",
+  "date_start": "2026-07-21T17:00:00-07:00",
+  "date_end": "2026-12-21T17:00:00-07:00",
+  "age_grade_level": [
+   "Family",
+   "Pre-K",
+   "Grades 6-8"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Afternoon"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Engineering"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "El Cajon",
   "latitude": "32.834727",
   "longitude": "-117.1306115",
   "contact_name": "",
@@ -1359,6 +1360,40 @@
   "logo_src": ""
  },
  {
+  "slug": "san_diego_county_library_lego_club_20260722",
+  "title": "Lego Club",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Play and build with Lego bricks! We provide the Legos, and you bring your imagination. Take on one of our building challenges or make your own creations! Open to builders ages 5-12. ",
+  "link": "https://sdcl.bibliocommons.com/events/69ea6b28bd9a3c316a54e975",
+  "availability": "Repeats 65 times through 2027-03-01",
+  "date_start": "2026-07-22T15:30:00-07:00",
+  "date_end": "2027-03-01T15:30:00-07:00",
+  "age_grade_level": [
+   "Family",
+   "Pre-K",
+   "Grades 6-8"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Afternoon"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Engineering"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Fallbrook",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
   "slug": "san_diego_county_library_steam_kids_artopia_20260722",
   "title": "STEAM Kids: Artopia",
   "partner_name": "San Diego County Library",
@@ -1391,6 +1426,172 @@
   "contact_email": "",
   "contact_phone": "",
   "logo_src": ""
+ },
+ {
+  "slug": "the_league_of_amazing_programmers_robot_drivers_ftc_your_first_coding_mission_20260722",
+  "title": "🤖Robot Drivers: FTC - Your First Coding Mission",
+  "partner_name": "The LEAGUE of Amazing Programmers",
+  "partner_id": 287,
+  "description": "**This Event is tailored to students in grades 7-12**\n\nWhat if your child could tell a robot exactly what to do, and watch it follow their commands? In this hands-on introductory workshop, students will step into the world of robotics and programming using FTC SIM, a free game-based simulator developed by FIRST Robotics Canada.\nWhat They'll Learn: Students will control a virtual robot using keyboard commands and program it with drag-and-drop block coding to move, turn, and navigate through challenges. No prior coding experience needed, just curiosity and a willingness to problem-solve. By the end of the hour, every student will have completed their first robot mission.\nWhy This Matters: Learning to code builds more than tech skills. It strengthens logical thinking, persistence, and creativity. Students learn to break big problems into smaller steps, test their ideas, and iterate when things don't work the first time, skills that transfer far beyond the screen.\nWhat to Expect:\n\n* Guided instruction with time for hands-on exploration\n* A fun puzzle challenge to apply what they've learned\n* A supportive environment where mistakes are part of the process\n\nWhat to Bring: Just your student! We'll provide computers. You are welcome to bring your computer as well.\nLearn more about FTC SIM: [https://ftcsim.org](https://ftcsim.org)",
+  "link": "https://www.meetup.com/the-league-tech-club/events/315533984/",
+  "availability": "Repeats 2 times through 2026-07-29",
+  "date_start": "2026-07-22T18:30:00-07:00",
+  "date_end": "2026-07-29T19:30:00-07:00",
+  "age_grade_level": [
+   "Grades 6-8",
+   "Grades 9-12"
+  ],
+  "cost_range": "",
+  "time_of_day": [
+   "Evening"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Coding/Computer Science/Cyber Security",
+   "Engineering"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "12625 High Bluff Dr. #113, San Diego, CA, 92130",
+  "latitude": "32.9475617",
+  "longitude": "-117.2395484",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "the_league_of_amazing.png"
+ },
+ {
+  "slug": "the_league_of_amazing_programmers_java_classes_20260722",
+  "title": "Java Classes",
+  "partner_name": "The LEAGUE of Amazing Programmers",
+  "partner_id": 287,
+  "description": "Learn to program in Java, one of the most important languages for commercial software development, and the language used in AP Computer Science. Many students explore our extensive curriculum and stay with our program through 12th grade. Classes meet one day per week for 1.5 hours Tuition is $280/month Student–teacher ratio of 5:1 Taught by experienced programmers Grades 5-12 only Our weekly classes run every week throughout the year, so when you register, we will enroll you at the same class time every week (bulk enrollment). You can then cancel or reschedule individual classes online through the client portal. To register for weekly classes Review the schedule below for a day and time slot. ( It's best to select the \"Month\" view. ) Create a client account , and add your students to the account Enroll in a first class for the day and time you want, from the list of classes below. To enroll in all classes of the same day and time, every week, you can: Email Liz Groves at info@jointheleague.org ( Click to compose an email ) with the day and time you would like. Call us at (858) 284-0481. Your child's instructor can enroll your child at the beginning of class. For all details on enrollment, please see our Enrollment Guide and our Policies and Procedures .",
+  "link": "https://jtl.pike13.com",
+  "availability": "",
+  "date_start": "2026-07-22T22:30:00-07:00",
+  "date_end": "2026-07-23T00:00:00-07:00",
+  "age_grade_level": [
+   "Grades 6-8",
+   "Grades 9-12"
+  ],
+  "cost_range": "Less than $200",
+  "time_of_day": [
+   "Evening"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Coding/Computer Science/Cyber Security"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Carmel Valley Campus (CV), San Diego",
+  "latitude": "32.9474",
+  "longitude": "-117.239",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "the_league_of_amazing.png"
+ },
+ {
+  "slug": "the_league_of_amazing_programmers_java_online_20260723",
+  "title": "Java Online",
+  "partner_name": "The LEAGUE of Amazing Programmers",
+  "partner_id": 287,
+  "description": "Learn to program in Java, one of the most important languages for commercial software development, and the language used in AP Computer Science. Many students explore our extensive curriculum and stay with our program through 12th grade. Classes meet one day per week for 1.5 hours Tuition is $280/month Student–teacher ratio of 5:1 Taught by experienced programmers Grades 5-12 only Our weekly classes run every week throughout the year, so when you register, we will enroll you at the same class time every week (bulk enrollment). You can then cancel or reschedule individual classes online through the client portal. To register for weekly classes Review the schedule below for a day and time slot. ( It's best to select the \"Month\" view. ) Create a client account , and add your students to the account Enroll in a first class for the day and time you want, from the list of classes below. To enroll in all classes of the same day and time, every week, you can: Email Liz Groves at info@jointheleague.org ( Click to compose an email ) with the day and time you would like. Call us at (858) 284-0481. Your child's instructor can enroll your child at the beginning of class. For all details on enrollment, please see our Enrollment Guide and our Policies and Procedures .",
+  "link": "https://jtl.pike13.com",
+  "availability": "",
+  "date_start": "2026-07-23T00:00:00-07:00",
+  "date_end": "2026-07-23T01:30:00-07:00",
+  "age_grade_level": [
+   "Grades 6-8",
+   "Grades 9-12"
+  ],
+  "cost_range": "Less than $200",
+  "time_of_day": [
+   "Evening"
+  ],
+  "opportunity_type": "Online",
+  "areas_of_interest": [
+   "Coding/Computer Science/Cyber Security"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Virtual Learning / Online (VL)",
+  "latitude": "32.9475617",
+  "longitude": "-117.2395484",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "the_league_of_amazing.png"
+ },
+ {
+  "slug": "the_league_of_amazing_programmers_python_online_20260723",
+  "title": "Python Online",
+  "partner_name": "The LEAGUE of Amazing Programmers",
+  "partner_id": 287,
+  "description": "Learn how to use python, one of the hottest programming languages used today. Python is used in everything from machine learning to data science. Our online Python Classes are for kids & teens who are eager to learn programming. We work closely with all students to make coding fun and engaging. Many students explore our extensive curriculum and stay with our program through 12th grade. Classes meet one day per week for 1.5 hours Tuition is $280/month Student–teacher ratio of 5:1 Taught by experienced programmers Grades 4-12 only Our weekly classes run every week throughout the year, so when you register, we will enroll you at the same class time every week (bulk enrollment). You can then cancel or reschedule individual classes online through the client portal. To register for weekly classes Review the schedule below for a day and time slot. ( It's best to select the \"Month\" view. ) Create a client account , and add your students to the account Enroll in a first class for the day and time you want, from the list of classes below. To enroll in all classes of the same day and time, every week, you can: Email Liz Groves at info@jointheleague.org ( Click to compose an email ) with the day and time you would like. Call us at (858) 284-0481. Your child's instructor can enroll your child at the beginning of class. For all details on enrollment, please see our Enrollment Guide and our Policies and Procedures .",
+  "link": "https://jtl.pike13.com",
+  "availability": "",
+  "date_start": "2026-07-23T00:00:00-07:00",
+  "date_end": "2026-07-23T01:30:00-07:00",
+  "age_grade_level": [
+   "Grades 6-8",
+   "Grades 9-12"
+  ],
+  "cost_range": "Less than $200",
+  "time_of_day": [
+   "Evening"
+  ],
+  "opportunity_type": "Online",
+  "areas_of_interest": [
+   "Coding/Computer Science/Cyber Security"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Virtual Learning / Online (VL)",
+  "latitude": "32.9475617",
+  "longitude": "-117.2395484",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "the_league_of_amazing.png"
+ },
+ {
+  "slug": "the_league_of_amazing_programmers_python_classes_20260723",
+  "title": "Python Classes",
+  "partner_name": "The LEAGUE of Amazing Programmers",
+  "partner_id": 287,
+  "description": "Learn to program in Python, the most popular programming language. Python is used in everything from machine learning to data science. Our online Python Classes are for kids & teens who are eager to learn programming. We work closely with all students to make coding fun and engaging. Many students explore our extensive curriculum and stay with our program through 12th grade. Classes meet one day per week for 1.5 hours Tuition is $280/month Student–teacher ratio of 5:1 Taught by experienced programmers Grades 4-12 only Our weekly classes run every week throughout the year, so when you register, we will enroll you at the same class time every week (bulk enrollment). You can then cancel or reschedule individual classes online through the client portal. To register for weekly classes Review the schedule below for a day and time slot. ( It's best to select the \"Month\" view. ) Create a client account , and add your students to the account Enroll in a first class for the day and time you want, from the list of classes below. To enroll in all classes of the same day and time, every week, you can: Email Liz Groves at info@jointheleague.org ( Click to compose an email ) with the day and time you would like. Call us at (858) 284-0481. Your child's instructor can enroll your child at the beginning of class. For all details on enrollment, please see our Enrollment Guide and our Policies and Procedures .",
+  "link": "https://jtl.pike13.com",
+  "availability": "",
+  "date_start": "2026-07-23T00:00:00-07:00",
+  "date_end": "2026-07-23T01:30:00-07:00",
+  "age_grade_level": [
+   "Grades 6-8",
+   "Grades 9-12"
+  ],
+  "cost_range": "Less than $100",
+  "time_of_day": [
+   "Evening"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Coding/Computer Science/Cyber Security"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Carmel Valley Campus (CV), San Diego",
+  "latitude": "32.9474",
+  "longitude": "-117.239",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "the_league_of_amazing.png"
  },
  {
   "slug": "san_diego_children_s_discovery_museum_bilingual_tortoise_talk_20260723",
@@ -1984,6 +2185,39 @@
   "logo_src": ""
  },
  {
+  "slug": "coastal_roots_farm_farm_film_and_music_series_8211_tending_nature_20260723",
+  "title": "Farm Film and Music Series &#8211; Tending Nature",
+  "partner_name": "Coastal Roots Farm",
+  "partner_id": 412,
+  "description": "Summertime Film on the Farm Join us for the July Farm Film & Music where we'll screen Tending Nature: Indigenous Land Stewardship . Tending Nature is a documentary series that explores how, for a thousand years, land has provided for Native peoples and how tribal groups have actively shaped and tended (cared for) the land. Through in-person interviews, the series highlights current projects that are trying to solve ongoing environmental problems by integrating traditional knowledge from tribal groups with Western science. Bring a picnic dinner, your low-back chairs, and your friends and family for an inspiring evening on the Farm with live music, community partners, a panel conversation, and a special outdoor screening under the stars.   Event Details 📅 Date: Thursday, July 23 🕡 6 PM – Gates Open: Enjoy live music from Nathan and Jessie , community partners, and a beautiful Farm setting 🎙️ 7:30 PM - Panel discussion 🎬 8:05 PM –Film Screening Tickets $12/person in advance, $18/person at the door $36/person for Farm Friend Proceeds help support the Farm’s mission to nourish our community and educate about environmental sustainability. Learn more about our impact here . Tending Nature—Indigenous Land Stewardship This \"Tending Nature\" special features multiple perspectives and voices from Indigenous communities across California who are striving to keep the practices of their heritage alive. From coming-of-age rituals, seasonal food harvests, basket weaving and jewelry making, the documentary shares how traditional practices can be protected and maintained as a way of life for future generations. Hear from Expert Panelists: True Allard , Moderator Member of the American Indian Student Association at CSUSM and Farm employee Shalena Critchlow Indigenous advocate, community organizer, and descendant of the Rincon Band of Luiseño Indians and the Iipay Nation of Santa Ysabel. Representing Tribal Sacred Waters, Inc. Amanda Subish Red Earth Movement Connect with Partner Organizations: Before the start of the film, visit and learn from tabling organizations that share in the mission of nourishing community, responsibly stewarding the land, and more. Tabling Partners: California Native Plant Society Native Plants 4 Encinitas Produce Good Sustainability is Sexy Tribal Sacred Waters, Inc. Wild Ones San Diego   Part of Our Farm Film & Music Series This event opens Coastal Roots Farm’s 2026 Farm Film & Music Series, a seasonal community experience featuring documentary films, live local music, and meaningful conversation on the Farm. Each event invites guests to explore pressing environmental and social issues while gathering in community, enjoying live music, and connecting with local partners. By beginning with Groundswell , this year’s series starts with a message at the heart of the Farm: healthy soil, resilient communities, and collective action can change what is possible. View the full 2026 series lineup here . Thank You to our Event Sponsors Series Title Sponsor: Presenting Sponsor: Interested in supporting this powerful community series? Learn more about sponsorship opportunities here or email Sara@coastalrootsfarm.org .",
+  "link": "https://coastalrootsfarm.org/event/farm-film-and-music-series-july-2026/",
+  "availability": "Repeats 2 times through 2026-07-23",
+  "date_start": "2026-07-23T18:00:00-07:00",
+  "date_end": "2026-07-23T21:00:00-07:00",
+  "age_grade_level": [
+   "Family"
+  ],
+  "cost_range": "Less than $25",
+  "time_of_day": [
+   "Evening"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Earth Science/Ecology",
+   "Biology / LifeSciences"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Coastal Roots Farm",
+  "latitude": "33.0560503",
+  "longitude": "-117.2834447",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "coastal_roots_farm.jpg"
+ },
+ {
   "slug": "fleet_science_center_stem_camps_20260724",
   "title": "STEM Camps",
   "partner_name": "Fleet Science Center",
@@ -2548,6 +2782,75 @@
   "logo_src": "anzaborrego_foundation.jpeg"
  },
  {
+  "slug": "the_league_of_amazing_programmers_robot_garage_20260725",
+  "title": "Robot Garage",
+  "partner_name": "The LEAGUE of Amazing Programmers",
+  "partner_id": 287,
+  "description": "Students build and program robots and other electronic projects using microcontrollers, motors and sensors. Students learn basic electronics, soldering, mechanical construction, communication busses, motion control and other aspects of software driven electronic devices. This class is most suitable for students 7th grade and older, and students should have some programming experience.",
+  "link": "https://jtl.pike13.com",
+  "availability": "",
+  "date_start": "2026-07-25T19:00:00-07:00",
+  "date_end": "2026-07-25T20:00:00-07:00",
+  "age_grade_level": [
+   "Grades 6-8",
+   "Grades 9-12"
+  ],
+  "cost_range": "",
+  "time_of_day": [
+   "Evening"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Engineering",
+   "Coding/Computer Science/Cyber Security",
+   "Physical Science"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Robot Garage (RG), San Diego",
+  "latitude": "32.8066",
+  "longitude": "-117.247",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "the_league_of_amazing.png"
+ },
+ {
+  "slug": "the_league_of_amazing_programmers_intro_to_robotics_robot_riot_20260726",
+  "title": "Intro to Robotics (Robot Riot)",
+  "partner_name": "The LEAGUE of Amazing Programmers",
+  "partner_id": 287,
+  "description": "Build & Code: Micro:Bit Robotics Take your coding skills to the next level by building and programming your own robot! In this exciting hands-on camp, students will use the Micro:Bit microcontroller to bring their creations to life. You'll learn how to program sensors, motors, and LEDs using Python, JavaScript, or block-based coding. Work with friends to design, build, and code robots that can move, interact, and respond to their environment. This camp is perfect for young engineers and programmers who want to explore the world of robotics in a fun and interactive way! All equipment will be provided by The League of AMAZING Programmers. If you would like to keep your robot at the end of the course there will be an additional fee of $55.00 for the starter kit. As we progress through the course there may be optional add ons to the robot that can be purchased through amazon, those are optional and will be communicated if/when your child gets to that point.",
+  "link": "https://jtl.pike13.com",
+  "availability": "",
+  "date_start": "2026-07-26T20:00:00-07:00",
+  "date_end": "2026-07-26T21:30:00-07:00",
+  "age_grade_level": [
+   "Grades 6-8",
+   "Grades 9-12"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Evening"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Coding/Computer Science/Cyber Security",
+   "Engineering"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Carmel Valley Campus (CV), San Diego",
+  "latitude": "32.9474",
+  "longitude": "-117.239",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "the_league_of_amazing.png"
+ },
+ {
   "slug": "san_diego_county_library_zovargo_animal_show_20260727",
   "title": "Zovargo Animal Show",
   "partner_name": "San Diego County Library",
@@ -2612,6 +2915,134 @@
   "contact_email": "",
   "contact_phone": "",
   "logo_src": ""
+ },
+ {
+  "slug": "the_league_of_amazing_programmers_robot_riot_cv_20260727",
+  "title": "Robot Riot@CV",
+  "partner_name": "The LEAGUE of Amazing Programmers",
+  "partner_id": 287,
+  "description": "Robot Riot at Carmel Valley Build & Code: Micro:Bit Robotics Take your coding skills to the next level by building and programming your own robot! In this exciting hands-on camp, students will use the Micro:Bit microcontroller to bring their creations to life. You'll learn how to program sensors, motors, and LEDs using Python, JavaScript, or block-based coding. Work with friends to design, build, and code robots that can move, interact, and respond to their environment. This camp is perfect for young engineers and programmers who want to explore the world of robotics in a fun and interactive way! All equipment will be provided by The League of AMAZING Programmers. If you would like to keep your robot at the end of the course there will be an additional fee of $55.00 for the starter kit. As we progress through the course there may be optional add ons to the robot that can be purchased through amazon, those are optional and will be communicated if/when your child gets to that point. Price: $375 Location: The League of Amazing Programmers 12625 High Bluff Dr #113, San Diego, CA 92130 Sign Up Below!",
+  "link": "https://jtl.pike13.com",
+  "availability": "",
+  "date_start": "2026-07-27T17:00:00-07:00",
+  "date_end": "2026-07-27T19:00:00-07:00",
+  "age_grade_level": [
+   "Grades 6-8",
+   "Grades 9-12"
+  ],
+  "cost_range": "Less than $400",
+  "time_of_day": [
+   "Evening"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Coding/Computer Science/Cyber Security",
+   "Engineering"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Carmel Valley Campus (CV), San Diego",
+  "latitude": "32.9474",
+  "longitude": "-117.239",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "the_league_of_amazing.png"
+ },
+ {
+  "slug": "the_league_of_amazing_programmers_summer_camps_sfa_20260727",
+  "title": "Summer Camps@SFA",
+  "partner_name": "The LEAGUE of Amazing Programmers",
+  "partner_id": 287,
+  "description": "",
+  "link": "https://jtl.pike13.com",
+  "availability": "",
+  "date_start": "2026-07-27T17:00:00-07:00",
+  "date_end": "2026-07-27T18:30:00-07:00",
+  "age_grade_level": [
+   "Family"
+  ],
+  "cost_range": "",
+  "time_of_day": [
+   "Evening"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "St. Francis of Assisi (SFA), Vista",
+  "latitude": "33.197",
+  "longitude": "-117.253",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "the_league_of_amazing.png"
+ },
+ {
+  "slug": "the_league_of_amazing_programmers_robotics_explorers_lt_20260727",
+  "title": "Robotics Explorers@LT",
+  "partner_name": "The LEAGUE of Amazing Programmers",
+  "partner_id": 287,
+  "description": "Robotics Explorers at After School Learning Tree This week-long robotics camp introduces to the basics of robotics and coding through fun, hands-on activities. Campers will program robots to move, react, and solve challenges while building problem-solving, logic, and teamwork skills. The camp focuses on creativity, confidence, and learning through play in a supportive environment that makes STEM exciting and approachable. Price: $280 Location: 11525 Sorrento Valley Rd, STE A, San Diego, CA, 92121 Sign Up Below!",
+  "link": "https://jtl.pike13.com",
+  "availability": "",
+  "date_start": "2026-07-27T20:00:00-07:00",
+  "date_end": "2026-07-27T21:30:00-07:00",
+  "age_grade_level": [
+   "Family",
+   "Grades 6-8"
+  ],
+  "cost_range": "Less than $200",
+  "time_of_day": [],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Coding/Computer Science/Cyber Security",
+   "Engineering"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "After School Learning Tree (LT), San Diego",
+  "latitude": "32.9118",
+  "longitude": "-117.231",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "the_league_of_amazing.png"
+ },
+ {
+  "slug": "the_league_of_amazing_programmers_league_labs_20260727",
+  "title": "League Labs",
+  "partner_name": "The LEAGUE of Amazing Programmers",
+  "partner_id": 287,
+  "description": "LEAGUE Labs is our unpaid internship program for High School students to develop new LEAGUE classes. LEAGUE Labs Interns will create 90 minute classes, on a subject of their choice, and teach that class to other students in our Tech Club or Code Clinic programs. Interns will not only learn basic job skills, but can also explore a new topic, because the best way to really learn something is to try to teach it. Interns in the program will gain important technical and soft skills with: Tools like Github, Github Codespaces and Visual Studio Code Programming Product development and Human Centered Design Marketing and Promotion ( you’ll need to beta test your class",
+  "link": "https://jtl.pike13.com",
+  "availability": "",
+  "date_start": "2026-07-27T21:00:00-07:00",
+  "date_end": "2026-07-27T22:30:00-07:00",
+  "age_grade_level": [
+   "Grades 9-12"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Evening"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Coding/Computer Science/Cyber Security"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Virtual Learning / Online  (VL)",
+  "latitude": "32.9475617",
+  "longitude": "-117.2395484",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "the_league_of_amazing.png"
  },
  {
   "slug": "san_diego_county_library_math_reading_fun_20260728",
@@ -3447,6 +3878,39 @@
   "logo_src": "the_san_diego_river.jpg"
  },
  {
+  "slug": "the_living_coast_discovery_center_international_owl_awareness_20260801",
+  "title": "International Owl Awareness",
+  "partner_name": "Living Coast Discovery Center",
+  "partner_id": 46,
+  "description": "International Owl Awareness Saturday, August 1 & Sunday, August 2 Who Gives a Hoot About Owls? We Do! Come meet some of the Living Coast’s most charming residents—our beloved owls! Discover the unique world of the Western Burrowing Owl—small in size, big on personality! With their wide eyes, curious nature, and “sassy” personalities, it's no wonder they're a fan favorite. Join us for an up-close experience and learn what makes these feathered ambassadors so special. Eagle Presentation: 10:30 AM Arts & Crafts: 11:00 AM – 2:00 PM Species Spotlight: 11:00 AM – 2:00 PM Wildlife Surprise: 12:30 PM Shark & Ray Presentation: 1:30 PM Sea Turtle Presentation: 2:30 PM",
+  "link": "https://www.thelivingcoast.org/programs-events-upcoming-events/international-owl-awareness/2026-08-01/",
+  "availability": "Repeats 2 times through 2026-08-02",
+  "date_start": "2026-08-01T10:00:00-07:00",
+  "date_end": "2026-08-02T17:00:00-07:00",
+  "age_grade_level": [
+   "Family"
+  ],
+  "cost_range": "",
+  "time_of_day": [
+   "Morning",
+   "Afternoon"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Biology / LifeSciences"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "The Living Coast",
+  "latitude": "32.6401018",
+  "longitude": "-117.1103432",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "living_coast_discovery_center.jpg"
+ },
+ {
   "slug": "san_diego_county_library_discover_play_saturday_free_play_20260801",
   "title": "Discover & Play Saturday - Free Play",
   "partner_name": "San Diego County Library",
@@ -3935,6 +4399,34 @@
   "logo_src": ""
  },
  {
+  "slug": "the_league_of_amazing_programmers_python_ga_20260806",
+  "title": "Python@GA",
+  "partner_name": "The LEAGUE of Amazing Programmers",
+  "partner_id": 287,
+  "description": "",
+  "link": "https://jtl.pike13.com",
+  "availability": "",
+  "date_start": "2026-08-06T01:15:00-07:00",
+  "date_end": "2026-08-06T02:15:00-07:00",
+  "age_grade_level": [],
+  "cost_range": "",
+  "time_of_day": [],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Coding/Computer Science/Cyber Security"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Geeks Academy (GA), Tijuana",
+  "latitude": "32.4993",
+  "longitude": "-116.985",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "the_league_of_amazing.png"
+ },
+ {
   "slug": "san_diego_county_library_san_luis_rey_park_ranger_storytime_20260806",
   "title": "San Luis Rey Park Ranger Storytime",
   "partner_name": "San Diego County Library",
@@ -4245,7 +4737,8 @@
   "date_start": "2026-08-09T10:30:00-07:00",
   "date_end": "2026-08-09T12:00:00-07:00",
   "age_grade_level": [
-   "Family"
+   "Family",
+   "Grades 9-12"
   ],
   "cost_range": "Less than $50",
   "time_of_day": [
@@ -4254,18 +4747,51 @@
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
    "Earth Science/Ecology",
-   "Biology / LifeSciences"
+   "General Science"
   ],
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "Coastal Roots Farm",
+  "location": "Coastal Roots Farm Coffee Cart, Coastal Roots Farm",
   "latitude": "33.0560503",
   "longitude": "-117.2834447",
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
   "logo_src": "coastal_roots_farm.jpg"
+ },
+ {
+  "slug": "the_league_of_amazing_programmers_robotics_explorers_sja_20260810",
+  "title": "Robotics Explorers@SJA",
+  "partner_name": "The LEAGUE of Amazing Programmers",
+  "partner_id": 287,
+  "description": "Robotics Explorers at St. James Academy This robotics camp introduces 2nd through 5th-graders to the basics of robotics and coding through fun, hands-on activities. Campers will program robots to move, react, and solve challenges while building problem-solving, logic, and teamwork skills. The camp focuses on creativity, confidence, and learning through play in a supportive environment that makes STEM exciting and approachable. Dates: June 22nd - 26th; August 10th - 14th Time: 10:00 AM - 11:30 AM Price: $280 Grades: 2nd-5th Grade Sign Up Below!",
+  "link": "https://jtl.pike13.com",
+  "availability": "",
+  "date_start": "2026-08-10T10:00:00-07:00",
+  "date_end": "2026-08-14T11:30:00-07:00",
+  "age_grade_level": [
+   "Grades 6-8"
+  ],
+  "cost_range": "Less than $300",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Coding/Computer Science/Cyber Security",
+   "Engineering"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "St. James Academy (SJA), Solana Beach",
+  "latitude": "32.984",
+  "longitude": "-117.264",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "the_league_of_amazing.png"
  },
  {
   "slug": "san_diego_county_library_lego_lab_20260810",
@@ -4705,6 +5231,38 @@
   "logo_src": ""
  },
  {
+  "slug": "coastal_roots_farm_great_outdoor_shabbat_20260814",
+  "title": "Great Outdoor Shabbat",
+  "partner_name": "Coastal Roots Farm",
+  "partner_id": 412,
+  "description": "Coastal Roots Farm invites people of all ages and backgrounds to our free and festive Summer Shabbat series—Great Outdoor Shabbat! It's a true picnic-style Shabbat: bring a picnic dinner, drinks, and blankets or chairs . We'll provide live music, a fun craft for kids, a brief 10–15 minute tour of the Farm, playtime in Nature Play, and optional learning opportunities. As the sun sets over the fields, we’ll welcome Shabbat together in the beauty of the great outdoors . 🗓️ Friday, August 14 ⏰ 5-7 p.m. 🎟️ FREE Facilitated By: Sharone Oren, Education Manager Our Shabbat experience will be uplifted by the music of the Kol Tefillah band. What’s Included: Live music, challah wine and grape juice, a craft, and a chance to learn about the intersection of Judaism and farming. Who Should Join: Anyone and everyone! Whether celebrating Shabbat is part of your weekly ritual or this will be your first time, join us at the Farm for a magical evening of friendship, laughter, and live music—all while looking at the beautiful scenery of the Farm.",
+  "link": "https://coastalrootsfarm.org/event/great-outdoor-shabbat-august-2026/",
+  "availability": "",
+  "date_start": "2026-08-14T17:00:00-07:00",
+  "date_end": "2026-08-14T19:00:00-07:00",
+  "age_grade_level": [
+   "Family"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Evening"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Earth Science/Ecology"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Coastal Roots Farm",
+  "latitude": "33.0560503",
+  "longitude": "-117.2834447",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "coastal_roots_farm.jpg"
+ },
+ {
   "slug": "i_love_a_clean_san_diego_compost_and_mulch_giveaway_8211_8_15_at_los_penasquitos_ranc_20260815",
   "title": "Compost and Mulch Giveaway &#8211; 8/15 at Los Penasquitos Ranch House",
   "partner_name": "I Love A Clean San Diego",
@@ -4736,6 +5294,39 @@
   "contact_email": "",
   "contact_phone": "",
   "logo_src": "i_love_a_clean.png"
+ },
+ {
+  "slug": "the_living_coast_discovery_center_world_lizard_day_20260815",
+  "title": "World Lizard Day",
+  "partner_name": "Living Coast Discovery Center",
+  "partner_id": 46,
+  "description": "World Lizard Day Saturday, August 15 & Sunday, August 16 Soakin’ Up the Sun with Lizards! Who’s loving summer as much as we are? The Western Fence Lizard, of course! These sun-loving reptiles are easy to spot, showing off with their signature “push-up” moves—whether they're trying to impress a mate or keep rivals away. Celebrate World Lizard Day with us and explore the fascinating world of lizards and all things reptiles on exhibit. Don’t forget to keep your eyes peeled as you stroll our trails and gardens—you might just spot some wild lizard friends soaking up the sun, too! Eagle Presentation: 10:30 AM Arts & Crafts: 11:00 AM – 2:00 PM Species Spotlight: 11:00 AM – 2:00 PM Wildlife Surprise: 12:30 PM Shark & Ray Presentation: 1:30 PM Sea Turtle Presentation: 2:30 PM",
+  "link": "https://www.thelivingcoast.org/programs-events-upcoming-events/world-lizard-day/2026-08-15/",
+  "availability": "Repeats 2 times through 2026-08-16",
+  "date_start": "2026-08-15T10:00:00-07:00",
+  "date_end": "2026-08-16T17:00:00-07:00",
+  "age_grade_level": [
+   "Family"
+  ],
+  "cost_range": "",
+  "time_of_day": [
+   "Morning",
+   "Afternoon"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Biology / LifeSciences"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Living Coast Discovery Center, 1000 Gunpowder Point Dr., Chula Vista, CA",
+  "latitude": "32.6401018",
+  "longitude": "-117.1103432",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "living_coast_discovery_center.jpg"
  },
  {
   "slug": "the_san_diego_river_park_foundation_bird_drawing_workshop_with_art_form_20260816",
@@ -7071,6 +7662,37 @@
   "date_end": "2026-12-02T11:30:00-07:00",
   "age_grade_level": [
    "Pre-K"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Bonita-Sunnyside",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": ""
+ },
+ {
+  "slug": "san_diego_county_library_playtime_at_bonita_library_20261203",
+  "title": "Playtime at Bonita Library",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Join us on the first Thursday of the month for playtime. Kids can play with blocks, trucks, educational toys, and more at the library. Perfect for toddlers and babies.",
+  "link": "https://sdcl.bibliocommons.com/events/6a5ebffc625471623e2c8073",
+  "availability": "",
+  "date_start": "2026-12-03T11:00:00-07:00",
+  "date_end": "2026-12-03T11:45:00-07:00",
+  "age_grade_level": [
+   "Pre-K",
+   "Family"
   ],
   "cost_range": "Free",
   "time_of_day": [
