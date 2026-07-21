@@ -23,7 +23,7 @@ from __future__ import annotations
 
 import copy
 from collections import defaultdict
-from datetime import datetime
+from datetime import date, datetime
 from typing import Iterable
 
 from partner_scrape.model import Event, normalize_title
@@ -39,17 +39,37 @@ def recurring_key(event: Event) -> RecurringKey:
     return (event.source_id, normalize_title(event.title))
 
 
-def _span(events: list[Event]) -> tuple[datetime | None, datetime | None]:
-    """Earliest `start` and latest `end` (or `start`, if an instance has no `end`) in ``events``."""
+def _span(events: list[Event], today: date) -> tuple[datetime | None, datetime | None]:
+    """The span to display for a recurring group: (next-upcoming start, last end).
+
+    ``start`` is the NEXT upcoming occurrence (earliest occurrence whose
+    date is ``>= today``), NOT the first-ever occurrence -- so an ongoing
+    weekly/monthly series never displays a stale past date (issue 005: a
+    class that started months ago but still runs was showing its original
+    2025/early-2026 start). ``end`` remains the group's last occurrence.
+
+    Fallbacks: a still-active group with no discrete upcoming occurrence
+    (e.g. a single exhibit running start..end where start is past but end
+    is future) shows ``today`` -- "available now". A genuinely-past group
+    (no occurrence and no end reaching today) keeps its earliest start and
+    is dropped downstream by the export's current+upcoming filter.
+    """
     starts = [e.start for e in events if e.start is not None]
     ends = [e.end if e.end is not None else e.start for e in events]
     ends = [e for e in ends if e is not None]
-    first = min(starts) if starts else None
     last = max(ends) if ends else None
+
+    upcoming = [s for s in starts if s.date() >= today]
+    if upcoming:
+        first = min(upcoming)
+    elif last is not None and last.date() >= today:
+        first = datetime(today.year, today.month, today.day)
+    else:
+        first = min(starts) if starts else None
     return first, last
 
 
-def collapse_recurring(events: Iterable[Event]) -> list[Instance]:
+def collapse_recurring(events: Iterable[Event], today: date) -> list[Instance]:
     """Collapse same-(source, title) ``events`` into one Instance per group.
 
     A group of one (no recurrence) still produces an Instance --
@@ -71,7 +91,7 @@ def collapse_recurring(events: Iterable[Event]) -> list[Instance]:
     instances: list[Instance] = []
     for group in groups.values():
         base = pick_best(group)
-        first, last = _span(group)
+        first, last = _span(group, today)
 
         merged_event = copy.deepcopy(base)
         if first is not None:

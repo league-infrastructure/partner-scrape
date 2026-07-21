@@ -23,7 +23,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import date, datetime
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -238,6 +238,7 @@ def run(
     events: Iterable[Event],
     partners_path: str | Path,
     source_org_names: dict[str, str] | None = None,
+    today: date | None = None,
 ) -> list[Opportunity]:
     """Normalize ``events`` into deduplicated, taxonomy-tagged Opportunities.
 
@@ -263,6 +264,7 @@ def run(
         One `Opportunity` per surviving, deduplicated/collapsed record.
     """
     source_org_names = source_org_names or {}
+    today = today or date.today()
     partners_by_norm = load_partners(partners_path)
 
     # Enforce a single datetime convention before any date comparison.
@@ -284,7 +286,7 @@ def run(
     for event in events:
         (internship_events if event.kind == "internship" else other_events).append(event)
 
-    collapsed = collapse_recurring(other_events)
+    collapsed = collapse_recurring(other_events, today)
     deduped = dedup_cross_source(collapsed)
 
     # kind="internship" Events bypass both collapse_recurring and

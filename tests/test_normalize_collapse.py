@@ -7,10 +7,14 @@ the full pipeline") -- no adapters, no network.
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import date, datetime
 
 from partner_scrape.model import Event
 from partner_scrape.normalize.collapse import collapse_recurring, recurring_key
+
+# An arbitrary date well before every event in this file, so `today` makes
+# all occurrences 'upcoming' -> next-occurrence == first == the pre-fix span.
+_BEFORE_ALL = date(2020, 1, 1)
 
 
 def _event(
@@ -42,7 +46,7 @@ class TestNonRecurring:
     def test_single_event_produces_one_instance_with_repeat_count_one(self):
         event = _event(start=datetime(2026, 8, 1, 9, 0))
 
-        instances = collapse_recurring([event])
+        instances = collapse_recurring([event], _BEFORE_ALL)
 
         assert len(instances) == 1
         assert instances[0].repeat_count == 1
@@ -52,7 +56,7 @@ class TestNonRecurring:
     def test_single_event_fields_are_preserved(self):
         event = _event(start=datetime(2026, 8, 1, 9, 0), description="Pick up trash on the beach")
 
-        instances = collapse_recurring([event])
+        instances = collapse_recurring([event], _BEFORE_ALL)
 
         assert instances[0].event.title == "Beach Cleanup"
         assert instances[0].event.description == "Pick up trash on the beach"
@@ -67,7 +71,7 @@ class TestRecurringCollapse:
             _event(start=datetime(2026, 10, 1, 9, 0)),
         ]
 
-        instances = collapse_recurring(events)
+        instances = collapse_recurring(events, _BEFORE_ALL)
 
         assert len(instances) == 1
         assert instances[0].repeat_count == 3
@@ -79,7 +83,7 @@ class TestRecurringCollapse:
             _event(start=datetime(2026, 9, 1, 9, 0)),
         ]
 
-        instances = collapse_recurring(events)
+        instances = collapse_recurring(events, _BEFORE_ALL)
 
         assert instances[0].event.start == datetime(2026, 8, 1, 9, 0)
         assert instances[0].event.end == datetime(2026, 10, 1, 9, 0)
@@ -93,7 +97,7 @@ class TestRecurringCollapse:
             confidence=1.0,
         )
 
-        instances = collapse_recurring([sparse, rich])
+        instances = collapse_recurring([sparse, rich], _BEFORE_ALL)
 
         assert instances[0].event.description == "A full description of the recurring event"
 
@@ -107,7 +111,7 @@ class TestRecurringCollapse:
             start=datetime(2026, 9, 1, 9, 0), description="Short", confidence=1.0
         )
 
-        instances = collapse_recurring([low_confidence_but_longer, high_confidence])
+        instances = collapse_recurring([low_confidence_but_longer, high_confidence], _BEFORE_ALL)
 
         assert instances[0].event.description == "Short"
 
@@ -119,7 +123,7 @@ class TestNoFalseMerges:
             _event(title="Tide Pool Walk", start=datetime(2026, 8, 1, 9, 0)),
         ]
 
-        instances = collapse_recurring(events)
+        instances = collapse_recurring(events, _BEFORE_ALL)
 
         assert len(instances) == 2
         assert all(inst.repeat_count == 1 for inst in instances)
@@ -130,7 +134,49 @@ class TestNoFalseMerges:
             _event(source_id="crf", title="Beach Cleanup", start=datetime(2026, 8, 1, 9, 0)),
         ]
 
-        instances = collapse_recurring(events)
+        instances = collapse_recurring(events, _BEFORE_ALL)
 
         assert len(instances) == 2
         assert {inst.event.source_id for inst in instances} == {"tlc", "crf"}
+
+
+class TestNextUpcomingOccurrence:
+    """Issue 005: a collapsed recurring/ongoing record shows its NEXT
+    upcoming date, never a stale past first-ever occurrence."""
+
+    TODAY = date(2026, 7, 20)
+
+    def test_recurring_start_is_next_upcoming_not_first_ever(self):
+        # A weekly series that started in the past and continues into the future.
+        events = [
+            _event(start=datetime(2026, 2, 7, 10, 0), end=datetime(2026, 2, 7, 11, 0)),
+            _event(start=datetime(2026, 7, 25, 10, 0), end=datetime(2026, 7, 25, 11, 0)),
+            _event(start=datetime(2026, 8, 22, 10, 0), end=datetime(2026, 8, 22, 11, 0)),
+        ]
+        [inst] = collapse_recurring(events, self.TODAY)
+        # start = next occurrence >= today (Jul 25), NOT the first-ever (Feb 7)
+        assert inst.event.start == datetime(2026, 7, 25, 10, 0)
+        assert inst.event.start.date() >= self.TODAY
+        # end still spans to the last occurrence
+        assert inst.event.end == datetime(2026, 8, 22, 11, 0)
+
+    def test_single_ongoing_event_with_past_start_future_end_clamps_to_today(self):
+        # An exhibit running past->future with no discrete upcoming occurrence.
+        ongoing = _event(start=datetime(2026, 6, 1, 9, 0), end=datetime(2026, 8, 31, 17, 0))
+        [inst] = collapse_recurring([ongoing], self.TODAY)
+        assert inst.event.start.date() == self.TODAY  # "available now", not Jun 1
+
+    def test_future_only_series_is_unchanged(self):
+        events = [
+            _event(start=datetime(2026, 9, 1, 10, 0)),
+            _event(start=datetime(2026, 9, 8, 10, 0)),
+        ]
+        [inst] = collapse_recurring(events, self.TODAY)
+        assert inst.event.start == datetime(2026, 9, 1, 10, 0)  # earliest upcoming
+
+    def test_genuinely_past_event_keeps_earliest_start(self):
+        # No future occurrence, no future end -> unchanged; the export's
+        # current+upcoming filter drops it downstream.
+        past = _event(start=datetime(2026, 5, 1, 10, 0), end=datetime(2026, 5, 1, 11, 0))
+        [inst] = collapse_recurring([past], self.TODAY)
+        assert inst.event.start == datetime(2026, 5, 1, 10, 0)
