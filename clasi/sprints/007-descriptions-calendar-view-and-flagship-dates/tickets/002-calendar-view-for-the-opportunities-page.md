@@ -1,8 +1,9 @@
 ---
 id: '002'
 title: Calendar view for the Opportunities page
-status: open
-use-cases: [SUC-002]
+status: done
+use-cases:
+- SUC-002
 depends-on: []
 github-issue: ''
 issue: 16-calendar-view.md
@@ -105,24 +106,24 @@ past the pre-rendered 3-month window; promoting to production
 
 ## Acceptance Criteria
 
-- [ ] The `.view-toggle` reads List · Calendar · Map; clicking each
+- [x] The `.view-toggle` reads List · Calendar · Map; clicking each
       button shows only that view's container.
-- [ ] Calendar renders a month grid starting at the current month, with
+- [x] Calendar renders a month grid starting at the current month, with
       the next two months (~3 total) reachable via in-page navigation.
-- [ ] Each dated opportunity appears on its `date_start` day as
+- [x] Each dated opportunity appears on its `date_start` day as
       compact time + title, and clicking it navigates to
       `/opportunities/{slug}`.
-- [ ] An opportunity with no `date_start` never appears on the
+- [x] An opportunity with no `date_start` never appears on the
       calendar (List view is unaffected either way).
-- [ ] Applying a sidebar filter (any checkbox group or the search box)
+- [x] Applying a sidebar filter (any checkbox group or the search box)
       changes which entries the calendar shows, matching what List
       would show for the same filter state.
-- [ ] The `"Showing X of Y"` count (visible in List view) is
+- [x] The `"Showing X of Y"` count (visible in List view) is
       **unaffected** by Calendar being open or by Calendar's entries —
       it continues to reflect only the card grid's count, verified by
       comparing the count before and after Calendar markup is added to
       the DOM.
-- [ ] `npm run build` (in `site/`) succeeds.
+- [x] `npm run build` (in `site/`) succeeds.
 
 ## Testing
 
