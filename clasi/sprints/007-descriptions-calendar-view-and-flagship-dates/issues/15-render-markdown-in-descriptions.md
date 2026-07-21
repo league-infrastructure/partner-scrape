@@ -1,5 +1,8 @@
 ---
-status: pending
+status: in-progress
+sprint: '007'
+tickets:
+- 007-001
 ---
 
 # Event descriptions must render Markdown (and decode HTML entities)

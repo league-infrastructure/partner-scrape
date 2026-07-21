@@ -1,5 +1,9 @@
 ---
-status: pending
+status: in-progress
+sprint: '007'
+tickets:
+- 007-003
+- 007-004
 ---
 
 # Flagship museums under-yield: date extraction fails on their event pages

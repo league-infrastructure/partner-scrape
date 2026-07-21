@@ -1,5 +1,8 @@
 ---
-status: pending
+status: in-progress
+sprint: '007'
+tickets:
+- 007-002
 ---
 
 # Add a Calendar view (List / Calendar / Map)
