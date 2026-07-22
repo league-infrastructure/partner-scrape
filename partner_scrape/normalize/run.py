@@ -21,6 +21,7 @@ docstrings for the rest of the ordering rationale.
 
 from __future__ import annotations
 
+import html
 import re
 from dataclasses import dataclass, field
 from datetime import date, datetime
@@ -226,7 +227,12 @@ def _to_opportunity(
 
     return Opportunity(
         slug=slug,
-        title=event.title,
+        # Decode HTML entities in the title so plain-text surfaces (cards,
+        # calendar, home, map popups) show real characters, not raw entities
+        # like "O&#8217;Side" or "Shark &#038; Ray". Descriptions are decoded
+        # at render time by the site's Markdown pipeline; titles are not, so
+        # they're decoded here at the export boundary.
+        title=html.unescape(event.title),
         partner_name=partner_name,
         partner_id=partner.get("id"),
         description=event.description,

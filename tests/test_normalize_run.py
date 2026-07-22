@@ -101,6 +101,16 @@ class TestFieldMapping:
         assert opportunity.title == "Farm Tour"
         assert opportunity.date_start.startswith("2026-08-01T09:00:00")
 
+    def test_decodes_html_entities_in_title(self):
+        event = _event(
+            title="Stay Classy O&#8217;Side: Shark &#038; Ray",
+            start=datetime(2026, 8, 1, 9, 0),
+        )
+
+        [opportunity] = run([event], PARTNERS_PATH)
+
+        assert opportunity.title == "Stay Classy O’Side: Shark & Ray"
+
 
 class TestTaxonomyDerivation:
     def test_areas_age_time_of_day_and_cost_are_derived(self):
