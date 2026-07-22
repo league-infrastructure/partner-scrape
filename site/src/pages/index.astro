@@ -7,40 +7,72 @@ import { getLogoPath } from '../lib/helpers';
 
 const base = import.meta.env.BASE_URL.replace(/\/+$/, ''); // "" or "/partner-scrape"
 
-// Featured: soonest upcoming, prefer free
-const now = new Date();
-const upcoming = opportunities
-  .filter(o => o.date_start && new Date(o.date_start) >= now)
-  .sort((a, b) => {
-    const aFree = a.cost_range === 'Free' ? 0 : 1;
-    const bFree = b.cost_range === 'Free' ? 0 : 1;
-    if (aFree !== bFree) return aFree - bFree;
-    return new Date(a.date_start).getTime() - new Date(b.date_start).getTime();
-  })
-  .slice(0, 4);
+// Hero background: production's own layered "network" texture + skyline
+// silhouette (self-hosted under public/images/hero/), referenced base-path-
+// safely and passed to global.css's .hero-home rule via CSS custom
+// properties (plain CSS can't read import.meta.env.BASE_URL itself).
+const heroNetworkSrc = `${base}/images/hero/hero-network.png`;
+const heroSkylineSrc = `${base}/images/hero/hero-skyline.png`;
+const heroStyle = `--hero-img-network: url(${heroNetworkSrc}); --hero-img-skyline: url(${heroSkylineSrc});`;
 
-// Partner logos: prefer those with active opportunities, take up to 16
+// Upcoming Opportunities: every opportunity whose local calendar day
+// (date_start) falls within today .. today+7 days inclusive, sorted
+// ascending by date -- no top-N cap (issue 24). Day boundaries are read
+// from date_start's own Y-M-D digits rather than by letting the build
+// machine's timezone reinterpret the ISO instant, mirroring helpers.ts's
+// `localDateOnly` and CalendarView's `dayKey` day-bucketing convention so
+// "today" and the window edges reflect the intended local (San Diego)
+// day everywhere on the site. Undated opportunities have no week to
+// belong to and stay excluded, same as every other date_start-gated view.
+const DATE_ONLY_RE = /^(\d{4})-(\d{2})-(\d{2})/;
+function localDay(dateStr: string): Date | null {
+  const m = DATE_ONLY_RE.exec(dateStr);
+  if (!m) return null;
+  return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+}
+
+const now = new Date();
+const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+const windowEnd = new Date(today);
+windowEnd.setDate(today.getDate() + 7);
+
+const upcoming = opportunities
+  .filter(o => {
+    if (!o.date_start) return false;
+    const day = localDay(o.date_start);
+    if (!day) return false;
+    return day.getTime() >= today.getTime() && day.getTime() <= windowEnd.getTime();
+  })
+  .sort((a, b) => new Date(a.date_start).getTime() - new Date(b.date_start).getTime());
+
+// Partner logos: prefer those with active opportunities, take up to 16.
+// The LEAGUE of Amazing Programmers (id 287) -- the org that builds and
+// runs this project -- is always included regardless of the general
+// active-opportunity-preference/cap logic (issue 26): pinned first, then
+// the existing selection logic fills the remaining slots from the rest of
+// the candidate pool, so the general policy is otherwise unchanged.
+const LEAGUE_PARTNER_ID = 287;
 const activePartnerNames = new Set(opportunities.map(o => o.partner_name));
-const logoPartners = partners
-  .filter(p => p.logo_src)
+const league = partners.find(p => p.id === LEAGUE_PARTNER_ID && p.logo_src);
+const otherLogoPartners = partners
+  .filter(p => p.logo_src && p.id !== LEAGUE_PARTNER_ID)
   .sort((a, b) => {
     const aActive = activePartnerNames.has(a.name) ? 0 : 1;
     const bActive = activePartnerNames.has(b.name) ? 0 : 1;
     return aActive - bActive;
-  })
-  .slice(0, 16);
+  });
+const logoPartners = league
+  ? [league, ...otherLogoPartners].slice(0, 16)
+  : otherLogoPartners.slice(0, 16);
 ---
 
 <BaseLayout title="SD STEM Ecosystem — Find STEM Opportunities in San Diego">
-  <!-- Hero -->
-  <section class="hero hero-home">
+  <!-- Hero: production's background treatment (network texture + skyline
+       silhouette over the brand gradient wash), h1, and quick filter tags. -->
+  <section class="hero hero-home" style={heroStyle}>
     <div class="hero-inner">
       <h1>We are creating a San Diego where everyone is connected to STEM learning opportunities.</h1>
       <p class="hero-sub">Find programs, workshops, camps, and events for learners of all ages across San Diego County.</p>
-      <div class="hero-actions">
-        <a href={`${base}/opportunities`} class="btn">Find Opportunities</a>
-        <a href={`${base}/partners`} class="btn btn-outline-hero">View Partners</a>
-      </div>
       <div class="hero-quick">
         <a href={`${base}/opportunities?cost=Free`} class="hero-tag">Free Programs</a>
         <a href={`${base}/opportunities?age=Family`} class="hero-tag">For Families</a>
@@ -49,13 +81,39 @@ const logoPartners = partners
     </div>
   </section>
 
-  <!-- Featured Opportunities -->
+  <!-- Hero Cards: production's two-card style ("Find a learning opportunity" /
+       "Get Involved"), overlapping the hero's bottom edge, adapted to this
+       site's own two directory pages. -->
+  <div class="container hero-cards-wrap">
+    <div class="hero-cards">
+      <div class="card hero-card">
+        <img src={`${base}/images/hero/icon-find-opportunities.png`} alt="" width="65" height="65" />
+        <h3>Find Opportunities</h3>
+        <p>Discover STEM programs—from camps to workshops—for learners of every age and background across San Diego.</p>
+        <a href={`${base}/opportunities`} class="btn">Find Opportunities</a>
+      </div>
+      <div class="card hero-card">
+        <img src={`${base}/images/hero/icon-view-partners.png`} alt="" width="65" height="65" />
+        <h3>View Partners</h3>
+        <p>Meet the organizations, businesses, schools, and community groups expanding STEM access across San Diego.</p>
+        <a href={`${base}/partners`} class="btn">View Partners</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Upcoming Opportunities: the entire next 7 days (today..today+7),
+       no top-N cap -- see the `upcoming` query above. The list can run
+       long on a busy week, so the grid scrolls within a bounded height
+       instead of dropping any opportunity; "View All Opportunities"
+       below still links out to the full, filterable Opportunities page. -->
   {upcoming.length > 0 && (
     <section class="section">
       <div class="container">
         <h2 class="text-center mb-3">Upcoming Opportunities</h2>
-        <div class="results-grid">
-          {upcoming.map(opp => <OpportunityCard opportunity={opp} />)}
+        <div class="upcoming-scroll">
+          <div class="results-grid">
+            {upcoming.map(opp => <OpportunityCard opportunity={opp} />)}
+          </div>
         </div>
         <div class="text-center mt-3">
           <a href={`${base}/opportunities`} class="btn">View All Opportunities</a>
@@ -116,69 +174,23 @@ const logoPartners = partners
 </BaseLayout>
 
 <style>
-  .hero-home {
-    min-height: 500px;
-    padding: 140px 40px 80px;
-    background-image: linear-gradient(180deg, #101a33, #2e2255);
-  }
-
-  .hero-inner {
-    max-width: 650px;
-  }
-
-  .hero-sub {
-    font-size: 18px;
-    font-weight: 400;
-    margin-top: 16px;
-    opacity: 0.9;
-  }
-
-  .hero-actions {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    margin-top: 30px;
-    flex-wrap: wrap;
-  }
-
-  .btn-outline-hero {
-    background: transparent;
-    background-image: none;
-    border: 2px solid rgba(255, 255, 255, 0.5);
-    color: var(--white);
-    box-shadow: none;
-  }
-  .btn-outline-hero:hover {
-    background-image: none;
-    border-color: var(--white);
-    color: var(--white);
-  }
-
-  .hero-quick {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-    margin-top: 20px;
-    flex-wrap: wrap;
-  }
-
-  .hero-tag {
-    display: inline-block;
-    padding: 4px 14px;
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 500;
-    background: rgba(255, 255, 255, 0.15);
-    color: var(--white);
-    transition: background 200ms ease;
-  }
-  .hero-tag:hover {
-    background: rgba(255, 255, 255, 0.3);
-    color: var(--white);
-  }
-
+  /* Hero, hero-cards, and button styling live in global.css (a dedicated
+     Home Page section) so the base-path-safe background images set via
+     the inline --hero-img-* custom properties above have one shared home
+     of truth. Only this page's non-hero sections stay scoped here. */
   .section {
     padding: 60px 0;
+  }
+
+  /* Upcoming Opportunities has no top-N cap (issue 24), so a busy week can
+     render far more cards than comfortably fits above the fold. Bound the
+     grid's visible height and let it scroll rather than truncating the
+     list -- every opportunity in the window still renders, just not all
+     visible without scrolling. */
+  .upcoming-scroll {
+    max-height: 760px;
+    overflow-y: auto;
+    padding-right: 4px;
   }
 
   .what-we-do {
@@ -203,16 +215,5 @@ const logoPartners = partners
 
   .info-card h3 {
     margin-bottom: 8px;
-  }
-
-  @media (max-width: 767px) {
-    .hero-home {
-      padding: 100px 20px 60px;
-      min-height: auto;
-    }
-    .hero-actions {
-      flex-direction: column;
-      align-items: center;
-    }
   }
 </style>

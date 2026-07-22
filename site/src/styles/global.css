@@ -43,6 +43,9 @@
   --purple: #6f63d4;
   --purple-dark: #594eb8;
   --purple-light: #dfdbff;
+  --purple-faint: #f5f3ff; /* much lighter than --purple-light; keeps the
+    calendar's "today" cell distinct from the --purple-light .cal-entry
+    chips it contains, instead of both rendering the same fill */
   --pink: #c83e8e;
   --green: #3B814F;
   --teal: #20b2ce;
@@ -243,6 +246,47 @@ h4 { font-size: 20px; }
   font-weight: 700;
 }
 
+/* === Opportunity Card Date === */
+/* `.opp-card-date` (OpportunityCard.astro) carries `data-weekend="true"`
+   for Saturday/Sunday dates (helpers.ts's `isWeekend()`). The distinction
+   is deliberately subtle -- a color/weight shift plus a small accent dot,
+   not a loud badge -- per issue 25. */
+.opp-card-date[data-weekend="true"] {
+  color: var(--pink);
+  font-weight: 700;
+}
+.opp-card-date[data-weekend="true"]::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 5px;
+  border-radius: 50%;
+  background: var(--pink);
+  vertical-align: middle;
+}
+
+/* === Opportunity Image (event photo / logo / placeholder fallback) === */
+/* `.opp-card-logo` (OpportunityCard.astro) and `.detail-logo`
+   ([slug].astro) share one visual slot for the three-tier image
+   fallback resolved by helpers.ts's `resolveImage()` (sprint 008, issue
+   19 site half / SUC-009): an opportunity's own event photo, else its
+   partner's logo, else the generic placeholder. Chosen layout: the
+   event image replaces the existing logo tile at the same size/crop
+   (Open Question 2, option a) -- lowest layout risk, no new slot to
+   design around a landscape photo that may not exist for most records
+   yet. The one visual difference: a real photo is more likely
+   landscape and looks better filling the tile edge-to-edge, while a
+   logo needs its whole mark visible on the tinted backdrop -- so
+   `data-event-image="true"` (set only for fallback tier 1, i.e. when
+   `image_src` resolved) switches `object-fit` from the base `contain`
+   to `cover`. Size/radius/background stay the shared rules already
+   defined alongside each component. */
+.opp-card-logo[data-event-image='true'],
+.detail-logo[data-event-image='true'] {
+  object-fit: cover;
+}
+
 /* === Hero === */
 .hero {
   text-align: center;
@@ -274,6 +318,111 @@ h4 { font-size: 20px; }
   }
   .hero h1 {
     font-size: 30px;
+  }
+}
+
+/* === Home Page: Hero / Hero Cards === */
+/* `.hero-home` (the home page's `.hero`) reuses production's own two-layer
+   background treatment: its brand "network" texture plus a city skyline
+   silhouette, both self-hosted under site/public/images/hero/ and referenced
+   base-path-safely via the --hero-img-network/--hero-img-skyline custom
+   properties `index.astro` sets inline (plain CSS has no access to
+   import.meta.env.BASE_URL), composited over the same gradient wash
+   production uses on its own home hero. Values mirror production's
+   `.path-frontpage .hero` background-position/size exactly. */
+.hero-home {
+  position: relative;
+  min-height: 460px;
+  padding: 110px 40px 200px;
+  background-color: var(--purple);
+  background-image:
+    var(--hero-img-network),
+    var(--hero-img-skyline),
+    radial-gradient(circle farthest-corner at 48% 202%, var(--purple-dark) -1%, #985ebe 0%, transparent 61%),
+    linear-gradient(180deg, var(--dark-deep), #2e2255);
+  background-position: 50% 50%, 50% 100%, 0 0, 0 0;
+  background-size: 109%, 85%, auto, auto;
+  background-repeat: no-repeat, no-repeat, repeat, repeat;
+}
+
+.hero-home .hero-inner {
+  max-width: 650px;
+}
+
+.hero-home .hero-sub {
+  font-size: 18px;
+  font-weight: 400;
+  margin-top: 16px;
+  opacity: 0.9;
+}
+
+.hero-home .hero-quick {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.hero-home .hero-tag {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--white);
+  transition: background 200ms ease;
+}
+.hero-home .hero-tag:hover {
+  background: rgba(255, 255, 255, 0.3);
+  color: var(--white);
+}
+
+/* Hero cards: production's "card-default" hero-card treatment reusing the
+   shared `.card` style (shadow/radius/padding already match production's
+   `.card` rule exactly), pulled up to overlap the hero's bottom edge on
+   desktop -- production's own `.hero-cards` treatment -- and stacking
+   normally below the hero on narrow viewports. */
+.hero-cards-wrap {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+  max-width: 800px;
+  margin: -150px auto 40px;
+}
+
+.hero-card img {
+  margin-bottom: 12px;
+}
+
+.hero-card h3 {
+  margin-bottom: 8px;
+}
+
+.hero-card p {
+  min-height: 72px;
+}
+
+.hero-card .btn {
+  margin-top: 12px;
+}
+
+@media (max-width: 991px) {
+  .hero-home {
+    padding: 90px 20px 50px;
+    min-height: auto;
+  }
+  .hero-cards {
+    margin: 30px auto 0;
+  }
+  .hero-card p {
+    min-height: 0;
   }
 }
 
@@ -585,8 +734,8 @@ h4 { font-size: 20px; }
   border-color: transparent;
 }
 .calendar-day.today {
-  border-color: var(--purple);
-  background: var(--purple-light);
+  border: 2px solid var(--purple);
+  background: var(--purple-faint);
 }
 
 .calendar-day-number {
@@ -609,11 +758,13 @@ h4 { font-size: 20px; }
   padding: 2px 4px;
   border-radius: 3px;
   background: var(--purple-light);
+  border: 1px solid var(--purple);
   color: var(--text-dark);
   text-decoration: none;
 }
 .cal-entry:hover {
   background: var(--purple);
+  border-color: var(--purple-dark);
   color: var(--white);
 }
 .cal-entry[data-hidden] {

@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getLogoPath, formatDateRange } from '../../lib/helpers';
+import { resolveImage, formatDateRange, isMappable } from '../../lib/helpers';
 import { renderDescriptionHtml } from '../../lib/markdown';
 import opportunities from '../../data/opportunities.json';
 import partners from '../../data/partners.json';
@@ -14,12 +14,15 @@ export function getStaticPaths() {
 
 const { opportunity: opp } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/+$/, ''); // "" or "/partner-scrape"
-const logoPath = getLogoPath(opp.logo_src);
+// Fallback chain (event image -> partner logo -> placeholder) resolved by
+// one shared helper -- see sprint 008 Design Rationale / SUC-009.
+const imagePath = resolveImage(opp.image_src, opp.logo_src);
+const hasEventImage = Boolean(opp.image_src);
 const dateRange = formatDateRange(opp.date_start, opp.date_end);
 
 // Find matching partner
 const partner = partners.find(p => p.name === opp.partner_name);
-const hasLocation = opp.latitude && opp.longitude && !isNaN(parseFloat(opp.latitude));
+const hasLocation = isMappable(opp.latitude, opp.longitude);
 const descriptionHtml = renderDescriptionHtml(opp.description);
 ---
 
@@ -32,7 +35,12 @@ const descriptionHtml = renderDescriptionHtml(opp.description);
 
     <div class="detail-header">
       <div class="detail-partner-row">
-        <img src={logoPath} alt={opp.partner_name} class="detail-logo" />
+        <img
+          src={imagePath}
+          alt={hasEventImage ? opp.title : opp.partner_name}
+          class="detail-logo"
+          data-event-image={hasEventImage ? 'true' : undefined}
+        />
         <div>
           {partner
             ? <a href={`${base}/partners/${partner.id}`} class="detail-partner-link">{opp.partner_name}</a>

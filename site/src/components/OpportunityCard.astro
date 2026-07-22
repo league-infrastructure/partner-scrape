@@ -1,5 +1,5 @@
 ---
-import { getLogoPath, formatDate, truncate } from '../lib/helpers';
+import { resolveImage, formatDate, isWeekend, truncate } from '../lib/helpers';
 import { descriptionToPlainText } from '../lib/markdown';
 
 interface Props {
@@ -18,6 +18,7 @@ interface Props {
     financial_support: string;
     ngss_aligned: string;
     logo_src: string;
+    image_src: string;
     latitude: string;
     longitude: string;
   };
@@ -25,8 +26,12 @@ interface Props {
 
 const { opportunity: opp } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/+$/, ''); // "" or "/partner-scrape"
-const logoPath = getLogoPath(opp.logo_src);
+// Fallback chain (event image -> partner logo -> placeholder) resolved by
+// one shared helper -- see sprint 008 Design Rationale / SUC-009.
+const imagePath = resolveImage(opp.image_src, opp.logo_src);
+const hasEventImage = Boolean(opp.image_src);
 const dateDisplay = formatDate(opp.date_start);
+const dateIsWeekend = isWeekend(opp.date_start);
 ---
 
 <article
@@ -45,13 +50,19 @@ const dateDisplay = formatDate(opp.date_start);
   data-lng={opp.longitude}
 >
   <div class="opp-card-top">
-    <img src={logoPath} alt={opp.partner_name} class="opp-card-logo" loading="lazy" />
+    <img
+      src={imagePath}
+      alt={hasEventImage ? opp.title : opp.partner_name}
+      class="opp-card-logo"
+      data-event-image={hasEventImage ? 'true' : undefined}
+      loading="lazy"
+    />
     <span class="tag tag-purple">{opp.opportunity_type}</span>
   </div>
   <h3><a href={`${base}/opportunities/${opp.slug}`}>{opp.title}</a></h3>
   <p class="opp-card-partner">{opp.partner_name}</p>
   <div class="opp-card-meta">
-    <span class="opp-card-date">{dateDisplay}</span>
+    <span class="opp-card-date" data-weekend={dateIsWeekend ? 'true' : undefined}>{dateDisplay}</span>
     {opp.cost_range === 'Free'
       ? <span class="tag tag-free">Free</span>
       : <span class="opp-card-cost">{opp.cost_range}</span>
