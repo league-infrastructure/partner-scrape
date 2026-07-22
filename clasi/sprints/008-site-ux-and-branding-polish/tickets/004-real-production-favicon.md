@@ -1,8 +1,9 @@
 ---
 id: '004'
 title: Real production favicon
-status: open
-use-cases: [SUC-004]
+status: done
+use-cases:
+- SUC-004
 depends-on: []
 github-issue: ''
 issue: 21-site-favicon.md
@@ -69,17 +70,19 @@ None required.
 
 ## Acceptance Criteria
 
-- [ ] The real STEM Ecosystem favicon renders in the browser tab on a local build.
-- [ ] `apple-touch-icon`/manifest icons added if production provides them and doing so is a small
+- [x] The real STEM Ecosystem favicon renders in the browser tab on a local build.
+- [x] `apple-touch-icon`/manifest icons added if production provides them and doing so is a small
       addition (not required if production offers none, or if the addition is nontrivial —
-      use judgment, favicon is the hard requirement).
-- [ ] The favicon path is base-path-safe (`import.meta.env.BASE_URL`), matching the convention
+      use judgment, favicon is the hard requirement). (Production offers neither — verified by
+      inspecting the full `<head>` of https://www.sdstemecosystem.org/: only a single
+      `<link rel="icon">`, no `apple-touch-icon`, no `manifest` link. Nothing to add.)
+- [x] The favicon path is base-path-safe (`import.meta.env.BASE_URL`), matching the convention
       already used elsewhere in `BaseLayout.astro`.
-- [ ] No runtime fetch to sdstemecosystem.org — the asset is fully self-hosted under
+- [x] No runtime fetch to sdstemecosystem.org — the asset is fully self-hosted under
       `site/public/`.
-- [ ] The downloaded asset was validated as a real image (content-type + decode check) before
+- [x] The downloaded asset was validated as a real image (content-type + decode check) before
       being committed.
-- [ ] `npm run build` succeeds.
+- [x] `npm run build` succeeds.
 
 ## Testing
 
