@@ -1,80 +1,13 @@
 [
  {
-  "slug": "birch_aquarium_at_scripps_shark_summer_at_birch_aquarium_20260721",
-  "title": "Shark Summer at Birch Aquarium",
-  "partner_name": "Birch Aquarium at Scripps",
-  "partner_id": null,
-  "description": "This summer, Birch Aquarium is making a splash with the return of Shark Summer! Dive into the world of these amazing animals, with fin-tastic fun for shark fans of all ages! Shark Summer celebrates the vital role sharks play in the ecosystem, while shining a light on the important conservation work and research being done to protect them. Shark Summer kicks off on July 1 and runs through August 2. Offerings vary by day, check the Daily Schedule for the latest.",
-  "link": "https://aquarium.ucsd.edu/events/shark-summer",
-  "availability": "",
-  "date_start": "2026-07-21T00:00:00-07:00",
-  "date_end": "2026-08-02T23:59:59-07:00",
-  "age_grade_level": [
-   "Family",
-   "Grades 6-8",
-   "Grades 9-12"
-  ],
-  "cost_range": "",
-  "time_of_day": [
-   "All Day"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Biology / LifeSciences",
-   "Earth Science/Ecology"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Birch Aquarium",
-  "latitude": "",
-  "longitude": "",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "birch_aquarium_at_scripps_birch_aquarium_is_open_late_sundays_20260721",
-  "title": "Birch Aquarium is Open Late Sundays",
-  "partner_name": "Birch Aquarium at Scripps",
-  "partner_id": null,
-  "description": "Looking for the perfect way to wind down after the weekend? Birch Aquarium is open late every Sunday evening from 5 – 7 p.m. Enjoy an all-ages experience featuring discounted tickets and a fun, relaxing vibe!",
-  "link": "https://aquarium.ucsd.edu/events/birch-after-hours",
-  "availability": "",
-  "date_start": "2026-07-21T00:00:00-07:00",
-  "date_end": "2027-02-28T19:00:00-07:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "Less than $50",
-  "time_of_day": [
-   "Evening"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Biology / LifeSciences"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Birch Aquarium",
-  "latitude": "",
-  "longitude": "",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "san_diego_county_library_explore_learn_and_play_20260721",
+  "slug": "san_diego_county_library_explore_learn_and_play_20260722",
   "title": "Explore, Learn, and Play",
   "partner_name": "San Diego County Library",
   "partner_id": 251,
   "description": "Bring your young children to explore, learn, and play in this free-play space. We provide a variety of sensory and educational toys and activities.",
   "link": "https://sdcl.bibliocommons.com/events/6a469bda20e06486019585aa",
-  "availability": "Repeats 132 times through 2027-01-17",
-  "date_start": "2026-07-21T00:00:00-07:00",
+  "availability": "Repeats 131 times through 2027-01-17",
+  "date_start": "2026-07-22T00:00:00-07:00",
   "date_end": "2027-01-17T00:00:00-07:00",
   "age_grade_level": [
    "Family",
@@ -97,17 +30,18 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": ""
  },
  {
-  "slug": "san_diego_county_library_under_the_sea_i_spy_20260721",
+  "slug": "san_diego_county_library_under_the_sea_i_spy_20260722",
   "title": "Under the Sea I SPY",
   "partner_name": "San Diego County Library",
   "partner_id": 251,
   "description": "Can you \"sea\" some of your favorite underwater characters and creatures on our I SPY wall? Try to find them all! Earn one prize a day while supplies last. Recommended for kids ages 10 and under.",
   "link": "https://sdcl.bibliocommons.com/events/6a1de8bf40f528ac04dfbade",
   "availability": "",
-  "date_start": "2026-07-21T00:00:00-07:00",
+  "date_start": "2026-07-22T00:00:00-07:00",
   "date_end": "2026-08-31T18:00:00-07:00",
   "age_grade_level": [
    "Family"
@@ -130,17 +64,18 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "aef91e6f3c89bfb8.png"
  },
  {
-  "slug": "san_diego_county_library_summer_scavenger_hunt_dinosaurs_20260721",
+  "slug": "san_diego_county_library_summer_scavenger_hunt_dinosaurs_20260722",
   "title": "Summer Scavenger Hunt: Dinosaurs",
   "partner_name": "San Diego County Library",
   "partner_id": 251,
   "description": "Enjoy a special themed scavenger hunt in the children's area! July's theme will be dinosaurs. Complete the scavenger hunt to win a small prize. For children ages 4-12. While supplies last; one prize per day.",
   "link": "https://sdcl.bibliocommons.com/events/69fbb06c703c33630025eb4d",
   "availability": "",
-  "date_start": "2026-07-21T00:00:00-07:00",
+  "date_start": "2026-07-22T00:00:00-07:00",
   "date_end": "2026-07-31T23:59:59-07:00",
   "age_grade_level": [
    "Family",
@@ -164,17 +99,18 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
-  "slug": "san_diego_county_library_u_s_a_scavenger_hunt_20260721",
+  "slug": "san_diego_county_library_u_s_a_scavenger_hunt_20260722",
   "title": "U.S.A. Scavenger Hunt",
   "partner_name": "San Diego County Library",
   "partner_id": 251,
   "description": "Come learn facts about the United States of America symbols. Earn one prize a day while supplies last. Recommended for kids ages 10 and under.",
   "link": "https://sdcl.bibliocommons.com/events/6a430b28f56bd86e00b9f0f7",
   "availability": "",
-  "date_start": "2026-07-21T00:00:00-07:00",
+  "date_start": "2026-07-22T00:00:00-07:00",
   "date_end": "2026-07-31T17:00:00-07:00",
   "age_grade_level": [
    "Grades 6-8",
@@ -196,504 +132,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "san_diego_children_s_discovery_museum_member_8217_s_only_hours_20260721",
-  "title": "Member&#8217;s Only Hours",
-  "partner_name": "San Diego Children's Discovery Museum",
-  "partner_id": 16,
-  "description": "Join us every Tuesday from 8:30 a.m. - 9:30 a.m. for our Member's Only Hours.",
-  "link": "https://visitcmod.org/events/members-only-hours-2/2026-08-11/",
-  "availability": "Repeats 18 times through 2026-12-29",
-  "date_start": "2026-07-21T08:30:00-07:00",
-  "date_end": "2026-12-29T09:30:00-07:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "General Science"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Children's Museum of Discovery, 320 North Broadway, Escondido, CA",
-  "latitude": "33.124517",
-  "longitude": "-117.082351",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "san_diego_childrens_discovery.jpg"
- },
- {
-  "slug": "ocean_connectors_birding_038_brews_8211_breakfast_edition_20260721",
-  "title": "Birding &#038; Brews &#8211; Breakfast Edition",
-  "partner_name": "Ocean Connectors",
-  "partner_id": 174,
-  "description": "Be an Ocean Connector and start your day with birding and brews! Sip on smooth, nitro cold brew from Trident Coffee as you learn how their values of connection, community, and character align with our conservation mission. Then, head out on a guided walking tour along the Bayshore Bikeway at South San Diego Bay, equipped with binoculars and field guides. What to Expect: Coffee Tasting: Kick off the tour with a unique nitro cold brew tasting, crafted locally by Trident Coffee. Birdwatching Walk: Explore the Bayshore Bikeway with expert guides to spot native and migratory birds. Ecology & Conservation: Learn about local ecosystems and conservation efforts to protect our coastal wildlife. Best of all, every tour supports our education programs for South Bay youth!",
-  "link": "https://oceanconnectors.org/event/birding-brews-breakfast-edition-38/",
-  "availability": "Repeats 4 times through 2026-08-20",
-  "date_start": "2026-07-21T09:00:00-07:00",
-  "date_end": "2026-08-20T11:00:00-07:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "Less than $50",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Biology / LifeSciences",
-   "Earth Science/Ecology"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "San Diego Bay Refuge, 501 Florence St, Imperial Beach, CA",
-  "latitude": "32.7495327",
-  "longitude": "-117.1509999",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "ocean_connectors.jpg"
- },
- {
-  "slug": "san_diego_children_s_discovery_museum_summer_camp_20260721",
-  "title": "Summer Camp",
-  "partner_name": "San Diego Children's Discovery Museum",
-  "partner_id": 16,
-  "description": "Are you a creative and curious problem solver? Spend the summer exploring with the Children's Museum of Discovery! Each day of camp includes access to Museum exhibits, hands-on exploration with trained education staff, and an opportunity to make new friends. Explore engineering, practice your paleontology skills, and blast off into outer space with endless opportunities to explore, imagine, and experiment. Register now to join us for a summer of FUN!   Little Explorers Camp Ages: 4 - 5 years old Hours: 9:00 a.m. - 2:30 p.m. Big Explorers Camp Ages: 6 - 8 years old Hours: 9:00 a.m. - 2:30 p.m. Register Here",
-  "link": "https://visitcmod.org/events/summer-camp-4/2026-07-21/",
-  "availability": "Repeats 19 times through 2026-08-14",
-  "date_start": "2026-07-21T09:00:00-07:00",
-  "date_end": "2026-08-14T14:30:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Pre-K",
-   "Grades 6-8"
-  ],
-  "cost_range": "",
-  "time_of_day": [
-   "Morning",
-   "Afternoon"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Engineering",
-   "Earth Science/Ecology",
-   "Physics"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Children's Museum of Discovery, 320 North Broadway, Escondido, CA",
-  "latitude": "33.124517",
-  "longitude": "-117.082351",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "san_diego_childrens_discovery.jpg"
- },
- {
-  "slug": "san_diego_children_s_discovery_museum_tortoise_talk_20260721",
-  "title": "Tortoise Talk",
-  "partner_name": "San Diego Children's Discovery Museum",
-  "partner_id": 16,
-  "description": "Meet Sebastian, the 57 year old North American Desert Tortoise! Guests can get an up close look at Sebastian the tortoise and learn about his different adaptations.",
-  "link": "https://visitcmod.org/events/tortoise-talk-4/2026-07-21/",
-  "availability": "Repeats 69 times through 2026-10-31",
-  "date_start": "2026-07-21T10:00:00-07:00",
-  "date_end": "2026-10-31T10:30:00-07:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Biology / LifeSciences"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Children's Museum of Discovery, 320 North Broadway, Escondido, CA",
-  "latitude": "33.124517",
-  "longitude": "-117.082351",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "san_diego_childrens_discovery.jpg"
- },
- {
-  "slug": "san_diego_children_s_discovery_museum_garden_workshop_20260721",
-  "title": "Garden Workshop",
-  "partner_name": "San Diego Children's Discovery Museum",
-  "partner_id": 16,
-  "description": "Enjoy a Garden Workshop with our Educators!",
-  "link": "https://visitcmod.org/events/garden-workshop-15/2026-07-21/",
-  "availability": "Repeats 231 times through 2026-12-30",
-  "date_start": "2026-07-21T11:00:00-07:00",
-  "date_end": "2026-12-30T14:30:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Pre-K",
-   "Grades 6-8"
-  ],
-  "cost_range": "",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Biology / LifeSciences",
-   "Earth Science/Ecology"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Children's Museum of Discovery, 320 North Broadway, Escondido, CA",
-  "latitude": "33.124517",
-  "longitude": "-117.082351",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "san_diego_childrens_discovery.jpg"
- },
- {
-  "slug": "san_diego_county_library_think_build_play_20260721",
-  "title": "Think, Build, Play",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Join us to get creative with LEGO and have fun with board games!",
-  "link": "https://sdcl.bibliocommons.com/events/6a4e9cad6ada47280057d61d",
-  "availability": "Repeats 2 times through 2026-07-28",
-  "date_start": "2026-07-21T12:00:00-07:00",
-  "date_end": "2026-07-28T13:00:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Grades 6-8"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Afternoon"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Engineering"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Lemon Grove, Community Room",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "san_diego_children_s_discovery_museum_family_workshop_20260721",
-  "title": "Family Workshop",
-  "partner_name": "San Diego Children's Discovery Museum",
-  "partner_id": 16,
-  "description": "Learn how birds migrate with a mixed media collage!",
-  "link": "https://visitcmod.org/events/family-workshop-106/2026-07-21/",
-  "availability": "Repeats 57 times through 2026-08-30",
-  "date_start": "2026-07-21T12:00:00-07:00",
-  "date_end": "2026-08-30T16:00:00-07:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "",
-  "time_of_day": [
-   "Afternoon"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Biology / LifeSciences",
-   "General Science"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Children's Museum of Discovery, 320 North Broadway, Escondido, CA",
-  "latitude": "33.124517",
-  "longitude": "-117.082351",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "san_diego_childrens_discovery.jpg"
- },
- {
-  "slug": "san_diego_county_library_hearts_and_hooves_mini_horses_20260721",
-  "title": "Hearts and Hooves Mini Horses",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Meet a mini-pony and learn about therapy animals with our special guests from Hearts and Hooves. Event will be held in the San Marcos Library's Kids & Family area. This program is generously sponsored by the Friends of the San Marcos Library.",
-  "link": "https://sdcl.bibliocommons.com/events/6a0cf5ce17731928001af1f6",
-  "availability": "",
-  "date_start": "2026-07-21T12:30:00-07:00",
-  "date_end": "2026-07-21T13:30:00-07:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Afternoon"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Biology / LifeSciences"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "San Marcos, Kids and Family Room",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "san_diego_county_library_teen_pottery_class_20260721",
-  "title": "Teen Pottery Class",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Get creative and hands-on in this fun pottery workshop designed just for teens! Participants will learn basic clay-building techniques to craft their own acoustic phone amplifiers, no electronics needed. Ages: 10-17 Registration is required. Sign up at the Front Desk or Call 760-731-4650.",
-  "link": "https://sdcl.bibliocommons.com/events/6a28ad4d8ea300e2631c7502",
-  "availability": "",
-  "date_start": "2026-07-21T13:00:00-07:00",
-  "date_end": "2026-07-21T15:00:00-07:00",
-  "age_grade_level": [
-   "Grades 6-8",
-   "Grades 9-12"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Afternoon"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Engineering"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Fallbrook",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "san_diego_county_library_intro_to_circuitry_by_nextgen_circuitry_20260721",
-  "title": "Intro to Circuitry (by Nextgen Circuitry)",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "FREE SUMMER CIRCUITRY CLASSES FOR ELEMENTARY STUDENTS GRADES: 3 - 6 Explore circuitry and STEM with fun activities and electronics projects! Hands-on learning , Beginner-friendly environment, Small group sessions, Builds problem-solving skills",
-  "link": "https://sdcl.bibliocommons.com/events/6a51478af4e5db3d00c0ddd7",
-  "availability": "",
-  "date_start": "2026-07-21T15:00:00-07:00",
-  "date_end": "2026-07-21T16:30:00-07:00",
-  "age_grade_level": [
-   "Grades 6-8"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Afternoon"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Engineering",
-   "Physical Science"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "4S Ranch",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "san_diego_county_library_summer_learning_teen_video_game_tournament_20260721",
-  "title": "Summer Learning - Teen Video Game Tournament",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Teens, ages 10-17. Come have fun and compete in a video game tournament.",
-  "link": "https://sdcl.bibliocommons.com/events/69fe5d031ed2c2bb2e2cb1c5",
-  "availability": "",
-  "date_start": "2026-07-21T16:00:00-07:00",
-  "date_end": "2026-07-21T17:30:00-07:00",
-  "age_grade_level": [
-   "Grades 6-8",
-   "Grades 9-12"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Afternoon"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Coding/Computer Science/Cyber Security"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Ramona",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "san_diego_county_library_summer_learning_presents_ralph_s_world_20260721",
-  "title": "Summer Learning Presents: Ralph's World",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Ralph Covert of Ralph’s World will lead kids and parents on a musical journey of fun. Kids will find their own voices as they join in with singing, dancing, pretending to be animals, and lots of silliness. Ralph will play story time favorites like “Driving in My Car,” as well as tunes from his time with Disney, like “Edward the Tap Dancing Elephant,” recently featured in a video puppet play produced by Chicago Children’s Theatre, that celebrates the importance of following your dream. Sponsored by the Friends of the La Mesa Library.",
-  "link": "https://sdcl.bibliocommons.com/events/69bc781c81b67dfe32adca72",
-  "availability": "",
-  "date_start": "2026-07-21T16:00:00-07:00",
-  "date_end": "2026-07-21T17:00:00-07:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Evening"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "La Mesa",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "the_league_of_amazing_programmers_game_making_cv_20260721",
-  "title": "Game Making@CV",
-  "partner_name": "The LEAGUE of Amazing Programmers",
-  "partner_id": 287,
-  "description": "Game Making at Carmel Valley Give your child the thrill of making their very first video game with block coding, a beginner friendly way to learn coding. Kids in grades 3 through 12 will work alongside a live instructor to design a main character, add movement, and create simple challenges--then watch their game come to life. It’s a fun, beginner-friendly way to spark creativity, build problem-solving skills, and get them excited about technology. For programmers from 2nd to 6th grade. Price: $375 Location: The League of Amazing Programmers 12625 High Bluff Dr #113, San Diego, CA 92130 Sign Up Below!",
-  "link": "https://jtl.pike13.com",
-  "availability": "",
-  "date_start": "2026-07-21T17:00:00-07:00",
-  "date_end": "2026-07-21T19:00:00-07:00",
-  "age_grade_level": [
-   "Grades 6-8",
-   "Grades 9-12"
-  ],
-  "cost_range": "Less than $400",
-  "time_of_day": [
-   "Evening"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Coding/Computer Science/Cyber Security"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "The League of Amazing Programmers, 12625 High Bluff Dr #113, San Diego, CA 92130",
-  "latitude": "32.9474",
-  "longitude": "-117.239",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "the_league_of_amazing.png"
- },
- {
-  "slug": "the_league_of_amazing_programmers_competitive_robotics_summer_warm_up_20260721",
-  "title": "Competitive Robotics Summer Warm Up",
-  "partner_name": "The LEAGUE of Amazing Programmers",
-  "partner_id": 287,
-  "description": "Students gain hands-on experience with robot design, build, and programming fundamentals aligned with competitive robotics. This summer session, we'll work together to learn what it takes to compete — meeting you where you are and pushing you further, whether you're picking up a wrench for the first time or refining your autonomous code. What you'll gain: Hands-on experience with robot design, build, and programming Greater confidence heading into the season Stronger teamwork and collaboration skills A real competitive edge for the upcoming season",
-  "link": "https://jtl.pike13.com",
-  "availability": "",
-  "date_start": "2026-07-21T17:00:00-07:00",
-  "date_end": "2026-07-21T19:00:00-07:00",
-  "age_grade_level": [
-   "Grades 6-8",
-   "Grades 9-12"
-  ],
-  "cost_range": "",
-  "time_of_day": [
-   "Evening"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Engineering",
-   "Coding/Computer Science/Cyber Security"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Robot Garage (RG), San Diego",
-  "latitude": "32.8066",
-  "longitude": "-117.247",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "the_league_of_amazing.png"
- },
- {
-  "slug": "san_diego_county_library_construction_club_20260721",
-  "title": "Construction Club",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Craft activities and building challenges with LEGO bricks, geared for kids ages 4 and up. Offered by local high school students. No registration required.",
-  "link": "https://sdcl.bibliocommons.com/events/6a1e2f1343b41b3d006aed7c",
-  "availability": "Repeats 29 times through 2026-12-21",
-  "date_start": "2026-07-21T17:00:00-07:00",
-  "date_end": "2026-12-21T17:00:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Pre-K",
-   "Grades 6-8"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Afternoon"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Engineering"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "El Cajon",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "aef91e6f3c89bfb8.png"
  },
  {
   "slug": "ocean_connectors_north_county_nature_paddle_eco_tour_20260722",
@@ -728,7 +168,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "ocean_connectors.jpg"
+  "logo_src": "ocean_connectors.jpg",
+  "image_src": "fdbdb362c08f3e2a.jpg"
  },
  {
   "slug": "san_diego_county_library_summer_learning_basic_outreach_20260722",
@@ -760,7 +201,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "san_diego_county_library_pre_k_play_20260722",
@@ -791,7 +233,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "cdbf671bbc6fed89.png"
  },
  {
   "slug": "the_living_coast_discovery_center_eagle_presentation_20260722",
@@ -823,7 +266,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "living_coast_discovery_center.jpg"
+  "logo_src": "living_coast_discovery_center.jpg",
+  "image_src": "465f691c385da6ff.jpg"
  },
  {
   "slug": "the_living_coast_discovery_center_wildlife_surprise_20260722",
@@ -855,7 +299,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "living_coast_discovery_center.jpg"
+  "logo_src": "living_coast_discovery_center.jpg",
+  "image_src": "4ac1596fa1aaf454.png"
  },
  {
   "slug": "san_diego_county_library_lego_drop_in_20260722",
@@ -888,11 +333,12 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "23875f7ad5d28bbb.png"
  },
  {
   "slug": "the_living_coast_discovery_center_shark_038_ray_presentation_20260722",
-  "title": "Shark &#038; Ray Presentation",
+  "title": "Shark & Ray Presentation",
   "partner_name": "Living Coast Discovery Center",
   "partner_id": 46,
   "description": "Visit the Shark & Ray Experience to learn about the diverse range of species that inhabit it, including leopard sharks, bat rays, diamond rays, shovelnose guitarfish, horn sharks, and more! This exhibit features a touch tank where you can interact with some of these residents while learning about them. *All presentations are subject to cancellation at the discretion of the staff.",
@@ -923,7 +369,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "living_coast_discovery_center.jpg"
+  "logo_src": "living_coast_discovery_center.jpg",
+  "image_src": "7e3ef527168178d8.jpg"
  },
  {
   "slug": "san_diego_county_library_respiratory_system_workshop_presented_by_project_patho_20260722",
@@ -956,7 +403,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6f575a6ebb16e215.jpg"
  },
  {
   "slug": "the_living_coast_discovery_center_sea_turtle_presentation_20260722",
@@ -992,7 +440,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "living_coast_discovery_center.jpg"
+  "logo_src": "living_coast_discovery_center.jpg",
+  "image_src": "161d8716a54b0902.png"
  },
  {
   "slug": "san_diego_county_library_summer_steam_programs_20260722",
@@ -1026,7 +475,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "11f1b15c3ee56d29.png"
  },
  {
   "slug": "san_diego_county_library_brick_builders_20260722",
@@ -1058,7 +508,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "7ab5b3a215ac27bf.png"
  },
  {
   "slug": "san_diego_county_library_lego_club_20260722",
@@ -1092,7 +543,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "san_diego_county_library_steam_kids_artopia_20260722",
@@ -1126,7 +578,77 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "f7178df63f4b492f.png"
+ },
+ {
+  "slug": "the_league_of_amazing_programmers_game_making_cv_20260722",
+  "title": "Game Making@CV",
+  "partner_name": "The LEAGUE of Amazing Programmers",
+  "partner_id": 287,
+  "description": "Game Making at Carmel Valley Give your child the thrill of making their very first video game with block coding, a beginner friendly way to learn coding. Kids in grades 3 through 12 will work alongside a live instructor to design a main character, add movement, and create simple challenges--then watch their game come to life. It’s a fun, beginner-friendly way to spark creativity, build problem-solving skills, and get them excited about technology. For programmers from 2nd to 6th grade. Price: $375 Location: The League of Amazing Programmers 12625 High Bluff Dr #113, San Diego, CA 92130 Sign Up Below!",
+  "link": "https://jtl.pike13.com",
+  "availability": "",
+  "date_start": "2026-07-22T17:00:00-07:00",
+  "date_end": "2026-07-22T19:00:00-07:00",
+  "age_grade_level": [
+   "Grades 6-8",
+   "Grades 9-12"
+  ],
+  "cost_range": "Less than $500",
+  "time_of_day": [
+   "Evening"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Coding/Computer Science/Cyber Security"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Carmel Valley Campus (CV), San Diego",
+  "latitude": "32.9474",
+  "longitude": "-117.239",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "the_league_of_amazing.png",
+  "image_src": ""
+ },
+ {
+  "slug": "san_diego_county_library_construction_club_20260722",
+  "title": "Construction Club",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Craft activities and building challenges with LEGO bricks, geared for kids ages 4 and up. Offered by local high school students. No registration required.",
+  "link": "https://sdcl.bibliocommons.com/events/6a1e2f1343b41b3d006aed7c",
+  "availability": "Repeats 28 times through 2026-12-21",
+  "date_start": "2026-07-22T17:00:00-07:00",
+  "date_end": "2026-12-21T17:00:00-07:00",
+  "age_grade_level": [
+   "Family",
+   "Pre-K",
+   "Grades 6-8"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Afternoon"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Engineering"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "El Cajon",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "bb6e2eb13692a223.png"
  },
  {
   "slug": "the_league_of_amazing_programmers_robot_drivers_ftc_your_first_coding_mission_20260722",
@@ -1160,7 +682,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "the_league_of_amazing.png"
+  "logo_src": "the_league_of_amazing.png",
+  "image_src": ""
  },
  {
   "slug": "the_league_of_amazing_programmers_java_classes_20260722",
@@ -1193,7 +716,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "the_league_of_amazing.png"
+  "logo_src": "the_league_of_amazing.png",
+  "image_src": ""
  },
  {
   "slug": "the_league_of_amazing_programmers_java_online_20260723",
@@ -1226,7 +750,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "the_league_of_amazing.png"
+  "logo_src": "the_league_of_amazing.png",
+  "image_src": ""
  },
  {
   "slug": "the_league_of_amazing_programmers_python_online_20260723",
@@ -1259,7 +784,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "the_league_of_amazing.png"
+  "logo_src": "the_league_of_amazing.png",
+  "image_src": ""
  },
  {
   "slug": "the_league_of_amazing_programmers_python_classes_20260723",
@@ -1292,39 +818,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "the_league_of_amazing.png"
- },
- {
-  "slug": "san_diego_children_s_discovery_museum_bilingual_tortoise_talk_20260723",
-  "title": "Bilingual Tortoise Talk",
-  "partner_name": "San Diego Children's Discovery Museum",
-  "partner_id": 16,
-  "description": "Enjoy Tortoise Talk in Spanish! Meet Sebastian, the 57 year old North American Desert Tortoise! Guests can get an up close look at Sebastian the tortoise and learn about his different adaptations.",
-  "link": "https://visitcmod.org/events/bilingual-tortoise-talk-3/2026-07-23/",
-  "availability": "Repeats 15 times through 2026-10-29",
-  "date_start": "2026-07-23T10:00:00-07:00",
-  "date_end": "2026-10-29T10:30:00-07:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Biology / LifeSciences"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Children's Museum of Discovery, 320 North Broadway, Escondido, CA",
-  "latitude": "33.124517",
-  "longitude": "-117.082351",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "san_diego_childrens_discovery.jpg"
+  "logo_src": "the_league_of_amazing.png",
+  "image_src": ""
  },
  {
   "slug": "san_diego_county_library_baby_sensory_play_time_20260723",
@@ -1354,7 +849,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "e249227e478b82dd.png"
  },
  {
   "slug": "san_diego_county_library_nature_tots_20260723",
@@ -1389,7 +885,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "7d6222ba6179364b.png"
  },
  {
   "slug": "san_diego_county_library_jack_s_pond_park_ranger_storytime_20260723",
@@ -1424,7 +921,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "san_diego_county_library_microphone_doctor_20260723",
@@ -1456,7 +954,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "san_diego_county_library_kids_summer_reading_christopher_t_magician_20260723",
@@ -1486,7 +985,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "san_diego_county_library_owl_talk_with_mutah_the_great_horned_owl_20260723",
@@ -1518,72 +1018,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "san_diego_children_s_discovery_museum_bilingual_garden_workshop_20260723",
-  "title": "Bilingual Garden Workshop",
-  "partner_name": "San Diego Children's Discovery Museum",
-  "partner_id": 16,
-  "description": "Enjoy a Garden Workshop with our Educators in Spanish!",
-  "link": "https://visitcmod.org/events/bilingual-garden-workshop-20/2026-07-23/",
-  "availability": "Repeats 48 times through 2026-12-31",
-  "date_start": "2026-07-23T11:00:00-07:00",
-  "date_end": "2026-12-31T14:30:00-07:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Earth Science/Ecology",
-   "General Science"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Children's Museum of Discovery, 320 North Broadway, Escondido, CA",
-  "latitude": "33.124517",
-  "longitude": "-117.082351",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "san_diego_childrens_discovery.jpg"
- },
- {
-  "slug": "san_diego_children_s_discovery_museum_bilingual_family_workshop_20260723",
-  "title": "Bilingual Family Workshop",
-  "partner_name": "San Diego Children's Discovery Museum",
-  "partner_id": 16,
-  "description": "Enjoy a Family Workshop with our Educators in Spanish! Learn how birds migrate with a mixed media collage!",
-  "link": "https://visitcmod.org/events/bilingual-family-workshop-52/2026-07-23/",
-  "availability": "Repeats 12 times through 2026-08-27",
-  "date_start": "2026-07-23T12:00:00-07:00",
-  "date_end": "2026-08-27T16:00:00-07:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "",
-  "time_of_day": [
-   "Afternoon"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Biology / LifeSciences"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Children's Museum of Discovery, 320 North Broadway, Escondido, CA",
-  "latitude": "33.124517",
-  "longitude": "-117.082351",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "san_diego_childrens_discovery.jpg"
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "san_diego_county_library_summer_learning_lego_fun_hour_20260723",
@@ -1615,7 +1051,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "san_diego_county_library_stem_workshop_electricity_light_20260723",
@@ -1649,7 +1086,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "2b9bb63565036d93.jpg"
  },
  {
   "slug": "san_diego_county_library_biology_workshop_by_biosphere_20260723",
@@ -1681,7 +1119,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "8bcb7567084d277e.jpg"
  },
  {
   "slug": "san_diego_county_library_homework_help_20260723",
@@ -1715,7 +1154,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "7efadc85856b07b5.jpg"
  },
  {
   "slug": "san_diego_county_library_the_lego_club_20260723",
@@ -1749,7 +1189,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "4bdf0e5aa9e9709e.jpg"
  },
  {
   "slug": "san_diego_county_library_teens_edible_flowers_and_culinary_ways_to_enjoy_them_20260723",
@@ -1781,7 +1222,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "ece59aaf33c16950.jpg"
  },
  {
   "slug": "san_diego_county_library_stemelevate_20260723",
@@ -1816,7 +1258,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "323a1f1f60783e3d.jpg"
  },
  {
   "slug": "san_diego_county_library_ez_science_for_kids_20260723",
@@ -1848,7 +1291,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "e28dd848481e9817.png"
  },
  {
   "slug": "san_diego_county_library_teen_summer_reading_soap_making_20260723",
@@ -1881,7 +1325,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "san_diego_county_library_youth_chess_club_20260723",
@@ -1915,11 +1360,12 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "7ceb4257a058bb65.png"
  },
  {
   "slug": "coastal_roots_farm_farm_film_and_music_series_8211_tending_nature_20260723",
-  "title": "Farm Film and Music Series &#8211; Tending Nature",
+  "title": "Farm Film and Music Series – Tending Nature",
   "partner_name": "Coastal Roots Farm",
   "partner_id": 412,
   "description": "Summertime Film on the Farm Join us for the July Farm Film & Music where we'll screen Tending Nature: Indigenous Land Stewardship . Tending Nature is a documentary series that explores how, for a thousand years, land has provided for Native peoples and how tribal groups have actively shaped and tended (cared for) the land. Through in-person interviews, the series highlights current projects that are trying to solve ongoing environmental problems by integrating traditional knowledge from tribal groups with Western science. Bring a picnic dinner, your low-back chairs, and your friends and family for an inspiring evening on the Farm with live music, community partners, a panel conversation, and a special outdoor screening under the stars.   Event Details 📅 Date: Thursday, July 23 🕡 6 PM – Gates Open: Enjoy live music from Nathan and Jessie , community partners, and a beautiful Farm setting 🎙️ 7:30 PM - Panel discussion 🎬 8:05 PM –Film Screening Tickets $12/person in advance, $18/person at the door $36/person for Farm Friend Proceeds help support the Farm’s mission to nourish our community and educate about environmental sustainability. Learn more about our impact here . Tending Nature—Indigenous Land Stewardship This \"Tending Nature\" special features multiple perspectives and voices from Indigenous communities across California who are striving to keep the practices of their heritage alive. From coming-of-age rituals, seasonal food harvests, basket weaving and jewelry making, the documentary shares how traditional practices can be protected and maintained as a way of life for future generations. Hear from Expert Panelists: True Allard , Moderator Member of the American Indian Student Association at CSUSM and Farm employee Shalena Critchlow Indigenous advocate, community organizer, and descendant of the Rincon Band of Luiseño Indians and the Iipay Nation of Santa Ysabel. Representing Tribal Sacred Waters, Inc. Amanda Subish Red Earth Movement Connect with Partner Organizations: Before the start of the film, visit and learn from tabling organizations that share in the mission of nourishing community, responsibly stewarding the land, and more. Tabling Partners: California Native Plant Society Native Plants 4 Encinitas Produce Good Sustainability is Sexy Tribal Sacred Waters, Inc. Wild Ones San Diego   Part of Our Farm Film & Music Series This event opens Coastal Roots Farm’s 2026 Farm Film & Music Series, a seasonal community experience featuring documentary films, live local music, and meaningful conversation on the Farm. Each event invites guests to explore pressing environmental and social issues while gathering in community, enjoying live music, and connecting with local partners. By beginning with Groundswell , this year’s series starts with a message at the heart of the Farm: healthy soil, resilient communities, and collective action can change what is possible. View the full 2026 series lineup here . Thank You to our Event Sponsors Series Title Sponsor: Presenting Sponsor: Interested in supporting this powerful community series? Learn more about sponsorship opportunities here or email Sara@coastalrootsfarm.org .",
@@ -1949,7 +1395,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "coastal_roots_farm.jpg"
+  "logo_src": "coastal_roots_farm.jpg",
+  "image_src": "a43cc8e8cdb59bb5.png"
  },
  {
   "slug": "fleet_science_center_stem_camps_20260724",
@@ -1982,7 +1429,42 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "fleet_science_center.jpg"
+  "logo_src": "fleet_science_center.jpg",
+  "image_src": ""
+ },
+ {
+  "slug": "ocean_connectors_birding_038_brews_8211_breakfast_edition_20260724",
+  "title": "Birding & Brews – Breakfast Edition",
+  "partner_name": "Ocean Connectors",
+  "partner_id": 174,
+  "description": "Be an Ocean Connector and start your day with birding and brews! Sip on smooth, nitro cold brew from Trident Coffee as you learn how their values of connection, community, and character align with our conservation mission. Then, head out on a guided walking tour along the Bayshore Bikeway at South San Diego Bay, equipped with binoculars and field guides. What to Expect: Coffee Tasting: Kick off the tour with a unique nitro cold brew tasting, crafted locally by Trident Coffee. Birdwatching Walk: Explore the Bayshore Bikeway with expert guides to spot native and migratory birds. Ecology & Conservation: Learn about local ecosystems and conservation efforts to protect our coastal wildlife. Best of all, every tour supports our education programs for South Bay youth!",
+  "link": "https://oceanconnectors.org/event/birding-brews-breakfast-edition-37/",
+  "availability": "Repeats 3 times through 2026-08-20",
+  "date_start": "2026-07-24T09:00:00-07:00",
+  "date_end": "2026-08-20T11:00:00-07:00",
+  "age_grade_level": [
+   "Family"
+  ],
+  "cost_range": "Less than $50",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Biology / LifeSciences",
+   "Earth Science/Ecology"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "San Diego Bay Refuge, 501 Florence St, Imperial Beach, CA",
+  "latitude": "32.7495327",
+  "longitude": "-117.1509999",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "ocean_connectors.jpg",
+  "image_src": "ca84d5fb70654dd6.jpg"
  },
  {
   "slug": "san_diego_county_library_toddler_time_20260724",
@@ -2015,7 +1497,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "dc34aba7343c48e2.png"
  },
  {
   "slug": "san_diego_county_library_parks_recreation_animal_raptor_show_20260724",
@@ -2048,7 +1531,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "san_diego_county_library_family_play_time_20260724",
@@ -2081,11 +1565,12 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "a8b7131fc4841890.png"
  },
  {
   "slug": "i_love_a_clean_san_diego_compost_038_mulch_giveaway_8211_7_25_at_sun_runner_lot_20260725",
-  "title": "Compost &#038; Mulch Giveaway &#8211; 7/25 at Sun Runner Lot",
+  "title": "Compost & Mulch Giveaway – 7/25 at Sun Runner Lot",
   "partner_name": "I Love A Clean San Diego",
   "partner_id": 361,
   "description": "Join us for our upcoming Compost and Mulch Giveaway Event! This event is available for City of San Diego residents ONLY! Have you ever wondered what happens after you toss yard trimmings and food scraps into your green bin? The organic waste is collected and brought to the Miramar Greenery (located at the Miramar Landfill) where it is turned into compost! This compost is available at no cost to residents of the City of San Diego and can be picked up during normal business hours. To increase opportunities for residents to pick up compost, I Love A Clean San Diego and the City of San Diego are partnering to host Compost Giveaways on select weekends. Get your hands on some nutrient-rich compost for your garden at no cost. Whether you're a seasoned gardener or just starting out, this event is perfect for anyone looking to give their plants a boost. Swing by and grab some compost to help your garden thrive! Mulch is also available at this event. Things to bring: Shovel Gloves Containers Tarp and bungees for truck beds (ALL TRUCK BEDS MUST BE COVERED!) Things to know: Be prepared to self load compost and mulch All participants are REQUIRED to sign a release waiver Must approach from the EAST Exact Coordinates: (32.76726972788742, -117.20799017856716) Please be aware, in order to collect compost you are REQUIRED to sign a waiver. All participants will need to sign a waiver upon entering the event. About the Miramar Greenery: At the Miramar Greenery, compost is made from yard trimmings and food scraps that have been ground, placed in windrows, turned and watered for 70 days. During this time, microorganisms digest the carbon and nitrogen rich mixture, causing the windrow to sustain temperatures of 140-165 F. This process eliminates most weed seeds and pathogens while breaking down the organic material into beneficial soil nutrients. Finished compost is screened to a particle size of one-half inch or less which also removes film plastic from the final product. For more information, visit https://www.sandiego.gov/environmental-services/miramar Practical Application and Benefits : Compost can be used as an amendment to improve soil texture and increase nutrient and water holding capacity. In San Diego, where soil lacks many essential plant nutrients, mixing compost in with the soil is one of the best things you can do for your yard and garden. Note: This event will occur rain or shine, however if severe weather occurs the days leading up to the event, the event will be rescheduled or canceled. If needed, registrants will receive electronic communication as soon as possible before the event. This event is made possible by the City of San Diego Environmental Services Department and facilitated by I Love A Clean San Diego.",
@@ -2113,7 +1598,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "i_love_a_clean.png"
+  "logo_src": "i_love_a_clean.png",
+  "image_src": "bf711b8a308eebc3.jpg"
  },
  {
   "slug": "ocean_connectors_wildlife_kayaking_eco_tour_20260725",
@@ -2148,7 +1634,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "ocean_connectors.jpg"
+  "logo_src": "ocean_connectors.jpg",
+  "image_src": "f3272a861f12242a.jpg"
  },
  {
   "slug": "solana_center_for_environmental_innovati_find_us_in_your_community_july_2026_solana_center_for_enviro_20260725",
@@ -2181,7 +1668,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "solana_center_for_environmental.png"
+  "logo_src": "solana_center_for_environmental.png",
+  "image_src": "4089e6d1abee0313.jpg"
  },
  {
   "slug": "the_living_coast_discovery_center_national_zookeeper_week_20260725",
@@ -2215,7 +1703,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "living_coast_discovery_center.jpg"
+  "logo_src": "living_coast_discovery_center.jpg",
+  "image_src": "239fb419bceb40ae.jpg"
  },
  {
   "slug": "san_diego_county_library_full_steam_ahead_origami_20260725",
@@ -2247,7 +1736,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "d54ccbb77a006867.jpg"
  },
  {
   "slug": "san_diego_county_library_kids_lego_club_20260725",
@@ -2280,7 +1770,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "f7178df63f4b492f.png"
  },
  {
   "slug": "san_diego_county_library_clay_sculpture_class_for_kids_20260725",
@@ -2312,7 +1803,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "1d0d1a5573bf152b.png"
  },
  {
   "slug": "san_diego_county_library_radical_raptors_birds_of_the_world_20260725",
@@ -2345,7 +1837,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "the_living_coast_discovery_center_sweetwater_safari_hike_20260725",
@@ -2378,7 +1871,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "living_coast_discovery_center.jpg"
+  "logo_src": "living_coast_discovery_center.jpg",
+  "image_src": "98f171d093824197.png"
  },
  {
   "slug": "san_diego_county_library_3d_printing_and_design_20260725",
@@ -2412,7 +1906,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6ecaa290959436c8.jpg"
  },
  {
   "slug": "san_diego_county_library_bughouse_chess_tournament_20260725",
@@ -2446,7 +1941,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "ef58c209b8dbbea4.jpg"
  },
  {
   "slug": "san_diego_county_library_slimetopia_scoops_of_squishy_fun_20260725",
@@ -2480,7 +1976,43 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
+ },
+ {
+  "slug": "the_league_of_amazing_programmers_competitive_robotics_summer_warm_up_20260725",
+  "title": "Competitive Robotics Summer Warm Up",
+  "partner_name": "The LEAGUE of Amazing Programmers",
+  "partner_id": 287,
+  "description": "Students gain hands-on experience with robot design, build, and programming fundamentals aligned with competitive robotics. This summer session, we'll work together to learn what it takes to compete — meeting you where you are and pushing you further, whether you're picking up a wrench for the first time or refining your autonomous code. What you'll gain: Hands-on experience with robot design, build, and programming Greater confidence heading into the season Stronger teamwork and collaboration skills A real competitive edge for the upcoming season",
+  "link": "https://jtl.pike13.com",
+  "availability": "",
+  "date_start": "2026-07-25T17:00:00-07:00",
+  "date_end": "2026-07-25T19:00:00-07:00",
+  "age_grade_level": [
+   "Grades 6-8",
+   "Grades 9-12"
+  ],
+  "cost_range": "",
+  "time_of_day": [
+   "Evening"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Engineering",
+   "Coding/Computer Science/Cyber Security"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Robot Garage (RG), San Diego",
+  "latitude": "32.8066",
+  "longitude": "-117.247",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "the_league_of_amazing.png",
+  "image_src": ""
  },
  {
   "slug": "the_league_of_amazing_programmers_robot_garage_20260725",
@@ -2515,7 +2047,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "the_league_of_amazing.png"
+  "logo_src": "the_league_of_amazing.png",
+  "image_src": ""
  },
  {
   "slug": "the_league_of_amazing_programmers_intro_to_robotics_robot_riot_20260726",
@@ -2549,7 +2082,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "the_league_of_amazing.png"
+  "logo_src": "the_league_of_amazing.png",
+  "image_src": ""
  },
  {
   "slug": "san_diego_county_library_zovargo_animal_show_20260727",
@@ -2581,7 +2115,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "san_diego_county_library_summer_steam_tangram_art_20260727",
@@ -2615,7 +2150,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "the_league_of_amazing_programmers_robot_riot_cv_20260727",
@@ -2649,7 +2185,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "the_league_of_amazing.png"
+  "logo_src": "the_league_of_amazing.png",
+  "image_src": ""
  },
  {
   "slug": "the_league_of_amazing_programmers_summer_camps_sfa_20260727",
@@ -2679,7 +2216,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "the_league_of_amazing.png"
+  "logo_src": "the_league_of_amazing.png",
+  "image_src": ""
  },
  {
   "slug": "the_league_of_amazing_programmers_robotics_explorers_lt_20260727",
@@ -2711,7 +2249,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "the_league_of_amazing.png"
+  "logo_src": "the_league_of_amazing.png",
+  "image_src": ""
  },
  {
   "slug": "the_league_of_amazing_programmers_league_labs_20260727",
@@ -2743,7 +2282,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "the_league_of_amazing.png"
+  "logo_src": "the_league_of_amazing.png",
+  "image_src": ""
  },
  {
   "slug": "san_diego_county_library_math_reading_fun_20260728",
@@ -2775,7 +2315,78 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": ""
+ },
+ {
+  "slug": "the_san_diego_river_park_foundation_river_readers_nature_storytime_20260728",
+  "title": "River Readers Nature Storytime",
+  "partner_name": "The San Diego River Park Foundation",
+  "partner_id": 323,
+  "description": "&lt;p&gt;Located at Grant Park in Mission Valley, the River Readers Nature Storytime will feature books, activities, and crafts celebrating the [&hellip;]&lt;/p&gt;\\n",
+  "link": "https://sandiegoriver.org/events/",
+  "availability": "Repeats 3 times through 2026-07-28",
+  "date_start": "2026-07-28T09:30:00-07:00",
+  "date_end": "2026-07-28T10:30:00-07:00",
+  "age_grade_level": [
+   "Family",
+   "Pre-K",
+   "Grades 6-8"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Earth Science/Ecology",
+   "General Science"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Grant Park, 2310 Camino Del Rio N., San Diego",
+  "latitude": "32.7639275",
+  "longitude": "-117.2033498",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "the_san_diego_river.jpg",
+  "image_src": "8685aa2e81fadc23.jpg"
+ },
+ {
+  "slug": "san_diego_county_library_think_build_play_20260728",
+  "title": "Think, Build, Play",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Join us to get creative with LEGO and have fun with board games!",
+  "link": "https://sdcl.bibliocommons.com/events/6a4e9cad6ada47280057d61e",
+  "availability": "",
+  "date_start": "2026-07-28T12:00:00-07:00",
+  "date_end": "2026-07-28T13:00:00-07:00",
+  "age_grade_level": [
+   "Family",
+   "Grades 6-8"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Afternoon"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Engineering"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Lemon Grove, Community Room",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "4ba279c1ccab27a0.jpg"
  },
  {
   "slug": "san_diego_county_library_knights_of_the_chess_table_20260728",
@@ -2809,7 +2420,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "98b19cb1d2be99ff.png"
  },
  {
   "slug": "san_diego_county_library_tween_tuesday_make_pop_tart_stuffies_20260728",
@@ -2842,7 +2454,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "san_diego_county_library_informational_animal_show_featuring_county_park_ranger_ruben_20260729",
@@ -2877,7 +2490,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "san_diego_county_library_craig_newton_20260729",
@@ -2910,7 +2524,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "san_diego_county_library_avian_behavior_international_20260729",
@@ -2942,7 +2557,45 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
+ },
+ {
+  "slug": "anza_borrego_foundation_the_a_bee_cs_of_california_s_native_bees_with_national_geogr_20260729",
+  "title": "The A, Bee, Cs of California’s Native Bees with National Geographic Explorer, Krystle Hickman (Webinar)",
+  "partner_name": "Anza-Borrego Foundation",
+  "partner_id": 646,
+  "description": "Join National Geographic Explorer Krystle Hickman for this presentation on native bees, their relationships with native plants, and community science engagement.      What to Expect:&nbsp;     Learn how&nbsp;California is home to over 1,600 species of native bees&nbsp;and&nbsp;how they are a vital part of the ecosystem.&nbsp;      Get to know more about these important pollinators through Krystle's stunning macro photography.       Discover what makes them special&nbsp;and how to&nbsp;support a healthy garden.&nbsp;         Who Should Attend:&nbsp;     Home gardeners and native plant enthusiasts interested in supporting pollinators&nbsp;&nbsp;      Nature lovers, photographers, and anyone curious about California’s native bees&nbsp;&nbsp;      Teachers, students, and environmental educators&nbsp;&nbsp;      Community science volunteers and conservation-minded residents&nbsp;&nbsp;      Beekeepers, master gardeners, and habitat restoration volunteers&nbsp;         REGISTER TODAY!        Date: Wednesday,&nbsp;July 29, 2026&nbsp;    Time: 12:00 p.m.–1:00 p.m. &nbsp;    Location: Online via Zoom. Instructions to access the&nbsp;webinar&nbsp;will be&nbsp;sent&nbsp;the week of the event. &nbsp;        Cost:  &nbsp;    ABF Member: FREE     Not a member? Join today for as little as $35 and save!     Non-Member: $10 &nbsp;    Student: $5 &nbsp;    Cancellation Policy &amp; Scholarships:&nbsp;Please see&nbsp;our FAQs page to read our cancellation policy and learn about scholarship options.   &nbsp;        What Past Participants Are Saying:&nbsp;    “Depth, thoroughness and clarity of information as well as intriguing videos”&nbsp;    “I always eagerly anticipate upcoming virtual programs…they are terrific.”&nbsp;&nbsp;    “The presenter was articulate, well-paced, and really knew the topic.”&nbsp;        Bio:&nbsp;    Krystle Hickman is a National Geographic Explorer, community scientist, conservation photographer, and multi-award-winning author based in Los Angeles, California. Through her photography, she raises awareness about the decline of native bee species while highlighting the ecosystems they&nbsp;reside&nbsp;in. &nbsp;    Hickman’s work has taken her across the globe, where she documents native bees without using lethal collection methods. This approach has enabled her to document behaviors new to science and capture some of the first images of living representatives of many species. &nbsp;    Her work has been featured across television, digital platforms, and podcasts, including Ologies, and she has presented internationally, including at the 2024 United Nations Biodiversity Conference (COP16) in Colombia. Hickman has also lectured at institutions such as Harvard University, UCLA, and more.&nbsp;",
+  "link": "https://theabf.org/events/the-a-bee-cs-of-californias-native-bees-webinar/",
+  "availability": "",
+  "date_start": "2026-07-29T12:00:00-07:00",
+  "date_end": "2026-07-29T13:00:00-07:00",
+  "age_grade_level": [
+   "Family",
+   "Grades 9-12",
+   "Grades 6-8",
+   "Adult"
+  ],
+  "cost_range": "Less than $25",
+  "time_of_day": [
+   "Afternoon"
+  ],
+  "opportunity_type": "Online",
+  "areas_of_interest": [
+   "Biology / LifeSciences",
+   "Earth Science/Ecology"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Online via Zoom",
+  "latitude": "None",
+  "longitude": "None",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "anzaborrego_foundation.jpeg",
+  "image_src": "02e76e8e52d8e62a.jpg"
  },
  {
   "slug": "san_diego_county_library_projectpatho_skeletal_system_event_20260729",
@@ -2975,7 +2628,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "f7178df63f4b492f.png"
  },
  {
   "slug": "san_diego_county_library_lego_mania_20260729",
@@ -3009,7 +2663,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "san_diego_county_library_steam_kids_slime_20260729",
@@ -3044,7 +2699,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "f7178df63f4b492f.png"
  },
  {
   "slug": "san_diego_county_library_nature_to_you_coyote_snakes_from_the_natural_history_museum_20260730",
@@ -3079,7 +2735,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": ""
  },
  {
   "slug": "san_diego_county_library_wild_things_reptile_show_20260730",
@@ -3111,7 +2768,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "san_diego_county_library_summer_learning_critter_encounters_20260730",
@@ -3144,7 +2802,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "san_diego_county_library_science_heroes_20260730",
@@ -3176,7 +2835,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "san_diego_county_library_summer_craft_paint_and_plant_20260730",
@@ -3208,7 +2868,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "san_diego_county_library_stem_workshop_sound_motion_20260730",
@@ -3243,7 +2904,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "430e51fc5af311b4.jpg"
  },
  {
   "slug": "san_diego_county_library_park_ranger_visit_raptors_20260730",
@@ -3275,7 +2937,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "uss_midway_museum_overnight_adventure_uss_midway_museum_20260731",
@@ -3312,7 +2975,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "uss_midway_museum.png",
+  "image_src": "3abb02ddec8d3026.jpg"
  },
  {
   "slug": "san_diego_county_library_fleet_science_center_superhero_science_20260731",
@@ -3345,42 +3009,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "san_diego_children_s_discovery_museum_fun_animal_friday_large_lizards_20260731",
-  "title": "Fun Animal Friday: Large Lizards",
-  "partner_name": "San Diego Children's Discovery Museum",
-  "partner_id": 16,
-  "description": "Meet large lizards with EcoVivarium on Friday, July 31, from 10:00 a.m. to 11:30 a.m. The event will include a live presentation, meet & greet*, storytime, and a special craft! Pre-registration is not required. Free with Museum admission. Opportunities to meet the animals are limited, and timed tickets will be provided upon check-in. *Meet and greet is entirely contingent upon the animals’ well-being. We recommend arriving at the Museum early to maximize your chances of meeting the animals. A Hold Harmless form is required to be filled out for all guests who want to meet the animals.",
-  "link": "https://visitcmod.org/events/fun-animal-friday-large-lizards/",
-  "availability": "",
-  "date_start": "2026-07-31T10:00:00-07:00",
-  "date_end": "2026-07-31T11:30:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Pre-K",
-   "Grades 6-8",
-   "Grades 9-12"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Biology / LifeSciences"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Children's Museum of Discovery, 320 North Broadway, Escondido, CA",
-  "latitude": "33.124517",
-  "longitude": "-117.082351",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "san_diego_childrens_discovery.jpg"
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "san_diego_county_library_baby_storytime_20260731",
@@ -3411,7 +3041,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "b897087588cf2ff4.jpg"
  },
  {
   "slug": "san_diego_county_library_slime_party_20260731",
@@ -3445,7 +3076,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "san_diego_county_library_free_play_friday_20260731",
@@ -3477,7 +3109,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": ""
  },
  {
   "slug": "nature_collective_san_elijo_lagoon_discovery_tour_nature_collective_20260801",
@@ -3508,11 +3141,12 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "nature_collective.png"
+  "logo_src": "nature_collective.png",
+  "image_src": ""
  },
  {
   "slug": "ocean_connectors_wildin_8217_mission_bay_kayak_eco_tour_20260801",
-  "title": "Wildin&#8217; Mission Bay Kayak Eco Tour",
+  "title": "Wildin’ Mission Bay Kayak Eco Tour",
   "partner_name": "Ocean Connectors",
   "partner_id": 174,
   "description": "Join us for a unique kayaking eco tour of Mission Bay, where you’ll paddle through calm waters and explore the bay’s diverse marine and bird life. With guidance from our eco-experts, you’ll learn about the bay’s natural habitat and the ongoing conservation work that keeps it thriving. Suitable for all skill levels, this eco-friendly adventure is perfect for anyone looking to experience Mission Bay from a new perspective. What to Expect: Scenic Paddling: Enjoy a guided kayak trip through Mission Bay’s beautiful landscapes. Marine Life Spotting: Discover Mission Bay’s rich marine and bird life with the help of our knowledgeable guides. Conservation Focus: Learn how you can support the bay’s ecosystems and see conservation efforts firsthand. Experience the magic of Mission Bay—reserve your spot on our next eco tour! Best of all, every tour supports our education programs for South Bay youth!",
@@ -3541,7 +3175,77 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "ocean_connectors.jpg"
+  "logo_src": "ocean_connectors.jpg",
+  "image_src": "611814fc9f782e0c.jpg"
+ },
+ {
+  "slug": "the_san_diego_river_park_foundation_friends_and_neighbors_open_house_celebration_20260801",
+  "title": "Friends and Neighbors Open House Celebration",
+  "partner_name": "The San Diego River Park Foundation",
+  "partner_id": 323,
+  "description": "&lt;p&gt;You\\'re invited to our special Friends and Neighbors Open House community celebration on Saturday, August 1, 2026 from 10:00 am to 2:00 pm. Come learn about San Diego River Park [&hellip;]&lt;/p&gt;\\n",
+  "link": "https://sandiegoriver.org/event/friends-and-neighbors-open-house-celebration/",
+  "availability": "",
+  "date_start": "2026-08-01T10:00:00-07:00",
+  "date_end": "2026-08-01T14:00:00-07:00",
+  "age_grade_level": [
+   "Family"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Morning",
+   "Afternoon"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Earth Science/Ecology"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Grant Park, 2310 Camino Del Rio N., San Diego",
+  "latitude": "32.7639275",
+  "longitude": "-117.2033498",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "the_san_diego_river.jpg",
+  "image_src": "2974d3bd84cd701c.png"
+ },
+ {
+  "slug": "the_san_diego_river_park_foundation_the_bbbbbs_bothersome_but_beneficial_backyard_bandits_8211_0_20260801",
+  "title": "The BBBBBs: Bothersome But Beneficial Backyard Bandits–& one wears a mask!",
+  "partner_name": "The San Diego River Park Foundation",
+  "partner_id": 323,
+  "description": "&lt;p&gt;THIS CLASS IS PART OF OUR FRIENDS AND NEIGHBORS OPEN HOUSE CELEBRATION LINDA HAWLEY’S NATURE ADVENTURES! FREE—ages 4-10 with an adult Ravenous Rabbits, Sneaky Squirrels, Stinky Skunks Rascally Raccoons &amp; [&hellip;]&lt;/p&gt;\\n",
+  "link": "https://sandiegoriver.org/event/the-bbbbbs-bothersome-but-beneficial-backyard-bandits-one-wears-a-mask/",
+  "availability": "",
+  "date_start": "2026-08-01T10:00:00-07:00",
+  "date_end": "2026-08-01T11:00:00-07:00",
+  "age_grade_level": [
+   "Family",
+   "Pre-K"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Biology / LifeSciences",
+   "Earth Science/Ecology"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Grant Park, 2310 Camino Del Rio N., San Diego",
+  "latitude": "32.7639275",
+  "longitude": "-117.2033498",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "the_san_diego_river.jpg",
+  "image_src": "6fdad753776bdfd2.png"
  },
  {
   "slug": "the_living_coast_discovery_center_international_owl_awareness_20260801",
@@ -3574,7 +3278,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "living_coast_discovery_center.jpg"
+  "logo_src": "living_coast_discovery_center.jpg",
+  "image_src": "a432039053b4a88e.jpg"
  },
  {
   "slug": "san_diego_county_library_discover_play_saturday_free_play_20260801",
@@ -3607,7 +3312,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "23db037e2ac45088.png"
  },
  {
   "slug": "san_diego_county_library_creekside_critters_birds_of_prey_20260801",
@@ -3642,7 +3348,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "1fd62844912cc794.jpg"
  },
  {
   "slug": "san_diego_county_library_paws_to_read_20260801",
@@ -3672,7 +3379,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "940ac6b2f83a7c6e.png"
  },
  {
   "slug": "san_diego_county_library_blooming_seeds_socal_20260801",
@@ -3706,7 +3414,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6bde7e253e911e08.jpg"
  },
  {
   "slug": "san_diego_county_library_teen_reptile_show_20260801",
@@ -3740,7 +3449,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "nature_collective_san_diego_activities_family_fun_day_nature_collective_20260802",
@@ -3772,37 +3482,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "nature_collective.png"
- },
- {
-  "slug": "san_diego_children_s_discovery_museum_sensory_friendly_mornings_20260802",
-  "title": "Sensory Friendly Mornings",
-  "partner_name": "San Diego Children's Discovery Museum",
-  "partner_id": 16,
-  "description": "Join us every Sunday from 9:00 a.m. - 10:30 a.m. for early mornings geared for families with children on the spectrum or with sensory sensitivities: Join a welcoming, comfortable environment Enjoy the Museum in a quiet and accepting setting Make connections and share resources with other families Free with Museum admission.",
-  "link": "https://visitcmod.org/events/sensory-friendly-mornings-2/2026-08-02/",
-  "availability": "Repeats 10 times through 2026-12-27",
-  "date_start": "2026-08-02T09:00:00-07:00",
-  "date_end": "2026-12-27T10:30:00-07:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Children's Museum of Discovery, 320 North Broadway, Escondido, CA",
-  "latitude": "33.124517",
-  "longitude": "-117.082351",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "san_diego_childrens_discovery.jpg"
+  "logo_src": "nature_collective.png",
+  "image_src": ""
  },
  {
   "slug": "san_diego_county_library_family_free_play_20260803",
@@ -3833,7 +3514,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "db9f4bacede39a3b.jpg"
  },
  {
   "slug": "san_diego_county_library_summer_steam_marshmallow_structures_20260803",
@@ -3865,7 +3547,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "san_diego_natural_history_museum_residents_free_days_20260804",
@@ -3902,7 +3585,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "san_diego_natural_history.png"
+  "logo_src": "san_diego_natural_history.png",
+  "image_src": ""
  },
  {
   "slug": "san_diego_county_library_wild_animals_and_park_rangers_20260804",
@@ -3934,7 +3618,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "san_diego_county_library_hour_of_ai_20260804",
@@ -3966,7 +3651,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "aee30e68a6eac8a0.jpg"
  },
  {
   "slug": "san_diego_county_library_free_play_fun_20260804",
@@ -3998,7 +3684,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": ""
  },
  {
   "slug": "san_diego_county_library_teen_jeopardy_20260804",
@@ -4032,7 +3719,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "nature_collective_habitat_restoration_nature_collective_san_elijo_lagoon_20260805",
@@ -4065,7 +3753,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "nature_collective.png"
+  "logo_src": "nature_collective.png",
+  "image_src": ""
  },
  {
   "slug": "san_diego_county_library_play_to_learn_20260805",
@@ -4098,7 +3787,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "40a59efa51d7fde6.jpg"
  },
  {
   "slug": "san_diego_county_library_preschool_storytime_20260805",
@@ -4129,7 +3819,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": ""
  },
  {
   "slug": "san_diego_county_library_summer_learning_lego_bingo_challenge_20260805",
@@ -4164,7 +3855,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "the_league_of_amazing_programmers_python_ga_20260806",
@@ -4192,7 +3884,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "the_league_of_amazing.png"
+  "logo_src": "the_league_of_amazing.png",
+  "image_src": ""
  },
  {
   "slug": "san_diego_county_library_san_luis_rey_park_ranger_storytime_20260806",
@@ -4226,7 +3919,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "san_diego_county_library_loot_lore_20260806",
@@ -4257,7 +3951,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "11f1b15c3ee56d29.png"
  },
  {
   "slug": "san_diego_county_library_lego_brick_builders_club_20260806",
@@ -4289,7 +3984,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "2012e012d806180c.png"
  },
  {
   "slug": "san_diego_county_library_natural_tie_dye_day_20260806",
@@ -4323,7 +4019,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "san_diego_natural_history_museum_summer_camp_20260807",
@@ -4355,7 +4052,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "san_diego_natural_history.png"
+  "logo_src": "san_diego_natural_history.png",
+  "image_src": ""
  },
  {
   "slug": "san_diego_county_library_projectpatho_cardiovascular_system_event_20260807",
@@ -4388,7 +4086,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "f7178df63f4b492f.png"
  },
  {
   "slug": "nature_collective_san_elijo_lagoon_wildlife_tour_nature_collective_20260808",
@@ -4421,11 +4120,12 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "nature_collective.png"
+  "logo_src": "nature_collective.png",
+  "image_src": ""
  },
  {
   "slug": "i_love_a_clean_san_diego_watershed_warriors_el_cajon_8211_flinn_springs_county_park_20260808",
-  "title": "Watershed Warriors: El Cajon &#8211; Flinn Springs County Park",
+  "title": "Watershed Warriors: El Cajon – Flinn Springs County Park",
   "partner_name": "I Love A Clean San Diego",
   "partner_id": 361,
   "description": "Join I Love A Clean San Diego and the County of San Diego for a litter cleanup! We will divert litter from our watersheds and keep it from traveling to the Pacific Ocean. Our staff will have check-in ready for you on-site. Be sure to wear comfortable clothes, closed-toed shoes, some form of sun protection (sunscreen or a hat), and bring a water bottle or two! Staff will be providing everything else you will need! Register below for more information and to get signed up!",
@@ -4455,7 +4155,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "i_love_a_clean.png"
+  "logo_src": "i_love_a_clean.png",
+  "image_src": "a7c61099b857a23d.png"
  },
  {
   "slug": "san_diego_county_library_wild_wonders_walk_on_the_wild_side_20260808",
@@ -4488,7 +4189,41 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
+ },
+ {
+  "slug": "san_diego_county_library_t_shirts_to_totes_w_pic_up_now_20260808",
+  "title": "T-shirts to Totes w/ Pic Up Now",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Learn about sustainability and turn tshirts into totes with Pic Up Now.  Registration required, space is limited. Tshirt and supplies provided, though you are welcome to bring tshirts for multiple totes. Registration opens the 1st of the month, 10AM. SDCL.ORG/VISTA",
+  "link": "https://sdcl.bibliocommons.com/events/6a5fbea6b3cbc0a63e9a00f8",
+  "availability": "",
+  "date_start": "2026-08-08T13:00:00-07:00",
+  "date_end": "2026-08-08T15:00:00-07:00",
+  "age_grade_level": [
+   "Family"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Afternoon"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Earth Science/Ecology"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Vista, Community Room",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "825c4e8fd173d790.png"
  },
  {
   "slug": "san_diego_county_library_beginning_sewing_with_clicbitz_20260808",
@@ -4521,11 +4256,49 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "de5b5f90511d2aab.png"
+ },
+ {
+  "slug": "anza_borrego_foundation_anza_borrego_under_the_stars_20260808",
+  "title": "Anza-Borrego Under the Stars",
+  "partner_name": "Anza-Borrego Foundation",
+  "partner_id": 646,
+  "description": "Join Us for a Stargazing Adventure in Anza-Borrego!  Experience the night sky like never before at Anza-Borrego Desert State Park—an official International Dark Sky Park. Explore stars, planets, and constellations through telescopes guided by an astronomer.  What to expect:   A Stunning Night Sky: Experience the awe of a star-filled sky in one of California’s premier Dark Sky Parks—perfect for spotting constellations, planets, and even the Milky Way.    Guided Stargazing: Learn the basics of stargazing, including how to identify major stars, constellations, and planets visible this time of year – with and without a telescope.    Relaxed Atmosphere: Bring your camp chair, snacks, and beverages. You're welcome to hang out, ask questions, and simply enjoy the desert night.    Optional Camping: Extend your visit by camping nearby (this portion is not hosted).   Who should attend:   Nature lovers, astronomy enthusiasts, and anyone curious about the night sky who wants to experience stargazing in a world-class dark-sky location.    Anyone interested in learning how to identify stars, planets, and constellations with guidance from an astronomer.    Photographers, campers, and outdoor adventurers who enjoy desert landscapes and immersive nighttime experiences.    Anyone seeking a peaceful escape from city lights to connect with nature and enjoy the beauty of the cosmos.   REGISTER TODAY! Date: Saturday, August 8, 2026  Time: 8:30 p.m.-10:30 p.m.  Location: Anza-Borrego Desert State Park (location to be determined)  Cost:  ABF Member: $20 Not a member? Join today for as little as $35 and save!  Non-Member: $24  Student: $12  Cancellation Policy &amp; Scholarships: Please see our FAQs page to read our cancellation policy and learn about scholarship options.",
+  "link": "https://theabf.org/events/anza-borrego-under-the-stars/",
+  "availability": "Repeats 3 times through 2026-10-09",
+  "date_start": "2026-08-08T20:30:00-07:00",
+  "date_end": "2026-10-09T22:00:00-07:00",
+  "age_grade_level": [
+   "Family",
+   "Grades 6-8",
+   "Grades 9-12",
+   "Adult"
+  ],
+  "cost_range": "Less than $25",
+  "time_of_day": [
+   "Evening"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Physics",
+   "Earth Science/Ecology"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Anza-Borrego Desert State Park",
+  "latitude": "None",
+  "longitude": "None",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "anzaborrego_foundation.jpeg",
+  "image_src": "24f9660f676b18ae.png"
  },
  {
   "slug": "coastal_roots_farm_monthly_farm_tour_8211_august_2026_20260809",
-  "title": "Monthly Farm Tour &#8211; August 2026",
+  "title": "Monthly Farm Tour – August 2026",
   "partner_name": "Coastal Roots Farm",
   "partner_id": 412,
   "description": "Get a behind-the-scenes look at Coastal Roots Farm. On this guided tour, you’ll enjoy a gentle walk through our ever-evolving gardens, educational spaces, chicken coops, compost operations, and vibrant Food Forest. Learn about our unique growing methods and how we cultivate food, community, and justice. The tour includes a hill and mixed terrain. We recommend wearing flat shoes, a sun hat, and bringing a water bottle. Learn about accessibility accommodations on the Farm. Pre-registration required. 🗓️ Sunday, August 9 🕒 10:30-12 p.m. | 📍Meet at the Coastal Roots Farm Coffee Cart 🎟️ $25/person. About Coastal Roots Farm We're nonprofit community farm and education center rooted in Jewish values and regenerative agriculture. We grow over 80,000 pounds of organic produce each year on our 18-acre farm, with more than 75% donated to community members experiencing food insecurity. Each year, we also welcome over 15,000 youth and adults for outdoor education, Jewish life programs, and community events that inspire environmental stewardship, climate action, and connection to Jewish tradition.",
@@ -4555,7 +4328,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "coastal_roots_farm.jpg"
+  "logo_src": "coastal_roots_farm.jpg",
+  "image_src": "4b414a14a7ccb2b3.png"
  },
  {
   "slug": "the_league_of_amazing_programmers_robotics_explorers_sja_20260810",
@@ -4588,7 +4362,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "the_league_of_amazing.png"
+  "logo_src": "the_league_of_amazing.png",
+  "image_src": ""
  },
  {
   "slug": "san_diego_county_library_lego_lab_20260810",
@@ -4622,7 +4397,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "11f1b15c3ee56d29.png"
  },
  {
   "slug": "san_diego_county_library_mosquito_storytime_20260811",
@@ -4655,7 +4431,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "san_diego_county_library_steam_explorers_20260811",
@@ -4696,7 +4473,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "f7178df63f4b492f.png"
  },
  {
   "slug": "san_diego_county_library_ranger_ruben_s_raptor_program_20260812",
@@ -4731,7 +4509,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "san_diego_county_library_ralph_s_world_20260812",
@@ -4762,7 +4541,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "5fff1d36ed91bac2.jpg"
  },
  {
   "slug": "san_diego_county_library_summer_learning_wild_wonders_20260812",
@@ -4798,7 +4578,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "san_diego_county_library_doggie_tales_20260812",
@@ -4828,7 +4609,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "65c54d39409c84e6.jpg"
  },
  {
   "slug": "san_diego_county_library_play_to_learn_20260813",
@@ -4859,7 +4641,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "dec355f48227ff76.jpg"
  },
  {
   "slug": "san_diego_county_library_portable_planetarium_solar_system_adventure_20260813",
@@ -4892,7 +4675,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "san_diego_county_library_mobile_recreation_20260813",
@@ -4924,39 +4708,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "san_diego_children_s_discovery_museum_jimbo_8217_s_garden_workshop_fruit_sea_turtle_20260814",
-  "title": "Jimbo&#8217;s Garden Workshop: Fruit Sea Turtle",
-  "partner_name": "San Diego Children's Discovery Museum",
-  "partner_id": 16,
-  "description": "Enjoy a special garden workshop in the Trudy Bronner Discovery Garden with local, seasonal ingredients from Jimbo's ! Today's recipe: Create a tasty fruit sea turtle made with organic ingredients from Jimbo’s! Pre-registration is not required. FREE with Museum Admission.",
-  "link": "https://visitcmod.org/events/jimbos-garden-workshop-fruit-sea-turtle/",
-  "availability": "",
-  "date_start": "2026-08-14T11:00:00-07:00",
-  "date_end": "2026-08-14T12:00:00-07:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Biology / LifeSciences"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Children's Museum of Discovery, 320 North Broadway, Escondido, CA",
-  "latitude": "33.124517",
-  "longitude": "-117.082351",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "san_diego_childrens_discovery.jpg"
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "1073d6e19184359f.png"
  },
  {
   "slug": "san_diego_county_library_3d_printer_drop_off_20260814",
@@ -4991,7 +4744,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "7cb6eabd47a16bb2.png"
  },
  {
   "slug": "san_diego_county_library_craft_chill_with_toshwerks_end_of_summer_slime_party_20260814",
@@ -5025,7 +4779,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "coastal_roots_farm_great_outdoor_shabbat_20260814",
@@ -5057,11 +4812,12 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "coastal_roots_farm.jpg"
+  "logo_src": "coastal_roots_farm.jpg",
+  "image_src": "2f51e5d1f10ab85f.png"
  },
  {
   "slug": "i_love_a_clean_san_diego_compost_and_mulch_giveaway_8211_8_15_at_los_penasquitos_ranc_20260815",
-  "title": "Compost and Mulch Giveaway &#8211; 8/15 at Los Penasquitos Ranch House",
+  "title": "Compost and Mulch Giveaway – 8/15 at Los Penasquitos Ranch House",
   "partner_name": "I Love A Clean San Diego",
   "partner_id": 361,
   "description": "Join us for our upcoming Compost and Mulch Giveaway Event! This event is available for City of San Diego residents ONLY! Have you ever wondered what happens after you toss yard trimmings and food scraps into your green bin? The organic waste is collected and brought to the Miramar Greenery (located at the Miramar Landfill) where it is turned into compost and mulch! These products available at no cost to residents of the City of San Diego and can be picked up during normal business hours. To increase opportunities for residents to pick up compost, I Love A Clean San Diego and the City of San Diego are partnering to host Compost and Mulch Giveaways on select weekends. Get your hands on some nutrient-rich compost for your garden at no cost. Whether you're a seasoned gardener or just starting out, this event is perfect for anyone looking to give their plants a boost. Swing by and grab some compost to help your garden thrive! Things to bring: Shovel Gloves Containers Tarp and bungees for truck beds (ALL TRUCK BEDS MUST BE COVERED!) Things to know: Be prepared to self load compost All participants are REQUIRED to sign a release waiver Must enter from the East (Black Mountain Road) Please be aware, in order to collect compost you are REQUIRED to sign a waiver. All participants will need to sign a waiver upon entering the event. About the Miramar Greenery: At the Miramar Greenery, compost is made from yard trimmings and food scraps that have been ground, placed in windrows, turned and watered for 70 days. During this time, microorganisms digest the carbon and nitrogen rich mixture, causing the windrow to sustain temperatures of 140-165 F. This process eliminates most weed seeds and pathogens while breaking down the organic material into beneficial soil nutrients. Finished compost is screened to a particle size of one-half inch or less which also removes film plastic from the final product. For more information, visit https://www.sandiego.gov/environmental-services/miramar Practical Application and Benefits : Compost can be used as an amendment to improve soil texture and increase nutrient and water holding capacity. In San Diego, where soil lacks many essential plant nutrients, mixing compost in with the soil is one of the best things you can do for your yard and garden. The County of San Diego's Rancho Los Penasquitos - In 1823, Francisco Maria Ruiz built a modest adobe that established Rancho Los Penasquitos as San Diego County's first Mexican land grant, remnants of which still stand within the present-day ranch house. Today, the surrounding park offers more than 10 miles of multi-use trails, a staging area, restrooms, and hosts weddings, reunions, and community events. The site also features the Los Peñasquitos Community Garden, founded in 2012, which provides 20 plots for local residents to grow their own produce through seasonal leases. The historic adobe serves as a cultural landmark and museum, offering visitors guided tours, educational programs, and a glimpse into the region’s early ranching and adobe life. For more information, visit https://www.sdparks.org/content/sdparks/en/park-pages/RanchoLosPenasquitos.html Note: This event will occur rain or shine, however if severe weather occurs the days leading up to the event, the event will be rescheduled or canceled. If needed, registrants will receive electronic communication as soon as possible before the event. This event is made possible by the City of San Diego Environmental Services Department and facilitated by I Love A Clean San Diego.",
@@ -5090,7 +4846,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "i_love_a_clean.png"
+  "logo_src": "i_love_a_clean.png",
+  "image_src": "bf711b8a308eebc3.jpg"
  },
  {
   "slug": "the_living_coast_discovery_center_world_lizard_day_20260815",
@@ -5123,7 +4880,78 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "living_coast_discovery_center.jpg"
+  "logo_src": "living_coast_discovery_center.jpg",
+  "image_src": "1abca1612aa90182.jpg"
+ },
+ {
+  "slug": "the_san_diego_river_park_foundation_bird_walk_at_grant_park_20260816",
+  "title": "Bird Walk at Grant Park",
+  "partner_name": "The San Diego River Park Foundation",
+  "partner_id": 323,
+  "description": "&lt;p&gt;Embark on a fun-filled walk with bird experts Cindy Pencek and Ian Swirka to observe and count the amazing biodiversity of birds that call this section of the river home! [&hellip;]&lt;/p&gt;\\n",
+  "link": "https://sandiegoriver.org/event/bird-walk-at-grant-park-2/",
+  "availability": "Repeats 9 times through 2026-12-20",
+  "date_start": "2026-08-16T08:00:00-07:00",
+  "date_end": "2026-12-20T09:30:00-07:00",
+  "age_grade_level": [
+   "Family"
+  ],
+  "cost_range": "",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Biology / LifeSciences",
+   "Earth Science/Ecology"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Grant Park, 2310 Camino Del Rio N., San Diego",
+  "latitude": "32.7639275",
+  "longitude": "-117.2033498",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "the_san_diego_river.jpg",
+  "image_src": "9e2d1234ab49895f.jpg"
+ },
+ {
+  "slug": "the_san_diego_river_park_foundation_bird_drawing_workshop_with_art_form_20260816",
+  "title": "Bird Drawing Workshop with Art FORM",
+  "partner_name": "The San Diego River Park Foundation",
+  "partner_id": 323,
+  "description": "&lt;p&gt;Go birding with the San Diego River Park Foundation and take a closer look at native birds that live on the San Diego River, followed by a bird drawing workshop [&hellip;]&lt;/p&gt;\\n",
+  "link": "https://sandiegoriver.org/event/bird-drawing-workshop-with-art-form/",
+  "availability": "Repeats 2 times through 2026-12-20",
+  "date_start": "2026-08-16T10:00:00-07:00",
+  "date_end": "2026-12-20T11:30:00-07:00",
+  "age_grade_level": [
+   "Family",
+   "Grades 6-8",
+   "Grades 9-12"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Biology / LifeSciences",
+   "General Science"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Grant Park, 2310 Camino Del Rio N., San Diego",
+  "latitude": "32.7639275",
+  "longitude": "-117.2033498",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "the_san_diego_river.jpg",
+  "image_src": "02dd47bb685969dd.jpg"
  },
  {
   "slug": "san_diego_county_library_air_space_museum_bus_20260818",
@@ -5159,7 +4987,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "san_diego_natural_history_museum_talks_and_workshops_20260819",
@@ -5196,7 +5025,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "san_diego_natural_history.png"
+  "logo_src": "san_diego_natural_history.png",
+  "image_src": "23d39e43d1e240d8.jpg"
  },
  {
   "slug": "san_diego_county_library_chess_20260819",
@@ -5230,7 +5060,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "953b1bbc6d541d25.png"
  },
  {
   "slug": "san_diego_county_library_preschool_play_20260821",
@@ -5260,11 +5091,12 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "700431b7df505ecd.jpg"
  },
  {
   "slug": "i_love_a_clean_san_diego_compost_and_mulch_giveaway_8211_8_22_at_chollas_lake_gloria__20260822",
-  "title": "Compost and Mulch Giveaway &#8211; 8/22 at Chollas Lake, Gloria&#8217;s Mesa Park",
+  "title": "Compost and Mulch Giveaway – 8/22 at Chollas Lake, Gloria’s Mesa Park",
   "partner_name": "I Love A Clean San Diego",
   "partner_id": 361,
   "description": "Join us for our upcoming Compost and Mulch Giveaway Event! This event is available for City of San Diego residents ONLY! Have you ever wondered what happens after you toss yard trimmings and food scraps into your green bin? The organic waste is collected and brought to the Miramar Greenery (located at the Miramar Landfill) where it is turned into compost and mulch! These products available at no cost to residents of the City of San Diego and can be picked up during normal business hours. To increase opportunities for residents to pick up compost, I Love A Clean San Diego and the City of San Diego are partnering to host Compost and Mulch Giveaways on select weekends. Get your hands on some nutrient-rich compost for your garden at no cost. Whether you're a seasoned gardener or just starting out, this event is perfect for anyone looking to give their plants a boost. Swing by and grab some compost to help your garden thrive! Things to bring: Shovel Gloves Containers Tarp and bungees for truck beds (ALL TRUCK BEDS MUST BE COVERED!) Things to know: Be prepared to self load compost All participants are REQUIRED to sign a release waiver Enter driveway from College Grove Drive in the Southeast corner of the park. Exact coordinates : (32.735533726595804, -117.06466452810379) Please be aware, in order to collect compost you are REQUIRED to sign a waiver. All participants will need to sign a waiver upon entering the event. About the Miramar Greenery: At the Miramar Greenery, compost is made from yard trimmings and food scraps that have been ground, placed in windrows, turned and watered for 70 days. During this time, microorganisms digest the carbon and nitrogen rich mixture, causing the windrow to sustain temperatures of 140-165 F. This process eliminates most weed seeds and pathogens while breaking down the organic material into beneficial soil nutrients. Finished compost is screened to a particle size of one-half inch or less which also removes film plastic from the final product. For more information, visit https://www.sandiego.gov/environmental-services/miramar Practical Application and Benefits : Compost can be used as an amendment to improve soil texture and increase nutrient and water holding capacity. In San Diego, where soil lacks many essential plant nutrients, mixing compost in with the soil is one of the best things you can do for your yard and garden. Note: This event will occur rain or shine, however if severe weather occurs the days leading up to the event, the event will be rescheduled or canceled. If needed, registrants will receive electronic communication as soon as possible before the event. This event is made possible by the City of San Diego Environmental Services Department and facilitated by I Love A Clean San Diego.",
@@ -5293,11 +5125,12 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "i_love_a_clean.png"
+  "logo_src": "i_love_a_clean.png",
+  "image_src": "bf711b8a308eebc3.jpg"
  },
  {
   "slug": "i_love_a_clean_san_diego_compost_and_mulch_giveaway_8211_8_22_at_chollas_lake_gloria__20260822_2",
-  "title": "Compost and Mulch Giveaway &#8211; 8/22 at Chollas Lake, Gloria&#8217;s Mesa Park",
+  "title": "Compost and Mulch Giveaway – 8/22 at Chollas Lake, Gloria’s Mesa Park",
   "partner_name": "I Love A Clean San Diego",
   "partner_id": 361,
   "description": "Join us for our upcoming Compost and Mulch Giveaway Event! This event is available for City of San Diego residents ONLY! Have you ever wondered what happens after you toss yard trimmings and food scraps into your green bin? The organic waste is collected and brought to the Miramar Greenery (located at the Miramar Landfill) where it is turned into compost and mulch! These products available at no cost to residents of the City of San Diego and can be picked up during normal business hours. To increase opportunities for residents to pick up compost, I Love A Clean San Diego and the City of San Diego are partnering to host Compost and Mulch Giveaways on select weekends. Get your hands on some nutrient-rich compost for your garden at no cost. Whether you're a seasoned gardener or just starting out, this event is perfect for anyone looking to give their plants a boost. Swing by and grab some compost to help your garden thrive! Things to bring: Shovel Gloves Containers Tarp and bungees for truck beds (ALL TRUCK BEDS MUST BE COVERED!) Things to know: Be prepared to self load compost All participants are REQUIRED to sign a release waiver Enter driveway from College Grove Drive in the Southeast corner of the park. Exact coordinates : (32.735533726595804, -117.06466452810379) Please be aware, in order to collect compost you are REQUIRED to sign a waiver. All participants will need to sign a waiver upon entering the event. About the Miramar Greenery: At the Miramar Greenery, compost is made from yard trimmings and food scraps that have been ground, placed in windrows, turned and watered for 70 days. During this time, microorganisms digest the carbon and nitrogen rich mixture, causing the windrow to sustain temperatures of 140-165 F. This process eliminates most weed seeds and pathogens while breaking down the organic material into beneficial soil nutrients. Finished compost is screened to a particle size of one-half inch or less which also removes film plastic from the final product. For more information, visit https://www.sandiego.gov/environmental-services/miramar Practical Application and Benefits : Compost can be used as an amendment to improve soil texture and increase nutrient and water holding capacity. In San Diego, where soil lacks many essential plant nutrients, mixing compost in with the soil is one of the best things you can do for your yard and garden. Note: This event will occur rain or shine, however if severe weather occurs the days leading up to the event, the event will be rescheduled or canceled. If needed, registrants will receive electronic communication as soon as possible before the event. This event is made possible by the City of San Diego Environmental Services Department and facilitated by I Love A Clean San Diego.",
@@ -5325,11 +5158,12 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "i_love_a_clean.png"
+  "logo_src": "i_love_a_clean.png",
+  "image_src": "bf711b8a308eebc3.jpg"
  },
  {
   "slug": "i_love_a_clean_san_diego_stay_classy_o_8217_side_libby_lake_park_cleanup_20260822",
-  "title": "Stay Classy O&#8217;Side: Libby Lake Park Cleanup",
+  "title": "Stay Classy O’Side: Libby Lake Park Cleanup",
   "partner_name": "I Love A Clean San Diego",
   "partner_id": 361,
   "description": "Join I Love A Clean San Diego and Green Oceanside for a litter cleanup at the park! We will divert litter from our watersheds and keep it from traveling to the Pacific Ocean. All supplies are provided. Register below for more information and to get signed up!",
@@ -5357,7 +5191,42 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "i_love_a_clean.png"
+  "logo_src": "i_love_a_clean.png",
+  "image_src": "5b52f251ed4ee5ac.png"
+ },
+ {
+  "slug": "the_san_diego_river_park_foundation_mountain_lions_101_20260822",
+  "title": "Mountain Lions 101",
+  "partner_name": "The San Diego River Park Foundation",
+  "partner_id": 323,
+  "description": "&lt;p&gt;Overview Join Mountain Lion Foundation volunteer and mountain lion expert Robin Parks for an engaging presentation about mountain lions. This session provides a broad introduction to these remarkable animals, offering [&hellip;]&lt;/p&gt;\\n",
+  "link": "https://sandiegoriver.org/event/mountain-lions-101-3/",
+  "availability": "Repeats 3 times through 2026-08-22",
+  "date_start": "2026-08-22T10:00:00-07:00",
+  "date_end": "2026-08-22T11:30:00-07:00",
+  "age_grade_level": [
+   "Family"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Biology / LifeSciences",
+   "Earth Science/Ecology"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Grant Park, 2310 Camino Del Rio N., San Diego",
+  "latitude": "32.7639275",
+  "longitude": "-117.2033498",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "the_san_diego_river.jpg",
+  "image_src": "781681e94159bc1d.jpg"
  },
  {
   "slug": "i_love_a_clean_san_diego_from_scraps_to_soil_vermicomposting_workshop_20260822",
@@ -5389,7 +5258,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "i_love_a_clean.png"
+  "logo_src": "i_love_a_clean.png",
+  "image_src": "44ac6822f67e062f.jpg"
  },
  {
   "slug": "san_diego_county_library_full_steam_ahead_tbd_20260822",
@@ -5421,7 +5291,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "f7178df63f4b492f.png"
  },
  {
   "slug": "san_diego_county_library_chess_tournament_20260822",
@@ -5454,7 +5325,44 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "a4d5ba4a517dc2f2.jpg"
+ },
+ {
+  "slug": "the_san_diego_river_park_foundation_nature_nights_bat_walk_and_moths_20260822",
+  "title": "Nature Nights: Bat Walk and Moths",
+  "partner_name": "The San Diego River Park Foundation",
+  "partner_id": 323,
+  "description": "&lt;p&gt;Join us for a fun evening adventure as we stroll along the river, listen and look for bats and moths, and explore the nighttime world. We’ll eavesdrop on echolocation calls [&hellip;]&lt;/p&gt;\\n",
+  "link": "https://sandiegoriver.org/event/nature-nights-bat-walk-and-moths-3/",
+  "availability": "Repeats 2 times through 2026-09-12",
+  "date_start": "2026-08-22T19:00:00-07:00",
+  "date_end": "2026-09-12T21:00:00-07:00",
+  "age_grade_level": [
+   "Family",
+   "Grades 6-8",
+   "Grades 9-12"
+  ],
+  "cost_range": "",
+  "time_of_day": [
+   "Evening"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Biology / LifeSciences",
+   "Earth Science/Ecology"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Grant Park, 2310 Camino Del Rio N., San Diego",
+  "latitude": "32.7639275",
+  "longitude": "-117.2033498",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "the_san_diego_river.jpg",
+  "image_src": "b69838530d38ef4f.png"
  },
  {
   "slug": "san_diego_county_library_free_play_20260826",
@@ -5487,7 +5395,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "b00597870543a647.png"
  },
  {
   "slug": "san_diego_county_library_tween_time_20260826",
@@ -5517,7 +5426,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": ""
  },
  {
   "slug": "san_diego_county_library_afterschool_adventures_pompom_maze_race_20260827",
@@ -5551,7 +5461,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "11f1b15c3ee56d29.png"
  },
  {
   "slug": "san_diego_county_library_spin_splatter_paint_20260827",
@@ -5585,39 +5496,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "san_diego_children_s_discovery_museum_fun_animal_friday_20260828",
-  "title": "Fun Animal Friday",
-  "partner_name": "San Diego Children's Discovery Museum",
-  "partner_id": 16,
-  "description": "Discover new, furry friends with different animal partners every month! Pre-registration is not required. Free with Museum admission. Opportunities to pet the animals are limited and timed tickets will be provided upon check-in. **Petting is entirely contingent upon the animals’ well-being. We recommend arriving at the Museum early to maximize your chances of meeting the animals. A Hold Harmless form is required to be filled out for all guests who want to pet the animals.",
-  "link": "https://visitcmod.org/events/fun-animal-friday-2/2026-08-28/",
-  "availability": "Repeats 5 times through 2026-12-18",
-  "date_start": "2026-08-28T10:00:00-07:00",
-  "date_end": "2026-12-18T11:30:00-07:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Biology / LifeSciences"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Children's Museum of Discovery, 320 North Broadway, Escondido, CA",
-  "latitude": "33.124517",
-  "longitude": "-117.082351",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "san_diego_childrens_discovery.jpg"
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "ca3893846b9565ba.png"
  },
  {
   "slug": "fleet_science_center_the_sky_tonight_20260829",
@@ -5652,11 +5532,12 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "fleet_science_center.jpg"
+  "logo_src": "fleet_science_center.jpg",
+  "image_src": ""
  },
  {
   "slug": "i_love_a_clean_san_diego_watershed_warriors_spring_valley_8211_sweetwater_lane_county_20260829",
-  "title": "Watershed Warriors: Spring Valley &#8211; Sweetwater Lane County Park",
+  "title": "Watershed Warriors: Spring Valley – Sweetwater Lane County Park",
   "partner_name": "I Love A Clean San Diego",
   "partner_id": 361,
   "description": "Join I Love A Clean San Diego and the County of San Diego for a litter cleanup! We will divert litter from our watersheds and keep it from traveling to the Pacific Ocean. Our staff will have check-in ready for you on-site. Be sure to wear comfortable clothes, closed-toed shoes, some form of sun protection (sunscreen or a hat), and bring a water bottle or two! Staff will be providing everything else you will need! Register below for more information and to get signed up!",
@@ -5686,7 +5567,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "i_love_a_clean.png"
+  "logo_src": "i_love_a_clean.png",
+  "image_src": "a7c61099b857a23d.png"
  },
  {
   "slug": "san_diego_county_library_summer_learning_program_hawk_talk_with_ranger_ruben_20260829",
@@ -5721,7 +5603,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6a79a10497a5d22b.png"
  },
  {
   "slug": "san_diego_county_library_intro_to_geocaching_20260829",
@@ -5755,7 +5638,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6b595917b598a24c.jpg"
  },
  {
   "slug": "san_diego_county_library_project_nextech_maker_space_workshop_20260901",
@@ -5790,7 +5674,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "73ab00cde0a2cbe5.png"
  },
  {
   "slug": "san_diego_county_library_loot_lore_dungeons_dragons_daggerheart_warriors_pok_mon_magi_20260902",
@@ -5821,7 +5706,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "5bd0c95affe2c7c5.jpg"
  },
  {
   "slug": "san_diego_county_library_afterschool_adventures_20260903",
@@ -5854,7 +5740,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "11f1b15c3ee56d29.png"
  },
  {
   "slug": "san_diego_county_library_tiny_tots_art_20260904",
@@ -5885,7 +5772,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "7ce175d13bfff17e.jpg"
  },
  {
   "slug": "san_diego_county_library_discover_play_saturday_storytime_20260905",
@@ -5916,7 +5804,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "23db037e2ac45088.png"
  },
  {
   "slug": "san_diego_county_library_creekside_critters_interesting_insects_20260905",
@@ -5950,7 +5839,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "936bd528a1aea9b3.jpg"
  },
  {
   "slug": "i_love_a_clean_san_diego_shoreline_sweep_pacific_beach_taylor_branch_library_20260908",
@@ -5982,7 +5872,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "i_love_a_clean.png"
+  "logo_src": "i_love_a_clean.png",
+  "image_src": "23833e4714846de7.png"
  },
  {
   "slug": "san_diego_county_library_project_nextech_natural_sciences_workshop_20260908",
@@ -6019,7 +5910,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "2546be69dc7f4aa4.png"
  },
  {
   "slug": "san_diego_county_library_teen_service_learning_orientation_20260908",
@@ -6049,7 +5941,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "70d0dd46d108ab8e.jpg"
  },
  {
   "slug": "san_diego_county_library_teen_frenzy_20260909",
@@ -6079,40 +5972,41 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "12a54a1a09aadce4.png"
  },
  {
-  "slug": "san_diego_children_s_discovery_museum_jimbo_8217_s_garden_workshop_20260911",
-  "title": "Jimbo&#8217;s Garden Workshop",
-  "partner_name": "San Diego Children's Discovery Museum",
-  "partner_id": 16,
-  "description": "Enjoy a special garden workshop in the Trudy Bronner Discovery Garden with local, seasonal ingredients from Jimbo’s ! Pre-registration is not required. FREE with Museum Admission.",
-  "link": "https://visitcmod.org/events/jimbos-garden-workshop/2026-09-11/",
-  "availability": "Repeats 4 times through 2026-12-11",
-  "date_start": "2026-09-11T11:00:00-07:00",
-  "date_end": "2026-12-11T12:00:00-07:00",
+  "slug": "the_san_diego_river_park_foundation_lunch_with_a_raptor_and_project_wildlife_coexisting_with_wil_20260911",
+  "title": "Lunch with a Raptor and Project Wildlife: Coexisting with Wildlife",
+  "partner_name": "The San Diego River Park Foundation",
+  "partner_id": 323,
+  "description": "&lt;p&gt;Join Project Wildlife for a brown-bag lunch info session with their amazing animal ambassadors! Raptors are found in all kinds of habitats on land — provided there is enough food! [&hellip;]&lt;/p&gt;\\n",
+  "link": "https://sandiegoriver.org/event/lunch-with-a-raptor-and-project-wildlife-coexisting-with-wildlife-2/",
+  "availability": "Repeats 2 times through 2026-09-11",
+  "date_start": "2026-09-11T12:00:00-07:00",
+  "date_end": "2026-09-11T13:00:00-07:00",
   "age_grade_level": [
    "Family"
   ],
   "cost_range": "Free",
   "time_of_day": [
-   "Morning"
+   "Afternoon"
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
-   "Biology / LifeSciences",
-   "Earth Science/Ecology"
+   "Biology / LifeSciences"
   ],
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "Children's Museum of Discovery, 320 North Broadway, Escondido, CA",
-  "latitude": "33.124517",
-  "longitude": "-117.082351",
+  "location": "Grant Park, 2310 Camino Del Rio N., San Diego",
+  "latitude": "32.7639275",
+  "longitude": "-117.2033498",
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "san_diego_childrens_discovery.jpg"
+  "logo_src": "the_san_diego_river.jpg",
+  "image_src": "39a0163c2a862c30.jpg"
  },
  {
   "slug": "san_diego_county_library_love_on_a_leash_20260911",
@@ -6142,7 +6036,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "9364606630d07c48.jpg"
  },
  {
   "slug": "san_diego_county_library_crest_library_scavenger_hunt_20260912",
@@ -6175,11 +6070,12 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "7162b10773889dbd.jpg"
  },
  {
   "slug": "i_love_a_clean_san_diego_watershed_warriors_ramona_8211_main_street_sweep_20260912",
-  "title": "Watershed Warriors: Ramona &#8211; Main Street Sweep",
+  "title": "Watershed Warriors: Ramona – Main Street Sweep",
   "partner_name": "I Love A Clean San Diego",
   "partner_id": 361,
   "description": "Join I Love A Clean San Diego and the County of San Diego for a litter cleanup! We will divert litter from our watersheds and keep it from traveling to the Pacific Ocean. Our staff will have check-in ready for you on-site. Be sure to wear comfortable clothes, closed-toed shoes, some form of sun protection (sunscreen or a hat), and bring a water bottle or two! Staff will be providing everything else you will need! Click the register below for more information and to get signed up!",
@@ -6207,11 +6103,12 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "i_love_a_clean.png"
+  "logo_src": "i_love_a_clean.png",
+  "image_src": "a7c61099b857a23d.png"
  },
  {
   "slug": "i_love_a_clean_san_diego_watershed_warriors_ramona_8211_main_street_sweep_20260912_2",
-  "title": "Watershed Warriors: Ramona &#8211; Main Street Sweep",
+  "title": "Watershed Warriors: Ramona – Main Street Sweep",
   "partner_name": "I Love A Clean San Diego",
   "partner_id": 361,
   "description": "Join I Love A Clean San Diego and the County of San Diego for a litter cleanup! We will divert litter from our watersheds and keep it from traveling to the Pacific Ocean. Our staff will have check-in ready for you on-site. Be sure to wear comfortable clothes, closed-toed shoes, some form of sun protection (sunscreen or a hat), and bring a water bottle or two! Staff will be providing everything else you will need! Click the register below for more information and to get signed up!",
@@ -6239,7 +6136,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "i_love_a_clean.png"
+  "logo_src": "i_love_a_clean.png",
+  "image_src": "a7c61099b857a23d.png"
  },
  {
   "slug": "san_diego_county_library_dungeons_dragons_group_20260912",
@@ -6269,7 +6167,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": ""
  },
  {
   "slug": "san_diego_county_library_chess_club_20260912",
@@ -6303,7 +6202,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "a4d5ba4a517dc2f2.jpg"
  },
  {
   "slug": "san_diego_county_library_preschool_playtime_20260914",
@@ -6336,7 +6236,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "c9a525840492bcfe.jpg"
  },
  {
   "slug": "san_diego_county_library_dungeons_dragons_dragon_heist_20260915",
@@ -6366,7 +6267,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "6f4d7092aa84260c.png"
  },
  {
   "slug": "san_diego_county_library_storytime_special_vector_control_mosquito_storytime_20260916",
@@ -6400,7 +6302,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "df03fce1ed1f6087.png"
  },
  {
   "slug": "i_love_a_clean_san_diego_42nd_annual_coastal_cleanup_day_20260919",
@@ -6434,7 +6337,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "i_love_a_clean.png"
+  "logo_src": "i_love_a_clean.png",
+  "image_src": "4ce43a429f114de4.jpg"
  },
  {
   "slug": "i_love_a_clean_san_diego_42nd_annual_coastal_cleanup_day_20260919_2",
@@ -6468,7 +6372,42 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "i_love_a_clean.png"
+  "logo_src": "i_love_a_clean.png",
+  "image_src": "4ce43a429f114de4.jpg"
+ },
+ {
+  "slug": "the_san_diego_river_park_foundation_wingspan_and_ecologies_game_time_20260920",
+  "title": "Wingspan and Ecologies Game Time!",
+  "partner_name": "The San Diego River Park Foundation",
+  "partner_id": 323,
+  "description": "&lt;p&gt;Join San Diego Bird Alliance and Jessica Ullyott, founder of Nature Needs SD and local trail guide for a deeper dive into ecosystems. Learn how plants, animals and other factors [&hellip;]&lt;/p&gt;\\n",
+  "link": "https://sandiegoriver.org/event/wingspan-and-ecologies-game-time-2/",
+  "availability": "Repeats 2 times through 2026-10-18",
+  "date_start": "2026-09-20T10:00:00-07:00",
+  "date_end": "2026-10-18T11:00:00-07:00",
+  "age_grade_level": [
+   "Family"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Biology / LifeSciences",
+   "Earth Science/Ecology"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Grant Park, 2310 Camino Del Rio N., San Diego",
+  "latitude": "32.7639275",
+  "longitude": "-117.2033498",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "the_san_diego_river.jpg",
+  "image_src": "f2fc7d5072365df4.jpg"
  },
  {
   "slug": "san_diego_county_library_special_storytime_with_breanne_reid_dds_20260921",
@@ -6500,7 +6439,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "53751c3a898e2ea7.jpg"
  },
  {
   "slug": "san_diego_county_library_lakeside_kids_crew_master_builders_20260922",
@@ -6533,7 +6473,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "a548790276995bdf.jpg"
  },
  {
   "slug": "san_diego_county_library_earthquake_preparedness_event_for_all_ages_20260926",
@@ -6570,11 +6511,47 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "d8a7e4643543945c.png"
+ },
+ {
+  "slug": "anza_borrego_foundation_september_anza_borrego_night_hike_20260926",
+  "title": "September Anza-Borrego Night Hike",
+  "partner_name": "Anza-Borrego Foundation",
+  "partner_id": 646,
+  "description": "Join us for a peaceful moonlit hike through the desert, where wide-open skies, rugged terrain, and the quiet beauty of the landscape come alive after dark.  What to Expect:   Under the glow of the moon and stars, we’ll experience the sights and sounds of the desert at night—from shifting shadows across the landscape to the subtle movement of nocturnal wildlife.    We’ll hike approximately 2-3 miles roundtrip across natural terrain.    Along the trail, you might see nocturnal creatures that thrive after dark, such as scorpions, bats, and owls.    This easy-paced night hike will be led by a wilderness first responder, ensuring a safe and fun experience for all ages.   Who Should Attend:   Nature lovers interested in experiencing the desert in a new and unique way.    Stargazers and those who appreciate wide, dark skies.    Hikers in moderate physical condition, comfortable walking several miles over sand or dirt trails.    Anyone looking for a memorable outdoor adventure at night.      REGISTER TODAY!   Date: Saturday, September 26, 2026  Time: 6:00 p.m.-9:00 p.m. (start and end times are approximate and will be confirmed)  Location: Meet at the ABF store at 587 Palm Canyon Dr. #110, Borrego Springs, CA 92004 (in The Mall next to Calico’s). From there we’ll carpool/caravan to the trailhead (location to be determined).    Cost:  ABF Member: $28 Not a member? Join today for as little as $35 and save!  Non-Member: $33  Student: $17  Cancellation Policy: Please see our FAQs page to read our cancellation policy and learn about scholarship options.     What Past Participants Are Saying:   “Well organized. Educated and educating guides.”   “I appreciated the opportunity to be outdoors and experience the desert in a different way via a night hike.”   “It was a perfect evening under the stars”     Hike Leader:  Matt Nagy is a San Diego native who had the unique experience of growing up across the world. Before graduating high school, he lived in five different countries, including the USA. His global travels have given him the opportunity to see much of the planet, but without a doubt, San Diego County (especially Anza Borrego) remains his favorite place. In his free time, Matt enjoys long hikes, bike rides, and live music. When he has a few weeks off, he embarks on extended adventures such as river trips, bikepacking, or backpacking. Having spent many months under the stars, Matt is always planning his next adventure. He is excited to explore and appreciate the wonders of Anza Borrego with others, creating unforgettable memories along the way.              Don't forget a night sky guide before you head out!",
+  "link": "https://theabf.org/events/september-anza-borrego-night-hike/",
+  "availability": "",
+  "date_start": "2026-09-26T18:00:00-07:00",
+  "date_end": "2026-09-26T21:00:00-07:00",
+  "age_grade_level": [
+   "Family",
+   "Grades 9-12",
+   "Adult"
+  ],
+  "cost_range": "Less than $50",
+  "time_of_day": [
+   "Evening"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Earth Science/Ecology"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "587 Palm Canyon Dr. #110, Borrego Springs, CA 92004",
+  "latitude": "None",
+  "longitude": "None",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "anzaborrego_foundation.jpeg",
+  "image_src": "03e30a79a9b3bfc8.png"
  },
  {
   "slug": "i_love_a_clean_san_diego_compost_038_mulch_giveaway_8211_10_3_at_sun_runner_lot_20261003",
-  "title": "Compost &#038; Mulch Giveaway &#8211; 10/3 at Sun Runner Lot",
+  "title": "Compost & Mulch Giveaway – 10/3 at Sun Runner Lot",
   "partner_name": "I Love A Clean San Diego",
   "partner_id": 361,
   "description": "Join us for our upcoming Compost and Mulch Giveaway Event! This event is available for City of San Diego residents ONLY! Have you ever wondered what happens after you toss yard trimmings and food scraps into your green bin? The organic waste is collected and brought to the Miramar Greenery (located at the Miramar Landfill) where it is turned into compost! This compost is available at no cost to residents of the City of San Diego and can be picked up during normal business hours. To increase opportunities for residents to pick up compost, I Love A Clean San Diego and the City of San Diego are partnering to host Compost Giveaways on select weekends. Get your hands on some nutrient-rich compost for your garden at no cost. Whether you're a seasoned gardener or just starting out, this event is perfect for anyone looking to give their plants a boost. Swing by and grab some compost to help your garden thrive! Mulch is also available at this event. Things to bring: Shovel Gloves Containers Tarp and bungees for truck beds (ALL TRUCK BEDS MUST BE COVERED!) Things to know: Be prepared to self load compost and mulch All participants are REQUIRED to sign a release waiver Must approach from the EAST Exact Coordinates: (32.76726972788742, -117.20799017856716) Please be aware, in order to collect compost you are REQUIRED to sign a waiver. All participants will need to sign a waiver upon entering the event. About the Miramar Greenery: At the Miramar Greenery, compost is made from yard trimmings and food scraps that have been ground, placed in windrows, turned and watered for 70 days. During this time, microorganisms digest the carbon and nitrogen rich mixture, causing the windrow to sustain temperatures of 140-165 F. This process eliminates most weed seeds and pathogens while breaking down the organic material into beneficial soil nutrients. Finished compost is screened to a particle size of one-half inch or less which also removes film plastic from the final product. For more information, visit https://www.sandiego.gov/environmental-services/miramar Practical Application and Benefits : Compost can be used as an amendment to improve soil texture and increase nutrient and water holding capacity. In San Diego, where soil lacks many essential plant nutrients, mixing compost in with the soil is one of the best things you can do for your yard and garden. Note: This event will occur rain or shine, however if severe weather occurs the days leading up to the event, the event will be rescheduled or canceled. If needed, registrants will receive electronic communication as soon as possible before the event. This event is made possible by the City of San Diego Environmental Services Department and facilitated by I Love A Clean San Diego.",
@@ -6602,7 +6579,42 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "i_love_a_clean.png"
+  "logo_src": "i_love_a_clean.png",
+  "image_src": "bf711b8a308eebc3.jpg"
+ },
+ {
+  "slug": "the_san_diego_river_park_foundation_beastly_bats_038_spooky_spiders_20261003",
+  "title": "BEASTLY BATS & SPOOKY SPIDERS!",
+  "partner_name": "The San Diego River Park Foundation",
+  "partner_id": 323,
+  "description": "&lt;p&gt;LINDA HAWLEY’S NATURE ADVENTURES! FREE—Ages 4-10, with an adult. EEEK! SHRIEK! SCREAM! SO SCARY! No! They are both MYTH-understood. Bats do not make nests in your hair or suck your [&hellip;]&lt;/p&gt;\\n",
+  "link": "https://sandiegoriver.org/event/beastly-bats-spooky-spiders-linda-hawleys-nature-adventures/",
+  "availability": "",
+  "date_start": "2026-10-03T10:00:00-07:00",
+  "date_end": "2026-10-03T11:00:00-07:00",
+  "age_grade_level": [
+   "Family",
+   "Pre-K"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Biology / LifeSciences"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Grant Park, 2310 Camino Del Rio N., San Diego",
+  "latitude": "32.7639275",
+  "longitude": "-117.2033498",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "the_san_diego_river.jpg",
+  "image_src": "9f924b0d6071f356.png"
  },
  {
   "slug": "san_diego_county_library_paws_and_tales_read_to_a_sd_humane_society_canine_ambassador_20261003",
@@ -6633,7 +6645,80 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "502c5db57de6c8df.jpg"
+ },
+ {
+  "slug": "anza_borrego_foundation_astrophotography_workshop_galleta_meadows_20261003",
+  "title": "Astrophotography Workshop: Galleta Meadows",
+  "partner_name": "Anza-Borrego Foundation",
+  "partner_id": 646,
+  "description": "Capture the Cosmos in Borrego Springs   Unlock the secrets of astrophotography and learn how to capture stunning Milky Way shots in just one session! Join us just outside the Park in the breathtaking Galleta Meadows and discover the essentials of night sky photography, from planning to execution, in one of the best dark sky spots in the country.     &nbsp;    What to Expect:       Hands-on astrophotography guidance in an iconic dark sky location         Step-by-step tips on camera settings, composition, and photo planning         Access to unique, easy-to-reach spots perfect for Milky Way shots         Personalized, small-group instruction to ensure individual attention         Minimal walking—just under 1/10 of a mile from parking to photo locations     &nbsp;    Who Should Attend:       Beginners with a basic understanding of camera settings         Anyone eager to capture the beauty of the night sky         Photography enthusiasts looking to improve their astrophotography skills     &nbsp;    What to Bring:       DSLR or mirrorless camera         Tripod and lens suitable for night photography         Sturdy closed-toe shoes         Head lamp     &nbsp;    Get ready to elevate your photography game under the stars!     &nbsp;  REGISTER TODAY!  &nbsp;    Date: Friday, October 24, 2025     Time: 6:30 p.m.-8:30 p.m.     Location: Meet at the ABF office at 587 Palm Canyon Dr. #122 Borrego Springs, CA 92004 (in The Mall next to Kendall’s Café). We’ll then carpool/caravan to Galleta Meadows.     &nbsp;    Cost:     ABF Member: $60     Non-Member: $70     Student: $35     Cancellation Policy &amp; Scholarships: Please see our FAQs page to read our cancellation policy and learn about scholarship options.      &nbsp;    What Previous Attendees Are Saying:     “Chris was a great instructor. He really set a great tone at the beginning of the workshop, and he adapted his approach to each student based on their needs. It was a really great workshop! I walked away learning a lot.”     “Great experience for my three-generation family”          About the Instructor: Chris Olivas is an award-winning landscape photographer and professional videographer. He was born and raised in San Diego, California. His education and photography have taken him all over the world. He also has been a science educator for over 14 years. He has an extensive background in astronomy and photography and has won numerous awards for his photography work. He loves the combination of science and art that astrophotography entails and loves to spread his passion for the night sky. He specializes in photographing the Milky Way in adventurous locations and sharing his experiences through educational workshops.",
+  "link": "https://theabf.org/events/astrophotography-workshop-galleta-meadows-2/",
+  "availability": "Repeats 3 times through 2026-10-03",
+  "date_start": "2026-10-03T19:00:00-07:00",
+  "date_end": "2026-10-03T21:00:00-07:00",
+  "age_grade_level": [
+   "Family",
+   "Grades 9-12",
+   "Adult"
+  ],
+  "cost_range": "Less than $100",
+  "time_of_day": [
+   "Evening"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Physics",
+   "Earth Science/Ecology"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "587 Palm Canyon Dr. #122, Borrego Springs, CA 92004 and Galleta Meadows",
+  "latitude": "None",
+  "longitude": "None",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "anzaborrego_foundation.jpeg",
+  "image_src": "3764ec194c0e1f32.png"
+ },
+ {
+  "slug": "the_san_diego_river_park_foundation_halloween_edition_nature_nights_bat_walk_and_moths_20261003",
+  "title": "Halloween Edition Nature Nights: Bat Walk and Moths",
+  "partner_name": "The San Diego River Park Foundation",
+  "partner_id": 323,
+  "description": "&lt;p&gt;Are you in a Halloween mood? Join us for a fun evening Halloween adventure! Stroll along the river as we listen and look for bats and moths and explore the [&hellip;]&lt;/p&gt;\\n",
+  "link": "https://sandiegoriver.org/event/halloween-edition-nature-nights-bat-walk-and-moths/",
+  "availability": "",
+  "date_start": "2026-10-03T19:00:00-07:00",
+  "date_end": "2026-10-03T21:00:00-07:00",
+  "age_grade_level": [
+   "Family",
+   "Grades 6-8",
+   "Grades 9-12"
+  ],
+  "cost_range": "Less than $25",
+  "time_of_day": [
+   "Evening"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Biology / LifeSciences",
+   "Earth Science/Ecology"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Grant Park, 2310 Camino Del Rio N., San Diego",
+  "latitude": "32.7639275",
+  "longitude": "-117.2033498",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "the_san_diego_river.jpg",
+  "image_src": "8f434ab6441bc445.png"
  },
  {
   "slug": "san_diego_county_library_lakeside_kids_crew_kids_arcade_20261006",
@@ -6664,11 +6749,44 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "11f1b15c3ee56d29.png"
+ },
+ {
+  "slug": "san_diego_county_library_toddler_storytime_yoga_20261007",
+  "title": "Toddler Storytime Yoga",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Yoga, stories, and creative movement for Toddlers and their Caregivers. Performed with Ms. Arianna from PEARLS FOR LIFE YOGA. This program is every first Wednesday of the month.",
+  "link": "https://sdcl.bibliocommons.com/events/6a5ff72b3896acb13e3fb37d",
+  "availability": "",
+  "date_start": "2026-10-07T10:30:00-07:00",
+  "date_end": "2026-10-07T11:00:00-07:00",
+  "age_grade_level": [
+   "Pre-K",
+   "Family"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Solana Beach",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "74d8d61bd9882ebd.png"
  },
  {
   "slug": "i_love_a_clean_san_diego_litter_free_la_mesa_la_mesa_8211_litter_free_la_mesa_la_mesa_20261010",
-  "title": "Litter Free La Mesa: La Mesa &#8211; Litter Free La Mesa: La Mesa &#8211; Salvation Army Kroc Center Neighborhood Cleanup",
+  "title": "Litter Free La Mesa: La Mesa – Litter Free La Mesa: La Mesa – Salvation Army Kroc Center Neighborhood Cleanup",
   "partner_name": "I Love A Clean San Diego",
   "partner_id": 361,
   "description": "Join I Love A Clean San Diego and the City of La Mesa for a litter cleanup! We will divert litter from our watersheds and keep it from traveling to the Pacific Ocean. All supplies are provided. Click the registration button below for more information and to get signed up!",
@@ -6696,7 +6814,41 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "i_love_a_clean.png"
+  "logo_src": "i_love_a_clean.png",
+  "image_src": "0bf30ff4eeafd91a.png"
+ },
+ {
+  "slug": "the_san_diego_river_park_foundation_family_field_trip_community_event_tracking_038_field_20261010",
+  "title": "Family Field Trip Community Event, TRACKING & FIELD",
+  "partner_name": "The San Diego River Park Foundation",
+  "partner_id": 323,
+  "description": "&lt;p&gt;Introducing Natural LAW Field Trips for the Whole Family! Land • Air • Water – Your Family’s Adventure Starts Here! REGISTRATION AND INFORMATION: https://sandiegoriver.galaxydigital.com/need/detail/?need_id=1178009 For years, parents and chaperones have [&hellip;]&lt;/p&gt;\\n",
+  "link": "https://sandiegoriver.galaxydigital.com/need/detail/?need_id=1178009",
+  "availability": "",
+  "date_start": "2026-10-10T10:00:00-07:00",
+  "date_end": "2026-10-10T12:00:00-07:00",
+  "age_grade_level": [
+   "Family"
+  ],
+  "cost_range": "",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "School Programs",
+  "areas_of_interest": [
+   "Earth Science/Ecology"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Grant Park, 2310 Camino Del Rio N., San Diego",
+  "latitude": "32.7639275",
+  "longitude": "-117.2033498",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "the_san_diego_river.jpg",
+  "image_src": "9f33685534ec947c.jpg"
  },
  {
   "slug": "san_diego_county_library_lakeside_kids_crew_chess_20261013",
@@ -6730,7 +6882,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "11f1b15c3ee56d29.png"
  },
  {
   "slug": "san_diego_county_library_chimes_an_early_childhood_music_program_20261014",
@@ -6761,7 +6914,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "efeff2b134e231a0.png"
  },
  {
   "slug": "san_diego_county_library_teen_game_day_20261020",
@@ -6794,45 +6948,12 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
- },
- {
-  "slug": "san_diego_children_s_discovery_museum_kpbs_kids_event_elinor_wonders_why_20261023",
-  "title": "KPBS Kids Event: Elinor Wonders Why",
-  "partner_name": "San Diego Children's Discovery Museum",
-  "partner_id": 16,
-  "description": "Follow your curiosity and ask questions with Elinor from Elinor Wonders Why! Join us Friday, October 23 from 10:00 a.m. – 12:00 p.m. for storytime, crafts, and a costume character photo opportunity.* This event is free with Museum Admission. *Photo opportunity with the costume character is subject to availability and weather permitting.   This project is a partnership between KPBS and the San Diego Children’s Discovery Museum, made possible with funding from the Linden Root Dickinson Foundation. Copyright 1957, 1985 Dr. Seuss Enterprises, L.P. TM 2010 Dr. Seuss Enterprises, L.P., Portfolio Entertainment Inc and Collingwood O’Hare Productions Ltd. All rights reserved. KPBS is a public service of San Diego State University.",
-  "link": "https://visitcmod.org/events/kpbs-kids-event-elinor-wonders-why-2/",
-  "availability": "",
-  "date_start": "2026-10-23T10:00:00-07:00",
-  "date_end": "2026-10-23T12:00:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Pre-K",
-   "Grades 6-8"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "General Science"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Children's Museum of Discovery, 320 North Broadway, Escondido, CA",
-  "latitude": "33.124517",
-  "longitude": "-117.082351",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "san_diego_childrens_discovery.jpg"
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "1d3d7404015104c0.png"
  },
  {
   "slug": "i_love_a_clean_san_diego_watershed_warriors_spring_valley_8211_lamar_county_park_20261024",
-  "title": "Watershed Warriors: Spring Valley &#8211; Lamar County Park",
+  "title": "Watershed Warriors: Spring Valley – Lamar County Park",
   "partner_name": "I Love A Clean San Diego",
   "partner_id": 361,
   "description": "Join I Love A Clean San Diego and the County of San Diego for a litter cleanup! We will divert litter from our watersheds and keep it from traveling to the Pacific Ocean. Our staff will have check-in ready for you on-site. Be sure to wear comfortable clothes, closed-toed shoes, some form of sun protection (sunscreen or a hat), and bring a water bottle or two! Staff will be providing everything else you will need! Register below for more information and to get signed up!",
@@ -6860,7 +6981,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "i_love_a_clean.png"
+  "logo_src": "i_love_a_clean.png",
+  "image_src": "a7c61099b857a23d.png"
  },
  {
   "slug": "the_living_coast_discovery_center_farm_to_bay_20261024",
@@ -6892,7 +7014,42 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "living_coast_discovery_center.jpg"
+  "logo_src": "living_coast_discovery_center.jpg",
+  "image_src": "392acb34d0825785.jpg"
+ },
+ {
+  "slug": "the_san_diego_river_park_foundation_halloween_edition_nature_nights_bat_walk_and_moths_haunted_t_20261024",
+  "title": "Halloween Edition Nature Nights: Bat Walk and Moths Haunted Trail at Peutz Creek!",
+  "partner_name": "The San Diego River Park Foundation",
+  "partner_id": 323,
+  "description": "&lt;p&gt;Are you in a Halloween mood? Join us for a fun evening Halloween adventure! Stroll along Peutz Creek as we listen and look for bats and moths and explore the [&hellip;]&lt;/p&gt;\\n",
+  "link": "https://sandiegoriver.org/event/halloween-edition-nature-nights-bat-walk-and-moths-2/",
+  "availability": "",
+  "date_start": "2026-10-24T19:00:00-07:00",
+  "date_end": "2026-10-24T21:00:00-07:00",
+  "age_grade_level": [
+   "Family"
+  ],
+  "cost_range": "Less than $25",
+  "time_of_day": [
+   "Evening"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Biology / LifeSciences",
+   "Earth Science/Ecology"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Peutz Creek, 966 Peutz Valley Rd, Alpine",
+  "latitude": "32.7639275",
+  "longitude": "-117.2033498",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "the_san_diego_river.jpg",
+  "image_src": "8f434ab6441bc445.png"
  },
  {
   "slug": "san_diego_county_library_haunted_chess_tournament_youth_ages_8_17_20261027",
@@ -6925,11 +7082,12 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "90a508ec2da4d50a.png"
  },
  {
   "slug": "i_love_a_clean_san_diego_compost_and_mulch_giveaway_8211_10_31_at_los_penasquitos_ran_20261031",
-  "title": "Compost and Mulch Giveaway &#8211; 10/31 at Los Penasquitos Ranch House",
+  "title": "Compost and Mulch Giveaway – 10/31 at Los Penasquitos Ranch House",
   "partner_name": "I Love A Clean San Diego",
   "partner_id": 361,
   "description": "Join us for our upcoming Compost and Mulch Giveaway Event! This event is available for City of San Diego residents ONLY! Have you ever wondered what happens after you toss yard trimmings and food scraps into your green bin? The organic waste is collected and brought to the Miramar Greenery (located at the Miramar Landfill) where it is turned into compost and mulch! These products available at no cost to residents of the City of San Diego and can be picked up during normal business hours. To increase opportunities for residents to pick up compost, I Love A Clean San Diego and the City of San Diego are partnering to host Compost and Mulch Giveaways on select weekends. Get your hands on some nutrient-rich compost for your garden at no cost. Whether you're a seasoned gardener or just starting out, this event is perfect for anyone looking to give their plants a boost. Swing by and grab some compost to help your garden thrive! Things to bring: Shovel Gloves Containers Tarp and bungees for truck beds (ALL TRUCK BEDS MUST BE COVERED!) Things to know: Be prepared to self load compost All participants are REQUIRED to sign a release waiver Must enter from the East (Black Mountain Road) Please be aware, in order to collect compost you are REQUIRED to sign a waiver. All participants will need to sign a waiver upon entering the event. About the Miramar Greenery: At the Miramar Greenery, compost is made from yard trimmings and food scraps that have been ground, placed in windrows, turned and watered for 70 days. During this time, microorganisms digest the carbon and nitrogen rich mixture, causing the windrow to sustain temperatures of 140-165 F. This process eliminates most weed seeds and pathogens while breaking down the organic material into beneficial soil nutrients. Finished compost is screened to a particle size of one-half inch or less which also removes film plastic from the final product. For more information, visit https://www.sandiego.gov/environmental-services/miramar Practical Application and Benefits : Compost can be used as an amendment to improve soil texture and increase nutrient and water holding capacity. In San Diego, where soil lacks many essential plant nutrients, mixing compost in with the soil is one of the best things you can do for your yard and garden. The County of San Diego's Rancho Los Penasquitos - In 1823, Francisco Maria Ruiz built a modest adobe that established Rancho Los Penasquitos as San Diego County's first Mexican land grant, remnants of which still stand within the present-day ranch house. Today, the surrounding park offers more than 10 miles of multi-use trails, a staging area, restrooms, and hosts weddings, reunions, and community events. The site also features the Los Peñasquitos Community Garden, founded in 2012, which provides 20 plots for local residents to grow their own produce through seasonal leases. The historic adobe serves as a cultural landmark and museum, offering visitors guided tours, educational programs, and a glimpse into the region’s early ranching and adobe life. For more information, visit https://www.sdparks.org/content/sdparks/en/park-pages/RanchoLosPenasquitos.html Note: This event will occur rain or shine, however if severe weather occurs the days leading up to the event, the event will be rescheduled or canceled. If needed, registrants will receive electronic communication as soon as possible before the event. This event is made possible by the City of San Diego Environmental Services Department and facilitated by I Love A Clean San Diego.",
@@ -6957,11 +7115,12 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "i_love_a_clean.png"
+  "logo_src": "i_love_a_clean.png",
+  "image_src": "bf711b8a308eebc3.jpg"
  },
  {
   "slug": "i_love_a_clean_san_diego_stay_classy_o_8217_side_ron_ortega_park_cleanup_20261105",
-  "title": "Stay Classy O&#8217;Side: Ron Ortega Park Cleanup",
+  "title": "Stay Classy O’Side: Ron Ortega Park Cleanup",
   "partner_name": "I Love A Clean San Diego",
   "partner_id": 361,
   "description": "Join I Love A Clean San Diego and Green Oceanside for a litter cleanup at the park! We will divert litter from our watersheds and keep it from traveling to the Pacific Ocean. All supplies are provided. Register below for more information and to get signed up!",
@@ -6989,41 +7148,12 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "i_love_a_clean.png"
- },
- {
-  "slug": "san_diego_children_s_discovery_museum_kpbs_kids_event_molly_of_denali_20261106",
-  "title": "KPBS Kids Event: Molly of Denali",
-  "partner_name": "San Diego Children's Discovery Museum",
-  "partner_id": 16,
-  "description": "Get ready to sled into fun with Molly of Denali! Practice social skills and learn about different cultures through craft activities and storytime. Join us Friday, November 6 from 10:00 a.m. – 12:00 p.m. for storytime, crafts, and a costume character photo opportunity.* This event is free with Museum Admission. *Photo opportunity with the costume character is subject to availability and weather permitting.   This project is a partnership between KPBS and the San Diego Children’s Discovery Museum, made possible with funding from the Linden Root Dickinson Foundation. Copyright 1957, 1985 Dr. Seuss Enterprises, L.P. TM 2010 Dr. Seuss Enterprises, L.P., Portfolio Entertainment Inc and Collingwood O’Hare Productions Ltd. All rights reserved. KPBS is a public service of San Diego State University.",
-  "link": "https://visitcmod.org/events/kpbs-kids-event-molly-of-denali-3/",
-  "availability": "",
-  "date_start": "2026-11-06T10:00:00-07:00",
-  "date_end": "2026-11-06T12:00:00-07:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Children's Museum of Discovery, 320 North Broadway, Escondido, CA",
-  "latitude": "33.124517",
-  "longitude": "-117.082351",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "san_diego_childrens_discovery.jpg"
+  "logo_src": "i_love_a_clean.png",
+  "image_src": "5b52f251ed4ee5ac.png"
  },
  {
   "slug": "i_love_a_clean_san_diego_litter_free_la_mesa_la_mesa_8211_riviera_drive_cleanup_20261107",
-  "title": "Litter Free La Mesa: La Mesa &#8211; Riviera Drive Cleanup",
+  "title": "Litter Free La Mesa: La Mesa – Riviera Drive Cleanup",
   "partner_name": "I Love A Clean San Diego",
   "partner_id": 361,
   "description": "Join I Love A Clean San Diego and the City of La Mesa for a litter cleanup! We will divert litter from our watersheds and keep it from traveling to the Pacific Ocean. All supplies are provided. Click the registration button below for more information and to get signed up!",
@@ -7051,7 +7181,44 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "i_love_a_clean.png"
+  "logo_src": "i_love_a_clean.png",
+  "image_src": "0bf30ff4eeafd91a.png"
+ },
+ {
+  "slug": "the_san_diego_river_park_foundation_the_wondrous_woodrat_mice_038_moles_shrews_038_voles_038_gop_20261107",
+  "title": "THE WONDROUS WOODRAT! … MICE & MOLES, SHREWS & VOLES & GOPHERS IN HOLES!",
+  "partner_name": "The San Diego River Park Foundation",
+  "partner_id": 323,
+  "description": "&lt;p&gt;LINDA HAWLEY’S NATURE ADVENTURES! FREE—ages 4-10 with an adult Not your ordinary sewer rats, woodrats are the original PACKRATS, building huge, intricate houses that last for centuries! How do they [&hellip;]&lt;/p&gt;\\n",
+  "link": "https://sandiegoriver.org/event/the-wondrous-woodrat-mice-moles-shrews-voles-gophers-in-holes/",
+  "availability": "",
+  "date_start": "2026-11-07T10:00:00-07:00",
+  "date_end": "2026-11-07T11:00:00-07:00",
+  "age_grade_level": [
+   "Family",
+   "Pre-K",
+   "Grades 6-8"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Biology / LifeSciences",
+   "Earth Science/Ecology"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Grant Park, 2310 Camino Del Rio N., San Diego",
+  "latitude": "32.7639275",
+  "longitude": "-117.2033498",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "the_san_diego_river.jpg",
+  "image_src": "7745d24d8eda9967.png"
  },
  {
   "slug": "san_diego_county_library_toddler_storytime_20261111",
@@ -7082,11 +7249,48 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "db866ec940404854.png"
+ },
+ {
+  "slug": "anza_borrego_foundation_intermediate_hike_domelands_20261114",
+  "title": "Intermediate Hike: Domelands",
+  "partner_name": "Anza-Borrego Foundation",
+  "partner_id": 646,
+  "description": "Journey through the sculpted wonders of Anza-Borrego  Explore the otherworldly terrain of the Domelands on this intermediate-level hike through Anza-Borrego Desert State Park. Discover wind and water-carved formations, slot canyons, and sweeping desert views that make this area a true geological treasure.  What to Expect:   Approximately 7 miles of moderate hiking with ~1,200 ft elevation gain, some uneven terrain, off-trail sections and light scrambling    Dramatic badlands, natural arches, and sculpted sandstone domes    Panoramic views of the Carrizo Badlands and Imperial Valley    A chance to see desert wildlife and seasonal blooms    Interpretive insights into the area’s unique geology and desert ecology   Who Should Attend:   Hikers with some experience looking for a moderate challenge    Nature and geology enthusiasts eager to explore off-the-beaten-path areas    Visitors eager to experience one of Anza-Borrego’s most fascinating natural features     REGISTER TODAY!   Date: Saturday, November 14, 2026  Time: 7:00 a.m.-2:00 p.m.  Location: Meet at the trailhead off of S-22. Precise meeting location will be sent before the event.    Cost:  ABF Member: $30  Non-Member: $35  Student: $18    Cancellation Policy &amp; Scholarships: Please see our FAQs page to read our cancellation policy and learn about scholarship options.  What Previous Attendees Are Saying about Our Hikes:  “I loved the hike choice and challenge. I will definitely be on another hike with the foundation soon!”  “I so enjoyed getting \"off trail\" and exploring with the Anza Borrego Foundation. The camaraderie, physical challenge, and education around Anza Borrego was beyond my expectations.”  “Expertise was great. cohesiveness of group was good. location excellent.”  Hike Leader:  In his professional life, Sergey Kuhsch has spent over 16 years in software development across different industries. In contrast, much of his free time is dedicated to exploring the natural world. As much as he enjoys hiking in chaparral or exploring the local mountains, he feels that Anza Borrego is a very special place. The sheer size and accessibility of the park are unlike any other in the region. The rugged landscape, endless vistas, and hidden oases offer unique opportunities to explore. Sergey feels that supporting the Anza Borrego Foundation is the most impactful way to support Anza Borrego Desert State Park.                                              You’re invited to explore the scientific detective story in San Diego’s diverse mountains and deserts spanning over 200 million years.&nbsp; This includes the expansive landscapes of Anza-Borrego Desert State Park which is rich with ancient geological wonders.&nbsp;",
+  "link": "https://theabf.org/events/intermediate-hike-domelands/",
+  "availability": "",
+  "date_start": "2026-11-14T07:00:00-07:00",
+  "date_end": "2026-11-14T14:00:00-07:00",
+  "age_grade_level": [
+   "Family",
+   "Grades 9-12",
+   "Adult"
+  ],
+  "cost_range": "Less than $50",
+  "time_of_day": [
+   "Morning",
+   "Afternoon"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Earth Science/Ecology"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Anza-Borrego Desert State Park, trailhead off S-22, Borrego Springs",
+  "latitude": "None",
+  "longitude": "None",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "anzaborrego_foundation.jpeg",
+  "image_src": "bc1c9d886241c88f.png"
  },
  {
   "slug": "i_love_a_clean_san_diego_compost_038_mulch_giveaway_8211_11_14_at_sun_runner_lot_20261114",
-  "title": "Compost &#038; Mulch Giveaway &#8211; 11/14 at Sun Runner Lot",
+  "title": "Compost & Mulch Giveaway – 11/14 at Sun Runner Lot",
   "partner_name": "I Love A Clean San Diego",
   "partner_id": 361,
   "description": "Join us for our upcoming Compost and Mulch Giveaway Event! This event is available for City of San Diego residents ONLY! Have you ever wondered what happens after you toss yard trimmings and food scraps into your green bin? The organic waste is collected and brought to the Miramar Greenery (located at the Miramar Landfill) where it is turned into compost! This compost is available at no cost to residents of the City of San Diego and can be picked up during normal business hours. To increase opportunities for residents to pick up compost, I Love A Clean San Diego and the City of San Diego are partnering to host Compost Giveaways on select weekends. Get your hands on some nutrient-rich compost for your garden at no cost. Whether you're a seasoned gardener or just starting out, this event is perfect for anyone looking to give their plants a boost. Swing by and grab some compost to help your garden thrive! Mulch is also available at this event. Things to bring: Shovel Gloves Containers Tarp and bungees for truck beds (ALL TRUCK BEDS MUST BE COVERED!) Things to know: Be prepared to self load compost and mulch All participants are REQUIRED to sign a release waiver Must approach from the EAST Exact Coordinates: (32.76726972788742, -117.20799017856716) Please be aware, in order to collect compost you are REQUIRED to sign a waiver. All participants will need to sign a waiver upon entering the event. About the Miramar Greenery: At the Miramar Greenery, compost is made from yard trimmings and food scraps that have been ground, placed in windrows, turned and watered for 70 days. During this time, microorganisms digest the carbon and nitrogen rich mixture, causing the windrow to sustain temperatures of 140-165 F. This process eliminates most weed seeds and pathogens while breaking down the organic material into beneficial soil nutrients. Finished compost is screened to a particle size of one-half inch or less which also removes film plastic from the final product. For more information, visit https://www.sandiego.gov/environmental-services/miramar Practical Application and Benefits : Compost can be used as an amendment to improve soil texture and increase nutrient and water holding capacity. In San Diego, where soil lacks many essential plant nutrients, mixing compost in with the soil is one of the best things you can do for your yard and garden. Note: This event will occur rain or shine, however if severe weather occurs the days leading up to the event, the event will be rescheduled or canceled. If needed, registrants will receive electronic communication as soon as possible before the event. This event is made possible by the City of San Diego Environmental Services Department and facilitated by I Love A Clean San Diego.",
@@ -7114,7 +7318,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "i_love_a_clean.png"
+  "logo_src": "i_love_a_clean.png",
+  "image_src": "bf711b8a308eebc3.jpg"
  },
  {
   "slug": "san_diego_county_library_rocking_toddler_storytime_20261119",
@@ -7145,7 +7350,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": ""
  },
  {
   "slug": "san_diego_county_library_children_activities_20261120",
@@ -7177,7 +7383,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": ""
  },
  {
   "slug": "san_diego_county_library_baby_bounce_20261202",
@@ -7207,7 +7414,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "ee8a6df79b3caff8.png"
  },
  {
   "slug": "san_diego_county_library_playtime_at_bonita_library_20261203",
@@ -7238,7 +7446,44 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "d66e8a89e63f536e.png"
+ },
+ {
+  "slug": "the_san_diego_river_park_foundation_reindeer_here_no_mule_deer_20261205",
+  "title": "REINDEER HERE? NO, MULE DEER!",
+  "partner_name": "The San Diego River Park Foundation",
+  "partner_id": 323,
+  "description": "&lt;p&gt;Linda Hawley’s Nature Adventures! FREE—ages 4-10 with an adult These beautiful, elegant mammals stand taller than all other San Diego native animals. Why are they called Mule deer? How are [&hellip;]&lt;/p&gt;\\n",
+  "link": "https://sandiegoriver.org/event/reindeer-here-no-mule-deer/",
+  "availability": "",
+  "date_start": "2026-12-05T10:00:00-07:00",
+  "date_end": "2026-12-05T11:00:00-07:00",
+  "age_grade_level": [
+   "Family",
+   "Pre-K",
+   "Grades 6-8"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Biology / LifeSciences",
+   "Earth Science/Ecology"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Grant Park, 2310 Camino Del Rio N., San Diego",
+  "latitude": "32.7639275",
+  "longitude": "-117.2033498",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "the_san_diego_river.jpg",
+  "image_src": "3cfb77630ac14054.png"
  },
  {
   "slug": "san_diego_county_library_kid_s_dnd_20261209",
@@ -7268,7 +7513,76 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "2d9a560289457d88.jpg"
+ },
+ {
+  "slug": "anza_borrego_foundation_desert_trails_a_primitive_camping_adventure_20261212",
+  "title": "Desert Trails: A Primitive Camping Adventure",
+  "partner_name": "Anza-Borrego Foundation",
+  "partner_id": 646,
+  "description": "Explore, Hike, and Camp Under the Stars in the Heart of the Desert  Get off the beaten path and discover the rugged beauty of the desert! This two-day adventure combines a scenic driving tour, invigorating hikes, and hands-on primitive camping skills for an unforgettable outdoor experience.  What to Expect:   Guided 4WD/AWD driving tour through Anza-Borrego Desert State Park    Two moderate-level hikes through stunning desert terrain    Learn primitive camping techniques—from setting up camp to outdoor cooking (we’ll provide a list of what to bring!)    Camp under a blanket of desert stars    Connect with fellow outdoor enthusiasts and nature lovers   Who Should Attend:   Adventurers eager to try primitive camping for the first time    Hikers and off-road explorers seeking a new challenge    Anyone who loves the desert and wants to learn wilderness basics     REGISTER TODAY!   Date/Time: 9:00 a.m. Saturday, December 12 – 12:00 p.m. Sunday, December 13, 2026    Location: Meet at the ABF Store (587 Palm Canyon Dr. #110, Borrego Springs, CA 92204). We’ll then carpool/caravan to the start of our driving tour.    Cost:  ABF Member: $102/person Not a member? Join today for as little as $35 and save!  Non-Member: $120/person  Student: $60/person    Cancellation &amp; Scholarship Policy: Please see our FAQs page to read our cancellation policy and learn about scholarship options.      Tour Leaders:  Todd Linke is a resident of San Diego and just finished his 25th year in education, 23 of them with the Grossmont Union High School District. Todd grew up in Ohio and has been exploring, hiking and camping since he was a child. His earliest outdoor memories include hiking in the caves in Hocking Hills, sailing on Lake Atwood, swimming in Lake Erie, and camping at the seaside at Myrtle Beach.  Todd fell in love with the desert several years ago and makes the 2-hour drive to the park every chance he gets. He has visited the park over 100 times and has hiked and driven many of its well-known and more obscure trails and roads, but as always discovering more. Todd brings his love for science and his passion for the desert to any excursion in the park.       In his professional life, Sergey Kuhsch has spent over 16 years in software development across different industries. In contrast, much of his free time is dedicated to exploring the natural world. As much as he enjoys hiking in chaparral or exploring the local mountains, he feels that Anza Borrego is a very special place. The sheer size and accessibility of the park are unlike any other in the region. The rugged landscape, endless vistas, and hidden oases offer unique opportunities to explore. Sergey feels that supporting the Anza Borrego Foundation is the most impactful way to support AnzaBorrego Desert State Park.",
+  "link": "https://theabf.org/events/desert-trails-a-primitive-camping-adventure-2/",
+  "availability": "",
+  "date_start": "2026-12-12T09:00:00-07:00",
+  "date_end": "2026-12-13T12:00:00-07:00",
+  "age_grade_level": [
+   "Family",
+   "Grades 9-12",
+   "Adult"
+  ],
+  "cost_range": "Less than $200",
+  "time_of_day": [
+   "All Day"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Earth Science/Ecology"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "587 Palm Canyon Dr. #110, Borrego Springs, CA 92204",
+  "latitude": "None",
+  "longitude": "None",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "anzaborrego_foundation.jpeg",
+  "image_src": "d4ef753b30a28016.png"
+ },
+ {
+  "slug": "the_san_diego_river_park_foundation_make_your_own_sustainable_gifts_workshop_diy_personal_care_p_20261212",
+  "title": "Make your Own Sustainable Gifts Workshop: DIY Personal Care Products",
+  "partner_name": "The San Diego River Park Foundation",
+  "partner_id": 323,
+  "description": "&lt;p&gt;Just in time for the Holidays! Are you looking for that special gift for that special, sustainability minded person? Would you like to save money and the planet at the [&hellip;]&lt;/p&gt;\\n",
+  "link": "https://sandiegoriver.org/event/make-your-own-sustainable-gifts-workshop-dyi-personal-care-products/",
+  "availability": "",
+  "date_start": "2026-12-12T10:00:00-07:00",
+  "date_end": "2026-12-12T11:30:00-07:00",
+  "age_grade_level": [
+   "Family"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "General Science"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Grant Park, 2310 Camino Del Rio N., San Diego",
+  "latitude": "32.7639275",
+  "longitude": "-117.2033498",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "the_san_diego_river.jpg",
+  "image_src": "1208e7f73b5fc2a4.jpg"
  },
  {
   "slug": "san_diego_county_library_preschool_story_time_20261218",
@@ -7298,7 +7612,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "48b77a7aba0da79e.jpg"
  },
  {
   "slug": "san_diego_county_library_storytime_and_craft_20261226",
@@ -7329,7 +7644,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "081dcdbe2de096b4.png"
  },
  {
   "slug": "san_diego_county_library_family_play_time_hour_20270106",
@@ -7360,11 +7676,12 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "d3273d7a510c362a.png"
  },
  {
   "slug": "i_love_a_clean_san_diego_stay_classy_o_8217_side_martin_luther_king_jr_park_cleanup_20270123",
-  "title": "Stay Classy O&#8217;Side: Martin Luther King Jr. Park Cleanup",
+  "title": "Stay Classy O’Side: Martin Luther King Jr. Park Cleanup",
   "partner_name": "I Love A Clean San Diego",
   "partner_id": 361,
   "description": "Join I Love A Clean San Diego and Green Oceanside for a litter cleanup at MLK Jr. Park! We will divert litter from our watersheds and keep it from traveling to the Pacific Ocean. All supplies will be provided. Click below for more details and to register for the event!",
@@ -7392,7 +7709,8 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "i_love_a_clean.png"
+  "logo_src": "i_love_a_clean.png",
+  "image_src": "5b52f251ed4ee5ac.png"
  },
  {
   "slug": "san_diego_county_library_craft_challenge_20270125",
@@ -7424,11 +7742,12 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": ""
+  "logo_src": "san_diego_county_library.png",
+  "image_src": "c906d42400f211c4.png"
  },
  {
   "slug": "i_love_a_clean_san_diego_stay_classy_o_8217_side_joe_balderrama_park_cleanup_20270218",
-  "title": "Stay Classy O&#8217;side: Joe Balderrama Park Cleanup",
+  "title": "Stay Classy O’side: Joe Balderrama Park Cleanup",
   "partner_name": "I Love A Clean San Diego",
   "partner_id": 361,
   "description": "Join I Love A Clean San Diego and Green Oceanside for a litter cleanup! We will divert litter from our watersheds and keep it from traveling to the Pacific Ocean. Click below for more details and to register for the event!  ",
@@ -7456,11 +7775,12 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "i_love_a_clean.png"
+  "logo_src": "i_love_a_clean.png",
+  "image_src": "e99f444c075bc134.png"
  },
  {
   "slug": "i_love_a_clean_san_diego_stay_classy_o_8217_side_lake_blvd_street_sweep_20270318",
-  "title": "Stay Classy O&#8217;Side: Lake Blvd Street Sweep",
+  "title": "Stay Classy O’Side: Lake Blvd Street Sweep",
   "partner_name": "I Love A Clean San Diego",
   "partner_id": 361,
   "description": "Join I Love A Clean San Diego and Green Oceanside for a litter cleanup at the park! We will divert litter from our watersheds and keep it from traveling to the Pacific Ocean. All supplies are provided. Register below for more information and to get signed up!",
@@ -7488,11 +7808,12 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "i_love_a_clean.png"
+  "logo_src": "i_love_a_clean.png",
+  "image_src": "5b52f251ed4ee5ac.png"
  },
  {
   "slug": "i_love_a_clean_san_diego_stay_classy_o_8217_side_airport_road_street_sweep_20270501",
-  "title": "Stay Classy O&#8217;Side: Airport Road Street Sweep",
+  "title": "Stay Classy O’Side: Airport Road Street Sweep",
   "partner_name": "I Love A Clean San Diego",
   "partner_id": 361,
   "description": "Join I Love A Clean San Diego and Green Oceanside for a litter cleanup! We will divert litter from our watersheds and keep it from traveling to the Pacific Ocean. All supplies are provided. Register below for more information and to get signed up!",
@@ -7520,6 +7841,7 @@
   "contact_name": "",
   "contact_email": "",
   "contact_phone": "",
-  "logo_src": "i_love_a_clean.png"
+  "logo_src": "i_love_a_clean.png",
+  "image_src": "5b52f251ed4ee5ac.png"
  }
 ]
