@@ -1,9 +1,11 @@
 ---
 id: '007'
 title: 'Home Upcoming Opportunities: full next-week window'
-status: open
-use-cases: [SUC-007]
-depends-on: ['006']
+status: done
+use-cases:
+- SUC-007
+depends-on:
+- '006'
 github-issue: ''
 issue: 24-home-upcoming-opportunities-next-week.md
 completes_issue: true
@@ -64,13 +66,13 @@ None required.
 
 ## Acceptance Criteria
 
-- [ ] All opportunities with `date_start` in `[today, today+7d]` (inclusive) appear in the
+- [x] All opportunities with `date_start` in `[today, today+7d]` (inclusive) appear in the
       "Upcoming Opportunities" section, sorted ascending by date.
-- [ ] No opportunity within that window is dropped for a "top N" cap.
-- [ ] Undated opportunities remain excluded from this section (unchanged).
-- [ ] If the section is long, it scrolls or links to the full Opportunities page rather than
+- [x] No opportunity within that window is dropped for a "top N" cap.
+- [x] Undated opportunities remain excluded from this section (unchanged).
+- [x] If the section is long, it scrolls or links to the full Opportunities page rather than
       hiding results.
-- [ ] `npm run build` succeeds.
+- [x] `npm run build` succeeds.
 
 ## Testing
 

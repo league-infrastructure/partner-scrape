@@ -15,17 +15,35 @@ const heroNetworkSrc = `${base}/images/hero/hero-network.png`;
 const heroSkylineSrc = `${base}/images/hero/hero-skyline.png`;
 const heroStyle = `--hero-img-network: url(${heroNetworkSrc}); --hero-img-skyline: url(${heroSkylineSrc});`;
 
-// Featured: soonest upcoming, prefer free
+// Upcoming Opportunities: every opportunity whose local calendar day
+// (date_start) falls within today .. today+7 days inclusive, sorted
+// ascending by date -- no top-N cap (issue 24). Day boundaries are read
+// from date_start's own Y-M-D digits rather than by letting the build
+// machine's timezone reinterpret the ISO instant, mirroring helpers.ts's
+// `localDateOnly` and CalendarView's `dayKey` day-bucketing convention so
+// "today" and the window edges reflect the intended local (San Diego)
+// day everywhere on the site. Undated opportunities have no week to
+// belong to and stay excluded, same as every other date_start-gated view.
+const DATE_ONLY_RE = /^(\d{4})-(\d{2})-(\d{2})/;
+function localDay(dateStr: string): Date | null {
+  const m = DATE_ONLY_RE.exec(dateStr);
+  if (!m) return null;
+  return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+}
+
 const now = new Date();
+const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+const windowEnd = new Date(today);
+windowEnd.setDate(today.getDate() + 7);
+
 const upcoming = opportunities
-  .filter(o => o.date_start && new Date(o.date_start) >= now)
-  .sort((a, b) => {
-    const aFree = a.cost_range === 'Free' ? 0 : 1;
-    const bFree = b.cost_range === 'Free' ? 0 : 1;
-    if (aFree !== bFree) return aFree - bFree;
-    return new Date(a.date_start).getTime() - new Date(b.date_start).getTime();
+  .filter(o => {
+    if (!o.date_start) return false;
+    const day = localDay(o.date_start);
+    if (!day) return false;
+    return day.getTime() >= today.getTime() && day.getTime() <= windowEnd.getTime();
   })
-  .slice(0, 4);
+  .sort((a, b) => new Date(a.date_start).getTime() - new Date(b.date_start).getTime());
 
 // Partner logos: prefer those with active opportunities, take up to 16
 const activePartnerNames = new Set(opportunities.map(o => o.partner_name));
@@ -74,13 +92,19 @@ const logoPartners = partners
     </div>
   </div>
 
-  <!-- Featured Opportunities -->
+  <!-- Upcoming Opportunities: the entire next 7 days (today..today+7),
+       no top-N cap -- see the `upcoming` query above. The list can run
+       long on a busy week, so the grid scrolls within a bounded height
+       instead of dropping any opportunity; "View All Opportunities"
+       below still links out to the full, filterable Opportunities page. -->
   {upcoming.length > 0 && (
     <section class="section">
       <div class="container">
         <h2 class="text-center mb-3">Upcoming Opportunities</h2>
-        <div class="results-grid">
-          {upcoming.map(opp => <OpportunityCard opportunity={opp} />)}
+        <div class="upcoming-scroll">
+          <div class="results-grid">
+            {upcoming.map(opp => <OpportunityCard opportunity={opp} />)}
+          </div>
         </div>
         <div class="text-center mt-3">
           <a href={`${base}/opportunities`} class="btn">View All Opportunities</a>
@@ -147,6 +171,17 @@ const logoPartners = partners
      of truth. Only this page's non-hero sections stay scoped here. */
   .section {
     padding: 60px 0;
+  }
+
+  /* Upcoming Opportunities has no top-N cap (issue 24), so a busy week can
+     render far more cards than comfortably fits above the fold. Bound the
+     grid's visible height and let it scroll rather than truncating the
+     list -- every opportunity in the window still renders, just not all
+     visible without scrolling. */
+  .upcoming-scroll {
+    max-height: 760px;
+    overflow-y: auto;
+    padding-right: 4px;
   }
 
   .what-we-do {
