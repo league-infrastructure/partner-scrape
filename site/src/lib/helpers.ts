@@ -9,6 +9,26 @@ export function getLogoPath(logoSrc: string | null | undefined): string {
   return `${base}/images/logos/${logoSrc}`;
 }
 
+// Single shared image-fallback decision for both `OpportunityCard.astro` and
+// `[slug].astro` (sprint 008, issue 19 site half / SUC-009), so the two
+// callers can't drift on fallback order: an opportunity's own event photo
+// (`image_src`, self-hosted by the scraper's Event Image Downloader under
+// `public/images/opportunities/`) -> its partner's logo (`logo_src`, tier 2
+// -- delegated to `getLogoPath()`, which already also owns tier 3, the
+// generic placeholder) -> the placeholder. Mirrors `getLogoPath()`'s own
+// filename-not-URL convention: `image_src` is a resolved local filename,
+// never fetched at build time (see sprint.md Design Rationale).
+export function resolveImage(
+  imageSrc: string | null | undefined,
+  logoSrc: string | null | undefined
+): string {
+  if (imageSrc) {
+    const base = import.meta.env.BASE_URL.replace(/\/+$/, '');
+    return `${base}/images/opportunities/${imageSrc}`;
+  }
+  return getLogoPath(logoSrc);
+}
+
 // Extract the intended local (San Diego) calendar day embedded in an ISO
 // date string, ignoring any timezone offset suffix. `_iso()`
 // (`partner_scrape/normalize/run.py`) always writes the scraper's

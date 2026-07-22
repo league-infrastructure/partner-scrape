@@ -266,6 +266,27 @@ h4 { font-size: 20px; }
   vertical-align: middle;
 }
 
+/* === Opportunity Image (event photo / logo / placeholder fallback) === */
+/* `.opp-card-logo` (OpportunityCard.astro) and `.detail-logo`
+   ([slug].astro) share one visual slot for the three-tier image
+   fallback resolved by helpers.ts's `resolveImage()` (sprint 008, issue
+   19 site half / SUC-009): an opportunity's own event photo, else its
+   partner's logo, else the generic placeholder. Chosen layout: the
+   event image replaces the existing logo tile at the same size/crop
+   (Open Question 2, option a) -- lowest layout risk, no new slot to
+   design around a landscape photo that may not exist for most records
+   yet. The one visual difference: a real photo is more likely
+   landscape and looks better filling the tile edge-to-edge, while a
+   logo needs its whole mark visible on the tinted backdrop -- so
+   `data-event-image="true"` (set only for fallback tier 1, i.e. when
+   `image_src` resolved) switches `object-fit` from the base `contain`
+   to `cover`. Size/radius/background stay the shared rules already
+   defined alongside each component. */
+.opp-card-logo[data-event-image='true'],
+.detail-logo[data-event-image='true'] {
+  object-fit: cover;
+}
+
 /* === Hero === */
 .hero {
   text-align: center;

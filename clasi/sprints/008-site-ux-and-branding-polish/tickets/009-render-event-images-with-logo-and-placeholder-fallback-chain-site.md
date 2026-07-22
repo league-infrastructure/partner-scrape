@@ -1,9 +1,12 @@
 ---
-id: '009'
+id: 009
 title: Render event images with logo and placeholder fallback chain (site)
-status: open
-use-cases: [SUC-009]
-depends-on: ['005', '008']
+status: done
+use-cases:
+- SUC-009
+depends-on:
+- '005'
+- 008
 github-issue: ''
 issue: 19-event-images.md
 completes_issue: true
@@ -68,16 +71,50 @@ None required.
 
 ## Acceptance Criteria
 
-- [ ] An opportunity with `image_src` set shows its own image on both the card and the detail
+- [x] An opportunity with `image_src` set shows its own image on both the card and the detail
       page.
-- [ ] An opportunity without `image_src` but with a partner `logo_src` shows the partner logo —
+- [x] An opportunity without `image_src` but with a partner `logo_src` shows the partner logo —
       today's behavior, unchanged.
-- [ ] An opportunity with neither shows the existing generic placeholder.
-- [ ] The fallback decision is made by one shared helper function, called from both the card and
+- [x] An opportunity with neither shows the existing generic placeholder.
+- [x] The fallback decision is made by one shared helper function, called from both the card and
       the detail page (not duplicated conditionals).
-- [ ] The chosen visual layout for an event image (replace the logo tile vs. a new larger slot)
+- [x] The chosen visual layout for an event image (replace the logo tile vs. a new larger slot)
       is implemented consistently and documented in the completion notes.
-- [ ] `npm run build` succeeds.
+- [x] `npm run build` succeeds.
+
+## Completion Notes
+
+- **Fallback helper**: `resolveImage(imageSrc, logoSrc)` added to `site/src/lib/helpers.ts`.
+  Tier 1 (event image) is resolved directly against
+  `${base}/images/opportunities/${imageSrc}`; tiers 2/3 (logo, placeholder) are delegated to the
+  existing `getLogoPath()` rather than re-implemented, so there is exactly one place that knows
+  the logo/placeholder path convention. Both `OpportunityCard.astro` and `[slug].astro` call this
+  one function — no per-page conditionals.
+- **Visual layout decision (Open Question 2)**: chose **option (a)** — the event image replaces
+  the existing logo tile at the same size/crop (`.opp-card-logo` / `.detail-logo`), rather than
+  adding a new larger top-of-card slot. Rationale: lowest layout risk, no restructuring of the
+  card/detail markup, and most records won't have a real event photo until the post-sprint
+  re-scrape populates `image_src`, so a speculative larger-slot layout would mostly render empty
+  today. One visual refinement was added to distinguish the two content types sharing that slot:
+  a new `data-event-image="true"` attribute (set only when `image_src` resolved, i.e. tier 1)
+  switches `object-fit` from the existing `contain` (keeps a logo's full mark visible on its
+  tinted backdrop) to `cover` (fills the tile edge-to-edge, which suits a landscape photo better).
+  This lives in `site/src/styles/global.css` under a new `=== Opportunity Image ===` section,
+  alongside the sibling `.opp-card-date[data-weekend]` pattern from the same sprint. Alt text also
+  switches with the tier: the opportunity's own title for an event photo, the partner name for a
+  logo/placeholder.
+- **Verification**: `npm run build` (offline) succeeds. All three fallback tiers were exercised
+  against the built HTML output: (1) an existing record with a `logo_src` but no `image_src`
+  renders the logo — unchanged; (2) an existing record with neither renders
+  `default-partner.svg`; (3) `image_src` was temporarily set on one record (pointed at an
+  existing `public/images/logos/` asset copied into a temp
+  `public/images/opportunities/TEST_EVENT_IMAGE.jpg`), rebuilt, and confirmed the card and detail
+  page both rendered `/images/opportunities/TEST_EVENT_IMAGE.jpg` with `data-event-image="true"`
+  and the opportunity's title as alt text — then the data file and temp image were reverted
+  (`git diff` confirms `site/src/data/opportunities.json` is unchanged) before the final build.
+  `opportunities.json` still has no `image_src` key on any record as of this ticket (re-scrape is
+  a separate, post-sprint step per ticket 008/sprint.md Migration Concerns), so tier 1 is untested
+  on production data but fully exercised via the constructed fixture above.
 
 ## Testing
 
