@@ -1,8 +1,9 @@
 ---
 id: '003'
 title: Drop map and markers for unmappable opportunities
-status: open
-use-cases: [SUC-003]
+status: done
+use-cases:
+- SUC-003
 depends-on: []
 github-issue: ''
 issue: 20-drop-map-when-no-address.md
@@ -75,13 +76,13 @@ None required.
 
 ## Acceptance Criteria
 
-- [ ] Detail page omits the map section entirely (no empty/placeholder map, no `#detail-map`
+- [x] Detail page omits the map section entirely (no empty/placeholder map, no `#detail-map`
       element) when an opportunity has no real location — verified against a record with null
       lat/long and one with `(0, 0)`.
-- [ ] Map view plots no marker for an unmappable opportunity (null lat/long or `(0, 0)`).
-- [ ] A mappable opportunity's detail-page map and Map-view marker are unaffected.
-- [ ] List and Calendar views still show unmappable opportunities (unchanged).
-- [ ] `npm run build` succeeds.
+- [x] Map view plots no marker for an unmappable opportunity (null lat/long or `(0, 0)`).
+- [x] A mappable opportunity's detail-page map and Map-view marker are unaffected.
+- [x] List and Calendar views still show unmappable opportunities (unchanged).
+- [x] `npm run build` succeeds.
 
 ## Testing
 

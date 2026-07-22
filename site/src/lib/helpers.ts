@@ -76,3 +76,22 @@ export function parseCity(location: string | null | undefined): string {
 export function slugify(text: string): string {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
 }
+
+// Single shared "is this opportunity mappable" predicate, used by both the
+// detail page's map section and the Map view's marker loop, so the two
+// checks can't independently drift (see sprint 008 Design Rationale). A
+// coordinate pair is mappable only if both values parse as finite numbers
+// and are not the (0, 0) null-island placeholder that upstream sources use
+// for "no real coordinate" — a bare falsy/NaN check alone misses this
+// because `parseFloat("0")` is `0`, not `NaN`.
+export function isMappable(
+  lat: string | number | null | undefined,
+  lng: string | number | null | undefined
+): boolean {
+  if (lat === null || lat === undefined || lng === null || lng === undefined) return false;
+  const latNum = typeof lat === 'number' ? lat : parseFloat(lat);
+  const lngNum = typeof lng === 'number' ? lng : parseFloat(lng);
+  if (isNaN(latNum) || isNaN(lngNum)) return false;
+  if (latNum === 0 && lngNum === 0) return false;
+  return true;
+}
