@@ -1,5 +1,9 @@
 ---
-status: pending
+status: in-progress
+sprint: 008
+tickets:
+- 008-008
+- 008-009
 ---
 
 # Try to get images for events

@@ -1,5 +1,8 @@
 ---
-status: pending
+status: in-progress
+sprint: 008
+tickets:
+- 008-007
 ---
 
 # Home page: "Upcoming Opportunities" should show the entire next week

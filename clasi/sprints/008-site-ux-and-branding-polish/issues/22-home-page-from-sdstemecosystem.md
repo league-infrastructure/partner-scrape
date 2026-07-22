@@ -1,5 +1,8 @@
 ---
-status: pending
+status: in-progress
+sprint: 008
+tickets:
+- 008-006
 ---
 
 # Rebuild the home page to match sdstemecosystem.org
