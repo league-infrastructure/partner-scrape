@@ -45,7 +45,12 @@ from typing import Any, Callable, Protocol, Sequence
 
 from partner_scrape.adapters import run as run_adapter
 from partner_scrape.config import get_site_dir
-from partner_scrape.export import export_ads, export_opportunities, load_ad_configs
+from partner_scrape.export import (
+    EventImageDownloader,
+    export_ads,
+    export_opportunities,
+    load_ad_configs,
+)
 from partner_scrape.fetch import Fetcher, PlaywrightFetcher, PoliteFetcher
 from partner_scrape.model import Event
 from partner_scrape.normalize import run as normalize_run
@@ -292,6 +297,7 @@ def run(
     today: date | None = None,
     dry_run: bool = False,
     max_source_workers: int = DEFAULT_MAX_SOURCE_WORKERS,
+    image_resolver: Callable[[str], str] | None = None,
 ) -> list[dict[str, Any]]:
     """Run the full aggregator engine end-to-end: Registry -> Adapters ->
     (empty) Enrichers -> Normalize -> Export.
@@ -374,6 +380,24 @@ def run(
             so a run's output is identical (same events, same order,
             same reported data) no matter how many workers processed
             it or in what order they happened to finish.
+        image_resolver: the `image_url -> local filename` callable
+            `normalize_run()` uses to populate `Opportunity.image_src`
+            (sprint 008 ticket 008, issue 19). Defaults to `None`, which
+            makes `run()` construct a real
+            `export.images.EventImageDownloader` writing into
+            `{resolved site_dir}/public/images/opportunities/` --
+            *unless* `dry_run` is `True`, in which case no downloader is
+            constructed and `image_src` simply stays `""` for every
+            record, matching `export_opportunities`'/`export_ads`'s own
+            "computes without touching disk" `dry_run` contract
+            (downloading and writing image files is itself a disk write
+            this parameter must not perform during a dry run). Tests
+            inject a fixture-backed callable (or `lambda _: ""`) here so
+            no test touches a real socket; every existing caller/test
+            that omits this parameter and never sets `Event.image_url`
+            is completely unaffected either way, since
+            `EventImageDownloader.download()` makes no network call at
+            all for an empty `image_url` (see that class's docstring).
 
     Returns:
         The list of opportunity dicts that were (or, for `dry_run`,
@@ -459,8 +483,26 @@ def run(
     )
     source_org_names = {source.source_id: source.org_name for source in sources}
 
+    # Event Image Downloader (sprint 008 ticket 008, issue 19 scraper
+    # half): constructed here, not defaulted inside `normalize_run()`
+    # itself, so `normalize` never imports `export` (see
+    # `normalize.run._to_opportunity`'s own comment on this) and so a
+    # single `EventImageDownloader` instance's dedup cache is shared
+    # across every source's events in this one `run()` call. Skipped
+    # entirely under `dry_run` -- see this parameter's own docstring for
+    # why constructing it would violate `dry_run`'s "no disk writes"
+    # contract.
+    resolved_image_resolver = image_resolver
+    if resolved_image_resolver is None and not dry_run:
+        resolved_image_resolver = EventImageDownloader(
+            resolved_site_dir / "public" / "images" / "opportunities"
+        ).download
+
     opportunities = normalize_run(
-        events, resolved_partners_path, source_org_names=source_org_names
+        events,
+        resolved_partners_path,
+        source_org_names=source_org_names,
+        image_resolver=resolved_image_resolver,
     )
     active_reporter.record_opportunities(opportunities)
 

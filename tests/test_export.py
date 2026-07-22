@@ -21,15 +21,15 @@ from partner_scrape.normalize.run import WORK_BASED_LEARNING_TYPE, Opportunity
 
 #: The exact field set documented in
 #: stem-ecosystem/docs/site-implementation-spec.md's Opportunities
-#: table. `Opportunity.sources` is deliberately absent -- it is
-#: normalize's own cross-source bookkeeping, not part of the site
-#: contract.
+#: table, plus `image_src` (sprint 008 ticket 008, issue 19). `Opportunity
+#: .sources` is deliberately absent -- it is normalize's own cross-source
+#: bookkeeping, not part of the site contract.
 _EXPECTED_SITE_FIELDS = {
     "slug", "title", "partner_name", "partner_id", "description", "link",
     "availability", "date_start", "date_end", "age_grade_level", "cost_range",
     "time_of_day", "opportunity_type", "areas_of_interest", "specific_attention",
     "financial_support", "ngss_aligned", "location", "latitude", "longitude",
-    "contact_name", "contact_email", "contact_phone", "logo_src",
+    "contact_name", "contact_email", "contact_phone", "logo_src", "image_src",
 }
 
 
@@ -75,6 +75,7 @@ def _opportunity(
         contact_email="",
         contact_phone="",
         logo_src="",
+        image_src="",
         sources=sources,
     )
     fields.update(overrides)
@@ -308,6 +309,18 @@ class TestSiteSchemaShape:
         assert isinstance(written["time_of_day"], list)
         assert isinstance(written["slug"], str)
         assert isinstance(written["title"], str)
+
+    def test_image_src_is_exported_like_logo_src(self, tmp_path):
+        """`image_src` (sprint 008 ticket 008, issue 19) is exported
+        automatically -- `_SITE_SCHEMA_FIELDS` is derived from
+        `fields(Opportunity)`, so no writer.py change is needed for a
+        populated value to reach `opportunities.json`."""
+        site_dir = _site_dir(tmp_path)
+        opp = _opportunity(image_src="a1b2c3d4e5f6a7b8.jpg")
+
+        payload = export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+
+        assert payload[0]["image_src"] == "a1b2c3d4e5f6a7b8.jpg"
 
 
 class TestScrapeMeta:

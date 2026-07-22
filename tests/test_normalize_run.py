@@ -36,6 +36,7 @@ def _event(
     cost: str = "",
     kind: str = "event",
     external_id: str = "",
+    image_url: str = "",
 ) -> Event:
     event = Event(source_id=source_id, kind=kind, external_id=external_id)
     event.set("title", title, source="fixture", confidence=confidence)
@@ -49,6 +50,8 @@ def _event(
         event.set("description", description, source="fixture", confidence=confidence)
     if cost:
         event.set("cost", cost, source="fixture", confidence=confidence)
+    if image_url:
+        event.set("image_url", image_url, source="fixture", confidence=confidence)
     return event
 
 
@@ -63,9 +66,20 @@ class TestFieldMapping:
             "availability", "date_start", "date_end", "age_grade_level", "cost_range",
             "time_of_day", "opportunity_type", "areas_of_interest", "specific_attention",
             "financial_support", "ngss_aligned", "location", "latitude", "longitude",
-            "contact_name", "contact_email", "contact_phone", "logo_src",
+            "contact_name", "contact_email", "contact_phone", "logo_src", "image_src",
         ):
             assert hasattr(opportunity, f), f"missing field {f!r}"
+
+    def test_image_src_defaults_to_empty_string(self):
+        """No `image_resolver` given (today's default) -- `image_src`
+        stays `""`, matching `logo_src`'s own "no match" default and
+        SUC-008's Alternate Flow. Zero behavior change for every existing
+        `run()` caller that predates ticket 008."""
+        event = _event(start=datetime(2026, 8, 1, 9, 0))
+
+        [opportunity] = run([event], PARTNERS_PATH)
+
+        assert opportunity.image_src == ""
 
     def test_unknown_values_are_empty_string_or_list_never_none(self):
         event = _event(start=datetime(2026, 8, 1, 9, 0))
@@ -481,3 +495,71 @@ class TestMixedDatetimeAwareness:
         # Both survive, and every emitted date_start is naive-ISO (no offset).
         assert len(opps) == 2
         assert all("+" not in o.date_start and "Z" not in o.date_start for o in opps)
+
+
+class TestEventImageResolution:
+    """`run()`'s `image_resolver` DI seam (sprint 008 ticket 008, issue
+    19): a plain injected callable, never an import of
+    `export.images.EventImageDownloader` -- see `normalize.run`'s own
+    comment on why `normalize` stays free of any dependency on `export`.
+    These tests inject a fake resolver rather than a real
+    `EventImageDownloader`, so this file (like every other normalize
+    test) makes no network call and touches no disk -- the Downloader's
+    own fetch/validate/quality-gate/dedupe logic is covered by
+    `tests/test_export_images.py`.
+    """
+
+    def test_no_resolver_given_leaves_image_src_empty_even_with_a_real_image_url(self):
+        event = _event(
+            start=datetime(2026, 8, 1, 9, 0),
+            image_url="https://example.org/event.jpg",
+        )
+
+        [opportunity] = run([event], PARTNERS_PATH)
+
+        assert opportunity.image_src == ""
+
+    def test_resolver_is_called_with_the_event_image_url_and_its_return_value_is_used(self):
+        calls: list[str] = []
+
+        def fake_resolver(image_url: str) -> str:
+            calls.append(image_url)
+            return "deadbeefcafef00d.jpg"
+
+        event = _event(
+            start=datetime(2026, 8, 1, 9, 0),
+            image_url="https://example.org/event.jpg",
+        )
+
+        [opportunity] = run([event], PARTNERS_PATH, image_resolver=fake_resolver)
+
+        assert calls == ["https://example.org/event.jpg"]
+        assert opportunity.image_src == "deadbeefcafef00d.jpg"
+
+    def test_resolver_rejecting_an_image_leaves_image_src_empty_without_raising(self):
+        """SUC-008's Alternate Flow: a resolver that rejects (returns
+        `""`, mirroring `EventImageDownloader.download`'s own contract
+        for a failed/unreachable/quality-gated-out image) never fails
+        the export."""
+        event = _event(
+            start=datetime(2026, 8, 1, 9, 0),
+            image_url="https://example.org/tracking-pixel.gif",
+        )
+
+        [opportunity] = run([event], PARTNERS_PATH, image_resolver=lambda _url: "")
+
+        assert opportunity.image_src == ""
+
+    def test_resolver_is_not_called_when_the_event_has_no_image_url(self):
+        calls: list[str] = []
+
+        def fake_resolver(image_url: str) -> str:
+            calls.append(image_url)
+            return "should-not-be-used.jpg"
+
+        event = _event(start=datetime(2026, 8, 1, 9, 0))  # image_url left blank
+
+        [opportunity] = run([event], PARTNERS_PATH, image_resolver=fake_resolver)
+
+        assert calls == []
+        assert opportunity.image_src == ""

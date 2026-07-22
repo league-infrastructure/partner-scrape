@@ -25,7 +25,7 @@ import re
 from dataclasses import dataclass, field
 from datetime import date, datetime
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any, Callable, Iterable
 
 from partner_scrape.model import Event
 from partner_scrape.normalize.collapse import collapse_recurring
@@ -70,9 +70,15 @@ _SLUG_STRIP_RE = re.compile(r"^_+|_+$")
 class Opportunity:
     """The site's opportunity record (`stem-ecosystem/docs/site-implementation-spec.md`).
 
-    Every field through `logo_src` is part of the site's JSON contract
+    Every field through `image_src` is part of the site's JSON contract
     (ticket 007 writes exactly these, matching
-    `dev/export_site.py`'s `build_opportunity` output shape). `sources`
+    `dev/export_site.py`'s `build_opportunity` output shape). `image_src`
+    (sprint 008 ticket 008, issue 19) follows the exact same convention
+    `logo_src` already established: a pre-resolved local filename (empty
+    string when absent), never a remote URL -- by the time the site
+    consumes `opportunities.json`, any image it references has already
+    been downloaded and self-hosted by the Event Image Downloader
+    (`export/images.py`), never hotlinked at request time. `sources`
     is this module's own bookkeeping -- the full set of `source_id`s a
     cross-source-merged record was seen on (SUC-006's "the set of
     contributing sources is recorded on the record, not silently
@@ -105,6 +111,7 @@ class Opportunity:
     contact_email: str
     contact_phone: str
     logo_src: str
+    image_src: str = ""
     sources: frozenset[str] = field(default_factory=frozenset)
 
 
@@ -153,6 +160,7 @@ def _to_opportunity(
     instance: Instance,
     partners_by_norm: dict[str, dict[str, Any]],
     org_name: str,
+    image_resolver: Callable[[str], str] | None = None,
 ) -> Opportunity:
     event = instance.event
     partner = find_partner(org_name, partners_by_norm) or {}
@@ -205,6 +213,17 @@ def _to_opportunity(
         WORK_BASED_LEARNING_TYPE if is_internship else classify_opportunity_type(event.title)
     )
 
+    # Event Image Downloader (sprint 008 ticket 008, issue 19 scraper
+    # half): `image_resolver` is a plain injected callable, not an
+    # import of `export.images.EventImageDownloader` -- this keeps
+    # `normalize` free of any dependency on `export`, matching
+    # sprint.md's documented one-way module-dependency direction
+    # (Export depends on Normalize, never the reverse). `pipeline.run()`
+    # wires the real `EventImageDownloader.download` in; tests and any
+    # caller that omits it get today's exact behavior (`image_src` stays
+    # "", SUC-008's Alternate Flow) with zero network access attempted.
+    image_src = image_resolver(event.image_url) if image_resolver and event.image_url else ""
+
     return Opportunity(
         slug=slug,
         title=event.title,
@@ -230,6 +249,7 @@ def _to_opportunity(
         contact_email="",
         contact_phone="",
         logo_src=partner.get("logo_src", ""),
+        image_src=image_src,
         sources=instance.sources,
     )
 
@@ -239,6 +259,7 @@ def run(
     partners_path: str | Path,
     source_org_names: dict[str, str] | None = None,
     today: date | None = None,
+    image_resolver: Callable[[str], str] | None = None,
 ) -> list[Opportunity]:
     """Normalize ``events`` into deduplicated, taxonomy-tagged Opportunities.
 
@@ -259,6 +280,16 @@ def run(
             a `partners.json` entry, which is fine -- SUC-005's
             documented error flow is "no match -> keep the org name,
             leave partner_id unset, do not fail the record."
+        image_resolver: optional `image_url -> local filename` callable
+            (sprint 008 ticket 008, issue 19), called once per surviving
+            `Event` that has a non-empty `image_url` to populate
+            `Opportunity.image_src`. Defaults to `None`, which leaves
+            `image_src` `""` for every record (today's exact pre-ticket-008
+            behavior) with zero network access attempted -- the production
+            caller (`pipeline.run()`) passes a real
+            `export.images.EventImageDownloader.download` bound method;
+            this module never imports `export` itself (see
+            `_to_opportunity`'s comment for why).
 
     Returns:
         One `Opportunity` per surviving, deduplicated/collapsed record.
@@ -312,5 +343,7 @@ def run(
     opportunities: list[Opportunity] = []
     for instance in all_instances:
         org_name = source_org_names.get(instance.event.source_id, instance.event.source_id)
-        opportunities.append(_to_opportunity(instance, partners_by_norm, org_name))
+        opportunities.append(
+            _to_opportunity(instance, partners_by_norm, org_name, image_resolver)
+        )
     return opportunities

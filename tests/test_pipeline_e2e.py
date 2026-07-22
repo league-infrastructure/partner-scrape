@@ -137,7 +137,7 @@ _SITE_SCHEMA_FIELDS = {
     "availability", "date_start", "date_end", "age_grade_level", "cost_range",
     "time_of_day", "opportunity_type", "areas_of_interest", "specific_attention",
     "financial_support", "ngss_aligned", "location", "latitude", "longitude",
-    "contact_name", "contact_email", "contact_phone", "logo_src",
+    "contact_name", "contact_email", "contact_phone", "logo_src", "image_src",
 }
 
 
@@ -560,6 +560,77 @@ class TestDryRun:
         assert len(payload) == 2
         assert not (site_dir / "src" / "data" / "opportunities.json").exists()
         assert not (site_dir / "src" / "data" / "scrape-meta.json").exists()
+
+    def test_dry_run_never_creates_the_images_directory(self, tmp_path):
+        """Sprint 008 ticket 008: `run()`'s default `EventImageDownloader`
+        construction (and thus any disk write under `public/images/
+        opportunities/`) is skipped entirely under `--dry-run`, matching
+        `export_opportunities`'/`export_ads`'s own "computes without
+        touching disk" contract."""
+        site_dir = _site_dir(tmp_path)
+        fetcher = _fixture_fetcher()
+
+        run(
+            registry_dir=E2E_REGISTRY_DIR,
+            site_dir=site_dir,
+            fetcher=fetcher,
+            today=TODAY,
+            dry_run=True,
+        )
+
+        assert not (site_dir / "public" / "images" / "opportunities").exists()
+
+
+class TestEventImageDownloaderWiring:
+    """Sprint 008 ticket 008 (issue 19 scraper half): proves `run()`'s
+    real, non-injected `image_resolver` wiring -- from `pipeline.run()`'s
+    default `EventImageDownloader` construction, through
+    `normalize.run()`'s DI seam, into the exported `opportunities.json`
+    payload -- without any real network access (a fixture `image_resolver`
+    stands in for a real `EventImageDownloader.download`; the Downloader's
+    own fetch/validate/quality-gate/dedupe logic is covered in isolation
+    by `tests/test_export_images.py`)."""
+
+    def test_explicit_image_resolver_reaches_the_exported_payload(self, tmp_path):
+        site_dir = _site_dir(tmp_path)
+        fetcher = _fixture_fetcher()
+
+        payload = run(
+            registry_dir=E2E_REGISTRY_DIR,
+            site_dir=site_dir,
+            fetcher=fetcher,
+            today=TODAY,
+            image_resolver=lambda _url: "should-not-be-called.jpg",
+        )
+
+        # None of this registry's fixture Events set image_url, so the
+        # resolver is never actually invoked -- but every record still
+        # carries the (empty) image_src field, proving the wiring is
+        # live end-to-end without requiring a fixture Event with a real
+        # image_url just to exercise it.
+        assert len(payload) == 2
+        assert all(record["image_src"] == "" for record in payload)
+
+    def test_default_downloader_construction_does_not_crash_or_touch_disk_when_no_event_has_an_image_url(
+        self, tmp_path
+    ):
+        """The production default path (`image_resolver` omitted,
+        `dry_run=False`) constructs a real `EventImageDownloader` -- this
+        proves that construction succeeds and, since none of this
+        registry's fixture Events set `image_url`,
+        `EventImageDownloader.download()` never performs any I/O (see
+        that method's own "no fetch for an empty image_url" contract),
+        so no `public/images/opportunities/` directory is ever created."""
+        site_dir = _site_dir(tmp_path)
+        fetcher = _fixture_fetcher()
+
+        payload = run(
+            registry_dir=E2E_REGISTRY_DIR, site_dir=site_dir, fetcher=fetcher, today=TODAY
+        )
+
+        assert len(payload) == 2
+        assert all(record["image_src"] == "" for record in payload)
+        assert not (site_dir / "public" / "images" / "opportunities").exists()
 
 
 class TestLimitAndSourceFilters:

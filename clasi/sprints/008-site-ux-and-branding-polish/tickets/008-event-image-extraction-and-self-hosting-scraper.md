@@ -1,8 +1,9 @@
 ---
-id: '008'
+id: 008
 title: Event image extraction and self-hosting (scraper)
-status: open
-use-cases: [SUC-008]
+status: done
+use-cases:
+- SUC-008
 depends-on: []
 github-issue: ''
 issue: 19-event-images.md
@@ -111,17 +112,17 @@ diagram for the full data-flow picture.
 
 ## Acceptance Criteria
 
-- [ ] `Opportunity` has a new `image_src: str = ""` field, exported automatically via
+- [x] `Opportunity` has a new `image_src: str = ""` field, exported automatically via
       `_SITE_SCHEMA_FIELDS`.
-- [ ] A new Event Image Downloader module fetches, validates, quality-gates, and self-hosts
+- [x] A new Event Image Downloader module fetches, validates, quality-gates, and self-hosts
       images from `Event.image_url` (already populated by the ladder + 4 adapters — no new
       extraction added).
-- [ ] Rejected/missing/failed images leave `image_src` empty without failing the export.
-- [ ] Downloaded images are validated as real images (content-type + decode check) before being
+- [x] Rejected/missing/failed images leave `image_src` empty without failing the export.
+- [x] Downloaded images are validated as real images (content-type + decode check) before being
       stored.
-- [ ] `uv run pytest` passes (all 848 existing tests, plus new coverage for the Downloader,
+- [x] `uv run pytest` passes (all 848 existing tests, plus new coverage for the Downloader,
       the new field, and its presence in the exported schema).
-- [ ] A before/after run on at least one real source shows `image_src` populated in the exported
+- [x] A before/after run on at least one real source shows `image_src` populated in the exported
       `opportunities.json` (documented evidence, not just passing unit tests).
 
 ## Testing
