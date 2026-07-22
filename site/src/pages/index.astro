@@ -45,16 +45,25 @@ const upcoming = opportunities
   })
   .sort((a, b) => new Date(a.date_start).getTime() - new Date(b.date_start).getTime());
 
-// Partner logos: prefer those with active opportunities, take up to 16
+// Partner logos: prefer those with active opportunities, take up to 16.
+// The LEAGUE of Amazing Programmers (id 287) -- the org that builds and
+// runs this project -- is always included regardless of the general
+// active-opportunity-preference/cap logic (issue 26): pinned first, then
+// the existing selection logic fills the remaining slots from the rest of
+// the candidate pool, so the general policy is otherwise unchanged.
+const LEAGUE_PARTNER_ID = 287;
 const activePartnerNames = new Set(opportunities.map(o => o.partner_name));
-const logoPartners = partners
-  .filter(p => p.logo_src)
+const league = partners.find(p => p.id === LEAGUE_PARTNER_ID && p.logo_src);
+const otherLogoPartners = partners
+  .filter(p => p.logo_src && p.id !== LEAGUE_PARTNER_ID)
   .sort((a, b) => {
     const aActive = activePartnerNames.has(a.name) ? 0 : 1;
     const bActive = activePartnerNames.has(b.name) ? 0 : 1;
     return aActive - bActive;
-  })
-  .slice(0, 16);
+  });
+const logoPartners = league
+  ? [league, ...otherLogoPartners].slice(0, 16)
+  : otherLogoPartners.slice(0, 16);
 ---
 
 <BaseLayout title="SD STEM Ecosystem — Find STEM Opportunities in San Diego">

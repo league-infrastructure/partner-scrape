@@ -1,9 +1,11 @@
 ---
 id: '010'
 title: Home Our Partners section featuring The LEAGUE of Amazing Programmers
-status: open
-use-cases: [SUC-010]
-depends-on: ['006']
+status: done
+use-cases:
+- SUC-010
+depends-on:
+- '006'
 github-issue: ''
 issue: 26-home-our-partners-section-league.md
 completes_issue: true
@@ -75,14 +77,14 @@ None required.
 
 ## Acceptance Criteria
 
-- [ ] The "Our Partners" section appears near the bottom of the home page, styled per
+- [x] The "Our Partners" section appears near the bottom of the home page, styled per
       production's treatment (as established by ticket 006).
-- [ ] The LEAGUE of Amazing Programmers' logo/name appears in the section on every build,
+- [x] The LEAGUE of Amazing Programmers' logo/name appears in the section on every build,
       independent of the general active-opportunity-preference/cap logic.
-- [ ] The League's entry links to its Partners-page detail entry (`/partners/287`).
-- [ ] The general partner-selection logic (active-opportunity preference, 16-partner cap) is
+- [x] The League's entry links to its Partners-page detail entry (`/partners/287`).
+- [x] The general partner-selection logic (active-opportunity preference, 16-partner cap) is
       otherwise unchanged for every other partner.
-- [ ] `npm run build` succeeds.
+- [x] `npm run build` succeeds.
 
 ## Testing
 
