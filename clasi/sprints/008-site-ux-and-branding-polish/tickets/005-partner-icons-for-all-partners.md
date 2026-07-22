@@ -1,8 +1,9 @@
 ---
 id: '005'
 title: Partner icons for all partners
-status: open
-use-cases: [SUC-005]
+status: done
+use-cases:
+- SUC-005
 depends-on: []
 github-issue: ''
 issue: 18-partner-icons-images.md
@@ -79,15 +80,15 @@ None required.
 
 ## Acceptance Criteria
 
-- [ ] All 28 currently logo-less partners have a non-empty `logo_src` pointing at a self-hosted
+- [x] All 28 currently logo-less partners have a non-empty `logo_src` pointing at a self-hosted
       image under `site/public/images/logos/`.
-- [ ] Each new image was validated as a real, usable image (not a tracking pixel or broken
+- [x] Each new image was validated as a real, usable image (not a tracking pixel or broken
       fetch) before being committed.
-- [ ] Any partner where automated sourcing genuinely failed shows a generated monogram/initials
+- [x] Any partner where automated sourcing genuinely failed shows a generated monogram/initials
       tile instead of the generic default placeholder.
-- [ ] The 125 partners that already had a `logo_src` are unchanged.
-- [ ] Images are self-hosted (no runtime hotlinking) and reasonably sized.
-- [ ] `npm run build` succeeds.
+- [x] The 125 partners that already had a `logo_src` are unchanged.
+- [x] Images are self-hosted (no runtime hotlinking) and reasonably sized.
+- [x] `npm run build` succeeds.
 
 ## Testing
 
