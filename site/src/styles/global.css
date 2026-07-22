@@ -246,6 +246,26 @@ h4 { font-size: 20px; }
   font-weight: 700;
 }
 
+/* === Opportunity Card Date === */
+/* `.opp-card-date` (OpportunityCard.astro) carries `data-weekend="true"`
+   for Saturday/Sunday dates (helpers.ts's `isWeekend()`). The distinction
+   is deliberately subtle -- a color/weight shift plus a small accent dot,
+   not a loud badge -- per issue 25. */
+.opp-card-date[data-weekend="true"] {
+  color: var(--pink);
+  font-weight: 700;
+}
+.opp-card-date[data-weekend="true"]::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 5px;
+  border-radius: 50%;
+  background: var(--pink);
+  vertical-align: middle;
+}
+
 /* === Hero === */
 .hero {
   text-align: center;

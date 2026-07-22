@@ -1,5 +1,5 @@
 ---
-import { getLogoPath, formatDate, truncate } from '../lib/helpers';
+import { getLogoPath, formatDate, isWeekend, truncate } from '../lib/helpers';
 import { descriptionToPlainText } from '../lib/markdown';
 
 interface Props {
@@ -27,6 +27,7 @@ const { opportunity: opp } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/+$/, ''); // "" or "/partner-scrape"
 const logoPath = getLogoPath(opp.logo_src);
 const dateDisplay = formatDate(opp.date_start);
+const dateIsWeekend = isWeekend(opp.date_start);
 ---
 
 <article
@@ -51,7 +52,7 @@ const dateDisplay = formatDate(opp.date_start);
   <h3><a href={`${base}/opportunities/${opp.slug}`}>{opp.title}</a></h3>
   <p class="opp-card-partner">{opp.partner_name}</p>
   <div class="opp-card-meta">
-    <span class="opp-card-date">{dateDisplay}</span>
+    <span class="opp-card-date" data-weekend={dateIsWeekend ? 'true' : undefined}>{dateDisplay}</span>
     {opp.cost_range === 'Free'
       ? <span class="tag tag-free">Free</span>
       : <span class="opp-card-cost">{opp.cost_range}</span>

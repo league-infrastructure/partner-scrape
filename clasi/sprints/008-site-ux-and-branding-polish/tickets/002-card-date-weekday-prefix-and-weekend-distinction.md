@@ -1,8 +1,9 @@
 ---
 id: '002'
 title: 'Card date: weekday prefix and weekend distinction'
-status: open
-use-cases: [SUC-002]
+status: done
+use-cases:
+- SUC-002
 depends-on: []
 github-issue: ''
 issue: 25-card-date-weekday-and-weekend-distinction.md
@@ -72,15 +73,15 @@ None required.
 
 ## Acceptance Criteria
 
-- [ ] Card dates show an abbreviated weekday (Mon–Sun) prefix, e.g. "Wed, Jul 22".
-- [ ] Weekend dates (Sat/Sun) carry a visibly different, but subtle, treatment from weekday
+- [x] Card dates show an abbreviated weekday (Mon–Sun) prefix, e.g. "Wed, Jul 22".
+- [x] Weekend dates (Sat/Sun) carry a visibly different, but subtle, treatment from weekday
       dates.
-- [ ] Timezone-bearing date strings resolve to the correct local wall-clock weekday, consistent
+- [x] Timezone-bearing date strings resolve to the correct local wall-clock weekday, consistent
       with the calendar's day bucketing.
-- [ ] Undated opportunities still show "Ongoing" (unchanged).
-- [ ] The detail page's date range (`formatDateRange()`) also shows the weekday prefix
+- [x] Undated opportunities still show "Ongoing" (unchanged).
+- [x] The detail page's date range (`formatDateRange()`) also shows the weekday prefix
       (intentional consequence of changing `formatDate()` directly, not a separate scope item).
-- [ ] `npm run build` succeeds.
+- [x] `npm run build` succeeds.
 
 ## Testing
 
