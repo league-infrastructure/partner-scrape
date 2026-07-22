@@ -188,7 +188,10 @@ const logoPartners = league
      list -- every opportunity in the window still renders, just not all
      visible without scrolling. */
   .upcoming-scroll {
-    max-height: 760px;
+    /* Full viewport height (minus a little breathing room for the section
+       heading) so the Upcoming Opportunities list fills the page before
+       scrolling. Every opportunity in the window still renders. */
+    max-height: calc(100vh - 120px);
     overflow-y: auto;
     padding-right: 4px;
   }
