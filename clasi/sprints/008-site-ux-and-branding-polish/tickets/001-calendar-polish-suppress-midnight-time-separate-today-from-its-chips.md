@@ -1,8 +1,9 @@
 ---
 id: '001'
 title: 'Calendar polish: suppress midnight time, separate today from its chips'
-status: open
-use-cases: [SUC-001]
+status: done
+use-cases:
+- SUC-001
 depends-on: []
 github-issue: ''
 issue:
@@ -83,17 +84,17 @@ referencing the current time-display or today-cell behavior.
 
 ## Acceptance Criteria
 
-- [ ] A bare-date opportunity's calendar entry shows no "12:00 AM" (time is omitted or replaced
+- [x] A bare-date opportunity's calendar entry shows no "12:00 AM" (time is omitted or replaced
       with "All day").
-- [ ] The no-time detection is correct for both a naive bare date and one carrying a timezone
+- [x] The no-time detection is correct for both a naive bare date and one carrying a timezone
       offset (e.g. `...T00:00:00-07:00`), using the intended local wall-clock day/time —
       consistent with `dayKey()`'s existing day-bucketing convention.
-- [ ] A timed opportunity's calendar entry is unaffected (still shows its real time).
-- [ ] Today's `.calendar-day` is visually distinguishable from its own `.cal-entry` chips at a
+- [x] A timed opportunity's calendar entry is unaffected (still shows its real time).
+- [x] Today's `.calendar-day` is visually distinguishable from its own `.cal-entry` chips at a
       glance (not one solid-color block).
-- [ ] Event chips are visually separated from each other and from the cell background on every
+- [x] Event chips are visually separated from each other and from the cell background on every
       day, not just today.
-- [ ] `npm run build` succeeds.
+- [x] `npm run build` succeeds.
 
 ## Testing
 

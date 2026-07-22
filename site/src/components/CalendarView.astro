@@ -48,7 +48,23 @@ function dayKey(d: Date): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
+// Detect a bare date with no real scraped time -- stored as a literal
+// `T00:00:00`, optionally followed by `Z` or a numeric offset like
+// `-07:00` (see `partner_scrape/normalize/run.py`'s `_iso()`/`_TZ_OFFSET`).
+// Matched against the source string directly, not via `Date` getters:
+// `getHours()`/`getMinutes()` reflect the *browser's* local time zone,
+// not the offset embedded in the string, so they'd misjudge "midnight"
+// on any client not itself in that zone. A literal string match instead
+// judges the same intended local wall-clock value `dayKey()` already
+// buckets events by, with no such client-dependence.
+const NO_REAL_TIME_RE = /T00:00:00(?:Z|[+-]\d{2}:\d{2})?$/;
+
+function hasNoRealTime(dateStr: string): boolean {
+  return NO_REAL_TIME_RE.test(dateStr);
+}
+
 function formatTime(dateStr: string): string {
+  if (hasNoRealTime(dateStr)) return '';
   const d = new Date(dateStr);
   if (isNaN(d.getTime())) return '';
   return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
@@ -107,26 +123,29 @@ const months = [0, 1, 2].map(offset => {
           <div class:list={['calendar-day', { today: cell.key === todayKey }]} data-date={cell.key}>
             <span class="calendar-day-number">{cell.day}</span>
             <div class="calendar-day-entries">
-              {cell.opportunities.map(opp => (
-                <a
-                  class="cal-entry"
-                  href={`${base}/opportunities/${opp.slug}`}
-                  title={opp.title}
-                  data-type={opp.opportunity_type}
-                  data-age={opp.age_grade_level?.join(',')}
-                  data-areas={opp.areas_of_interest?.join(',')}
-                  data-cost={opp.cost_range}
-                  data-time={opp.time_of_day?.join(',')}
-                  data-financial={opp.financial_support}
-                  data-ngss={opp.ngss_aligned}
-                  data-attention={opp.specific_attention?.join(',')}
-                  data-title={opp.title?.toLowerCase()}
-                  data-desc={opp.description?.toLowerCase()?.slice(0, 300)}
-                >
-                  <span class="cal-entry-time">{formatTime(opp.date_start)}</span>
-                  <span class="cal-entry-title">{opp.title}</span>
-                </a>
-              ))}
+              {cell.opportunities.map(opp => {
+                const time = formatTime(opp.date_start);
+                return (
+                  <a
+                    class="cal-entry"
+                    href={`${base}/opportunities/${opp.slug}`}
+                    title={opp.title}
+                    data-type={opp.opportunity_type}
+                    data-age={opp.age_grade_level?.join(',')}
+                    data-areas={opp.areas_of_interest?.join(',')}
+                    data-cost={opp.cost_range}
+                    data-time={opp.time_of_day?.join(',')}
+                    data-financial={opp.financial_support}
+                    data-ngss={opp.ngss_aligned}
+                    data-attention={opp.specific_attention?.join(',')}
+                    data-title={opp.title?.toLowerCase()}
+                    data-desc={opp.description?.toLowerCase()?.slice(0, 300)}
+                  >
+                    {time && <span class="cal-entry-time">{time}</span>}
+                    <span class="cal-entry-title">{opp.title}</span>
+                  </a>
+                );
+              })}
             </div>
           </div>
         ) : (

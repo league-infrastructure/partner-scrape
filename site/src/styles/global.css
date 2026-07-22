@@ -43,6 +43,9 @@
   --purple: #6f63d4;
   --purple-dark: #594eb8;
   --purple-light: #dfdbff;
+  --purple-faint: #f5f3ff; /* much lighter than --purple-light; keeps the
+    calendar's "today" cell distinct from the --purple-light .cal-entry
+    chips it contains, instead of both rendering the same fill */
   --pink: #c83e8e;
   --green: #3B814F;
   --teal: #20b2ce;
@@ -585,8 +588,8 @@ h4 { font-size: 20px; }
   border-color: transparent;
 }
 .calendar-day.today {
-  border-color: var(--purple);
-  background: var(--purple-light);
+  border: 2px solid var(--purple);
+  background: var(--purple-faint);
 }
 
 .calendar-day-number {
@@ -609,11 +612,13 @@ h4 { font-size: 20px; }
   padding: 2px 4px;
   border-radius: 3px;
   background: var(--purple-light);
+  border: 1px solid var(--purple);
   color: var(--text-dark);
   text-decoration: none;
 }
 .cal-entry:hover {
   background: var(--purple);
+  border-color: var(--purple-dark);
   color: var(--white);
 }
 .cal-entry[data-hidden] {
