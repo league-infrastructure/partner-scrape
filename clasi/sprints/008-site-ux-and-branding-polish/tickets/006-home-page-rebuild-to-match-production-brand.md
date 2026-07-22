@@ -1,8 +1,9 @@
 ---
 id: '006'
 title: Home page rebuild to match production brand
-status: open
-use-cases: [SUC-006]
+status: done
+use-cases:
+- SUC-006
 depends-on: []
 github-issue: ''
 issue: 22-home-page-from-sdstemecosystem.md
@@ -81,16 +82,16 @@ None required.
 
 ## Acceptance Criteria
 
-- [ ] Hero background image, button style, and hero-card style visually match production.
-- [ ] The two hero cards read "Find Opportunities" → `/opportunities` and "View Partners" →
+- [x] Hero background image, button style, and hero-card style visually match production.
+- [x] The two hero cards read "Find Opportunities" → `/opportunities` and "View Partners" →
       `/partners`.
-- [ ] No section references a page this site doesn't have (only Opportunities and Partners
+- [x] No section references a page this site doesn't have (only Opportunities and Partners
       content survives from production's fuller feature set).
-- [ ] The existing "Our Partners" section is preserved (restyled to match, not removed) — ticket
+- [x] The existing "Our Partners" section is preserved (restyled to match, not removed) — ticket
       010 depends on it existing after this ticket.
-- [ ] All paths are base-path-safe (`import.meta.env.BASE_URL`); the hero image is self-hosted
+- [x] All paths are base-path-safe (`import.meta.env.BASE_URL`); the hero image is self-hosted
       (no runtime remote fetch).
-- [ ] `npm run build` succeeds.
+- [x] `npm run build` succeeds.
 
 ## Testing
 

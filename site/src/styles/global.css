@@ -300,6 +300,111 @@ h4 { font-size: 20px; }
   }
 }
 
+/* === Home Page: Hero / Hero Cards === */
+/* `.hero-home` (the home page's `.hero`) reuses production's own two-layer
+   background treatment: its brand "network" texture plus a city skyline
+   silhouette, both self-hosted under site/public/images/hero/ and referenced
+   base-path-safely via the --hero-img-network/--hero-img-skyline custom
+   properties `index.astro` sets inline (plain CSS has no access to
+   import.meta.env.BASE_URL), composited over the same gradient wash
+   production uses on its own home hero. Values mirror production's
+   `.path-frontpage .hero` background-position/size exactly. */
+.hero-home {
+  position: relative;
+  min-height: 460px;
+  padding: 110px 40px 200px;
+  background-color: var(--purple);
+  background-image:
+    var(--hero-img-network),
+    var(--hero-img-skyline),
+    radial-gradient(circle farthest-corner at 48% 202%, var(--purple-dark) -1%, #985ebe 0%, transparent 61%),
+    linear-gradient(180deg, var(--dark-deep), #2e2255);
+  background-position: 50% 50%, 50% 100%, 0 0, 0 0;
+  background-size: 109%, 85%, auto, auto;
+  background-repeat: no-repeat, no-repeat, repeat, repeat;
+}
+
+.hero-home .hero-inner {
+  max-width: 650px;
+}
+
+.hero-home .hero-sub {
+  font-size: 18px;
+  font-weight: 400;
+  margin-top: 16px;
+  opacity: 0.9;
+}
+
+.hero-home .hero-quick {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.hero-home .hero-tag {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--white);
+  transition: background 200ms ease;
+}
+.hero-home .hero-tag:hover {
+  background: rgba(255, 255, 255, 0.3);
+  color: var(--white);
+}
+
+/* Hero cards: production's "card-default" hero-card treatment reusing the
+   shared `.card` style (shadow/radius/padding already match production's
+   `.card` rule exactly), pulled up to overlap the hero's bottom edge on
+   desktop -- production's own `.hero-cards` treatment -- and stacking
+   normally below the hero on narrow viewports. */
+.hero-cards-wrap {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+  max-width: 800px;
+  margin: -150px auto 40px;
+}
+
+.hero-card img {
+  margin-bottom: 12px;
+}
+
+.hero-card h3 {
+  margin-bottom: 8px;
+}
+
+.hero-card p {
+  min-height: 72px;
+}
+
+.hero-card .btn {
+  margin-top: 12px;
+}
+
+@media (max-width: 991px) {
+  .hero-home {
+    padding: 90px 20px 50px;
+    min-height: auto;
+  }
+  .hero-cards {
+    margin: 30px auto 0;
+  }
+  .hero-card p {
+    min-height: 0;
+  }
+}
+
 /* === Two-Column Layout (listing pages) === */
 .listing-layout {
   display: grid;
