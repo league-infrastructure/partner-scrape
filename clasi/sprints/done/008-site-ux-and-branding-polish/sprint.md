@@ -1,7 +1,7 @@
 ---
 id: 008
 title: Site UX and branding polish
-status: planning-docs
+status: closed
 branch: sprint/008-site-ux-and-branding-polish
 worktree: false
 use-cases:
