@@ -29,7 +29,6 @@ import SocialIcon from '../components/SocialIcon.astro';
               <SocialIcon platform="facebook" url="https://www.facebook.com/groups/1462184020556689/about/" size={24} />
               <SocialIcon platform="instagram" url="https://www.instagram.com/sdstemecosystem" size={24} />
               <SocialIcon platform="linkedin" url="https://www.linkedin.com/groups/7054524" size={24} />
-              <SocialIcon platform="twitter" url="https://twitter.com/SDstemecosystem" size={24} />
             </div>
           </div>
         </div>
@@ -38,10 +37,27 @@ import SocialIcon from '../components/SocialIcon.astro';
       <div class="contact-cta card">
         <h2>Want to Add Your Organization?</h2>
         <p>If you're a STEM organization in San Diego County and would like to be listed in our partner directory or share your opportunities, we'd love to connect with you.</p>
-        <p class="mt-2">Reach out to us by phone or through our social channels to learn how to join the ecosystem.</p>
-        <div class="mt-2">
-          <a href="https://donatenow.networkforgood.org/stemecosystem" target="_blank" rel="noopener" class="btn btn-secondary">Donate</a>
-        </div>
+        <form id="partner-form" class="partner-form mt-2">
+          <label>
+            Your Name
+            <input type="text" name="name" required autocomplete="name" />
+          </label>
+          <label>
+            Organization
+            <input type="text" name="organization" autocomplete="organization" />
+          </label>
+          <label>
+            Email
+            <input type="email" name="email" required autocomplete="email" />
+          </label>
+          <label>
+            Message
+            <textarea name="message" rows="4" required></textarea>
+          </label>
+          <input type="text" name="_honey" class="honey" tabindex="-1" autocomplete="off" aria-hidden="true" />
+          <button type="submit" class="btn btn-secondary">Send Message</button>
+          <p class="form-status" role="status"></p>
+        </form>
       </div>
     </div>
   </div>
@@ -112,9 +128,85 @@ import SocialIcon from '../components/SocialIcon.astro';
     line-height: 1.7;
   }
 
+  .partner-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .partner-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .partner-form input,
+  .partner-form textarea {
+    font: inherit;
+    font-weight: 400;
+    padding: 8px 10px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+  }
+
+  .partner-form textarea {
+    resize: vertical;
+  }
+
+  .partner-form .honey {
+    display: none;
+  }
+
+  .partner-form button {
+    align-self: flex-start;
+  }
+
+  .form-status {
+    font-size: 14px;
+    min-height: 1.4em;
+    margin: 0;
+  }
+
   @media (max-width: 767px) {
     .contact-grid {
       grid-template-columns: 1fr;
     }
   }
 </style>
+
+<script>
+  const form = document.getElementById('partner-form') as HTMLFormElement;
+  // Recipient assembled at runtime so the address never appears in the page source.
+  const addr = ['eric', 'busboom'].join('.') + '@' + ['jointheleague', 'org'].join('.');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const status = form.querySelector('.form-status') as HTMLElement;
+    const button = form.querySelector('button') as HTMLButtonElement;
+    button.disabled = true;
+    status.textContent = 'Sending…';
+
+    const data: Record<string, unknown> = Object.fromEntries(new FormData(form));
+    data._subject = 'SD STEM Ecosystem partner inquiry';
+    data._template = 'table';
+    data._captcha = 'false';
+
+    try {
+      const res = await fetch('https://formsubmit.co/ajax/' + addr, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error(String(res.status));
+      form.reset();
+      status.textContent = "Thanks — we've received your message and will be in touch.";
+    } catch {
+      status.textContent =
+        'Something went wrong sending your message. Please try again, or call us at (619) 238-1233.';
+    } finally {
+      button.disabled = false;
+    }
+  });
+</script>
