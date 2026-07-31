@@ -1,5 +1,5 @@
 ---
-status: pending
+status: done
 ---
 
 # Replace Donate button with partner-appropriate CTA on Contact Us page

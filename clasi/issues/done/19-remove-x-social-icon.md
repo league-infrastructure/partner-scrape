@@ -1,5 +1,5 @@
 ---
-status: pending
+status: done
 ---
 
 # Remove X (Twitter) social icon from site
