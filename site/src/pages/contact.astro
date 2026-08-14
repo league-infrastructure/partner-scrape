@@ -179,7 +179,7 @@ import SocialIcon from '../components/SocialIcon.astro';
 <script>
   const form = document.getElementById('partner-form') as HTMLFormElement;
   // Recipient assembled at runtime so the address never appears in the page source.
-  const addr = ['eric', 'busboom'].join('.') + '@' + ['jointheleague', 'org'].join('.');
+  const addr = ['partners', 'sdstemecosystem.org'].join('@');
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
