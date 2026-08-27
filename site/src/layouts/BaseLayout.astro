@@ -30,6 +30,13 @@ const ogImageURL = new URL(ogImage, canonicalURL).href;
     <meta property="og:image" content={ogImageURL} />
     <meta property="og:type" content="website" />
     <title>{title}</title>
+    <!-- Umami analytics (analytics.jtlapp.net); is:inline keeps Astro from bundling it. -->
+    <script
+      is:inline
+      defer
+      src="https://analytics.jtlapp.net/script.js"
+      data-website-id="949cff30-abab-4247-b13a-d27093fabc4f"
+    ></script>
   </head>
   <body>
     <Header />
