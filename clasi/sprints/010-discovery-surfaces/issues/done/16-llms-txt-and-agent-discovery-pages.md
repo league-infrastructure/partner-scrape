@@ -1,6 +1,10 @@
 ---
-status: pending
+status: done
 sprint: '010'
+tickets:
+- 010-002
+- 010-004
+- 010-001
 ---
 
 # llms.txt + agent discovery pages (make the data easy for LLMs to find)
