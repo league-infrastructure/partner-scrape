@@ -1,7 +1,7 @@
 ---
 id: '003'
 title: TBA source and cross league merge
-status: open
+status: done
 use-cases:
 - SUC-002
 depends-on:
@@ -33,38 +33,64 @@ FTC-only `teams.json` rather than failing the whole `teams` run.
 
 ## Acceptance Criteria
 
-- [ ] `partner_scrape/config.py` gains `get_tba_api_key()` and
+- [x] `partner_scrape/config.py` gains `get_tba_api_key()` and
       `get_tba_url()`, reading `TBA_KEY`/`TBA_URL`, mirroring
       `get_leaguesync_api_key()`/`get_leaguesync_url()` exactly —
       including stripping surrounding quotes from the SOPS-decrypted
       secret. `config.py` remains the only module reading
       `os.environ`.
-- [ ] `partner_scrape/teams/sources/tba.py` implements `TeamSource`
+- [x] `partner_scrape/teams/sources/tba.py` implements `TeamSource`
       against The Blue Alliance's `/api/v3/teams/{page}` (paginated,
       `X-TBA-Auth-Key` header via `config.get_tba_api_key()`), filtered
       to CA + San Diego cities, producing 59 `Team` objects with
       `league="FRC"` and (per the issue's measured coverage) school
       name (91%), ZIP (83%), and website (72%) where present.
-- [ ] `partner_scrape/teams/registry/frc-sd.toml` registers the TBA
+      **AMENDED 2026-08-28 (reopened, sprint-validation defect):** the
+      "59" figure and coverage percentages above were measured against
+      a hand-authored test fixture whose `state_prov` field used only
+      the literal `"CA"` abbreviation. The real live API mostly reports
+      the *full* state name (`"California"`), which the original
+      filter (`state_prov != "CA"`) silently rejected — a live run
+      surfaced only 19 FRC teams, not 59. Fixed via
+      `sources.tba._normalize_state()`, which normalizes any
+      recognized full US state name to a USPS abbreviation before the
+      comparison. Corrected, live-confirmed figures (2026-08-28): **78**
+      FRC teams (59 "California" + 19 legitimate but older/inactive
+      "CA"-labeled records — see `teams/DESIGN.md`'s Open Questions for
+      the full legitimacy analysis), website 68%, postal_code 87%,
+      school_name 69% coverage. The committed test fixture was rebuilt
+      from real, live-captured TBA records but deliberately kept to a
+      small 7-record curated subset (not all 78) — see
+      `tests/teams/test_sources_tba.py`'s module docstring.
+- [x] `partner_scrape/teams/registry/frc-sd.toml` registers the TBA
       source.
-- [ ] `partner_scrape/teams/merge.py` links a `Team`'s
+- [x] `partner_scrape/teams/merge.py` links a `Team`'s
       `org_key`/`sibling_team_ids` by
       `normalize.partners.normalize_org_name`-normalized organization
       — **reused directly, not reimplemented**. A test fixture covering
       one of the seven known dual-program organizations (e.g. Canyon
       Crest Academy) confirms its FTC and FRC teams cross-reference via
       `sibling_team_ids`.
-- [ ] `merge.py` never groups `Family/Community` or empty-organization
+- [x] `merge.py` never groups `Family/Community` or empty-organization
       teams into a shared `org_key` — tested explicitly with a
       multi-team `Family/Community` fixture.
-- [ ] Team number collisions (e.g. 1622, which exists independently in
+- [x] Team number collisions (e.g. 1622, which exists independently in
       both FTC and FRC) never cause a false merge — tested explicitly.
-- [ ] `teams.pipeline.run_teams()` runs FTCScout and TBA, then
+- [x] `teams.pipeline.run_teams()` runs FTCScout and TBA, then
       `merge.py`, before export. A simulated `TBA_KEY`-missing or
       TBA-401 fixture run still publishes a 152-team, FTC-only
       `teams.json` (per-source isolation, not a whole-run failure).
-- [ ] With TBA fixtures present, `teams.json` carries 59 FRC teams
+- [x] With TBA fixtures present, `teams.json` carries 59 FRC teams
       (211 total).
+      **AMENDED 2026-08-28 (reopened):** the committed TBA fixture was
+      rebuilt from real, live-captured records as a small curated
+      7-record subset (see the amendment on the AC above), so the
+      fixture-driven test corpus is now 159 total (152 FTC + 7 FRC) —
+      `tests/teams/test_pipeline.py`'s
+      `TestBothRealSourcesTogether.test_159_teams_total_152_ftc_7_frc`
+      asserts this. The real, live total (confirmed via
+      `partner-scrape teams --dry-run` on 2026-08-28) is **230 (152 FTC
+      + 78 FRC)**.
 
 ## Implementation Plan
 

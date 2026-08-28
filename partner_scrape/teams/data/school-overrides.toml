@@ -1,0 +1,27 @@
+# Hand corrections for the geocoding ladder's residue -- consulted
+# first, before any algorithmic rung (teams/geo.py's rung 1). Add an
+# entry here only after a human has actually verified the coordinate;
+# an entry here is never flagged needs_review, unlike a rung 3/4 fuzzy
+# match, because it is not a guess -- someone checked.
+#
+# Format: table header is `geo.normalize_school_name(Team.organization)`
+# -- lowercased, punctuation-stripped, parentheticals removed, one
+# space between tokens. Each entry needs `matched_name` (a real,
+# human-readable name -- what actually gets published in
+# Team.matched_name), `latitude`, and `longitude`.
+#
+# Example (not a real correction -- delete or replace with a verified
+# one before it would ever affect a live run):
+#
+# ["classical academy online"]
+# matched_name = "The Classical Academy (verified building address, not the CDE district-office fuzzy match)"
+# latitude = 33.129300
+# longitude = -117.063900
+#
+# No entries yet as of ticket 011-004: the ladder's algorithmic rungs
+# (2-4) resolve the corpus well enough that no hand correction has been
+# required so far -- see partner_scrape/teams/DESIGN.md's Geocoding
+# section for the measured precision distribution across all 211 live
+# FTC+FRC teams. Add entries here as real residue is found in future
+# runs (a team stuck at needs_review: true, or one that never clears
+# rung 4 despite obviously being a real school).

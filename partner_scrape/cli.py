@@ -13,6 +13,14 @@ structurally separate from (and never calling into) the `run` command's
 structurally separate from the Event/Opportunity pipeline"). It is
 purely additive: every existing flag, default, and printed line of the
 no-subcommand/`run` invocation is unchanged.
+
+Ticket 002 (sprint 011) adds the `teams` subcommand, dispatching to
+`teams.pipeline.run_teams()` -- structurally separate from (and never
+calling into) the `run` command's `pipeline.run()` path, for the same
+reason as `discover-candidates` plus one more: rosters refresh
+annually while opportunities refresh weekly, and a future TBA
+credential failure (ticket 011-003) must never sit inside `run`'s own
+process/exit code. Also purely additive.
 """
 
 from __future__ import annotations
@@ -51,6 +59,7 @@ from partner_scrape.pipeline import Enricher, run
 
 from partner_scrape.discovery.candidate_pipeline import discover_candidates
 from partner_scrape.registry.hub_schema import load_hubs
+from partner_scrape.teams.pipeline import run_teams
 
 
 def _build_parser() -> argparse.ArgumentParser:
@@ -168,6 +177,7 @@ def _build_parser() -> argparse.ArgumentParser:
     # when one is actually given).
     subparsers = parser.add_subparsers(dest="command")
     _add_discover_candidates_subcommand(subparsers)
+    _add_teams_subcommand(subparsers)
 
     return parser
 
@@ -232,6 +242,100 @@ def _add_discover_candidates_subcommand(subparsers: argparse._SubParsersAction) 
     )
 
 
+def _add_teams_subcommand(subparsers: argparse._SubParsersAction) -> None:
+    parser = subparsers.add_parser(
+        "teams",
+        help="Acquire, locate, and publish San Diego FIRST robotics teams as teams.json.",
+        description=(
+            "Run the Teams pipeline: load this subsystem's own Team "
+            "Registry (partner_scrape/teams/registry/, disjoint from the "
+            "Opportunity Source Registry), acquire each active team "
+            "source, and publish {site_dir}/src/data/teams.json. Never "
+            "runs the normal scrape/export -- opportunities.json and "
+            "scrape-meta.json are never touched by this command."
+        ),
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Compute the teams.json payload without writing anything to --site-dir.",
+    )
+    parser.add_argument(
+        "--source",
+        dest="source",
+        default=None,
+        metavar="SOURCE",
+        help=(
+            "Only run this single acquisition source, by adapter_type "
+            "(e.g. 'ftcscout' or 'tba') -- not a Team Registry file's "
+            "stem. Omitted, every active team source runs."
+        ),
+    )
+    parser.add_argument(
+        "--site-dir",
+        type=Path,
+        default=None,
+        help=(
+            "Sibling stem-ecosystem checkout to write teams.json into "
+            "(default: ../stem-ecosystem, or $SITE_DIR) -- same default "
+            "and override as the `run` command's --site-dir."
+        ),
+    )
+    parser.add_argument(
+        "--no-mirror",
+        action="store_true",
+        help=(
+            "Do not copy teams.json into any additional site checkout -- "
+            "write only to --site-dir."
+        ),
+    )
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        action="store_true",
+        help="Enable INFO-level logging (per-source team counts, skip reasons).",
+    )
+
+
+def _run_teams(args: argparse.Namespace) -> int:
+    """Handler for the `teams` subcommand.
+
+    Constructs its own default `Fetcher` (a real `PoliteFetcher()`) and
+    passes it explicitly into `run_teams()` -- the same "CLI constructs
+    the default concrete implementation" role `main()` already plays
+    for the `run` command's `Fetcher`, and `_run_discover_candidates`
+    plays for its own. Never calls `run`/`pipeline.run()` -- see cli.py's
+    module docstring.
+    """
+    logging.basicConfig(
+        level=logging.INFO if args.verbose else logging.WARNING,
+        format="%(levelname)s %(name)s: %(message)s",
+    )
+
+    payload = run_teams(
+        source=args.source,
+        site_dir=args.site_dir,
+        fetcher=PoliteFetcher(),
+        dry_run=args.dry_run,
+    )
+    teams = payload["teams"]
+
+    # Keep every other checkout of the site in step, same convention as
+    # the `run` command's own mirroring step -- skipped under
+    # --dry-run/--no-mirror, which both promise not to touch any
+    # checkout beyond (or including) --site-dir.
+    if not args.dry_run and not args.no_mirror:
+        targets = get_mirror_site_dirs()
+        if targets:
+            primary = args.site_dir if args.site_dir is not None else get_site_dir()
+            mirror_site_data(primary, targets)
+
+    noun = "team" if len(teams) == 1 else "teams"
+    suffix = " (dry run -- nothing written)" if args.dry_run else ""
+    print(f"partner-scrape teams: wrote {len(teams)} {noun}{suffix}.")
+    return 0
+
+
 def _run_discover_candidates(args: argparse.Namespace) -> int:
     """Handler for the `discover-candidates` subcommand.
 
@@ -277,6 +381,9 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "discover-candidates":
         return _run_discover_candidates(args)
+
+    if args.command == "teams":
+        return _run_teams(args)
 
     logging.basicConfig(
         level=logging.INFO if args.verbose else logging.WARNING,

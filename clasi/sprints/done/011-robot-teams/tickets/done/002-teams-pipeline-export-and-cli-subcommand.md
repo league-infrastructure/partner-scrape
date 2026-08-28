@@ -1,7 +1,7 @@
 ---
 id: '002'
 title: Teams pipeline export and CLI subcommand
-status: open
+status: done
 use-cases:
 - SUC-001
 depends-on:
@@ -26,36 +26,36 @@ with 152 FTC teams is a real, buildable artifact. Completes SUC-001.
 
 ## Acceptance Criteria
 
-- [ ] `partner_scrape/teams/pipeline.py` defines `run_teams(*,
+- [x] `partner_scrape/teams/pipeline.py` defines `run_teams(*,
       source=None, site_dir=None, dry_run=False) -> dict`, sequencing
       the configured `TeamSource`(s) → `teams.export.export_teams(...)`.
       `source` restricts to one named source (`"ftcscout"` for now).
-- [ ] `partner_scrape/teams/export.py` defines
+- [x] `partner_scrape/teams/export.py` defines
       `export_teams(teams, site_dir=None, *, dry_run=False) -> dict`,
       writing `{site_dir}/src/data/teams.json` with a `meta` envelope
       (`generated` timestamp, per-league counts, out-of-region count)
       and a `teams` array. **Never** writes or touches
       `opportunities.json` or `scrape-meta.json` — tested explicitly
       (hard invariant).
-- [ ] `export_teams` performs no field re-derivation (matches
+- [x] `export_teams` performs no field re-derivation (matches
       `export/writer.py`'s "filter, serialize, write" discipline) and
       raises on an unwritable `site_dir`, matching
       `export_opportunities`'s loud-failure contract.
-- [ ] `partner_scrape/cli.py` gains a `teams` subcommand:
+- [x] `partner_scrape/cli.py` gains a `teams` subcommand:
       `partner-scrape teams [--dry-run] [--source ftcscout] [--site-dir
       DIR] [--no-mirror] [-v]`, calling `run_teams(...)` and, unless
       `--no-mirror` or `--dry-run`, `export.mirror_site_data`. The
       existing `run`/`discover-candidates` subcommands are unmodified —
       tested by re-running their existing test suites unchanged.
-- [ ] `export/mirror.py`'s `MIRRORED_DATA_FILES` gains `"teams.json"`.
-- [ ] `partner-scrape teams --dry-run -v` against ticket 001's fixture
+- [x] `export/mirror.py`'s `MIRRORED_DATA_FILES` gains `"teams.json"`.
+- [x] `partner-scrape teams --dry-run -v` against ticket 001's fixture
       reports 152 FTC teams with no network access and no disk write.
-- [ ] `teams.json` is written to `{site_dir}/src/data/` on a real
+- [x] `teams.json` is written to `{site_dir}/src/data/` on a real
       (non-dry-run) invocation and mirrored to every configured
       checkout on the next `mirror_site_data` call.
-- [ ] A test asserts no key or value in the written `teams.json`
+- [x] A test asserts no key or value in the written `teams.json`
       matches an email-address pattern.
-- [ ] A test asserts `opportunities.json`/`scrape-meta.json` are
+- [x] A test asserts `opportunities.json`/`scrape-meta.json` are
       byte-identical before and after a `teams` run.
 
 ## Implementation Plan

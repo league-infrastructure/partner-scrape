@@ -6,7 +6,12 @@ import json
 
 import pytest
 
-from partner_scrape.export.mirror import IMAGES_SUBPATH, PUBLIC_DATA_SUBPATH, mirror_site_data
+from partner_scrape.export.mirror import (
+    IMAGES_SUBPATH,
+    MIRRORED_DATA_FILES,
+    PUBLIC_DATA_SUBPATH,
+    mirror_site_data,
+)
 
 
 def _make_site(root, *, data: dict[str, str] | None = None, images=(), public_data=None):
@@ -278,3 +283,52 @@ def test_several_targets_all_receive_the_public_data_tree(primary, tmp_path):
 
     for target in targets:
         assert (target / PUBLIC_DATA_SUBPATH / "partners.json").exists()
+
+
+# ---------------------------------------------------------------------
+# Sprint 011 (ticket 002): teams.json joins MIRRORED_DATA_FILES,
+# reusing the exact same flat-file copy mechanism as opportunities.json/
+# scrape-meta.json/ads.json -- no new copy logic to test, just that the
+# allowlist entry is present and honored.
+# ---------------------------------------------------------------------
+
+
+def test_mirrored_data_files_includes_teams_json():
+    assert "teams.json" in MIRRORED_DATA_FILES
+
+
+def test_teams_json_reaches_the_target_when_present(tmp_path):
+    primary = _make_site(
+        tmp_path / "stem-ecosystem",
+        data={"teams.json": json.dumps({"meta": {"total": 1}, "teams": [{"team_id": "ftc-1"}]})},
+    )
+    target = _make_site(tmp_path / "beta", data={})
+
+    mirror_site_data(primary, [target])
+
+    mirrored = json.loads((target / "src" / "data" / "teams.json").read_text())
+    assert mirrored == {"meta": {"total": 1}, "teams": [{"team_id": "ftc-1"}]}
+
+
+def test_a_missing_teams_json_on_the_primary_is_not_an_error(tmp_path):
+    """Mirrors `ads.json`'s existing precedent: a source file that
+    simply doesn't exist yet (no `teams` run has ever happened in this
+    checkout) is skipped, not fatal -- the rest of the mirror still
+    succeeds."""
+    primary = _make_site(tmp_path / "stem-ecosystem", data={})
+    target = _make_site(tmp_path / "beta", data={})
+
+    assert mirror_site_data(primary, [target]) == [target.resolve()]
+    assert not (target / "src" / "data" / "teams.json").exists()
+
+
+def test_teams_json_is_not_written_under_dry_run(tmp_path):
+    primary = _make_site(
+        tmp_path / "stem-ecosystem",
+        data={"teams.json": json.dumps({"meta": {"total": 0}, "teams": []})},
+    )
+    target = _make_site(tmp_path / "beta", data={})
+
+    mirror_site_data(primary, [target], dry_run=True)
+
+    assert not (target / "src" / "data" / "teams.json").exists()

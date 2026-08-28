@@ -1,7 +1,7 @@
 ---
 id: '001'
 title: Team model and FTCScout source
-status: open
+status: done
 use-cases:
 - SUC-001
 depends-on: []
@@ -34,7 +34,7 @@ completes it end to end).
 
 ## Acceptance Criteria
 
-- [ ] `partner_scrape/teams/model.py` defines a `Team` dataclass with:
+- [x] `partner_scrape/teams/model.py` defines a `Team` dataclass with:
       `team_id` (`"{league}-{number}"`), `league`, `program`, `number`,
       `name`, `organization`, `org_type`, `city`, `postal_code`,
       `latitude`, `longitude`, `location_precision`
@@ -44,26 +44,26 @@ completes it end to end).
       `sibling_team_ids`, `sources`. **No `email` field** — this is a
       structural guarantee, not an omission to remember; there must be
       nowhere to put one.
-- [ ] `partner_scrape/teams/sources/base.py` defines a `TeamSource`
+- [x] `partner_scrape/teams/sources/base.py` defines a `TeamSource`
       Protocol (`discover`/`fetch`/`extract` → `Team` objects), parallel
       in shape to `adapters.base.Adapter` but **not** registered with
       `adapters.base.ADAPTERS` and not importable as one — verified by
       a test asserting `teams.sources` has no reference into
       `adapters.base`.
-- [ ] `partner_scrape/teams/sources/ftcscout.py` implements `TeamSource`
+- [x] `partner_scrape/teams/sources/ftcscout.py` implements `TeamSource`
       against FTCScout's REST search endpoint
       (`GET api.ftcscout.org/rest/v1/teams/search?region=USCASD`),
       producing one `Team` per FTC team with `league="FTC"`,
       city-level data at minimum, `organization`/`org_type` from the
       `schoolName` field where present (62% of records).
-- [ ] `partner_scrape/teams/registry/ftc-sd.toml` registers the
+- [x] `partner_scrape/teams/registry/ftc-sd.toml` registers the
       FTCScout source, reusing `registry.schema.SourceConfig`/
       `registry.loader.load_active_sources` verbatim (no new schema).
-- [ ] `fetch.PoliteFetcher` is the only network path `ftcscout.py` uses
+- [x] `fetch.PoliteFetcher` is the only network path `ftcscout.py` uses
       — no direct `urllib`/`requests` call.
-- [ ] Against a canned fixture, `ftcscout.py` produces 152 `Team`
+- [x] Against a canned fixture, `ftcscout.py` produces 152 `Team`
       objects (the issue's measured count) with no network access.
-- [ ] `partner_scrape/teams/DESIGN.md` exists at its co-located path,
+- [x] `partner_scrape/teams/DESIGN.md` exists at its co-located path,
       following the bootstrap-design subsystem template (see
       Documentation below).
 

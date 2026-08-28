@@ -1,0 +1,213 @@
+---
+// Copies partners/index.astro's structure (List/Map toggle only -- Team,
+// like Partner, has no date field, so there is no Calendar view here; that
+// omission is a real field difference, not a style choice). Keeps the
+// #results-grid / #map-container / .results-count / .view-toggle IDs
+// scripts/filters.js finds by convention (sprint 011 ticket 005).
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TeamFilters from '../../components/TeamFilters.astro';
+import TeamCard from '../../components/TeamCard.astro';
+import teamsData from '../../data/teams.json';
+
+const teams = teamsData.teams as any[];
+
+// Sort by organization (school/sponsor), falling back to the team's own
+// name for organization-less (Family/Community) teams, then by team
+// number -- groups siblings from the same school together, matching how
+// visitors actually look for "my kid's school's robotics team."
+const sorted = [...teams].sort((a, b) => {
+  const orgA = a.organization || a.name || '';
+  const orgB = b.organization || b.name || '';
+  const cmp = orgA.localeCompare(orgB);
+  if (cmp !== 0) return cmp;
+  return a.number - b.number;
+});
+---
+
+<BaseLayout title="Robotics Teams | SD STEM Ecosystem">
+  <section class="hero hero-sm">
+    <h1>San Diego Robotics Teams</h1>
+    <p>FIRST Tech Challenge and FIRST Robotics Competition teams across San Diego County.</p>
+  </section>
+
+  <div class="listing-layout">
+    <TeamFilters />
+    <div class="results-area">
+      <div class="results-header">
+        <span class="results-count">Showing {sorted.length} of {sorted.length}</span>
+        <div class="view-toggle">
+          <button class="active" data-view="grid">List</button>
+          <button data-view="map">Map</button>
+        </div>
+      </div>
+      <div class="results-grid" id="results-grid">
+        {sorted.map(team => <TeamCard team={team} />)}
+      </div>
+      <div class="map-container" id="map-container" style="display:none;"></div>
+    </div>
+  </div>
+</BaseLayout>
+
+<script src="../../scripts/filters.js"></script>
+
+<script>
+  // List/Map toggle -- copied from partners/index.astro, including the San
+  // Diego bounding box and #c83e8e marker colour (sprint 011 ticket 005).
+  const viewBtns = document.querySelectorAll('.view-toggle button');
+  const grid = document.getElementById('results-grid');
+  const mapContainer = document.getElementById('map-container');
+
+  viewBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      viewBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      if (btn.dataset.view === 'map') {
+        if (grid) grid.style.display = 'none';
+        if (mapContainer) {
+          mapContainer.style.display = 'block';
+          initMap();
+        }
+      } else {
+        if (grid) grid.style.display = '';
+        if (mapContainer) mapContainer.style.display = 'none';
+      }
+    });
+  });
+
+  let mapInit = false;
+  function initMap() {
+    if (mapInit) return;
+    mapInit = true;
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+    document.head.appendChild(link);
+
+    const script = document.createElement('script');
+    script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    script.onload = () => {
+      // @ts-ignore
+      const L = window.L;
+      const map = L.map('map-container').setView([32.7157, -117.1611], 10);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
+      }).addTo(map);
+
+      // San Diego County bounding box
+      const SD_BOUNDS = { latMin: 32.4, latMax: 33.5, lngMin: -117.7, lngMax: -116.0 };
+      const sdBounds = [[SD_BOUNDS.latMin, SD_BOUNDS.lngMin], [SD_BOUNDS.latMax, SD_BOUNDS.lngMax]];
+      map.setMaxBounds(sdBounds);
+      map.fitBounds(sdBounds);
+
+      // Map-treatment requirement (sprint 011 issue, "Map treatment"):
+      // ~70 city-precision teams collapse onto a handful of city centroids
+      // -- plotting each as its own pin would stack dozens of markers on
+      // one point and read as a single team. school/zip precision (a real,
+      // resolved coordinate) gets an individual pin, exactly like every
+      // other map on this site. city precision gets one labelled count
+      // badge per city instead -- never jittered (that fabricates
+      // precision and would shift on every regeneration) and never a
+      // plain unlabeled cluster marker (that implies the centroid itself
+      // means something). location_precision "none" teams have no
+      // coordinates and are never plotted, though they still appear in
+      // the list/filter view. Teams outside San Diego County
+      // (data-region="false") are excluded from the map entirely --
+      // this is a "San Diego teams" map, and at least one out-of-region
+      // team's city centroid (San Clemente) falls inside SD_BOUNDS, so the
+      // bounding-box check alone would not have caught it.
+      const cityGroups = {};
+
+      const cards = document.querySelectorAll('.team-card');
+      cards.forEach(card => {
+        if (card.hasAttribute('data-hidden')) return;
+        if (card.dataset.region !== 'true') return;
+
+        const precision = card.dataset.precision;
+        if (!precision || precision === 'none') return;
+
+        const lat = parseFloat(card.dataset.lat);
+        const lng = parseFloat(card.dataset.lng);
+        if (isNaN(lat) || isNaN(lng)) return;
+        if (lat < SD_BOUNDS.latMin || lat > SD_BOUNDS.latMax || lng < SD_BOUNDS.lngMin || lng > SD_BOUNDS.lngMax) return;
+
+        const name = card.querySelector('h3')?.textContent || '';
+        const href = card.querySelector('h3 a')?.getAttribute('href') || '#';
+
+        if (precision === 'city') {
+          const city = card.dataset.city || name;
+          if (!cityGroups[city]) cityGroups[city] = { lat, lng, teams: [] };
+          cityGroups[city].teams.push({ name, href });
+          return;
+        }
+
+        // school/zip precision: an individual pin, same style as every
+        // other precise marker on this site.
+        L.circleMarker([lat, lng], { radius: 5, color: '#c83e8e', fillColor: '#c83e8e', fillOpacity: 0.9, weight: 1 })
+          .addTo(map).bindPopup(`<a href="${href}">${name}</a>`);
+      });
+
+      // One labelled badge per city, opening a list of that city's teams
+      // -- not a single popup, and not a plain cluster marker.
+      Object.keys(cityGroups).forEach(city => {
+        const group = cityGroups[city];
+        const count = group.teams.length;
+        const label = `${city} — ${count} team${count === 1 ? '' : 's'}`;
+        const icon = L.divIcon({
+          className: 'team-city-badge',
+          html: `<span>${label}</span>`,
+        });
+        const listHtml = group.teams
+          .slice()
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .map(t => `<li><a href="${t.href}">${t.name}</a></li>`)
+          .join('');
+        L.marker([group.lat, group.lng], { icon })
+          .addTo(map)
+          .bindPopup(`<strong>${label}</strong><ul class="team-city-popup-list">${listHtml}</ul>`);
+      });
+    };
+    document.head.appendChild(script);
+  }
+</script>
+
+<style>
+  .hero-sm {
+    min-height: auto;
+    padding: 100px 20px 40px;
+  }
+  .hero-sm h1 {
+    font-size: 36px;
+  }
+  .hero-sm p {
+    margin-top: 8px;
+    opacity: 0.85;
+  }
+
+  /* City-precision badge marker: deliberately a solid labelled pill in the
+     site's secondary map colour, visually distinct from the pink
+     circleMarker dots used for individually-resolved (school/zip)
+     locations. Injected into the DOM by Leaflet at runtime (not present in
+     this component's own server-rendered markup), so these rules must be
+     :global -- Astro's scoped-style attribute is never applied to them. */
+  :global(.team-city-badge) {
+    display: inline-block;
+  }
+  :global(.team-city-badge span) {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--purple);
+    color: var(--white);
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+    box-shadow: 0 1px 4px rgba(50, 50, 93, 0.35);
+    border: 2px solid var(--white);
+  }
+  :global(.team-city-popup-list) {
+    margin: 6px 0 0;
+    padding-left: 18px;
+    max-height: 160px;
+    overflow-y: auto;
+  }
+</style>

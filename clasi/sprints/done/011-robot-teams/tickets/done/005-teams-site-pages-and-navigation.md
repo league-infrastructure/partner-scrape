@@ -1,7 +1,7 @@
 ---
 id: '005'
 title: Teams site pages and navigation
-status: open
+status: done
 use-cases:
 - SUC-004
 depends-on:
@@ -36,35 +36,35 @@ Do not repeat `PartnerCard`'s structure for `TeamCard`.
 
 ## Acceptance Criteria
 
-- [ ] `site/src/components/TeamCard.astro` — modeled on
+- [x] `site/src/components/TeamCard.astro` — modeled on
       `OpportunityCard.astro`'s structure (title anchor nested inside
       `<h3>`), not `PartnerCard.astro`. Every card carries a `data-type`
       (league/program) attribute so the filter engine
       (`scripts/filters.js`) can see it, matching
       `OpportunityCard`/`PartnerCard`'s existing convention.
-- [ ] `site/src/components/TeamFilters.astro` — clones
+- [x] `site/src/components/TeamFilters.astro` — clones
       `OpportunityFilters.astro`'s build-time facet-count pattern,
       faceted by league/program at minimum.
-- [ ] `site/src/pages/teams/index.astro` — copies
+- [x] `site/src/pages/teams/index.astro` — copies
       `partners/index.astro`'s structure, keeping the `#results-grid`,
       `#map-container`, `.results-count`, `.view-toggle` element IDs
       `scripts/filters.js` finds by convention.
-- [ ] `site/src/pages/teams/[slug].astro` — `getStaticPaths()` over
+- [x] `site/src/pages/teams/[slug].astro` — `getStaticPaths()` over
       `teams.json`; reuses the existing `.detail-page` + mini-map
       pattern from `opportunities/[slug].astro`.
-- [ ] Map treatment respects `location_precision`: `school`/`zip`
+- [x] Map treatment respects `location_precision`: `school`/`zip`
       precision teams render as individual pins; `city` precision teams
       render as **one labelled badge per city** (e.g. "San Diego — 40
       teams"), never a jittered pin and never a plain unlabeled cluster
       marker. Teams with `location_precision: none` are omitted from
       the map but still appear in the list/filter view.
-- [ ] Every emitted URL goes through `const base =
+- [x] Every emitted URL goes through `const base =
       import.meta.env.BASE_URL.replace(/\/+$/, '')`, matching every
       existing page's convention.
-- [ ] "Teams" is added to **both** `Header.astro`'s and
+- [x] "Teams" is added to **both** `Header.astro`'s and
       `Footer.astro`'s hard-coded nav lists (two separate edits — they
       are not shared data).
-- [ ] `just build`'s `/teams` page count equals the fixture
+- [x] `just build`'s `/teams` page count equals the fixture
       `teams.json`'s exported team count.
 
 ## Implementation Plan

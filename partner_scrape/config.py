@@ -45,6 +45,29 @@ LEAGUESYNC_URL_ENV_VAR = "LEAGUESYNC_URL"
 #: adapter's build.
 DEFAULT_LEAGUESYNC_URL = "https://sync.jtlapp.net"
 
+#: Environment variable holding the ``X-TBA-Auth-Key`` header value for
+#: The Blue Alliance's v3 API (``teams.sources.tba``). Assembled by
+#: dotconfig into ``config/prod/secrets.env`` -- there is no sane
+#: default, so it must be set explicitly, matching
+#: ``get_leaguesync_api_key()``'s convention exactly. Provisioned and
+#: verified working in ``.env``/``config/prod/secrets.env`` as of
+#: ticket 011-003, but **not yet** in the scheduled workflow's GitHub
+#: Actions repo secrets (sprint.md's Migration Concerns) -- a scheduled
+#: run will hit this unset until an operator pushes it, which is why
+#: ``teams.pipeline.run_teams()`` must isolate a TBA source failure the
+#: same way it isolates any other source's.
+TBA_API_KEY_ENV_VAR = "TBA_KEY"
+
+#: Environment variable overriding The Blue Alliance API's base URL.
+#: Overridable so a future staging mirror doesn't require a code
+#: change, matching ``LEAGUESYNC_URL_ENV_VAR``'s convention.
+TBA_URL_ENV_VAR = "TBA_URL"
+
+#: Default base URL for The Blue Alliance's v3 API -- confirmed live
+#: (``GET /api/v3/status``, ``GET /api/v3/teams/{page}``) during the
+#: TBA source's build.
+DEFAULT_TBA_URL = "https://www.thebluealliance.com"
+
 # This package's own directory, e.g. .../partner-scrape/partner_scrape
 _PACKAGE_DIR = Path(__file__).resolve().parent
 
@@ -160,3 +183,47 @@ def get_leaguesync_url() -> str:
     if value:
         return value
     return DEFAULT_LEAGUESYNC_URL
+
+
+def get_tba_api_key() -> str:
+    """Return the ``X-TBA-Auth-Key`` header value, stripped of quotes.
+
+    Reads ``TBA_KEY`` from the environment on every call (no caching),
+    mirroring ``get_leaguesync_api_key()`` exactly -- including the
+    quote-stripping the assembled ``.env`` needs (dotconfig's
+    round-trip of a SOPS-decrypted secret carries surrounding single
+    quotes, e.g. ``TBA_KEY='abc123'``) -- so callers get the bare
+    token, never the quote characters.
+
+    Raises:
+        RuntimeError: if ``TBA_KEY`` is not set (or is empty after
+            stripping) -- there is no safe default for an API
+            credential, matching ``get_leaguesync_api_key()``'s
+            convention. This is the failure mode
+            ``teams.pipeline.run_teams()`` must isolate (Migration
+            Concerns): a missing ``TBA_KEY`` degrades the ``teams``
+            export to FTC-only, it must never raise out of the whole
+            run.
+    """
+    value = os.environ.get(TBA_API_KEY_ENV_VAR)
+    if value is not None:
+        value = value.strip().strip("'\"").strip()
+    if not value:
+        raise RuntimeError(
+            f"{TBA_API_KEY_ENV_VAR} is not set. Configure it via the "
+            "assembled .env (see config/prod/secrets.env) before running "
+            "the tba team source."
+        )
+    return value
+
+
+def get_tba_url() -> str:
+    """Return The Blue Alliance API's base URL.
+
+    Reads ``TBA_URL`` from the environment if set; otherwise returns
+    :data:`DEFAULT_TBA_URL`.
+    """
+    value = os.environ.get(TBA_URL_ENV_VAR)
+    if value:
+        return value
+    return DEFAULT_TBA_URL

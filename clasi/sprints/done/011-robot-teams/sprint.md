@@ -1,7 +1,7 @@
 ---
 id: '011'
 title: Robot teams
-status: ticketing
+status: done
 branch: sprint/011-robot-teams
 use-cases: []
 issues:

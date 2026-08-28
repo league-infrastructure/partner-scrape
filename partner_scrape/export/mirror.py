@@ -49,7 +49,14 @@ logger = logging.getLogger(__name__)
 #: explicit rather than globbing the directory so an unrelated file
 #: living beside them (notably the curated `partners.json`) is never
 #: copied over the target's own copy.
-MIRRORED_DATA_FILES = ("opportunities.json", "scrape-meta.json", "ads.json")
+#:
+#: Sprint 011 (ticket 002): `"teams.json"` is written by
+#: `teams/export.py`, a structurally separate module from this
+#: subsystem's own `writer.py`/`ads.py` (see `teams/DESIGN.md`) --
+#: mirroring reuses this exact allowlist/copy mechanism unmodified, the
+#: same way `teams`'s CLI subcommand reuses `mirror_site_data` itself
+#: rather than duplicating it.
+MIRRORED_DATA_FILES = ("opportunities.json", "scrape-meta.json", "ads.json", "teams.json")
 
 #: Event images referenced by the mirrored `opportunities.json`. Without
 #: these the copied JSON would point at images the target checkout does

@@ -1,0 +1,37 @@
+# The Blue Alliance -- keyed REST source for San Diego County's FIRST
+# Robotics Competition (FRC) teams. Loaded via
+# registry.loader.load_active_sources (reused verbatim, no new schema)
+# against this directory (partner_scrape/teams/registry/), NOT the
+# main partner_scrape/registry/sources/ directory -- teams sources are
+# structurally disjoint from the Opportunity registry (see
+# teams/DESIGN.md's Constraints and Invariants).
+#
+# `adapter_type` is read by teams.pipeline to select the matching
+# TeamSource ("tba" -> teams.sources.tba.TBASource), not by
+# adapters.base.ADAPTERS. This source is never registered there.
+#
+# Unlike ftc-sd.toml's FTCScout source, this source requires a
+# credential (X-TBA-Auth-Key, config.get_tba_api_key()) -- not yet in
+# the scheduled workflow's GitHub Actions secrets as of this ticket
+# (sprint.md's Migration Concerns). teams.pipeline.run_teams() isolates
+# that failure per-source (logged and skipped), so a missing/invalid
+# TBA_KEY degrades a `teams` run to FTC-only output rather than failing
+# it outright.
+
+org_name = "FIRST Robotics Competition -- San Diego County"
+adapter_type = "tba"
+enabled = true
+
+[config]
+# api_base defaults to config.get_tba_url() (teams/sources/tba.py) when
+# omitted here -- no need to repeat the default in this file.
+
+[acquisition_policy]
+# TBA documents no hard rate limit for authenticated v3 requests;
+# matching the registry's existing default (1 req/sec) is a polite,
+# conservative choice, not a measured requirement. A run issues one
+# /status probe plus one request per enumerated page (23 pages at time
+# of measurement).
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "clasi/sprints/011-robot-teams/issues/robot-teams-scrape-locate-and-publish-san-diego-first-teams.md (measured live, 2026-08-28)"
