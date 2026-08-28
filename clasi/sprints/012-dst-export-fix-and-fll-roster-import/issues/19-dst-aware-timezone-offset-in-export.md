@@ -1,5 +1,8 @@
 ---
-status: pending
+status: in-progress
+sprint: '012'
+tickets:
+- 012-001
 ---
 
 # Exported dates carry a hard-coded -07:00 offset and are wrong outside DST

@@ -1,5 +1,8 @@
 ---
-status: pending
+status: in-progress
+sprint: '012'
+tickets:
+- 012-002
 ---
 
 # Import the 48 FLL teams as a static roster into the teams directory
