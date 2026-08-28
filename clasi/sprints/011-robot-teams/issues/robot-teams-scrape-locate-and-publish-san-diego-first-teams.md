@@ -1,6 +1,12 @@
 ---
-status: pending
+status: in-progress
 sprint: '011'
+tickets:
+- 011-001
+- 011-002
+- 011-003
+- 011-004
+- 011-005
 ---
 
 # Robot Teams: scrape, locate, and publish San Diego FIRST teams
