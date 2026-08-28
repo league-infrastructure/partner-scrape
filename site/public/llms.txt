@@ -1,0 +1,20 @@
+# SD STEM Ecosystem
+
+> A directory of STEM learning opportunities (camps, out-of-school programs,
+> work-based learning) run by San Diego-area partner organizations. The
+> underlying data is published as plain, statically-served JSON: no auth, no
+> API key, no rate limit imposed by us.
+
+## Data
+
+- [partners.json](https://league-infrastructure.github.io/partner-scrape/data/partners.json): Partner roster envelope (`generated_at`, `partner_count`, `partners[]`). Each partner entry has a `slug`, `events_url`, and `past_events_url` (both relative to `.../data/`).
+- Per-partner events, one pair per partner listed in `partners.json`: `https://league-infrastructure.github.io/partner-scrape/data/partners/<slug>/events.json` and `https://league-infrastructure.github.io/partner-scrape/data/partners/<slug>/past-events.json`. `current`/`past` is a true partition — undated records land in `past-events.json`, nothing is dropped.
+
+## Documentation
+
+- [How to Consume Our Data](https://league-infrastructure.github.io/partner-scrape/data-access/): Full file shapes, the complete event field schema, the reconstruction contract, and a worked example of both files.
+- [For Agents](https://league-infrastructure.github.io/partner-scrape/for-agents/): Terse, link-dense landing page for an LLM/agent — the same data URLs above, self-sufficient if reached directly.
+
+## Publishing
+
+- [Publish Your Events](https://league-infrastructure.github.io/partner-scrape/publish-events/): How a partner organization can publish events so this scraper ingests them well — several standard methods, ordered easiest-adoption-first.

@@ -1,6 +1,9 @@
 ---
-status: pending
+status: done
 sprint: '010'
+tickets:
+- 010-003
+- 010-004
 ---
 
 # Multi-pronged event-publishing strategy for partners (harmonized with the scraper)

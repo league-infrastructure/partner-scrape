@@ -1,0 +1,158 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/+$/, ''); // "" or "/partner-scrape"
+
+// Sprint 010, ticket 002 (issue 16): terse, link-dense landing page for
+// an LLM/agent that followed `llms.txt` (ticket 004) -- or reached this
+// URL directly. States the exact data URLs so the page is self-sufficient
+// without `llms.txt`; defers the full schema to `/data-access` (Design
+// Rationale D2 -- never duplicate the field table) and points partner-
+// side agents at `/publish-events`.
+//
+// Origin used for the absolute data URLs below: `DATA_ORIGIN` is
+// deliberately `https://league-infrastructure.github.io/partner-scrape`,
+// NOT `https://www.sdstemecosystem.org` (the domain sprint.md's Design
+// Rationale D6 names as canonical for `llms.txt`). Verified live, not
+// assumed:
+//
+//   $ curl -sI https://www.sdstemecosystem.org/          -> 200, but the
+//     body is a 417-byte HTML4 `<frameset>` whose only `<frame>` points
+//     at https://league-infrastructure.github.io/partner-scrape/ -- it
+//     is not the site itself, so a plain HTTP client (an agent, not a
+//     frame-rendering browser) that GETs that domain never reaches real
+//     content.
+//   $ curl -so /dev/null -w '%{http_code}' \
+//       https://www.sdstemecosystem.org/data/partners.json     -> 404
+//   $ curl -so /dev/null -w '%{http_code}' \
+//       https://league-infrastructure.github.io/partner-scrape/ -> 200
+//
+// `league-infrastructure.github.io/partner-scrape` is this repo's own
+// GitHub Pages deployment (`.github/workflows/pages.yml`, "the beta:
+// the site + scraped data are iterated here" -- stem-ecosystem is
+// production, promoted to when ready) and is what the frameset itself
+// resolves to, so it is the one origin that actually serves this page
+// tree today. Flagged for ticket 004: `llms.txt`'s own Data section
+// (SUC-001 AC) currently specs `www.sdstemecosystem.org` per D6 --
+// that AC was written before this framing behavior was verified against
+// the live domain, and matching it here would print a URL that 404s
+// through a frame for any plain HTTP client. `partners.json` itself
+// 404s at DATA_ORIGIN too as of this writing -- expected, matching
+// sprint.md's Migration Concerns note that the pipeline hasn't
+// published to this checkout's `public/data/` yet; the origin choice
+// is independent of that operational gap.
+const DATA_ORIGIN = 'https://league-infrastructure.github.io/partner-scrape';
+---
+
+<BaseLayout
+  title="For Agents | SD STEM Ecosystem"
+  description="Machine-readable data behind the San Diego STEM Ecosystem: exact data URLs, the reconstruction contract, and where to publish events."
+>
+  <section class="hero hero-sm">
+    <h1>For Agents</h1>
+    <p>Structured JSON behind the San Diego STEM Ecosystem opportunity directory. No auth, no API key, no rate limit imposed by us.</p>
+  </section>
+
+  <div class="agents-page container">
+    <section class="agents-section">
+      <h2>What this is</h2>
+      <p>
+        A directory of STEM learning opportunities (camps, out-of-school programs, work-based
+        learning) run by San Diego-area partner organizations. Two file kinds, statically served,
+        plain JSON: a partner roster and, per partner, a current-events file and a past-events
+        file. <code>partners.json</code> plus every referenced partner's event files fully
+        reconstruct the opportunity data on this site — no other source needed.
+      </p>
+    </section>
+
+    <section class="agents-section">
+      <h2>Data</h2>
+      <p>Fetch in this order:</p>
+      <pre class="code-block"><code>{`1. GET ${DATA_ORIGIN}/data/partners.json
+   -> { generated_at, partner_count, partners: [...] }
+   Each partner has a "slug", "events_url", "past_events_url"
+   (both paths relative to .../data/).
+
+2. For each partner, GET:
+   ${DATA_ORIGIN}/data/partners/<slug>/events.json
+   ${DATA_ORIGIN}/data/partners/<slug>/past-events.json
+   -> { generated_at, partner_slug, kind, event_count, events: [...] }
+   "current"/"past" is a true partition -- undated records land in
+   past-events.json, nothing is dropped.`}</code></pre>
+      <p>
+        That's the full URL surface — no other endpoint exists. Field-by-field definitions for
+        every partner and event property, plus a worked example of both file shapes, are on
+        <a href={`${base}/data-access`}>How to Consume Our Data</a>; this page does not repeat
+        them.
+      </p>
+    </section>
+
+    <section class="agents-section">
+      <h2>Links</h2>
+      <ul class="agents-links">
+        <li><a href={`${base}/data-access`}>/data-access</a> — full schema, envelope shape, reconstruction contract, worked example.</li>
+        <li><a href={`${base}/publish-events`}>/publish-events</a> — acting on a partner's behalf and want their events ingested? Publishing methods, ordered easiest-first.</li>
+        <li><a href={`${base}/opportunities`}>/opportunities</a> — this same data, rendered for a human.</li>
+      </ul>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .hero-sm {
+    min-height: auto;
+    padding: 100px 20px 40px;
+  }
+
+  .agents-page {
+    padding: 40px 15px 60px;
+    max-width: 900px;
+  }
+
+  .agents-section {
+    margin-bottom: 40px;
+  }
+
+  .agents-section h2 {
+    margin-bottom: 16px;
+  }
+
+  .agents-section p {
+    line-height: 1.8;
+    margin-bottom: 12px;
+  }
+
+  .agents-section code {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 0.9em;
+    background: var(--purple-faint);
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: var(--dark);
+  }
+
+  .agents-links {
+    line-height: 1.9;
+    padding-left: 20px;
+  }
+
+  .code-block {
+    background: var(--dark-deep);
+    color: var(--white);
+    padding: 18px 20px;
+    border-radius: var(--radius);
+    overflow-x: auto;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  .code-block code {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    background: none;
+    padding: 0;
+    color: inherit;
+    white-space: pre;
+  }
+</style>
