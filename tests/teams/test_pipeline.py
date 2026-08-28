@@ -375,3 +375,57 @@ class TestTbaFailureIsolation:
         written = json.loads((site / "src" / "data" / "teams.json").read_text())
         assert written["meta"]["total"] == 152
         assert written["meta"]["by_league"] == {"FTC": 152}
+
+
+class TestGeocodingAggregateDistribution:
+    """AC (ticket 011-004): "Write a test asserting the aggregate
+    distribution so a silent regression in the matcher is caught."
+
+    Runs the full pipeline (both real sources' fixtures, real Team
+    Registry, real committed `teams/geo.py` data files -- no
+    `geo_data_dir` override) and asserts the precision distribution
+    against *tolerant* bounds, not exact counts: `sd-schools-public.tsv`/
+    `sd-schools-private.tsv` are refreshed yearly from CDE/NCES (see
+    `dev/refresh_school_directories.py`), so a routine data refresh
+    that shifts a handful of matches must not fail this test -- only a
+    genuinely broken matcher (e.g. the ladder resolving almost nothing,
+    or every match suddenly needing review) should. Measured at ticket
+    011-004's own build (2026-08-28): 129 school (79 FTC + 50 FRC), 8
+    zip, 70 city, 4 none, 14 needs_review, 6 out_of_region.
+    """
+
+    def test_precision_distribution_stays_within_expected_bounds(self, monkeypatch, tmp_path):
+        monkeypatch.setenv("TBA_KEY", "fixture-test-key")
+        fetcher = _ftc_and_tba_fetcher()
+
+        payload = run_teams(site_dir=tmp_path, fetcher=fetcher, dry_run=True)
+
+        assert payload["meta"]["total"] == 211
+        by_precision = payload["meta"]["by_location_precision"]
+
+        # School precision is the ladder's top rungs (overrides + exact
+        # + fuzzy CDE/NCES match) -- the issue's own measurement
+        # expected ~118; a healthy matcher should clear 100.
+        assert by_precision.get("school", 0) >= 100
+        # Every team should resolve to at least a city, except the
+        # handful of genuinely out-of-region/foreign/ambiguous ones
+        # (Ensenada x2, plus ambiguous "San Antonio"/"Louisville") --
+        # "none" must stay a small residue, not a large fraction.
+        assert by_precision.get("none", 0) <= 10
+        # Every located team is accounted for.
+        assert sum(by_precision.values()) == 211
+
+        needs_review_count = sum(1 for t in payload["teams"] if t["needs_review"])
+        # A small, meaningful minority -- if this ever approaches the
+        # school-precision count itself, the matcher's confidence
+        # scoring (or its stopword normalization) has regressed.
+        assert 0 < needs_review_count <= 40
+
+        # matched_name is recorded on every resolved team (AC).
+        for team in payload["teams"]:
+            if team["location_precision"] != "none":
+                assert team["matched_name"] != ""
+            else:
+                assert team["matched_name"] == ""
+
+        assert payload["meta"]["out_of_region"] == 6

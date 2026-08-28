@@ -1,6 +1,6 @@
 # teams
 
-**Owner:** Eric Busboom · **Last reviewed:** 2026-08-28 · **Status:** in-flux
+**Owner:** Eric Busboom · **Last reviewed:** 2026-08-28 (ticket 011-004) · **Status:** in-flux
 
 ---
 
@@ -19,15 +19,19 @@ an undated directory entity," which nothing else in the codebase does.
 
 ## 2. Orientation
 
-**Ticket 011-003 (this ticket) adds the second live source and
-resolves cross-league organizational identity.** `teams.pipeline.
-run_teams()` now runs both `FTCScoutSource` and `TBASource`, links
-their output via `teams.merge.merge_teams()`, and publishes the
-combined `Team[]` — `teams.json` with 152 FTC + 59 FRC teams (211
-total) is a real, buildable artifact as of this ticket. Geocoding and
-site pages remain later tickets, landing on top of this spine in
-sequence (`sprint.md`'s Migration Concerns: 001→002→003→004→005, each
-needing the one before it):
+**Ticket 011-004 (this ticket) adds the offline geocoding ladder —
+the increment that actually delivers the sprint's stated goal of
+*knowing where the teams are*.** `teams.pipeline.run_teams()` now runs
+both sources, links cross-league identity, and geocodes every merged
+`Team` through `teams.geo.geocode_teams()` before export. Measured
+against the real 211-team FTC+FRC corpus (`tests/fixtures/teams/`, the
+same live-captured fixtures ticket 011-003 uses) at this ticket's build
+(2026-08-28): **129 teams at school precision** (79 FTC + 50 FRC), **8
+at ZIP**, **70 at city**, **4 unresolved** (`"none"` — two Ensenada
+teams, plus two out-of-region teams whose city name is too ambiguous
+to guess, "San Antonio"/"Louisville"), **14 flagged `needs_review`**.
+Only site pages remain (`sprint.md`'s Migration Concerns:
+001→002→003→004→005, each needing the one before it):
 
 ```
 BUILT (ticket 011-001):
@@ -49,28 +53,39 @@ BUILT (ticket 011-002):
   export.mirror_site_data()           reused unmodified, teams.json added
                                        to MIRRORED_DATA_FILES
 
-BUILT (this ticket, 011-003):
+BUILT (ticket 011-003):
   sources.tba.TBASource                probes /api/v3/status for
      ↓                                 max_team_page, enumerates every
      ↓                                 /api/v3/teams/{page}, filters to
      ↓                                 CA + SD_COUNTY_CITIES -- 59 teams
   teams.merge.merge_teams(teams)       links Team.org_key/sibling_team_ids
      ↓                                 by normalized organization name,
-     ↓                                 run after every source, before export
+     ↓                                 run after every source, before geocode
+
+BUILT (this ticket, 011-004):
+  teams.geo.geocode_teams(teams)       seven-rung offline ladder (below),
+     ↓                                 run once over the merged Team[],
+     ↓                                 after merge_teams(), before export
+  teams/data/*.tsv, *.toml             CDE + NCES + ZIP/city centroids +
+     ↓                                 school-overrides.toml, all committed
+  dev/refresh_school_directories.py    standalone yearly refresh (network;
+                                        never imported by teams/geo.py or
+                                        teams.pipeline)
   (feeds into ticket 011-002's export_teams(), unchanged)
 
 PLANNED (later tickets, not yet built):
-  → geo.py + data/                           (011-004 -- offline geocoding ladder)
   → site/src/pages/teams/*                   (011-005)
 ```
 
 A freshly-extracted `Team` from either source still has
-`location_precision == "none"` and no coordinates — that is correct,
-not a gap: no geocoding rung has run yet (ticket 011-004). `teams.json`
-publishes that honestly (`by_location_precision: {"none": 211}` in its
-`meta`) rather than hiding it. `cli.py` still imports only
+`location_precision == "none"` and no coordinates until
+`teams.geo.geocode_teams()` runs — that stage now runs on every
+`run_teams()` call, so `teams.json` carries real coordinates for most
+teams as of this ticket. `cli.py` still imports only
 `teams.pipeline.run_teams` — the one and only edge from any existing,
-non-`teams/` module into this subsystem.
+non-`teams/` module into this subsystem; `teams.geo` itself has zero
+edges into `partner_scrape.fetch` or any other network-capable module
+(see Constraints and `teams/geo.py`'s own docstring).
 
 **FTCScout**, `api.ftcscout.org`, free, unauthenticated. Its REST
 search endpoint returns 152 San Diego FTC teams in one response — no
@@ -174,8 +189,9 @@ geocoding source**; only ticket 011-004's `geo.py` sets
   own module docstring for the full rationale and
   `tests/teams/test_merge.py` for the dual-program/never-groups/
   number-collision test cases.
-- **`merge_teams()` runs once, after every source has completed, before
-  export — never inside the per-source acquisition loop.** Cross-league
+- **`merge_teams()` runs once, after every source has completed and
+  before `teams.geo.geocode_teams()` — never inside the per-source
+  acquisition loop.** Cross-league
   identity needs the *combined* `Team[]` from every source that
   succeeded; running it per-source would see only one league at a time
   and could never link anything. `teams.pipeline.run_teams()` calls it
@@ -194,14 +210,104 @@ geocoding source**; only ticket 011-004's `geo.py` sets
   is a simple, sufficient fix for the variants actually observed — it
   is not a general place-name normalizer, and ticket 011-004's `geo.py`
   does the real matching against CDE/NCES school directories.
-- **Deliberate non-goal, still — no geocoding.** Neither
-  `sources/ftcscout.py` nor `sources/tba.py` resolves coordinates; both
-  leave `Team.latitude`/`longitude`/`location_precision` at their
-  dataclass defaults (`None`/`None`/`"none"`). Do not "helpfully" add
-  geocoding to either source or to `merge.py` — that is ticket
-  011-004's `geo.py`, sequenced after this ticket specifically because
-  its offline ladder needs real `postal_code` values, which only TBA
-  (this ticket) supplies at any real rate.
+- **Sources still never geocode.** Neither `sources/ftcscout.py` nor
+  `sources/tba.py` resolves coordinates; both leave
+  `Team.latitude`/`longitude`/`location_precision` at their dataclass
+  defaults (`None`/`None`/`"none"`) and `teams.merge.merge_teams()`
+  never touches them either. That is exclusively `teams.geo.
+  geocode_teams()`'s job (this ticket), sequenced after both sources
+  and after `merge_teams()` specifically because its offline ladder
+  needs real `postal_code` values, which only TBA supplies at any real
+  rate (ticket 011-003).
+- **`teams.geo` is fully offline — zero network calls, structurally,
+  not just by convention.** Measured before this ticket was built
+  (`clasi/sprints/011-robot-teams/issues/robot-teams-scrape-locate-and-
+  publish-san-diego-first-teams.md`'s Geocoding section): Nominatim/OSM
+  resolved only 25 of 62 distinct school names (41% failure) and
+  returned an HTTP 429 on a second machine's very first request; the US
+  Census geocoder found 0 matches for a bare school name (it parses
+  street addresses, which this project does not have). `teams/geo.py`
+  therefore reads only the five committed files under `teams/data/`
+  and never imports `partner_scrape.fetch` or any of Python's own
+  networking modules (`urllib`, `http`, `socket`, ...) —
+  `tests/teams/test_geo.py`'s `TestZeroNetworkCalls` enforces this by
+  AST-scanning `geo.py`'s own source (matching
+  `test_sources_base.py`'s forbidden-import-scan precedent) *and* by
+  asserting `geocode_teams()`/`SchoolIndex.__init__()` accept no
+  `Fetcher`-shaped parameter at all — not merely "an unused one," so a
+  future edit cannot silently wire one in. The only thing in this
+  subsystem that touches the network is `dev/refresh_school_
+  directories.py`, a standalone script run by hand roughly yearly,
+  never imported by `teams.geo` or `teams.pipeline`.
+- **No LLM fallback for geocoding, ever — a wrong pin is worse than no
+  pin.** A team that exhausts all seven of `teams.geo`'s rungs gets
+  `location_precision: "none"` and no coordinates, full stop. This is
+  tested directly (`tests/teams/test_geo.py`'s `TestRung7NoMatch`) and
+  is why rung 7 exists as a real, exercised code path rather than an
+  unreachable default.
+- **`teams.geo`'s cache is in-memory, scoped to one `SchoolIndex`
+  instance/one `run_teams()` call — deliberately not a disk-persisted
+  cache modeled on `enrich/cache.py`.** `EnrichmentCache` exists to
+  avoid *paying for* a repeated LLM call (real money, real latency);
+  nothing in `teams.geo`'s matching costs either — it is a few hundred
+  organizations compared against ~1,000 in-repo TSV rows, sub-second
+  even uncached. A disk cache would add real complexity (schema
+  versioning, content-hash invalidation, a `SCRAPE_CACHE_DIR`
+  dependency this offline module would otherwise never need) for no
+  measurable benefit. What *is* reused from that module's design is the
+  shape "cache hits and misses alike, keyed by identity, not by
+  record" — `SchoolIndex` caches rungs 1-4's outcome (hit **or**
+  confirmed miss) keyed by `geo.normalize_school_name(Team.
+  organization)` alone, per the issue's own measurement that 94
+  school-named FTC/FRC teams collapse onto ~58 distinct campuses (a
+  per-team cache would repeat ~40% of the matching work).
+  `tests/teams/test_geo.py`'s `TestPerSchoolNotPerTeamCaching` proves
+  this via `SchoolIndex.match_calls`, a counter incremented only on an
+  actual (uncached) ladder run.
+- **`needs_review` reflects the fuzzy match's actual Jaccard score, not
+  which rung (3 vs. 4) accepted it.** A rung-3 (within-city, ≥0.60)
+  match that happens to score ≥0.85 is not flagged; a rung-4
+  (county-wide, ≥0.80) match at exactly 0.80 is. Below 0.85 the match
+  still publishes — a flagged guess beats a silent one — exactly the
+  mechanism that would catch "Classical Academy Online" (an online
+  school with no campus) fuzzy-matching its sponsoring district's
+  building at a 0.70 score without a human ever ratifying it.
+  `Team.matched_name` is set on every resolved team regardless of
+  precision (`"ZIP 92037 centroid"`, `"San Diego (city centroid)"`,
+  or a real school name) so "why is this team here?" always has a
+  string answer — never set (`""`) only when `location_precision ==
+  "none"`.
+- **Normalizing "Poway High School" to match CDE's own official "Poway
+  High" required stripping a small, deliberately narrow stopword set
+  (`"school"`/`"schools"`/`"sch"`/`"the"`), not a general fuzzy
+  matcher.** Measured live building this ticket: without this, ~72 of
+  117 school-precision matches (61%) scored 0.60-0.80 purely from CDE
+  almost never writing the word "School" itself, flooding
+  `needs_review` with matches that were actually exactly correct.
+  Grade-level/type words (`"high"`, `"middle"`, `"elementary"`,
+  `"senior"`) are deliberately **not** stripped — they distinguish two
+  real, different schools at the same place name (e.g. "Poway High" vs.
+  a hypothetical "Poway Middle") and dropping them would risk a false
+  match, not just a noisy flag. After this fix, `needs_review` count
+  dropped to 14 of 211 teams — a small, meaningful residue (genuine
+  wording differences like "Senior"/"Early College", plus the
+  "Classical Academy Online" case itself), not matcher noise.
+  `geo.normalize_school_name` is a small, separately-named normalizer
+  local to `teams/geo.py` — deliberately not
+  `normalize.partners.normalize_org_name`, which is scoped to
+  partner-directory organization names, not place names (see Design,
+  below, for why the two must not be conflated).
+- **`geo.py`'s loader independently re-checks `Virtual`/`StatusType`
+  rather than trusting `dev/refresh_school_directories.py` was run
+  correctly.** The committed `sd-schools-public.tsv` already excludes
+  `Virtual in {"F", "V"}` rows and ships `StatusType == "Active"` rows
+  only, but `SchoolIndex`'s own TSV loader re-applies both filters (the
+  Virtual reject unconditionally; "prefer Active over Closed" as a
+  per-normalized-name dedup) — defense in depth, and the only way
+  `tests/teams/test_geo.py`'s `TestVirtualRowRejected` and
+  `TestRung2ExactMatch::test_closed_row_never_wins_over_active` can
+  exercise this behavior directly via a hand-built fixture, independent
+  of whether today's real data file happens to need it.
 - **`teams/export.py` never writes or touches `opportunities.json` or
   `scrape-meta.json`.** Those are `export/writer.py`'s exclusive
   outputs; `scrape-meta.json` in particular carries the *opportunities*
@@ -329,22 +435,64 @@ property of *which acquisition method*, not which file. Filtering on
 `SourceConfig.adapter_type` (`"ftcscout"`, `"tba"`) matches that need
 directly.
 
+**Why `teams.geo`'s seven rungs are ordered exact-cheapest-first, not
+best-effort-in-parallel (this ticket).** `SchoolIndex._run_ladder()`
+tries overrides, then an exact normalized-name match, before ever
+computing a single Jaccard score — cheaper and strictly
+higher-confidence checks should never be skipped in favor of a fuzzy
+one that happens to run first. Rungs 3 (within-city, ≥0.60) and 4
+(county-wide, ≥0.80) are two different *candidate pools* at two
+different thresholds, not two different scoring functions — the same
+`_best_token_match()` helper powers both, called once with a city
+filter and once without. This mirrors the issue's own measured
+methodology (Jaccard token-set matching, city-scoped before
+county-wide) rather than the earlier difflib-ratio approach an even
+earlier exploratory pass of the same issue tried and superseded.
+
+**Why `geo.normalize_school_name()` is a separate function from
+`normalize.partners.normalize_org_name()`, not a shared one (per
+sprint.md's Design Rationale and this module's own docstring).** The
+two solve different problems: `normalize_org_name` matches a scraped
+organization string against the curated partner directory (drops a
+leading "the ", nothing else); `normalize_school_name` matches a
+team's self-reported school name against an *official government
+directory's* naming conventions specifically — parenthetical asides
+CDE writes into names (`"Feaster (Mae L.) Charter"`), and a small
+institution-type stopword set (`"school"`, `"schools"`, `"sch"`,
+`"the"`) that CDE systematically omits from its own records
+(`"Poway High"`, never `"Poway High School"`). Importing
+`normalize_org_name` and extending it in place would couple two
+independently-changing concerns (partner-name matching, school-name
+matching) into one function neither caller fully owns; keeping them
+separate, even with a few lines of real duplication (both drop a
+leading "the"), was the deliberate choice sprint.md's plan called for.
+
+**Why the offline data provisioning script lives in `dev/`, not inside
+`teams/` itself.** `dev/refresh_school_directories.py` is the only
+thing in this whole subsystem that touches the network, and it is a
+human-run, reviewed-before-commit tool (download, diff, commit) — not
+part of any runtime code path. Placing it under `dev/` (matching this
+project's existing convention: `dev/fetch_tec_api.py`,
+`dev/export_site.py`, ...) rather than `teams/` makes that boundary
+visible in the directory layout itself, not just in a docstring.
+
 ## 5. Interfaces
 
 ### Exposes
 - **`model.Team`** — the record type: `team_id`, `league`, `program`,
   `number`, `name`, `organization`, `org_type`, `city`, `postal_code`,
   `latitude`, `longitude`, `location_precision`, `in_region`,
-  `website`, `website_status`, `organization_website`, `rookie_year`,
-  `active`, `last_season`, `sponsors`, `org_key`, `sibling_team_ids`,
-  `sources`. Every field defaults to an empty/neutral value; no
-  `email` field exists (Constraints). Fields are populated
-  incrementally across pipeline stages — `sources/ftcscout.py` and
-  `sources/tba.py` set identity/organization/city/website/postal_code/
-  sponsors/in-region fields; `teams.merge.merge_teams()` (this ticket)
-  sets `org_key`/`sibling_team_ids`; `latitude`/`longitude`/
-  `location_precision`/`organization_website` are set later still, by
-  ticket 011-004's `geo.py`.
+  `matched_name`, `needs_review` (this ticket), `website`,
+  `website_status`, `organization_website`, `rookie_year`, `active`,
+  `last_season`, `sponsors`, `org_key`, `sibling_team_ids`, `sources`.
+  Every field defaults to an empty/neutral value; no `email` field
+  exists (Constraints). Fields are populated incrementally across
+  pipeline stages — `sources/ftcscout.py` and `sources/tba.py` set
+  identity/organization/city/website/postal_code/sponsors/in-region
+  fields; `teams.merge.merge_teams()` sets `org_key`/`sibling_team_ids`;
+  `latitude`/`longitude`/`location_precision`/`organization_website`/
+  `matched_name`/`needs_review` are set last, by this ticket's
+  `teams.geo.geocode_teams()`.
 - **`sources.base.TeamSource`** — the injectable per-source protocol
   (`discover(source, fetcher) -> Iterable[TeamRef]`,
   `fetch(ref, fetcher) -> RawTeamResponse`,
@@ -385,14 +533,38 @@ directly.
   before `export_teams()`. See Constraints for the full identity rule
   and Design for why it keys on organization name, not team number.
 - **`pipeline.run_teams(*, registry_dir=None, source=None, site_dir=None,
-  fetcher=None, dry_run=False) -> dict`** — the programmatic entry
-  point: loads the Team Registry (defaulting to the real seed,
-  `teams/registry/`), dispatches each active source to its
+  fetcher=None, dry_run=False, geo_data_dir=None) -> dict`** — the
+  programmatic entry point: loads the Team Registry (defaulting to the
+  real seed, `teams/registry/`), dispatches each active source to its
   `TeamSource` via `_TEAM_SOURCES`, isolates any one source's failure
   (logged and skipped, matching `pipeline.run()`'s own SUC-008
-  contract), links cross-league identity via `merge_teams()` (this
-  ticket) over the combined result, and hands it to `export_teams()`.
+  contract), links cross-league identity via `merge_teams()`, resolves
+  every team's location via `teams.geo.geocode_teams()` (this ticket;
+  `geo_data_dir` overrides the geocoding data directory, mainly for
+  tests) over the combined result, and hands it to `export_teams()`.
   Returns that call's `{"meta": ..., "teams": [...]}` payload unchanged.
+- **`teams.geo.geocode_teams(teams, *, data_dir=None) -> list[Team]`**
+  (this ticket) — resolves every `Team` through the seven-rung offline
+  ladder in place; returns the same list (parallel in shape to
+  `merge_teams()`). `data_dir` defaults to `geo.DEFAULT_DATA_DIR` (the
+  real committed `teams/data/`). Called once by `run_teams()`, after
+  `merge_teams()` and before `export_teams()`.
+- **`teams.geo.SchoolIndex(data_dir=None)`** (this ticket) — loads all
+  five `teams/data/` files once and exposes `resolve(team)` (the full
+  ladder for one `Team`, mutating it in place), `resolve_school(org,
+  city)` (rungs 1-4, cached), `resolve_zip(postal_code)`/
+  `resolve_city(city)` (rungs 5-6, uncached — already O(1) dict
+  lookups), and `match_calls` (a counter of actual, uncached rungs-1-4
+  ladder runs — what `tests/teams/test_geo.py`'s per-school-caching
+  tests assert against). Raises `RuntimeError` if any data file under
+  `data_dir` is missing or malformed — fails loudly at construction,
+  per SUC-003's Error Flows ("a bad geocoding table is a build-time
+  defect"). See Constraints for the caching design and Design for the
+  rung ordering.
+- **`teams.geo.normalize_school_name(name) -> str` /
+  `normalize_city_name(city) -> str`** (this ticket) — the two
+  normalizers `SchoolIndex` matches against; see Design for why these
+  are separate from `normalize.partners.normalize_org_name`.
 - **`export.export_teams(teams, site_dir=None, *, dry_run=False) -> dict`**
   — writes `{site_dir}/src/data/teams.json` as
   `{"meta": {...}, "teams": [...]}`. `meta` carries `generated`
@@ -417,6 +589,30 @@ directly.
 - **`export/mirror.py`'s `MIRRORED_DATA_FILES`** — gained one entry,
   `"teams.json"`, in ticket 011-002; no change in this ticket. See
   `export/DESIGN.md`.
+- **`teams/data/*`** (this ticket) — the five committed offline
+  geocoding data files `teams.geo.SchoolIndex` reads:
+  `sd-schools-public.tsv` (CDE public schools, San Diego County,
+  `StatusType == "Active"`, `Virtual not in {"F","V"}`, 795 rows as of
+  this ticket's build), `sd-schools-private.tsv` (NCES EDGE private
+  schools, San Diego County, union of the 2021-22 and 2023-24 survey
+  vintages, 213 rows), `zip-centroids.toml` (95 ZIP Code Tabulation
+  Area centroids from the Census Bureau's own Gazetteer),
+  `city-centroids.toml` (54 city/neighborhood centroids, derived from
+  `sd-schools-public.tsv`'s own coordinates plus a documented ZIP
+  fallback for the handful of San Diego neighborhoods CDE's `City`
+  field does not distinguish from plain "San Diego" — see
+  `dev/refresh_school_directories.py`'s own docstring), and
+  `school-overrides.toml` (hand corrections, empty as of this ticket —
+  the ladder's algorithmic rungs resolved the real 211-team corpus well
+  enough that none has been needed yet). All five are plain data, never
+  imported as Python.
+- **`dev/refresh_school_directories.py`** (this ticket) — the
+  standalone, human-run yearly refresh script that produces the four
+  generated files above (not `school-overrides.toml`, which is
+  hand-maintained only). The only network-capable code in this whole
+  subsystem; never imported by `teams.geo` or `teams.pipeline`. See its
+  own module docstring for the exact CDE/NCES/Census Gazetteer
+  endpoints and filtering rules.
 
 ### Consumes
 - **`registry.schema.SourceConfig` / `registry.loader.load_active_sources`
@@ -452,10 +648,53 @@ directly.
 
 ## 6. Open Questions / Known Limitations
 
-- `geo.py` and the site pages do not exist yet — this doc describes
-  what tickets 011-001 through 011-003 built (model + FTCScout +
-  TBA + export + CLI + merge); see `sprint.md`'s Tickets table for the
-  remaining sequencing (011-004, 011-005).
+- The site pages do not exist yet — this doc now describes what
+  tickets 011-001 through 011-004 built (model + FTCScout + TBA +
+  export + CLI + merge + offline geocoding); see `sprint.md`'s Tickets
+  table for the remaining ticket (011-005).
+- **`school-overrides.toml` ships empty as of this ticket.** The
+  algorithmic rungs (exact match + the stopword-normalized Jaccard
+  fuzzy tiers) resolved the real 211-team corpus well enough that no
+  hand correction was needed — 129 teams reached school precision with
+  only 14 flagged `needs_review`, and none of those 14 were bad enough
+  to warrant a hand override rather than just a flag (each is a real,
+  explainable wording difference — "Senior" vs. not, "HS" vs. spelled
+  out, or the genuinely-ambiguous "Classical Academy Online" case).
+  Future refreshes or a larger corpus (FLL, a follow-on sprint) may
+  surface real residue; add entries there once a human has verified a
+  specific coordinate, per that file's own header comment.
+- **Two ambiguous out-of-region city names are deliberately
+  unresolved.** FTCScout's `region=USCASD` search returned one team
+  each reporting `city == "San Antonio"` and `city == "Louisville"` —
+  real US place names that exist in many states, with no way to tell
+  which one FTCScout means from the data available. `city-
+  centroids.toml` has no entry for either, so both fall through to
+  `location_precision: "none"` rather than guessing a specific city
+  (Texas? California? Kentucky?). `"Ensenada"` (Mexico) is similarly
+  unresolved — outside US Census/CDE coverage entirely, not a matcher
+  gap. All three are in `sources.ftcscout.OUT_OF_REGION_CITIES`, so
+  they are correctly flagged `in_region = False` regardless of
+  location precision. See `dev/refresh_school_directories.py`'s
+  docstring for the same reasoning applied to `city-centroids.toml`'s
+  construction.
+- **`Team.organization_website` is populated from CDE's `WebSite`
+  column on a school-precision *public*-school match only** — NCES's
+  private-school geocode data carries no website field at all, so a
+  private-school match never sets it (confirmed: 88 of the 117
+  school-precision FTC teams and 11 of the 44 FRC ones got a real
+  `organization_website` at this ticket's build; the private-school
+  gap accounts for the rest). Not a gap in the matcher — there is
+  simply nothing to carry over from that source.
+- **The ZIP/city centroid tables cover what this ticket's real 211-team
+  corpus and `sources.tba.SD_COUNTY_CITIES`'s full allowlist need, not
+  a hand-picked "~38"/"~25" count the issue's early estimate
+  mentioned.** `dev/refresh_school_directories.py` derives 95 ZIP
+  centroids (every ZIP appearing in `sd-schools-public.tsv`, a
+  reproducible superset rather than a curated subset) and 54 city
+  centroids (every CDE `City` value plus the documented neighborhood/
+  out-of-region additions) — broader coverage costs nothing at runtime
+  (an unused entry is simply never looked up) and reduces the chance a
+  future real team falls through to a coarser rung than it should.
 - `teams.pipeline.run_teams()`'s per-source failure isolation (logged
   and skipped) is now load-bearing in production, not just tested via
   a synthetic double: `sources.tba.TBASource.discover()` raises on a
@@ -467,12 +706,12 @@ directly.
   pushes it.
 - `sources.ftcscout.OUT_OF_REGION_CITIES` is a small hand-maintained
   denylist derived from one live measurement (2026-08-27).
-  `sources.tba.SD_COUNTY_CITIES` (this ticket) is the equivalent
-  allowlist for TBA — see Constraints for why TBA needs an allowlist
-  where FTCScout needs only a denylist. Both are sufficient for their
-  respective fixture-based tests but are not the "real" county-boundary
-  determination — ticket 011-004's CDE/NCES-driven geocoding ladder is
-  the actual authority on location, and may eventually supersede both.
+  `sources.tba.SD_COUNTY_CITIES` is the equivalent allowlist for TBA —
+  see Constraints for why TBA needs an allowlist where FTCScout needs
+  only a denylist. Both remain in place, unsuperseded: `teams.geo`'s
+  CDE/NCES-driven ladder resolves *where* a team is, but `in_region`
+  (whether it counts as San Diego County at all) is still these two
+  lists' job — `geo.py` never sets or reads `in_region` (Constraints).
 - `sources.tba.SD_COUNTY_CITIES` was assembled from this project's own
   historical FRC roster (`data/robot-teams.json`) plus every
   incorporated San Diego County city, not from a live capture of TBA's
@@ -485,15 +724,17 @@ directly.
 - `FTCScoutSource.fetch()` does not send any auth header (FTCScout
   needs none) — unlike `adapters/leaguesync.py`'s Bearer-token pattern
   and unlike this ticket's `TBASource.fetch()`, which does.
-- `teams.merge.merge_teams()` links strictly pairwise-by-group; it has
-  no notion of merge *confidence* the way ticket 011-004's fuzzy
-  school-name matching will (`needs_review: true` below a 0.85 score,
-  per the issue). Two organizations whose names normalize identically
-  but are not actually the same real-world organization (not observed
-  in the 152+59 fixture corpus, but not structurally impossible with a
-  larger live roster) would link — there is no manual-override
-  mechanism (a `school-overrides.toml`-style table) for `merge.py`
-  today.
+- `teams.merge.merge_teams()` links strictly pairwise-by-group; unlike
+  `teams.geo`'s fuzzy school matching (`needs_review: true` below a
+  0.85 Jaccard score, this ticket), it has no notion of merge
+  *confidence* at all — `merge.py` only ever compares exact normalized
+  organization names, never fuzzy-matches two differently-worded
+  organization strings. Two organizations whose names normalize
+  identically but are not actually the same real-world organization
+  (not observed in the 152+59 fixture corpus, but not structurally
+  impossible with a larger live roster) would link — there is no
+  manual-override mechanism (a `school-overrides.toml`-style table) for
+  `merge.py` today.
 - Whether `teams.json` is ever joined to the curated partner directory,
   and whether LLM-assisted website discovery is added later, are both
   explicitly out of scope for the whole sprint, not just this ticket —

@@ -22,18 +22,27 @@ anything else, and provides no path back into
 the one caller that needs it, not a second `ADAPTERS`-shaped public
 extension point.
 
-Ticket 011-003 (this ticket) adds the `"tba"` entry below plus a
-`merge_teams()` call after every source has run and before export --
-cross-league organizational identity (`teams.merge`) has to see the
-full, combined `Team[]` from every source, so it cannot run inside the
-per-source loop. The per-source try/except this module already had
-(ticket 011-002) needed no change to give TBA the same isolation
-Migration Concerns calls for (a missing/401 `TBA_KEY` degrades to
-FTC-only output, never fails the whole run): `sources/tba.py`'s
-`discover()` raises on a credential/probe failure by design (see its
-own module docstring), and this loop already treats any `Exception`
-from `run_team_source()` as "log and skip this source," regardless of
-which source raised it.
+Ticket 011-003 added the `"tba"` entry below plus a `merge_teams()`
+call after every source has run and before export -- cross-league
+organizational identity (`teams.merge`) has to see the full, combined
+`Team[]` from every source, so it cannot run inside the per-source
+loop. The per-source try/except this module already had (ticket
+011-002) needed no change to give TBA the same isolation Migration
+Concerns calls for (a missing/401 `TBA_KEY` degrades to FTC-only
+output, never fails the whole run): `sources/tba.py`'s `discover()`
+raises on a credential/probe failure by design (see its own module
+docstring), and this loop already treats any `Exception` from
+`run_team_source()` as "log and skip this source," regardless of which
+source raised it.
+
+Ticket 011-004 (this ticket) adds one more stage after `merge_teams()`
+and before `export_teams()`: `teams.geo.geocode_teams()`, the seven-rung
+offline location resolver. Like `merge_teams()`, it runs exactly once
+over the full merged `Team[]` (not per-source) and is not wrapped in
+its own try/except -- a malformed geocoding data file is a build-time
+defect `teams.geo.SchoolIndex` raises loudly for (see that module's own
+docstring), not a per-record failure to isolate the way a source's
+network fetch is.
 """
 
 from __future__ import annotations
@@ -45,6 +54,7 @@ from typing import Any
 from partner_scrape.fetch import Fetcher, PoliteFetcher
 from partner_scrape.registry.loader import load_active_sources
 from partner_scrape.teams.export import export_teams
+from partner_scrape.teams.geo import geocode_teams
 from partner_scrape.teams.merge import merge_teams
 from partner_scrape.teams.model import Team
 from partner_scrape.teams.sources.base import TeamSource, run as run_team_source
@@ -76,9 +86,10 @@ def run_teams(
     site_dir: str | Path | None = None,
     fetcher: Fetcher | None = None,
     dry_run: bool = False,
+    geo_data_dir: str | Path | None = None,
 ) -> dict[str, Any]:
     """Run the Teams pipeline end-to-end: Team Registry -> `TeamSource`(s)
-    -> `export_teams()`.
+    -> `merge_teams()` -> `geocode_teams()` -> `export_teams()`.
 
     Args:
         registry_dir: Team Registry directory to load sources from.
@@ -104,6 +115,15 @@ def run_teams(
         dry_run: when `True`, compute and return the would-be-written
             export payload without touching disk (`export_teams`
             honors this the same way `export_opportunities` does).
+        geo_data_dir: the offline geocoding data directory
+            `teams.geo.geocode_teams()` reads. Defaults to
+            `teams.geo.DEFAULT_DATA_DIR` (the real committed
+            `teams/data/`) when omitted. Tests that need to control
+            geocoding outcomes precisely should pass an explicit
+            fixture directory here; tests that only care about
+            source/merge behavior can safely omit it and exercise the
+            real committed data files, matching this module's existing
+            "trust the real registry in tests" convention.
 
     Returns:
         `export_teams()`'s `{"meta": ..., "teams": [...]}` payload,
@@ -160,5 +180,13 @@ def run_teams(
     # receive here (see its own docstring), so it is not wrapped in
     # its own try/except the way each source's acquisition is.
     teams = merge_teams(teams)
+
+    # The offline geocoding ladder (teams.geo) runs once over the full
+    # merged Team[], same shape as merge_teams() above and for the same
+    # reason -- it is not per-source and not wrapped in its own
+    # try/except: a malformed data file is a build-time defect
+    # SchoolIndex raises loudly for (see teams/geo.py's own docstring),
+    # never a per-record failure to isolate the way a source fetch is.
+    teams = geocode_teams(teams, data_dir=geo_data_dir)
 
     return export_teams(teams, site_dir=site_dir, dry_run=dry_run)

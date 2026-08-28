@@ -17,10 +17,10 @@ Fields are populated directly by each source's ``extract()``
 ticket does not implement: ``merge.py`` (ticket 011-003) sets
 ``org_key``/``sibling_team_ids`` for cross-league identity;
 ``geo.py`` (ticket 011-004) sets ``latitude``/``longitude``/
-``location_precision``/``organization_website``. A freshly-extracted
-``Team`` therefore has ``location_precision == "none"`` and no
-coordinates -- that is correct for this ticket, not a bug: no
-geocoding rung has run yet.
+``location_precision``/``organization_website``/``matched_name``/
+``needs_review``. A freshly-extracted ``Team`` therefore has
+``location_precision == "none"`` and no coordinates -- that is correct
+for this ticket, not a bug: no geocoding rung has run yet.
 
 **No ``email`` field, anywhere on this dataclass.** This is a
 structural guarantee, not an omission to remember to avoid later: the
@@ -93,6 +93,17 @@ class Team:
     location_precision: str = "none"  # LocationPrecision
     in_region: bool = True  # flagged false for a team outside San Diego
     # County, never dropped -- see sources/ftcscout.py's OUT_OF_REGION_CITIES.
+    matched_name: str = ""  # geo.py (ticket 011-004): the real-world name
+    # ("St. Pius X School", "ZIP 92037 centroid", "San Diego (city
+    # centroid)") the resolver actually matched against -- set on every
+    # resolved Team (school/zip/city precision alike), empty for
+    # location_precision == "none". "Why is this team here?" always has
+    # a string answer, never a silent guess.
+    needs_review: bool = False  # geo.py (ticket 011-004): True when a
+    # fuzzy school-name match scored below 0.85 -- surfaced rather than
+    # published silently. Never set for an exact/override/zip/city
+    # match (each of those is either human-verified or deterministic,
+    # with no fuzzy score to distrust).
 
     # Web presence -- deliberately thin this ticket: FTCScout's own
     # `website` field is null for 0/152 San Diego FTC teams (measured
@@ -101,8 +112,11 @@ class Team:
     # (72% website coverage) is the first real populator.
     website: str = ""
     website_status: str = ""  # liveness-check result, not set this ticket
-    organization_website: str = ""  # CDE-matched school site, set by
-    # teams/geo.py (ticket 011-004), not this ticket
+    organization_website: str = ""  # CDE-matched school's own WebSite
+    # column, set by teams/geo.py (ticket 011-004) on a school-precision
+    # public-school match only (NCES's private-school data carries no
+    # website column). Deliberately a separate field from Team.website --
+    # never presented as the team's own site.
 
     # Program metadata
     rookie_year: int | None = None
