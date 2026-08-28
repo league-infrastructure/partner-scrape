@@ -25,6 +25,8 @@ from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
 
+import pytest
+
 from partner_scrape.adapters.greenhouse import DEFAULT_API_BASE as GREENHOUSE_API_BASE
 from partner_scrape.adapters.lever import DEFAULT_API_BASE as LEVER_API_BASE
 from partner_scrape.fetch.fetcher import FetchResponse
@@ -41,6 +43,19 @@ GREENHOUSE_URL = f"{GREENHOUSE_API_BASE}/{GREENHOUSE_BOARD_TOKEN}/jobs?content=t
 
 LEVER_COMPANY = "fixturebiotech"
 LEVER_URL = f"{LEVER_API_BASE}/{LEVER_COMPANY}?mode=json"
+
+
+@pytest.fixture(autouse=True)
+def _scrape_cache_dir(tmp_path, monkeypatch):
+    """Point SCRAPE_CACHE_DIR at a tmp_path for every test in this file.
+
+    `pipeline.run()` unconditionally calls `export.partner_log.record()`
+    (sprint 009 ticket 003), whose default `log_dir` resolves via
+    `config.get_scrape_cache_dir()` when a test doesn't pass one
+    explicitly -- matches `test_pipeline_e2e.py`'s identical fixture.
+    """
+    monkeypatch.setenv("SCRAPE_CACHE_DIR", str(tmp_path / "scrape_cache"))
+    return tmp_path
 
 
 @dataclass

@@ -22,6 +22,8 @@ from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
 
+import pytest
+
 from partner_scrape.fetch.fetcher import FetchResponse
 from partner_scrape.pipeline import run
 
@@ -36,6 +38,19 @@ TEC_API_BASE = "https://coastalrootsfarm.example/wp-json/tribe/events/v1/events/
 TEC_PROBE_URL = f"{TEC_API_BASE}?per_page=50&status=publish&start_date=now"
 TEC_PAGE1_URL = f"{TEC_API_BASE}?per_page=50&page=1&status=publish&start_date=now"
 ICAL_FEED_URL = "https://thelivingcoast.example/events/?ical=1"
+
+
+@pytest.fixture(autouse=True)
+def _scrape_cache_dir(tmp_path, monkeypatch):
+    """Point SCRAPE_CACHE_DIR at a tmp_path for every test in this file.
+
+    `pipeline.run()` unconditionally calls `export.partner_log.record()`
+    (sprint 009 ticket 003), whose default `log_dir` resolves via
+    `config.get_scrape_cache_dir()` when a test doesn't pass one
+    explicitly -- matches `test_pipeline_e2e.py`'s identical fixture.
+    """
+    monkeypatch.setenv("SCRAPE_CACHE_DIR", str(tmp_path / "scrape_cache"))
+    return tmp_path
 
 
 class NoFixtureResponse(RuntimeError):

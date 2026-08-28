@@ -63,6 +63,23 @@ BROKEN_API_BASE = "https://broken-source.example/wp-json/tribe/events/v1/events/
 BROKEN_PROBE_URL = f"{BROKEN_API_BASE}?per_page=50&status=publish&start_date=now"
 
 
+@pytest.fixture(autouse=True)
+def _scrape_cache_dir(tmp_path, monkeypatch):
+    """Point SCRAPE_CACHE_DIR at a tmp_path for every test in this file.
+
+    `pipeline.run()` unconditionally calls `export.partner_log.record()`
+    (sprint 009 ticket 003), whose default `log_dir` resolves via
+    `config.get_scrape_cache_dir()` when a test doesn't pass one
+    explicitly -- exactly none of the tests in this file do, since they
+    only ever pass `site_dir`. Mirrors `test_pipeline_e2e_enrichment.py`'s
+    and `test_cli.py`'s identical fixture for the same underlying reason
+    (a real config accessor with no safe default, reached unconditionally
+    now). No test here ever touches the real configured cache directory.
+    """
+    monkeypatch.setenv("SCRAPE_CACHE_DIR", str(tmp_path / "scrape_cache"))
+    return tmp_path
+
+
 class NoFixtureResponse(RuntimeError):
     """Raised by FixtureFetcher for a URL with no canned response -- the
     real failure the deliberately-broken registry entry is meant to

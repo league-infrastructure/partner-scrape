@@ -50,6 +50,7 @@ from partner_scrape.export import (
     export_ads,
     export_opportunities,
     load_ad_configs,
+    partner_log,
 )
 from partner_scrape.fetch import Fetcher, PlaywrightFetcher, PoliteFetcher
 from partner_scrape.model import Event
@@ -505,6 +506,22 @@ def run(
         image_resolver=resolved_image_resolver,
     )
     active_reporter.record_opportunities(opportunities)
+
+    # Persistent per-partner accumulation (sprint 009 ticket 003, issue
+    # 15): appends this run's new-or-changed Opportunities into their
+    # partner's append-only `.jsonl` log, independent of and alongside
+    # the flat `opportunities.json` export below -- see
+    # `export/partner_log.py`'s module docstring. `partners_path` is the
+    # exact value just resolved for `normalize_run()` above, so the two
+    # modules' partner joins can never read a different `partners.json`.
+    # `dry_run` is threaded straight through, matching
+    # `export_opportunities`'/`export_ads`'s own contract (computed,
+    # never written, under `dry_run`).
+    partner_log.record(
+        opportunities,
+        partners_path=resolved_partners_path,
+        dry_run=dry_run,
+    )
 
     result = export_opportunities(
         opportunities,
