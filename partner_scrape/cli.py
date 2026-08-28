@@ -22,7 +22,8 @@ import logging
 import sys
 from pathlib import Path
 
-from partner_scrape.config import get_site_dir
+from partner_scrape.config import get_mirror_site_dirs, get_site_dir
+from partner_scrape.export.mirror import mirror_site_data
 from partner_scrape.enrich.cache import EnrichmentCache
 from partner_scrape.enrich.enricher import LLMEnricher
 from partner_scrape.enrich.llm_client import AnthropicLLMClient
@@ -75,6 +76,26 @@ def _build_parser() -> argparse.ArgumentParser:
         help=(
             "Sibling stem-ecosystem checkout to write opportunities.json / "
             "scrape-meta.json into (default: ../stem-ecosystem, or $SITE_DIR)."
+        ),
+    )
+    parser.add_argument(
+        "--mirror-site-dir",
+        dest="mirror_site_dirs",
+        type=Path,
+        action="append",
+        help=(
+            "Additional site checkout to copy the finished export into "
+            "(repeatable). Defaults to this repo's own site/, so a scrape "
+            "refreshes the beta site `just dev` serves as well as "
+            "--site-dir. Override the default with $MIRROR_SITE_DIRS."
+        ),
+    )
+    parser.add_argument(
+        "--no-mirror",
+        action="store_true",
+        help=(
+            "Do not copy the export into any additional site checkout -- "
+            "write only to --site-dir."
         ),
     )
     parser.add_argument(
@@ -302,6 +323,19 @@ def main(argv: list[str] | None = None) -> int:
         enrichers=enrichers,
         reporter=yield_reporter,
     )
+
+    # Keep every other checkout of the site in step with the export
+    # that was just written. Skipped under --dry-run, which promises to
+    # write nothing anywhere.
+    if not args.dry_run and not args.no_mirror:
+        targets = (
+            args.mirror_site_dirs
+            if args.mirror_site_dirs is not None
+            else get_mirror_site_dirs()
+        )
+        if targets:
+            primary = args.site_dir if args.site_dir is not None else get_site_dir()
+            mirror_site_data(primary, targets)
 
     noun = "opportunity" if len(payload) == 1 else "opportunities"
     suffix = " (dry run -- nothing written)" if args.dry_run else ""
