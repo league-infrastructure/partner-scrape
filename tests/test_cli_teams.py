@@ -37,9 +37,16 @@ def _cache_dir(tmp_path, monkeypatch):
     sane default" `RuntimeError`). `SITE_DIR` is pinned too so any test
     that omits `--site-dir` can never reach the real sibling
     `../stem-ecosystem` checkout, matching `test_cli.py`'s own `_cache_dir`
-    fixture."""
+    fixture. `TBA_KEY` is unset unconditionally too (ticket 011-003):
+    the real seeded registry this class runs against now also loads
+    `frc-sd.toml`, and `TBA_KEY` is a real, working credential in this
+    project's own `.env` -- without this, a run on a machine with that
+    `.env` sourced could silently behave differently than one without
+    it (the fixture Fetchers below only register FTCScout's URL).
+    Tests that need a valid key set it explicitly."""
     monkeypatch.setenv("SCRAPE_CACHE_DIR", str(tmp_path))
     monkeypatch.setenv("SITE_DIR", str(tmp_path))
+    monkeypatch.delenv("TBA_KEY", raising=False)
     # `cli.main()`'s no-subcommand/`run` path calls `publish.project(...)`
     # after `run()` returns, which raises loudly on a missing curated
     # `partners.json` -- only `TestNeverCrossesIntoTheOtherPipeline`'s

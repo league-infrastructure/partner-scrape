@@ -332,17 +332,20 @@ class TestRegistryConfig:
     """
 
     def test_ftc_sd_toml_loads_via_load_active_sources(self):
+        # Ticket 011-003 added a sibling `frc-sd.toml` to this same
+        # directory, so this asserts the ftc-sd entry specifically
+        # rather than assuming it is the directory's only file --
+        # matching test_sources_tba.py::TestRegistryConfig's precedent.
         sources = load_active_sources(TEAMS_REGISTRY_DIR)
+        source = next(s for s in sources if s.source_id == "ftc-sd")
 
-        assert len(sources) == 1
-        source = sources[0]
-        assert source.source_id == "ftc-sd"
         assert source.adapter_type == "ftcscout"
         assert source.enabled is True
         assert source.config.get("region") == DEFAULT_REGION
 
     def test_loaded_source_config_drives_discover_to_the_real_search_url(self):
-        source = load_active_sources(TEAMS_REGISTRY_DIR)[0]
+        sources = load_active_sources(TEAMS_REGISTRY_DIR)
+        source = next(s for s in sources if s.source_id == "ftc-sd")
         source_obj = FTCScoutSource()
 
         refs = list(source_obj.discover(source, fetcher=None))

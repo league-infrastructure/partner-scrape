@@ -1,13 +1,14 @@
 """Tests for partner_scrape.teams.pipeline: `run_teams()`'s
-Registry -> TeamSource(s) -> export_teams() sequencing.
+Registry -> TeamSource(s) -> merge_teams() -> export_teams() sequencing.
 
 Drives the real Team Registry seed (`partner_scrape/teams/registry/
-ftc-sd.toml`, the same one production loads) through a fixture Fetcher
-returning the live-captured 152-team FTCScout fixture -- no test here
-opens a real network socket, and no test relies on a synthetic registry
-standing in for the real one (except the two tests that specifically
-need an unrecognized/erroring source, which use their own small fixture
-registries under `tests/fixtures/teams/`).
+ftc-sd.toml` + `frc-sd.toml`, the same ones production loads) through a
+fixture Fetcher returning the live-captured 152-team FTCScout fixture
+and (ticket 011-003) the hand-authored 59-team TBA fixture -- no test
+here opens a real network socket, and no test relies on a synthetic
+registry standing in for the real one (except the two tests that
+specifically need an unrecognized/erroring source, which use their own
+small fixture registries under `tests/fixtures/teams/`).
 """
 
 from __future__ import annotations
@@ -18,14 +19,19 @@ from pathlib import Path
 
 import pytest
 
+from partner_scrape import config
 from partner_scrape.fetch.fetcher import FetchResponse
 from partner_scrape.teams import pipeline as teams_pipeline
 from partner_scrape.teams.model import Team
 from partner_scrape.teams.pipeline import DEFAULT_TEAMS_REGISTRY_DIR, run_teams
 from partner_scrape.teams.sources.ftcscout import DEFAULT_API_BASE, DEFAULT_REGION, _search_url
+from partner_scrape.teams.sources.tba import _status_url, _teams_page_url
 
 FIXTURES_DIR = Path(__file__).resolve().parents[1] / "fixtures" / "teams"
 SEARCH_URL = _search_url(DEFAULT_API_BASE, DEFAULT_REGION)
+TBA_STATUS_URL = _status_url(config.DEFAULT_TBA_URL)
+TBA_PAGE0_URL = _teams_page_url(config.DEFAULT_TBA_URL, 0)
+TBA_PAGE1_URL = _teams_page_url(config.DEFAULT_TBA_URL, 1)
 
 
 @dataclass
@@ -46,9 +52,43 @@ def _ftcscout_fetcher() -> FixtureFetcher:
     return FixtureFetcher({SEARCH_URL: FetchResponse(url="", status=200, headers={}, body=body)})
 
 
+def _fixture_response(name: str, status: int = 200) -> FetchResponse:
+    return FetchResponse(url="", status=status, headers={}, body=(FIXTURES_DIR / name).read_text())
+
+
+def _tba_responses() -> dict[str, FetchResponse]:
+    return {
+        TBA_STATUS_URL: _fixture_response("tba_status.json"),
+        TBA_PAGE0_URL: _fixture_response("tba_teams_page0.json"),
+        TBA_PAGE1_URL: _fixture_response("tba_teams_page1.json"),
+    }
+
+
+def _ftc_and_tba_fetcher() -> FixtureFetcher:
+    """Both real sources' responses in one Fetcher -- the real Team
+    Registry (ftc-sd.toml + frc-sd.toml) drives both against it."""
+    responses = {
+        SEARCH_URL: _fixture_response("ftcscout_search.json"),
+        **_tba_responses(),
+    }
+    return FixtureFetcher(responses)
+
+
 def _make_site(root: Path) -> Path:
     (root / "src" / "data").mkdir(parents=True)
     return root
+
+
+@pytest.fixture(autouse=True)
+def _clean_tba_key_env(monkeypatch):
+    """Every test in this module starts with `TBA_KEY` unset,
+    regardless of the real ambient environment -- `TBA_KEY` is a real,
+    working credential in this project's own `.env` (sprint.md's
+    Migration Concerns), so without this a test run on a machine with
+    that `.env` sourced could silently behave differently than one
+    without it. Tests that need a valid key set it explicitly via
+    `monkeypatch.setenv("TBA_KEY", ...)`."""
+    monkeypatch.delenv("TBA_KEY", raising=False)
 
 
 class TestEndToEndAgainstTheRealRegistry:
@@ -56,7 +96,14 @@ class TestEndToEndAgainstTheRealRegistry:
     stand-in) so drift in the real registry file is caught here too --
     matching `tests/teams/test_sources_ftcscout.py`'s
     `TestRegistryConfig` precedent of trusting the real registry file
-    in tests."""
+    in tests.
+
+    `TBA_KEY` is unset for every test below (see `_clean_tba_key_env`)
+    -- the real registry also loads `frc-sd.toml` now (ticket 011-003),
+    so these FTCScout-focused tests double as a first proof that an
+    unset `TBA_KEY` degrades to FTC-only output with no TBA fetch
+    attempted at all; `TestTbaFailureIsolation` below covers that
+    explicitly and in more detail."""
 
     def test_dry_run_reports_152_teams_with_no_disk_write(self, tmp_path):
         fetcher = _ftcscout_fetcher()
@@ -93,10 +140,23 @@ class TestEndToEndAgainstTheRealRegistry:
 
         assert payload["meta"]["total"] == 152
 
+    def test_source_filter_tba_matches_the_real_registry_entry(self, monkeypatch, tmp_path):
+        # "tba" was the unregistered-adapter_type example this test
+        # class used pre-ticket-011-003 (frc-sd.toml didn't exist yet)
+        # -- now it is a real, registered source, so it gets its own
+        # positive test here instead.
+        monkeypatch.setenv("TBA_KEY", "fixture-test-key")
+        fetcher = _ftc_and_tba_fetcher()
+
+        payload = run_teams(source="tba", site_dir=tmp_path, fetcher=fetcher, dry_run=True)
+
+        assert payload["meta"]["total"] == 59
+        assert SEARCH_URL not in fetcher.calls  # the filtered-out source is never fetched
+
     def test_source_filter_for_an_unknown_source_yields_zero_teams(self, tmp_path):
         fetcher = _ftcscout_fetcher()
 
-        payload = run_teams(source="tba", site_dir=tmp_path, fetcher=fetcher, dry_run=True)
+        payload = run_teams(source="seed", site_dir=tmp_path, fetcher=fetcher, dry_run=True)
 
         assert payload["meta"]["total"] == 0
         assert fetcher.calls == []  # the filtered-out source's fetcher is never even called
@@ -201,3 +261,117 @@ class TestSourceFailureIsolation:
         # returns no refs) -- the point is that the exploding source's
         # RuntimeError never propagates out of run_teams().
         assert payload["meta"]["total"] == 0
+
+
+class TestBothRealSourcesTogether:
+    """AC: with TBA fixtures present, `teams.json` carries 59 FRC teams
+    (211 total) -- the real Team Registry (`ftc-sd.toml` + `frc-sd.toml`)
+    driven against both real fixture sets in one run."""
+
+    def test_211_teams_total_152_ftc_59_frc(self, monkeypatch, tmp_path):
+        monkeypatch.setenv("TBA_KEY", "fixture-test-key")
+        fetcher = _ftc_and_tba_fetcher()
+
+        payload = run_teams(site_dir=tmp_path, fetcher=fetcher, dry_run=True)
+
+        assert payload["meta"]["total"] == 211
+        assert payload["meta"]["by_league"] == {"FTC": 152, "FRC": 59}
+        assert len(payload["teams"]) == 211
+
+    def test_merge_ran_canyon_crest_academy_links_across_leagues(self, monkeypatch, tmp_path):
+        # Canyon Crest Academy: FTC 7159/9837/14425 (real fixture) and
+        # FRC 3128 (real fixture) -- sprint.md's dual-program example.
+        monkeypatch.setenv("TBA_KEY", "fixture-test-key")
+        fetcher = _ftc_and_tba_fetcher()
+
+        payload = run_teams(site_dir=tmp_path, fetcher=fetcher, dry_run=True)
+        by_id = {t["team_id"]: t for t in payload["teams"]}
+
+        cca_ids = {"ftc-7159", "ftc-9837", "ftc-14425", "frc-3128"}
+        org_keys = {by_id[tid]["org_key"] for tid in cca_ids}
+        assert org_keys != {""}
+        assert len(org_keys) == 1
+        assert set(by_id["frc-3128"]["sibling_team_ids"]) == cca_ids - {"frc-3128"}
+
+    def test_poway_1622_links_but_stays_two_separate_records(self, monkeypatch, tmp_path):
+        # FTC 1622 and FRC 1622 -- same org (Poway High School), same
+        # number, but never fused into one record. (Poway High School
+        # also fields a second FTC team, 20422 "Team Spyder Too", in
+        # the real fixture -- so this is a 3-team sibling group, not a
+        # pair; the point under test is that ftc-1622 and frc-1622
+        # specifically remain separate records that reference each
+        # other, not that Poway fields exactly two teams.)
+        monkeypatch.setenv("TBA_KEY", "fixture-test-key")
+        fetcher = _ftc_and_tba_fetcher()
+
+        payload = run_teams(site_dir=tmp_path, fetcher=fetcher, dry_run=True)
+        team_1622 = [t for t in payload["teams"] if t["number"] == 1622]
+
+        assert len(team_1622) == 2
+        by_id = {t["team_id"]: t for t in team_1622}
+        assert set(by_id) == {"ftc-1622", "frc-1622"}
+        assert by_id["ftc-1622"]["org_key"] == by_id["frc-1622"]["org_key"]
+        assert "frc-1622" in by_id["ftc-1622"]["sibling_team_ids"]
+        assert "ftc-1622" in by_id["frc-1622"]["sibling_team_ids"]
+        assert "ftc-20422" in by_id["frc-1622"]["sibling_team_ids"]
+
+    def test_family_community_teams_never_grouped_together(self, monkeypatch, tmp_path):
+        monkeypatch.setenv("TBA_KEY", "fixture-test-key")
+        fetcher = _ftc_and_tba_fetcher()
+
+        payload = run_teams(site_dir=tmp_path, fetcher=fetcher, dry_run=True)
+        empty_org_teams = [t for t in payload["teams"] if t["organization"] == ""]
+
+        # 58 FTC Family/Community teams + the FRC no-school-reported
+        # teams in the TBA fixture all get org_key == "" and no
+        # siblings, never fused into one giant bogus organization.
+        assert len(empty_org_teams) >= 58
+        assert all(t["org_key"] == "" for t in empty_org_teams)
+        assert all(t["sibling_team_ids"] == [] for t in empty_org_teams)
+
+
+class TestTbaFailureIsolation:
+    """AC: a simulated `TBA_KEY`-missing or TBA-401 fixture run still
+    publishes a 152-team, FTC-only `teams.json` -- per-source isolation,
+    not a whole-run failure (sprint.md's Migration Concerns; this
+    ticket's own acceptance criteria)."""
+
+    def test_missing_tba_key_still_publishes_ftc_only_152_teams(self, monkeypatch, tmp_path):
+        monkeypatch.delenv("TBA_KEY", raising=False)
+        fetcher = _ftc_and_tba_fetcher()
+
+        payload = run_teams(site_dir=tmp_path, fetcher=fetcher, dry_run=True)
+
+        assert payload["meta"]["total"] == 152
+        assert payload["meta"]["by_league"] == {"FTC": 152}
+        assert all(t["league"] == "FTC" for t in payload["teams"])
+        # The TBA status probe was never even attempted -- the missing
+        # key is caught in _auth_headers() before any fetcher.get().
+        assert TBA_STATUS_URL not in fetcher.calls
+
+    def test_tba_401_still_publishes_ftc_only_152_teams(self, monkeypatch, tmp_path):
+        monkeypatch.setenv("TBA_KEY", "fixture-test-key")
+        fetcher = FixtureFetcher(
+            {
+                SEARCH_URL: _fixture_response("ftcscout_search.json"),
+                TBA_STATUS_URL: FetchResponse(url="", status=401, headers={}, body="{}"),
+            }
+        )
+
+        payload = run_teams(site_dir=tmp_path, fetcher=fetcher, dry_run=True)
+
+        assert payload["meta"]["total"] == 152
+        assert payload["meta"]["by_league"] == {"FTC": 152}
+
+    def test_missing_tba_key_writes_a_valid_teams_json_to_disk(self, monkeypatch, tmp_path):
+        # Not just dry_run -- confirm the degraded run still writes a
+        # real, valid teams.json rather than nothing at all.
+        monkeypatch.delenv("TBA_KEY", raising=False)
+        fetcher = _ftc_and_tba_fetcher()
+        site = _make_site(tmp_path)
+
+        run_teams(site_dir=site, fetcher=fetcher, dry_run=False)
+
+        written = json.loads((site / "src" / "data" / "teams.json").read_text())
+        assert written["meta"]["total"] == 152
+        assert written["meta"]["by_league"] == {"FTC": 152}

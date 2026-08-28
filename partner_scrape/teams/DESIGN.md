@@ -8,27 +8,26 @@
 
 `partner_scrape/teams/` acquires, locates, and publishes San Diego
 County's FIRST robotics teams (FTC via FTCScout, FRC via The Blue
-Alliance in a later ticket) as a standalone `teams.json` data contract,
-structurally independent of the existing `Opportunity` pipeline. It is
-a subsystem of its own — not folded into `adapters/`/`normalize/`/
-`export/` — because a `Team` is a fundamentally different kind of
-record: a standing entity with no date, no recurrence, and no
-relevance-gating need, none of which the existing pipeline's
-abstractions are built around. The seam this subsystem owns is
-"acquire, locate, and publish an undated directory entity," which
-nothing else in the codebase does.
+Alliance) as a standalone `teams.json` data contract, structurally
+independent of the existing `Opportunity` pipeline. It is a subsystem
+of its own — not folded into `adapters/`/`normalize/`/`export/` —
+because a `Team` is a fundamentally different kind of record: a
+standing entity with no date, no recurrence, and no relevance-gating
+need, none of which the existing pipeline's abstractions are built
+around. The seam this subsystem owns is "acquire, locate, and publish
+an undated directory entity," which nothing else in the codebase does.
 
 ## 2. Orientation
 
-**Ticket 011-002 (this ticket) wires the acquisition foundation ticket
-011-001 built into a runnable, publishable end-to-end path.**
-`teams.pipeline.run_teams()` now sequences the Team Registry ->
-`TeamSource`(s) -> `teams.export.export_teams()`, and a new
-`partner-scrape teams` CLI subcommand invokes it — `teams.json` with
-152 FTC teams is a real, buildable artifact as of this ticket. There is
-still no merge or geocoding — those remain later tickets, landing on
-top of this spine in sequence (`sprint.md`'s Migration Concerns:
-001→002→003→004→005, each needing the one before it):
+**Ticket 011-003 (this ticket) adds the second live source and
+resolves cross-league organizational identity.** `teams.pipeline.
+run_teams()` now runs both `FTCScoutSource` and `TBASource`, links
+their output via `teams.merge.merge_teams()`, and publishes the
+combined `Team[]` — `teams.json` with 152 FTC + 59 FRC teams (211
+total) is a real, buildable artifact as of this ticket. Geocoding and
+site pages remain later tickets, landing on top of this spine in
+sequence (`sprint.md`'s Migration Concerns: 001→002→003→004→005, each
+needing the one before it):
 
 ```
 BUILT (ticket 011-001):
@@ -38,40 +37,61 @@ BUILT (ticket 011-001):
      ↓ (via sources.base.run())
   model.Team objects                                (no email field, ever)
 
-BUILT (this ticket, 011-002):
+BUILT (ticket 011-002):
   teams.pipeline.run_teams()          Team Registry -> TeamSource(s) dispatch,
      ↓                                per-source failure isolation
   teams.export.export_teams()         writes {site_dir}/src/data/teams.json
      ↓                                (meta envelope + teams array)
   cli.py `teams` subcommand           partner-scrape teams [--dry-run]
-                                       [--source ftcscout] [--site-dir DIR]
+                                       [--source ftcscout|tba] [--site-dir DIR]
                                        [--no-mirror] [-v]
      ↓ (unless --no-mirror/--dry-run)
   export.mirror_site_data()           reused unmodified, teams.json added
                                        to MIRRORED_DATA_FILES
 
+BUILT (this ticket, 011-003):
+  sources.tba.TBASource                probes /api/v3/status for
+     ↓                                 max_team_page, enumerates every
+     ↓                                 /api/v3/teams/{page}, filters to
+     ↓                                 CA + SD_COUNTY_CITIES -- 59 teams
+  teams.merge.merge_teams(teams)       links Team.org_key/sibling_team_ids
+     ↓                                 by normalized organization name,
+     ↓                                 run after every source, before export
+  (feeds into ticket 011-002's export_teams(), unchanged)
+
 PLANNED (later tickets, not yet built):
-  + sources.tba.TBASource                    (011-003 -- 59 FRC teams)
-  → merge.py                                 (011-003 -- cross-league identity)
   → geo.py + data/                           (011-004 -- offline geocoding ladder)
   → site/src/pages/teams/*                   (011-005)
 ```
 
-A freshly-extracted `Team` from `FTCScoutSource` still has
+A freshly-extracted `Team` from either source still has
 `location_precision == "none"` and no coordinates — that is correct,
 not a gap: no geocoding rung has run yet (ticket 011-004). `teams.json`
-publishes that honestly (`by_location_precision: {"none": 152}` in its
-`meta`) rather than hiding it. As of this ticket, `cli.py` imports
+publishes that honestly (`by_location_precision: {"none": 211}` in its
+`meta`) rather than hiding it. `cli.py` still imports only
 `teams.pipeline.run_teams` — the one and only edge from any existing,
 non-`teams/` module into this subsystem.
 
-**FTCScout, this ticket's only source.** `api.ftcscout.org`, free,
-unauthenticated. Its REST search endpoint returns 152 San Diego FTC
-teams in one response — no pagination, no probing needed, one
-`TeamRef` per run. It supplies city and (62% of the time) a school
-name, but confirmed live: no website and no ZIP for any of the 152
-records (0/3,412 nationally too). The Blue Alliance (ticket 011-003)
-is the first real source of website/ZIP coverage.
+**FTCScout**, `api.ftcscout.org`, free, unauthenticated. Its REST
+search endpoint returns 152 San Diego FTC teams in one response — no
+pagination, no probing needed, one `TeamRef` per run. It supplies city
+and (62% of the time) a school name, but confirmed live: no website and
+no ZIP for any of the 152 records (0/3,412 nationally too).
+
+**The Blue Alliance (this ticket)**, `www.thebluealliance.com/api/v3`,
+keyed (`X-TBA-Auth-Key`, 401 without it). Unlike FTCScout, TBA has no
+region-scoped search endpoint — `discover()` first probes `/api/v3/
+status` for `max_team_page` (23 measured live), then enumerates every
+`/api/v3/teams/{page}` (~9,163 teams worldwide, 496 in California),
+filtering down to the 59 in `sources.tba.SD_COUNTY_CITIES` (an
+allowlist — see Constraints below for why it must be one, unlike
+FTCScout's denylist). TBA is the first real source of website (73%)
+and ZIP (83%) coverage; its `lat`/`lng`/`address`/`location_name`/
+`gmaps_place_id` fields are documented in TBA's own OpenAPI spec as
+"Will be NULL, for future development" and confirmed NULL for all 59 SD
+teams, so this source never reads them at all — **TBA is not a
+geocoding source**; only ticket 011-004's `geo.py` sets
+`Team.latitude`/`longitude`.
 
 ## 3. Constraints and Invariants
 
@@ -94,7 +114,7 @@ is the first real source of website/ZIP coverage.
   (`fetch/fetcher.py`) is GET-only; adding a `post()` method to support
   GraphQL would ripple into every `FixtureFetcher` test double in the
   whole suite for this one source's benefit.
-- **Out-of-region teams are flagged, never dropped.** A team whose
+- **Out-of-region FTC teams are flagged, never dropped.** A team whose
   (cleaned) city is in `sources.ftcscout.OUT_OF_REGION_CITIES` (6 of
   152 FTC teams: Ensenada ×2, San Clemente, San Antonio, Louisville,
   Agoura Hills) is published with `Team.in_region = False`, not
@@ -103,6 +123,67 @@ is the first real source of website/ZIP coverage.
   mode (a real San Diego community not yet seen must never be silently
   flagged out-of-region because it's missing from a hand-maintained
   list).
+- **`sources.tba.SD_COUNTY_CITIES` must be an allowlist, unlike
+  FTCScout's denylist above — and this is deliberate, not an
+  inconsistency.** FTCScout's `region=USCASD` search endpoint already
+  pre-filters to a rough San Diego-area geographic box, so its residual
+  6-city denylist only needs to catch stragglers. TBA's `/api/v3/
+  teams/{page}` has no region parameter at all — it enumerates every
+  FRC team worldwide (~9,163) — so `sources/tba.py` must actively
+  select the 59 that are in San Diego County, both by `state_prov ==
+  "CA"` and by `city` matching this allowlist. An unrecognized San
+  Diego city is a silent *undercount* here (the opposite failure mode
+  from FTCScout's denylist), surfaced via `meta.by_league["FRC"]`
+  reading lower than the issue's measured 59 — that count is the first
+  place to check if this list ever needs a new entry.
+- **`sources.tba.TBASource.discover()` raises on any probe failure; it
+  does not degrade gracefully the way `adapters/tec.py`'s pagination
+  probe does (falling back to "assume 1 page").** A missing/invalid
+  `TBA_KEY`, a non-200/401 `/api/v3/status` response, or an unparseable
+  body all raise `RuntimeError` from `discover()`. There is no sane
+  page-count fallback for a credential failure — guessing would still
+  401 on every subsequent page fetch, just less honestly. Raising here
+  is exactly what lets `teams.pipeline.run_teams()`'s existing
+  per-source try/except (ticket 011-002, unchanged by this ticket)
+  isolate it: log, skip TBA, continue with whatever FTCScout already
+  contributed. This is the mechanism that satisfies sprint.md's
+  Migration Concerns — a missing/401 `TBA_KEY` degrades a `teams` run
+  to FTC-only output, never aborts it — with **zero TBA-specific
+  special-casing in `pipeline.py`** beyond registering the source in
+  `_TEAM_SOURCES`. `tests/teams/test_pipeline.py`'s
+  `TestTbaFailureIsolation` covers both cases end-to-end.
+- **Cross-league organizational identity keys on normalized
+  organization name, never on team number.** `teams.merge.merge_teams()`
+  links `Team.org_key`/`sibling_team_ids` by
+  `normalize.partners.normalize_org_name`-normalized `Team.organization`
+  — reused directly, not reimplemented. `Team.team_id` already
+  guarantees per-league uniqueness by construction
+  (`f"{league.lower()}-{number}"`), so number collisions across leagues
+  never produce a duplicate ID, but a naive number-based *link* would
+  still be wrong: FTC 1622 and FRC 1622 are both real, both at Poway
+  High School (a genuine dual-program link, correctly made by org
+  name), while FTC 812 and FRC 812 are at *different* schools (measured
+  — a number-based link would be actively wrong here, and org-name
+  linking correctly makes none). Linking never fuses records — every
+  `Team` a group produces stays a separate object; only `org_key` and
+  `sibling_team_ids` are set. `Family/Community` and any other
+  empty-`organization` team gets `org_key = ""` and is excluded from
+  grouping entirely (never linked to anything, including other
+  empty-organization teams) — without this, 58 unrelated FTC home teams
+  would fuse into one bogus ~60-team "organization." See `merge.py`'s
+  own module docstring for the full rationale and
+  `tests/teams/test_merge.py` for the dual-program/never-groups/
+  number-collision test cases.
+- **`merge_teams()` runs once, after every source has completed, before
+  export — never inside the per-source acquisition loop.** Cross-league
+  identity needs the *combined* `Team[]` from every source that
+  succeeded; running it per-source would see only one league at a time
+  and could never link anything. `teams.pipeline.run_teams()` calls it
+  exactly once, after the source loop, and does not wrap it in its own
+  try/except — unlike source acquisition (network I/O, expected to
+  fail sometimes), `merge_teams()` operates on already-validated
+  in-memory `Team` objects and never raises for any input it can
+  receive there.
 - **Dirty city strings are normalized at extraction time, not
   deferred.** Measured live: 27 raw distinct `city` strings for what
   is really 24 places (`"La Jolla "` with trailing whitespace,
@@ -113,14 +194,14 @@ is the first real source of website/ZIP coverage.
   is a simple, sufficient fix for the variants actually observed — it
   is not a general place-name normalizer, and ticket 011-004's `geo.py`
   does the real matching against CDE/NCES school directories.
-- **Deliberate non-goal, still — no merge, no geocoding.**
-  `sources/ftcscout.py` only extracts `Team` objects from one source;
-  it does not attempt cross-league identity (that needs a second
-  source to merge against — ticket 011-003) and does not resolve
-  coordinates (ticket 011-004). Do not "helpfully" add either here —
-  each has its own ticket, sequenced because each genuinely depends on
-  the one before it (geocoding fixtures need real `postal_code`
-  values, which only TBA supplies at any real rate).
+- **Deliberate non-goal, still — no geocoding.** Neither
+  `sources/ftcscout.py` nor `sources/tba.py` resolves coordinates; both
+  leave `Team.latitude`/`longitude`/`location_precision` at their
+  dataclass defaults (`None`/`None`/`"none"`). Do not "helpfully" add
+  geocoding to either source or to `merge.py` — that is ticket
+  011-004's `geo.py`, sequenced after this ticket specifically because
+  its offline ladder needs real `postal_code` values, which only TBA
+  (this ticket) supplies at any real rate.
 - **`teams/export.py` never writes or touches `opportunities.json` or
   `scrape-meta.json`.** Those are `export/writer.py`'s exclusive
   outputs; `scrape-meta.json` in particular carries the *opportunities*
@@ -131,20 +212,23 @@ is the first real source of website/ZIP coverage.
   both files are byte-identical before and after a `teams` run, over
   the full 152-team fixture, not just a single hand-built `Team`.
 - **`teams` is a CLI subcommand, never a flag on `run`.** Rosters
-  refresh annually; opportunities refresh weekly. A future TBA auth
-  failure (ticket 011-003) must never sit inside the same process/exit
-  code as the weekly opportunities export. `cli.py`'s `_run_teams()`
-  never calls `run`/`pipeline.run()`, and `tests/test_cli_teams.py`
-  asserts the isolation in both directions (`teams` never reaches
-  `pipeline.run()`; the no-subcommand path never reaches `run_teams()`).
+  refresh annually; opportunities refresh weekly. A TBA auth failure
+  (this ticket's `sources/tba.py`) must never sit inside the same
+  process/exit code as the weekly opportunities export. `cli.py`'s
+  `_run_teams()` never calls `run`/`pipeline.run()`, and
+  `tests/test_cli_teams.py` asserts the isolation in both directions
+  (`teams` never reaches `pipeline.run()`; the no-subcommand path never
+  reaches `run_teams()`).
 - **`export_teams()` drops `Team.sources` from the published field
   set**, the same way `export/writer.py`'s `SITE_SCHEMA_FIELDS` drops
   `Opportunity.sources` — cross-source acquisition bookkeeping (which
   source(s) contributed a record) has no counterpart in the site's
   schema. `teams/export.py`'s `TEAMS_SCHEMA_FIELDS` is derived from
-  `dataclasses.fields(Team)` the same drift-proof way, so a future field
-  (e.g. ticket 011-003/011-004's `org_key`, `latitude`) is published
-  automatically with no `export.py` change required.
+  `dataclasses.fields(Team)` the same drift-proof way, so a new field
+  (this ticket's `org_key`/`sibling_team_ids`, confirmed live: they now
+  publish with no `export.py` change; ticket 011-004's `latitude`/
+  `longitude`/`location_precision` next) is published automatically
+  with no `export.py` change required.
 
 ## 4. Design
 
@@ -161,12 +245,28 @@ copied.** FTCScout's `schoolName` field is populated for every record,
 but 58 of 152 (38%) carry the literal sentinel `"Family/Community"` —
 a home team with no sponsoring school, not an organization named
 "Family/Community". `_extract_one()` maps that sentinel to
-`organization=""`, `org_type="family_community"` specifically so a
-later stage (ticket 011-003's `merge.py`) can key cross-league identity
-on a non-empty normalized organization name without accidentally
-fusing 58 unrelated home teams into one bogus "Family/Community"
-organization — `merge.py` doesn't exist yet, but this extraction
-decision is what makes that rule enforceable when it lands.
+`organization=""`, `org_type="family_community"` specifically so
+`merge.py` (this ticket) can key cross-league identity on a non-empty
+normalized organization name without accidentally fusing 58 unrelated
+home teams into one bogus "Family/Community" organization.
+`sources/tba.py` mirrors this for FRC: TBA has no equivalent sentinel,
+but an unaffiliated team simply reports an empty `school_name`, which
+maps the same way (`organization=""`, `org_type="unknown"`) — both
+sources land in the same "never group" bucket `merge.py` checks
+(`Team.organization == ""`), with no TBA-specific case in `merge.py`
+itself.
+
+**Why `teams.merge.merge_teams()` groups by `Team.organization ==
+""` rather than a set of known sentinel values.** `merge.py` has no
+knowledge of `"Family/Community"` or any other source-specific
+sentinel — `_org_key()` only ever checks `if not team.organization`.
+Each source is responsible for mapping its own "no real organization"
+signal to an empty `Team.organization` at extraction time (see the
+paragraph above); `merge.py` only needs to know that "empty" means
+"never group," which keeps it source-agnostic and means a third future
+source (e.g. increment 5's FLL static roster) needs no `merge.py`
+change to get the same protection, only its own extraction-time
+mapping to `organization=""` where appropriate.
 
 **Why `location_precision` defaults to `"none"` here rather than
 `"city"`.** FTCScout does give city-level data, so it might seem
@@ -180,16 +280,20 @@ place name for anything downstream that wants it before geocoding
 runs; `location_precision` is reserved for geocoding provenance
 specifically.
 
-**Why FTCScout/TBA (ticket 011-003) will share no extraction code
-beyond the `TeamSource` protocol shape.** The two payloads are
-structurally unrelated (FTCScout: REST search, thin fields; TBA:
-`/api/v3/teams/{page}`, richer fields, Bearer auth) — forcing a shared
-extraction helper would couple two things that change for unrelated
-reasons. `sources/base.py` supplies only the shared protocol shape
+**Why FTCScout/TBA share no extraction code beyond the `TeamSource`
+protocol shape.** The two payloads are structurally unrelated
+(FTCScout: REST search, thin fields; TBA: `/api/v3/teams/{page}`,
+richer fields, `X-TBA-Auth-Key` header) — forcing a shared extraction
+helper would couple two things that change for unrelated reasons.
+`sources/base.py` supplies only the shared protocol shape
 (`discover`/`fetch`/`extract` → `Team` objects) and a generic
 `run()` chaining helper, matching `adapters.base.Adapter`/
 `adapters.base.run()`'s shape closely enough to reuse the mental
-model, deliberately not the type itself (see Constraints).
+model, deliberately not the type itself (see Constraints). Confirmed
+true in practice, not just anticipated: `sources/tba.py` (this ticket)
+shares zero helper functions with `sources/ftcscout.py` — only the
+`TeamSource` protocol and `SOURCE_NAME`/`LEAGUE`/`PROGRAM` naming
+convention.
 
 **Why `teams.pipeline._TEAM_SOURCES` is a private local dict, not a
 second `adapters.base.ADAPTERS`.** `sources.base.run()` deliberately
@@ -200,8 +304,9 @@ entry's `adapter_type`, and `teams.pipeline` is that one caller.
 `_TEAM_SOURCES` is not exported, not imported by anything else, and
 provides no path from `partner_scrape.pipeline.run()` into this
 subsystem — it is a plain lookup local to one function, not a
-public, growable extension point like `ADAPTERS` is. Ticket 011-003
-adds a `"tba"` entry here, nothing more.
+public, growable extension point like `ADAPTERS` is. This ticket adds
+a `"tba"` entry here, and nothing else changed about the shape of
+`_TEAM_SOURCES` itself.
 
 **Why `teams.export.export_teams()` performs no current/upcoming
 filter or slug-dedup pass, unlike `export/writer.py`.** Teams are
@@ -218,11 +323,11 @@ not by Team Registry file stem.** `pipeline.run()`'s own `--source`
 flag matches a Source Registry file's stem (e.g. `coastalrootsfarm`),
 because that pipeline's registry holds one file per organization.
 `teams`' registry instead holds one file per *league/program* source
-(`ftc-sd.toml`, and ticket 011-003's `frc-sd.toml`), and the operator-
-facing need is "run only FTCScout" / "run only TBA" (e.g. to isolate a
-TBA outage) — a property of *which acquisition method*, not which
-file. Filtering on `SourceConfig.adapter_type` (`"ftcscout"`, `"tba"`)
-matches that need directly.
+(`ftc-sd.toml`, `frc-sd.toml`), and the operator-facing need is "run
+only FTCScout" / "run only TBA" (e.g. to isolate a TBA outage) — a
+property of *which acquisition method*, not which file. Filtering on
+`SourceConfig.adapter_type` (`"ftcscout"`, `"tba"`) matches that need
+directly.
 
 ## 5. Interfaces
 
@@ -234,11 +339,12 @@ matches that need directly.
   `active`, `last_season`, `sponsors`, `org_key`, `sibling_team_ids`,
   `sources`. Every field defaults to an empty/neutral value; no
   `email` field exists (Constraints). Fields are populated
-  incrementally across pipeline stages — this ticket's
-  `sources/ftcscout.py` sets identity/organization/city/sponsors/
-  in-region fields only; `org_key`/`sibling_team_ids` (ticket
-  011-003), `latitude`/`longitude`/`location_precision`/
-  `organization_website` (ticket 011-004) are set later.
+  incrementally across pipeline stages — `sources/ftcscout.py` and
+  `sources/tba.py` set identity/organization/city/website/postal_code/
+  sponsors/in-region fields; `teams.merge.merge_teams()` (this ticket)
+  sets `org_key`/`sibling_team_ids`; `latitude`/`longitude`/
+  `location_precision`/`organization_website` are set later still, by
+  ticket 011-004's `geo.py`.
 - **`sources.base.TeamSource`** — the injectable per-source protocol
   (`discover(source, fetcher) -> Iterable[TeamRef]`,
   `fetch(ref, fetcher) -> RawTeamResponse`,
@@ -255,46 +361,76 @@ matches that need directly.
   FTCScout's REST search endpoint. Config keys read from
   `SourceConfig.config`: `api_base` (default
   `https://api.ftcscout.org`), `region` (default `USCASD`).
-- **`teams/registry/ftc-sd.toml`** — the FTCScout source's
-  `SourceConfig`, loaded via `registry.loader.load_active_sources`
+- **`sources.tba.TBASource`** (this ticket) — the concrete `TeamSource`
+  for The Blue Alliance's keyed v3 API. `discover()` probes `/api/v3/
+  status` for `max_team_page`, then returns one `TeamRef` per `/api/v3/
+  teams/{page}`; raises `RuntimeError` on any probe failure rather than
+  degrading (Constraints). `extract()` filters each page to `state_prov
+  == "CA"` and `city` in `SD_COUNTY_CITIES`. Config keys read from
+  `SourceConfig.config`: `api_base` (default `config.get_tba_url()`).
+  Auth via `config.get_tba_api_key()`, read fresh per call
+  (`_auth_headers()`, matching `adapters/leaguesync.py`'s pattern).
+- **`teams/registry/ftc-sd.toml`** / **`teams/registry/frc-sd.toml`**
+  (the latter this ticket) — the FTCScout and TBA sources'
+  `SourceConfig`s, loaded via `registry.loader.load_active_sources`
   pointed at `teams/registry/` (not the main
   `partner_scrape/registry/sources/` directory — a separate, disjoint
   registry namespace).
+- **`merge.merge_teams(teams: list[Team]) -> list[Team]`** (this
+  ticket) — sets `Team.org_key`/`sibling_team_ids` in place by grouping
+  on `normalize.partners.normalize_org_name`-normalized
+  `Team.organization`, skipping (never grouping) any team whose
+  `organization` is empty. Mutates and returns the same list; called
+  once by `teams.pipeline.run_teams()`, after every source has run and
+  before `export_teams()`. See Constraints for the full identity rule
+  and Design for why it keys on organization name, not team number.
 - **`pipeline.run_teams(*, registry_dir=None, source=None, site_dir=None,
-  fetcher=None, dry_run=False) -> dict`** (ticket 011-002) — the
-  programmatic entry point: loads the Team Registry (defaulting to the
-  real seed, `teams/registry/`), dispatches each active source to its
+  fetcher=None, dry_run=False) -> dict`** — the programmatic entry
+  point: loads the Team Registry (defaulting to the real seed,
+  `teams/registry/`), dispatches each active source to its
   `TeamSource` via `_TEAM_SOURCES`, isolates any one source's failure
   (logged and skipped, matching `pipeline.run()`'s own SUC-008
-  contract), and hands the accumulated `Team[]` to `export_teams()`.
+  contract), links cross-league identity via `merge_teams()` (this
+  ticket) over the combined result, and hands it to `export_teams()`.
   Returns that call's `{"meta": ..., "teams": [...]}` payload unchanged.
 - **`export.export_teams(teams, site_dir=None, *, dry_run=False) -> dict`**
-  (ticket 011-002) — writes `{site_dir}/src/data/teams.json` as
+  — writes `{site_dir}/src/data/teams.json` as
   `{"meta": {...}, "teams": [...]}`. `meta` carries `generated`
   (timestamp), `total`, `by_league`, `out_of_region`, and
   `by_location_precision` — coverage/data-quality made visible in the
   artifact itself, not just a log line. `TEAMS_SCHEMA_FIELDS` (every
   `Team` field except `sources`) is the published field set, derived
-  from `dataclasses.fields(Team)` so it can never drift. Raises
-  `RuntimeError` on an unwritable `site_dir`/`src/data`, matching
-  `export_opportunities`'s loud-failure contract; `dry_run=True`
-  computes and returns the payload without touching disk. **Never**
-  writes or touches `opportunities.json`/`scrape-meta.json` (Constraints).
-- **`partner-scrape teams [--dry-run] [--source ftcscout] [--site-dir
-  DIR] [--no-mirror] [-v]`** (ticket 011-002, `cli.py`) — the CLI entry
+  from `dataclasses.fields(Team)` so it can never drift — `org_key`/
+  `sibling_team_ids` (this ticket) needed no `export.py` change to
+  start being published, exactly as designed. Raises `RuntimeError` on
+  an unwritable `site_dir`/`src/data`, matching `export_opportunities`'s
+  loud-failure contract; `dry_run=True` computes and returns the
+  payload without touching disk. **Never** writes or touches
+  `opportunities.json`/`scrape-meta.json` (Constraints).
+- **`partner-scrape teams [--dry-run] [--source ftcscout|tba]
+  [--site-dir DIR] [--no-mirror] [-v]`** (`cli.py`) — the CLI entry
   point. Constructs a real `PoliteFetcher()` and calls `run_teams()`;
   unless `--dry-run`/`--no-mirror`, also calls `export.mirror_site_data`
   (reused, unmodified) against `config.get_mirror_site_dirs()`. Never
   calls `run`/`pipeline.run()` — see `cli.py`'s own module docstring
   and Constraints above.
-- **`export/mirror.py`'s `MIRRORED_DATA_FILES`** (ticket 011-002) —
-  gained one entry, `"teams.json"`; no change to `mirror_site_data`'s
-  own copy logic. See `export/DESIGN.md`.
+- **`export/mirror.py`'s `MIRRORED_DATA_FILES`** — gained one entry,
+  `"teams.json"`, in ticket 011-002; no change in this ticket. See
+  `export/DESIGN.md`.
 
 ### Consumes
 - **`registry.schema.SourceConfig` / `registry.loader.load_active_sources`
   (from `registry/`)** — reused verbatim for per-league source config;
   no new schema. See `registry/DESIGN.md`.
+- **`normalize.partners.normalize_org_name` (from `normalize/`)** (this
+  ticket) — `teams.merge`'s only edge into `normalize/`, read-only:
+  organization-name normalization for cross-league linking, reused
+  directly rather than reimplemented. This is a *new* caller of an
+  *existing* function, not a new dependency on `normalize/run()` or any
+  other part of that pipeline — `teams/` still has no edge into
+  `enrich/`, `normalize.run()`, `pipeline.run()`, or either existing
+  export writer (sprint.md's Impact on Existing Components). See
+  `normalize/DESIGN.md`.
 - **`fetch.Fetcher` (from `fetch/`)** — the protocol every `TeamSource`
   method takes as an explicit argument. Production wiring to a real
   `fetch.PoliteFetcher` instance happens in `cli.py`'s `_run_teams()`
@@ -303,40 +439,61 @@ matches that need directly.
   constructs a concrete fetcher's default itself except that one CLI
   call site, matching `adapters/leaguesync.py`'s convention of taking
   `Fetcher` as a parameter. See `fetch/DESIGN.md`.
-- **`config.get_site_dir()` / `config.get_mirror_site_dirs()` (from
-  `config.py`)** (ticket 011-002) — the same site-checkout resolution
-  `export/writer.py` and `cli.py`'s `run` command already use;
-  `teams/export.py` and `cli.py`'s `teams` handler reuse them
-  unmodified rather than duplicating `SITE_DIR`/`MIRROR_SITE_DIRS`
-  resolution. See the root `partner_scrape/DESIGN.md`.
-- **`export.mirror_site_data` (from `export/`)** (ticket 011-002) —
-  reused, unmodified, to propagate `teams.json` into extra checkouts.
-  See `export/DESIGN.md`.
+- **`config.get_site_dir()` / `config.get_mirror_site_dirs()` /
+  `config.get_tba_api_key()` / `config.get_tba_url()` (from
+  `config.py`)** — the last two, this ticket, mirror
+  `get_leaguesync_api_key()`/`get_leaguesync_url()` line-for-line,
+  including the SOPS-decrypted-secret quote-stripping; `config.py`
+  remains the only module reading `os.environ`. The site-dir/mirror
+  accessors are ticket 011-002's, reused unmodified. See the root
+  `partner_scrape/DESIGN.md`.
+- **`export.mirror_site_data` (from `export/`)** — reused, unmodified,
+  to propagate `teams.json` into extra checkouts. See `export/DESIGN.md`.
 
 ## 6. Open Questions / Known Limitations
 
-- `merge.py`, `geo.py`, and `sources/tba.py` (the FRC source) do not
-  exist yet — this doc describes what tickets 011-001 and 011-002
-  built; see `sprint.md`'s Tickets table for the remaining sequencing
-  (011-003 through 011-005).
+- `geo.py` and the site pages do not exist yet — this doc describes
+  what tickets 011-001 through 011-003 built (model + FTCScout +
+  TBA + export + CLI + merge); see `sprint.md`'s Tickets table for the
+  remaining sequencing (011-004, 011-005).
 - `teams.pipeline.run_teams()`'s per-source failure isolation (logged
-  and skipped) is exercised this ticket only via a synthetic
-  test double (`tests/teams/test_pipeline.py`'s
-  `TestSourceFailureIsolation`) — FTCScout itself has no known failure
-  mode this ticket triggers live. Ticket 011-003 is the first source
-  this isolation is load-bearing for in production (a missing/401
-  `TBA_KEY`, per `sprint.md`'s Migration Concerns).
+  and skipped) is now load-bearing in production, not just tested via
+  a synthetic double: `sources.tba.TBASource.discover()` raises on a
+  missing/invalid `TBA_KEY` or a non-200/401 `/api/v3/status` response
+  by design (Constraints), and `tests/teams/test_pipeline.py`'s
+  `TestTbaFailureIsolation` exercises both cases end-to-end. This is
+  the real mechanism `TBA_KEY` not yet being in GitHub Actions repo
+  secrets (sprint.md's Migration Concerns) depends on until an operator
+  pushes it.
 - `sources.ftcscout.OUT_OF_REGION_CITIES` is a small hand-maintained
-  denylist derived from one live measurement (2026-08-27). It is
-  sufficient for this ticket's fixture-based tests but is not the
-  "real" county-boundary determination — ticket 011-004's CDE/NCES-
-  driven geocoding ladder is the actual authority on location, and may
-  eventually supersede this denylist entirely.
+  denylist derived from one live measurement (2026-08-27).
+  `sources.tba.SD_COUNTY_CITIES` (this ticket) is the equivalent
+  allowlist for TBA — see Constraints for why TBA needs an allowlist
+  where FTCScout needs only a denylist. Both are sufficient for their
+  respective fixture-based tests but are not the "real" county-boundary
+  determination — ticket 011-004's CDE/NCES-driven geocoding ladder is
+  the actual authority on location, and may eventually supersede both.
+- `sources.tba.SD_COUNTY_CITIES` was assembled from this project's own
+  historical FRC roster (`data/robot-teams.json`) plus every
+  incorporated San Diego County city, not from a live capture of TBA's
+  current data (no network access during this ticket's build — see
+  `tests/teams/test_sources_tba.py`'s module docstring). A San Diego
+  city genuinely present in TBA's live data but missing from this list
+  would silently undercount; `meta.by_league["FRC"]` reading below the
+  issue's measured 59 on a real run is the signal to check this list
+  first.
 - `FTCScoutSource.fetch()` does not send any auth header (FTCScout
-  needs none) — unlike `adapters/leaguesync.py`'s Bearer-token pattern.
-  If FTCScout ever requires a credential, `config.py` (the sole
-  `os.environ` reader) would need a new accessor, matching
-  `get_leaguesync_api_key()`'s shape.
+  needs none) — unlike `adapters/leaguesync.py`'s Bearer-token pattern
+  and unlike this ticket's `TBASource.fetch()`, which does.
+- `teams.merge.merge_teams()` links strictly pairwise-by-group; it has
+  no notion of merge *confidence* the way ticket 011-004's fuzzy
+  school-name matching will (`needs_review: true` below a 0.85 score,
+  per the issue). Two organizations whose names normalize identically
+  but are not actually the same real-world organization (not observed
+  in the 152+59 fixture corpus, but not structurally impossible with a
+  larger live roster) would link — there is no manual-override
+  mechanism (a `school-overrides.toml`-style table) for `merge.py`
+  today.
 - Whether `teams.json` is ever joined to the curated partner directory,
   and whether LLM-assisted website discovery is added later, are both
   explicitly out of scope for the whole sprint, not just this ticket —

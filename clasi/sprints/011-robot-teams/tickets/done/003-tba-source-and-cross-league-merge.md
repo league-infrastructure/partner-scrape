@@ -1,7 +1,7 @@
 ---
 id: '003'
 title: TBA source and cross league merge
-status: open
+status: done
 use-cases:
 - SUC-002
 depends-on:
@@ -33,37 +33,37 @@ FTC-only `teams.json` rather than failing the whole `teams` run.
 
 ## Acceptance Criteria
 
-- [ ] `partner_scrape/config.py` gains `get_tba_api_key()` and
+- [x] `partner_scrape/config.py` gains `get_tba_api_key()` and
       `get_tba_url()`, reading `TBA_KEY`/`TBA_URL`, mirroring
       `get_leaguesync_api_key()`/`get_leaguesync_url()` exactly —
       including stripping surrounding quotes from the SOPS-decrypted
       secret. `config.py` remains the only module reading
       `os.environ`.
-- [ ] `partner_scrape/teams/sources/tba.py` implements `TeamSource`
+- [x] `partner_scrape/teams/sources/tba.py` implements `TeamSource`
       against The Blue Alliance's `/api/v3/teams/{page}` (paginated,
       `X-TBA-Auth-Key` header via `config.get_tba_api_key()`), filtered
       to CA + San Diego cities, producing 59 `Team` objects with
       `league="FRC"` and (per the issue's measured coverage) school
       name (91%), ZIP (83%), and website (72%) where present.
-- [ ] `partner_scrape/teams/registry/frc-sd.toml` registers the TBA
+- [x] `partner_scrape/teams/registry/frc-sd.toml` registers the TBA
       source.
-- [ ] `partner_scrape/teams/merge.py` links a `Team`'s
+- [x] `partner_scrape/teams/merge.py` links a `Team`'s
       `org_key`/`sibling_team_ids` by
       `normalize.partners.normalize_org_name`-normalized organization
       — **reused directly, not reimplemented**. A test fixture covering
       one of the seven known dual-program organizations (e.g. Canyon
       Crest Academy) confirms its FTC and FRC teams cross-reference via
       `sibling_team_ids`.
-- [ ] `merge.py` never groups `Family/Community` or empty-organization
+- [x] `merge.py` never groups `Family/Community` or empty-organization
       teams into a shared `org_key` — tested explicitly with a
       multi-team `Family/Community` fixture.
-- [ ] Team number collisions (e.g. 1622, which exists independently in
+- [x] Team number collisions (e.g. 1622, which exists independently in
       both FTC and FRC) never cause a false merge — tested explicitly.
-- [ ] `teams.pipeline.run_teams()` runs FTCScout and TBA, then
+- [x] `teams.pipeline.run_teams()` runs FTCScout and TBA, then
       `merge.py`, before export. A simulated `TBA_KEY`-missing or
       TBA-401 fixture run still publishes a 152-team, FTC-only
       `teams.json` (per-source isolation, not a whole-run failure).
-- [ ] With TBA fixtures present, `teams.json` carries 59 FRC teams
+- [x] With TBA fixtures present, `teams.json` carries 59 FRC teams
       (211 total).
 
 ## Implementation Plan
