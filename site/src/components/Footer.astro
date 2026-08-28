@@ -26,6 +26,14 @@ const lastUpdated = new Date(scrapeMeta.last_updated).toLocaleDateString('en-US'
         <li><a href={`${base}/contact`}>Contact</a></li>
       </ul>
     </div>
+    <div class="footer-nav">
+      <h4>For Developers &amp; Partners</h4>
+      <ul>
+        <li><a href={`${base}/data-access`}>Data Access</a></li>
+        <li><a href={`${base}/for-agents`}>For Agents</a></li>
+        <li><a href={`${base}/publish-events`}>Publish Events</a></li>
+      </ul>
+    </div>
     <div class="footer-contact">
       <h4>Contact</h4>
       <p>1875 El Prado<br />San Diego, CA 92101</p>
@@ -58,7 +66,7 @@ const lastUpdated = new Date(scrapeMeta.last_updated).toLocaleDateString('en-US'
     max-width: var(--max-width);
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
     gap: 40px;
     padding-bottom: 40px;
   }
