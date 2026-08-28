@@ -26,6 +26,7 @@ from dataclasses import dataclass, field
 from datetime import date, datetime
 from pathlib import Path
 from typing import Any, Callable, Iterable
+from zoneinfo import ZoneInfo
 
 from partner_scrape.model import Event, slugify
 from partner_scrape.normalize.collapse import collapse_recurring
@@ -54,13 +55,16 @@ DEFAULT_OPPORTUNITY_TYPE = "Out-of-school Programs"
 #: branch on the same constant rather than a duplicated string literal.
 WORK_BASED_LEARNING_TYPE = "Work-based Learning"
 
-#: TZ offset embedded on naive display-only ISO datetimes so the site
-#: shows the correct San Diego calendar day -- matches
-#: `dev/export_site.py`'s `TZ`. Every adapter this sprint produces naive
-#: `datetime`s (no adapter sets `tzinfo`), so this is applied whenever
-#: `Event.start`/`.end` lack one; a future tz-aware source's own offset
-#: is left untouched.
-_TZ_OFFSET = "-07:00"
+#: Timezone every naive `datetime` is localized into at serialization
+#: time (sprint 012, issue 19) so the exported ISO 8601 offset matches
+#: true San Diego local time year-round -- matches `dev/export_site.py`'s
+#: `TZ`. Every adapter this project produces naive `datetime`s (no
+#: adapter sets `tzinfo`), so this is applied whenever `Event.start`/
+#: `.end` lack one; a tz-aware source's own offset is left untouched
+#: (see `_iso`). Replaces the previous hard-coded `_TZ_OFFSET = "-07:00"`
+#: constant, which was wrong for the ~4 months a year (early November -
+#: mid-March) San Diego is on Standard Time, not Daylight Time.
+_SITE_TZ = ZoneInfo("America/Los_Angeles")
 
 
 @dataclass
@@ -113,12 +117,35 @@ class Opportunity:
 
 
 def _iso(dt: datetime | None) -> str:
-    """Format a `datetime` as ISO 8601, embedding `_TZ_OFFSET` if naive; `""` if unset."""
+    """Format a `datetime` as ISO 8601; `""` if unset.
+
+    A naive `dt` is localized into `_SITE_TZ`
+    (`zoneinfo.ZoneInfo("America/Los_Angeles")`) so the embedded UTC
+    offset is resolved per-date rather than a hard-coded constant
+    (sprint 012, issue 19): `-07:00` for a Daylight Time date, `-08:00`
+    for a Standard Time one. An already-aware `dt` is returned with its
+    own offset untouched -- unchanged from prior behavior.
+
+    DST-transition fold convention (documented here and in
+    `normalize/DESIGN.md`'s Design section): every naive `datetime` this
+    pipeline produces carries `fold=0`, the dataclass/stdlib default, since
+    no adapter ever sets `fold` explicitly. This module does not invent a
+    second convention on top of `fold`'s own default -- it is simply never
+    overridden. The practical effect on the DST transition's two
+    genuinely ambiguous/nonexistent local times: the repeated 1am-2am
+    hour on the November fall-back resolves to its earlier, pre-transition
+    Daylight Time occurrence (`-07:00`); the skipped 2am-3am hour on the
+    March spring-forward resolves to `zoneinfo`'s own convention for a
+    nonexistent local time, which is also the pre-transition offset
+    (`-08:00`). One documented, tested, consistent answer -- not a claim
+    that either resolves the underlying source-data ambiguity of which of
+    two real clock readings an event's extracted date+time actually meant.
+    """
     if dt is None:
         return ""
     if dt.tzinfo is not None:
         return dt.isoformat()
-    return dt.isoformat() + _TZ_OFFSET
+    return dt.replace(tzinfo=_SITE_TZ).isoformat()
 
 
 def _availability(instance: Instance) -> str:

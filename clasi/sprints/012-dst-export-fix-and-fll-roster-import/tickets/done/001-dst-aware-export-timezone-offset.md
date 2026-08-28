@@ -1,8 +1,9 @@
 ---
 id: '001'
 title: DST-aware export timezone offset
-status: open
-use-cases: [SUC-001]
+status: done
+use-cases:
+- SUC-001
 depends-on: []
 github-issue: ''
 issue: 19-dst-aware-timezone-offset-in-export.md
@@ -32,13 +33,13 @@ run.py`'s Design and Open Questions sections).
 
 ## Acceptance Criteria
 
-- [ ] `_iso()` resolves each naive `datetime`'s UTC offset from
+- [x] `_iso()` resolves each naive `datetime`'s UTC offset from
       `zoneinfo.ZoneInfo("America/Los_Angeles")` at serialization time,
       replacing the `_TZ_OFFSET` constant. `-07:00` for Daylight Time
       dates, `-08:00` for Standard Time dates.
-- [ ] A naive `datetime` that is already aware (`tzinfo is not None`) is
+- [x] A naive `datetime` that is already aware (`tzinfo is not None`) is
       left untouched — no change to that branch's existing behavior.
-- [ ] The DST-transition fold convention documented in the design
+- [x] The DST-transition fold convention documented in the design
       overlay is implemented: `fold=0` (the stdlib default, since no
       adapter in this codebase ever sets `fold` explicitly) governs both
       edge cases — the repeated 1am-2am hour in November resolves to its
@@ -46,11 +47,11 @@ run.py`'s Design and Open Questions sections).
       March resolves to `zoneinfo`'s own pre-transition-offset
       convention for a nonexistent local time. No new convention is
       invented beyond what `zoneinfo`/`fold` already provide.
-- [ ] `_TZ_OFFSET`'s module-level docstring/comment is removed or
+- [x] `_TZ_OFFSET`'s module-level docstring/comment is removed or
       updated to no longer describe a hard-coded literal.
-- [ ] No change to any other function in `normalize/run.py`,
+- [x] No change to any other function in `normalize/run.py`,
       `collapse.py`, `dedup.py`, or `taxonomy.py`.
-- [ ] No change to `export/writer.py` — confirmed in this sprint's
+- [x] No change to `export/writer.py` — confirmed in this sprint's
       Architecture that `is_current_or_upcoming` and every other
       date-based filter there reads only `date_str[:10]` (the date
       portion), never the offset suffix, so this fix changes no
