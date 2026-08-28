@@ -1,6 +1,6 @@
 # teams
 
-**Owner:** Eric Busboom · **Last reviewed:** 2026-08-28 (ticket 011-005) · **Status:** increments 1-4 complete (FTC + FRC + geocoding + site pages); increment 5 (FLL) deferred to a follow-on sprint
+**Owner:** Eric Busboom · **Last reviewed:** 2026-08-28 (ticket 011-003, reopened — TBA `state_prov` filter defect) · **Status:** increments 1-4 complete (FTC + FRC + geocoding + site pages); increment 5 (FLL) deferred to a follow-on sprint
 
 ---
 
@@ -23,26 +23,65 @@ an undated directory entity," which nothing else in the codebase does.
 that actually delivers the sprint's stated goal of *knowing where the
 teams are*.** `teams.pipeline.run_teams()` runs both sources, links
 cross-league identity, and geocodes every merged `Team` through
-`teams.geo.geocode_teams()` before export. Measured against the real
-211-team FTC+FRC corpus (`tests/fixtures/teams/`, the same
-live-captured fixtures ticket 011-003 uses) at ticket 011-004's build
-(2026-08-28): **129 teams at school precision** (79 FTC + 50 FRC), **8
-at ZIP**, **70 at city**, **4 unresolved** (`"none"` — two Ensenada
-teams, plus two out-of-region teams whose city name is too ambiguous
-to guess, "San Antonio"/"Louisville"), **14 flagged `needs_review`**.
+`teams.geo.geocode_teams()` before export. Measured at ticket 011-004's
+own build (2026-08-28) against the *original* 211-team FTC+FRC test
+corpus (152 FTC + a hand-authored 59-team TBA fixture, since
+superseded — see below): **129 teams at school precision** (79 FTC +
+50 FRC), **8 at ZIP**, **70 at city**, **4 unresolved** (`"none"` — two
+Ensenada teams, plus two out-of-region teams whose city name is too
+ambiguous to guess, "San Antonio"/"Louisville"), **14 flagged
+`needs_review`**. This distribution described the *test fixture's*
+corpus at that build, not a live measurement — see the next paragraph
+for why that distinction turned out to matter.
 
-**Ticket 011-005 (this ticket) adds the `/teams` site section — the
-last increment of `sprint.md`'s Migration Concerns chain
-(001→002→003→004→005)** — and is the ticket that makes the whole
-sprint visible to a site visitor. It builds no new Python code in this
-subsystem at all; it is purely a consumer of `teams.json`, exactly as
-`sprint.md`'s Impact on Existing Components anticipated. See "Site
-Presentation Layer" below for what it built.
+**Ticket 011-005 adds the `/teams` site section — the last increment
+of `sprint.md`'s Migration Concerns chain (001→002→003→004→005)** —
+and is the ticket that makes the whole sprint visible to a site
+visitor. It builds no new Python code in this subsystem at all; it is
+purely a consumer of `teams.json`, exactly as `sprint.md`'s Impact on
+Existing Components anticipated. See "Site Presentation Layer" below
+for what it built.
 
-Note on this ticket's own local build: a live `partner-scrape teams`
-run during this ticket's work returned only 19 FRC teams (171 total,
-not the 211/59 this doc's other measurements cite) — see Open
-Questions for why that figure is not treated as a new baseline here.
+**Ticket 011-003 was reopened (2026-08-28) for a sprint-validation
+defect: a live `partner-scrape teams` run returned only 19 FRC teams,
+not the ~59 the original ticket measured.** Root cause: TBA's
+`/api/v3/teams/{page}` reports the *full* state name (`"California"`)
+for the majority of San Diego County records (59 of the real 78) and
+only the bare USPS abbreviation (`"CA"`) for the rest (19) —
+`sources.tba._extract_one()`'s original filter compared `state_prov`
+to the literal string `"CA"` with no normalization, so it matched only
+the minority 19 and silently dropped the majority 59. The ticket
+011-003 test fixture used `"CA"` for every hand-authored record, so
+this was never caught in tests. **Fix:** `sources.tba._normalize_state()`
+normalizes any recognized full US state name to its USPS abbreviation
+before the comparison runs (see Interfaces). **On the 19 `"CA"`-abbreviated
+records themselves:** confirmed live (`/team/frcNNNN/years_participated`)
+that every one is a genuine historical San Diego County FRC team —
+real schools, real addresses, several with real working websites — but
+all 19 last competed in or before 2014 (two never competed at all),
+while the "California"-labeled 59 skew far more recent (40 of 59 last
+competed 2023 or later). This age/format correlation is why the bug
+went undercounted for so long, but it is not a legitimacy signal: TBA's
+team roster is an append-only historical registry with no "active"
+flag (`model.Team.active` is not populated by any source; see
+Constraints below), so an old profile that has never been rewritten to
+the full state name is still a real San Diego County team, exactly the
+same way a "California"-labeled but similarly stale record already in
+the 59 is. Excluding the 19 would require inventing a new
+activity-based filter this subsystem has never had (neither source
+filters by recency), which was judged out of scope for a filter-format
+bugfix. **Corrected total, confirmed via a real `partner-scrape teams
+--dry-run` run (2026-08-28): 78 FRC teams, 230 overall (152 FTC + 78
+FRC)** — see Interfaces for the corrected `SD_COUNTY_CITIES` figure and
+Open Questions for the full before/after. The *committed test fixture*
+(`tests/fixtures/teams/tba_teams_page0.json`/`page1.json`) was rebuilt
+from real, live-captured records but deliberately kept small (7 of the
+78 real matches, plus real noise records) rather than growing to the
+full 78 — see `tests/teams/test_sources_tba.py`'s module docstring —
+so the fixture-driven test corpus is now 159 teams (152 FTC + 7 FRC),
+not 211; every count elsewhere in this document that cites "211" or
+"59" describes that now-superseded original fixture unless marked
+otherwise.
 
 ```
 BUILT (ticket 011-001):
@@ -68,7 +107,7 @@ BUILT (ticket 011-003):
   sources.tba.TBASource                probes /api/v3/status for
      ↓                                 max_team_page, enumerates every
      ↓                                 /api/v3/teams/{page}, filters to
-     ↓                                 CA + SD_COUNTY_CITIES -- 59 teams
+     ↓                                 CA + SD_COUNTY_CITIES -- 78 teams
   teams.merge.merge_teams(teams)       links Team.org_key/sibling_team_ids
      ↓                                 by normalized organization name,
      ↓                                 run after every source, before geocode
@@ -122,16 +161,20 @@ no ZIP for any of the 152 records (0/3,412 nationally too).
 keyed (`X-TBA-Auth-Key`, 401 without it). Unlike FTCScout, TBA has no
 region-scoped search endpoint — `discover()` first probes `/api/v3/
 status` for `max_team_page` (23 measured live), then enumerates every
-`/api/v3/teams/{page}` (~9,163 teams worldwide, 496 in California),
-filtering down to the 59 in `sources.tba.SD_COUNTY_CITIES` (an
-allowlist — see Constraints below for why it must be one, unlike
-FTCScout's denylist). TBA is the first real source of website (73%)
-and ZIP (83%) coverage; its `lat`/`lng`/`address`/`location_name`/
-`gmaps_place_id` fields are documented in TBA's own OpenAPI spec as
-"Will be NULL, for future development" and confirmed NULL for all 59 SD
-teams, so this source never reads them at all — **TBA is not a
-geocoding source**; only ticket 011-004's `geo.py` sets
-`Team.latitude`/`longitude`.
+`/api/v3/teams/{page}` (~9,163 teams worldwide, 659 in California --
+496 reporting the full state name `"California"`, 163 the bare
+abbreviation `"CA"`), filtering down to the 78 in `sources.tba.
+SD_COUNTY_CITIES` (an allowlist — see Constraints below for why it
+must be one, unlike FTCScout's denylist) after normalizing
+`state_prov` to a USPS abbreviation (`_normalize_state()`, ticket
+011-003 reopened — see Open Questions for why this normalization step
+exists). TBA is the first real source of website (68% of the 78) and
+ZIP (87%) coverage; its `lat`/`lng`/`address`/`location_name`/
+`gmaps_place_id` fields are
+documented in TBA's own OpenAPI spec as "Will be NULL, for future
+development" and confirmed NULL for all 78 SD teams, so this source
+never reads them at all — **TBA is not a geocoding source**; only
+ticket 011-004's `geo.py` sets `Team.latitude`/`longitude`.
 
 ## 3. Constraints and Invariants
 
@@ -170,12 +213,14 @@ geocoding source**; only ticket 011-004's `geo.py` sets
   6-city denylist only needs to catch stragglers. TBA's `/api/v3/
   teams/{page}` has no region parameter at all — it enumerates every
   FRC team worldwide (~9,163) — so `sources/tba.py` must actively
-  select the 59 that are in San Diego County, both by `state_prov ==
-  "CA"` and by `city` matching this allowlist. An unrecognized San
-  Diego city is a silent *undercount* here (the opposite failure mode
-  from FTCScout's denylist), surfaced via `meta.by_league["FRC"]`
-  reading lower than the issue's measured 59 — that count is the first
-  place to check if this list ever needs a new entry.
+  select the 78 that are in San Diego County, both by `state_prov`
+  (normalized to `"CA"` via `_normalize_state()` — ticket 011-003,
+  reopened; see Open Questions) and by `city` matching this allowlist.
+  An unrecognized San Diego city is a silent *undercount* here (the
+  opposite failure mode from FTCScout's denylist), surfaced via
+  `meta.by_league["FRC"]` reading lower than the measured 78 — that
+  count is the first place to check if this list ever needs a new
+  entry.
 - **`sources.tba.TBASource.discover()` raises on any probe failure; it
   does not degrade gracefully the way `adapters/tec.py`'s pagination
   probe does (falling back to "assume 1 page").** A missing/invalid
@@ -314,9 +359,11 @@ geocoding source**; only ticket 011-004's `geo.py` sets
   real, different schools at the same place name (e.g. "Poway High" vs.
   a hypothetical "Poway Middle") and dropping them would risk a false
   match, not just a noisy flag. After this fix, `needs_review` count
-  dropped to 14 of 211 teams — a small, meaningful residue (genuine
-  wording differences like "Senior"/"Early College", plus the
-  "Classical Academy Online" case itself), not matcher noise.
+  dropped to 14 of the original 211-team fixture corpus (13 of the
+  real, live 230-team corpus as of ticket 011-003's reopening — see
+  Orientation) — a small, meaningful residue (genuine wording
+  differences like "Senior"/"Early College", plus the "Classical
+  Academy Online" case itself), not matcher noise.
   `geo.normalize_school_name` is a small, separately-named normalizer
   local to `teams/geo.py` — deliberately not
   `normalize.partners.normalize_org_name`, which is scoped to
@@ -503,7 +550,9 @@ visible in the directory layout itself, not just in a docstring.
 
 **Why city-precision teams render as one labelled badge per city, not
 individual pins, jittered dots, or a plain cluster marker (this
-ticket).** ~70 of 211 teams sit at `location_precision: "city"`, and
+ticket).** ~70 of the original 211-team fixture corpus sat at
+`location_precision: "city"` (73 of the real, live 230-team corpus as
+of ticket 011-003's reopening — see Orientation), and
 most collapse onto the same handful of city centroids — plotting each
 as its own `circleMarker` would stack dozens of markers on one point
 and read, visually, as a single team. Three alternatives were rejected
@@ -578,11 +627,15 @@ the default list shows everything, same as `teams.json` itself.
   for The Blue Alliance's keyed v3 API. `discover()` probes `/api/v3/
   status` for `max_team_page`, then returns one `TeamRef` per `/api/v3/
   teams/{page}`; raises `RuntimeError` on any probe failure rather than
-  degrading (Constraints). `extract()` filters each page to `state_prov
-  == "CA"` and `city` in `SD_COUNTY_CITIES`. Config keys read from
-  `SourceConfig.config`: `api_base` (default `config.get_tba_url()`).
-  Auth via `config.get_tba_api_key()`, read fresh per call
-  (`_auth_headers()`, matching `adapters/leaguesync.py`'s pattern).
+  degrading (Constraints). `extract()` filters each page to
+  `_normalize_state(state_prov) == "CA"` (ticket 011-003, reopened —
+  normalizes both TBA's `"CA"` and `"California"` forms, and any other
+  recognized full US state name, to a USPS abbreviation before
+  comparing; see Open Questions) and `city` in `SD_COUNTY_CITIES`.
+  Config keys read from `SourceConfig.config`: `api_base` (default
+  `config.get_tba_url()`). Auth via `config.get_tba_api_key()`, read
+  fresh per call (`_auth_headers()`, matching `adapters/leaguesync.py`'s
+  pattern).
 - **`teams/registry/ftc-sd.toml`** / **`teams/registry/frc-sd.toml`**
   (the latter this ticket) — the FTCScout and TBA sources'
   `SourceConfig`s, loaded via `registry.loader.load_active_sources`
@@ -668,9 +721,11 @@ the default list shows everything, same as `teams.json` itself.
   field does not distinguish from plain "San Diego" — see
   `dev/refresh_school_directories.py`'s own docstring), and
   `school-overrides.toml` (hand corrections, empty as of this ticket —
-  the ladder's algorithmic rungs resolved the real 211-team corpus well
-  enough that none has been needed yet). All five are plain data, never
-  imported as Python.
+  the ladder's algorithmic rungs resolved the real corpus well enough
+  that none has been needed yet, whether measured against the original
+  211-team fixture or the real, live 230-team corpus ticket 011-003's
+  reopening confirmed). All five are plain data, never imported as
+  Python.
 - **`dev/refresh_school_directories.py`** (this ticket) — the
   standalone, human-run yearly refresh script that produces the four
   generated files above (not `school-overrides.toml`, which is
@@ -749,36 +804,54 @@ the default list shows everything, same as `teams.json` itself.
 
 ## 6. Open Questions / Known Limitations
 
-- **A live `partner-scrape teams` run during this ticket's (011-005)
-  work returned only 19 of the expected ~59 FRC teams (171 total, not
-  211).** No error or warning was logged — `sources.tba.TBASource`
-  completed without raising, it just surfaced fewer records than the
-  committed `tests/fixtures/teams/` corpus (captured 2026-08-27) or
-  this doc's own ticket-011-004 measurements describe. This doc's
-  historical counts (211 total, 129/8/70/4 by precision) are left
-  unchanged because they describe the stable, hermetic fixture corpus
-  the test suite actually asserts against, not one live run's result —
-  changing them on the strength of a single live capture would make
-  the doc track network conditions on one particular day rather than
-  the tested contract. This ticket's site pages are agnostic to the
-  exact team count (they render whatever `teams.json` contains and the
-  page-count-equals-team-count acceptance criterion was verified
-  against this run's actual 171-team output), so the discrepancy did
-  not block this ticket, but it is worth an operator checking
-  `meta.by_league["FRC"]` on the next real scheduled run — if it is
-  still well under 59, `sources.tba.SD_COUNTY_CITIES` or TBA's own
-  pagination (ticket 011-003's `TBASource.discover()`) may need a
-  fresh look. Out of scope for this ticket to diagnose further (011-003
-  already shipped and is `done`).
-- **`school-overrides.toml` ships empty as of this ticket.** The
-  algorithmic rungs (exact match + the stopword-normalized Jaccard
-  fuzzy tiers) resolved the real 211-team corpus well enough that no
-  hand correction was needed — 129 teams reached school precision with
-  only 14 flagged `needs_review`, and none of those 14 were bad enough
-  to warrant a hand override rather than just a flag (each is a real,
-  explainable wording difference — "Senior" vs. not, "HS" vs. spelled
-  out, or the genuinely-ambiguous "Classical Academy Online" case).
-  Future refreshes or a larger corpus (FLL, a follow-on sprint) may
+- **RESOLVED (ticket 011-003, reopened 2026-08-28) — a live
+  `partner-scrape teams` run during ticket 011-005's work returned
+  only 19 of the expected ~59 FRC teams (171 total, not 211); this was
+  a real defect, not network conditions on one particular day.** Root
+  cause: `sources.tba._extract_one()`'s filter compared TBA's raw
+  `state_prov` field to the literal string `"CA"` with no
+  normalization. Confirmed live: TBA reports the *full* state name
+  (`"California"`) for the majority of San Diego County FRC records
+  (59 of the real 78) and only the bare USPS abbreviation (`"CA"`) for
+  the rest (19) — the original filter matched only the minority 19 and
+  silently dropped the majority 59, with no error or warning logged
+  (`TBASource` completed without raising; it just quietly under-filtered).
+  Ticket 011-003's original test fixture was hand-authored with
+  `"CA"` on every record, so this was never caught in tests — the
+  fixture didn't match reality. **Fix:** `sources.tba._normalize_state()`
+  maps any recognized full US state name to its USPS abbreviation
+  before the comparison runs. **On the 19 `"CA"`-abbreviated records:**
+  confirmed real, legitimate historical San Diego County FRC teams
+  (verified against `/team/frcNNNN/years_participated`), just
+  disproportionately old/inactive (all 19 last competed in or before
+  2014) compared to the "California"-labeled 59 (40 of which last
+  competed 2023 or later) — TBA's roster has no "active" flag and
+  neither source populates `model.Team.active`, so age is not grounds
+  to exclude them; both groups are included. **Corrected total,
+  confirmed via a real `partner-scrape teams --dry-run` run
+  (2026-08-28): 78 FRC, 230 overall (152 FTC + 78 FRC)**, with
+  `by_location_precision` `{"school": 120 (79 FTC + 41 FRC), "zip": 33
+  (all FRC), "city": 73 (69 FTC + 4 FRC), "none": 4 (all FTC — the same
+  two Ensenada teams plus "San Antonio"/"Louisville", unaffected by
+  this fix)}` and 13 `needs_review`. The committed fixture corpus was
+  rebuilt from real, live-captured TBA records (not all 78 -- see
+  `tests/teams/test_sources_tba.py`'s module docstring for the smaller,
+  curated 7-record subset actually committed) and is now 159 teams
+  (152 FTC + 7 FRC); every count elsewhere in this document citing
+  "211"/"59"/"129" describes the now-superseded original fixture
+  unless marked otherwise (see Orientation).
+- **`school-overrides.toml` ships empty.** The algorithmic rungs (exact
+  match + the stopword-normalized Jaccard fuzzy tiers) resolved the
+  real corpus well enough that no hand correction was needed — measured
+  129 school-precision/14 `needs_review` against the original 211-team
+  fixture at ticket 011-004's build, and 120 school-precision/13
+  `needs_review` against the real, live 230-team corpus at ticket
+  011-003's reopening (see the bullet above) — and none of those flagged
+  matches were bad enough to warrant a hand override rather than just a
+  flag (each is a real, explainable wording difference — "Senior" vs.
+  not, "HS" vs. spelled out, or the genuinely-ambiguous "Classical
+  Academy Online" case). Future refreshes or a larger corpus (FLL, a
+  follow-on sprint) may
   surface real residue; add entries there once a human has verified a
   specific coordinate, per that file's own header comment.
 - **Two ambiguous out-of-region city names are deliberately
@@ -803,10 +876,11 @@ the default list shows everything, same as `teams.json` itself.
   `organization_website` at this ticket's build; the private-school
   gap accounts for the rest). Not a gap in the matcher — there is
   simply nothing to carry over from that source.
-- **The ZIP/city centroid tables cover what this ticket's real 211-team
-  corpus and `sources.tba.SD_COUNTY_CITIES`'s full allowlist need, not
-  a hand-picked "~38"/"~25" count the issue's early estimate
-  mentioned.** `dev/refresh_school_directories.py` derives 95 ZIP
+- **The ZIP/city centroid tables cover what this ticket's real corpus
+  (211-team fixture at ticket 011-004's build; 230-team live corpus as
+  of ticket 011-003's reopening) and `sources.tba.SD_COUNTY_CITIES`'s
+  full allowlist need, not a hand-picked "~38"/"~25" count the issue's
+  early estimate mentioned.** `dev/refresh_school_directories.py` derives 95 ZIP
   centroids (every ZIP appearing in `sd-schools-public.tsv`, a
   reproducible superset rather than a curated subset) and 54 city
   centroids (every CDE `City` value plus the documented neighborhood/
@@ -830,15 +904,21 @@ the default list shows everything, same as `teams.json` itself.
   CDE/NCES-driven ladder resolves *where* a team is, but `in_region`
   (whether it counts as San Diego County at all) is still these two
   lists' job — `geo.py` never sets or reads `in_region` (Constraints).
-- `sources.tba.SD_COUNTY_CITIES` was assembled from this project's own
-  historical FRC roster (`data/robot-teams.json`) plus every
-  incorporated San Diego County city, not from a live capture of TBA's
-  current data (no network access during this ticket's build — see
-  `tests/teams/test_sources_tba.py`'s module docstring). A San Diego
-  city genuinely present in TBA's live data but missing from this list
-  would silently undercount; `meta.by_league["FRC"]` reading below the
-  issue's measured 59 on a real run is the signal to check this list
-  first.
+- `sources.tba.SD_COUNTY_CITIES` was originally assembled from this
+  project's own historical FRC roster (`data/robot-teams.json`) plus
+  every incorporated San Diego County city, not from a live capture of
+  TBA's current data (no network access during ticket 011-003's
+  original build). Ticket 011-003's reopening (2026-08-28) did perform
+  a full live capture of all 24 TBA team pages (9,163 records) as part
+  of diagnosing the `state_prov` defect above, and cross-checked every
+  San Diego County match against this allowlist — no city was found
+  missing (every one of the real 78 matches an existing entry), so this
+  list is now empirically validated against live data, not just
+  assembled from secondary sources. A San Diego city genuinely present
+  in TBA's live data but missing from this list would still silently
+  undercount if TBA's roster changes in the future; `meta.by_league
+  ["FRC"]` reading below the measured 78 on a real run is the signal to
+  check this list first.
 - `FTCScoutSource.fetch()` does not send any auth header (FTCScout
   needs none) — unlike `adapters/leaguesync.py`'s Bearer-token pattern
   and unlike this ticket's `TBASource.fetch()`, which does.
@@ -849,8 +929,9 @@ the default list shows everything, same as `teams.json` itself.
   organization names, never fuzzy-matches two differently-worded
   organization strings. Two organizations whose names normalize
   identically but are not actually the same real-world organization
-  (not observed in the 152+59 fixture corpus, but not structurally
-  impossible with a larger live roster) would link — there is no
+  (not observed in the 152+78 real live corpus confirmed at ticket
+  011-003's reopening, but not structurally impossible) would link —
+  there is no
   manual-override mechanism (a `school-overrides.toml`-style table) for
   `merge.py` today.
 - Whether `teams.json` is ever joined to the curated partner directory,

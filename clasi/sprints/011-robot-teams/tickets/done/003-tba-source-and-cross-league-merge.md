@@ -45,6 +45,23 @@ FTC-only `teams.json` rather than failing the whole `teams` run.
       to CA + San Diego cities, producing 59 `Team` objects with
       `league="FRC"` and (per the issue's measured coverage) school
       name (91%), ZIP (83%), and website (72%) where present.
+      **AMENDED 2026-08-28 (reopened, sprint-validation defect):** the
+      "59" figure and coverage percentages above were measured against
+      a hand-authored test fixture whose `state_prov` field used only
+      the literal `"CA"` abbreviation. The real live API mostly reports
+      the *full* state name (`"California"`), which the original
+      filter (`state_prov != "CA"`) silently rejected — a live run
+      surfaced only 19 FRC teams, not 59. Fixed via
+      `sources.tba._normalize_state()`, which normalizes any
+      recognized full US state name to a USPS abbreviation before the
+      comparison. Corrected, live-confirmed figures (2026-08-28): **78**
+      FRC teams (59 "California" + 19 legitimate but older/inactive
+      "CA"-labeled records — see `teams/DESIGN.md`'s Open Questions for
+      the full legitimacy analysis), website 68%, postal_code 87%,
+      school_name 69% coverage. The committed test fixture was rebuilt
+      from real, live-captured TBA records but deliberately kept to a
+      small 7-record curated subset (not all 78) — see
+      `tests/teams/test_sources_tba.py`'s module docstring.
 - [x] `partner_scrape/teams/registry/frc-sd.toml` registers the TBA
       source.
 - [x] `partner_scrape/teams/merge.py` links a `Team`'s
@@ -65,6 +82,15 @@ FTC-only `teams.json` rather than failing the whole `teams` run.
       `teams.json` (per-source isolation, not a whole-run failure).
 - [x] With TBA fixtures present, `teams.json` carries 59 FRC teams
       (211 total).
+      **AMENDED 2026-08-28 (reopened):** the committed TBA fixture was
+      rebuilt from real, live-captured records as a small curated
+      7-record subset (see the amendment on the AC above), so the
+      fixture-driven test corpus is now 159 total (152 FTC + 7 FRC) —
+      `tests/teams/test_pipeline.py`'s
+      `TestBothRealSourcesTogether.test_159_teams_total_152_ftc_7_frc`
+      asserts this. The real, live total (confirmed via
+      `partner-scrape teams --dry-run` on 2026-08-28) is **230 (152 FTC
+      + 78 FRC)**.
 
 ## Implementation Plan
 

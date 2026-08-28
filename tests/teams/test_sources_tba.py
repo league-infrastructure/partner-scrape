@@ -1,18 +1,68 @@
 """Tests for partner_scrape.teams.sources.tba: The Blue Alliance source.
 
-``tests/fixtures/teams/tba_status.json`` + ``tba_teams_page0.json`` +
-``tba_teams_page1.json`` are a hand-authored (not live-captured -- no
-network access during this ticket's build) but realistic-scale corpus:
-``max_team_page = 1`` (2 pages), page 0 carries the issue's measured 59
-San-Diego-County FRC records (built from this project's own historical
-FRC roster, ``data/robot-teams.json``, plus a small synthetic tail --
-see ``gen_tba_fixture.py``'s comments for provenance) plus a couple of
-CA-but-not-San-Diego noise records, and page 1 is entirely
-out-of-state/international noise -- so both the state_prov filter and
-the San Diego County city allowlist are exercised on real page
-boundaries. ``tba_teams_malformed.json`` is small and hand-authored
-(mirroring ``ftcscout_search_malformed.json``'s convention) to exercise
-per-record error isolation.
+``tests/fixtures/teams/tba_teams_page0.json`` and
+``tba_teams_page1.json`` are **verbatim, live-captured** TBA
+``/api/v3/teams/{page}`` records (captured 2026-08-28, re-fetched
+directly against ``https://www.thebluealliance.com/api/v3`` -- see
+this ticket's own commit for the capture script), not hand-authored --
+ticket 011-003's original fixture was hand-authored with every record
+using the ``"CA"`` abbreviation, which is exactly why its test suite
+never caught the defect this reopened ticket fixes: TBA's real API
+mostly reports the *full* state name (``"California"``), and the
+original filter only ever matched the bare abbreviation. Ticket
+011-003's original fixture also simulated the issue's then-measured 59
+San-Diego-County records; the real total is **78** (see
+``sources/tba.py``'s module docstring), and this reopened ticket
+deliberately captures a small, curated *subset* of real records rather
+than all 78 -- the point of this corpus is exercising the extraction
+and filter logic against genuine API output, not asserting an exact
+production count (that belongs to a live run, not a fixture).
+
+Nine records were selected from the live capture into
+``tba_teams_page0.json``:
+
+- ``1622`` (Poway, "California") and ``3128`` (San Diego/Canyon Crest
+  Academy, "California") -- both real dual-program schools whose FTC
+  counterpart also appears in ``ftcscout_search.json``, so
+  ``tests/teams/test_pipeline.py``'s cross-league merge tests still
+  exercise a genuine link.
+- ``2984`` (La Jolla) and ``2827`` (Coronado) -- two more real,
+  currently-competing "California"-labeled records.
+- ``2029`` (Ramona, "California", ``school_name`` null) -- a real
+  record proving the "California" full-name form and the
+  no-reported-school/``org_type: "unknown"`` case are independent of
+  each other.
+- ``1125`` (San Diego) and ``5488`` (Chula Vista) -- both real,
+  currently-``state_prov: "CA"`` (abbreviated) records. **These are
+  this ticket's regression fixture**: under the pre-fix filter
+  (``state_prov != "CA"``, no normalization) these already passed
+  coincidentally, so the real regression proof is the "California"
+  records above being accepted, not these -- both groups are asserted
+  together in ``TestStateNameNormalization`` below.
+- ``100`` (Woodside, "California", not a San Diego County city) --
+  real noise proving the city allowlist still excludes a same-state
+  team outside the county.
+- ``8353`` (**San Diego, Texas** -- a real Texas town that happens to
+  share San Diego's own city name, "San Diego High School" and all) --
+  real noise proving the state check is still load-bearing: dropping
+  it and filtering on city alone would wrongly admit this team.
+
+``tba_teams_page1.json`` is, as in the original fixture, entirely
+out-of-state/international noise: ``1554`` (Oceanside, **New York**)
+and ``3679``/``3723`` (San Marcos, TX / Spring Valley, MN) are three
+more real same-city-name collisions (proving the state check's
+necessity is not a one-off), plus ``188`` (Toronto, Ontario, Canada)
+and ``118`` (Houston, TX, the real "Robonauts") as plain non-colliding
+noise. ``tests/teams/test_pipeline.py`` and this module both still see
+``tba_status.json``'s ``max_team_page: 1`` (2 pages) -- a deliberately
+small, synthetic pagination count kept from the original fixture so
+this remains a *representative* corpus, not all 24 of TBA's real
+pages; only the pagination metadata is synthetic, every team record
+within the two pages is real. ``tba_teams_malformed.json`` reuses two
+of the same real records (``1622``, ``2827``) plus one
+still-hand-authored broken record (no ``team_number`` -- there is no
+way to "capture" a malformed record from a well-formed API), matching
+``ftcscout_search_malformed.json``'s convention.
 
 Every test drives the source through a fixture Fetcher returning these
 canned bodies -- no test here opens a real network socket.
@@ -37,6 +87,7 @@ from partner_scrape.teams.sources.tba import (
     TBASource,
     _auth_headers,
     _clean_city,
+    _normalize_state,
     _status_url,
     _teams_page_url,
 )
@@ -197,16 +248,25 @@ class TestFetch:
 
 
 class TestEndToEndCount:
-    def test_produces_59_san_diego_county_teams(self, monkeypatch):
+    """This fixture is a deliberately small, curated subset of the real
+    78 San-Diego-County FRC records (see this module's own docstring
+    and ``sources/tba.py``'s) -- 7 of the 9 real records in
+    ``tba_teams_page0.json`` pass the filter (``100`` and ``8353`` are
+    real noise, dropped by design; see ``TestCaAndSanDiegoCountyFilter``),
+    and all 5 records in ``tba_teams_page1.json`` are noise. These
+    counts describe this fixture's own small corpus, not a production
+    total."""
+
+    def test_produces_seven_san_diego_county_teams(self, monkeypatch):
         teams = _extract_real_fixture(monkeypatch)
 
-        assert len(teams) == 59
+        assert len(teams) == 7
 
     def test_every_team_id_is_unique_and_frc_prefixed(self, monkeypatch):
         teams = _extract_real_fixture(monkeypatch)
 
         team_ids = [t.team_id for t in teams]
-        assert len(set(team_ids)) == 59
+        assert len(set(team_ids)) == 7
         assert all(tid.startswith("frc-") for tid in team_ids)
 
     def test_every_team_has_league_and_program_set(self, monkeypatch):
@@ -221,28 +281,45 @@ class TestEndToEndCount:
         assert all(t.sources == ["tba"] for t in teams)
 
     def test_measured_field_coverage(self, monkeypatch):
-        # The issue's own measured coverage of the 59 SD-county FRC
-        # teams: website 43/59, postal_code 49/59, school_name 54/59,
-        # rookie_year 59/59, nickname (Team.name) 59/59.
+        # Measured directly against this fixture's 7 real surviving
+        # records: website 6/7 (5488's is null), postal_code 7/7,
+        # organization (school_name) 4/7 (2029/1125/5488 report no
+        # school), rookie_year 7/7, nickname (Team.name) 7/7.
         teams = _extract_real_fixture(monkeypatch)
 
-        assert sum(1 for t in teams if t.website) == 43
-        assert sum(1 for t in teams if t.postal_code) == 49
-        assert sum(1 for t in teams if t.organization) == 54
-        assert sum(1 for t in teams if t.rookie_year is not None) == 59
-        assert sum(1 for t in teams if t.name) == 59
+        assert sum(1 for t in teams if t.website) == 6
+        assert sum(1 for t in teams if t.postal_code) == 7
+        assert sum(1 for t in teams if t.organization) == 4
+        assert sum(1 for t in teams if t.rookie_year is not None) == 7
+        assert sum(1 for t in teams if t.name) == 7
 
 
 class TestCaAndSanDiegoCountyFilter:
     def test_non_california_records_are_dropped(self, monkeypatch):
         teams = _extract_real_fixture(monkeypatch)
 
-        assert all(t.number not in (300, 301, 302, 303) for t in teams)
+        # 1554 (Oceanside, New York), 3679 (San Marcos, Texas), 3723
+        # (Spring Valley, Minnesota), 188 (Toronto, Ontario), 118
+        # (Houston, Texas) -- all real, all out-of-state/international.
+        assert all(t.number not in (1554, 3679, 3723, 188, 118) for t in teams)
 
     def test_california_but_not_san_diego_records_are_dropped(self, monkeypatch):
         teams = _extract_real_fixture(monkeypatch)
 
-        assert all(t.number not in (100, 200) for t in teams)
+        # 100: real, "California", Woodside -- not a San Diego County city.
+        assert all(t.number != 100 for t in teams)
+
+    def test_san_diego_named_texas_city_is_dropped_despite_the_name_match(
+        self, monkeypatch
+    ):
+        # 8353: real, "Botqueros 2 the FUTURE!", "San Diego High School",
+        # city "San Diego" -- but state_prov is "Texas". Proves the
+        # state check remains load-bearing even when city alone would
+        # match SD_COUNTY_CITIES -- exactly the failure mode a
+        # city-only filter would miss.
+        teams = _extract_real_fixture(monkeypatch)
+
+        assert all(t.number != 8353 for t in teams)
 
     def test_out_of_state_page_contributes_zero_teams(self, monkeypatch):
         monkeypatch.setenv("TBA_KEY", "fixture-test-key")
@@ -255,6 +332,63 @@ class TestCaAndSanDiegoCountyFilter:
         teams = list(source_obj.extract(raw, _source()))
 
         assert teams == []
+
+
+class TestStateNameNormalization:
+    """Regression coverage for the defect this reopened ticket fixes:
+    the original filter compared ``state_prov`` to the literal string
+    ``"CA"`` only, so a record reporting the full name "California"
+    (the majority of TBA's real live data -- 59 of 78 San Diego County
+    records) was silently dropped. This is the test that was missing
+    -- ``tba_teams_page0.json``'s original hand-authored fixture used
+    ``"CA"`` for every record, so it could never have caught this."""
+
+    def test_full_state_name_california_is_accepted(self, monkeypatch):
+        teams = _extract_real_fixture(monkeypatch)
+
+        # 1622, 3128, 2984, 2827, 2029, 100 are all real records with
+        # state_prov == "California" in the raw fixture; the first
+        # five are San Diego County cities and must survive extraction
+        # (100 is Woodside, correctly dropped for city, not state).
+        numbers = {t.number for t in teams}
+        assert {1622, 3128, 2984, 2827, 2029}.issubset(numbers)
+
+    def test_abbreviated_state_ca_is_still_accepted(self, monkeypatch):
+        # 1125 and 5488 report the bare "CA" abbreviation in the raw
+        # fixture -- these already passed under the pre-fix filter, so
+        # this asserts the fix does not regress the abbreviated form.
+        teams = _extract_real_fixture(monkeypatch)
+
+        numbers = {t.number for t in teams}
+        assert {1125, 5488}.issubset(numbers)
+
+    def test_normalize_state_maps_full_name_to_abbreviation(self):
+        assert _normalize_state("California") == "CA"
+        assert _normalize_state("california") == "CA"
+        assert _normalize_state("  California  ") == "CA"
+
+    def test_normalize_state_passes_through_an_existing_abbreviation(self):
+        assert _normalize_state("CA") == "CA"
+        assert _normalize_state("ca") == "CA"
+
+    def test_normalize_state_normalizes_other_recognized_state_names(self):
+        # Not just California -- the ticket's own instruction was to
+        # normalize generally, not special-case one state.
+        assert _normalize_state("Texas") == "TX"
+        assert _normalize_state("New York") == "NY"
+        assert _normalize_state("Minnesota") == "MN"
+
+    def test_normalize_state_handles_none_and_empty(self):
+        assert _normalize_state(None) == ""
+        assert _normalize_state("") == ""
+        assert _normalize_state("   ") == ""
+
+    def test_normalize_state_passes_through_an_unrecognized_name_uppercased(self):
+        # An unrecognized full name (e.g. a non-US province spelled
+        # out) must never accidentally collide with "CA" -- it is
+        # uppercased and left as-is, which will simply fail the "CA"
+        # comparison like any other non-California value.
+        assert _normalize_state("Ontario") == "ONTARIO"
 
 
 class TestExactSchoolNamedTeam:
@@ -275,29 +409,35 @@ class TestExactSchoolNamedTeam:
         assert spyder.org_type == "school"
         assert spyder.city == "Poway"
         assert spyder.rookie_year == 2005
-        assert spyder.website == "https://teamspyder.org"
+        assert spyder.website == "http://www.teamspyder.org"
 
 
 class TestUnknownOrganizationTeam:
     """A community/no-school FRC team (no TBA ``Family/Community``
-    sentinel exists -- TBA simply reports an empty ``school_name``) --
+    sentinel exists -- TBA simply reports a null ``school_name``) --
     org_type "unknown", organization "", the same "never group" bucket
-    teams.merge.py gives FTCScout's Family/Community sentinel."""
+    teams.merge.py gives FTCScout's Family/Community sentinel. Team
+    2029 ("Neo-Tech Robotics", Ramona) is real and live-captured, with
+    a null ``school_name`` despite ``state_prov`` being the full
+    "California" -- proving the state-name form and the
+    no-reported-school case are independent of each other."""
 
-    def test_empty_school_name_maps_to_empty_organization(self, monkeypatch):
+    def test_null_school_name_maps_to_empty_organization(self, monkeypatch):
         teams = _extract_real_fixture(monkeypatch)
 
-        quantum_leap = next(t for t in teams if t.number == 4444)
-        assert quantum_leap.organization == ""
-        assert quantum_leap.org_type == "unknown"
+        neo_tech = next(t for t in teams if t.number == 2029)
+        assert neo_tech.organization == ""
+        assert neo_tech.org_type == "unknown"
 
 
 class TestTbaIsNotAGeocodingSource:
     """TBA's lat/lng/address/location_name/gmaps_place_id are
     documented in its own OpenAPI spec as "Will be NULL, for future
-    development" -- confirmed NULL for all 59 SD teams. This source
-    must never read them, present-but-null or otherwise; Team.latitude/
-    longitude stay at their dataclass default (None) here."""
+    development" -- confirmed NULL for all 78 real SD teams (measured
+    live; see ``sources/tba.py``'s module docstring), including every
+    record in this fixture. This source must never read them,
+    present-but-null or otherwise; Team.latitude/longitude stay at
+    their dataclass default (None) here."""
 
     def test_present_but_null_lat_lng_never_populates_team_coordinates(self, monkeypatch):
         teams = _extract_real_fixture(monkeypatch)

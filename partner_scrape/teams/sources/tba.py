@@ -7,9 +7,33 @@ FRC team on file, worldwide, ~500 per page, with no region-filtered
 search endpoint the way FTCScout has. Confirmed live: ``GET
 /api/v3/status`` reports ``max_team_page`` (23 at time of measurement)
 for callers to enumerate every page; the full roster is ~9,163 teams,
-496 of them in California, of which **59** are in San Diego County
-cities (:data:`SD_COUNTY_CITIES`) -- this source's whole job is
-fetching every page and filtering down to that 59.
+659 of them in California (496 reporting the full state name
+``"California"``, 163 the bare abbreviation ``"CA"`` -- see the next
+paragraph), of which **78** are in San Diego County cities
+(:data:`SD_COUNTY_CITIES`) -- this source's whole job is fetching
+every page and filtering down to that 78.
+
+**``state_prov`` is not a consistent literal.** Confirmed live
+(2026-08-27, re-measured against ticket 011-003's original 59-team
+figure): TBA reports the *full* state name (``"California"``, 59 of
+the 78 SD County records) far more often than the bare USPS
+abbreviation (``"CA"``, the other 19) for the exact same state --
+generally the older, less-recently-edited team profiles (all 19 last
+competed in or before 2014, several never competed at all) still carry
+the abbreviation, while every actively-maintained profile has been
+rewritten to the full name at some point. Both groups are equally real
+historical San Diego County FRC teams -- TBA's team roster is an
+append-only historical registry with no "active" flag of its own
+(``model.Team.active`` exists on the dataclass but neither this source
+nor ``sources/ftcscout.py`` populates it -- see ``teams/DESIGN.md``),
+so a team's competing history being old is not evidence it does not
+belong in San Diego County's count, only that it may no longer be
+fielding a team. Ticket 011-003's original filter compared
+``state_prov`` to the literal string ``"CA"`` only, which matched the
+minority 19 and silently dropped the majority 59 --
+``_normalize_state()`` (ticket 011-003, reopened) fixes this by
+normalizing every recognized full US state name to its abbreviation
+before that comparison runs.
 
 **Auth.** Every request (including the ``/status`` probe) requires the
 ``X-TBA-Auth-Key`` header (401 without it) -- see
@@ -38,7 +62,7 @@ isolates any source failure": a missing/401 ``TBA_KEY`` degrades a
 **TBA is not a geocoding source.** ``lat``/``lng``/``address``/
 ``location_name``/``gmaps_place_id`` are documented in TBA's own
 OpenAPI spec as "Will be NULL, for future development" -- confirmed
-NULL for all 59 San Diego teams. This source therefore never reads
+NULL for all 78 San Diego teams. This source therefore never reads
 those fields at all (not even to check they're null) -- ``Team.
 latitude``/``Team.longitude`` are left at their dataclass defaults
 (``None``) here; ``teams/geo.py`` (ticket 011-004) is the only stage
@@ -90,7 +114,9 @@ PROGRAM = "FIRST Robotics Competition"
 #: silent undercount -- ``meta.by_league`` in the exported
 #: ``teams.json`` (``teams/export.py``) makes that undercount visible
 #: as a lower-than-expected FRC total, and this list is the first
-#: place to check when it drifts from the measured 59.
+#: place to check when it drifts from the measured 78 (59 recorded by
+#: TBA as ``"California"`` + 19 as ``"CA"`` -- see
+#: :func:`_normalize_state`'s docstring for why both groups count).
 SD_COUNTY_CITIES = frozenset(
     {
         "San Diego",
@@ -177,6 +203,73 @@ def _clean_city(raw: str | None) -> str:
     return raw.strip().title()
 
 
+#: Full US state/territory name -> USPS two-letter abbreviation. TBA's
+#: ``state_prov`` field is **inconsistent** across records: measured
+#: live (see :func:`_normalize_state`'s docstring), the same San Diego
+#: County FRC roster reports ``"California"`` for 59 records and the
+#: bare abbreviation ``"CA"`` for another 19 -- both refer to the same
+#: state, and a record's age (older, less-recently-edited TBA profiles
+#: skew towards the bare abbreviation) is the only thing that predicts
+#: which form a given record uses, not anything about the team itself.
+#: This table normalizes *every* full US state name TBA is known to
+#: emit to its abbreviation, not just California's, per this ticket's
+#: explicit instruction to normalize rather than special-case one
+#: state -- a future SD_COUNTY_CITIES-adjacent state or a records-entry
+#: quirk in a currently-unseen state must not silently re-trigger this
+#: same bug for a different state string.
+_US_STATE_ABBREVIATIONS: dict[str, str] = {
+    "alabama": "AL", "alaska": "AK", "arizona": "AZ", "arkansas": "AR",
+    "california": "CA", "colorado": "CO", "connecticut": "CT",
+    "delaware": "DE", "district of columbia": "DC", "florida": "FL",
+    "georgia": "GA", "hawaii": "HI", "idaho": "ID", "illinois": "IL",
+    "indiana": "IN", "iowa": "IA", "kansas": "KS", "kentucky": "KY",
+    "louisiana": "LA", "maine": "ME", "maryland": "MD",
+    "massachusetts": "MA", "michigan": "MI", "minnesota": "MN",
+    "mississippi": "MS", "missouri": "MO", "montana": "MT",
+    "nebraska": "NE", "nevada": "NV", "new hampshire": "NH",
+    "new jersey": "NJ", "new mexico": "NM", "new york": "NY",
+    "north carolina": "NC", "north dakota": "ND", "ohio": "OH",
+    "oklahoma": "OK", "oregon": "OR", "pennsylvania": "PA",
+    "puerto rico": "PR", "rhode island": "RI", "south carolina": "SC",
+    "south dakota": "SD", "tennessee": "TN", "texas": "TX", "utah": "UT",
+    "vermont": "VT", "virginia": "VA", "washington": "WA",
+    "west virginia": "WV", "wisconsin": "WI", "wyoming": "WY",
+}
+
+
+def _normalize_state(raw: str | None) -> str:
+    """Normalize a raw TBA ``state_prov`` value to a USPS abbreviation.
+
+    Confirmed live against the real API (San Diego County FRC roster,
+    2026-08-27): TBA reports the *full* state name (``"California"``,
+    59 records) far more often than the bare abbreviation (``"CA"``,
+    19 records) for the exact same state -- there is no per-record
+    signal for which form a given record uses other than the profile's
+    age. The original filter compared ``state_prov`` to the literal
+    string ``"CA"``, which matched only the minority 19 and silently
+    dropped every one of the majority 59 -- a defect this function
+    fixes by normalizing both forms (and any other recognized full US
+    state name -- see :data:`_US_STATE_ABBREVIATIONS`) to the same
+    two-letter code before the caller ever compares against ``"CA"``.
+
+    A value already two letters long (case-insensitive) is assumed to
+    already be an abbreviation (covers ``"CA"`` and every non-US
+    ``state_prov`` this source will filter out anyway, e.g. Canadian
+    province codes like ``"ON"``) and is passed through uppercased,
+    unchanged. An unrecognized full name (a state this table doesn't
+    list, or garbage input) is returned uppercased as-is -- it will
+    simply fail the ``!= "CA"`` comparison the same as any other
+    non-California value, which is the correct, safe outcome (never a
+    false positive San Diego match from an unrecognized string).
+    """
+    cleaned = (raw or "").strip()
+    if not cleaned:
+        return ""
+    if len(cleaned) == 2:
+        return cleaned.upper()
+    return _US_STATE_ABBREVIATIONS.get(cleaned.lower(), cleaned.upper())
+
+
 def _extract_one(record: dict[str, Any]) -> Team | None:
     """Map one TBA team record into a ``Team``, or ``None`` if it falls
     outside California + San Diego County (filtered, not an error).
@@ -191,7 +284,7 @@ def _extract_one(record: dict[str, Any]) -> Team | None:
     if not isinstance(number, int):
         raise ValueError("TBA team record has no usable team_number")
 
-    state_prov = (record.get("state_prov") or "").strip()
+    state_prov = _normalize_state(record.get("state_prov"))
     city = _clean_city(record.get("city"))
     if state_prov != "CA" or city not in SD_COUNTY_CITIES:
         return None

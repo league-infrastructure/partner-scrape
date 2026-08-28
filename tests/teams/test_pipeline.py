@@ -4,11 +4,13 @@ Registry -> TeamSource(s) -> merge_teams() -> export_teams() sequencing.
 Drives the real Team Registry seed (`partner_scrape/teams/registry/
 ftc-sd.toml` + `frc-sd.toml`, the same ones production loads) through a
 fixture Fetcher returning the live-captured 152-team FTCScout fixture
-and (ticket 011-003) the hand-authored 59-team TBA fixture -- no test
-here opens a real network socket, and no test relies on a synthetic
-registry standing in for the real one (except the two tests that
-specifically need an unrecognized/erroring source, which use their own
-small fixture registries under `tests/fixtures/teams/`).
+and (ticket 011-003, reopened) a curated 7-team subset of the
+live-captured TBA fixture (see `tests/teams/test_sources_tba.py`'s
+module docstring for why 7, not the real 78) -- no test here opens a
+real network socket, and no test relies on a synthetic registry
+standing in for the real one (except the two tests that specifically
+need an unrecognized/erroring source, which use their own small
+fixture registries under `tests/fixtures/teams/`).
 """
 
 from __future__ import annotations
@@ -150,7 +152,7 @@ class TestEndToEndAgainstTheRealRegistry:
 
         payload = run_teams(source="tba", site_dir=tmp_path, fetcher=fetcher, dry_run=True)
 
-        assert payload["meta"]["total"] == 59
+        assert payload["meta"]["total"] == 7
         assert SEARCH_URL not in fetcher.calls  # the filtered-out source is never fetched
 
     def test_source_filter_for_an_unknown_source_yields_zero_teams(self, tmp_path):
@@ -264,19 +266,25 @@ class TestSourceFailureIsolation:
 
 
 class TestBothRealSourcesTogether:
-    """AC: with TBA fixtures present, `teams.json` carries 59 FRC teams
-    (211 total) -- the real Team Registry (`ftc-sd.toml` + `frc-sd.toml`)
-    driven against both real fixture sets in one run."""
+    """AC: with TBA fixtures present, `teams.json` carries the fixture's
+    7 FRC teams (159 total) -- the real Team Registry (`ftc-sd.toml` +
+    `frc-sd.toml`) driven against both real fixture sets in one run.
+    (Ticket 011-003's original AC said 59 FRC/211 total -- that number
+    came from a hand-authored fixture with an undetected state_prov
+    bug; see `tests/teams/test_sources_tba.py`'s module docstring and
+    this reopened ticket's own commit for why the fixture -- and this
+    number -- changed. The real, live `partner-scrape teams` total is
+    78 FRC/230 overall; see `sources/tba.py`'s module docstring.)"""
 
-    def test_211_teams_total_152_ftc_59_frc(self, monkeypatch, tmp_path):
+    def test_159_teams_total_152_ftc_7_frc(self, monkeypatch, tmp_path):
         monkeypatch.setenv("TBA_KEY", "fixture-test-key")
         fetcher = _ftc_and_tba_fetcher()
 
         payload = run_teams(site_dir=tmp_path, fetcher=fetcher, dry_run=True)
 
-        assert payload["meta"]["total"] == 211
-        assert payload["meta"]["by_league"] == {"FTC": 152, "FRC": 59}
-        assert len(payload["teams"]) == 211
+        assert payload["meta"]["total"] == 159
+        assert payload["meta"]["by_league"] == {"FTC": 152, "FRC": 7}
+        assert len(payload["teams"]) == 159
 
     def test_merge_ran_canyon_crest_academy_links_across_leagues(self, monkeypatch, tmp_path):
         # Canyon Crest Academy: FTC 7159/9837/14425 (real fixture) and
@@ -390,8 +398,16 @@ class TestGeocodingAggregateDistribution:
     that shifts a handful of matches must not fail this test -- only a
     genuinely broken matcher (e.g. the ladder resolving almost nothing,
     or every match suddenly needing review) should. Measured at ticket
-    011-004's own build (2026-08-28): 129 school (79 FTC + 50 FRC), 8
-    zip, 70 city, 4 none, 14 needs_review, 6 out_of_region.
+    011-004's own build (2026-08-28) against the original 211-team
+    corpus: 129 school (79 FTC + 50 FRC), 8 zip, 70 city, 4 none, 14
+    needs_review, 6 out_of_region. Re-measured against this reopened
+    ticket's smaller, corrected-fixture 159-team corpus (2026-08-28):
+    83 school (79 FTC + 4 FRC -- the TBA fixture shrank from 59 to 7
+    real records, see `tests/teams/test_sources_tba.py`'s module
+    docstring; the FTC-side 79 is unaffected), 3 zip, 69 city, 4 none,
+    6 needs_review, 6 out_of_region unchanged (out_of_region comes
+    entirely from `sources.ftcscout.OUT_OF_REGION_CITIES`, which this
+    ticket did not touch).
     """
 
     def test_precision_distribution_stays_within_expected_bounds(self, monkeypatch, tmp_path):
@@ -400,20 +416,20 @@ class TestGeocodingAggregateDistribution:
 
         payload = run_teams(site_dir=tmp_path, fetcher=fetcher, dry_run=True)
 
-        assert payload["meta"]["total"] == 211
+        assert payload["meta"]["total"] == 159
         by_precision = payload["meta"]["by_location_precision"]
 
         # School precision is the ladder's top rungs (overrides + exact
-        # + fuzzy CDE/NCES match) -- the issue's own measurement
-        # expected ~118; a healthy matcher should clear 100.
-        assert by_precision.get("school", 0) >= 100
+        # + fuzzy CDE/NCES match) -- measured 83 at this build; a
+        # healthy matcher should clear 65.
+        assert by_precision.get("school", 0) >= 65
         # Every team should resolve to at least a city, except the
         # handful of genuinely out-of-region/foreign/ambiguous ones
         # (Ensenada x2, plus ambiguous "San Antonio"/"Louisville") --
         # "none" must stay a small residue, not a large fraction.
         assert by_precision.get("none", 0) <= 10
         # Every located team is accounted for.
-        assert sum(by_precision.values()) == 211
+        assert sum(by_precision.values()) == 159
 
         needs_review_count = sum(1 for t in payload["teams"] if t["needs_review"])
         # A small, meaningful minority -- if this ever approaches the
