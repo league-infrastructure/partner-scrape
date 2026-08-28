@@ -220,6 +220,75 @@ class TestLLMClassificationOverride:
         assert opportunity.age_grade_level == ["Family"]
 
 
+class TestOpportunityTypeLLMOverride:
+    """`_to_opportunity` prefers an Event's own LLM/fallback-set
+    `opportunity_type` (sprint 009, issue 13) over `taxonomy.py`'s
+    keyword derivation, via the same field_provenance-presence
+    precedence pattern the other four classification fields already use."""
+
+    def test_no_opportunity_type_set_falls_back_to_keyword_classification(self):
+        event = _event(title="Farm Tour", start=datetime(2026, 8, 1, 9, 0))
+        assert "opportunity_type" not in event.field_provenance
+
+        [opportunity] = run([event], PARTNERS_PATH)
+
+        assert opportunity.opportunity_type == DEFAULT_OPPORTUNITY_TYPE
+
+    def test_llm_set_opportunity_type_overrides_keyword_derivation(self):
+        # "Farm Tour" keyword-classifies to the default bucket; an
+        # LLM/fallback-set value (field_provenance present) must win.
+        event = _event(title="Farm Tour", start=datetime(2026, 8, 1, 9, 0))
+        event.set("opportunity_type", "Funding Opportunities", source="llm_enrichment", confidence=0.7)
+
+        [opportunity] = run([event], PARTNERS_PATH)
+
+        assert opportunity.opportunity_type == "Funding Opportunities"
+
+    def test_taxonomy_fallback_set_opportunity_type_also_wins(self):
+        """The precedence check is field_provenance *presence*, not which
+        source set it -- a taxonomy_fallback-sourced value (enrich/'s
+        fail-open path) counts too, same as it does for the other three
+        LLM-classification fields."""
+        event = _event(title="Farm Tour", start=datetime(2026, 8, 1, 9, 0))
+        event.set("opportunity_type", "Volunteering", source="taxonomy_fallback", confidence=0.3)
+
+        [opportunity] = run([event], PARTNERS_PATH)
+
+        assert opportunity.opportunity_type == "Volunteering"
+
+    def test_internship_stays_work_based_learning_even_with_opportunity_type_set(self):
+        """Internships are forced to WORK_BASED_LEARNING_TYPE by `kind`,
+        checked before the field_provenance precedence logic -- an
+        Event.set() opportunity_type value must not leak through."""
+        event = _event(
+            title="Data Science Intern",
+            start=datetime(2026, 8, 1, 9, 0),
+            kind="internship",
+            external_id="gh-99",
+        )
+        event.set("opportunity_type", "Online", source="llm_enrichment", confidence=0.7)
+
+        [opportunity] = run([event], PARTNERS_PATH)
+
+        assert opportunity.opportunity_type == WORK_BASED_LEARNING_TYPE
+
+
+class TestOpportunityTypeTitleOnlyRegression:
+    """Regression (issue 13's known false-positive): a title like "Bird
+    Walk at Grant Park" must not classify as "Funding Opportunities" --
+    neither via the keyword fallback (OPPORTUNITY_TYPE_KEYWORDS has no
+    such rule, deliberately) nor via field_provenance-precedence somehow
+    picking up an unset LLM value."""
+
+    def test_bird_walk_title_does_not_classify_as_funding_opportunities(self):
+        event = _event(title="Bird Walk at Grant Park", start=datetime(2026, 8, 1, 9, 0))
+
+        [opportunity] = run([event], PARTNERS_PATH)
+
+        assert opportunity.opportunity_type != "Funding Opportunities"
+        assert opportunity.opportunity_type == DEFAULT_OPPORTUNITY_TYPE
+
+
 class TestPartnerJoin:
     def test_matching_org_gets_partner_id_logo_and_geo_populated(self):
         event = _event(source_id="crf", start=datetime(2026, 8, 1, 9, 0))

@@ -105,6 +105,7 @@ def _event_to_dict(event: Event) -> dict[str, Any]:
         "age_grade_level": list(event.age_grade_level),
         "cost_range": event.cost_range,
         "time_of_day": list(event.time_of_day),
+        "opportunity_type": event.opportunity_type,
         "field_provenance": {
             field_name: {"source": prov.source, "confidence": prov.confidence}
             for field_name, prov in event.field_provenance.items()
@@ -138,6 +139,7 @@ def _event_from_dict(data: dict[str, Any]) -> Event:
         age_grade_level=list(data["age_grade_level"]),
         cost_range=data["cost_range"],
         time_of_day=list(data["time_of_day"]),
+        opportunity_type=data["opportunity_type"],
         field_provenance={
             field_name: Provenance(source=p["source"], confidence=p["confidence"])
             for field_name, p in data["field_provenance"].items()

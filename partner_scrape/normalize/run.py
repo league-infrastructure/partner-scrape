@@ -206,12 +206,24 @@ def _to_opportunity(
 
     is_internship = event.kind == "internship"
     availability = _internship_availability(event) if is_internship else _availability(instance)
-    # Internships force Work-based Learning by kind; everything else is
-    # classified from its own text rather than blindly stamped with the
-    # default (which flattened every event into "Out-of-school Programs"
-    # and left 7 of the site's 8 type filters permanently empty).
+    # Internships force Work-based Learning by kind, checked first and
+    # unconditionally. Otherwise: prefer an Event's own LLM-set
+    # opportunity_type (sprint 009, issue 13) over taxonomy.py's keyword
+    # fallback, via the same field_provenance-presence precedence as the
+    # four fields above -- LLM/fallback ran (field_provenance entry
+    # present) wins, else classify from the title directly (covers
+    # --no-enrich and any other enrichment-skipped path). This replaced
+    # a blind default that flattened every event into "Out-of-school
+    # Programs" and left 7 of the site's 8 type filters permanently
+    # empty.
     opportunity_type = (
-        WORK_BASED_LEARNING_TYPE if is_internship else classify_opportunity_type(event.title)
+        WORK_BASED_LEARNING_TYPE
+        if is_internship
+        else (
+            event.opportunity_type
+            if "opportunity_type" in event.field_provenance
+            else classify_opportunity_type(event.title)
+        )
     )
 
     # Event Image Downloader (sprint 008 ticket 008, issue 19 scraper

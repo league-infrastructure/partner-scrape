@@ -138,12 +138,14 @@ _LLM_RESPONSES: dict[str, EnrichmentResult] = {
         age_grade_level=["Grades 6-8"],
         cost_range="Less than $25",
         time_of_day=["Morning"],
+        opportunity_type="Out-of-school Programs",
         relevant=True,
         relevance_reason="Hands-on marine biology exploration for youth.",
     ),
     # <time datetime> rung: already dated -- verdicted NOT relevant, the
     # one event this test expects gated out of the final export.
     "Beach Cleanup": EnrichmentResult(
+        opportunity_type="Volunteering",
         relevant=False,
         relevance_reason="General community volunteering, not a STEM learning opportunity.",
     ),
@@ -157,6 +159,7 @@ _LLM_RESPONSES: dict[str, EnrichmentResult] = {
         age_grade_level=["Family"],
         cost_range="Free",
         time_of_day=["Evening"],
+        opportunity_type="Out-of-school Programs",
         relevant=True,
         relevance_reason="Astronomy observation event for families.",
     ),
@@ -166,6 +169,7 @@ _LLM_RESPONSES: dict[str, EnrichmentResult] = {
         age_grade_level=["Grades 6-8"],
         cost_range="Less than $25",
         time_of_day=["Afternoon"],
+        opportunity_type="Out-of-school Programs",
         relevant=True,
         relevance_reason="Hands-on robotics building for kids.",
     ),
@@ -293,6 +297,7 @@ class TestDiscoveryExtractEnrichGateExport:
         assert tide_pool["age_grade_level"] == ["Grades 6-8"]
         assert tide_pool["cost_range"] == "Less than $25"
         assert tide_pool["time_of_day"] == ["Morning"]
+        assert tide_pool["opportunity_type"] == "Out-of-school Programs"
 
         [robotics] = [r for r in payload if r["title"] == "Robotics Workshop"]
         assert robotics["areas_of_interest"] == [

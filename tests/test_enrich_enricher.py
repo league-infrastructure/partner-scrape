@@ -19,12 +19,17 @@ from typing import Any
 from partner_scrape.enrich.cache import EnrichmentCache
 from partner_scrape.enrich.enricher import (
     FALLBACK_SOURCE,
+    LLM_CONFIDENCE,
     LLM_SOURCE,
     LLMEnricher,
 )
 from partner_scrape.enrich.llm_client import EnrichmentResult, FixtureLLMClient, LLMEnrichmentError
 from partner_scrape.model import Event
-from partner_scrape.normalize.taxonomy import build_taxonomy_text, derive_areas_of_interest
+from partner_scrape.normalize.taxonomy import (
+    build_taxonomy_text,
+    classify_opportunity_type,
+    derive_areas_of_interest,
+)
 
 
 def _event(title: str = "Robotics Night", **overrides: Any) -> Event:
@@ -160,6 +165,7 @@ class TestRecoversMissingFields:
             age_grade_level=["Grades 6-8"],
             cost_range="Free",
             time_of_day=["Evening"],
+            opportunity_type="Volunteering",
             relevant=True,
             relevance_reason="Youth robotics program.",
         )
@@ -172,9 +178,18 @@ class TestRecoversMissingFields:
         assert enriched.age_grade_level == ["Grades 6-8"]
         assert enriched.cost_range == "Free"
         assert enriched.time_of_day == ["Evening"]
+        assert enriched.opportunity_type == "Volunteering"
         assert enriched.relevance_reason == "Youth robotics program."
-        for f in ("areas_of_interest", "age_grade_level", "cost_range", "time_of_day", "relevant"):
+        for f in (
+            "areas_of_interest",
+            "age_grade_level",
+            "cost_range",
+            "time_of_day",
+            "opportunity_type",
+            "relevant",
+        ):
             assert enriched.field_provenance[f].source == LLM_SOURCE
+            assert enriched.field_provenance[f].confidence == LLM_CONFIDENCE
 
 
 # ---------------------------------------------------------------------
@@ -263,10 +278,27 @@ class TestFailsOpenOnLlmFailure:
         expected_areas = derive_areas_of_interest(
             build_taxonomy_text(event.title, event.description, event.categories, event.tags)
         )
+        expected_opportunity_type = classify_opportunity_type(event.title)
         assert enriched.relevant is True
         assert enriched.areas_of_interest == expected_areas
+        assert enriched.opportunity_type == expected_opportunity_type
         assert enriched.field_provenance["relevant"].source == FALLBACK_SOURCE
+        assert enriched.field_provenance["opportunity_type"].source == FALLBACK_SOURCE
         assert "LLM enrichment failed" in caplog.text
+
+    def test_fallback_opportunity_type_reflects_a_matching_keyword_rule(self, tmp_path):
+        """Not just always the default bucket -- the fallback derives
+        opportunity_type from the Event's own title via
+        classify_opportunity_type, same as the other fallback fields."""
+        event = _event(title="Beach Cleanup Day")
+        llm_client = _RaisingLLMClient()
+        enricher = LLMEnricher(llm_client, EnrichmentCache(cache_dir=tmp_path))
+
+        [enriched] = enricher.enrich([event])
+
+        assert enriched.opportunity_type == "Volunteering"
+        assert enriched.field_provenance["opportunity_type"].source == FALLBACK_SOURCE
+        assert enriched.field_provenance["opportunity_type"].confidence == 0.3
 
     def test_no_cache_entry_is_written_when_the_llm_call_fails(self, tmp_path):
         cache = EnrichmentCache(cache_dir=tmp_path)

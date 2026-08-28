@@ -115,6 +115,16 @@ class Event:
     cost_range: str = ""
     time_of_day: list[str] = field(default_factory=list)
 
+    # opportunity_type classification (sprint 009, issue 13): threaded
+    # through the exact same LLM-enrichment/field_provenance pattern as
+    # the four classification fields above -- see enrich/DESIGN.md and
+    # normalize/DESIGN.md's sprint 009 additions. Default "" (not the
+    # site's "Out-of-school Programs" bucket) so an untouched Event still
+    # reproduces every pre-existing behavior exactly; the site-facing
+    # default is applied downstream, in normalize/taxonomy.py and the
+    # LLM prompt, never here.
+    opportunity_type: str = ""
+
     # Side-car provenance/confidence map, keyed by field name.
     field_provenance: dict[str, Provenance] = field(default_factory=dict)
 

@@ -29,6 +29,9 @@ class TestEventDefaults:
         assert event.tags == []
         assert event.field_provenance == {}
 
+    def test_opportunity_type_defaults_to_empty_string(self):
+        assert Event().opportunity_type == ""
+
     def test_kind_can_be_program_or_internship(self):
         assert Event(kind="program").kind == "program"
         assert Event(kind="internship").kind == "internship"

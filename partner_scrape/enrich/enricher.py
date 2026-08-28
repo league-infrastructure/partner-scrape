@@ -77,6 +77,7 @@ from partner_scrape.enrich.llm_client import EnrichmentResult, LLMClient
 from partner_scrape.model import Event
 from partner_scrape.normalize.taxonomy import (
     build_taxonomy_text,
+    classify_opportunity_type,
     derive_age_grade_level,
     derive_areas_of_interest,
     derive_time_of_day,
@@ -126,7 +127,13 @@ _RECOVERABLE_FIELDS = ("start", "end", "all_day", "location", "cost", "registrat
 
 #: `Event` fields an `EnrichmentResult` always produces (classification +
 #: the relevance verdict) -- applied unconditionally.
-_CLASSIFICATION_FIELDS = ("areas_of_interest", "age_grade_level", "cost_range", "time_of_day")
+_CLASSIFICATION_FIELDS = (
+    "areas_of_interest",
+    "age_grade_level",
+    "cost_range",
+    "time_of_day",
+    "opportunity_type",
+)
 
 
 def _apply_result(event: Event, result: EnrichmentResult, *, source: str, confidence: float) -> None:
@@ -158,6 +165,7 @@ def _fallback_result(event: Event) -> EnrichmentResult:
         age_grade_level=derive_age_grade_level(text),
         cost_range=map_cost(event.cost),
         time_of_day=derive_time_of_day(event.start, event.all_day),
+        opportunity_type=classify_opportunity_type(event.title),
         relevant=True,
         relevance_reason="",
     )

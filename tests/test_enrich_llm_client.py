@@ -110,6 +110,7 @@ class TestEnrichmentResult:
         assert result.age_grade_level == []
         assert result.cost_range == ""
         assert result.time_of_day == []
+        assert result.opportunity_type == ""
         assert result.relevant is True
         assert result.relevance_reason == ""
 
@@ -133,6 +134,14 @@ class TestEnrichmentJsonSchema:
         for name in ("areas_of_interest", "age_grade_level", "time_of_day"):
             prop = ENRICHMENT_JSON_SCHEMA["properties"][name]
             assert prop == {"type": "array", "items": {"type": "string"}}
+
+    def test_opportunity_type_is_a_required_string_field(self):
+        """Sprint 009 (issue 13): opportunity_type is picked up by the
+        dataclass-introspection schema generator automatically -- no
+        hand-maintained schema literal is touched to add it."""
+        assert "opportunity_type" in ENRICHMENT_JSON_SCHEMA["properties"]
+        assert ENRICHMENT_JSON_SCHEMA["properties"]["opportunity_type"] == {"type": "string"}
+        assert "opportunity_type" in ENRICHMENT_JSON_SCHEMA["required"]
 
 
 # ---------------------------------------------------------------------
@@ -230,6 +239,7 @@ class TestAnthropicLLMClientParsesResponses:
         assert result.age_grade_level == ["Grades 6-8"]
         assert result.cost_range == "Free"
         assert result.time_of_day == ["Evening"]
+        assert result.opportunity_type == "Out-of-school Programs"
         assert result.relevant is True
         assert result.relevance_reason == "Hands-on youth robotics program at a public library."
 
@@ -297,6 +307,24 @@ class TestAnthropicLLMClientRejectsMalformedResponses:
         with pytest.raises(LLMEnrichmentError):
             client.enrich_event(_sample_event())
 
+    def test_missing_opportunity_type_raises_llm_enrichment_error(self, monkeypatch):
+        bad_payload = json.loads(_read_fixture("full_classification.json"))
+        del bad_payload["opportunity_type"]
+        _install_fake_anthropic(monkeypatch, response_text=json.dumps(bad_payload))
+        client = AnthropicLLMClient()
+
+        with pytest.raises(LLMEnrichmentError):
+            client.enrich_event(_sample_event())
+
+    def test_wrong_type_opportunity_type_raises_llm_enrichment_error(self, monkeypatch):
+        bad_payload = json.loads(_read_fixture("full_classification.json"))
+        bad_payload["opportunity_type"] = ["Online"]  # should be a string
+        _install_fake_anthropic(monkeypatch, response_text=json.dumps(bad_payload))
+        client = AnthropicLLMClient()
+
+        with pytest.raises(LLMEnrichmentError):
+            client.enrich_event(_sample_event())
+
     def test_non_object_json_raises_llm_enrichment_error(self, monkeypatch):
         _install_fake_anthropic(monkeypatch, response_text=json.dumps(["not", "an", "object"]))
         client = AnthropicLLMClient()
@@ -334,6 +362,15 @@ class TestFixtureLLMClient:
         result = client.enrich_event(event)
 
         assert result is canned
+
+    def test_canned_result_can_set_opportunity_type(self):
+        canned = EnrichmentResult(relevant=True, opportunity_type="Volunteering")
+        client = FixtureLLMClient(responses={"Beach Cleanup": canned})
+        event = _sample_event(title="Beach Cleanup")
+
+        result = client.enrich_event(event)
+
+        assert result.opportunity_type == "Volunteering"
 
     def test_records_every_call_in_order(self):
         canned = EnrichmentResult()
