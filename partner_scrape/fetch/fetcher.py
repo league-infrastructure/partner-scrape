@@ -12,15 +12,77 @@ ever opened.
 
 from __future__ import annotations
 
+import functools
+import http.client
+import logging
+import ssl
 import urllib.error
+import urllib.parse
 import urllib.request
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Protocol
 
+import certifi
+
+logger = logging.getLogger(__name__)
+
 #: Polite default User-Agent, matching dev/fetch_tec_api.py's
 #: already-proven value for these sites.
 DEFAULT_USER_AGENT = "STEM-Calendar-Bot/1.0 (educational research)"
+
+#: Synthetic ``FetchResponse.status`` for a request that never produced
+#: an HTTP response at all -- DNS failure, TLS failure, timeout, reset
+#: connection, malformed URL. Callers already branch on "not 2xx" (the
+#: adapters skip the page, ``cache.py`` declines to cache it), so a
+#: sentinel status routes transport failures down the same
+#: already-tested path a 404 takes instead of raising.
+TRANSPORT_ERROR_STATUS = 0
+
+#: Characters left alone when percent-encoding a URL's path/query. ``%``
+#: is safe so an already-encoded URL is not double-encoded.
+_PATH_SAFE = "/%:@&=+$,;~()!*'"
+_QUERY_SAFE = _PATH_SAFE + "?"
+
+
+@functools.lru_cache(maxsize=1)
+def _ssl_context() -> ssl.SSLContext:
+    """Return a shared TLS context trusting certifi's CA bundle.
+
+    The interpreter's default trust store is whatever the platform
+    happens to provide, and a uv-managed CPython on macOS resolves it to
+    an ``/etc/ssl`` bundle that rejects some partners' certificate
+    chains outright (observed as ``CERTIFICATE_VERIFY_FAILED: unable to
+    get local issuer certificate`` against awissd.org and
+    calendar.ucsd.edu, both of which verify fine against certifi).
+    Pinning certifi makes verification reproducible across machines
+    without weakening it -- certificates are still fully verified.
+    """
+    return ssl.create_default_context(cafile=certifi.where())
+
+
+def sanitize_url(url: str) -> str:
+    """Percent-encode characters that would make ``url`` unrequestable.
+
+    Partner sitemaps link documents whose paths contain raw spaces (and
+    other control characters), which ``http.client`` rejects with
+    ``InvalidURL`` before a socket is ever opened. Encoding the path and
+    query -- while leaving ``%`` safe, so an already-encoded URL is not
+    double-encoded -- makes those URLs fetchable instead of fatal.
+    """
+    try:
+        split = urllib.parse.urlsplit(url)
+    except ValueError:
+        return url
+    return urllib.parse.urlunsplit(
+        (
+            split.scheme,
+            split.netloc,
+            urllib.parse.quote(split.path, safe=_PATH_SAFE),
+            urllib.parse.quote(split.query, safe=_QUERY_SAFE),
+            split.fragment,
+        )
+    )
 
 
 @dataclass
@@ -63,9 +125,11 @@ class UrllibFetcher:
 
     def get(self, url: str, headers: dict[str, str] | None = None) -> FetchResponse:
         request_headers = {"User-Agent": self.user_agent, **(headers or {})}
-        request = urllib.request.Request(url, headers=request_headers)
+        request = urllib.request.Request(sanitize_url(url), headers=request_headers)
         try:
-            with urllib.request.urlopen(request, timeout=self.timeout) as response:
+            with urllib.request.urlopen(
+                request, timeout=self.timeout, context=_ssl_context()
+            ) as response:
                 body = response.read().decode("utf-8", errors="replace")
                 return FetchResponse(
                     url=url,
@@ -80,3 +144,26 @@ class UrllibFetcher:
             body = exc.read().decode("utf-8", errors="replace") if exc.fp else ""
             headers = dict(exc.headers.items()) if exc.headers else {}
             return FetchResponse(url=url, status=exc.code, headers=headers, body=body)
+        except (OSError, http.client.HTTPException, UnicodeError) as exc:
+            # No HTTP response ever arrived: DNS failure, TLS failure,
+            # read timeout, reset connection, malformed URL. Raising
+            # here would abort the *whole source* -- the pipeline's
+            # per-source guard is the only handler above us -- so one
+            # unreachable page out of hundreds would discard every event
+            # the source had already yielded. Report it as a non-2xx
+            # response instead, which callers already know how to skip.
+            #
+            # OSError covers URLError and its socket/TLS/timeout
+            # subclasses; HTTPException covers InvalidURL; UnicodeError
+            # covers hostnames that fail IDNA encoding.
+            logger.warning(
+                "Fetch of %s failed at the transport layer (%s: %s); "
+                "reporting status %s so the caller can skip just this URL",
+                url,
+                type(exc).__name__,
+                exc,
+                TRANSPORT_ERROR_STATUS,
+            )
+            return FetchResponse(
+                url=url, status=TRANSPORT_ERROR_STATUS, headers={}, body=""
+            )

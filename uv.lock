@@ -607,10 +607,11 @@ wheels = [
 
 [[package]]
 name = "partner-scrape"
-version = "0.20260731.1"
+version = "0.20260814.1"
 source = { editable = "." }
 dependencies = [
     { name = "anthropic" },
+    { name = "certifi" },
     { name = "icalendar" },
     { name = "lxml" },
     { name = "python-dateutil" },
@@ -631,6 +632,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "anthropic", specifier = ">=0.69.0" },
+    { name = "certifi", specifier = ">=2024.2.2" },
     { name = "icalendar", specifier = ">=7.2.0" },
     { name = "lxml", specifier = ">=5.0" },
     { name = "playwright", marker = "extra == 'headless'", specifier = ">=1.40" },
