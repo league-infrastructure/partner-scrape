@@ -1,0 +1,54 @@
+[
+  {
+    "number": 1622,
+    "name": "Team Spyder",
+    "schoolName": "Poway High School",
+    "sponsors": ["BAE Systems", "PTC", "Qualcomm"],
+    "country": "USA",
+    "state": "CA",
+    "city": "Poway",
+    "rookieYear": 2007,
+    "website": null,
+    "createdAt": "2024-10-24T21:15:21.497Z",
+    "updatedAt": "2026-08-04T06:43:41.830Z"
+  },
+  {
+    "number": null,
+    "name": "Synthetic Bad Record -- No Team Number",
+    "schoolName": "Family/Community",
+    "sponsors": [],
+    "country": "USA",
+    "state": "CA",
+    "city": "San Diego",
+    "rookieYear": 2020,
+    "website": null,
+    "createdAt": "2024-10-24T20:25:55.825Z",
+    "updatedAt": "2024-10-24T20:25:55.825Z"
+  },
+  {
+    "number": 99999,
+    "name": "",
+    "schoolName": "Family/Community",
+    "sponsors": [],
+    "country": "USA",
+    "state": "CA",
+    "city": "San Diego",
+    "rookieYear": 2020,
+    "website": null,
+    "createdAt": "2024-10-24T20:25:55.825Z",
+    "updatedAt": "2024-10-24T20:25:55.825Z"
+  },
+  {
+    "number": 4216,
+    "name": "Rise of Hephaestus",
+    "schoolName": "Family/Community",
+    "sponsors": ["RISE-Robotics Inspiring Science and Engineering", "DoD STEM"],
+    "country": "USA",
+    "state": "CA",
+    "city": "Santee",
+    "rookieYear": 0,
+    "website": null,
+    "createdAt": "2024-10-24T20:25:55.825Z",
+    "updatedAt": "2026-08-04T06:43:41.830Z"
+  }
+]

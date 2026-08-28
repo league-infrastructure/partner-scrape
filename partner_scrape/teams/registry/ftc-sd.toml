@@ -1,0 +1,29 @@
+# FTCScout -- free, unauthenticated REST source for San Diego County's
+# FIRST Tech Challenge teams. Loaded via registry.loader.load_active_sources
+# (reused verbatim, no new schema) against this directory
+# (partner_scrape/teams/registry/), NOT the main
+# partner_scrape/registry/sources/ directory -- teams sources are
+# structurally disjoint from the Opportunity registry (see
+# teams/DESIGN.md's Constraints and Invariants).
+#
+# `adapter_type` is reused here as a generic per-league source-type key
+# (this project's SourceConfig schema names the field "adapter_type"
+# regardless of consumer -- see registry/schema.py); it is read by
+# ticket 011-002's teams.pipeline to select the matching TeamSource, not
+# by adapters.base.ADAPTERS. This source is never registered there.
+
+org_name = "FIRST Tech Challenge -- San Diego County"
+adapter_type = "ftcscout"
+enabled = true
+
+[config]
+region = "USCASD"
+
+[acquisition_policy]
+# FTCScout has no documented rate limit; matching the registry's
+# existing default (1 req/sec) is a polite, conservative choice, not a
+# measured requirement -- this source issues exactly one request per
+# run regardless (discover() returns a single TeamRef).
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "clasi/issues/robot-teams-scrape-locate-and-publish-san-diego-first-teams.md (measured live, 2026-08-27)"
