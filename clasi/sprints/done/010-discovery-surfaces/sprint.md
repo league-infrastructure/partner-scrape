@@ -1,7 +1,7 @@
 ---
 id: '010'
 title: Discovery surfaces
-status: executing
+status: done
 branch: sprint/010-discovery-surfaces
 use-cases: []
 issues:
