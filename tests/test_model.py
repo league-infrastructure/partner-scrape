@@ -4,7 +4,14 @@ from datetime import datetime
 
 import pytest
 
-from partner_scrape.model import Event, Provenance, identity_key, normalize_title, same_record
+from partner_scrape.model import (
+    Event,
+    Provenance,
+    identity_key,
+    normalize_title,
+    same_record,
+    slugify,
+)
 
 
 class TestEventDefaults:
@@ -207,6 +214,30 @@ class TestNormalizeTitle:
 
     def test_handles_mixed_punctuation_and_case(self):
         assert normalize_title("STEM Fair: Grades 6-8 (Free!)") == "stem fair grades 68 free"
+
+
+class TestSlugify:
+    """`slugify()` (sprint 009 ticket 002): promoted from
+    `normalize/run.py`'s private `_slugify`, behavior unchanged --
+    reused for both the event slug (`normalize/run.py`) and the
+    partner slug (`export/partner_log.py`, ticket 003). Matches
+    `site/src/lib/helpers.ts`'s `slugify()` convention.
+    """
+
+    def test_lowercases(self):
+        assert slugify("Farm Tour") == "farm_tour"
+
+    def test_non_alnum_runs_collapse_to_a_single_underscore(self):
+        assert slugify("Farm Tour: Session A!!") == "farm_tour_session_a"
+
+    def test_strips_leading_and_trailing_underscores(self):
+        assert slugify("  Farm Tour  ") == "farm_tour"
+
+    def test_already_slug_shaped_text_is_unchanged(self):
+        assert slugify("farm_tour_20260801") == "farm_tour_20260801"
+
+    def test_empty_string_stays_empty(self):
+        assert slugify("") == ""
 
 
 class TestIdentityKey:

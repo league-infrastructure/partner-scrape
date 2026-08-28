@@ -13,7 +13,7 @@ from __future__ import annotations
 from datetime import datetime
 from pathlib import Path
 
-from partner_scrape.model import Event
+from partner_scrape.model import Event, slugify
 from partner_scrape.normalize.run import (
     DEFAULT_OPPORTUNITY_TYPE,
     WORK_BASED_LEARNING_TYPE,
@@ -37,6 +37,8 @@ def _event(
     kind: str = "event",
     external_id: str = "",
     image_url: str = "",
+    registration_url: str = "",
+    url: str = "",
 ) -> Event:
     event = Event(source_id=source_id, kind=kind, external_id=external_id)
     event.set("title", title, source="fixture", confidence=confidence)
@@ -52,6 +54,10 @@ def _event(
         event.set("cost", cost, source="fixture", confidence=confidence)
     if image_url:
         event.set("image_url", image_url, source="fixture", confidence=confidence)
+    if registration_url:
+        event.set("registration_url", registration_url, source="fixture", confidence=confidence)
+    if url:
+        event.set("url", url, source="fixture", confidence=confidence)
     return event
 
 
@@ -110,6 +116,139 @@ class TestFieldMapping:
         [opportunity] = run([event], PARTNERS_PATH)
 
         assert opportunity.title == "Stay Classy O’Side: Shark & Ray"
+
+
+class TestSlugComputation:
+    """`Opportunity.slug` (sprint 009 ticket 002) is now a stable,
+    cross-run identity -- `slugify(link)` when the Event has a link,
+    else `slugify(title) + date` -- not merely a within-export display
+    key. No org/partner prefix: the slug is stored *inside* a
+    partner-scoped directory (ticket 003), so the partner is already
+    implied by where it lives.
+    """
+
+    def test_link_present_uses_slugified_registration_url(self):
+        event = _event(
+            title="Farm Tour",
+            start=datetime(2026, 8, 1, 9, 0),
+            registration_url="https://coastalrootsfarm.org/events/farm-tour",
+        )
+
+        [opportunity] = run([event], PARTNERS_PATH)
+
+        assert opportunity.slug == slugify("https://coastalrootsfarm.org/events/farm-tour")
+
+    def test_url_used_when_registration_url_is_absent(self):
+        event = _event(
+            title="Farm Tour",
+            start=datetime(2026, 8, 1, 9, 0),
+            url="https://coastalrootsfarm.org/farm-tour",
+        )
+
+        [opportunity] = run([event], PARTNERS_PATH)
+
+        assert opportunity.slug == slugify("https://coastalrootsfarm.org/farm-tour")
+
+    def test_registration_url_preferred_over_url_when_both_set(self):
+        event = _event(
+            title="Farm Tour",
+            start=datetime(2026, 8, 1, 9, 0),
+            registration_url="https://coastalrootsfarm.org/register",
+            url="https://coastalrootsfarm.org/listing",
+        )
+
+        [opportunity] = run([event], PARTNERS_PATH)
+
+        assert opportunity.slug == slugify("https://coastalrootsfarm.org/register")
+
+    def test_no_link_falls_back_to_title_and_date(self):
+        event = _event(title="Farm Tour", start=datetime(2026, 8, 1, 9, 0))
+
+        [opportunity] = run([event], PARTNERS_PATH)
+
+        assert opportunity.slug == "farm_tour_20260801"
+
+    def test_slug_never_includes_org_or_partner_name(self):
+        event = _event(source_id="crf", title="Farm Tour", start=datetime(2026, 8, 1, 9, 0))
+
+        [opportunity] = run(
+            [event], PARTNERS_PATH, source_org_names={"crf": "Coastal Roots Farm"}
+        )
+
+        assert opportunity.slug == "farm_tour_20260801"
+        assert "coastal" not in opportunity.slug
+        assert "crf" not in opportunity.slug
+
+    def test_slug_is_stable_across_runs_with_equivalent_input_link_branch(self):
+        """The same real-world event, normalized in two separate `run()`
+        calls from equivalent-but-not-identical input -- an unrelated
+        field (here, the description) changing between runs must not
+        move the link-based slug. This is the property ticket 003's
+        per-partner log depends on to recognize "same event" across
+        runs."""
+        link = "https://coastalrootsfarm.org/events/farm-tour"
+        first = _event(
+            title="Farm Tour",
+            start=datetime(2026, 8, 1, 9, 0),
+            registration_url=link,
+            description="Come tour the farm!",
+        )
+        second = _event(
+            title="Farm Tour",
+            start=datetime(2026, 8, 1, 9, 0),
+            registration_url=link,
+            description="Come tour the farm! Updated details this run.",
+        )
+
+        [opp1] = run([first], PARTNERS_PATH)
+        [opp2] = run([second], PARTNERS_PATH)
+
+        assert opp1.slug == opp2.slug
+
+    def test_slug_is_stable_across_runs_with_equivalent_input_title_date_branch(self):
+        """Same stability property as the link branch above, for the
+        no-link title+date fallback."""
+        first = _event(
+            title="Farm Tour",
+            start=datetime(2026, 8, 1, 9, 0),
+            description="Come tour the farm!",
+        )
+        second = _event(
+            title="Farm Tour",
+            start=datetime(2026, 8, 1, 9, 0),
+            description="Come tour the farm! Updated wording this run.",
+        )
+
+        [opp1] = run([first], PARTNERS_PATH)
+        [opp2] = run([second], PARTNERS_PATH)
+
+        assert opp1.slug == opp2.slug
+
+    def test_different_partners_same_title_and_day_no_link_share_the_same_slug_pre_dedup(self):
+        """Since the org prefix is gone, two different orgs' same-titled,
+        same-day events (no link) now collide on slug string *before*
+        any export-time disambiguation. Differing venue keeps
+        cross-source dedup from merging them into one Opportunity, so
+        both survive with an identical slug -- `export/writer.py`'s
+        `_dedupe_slugs` remains the backstop that disambiguates this in
+        the flat legacy export (see test_export.py::TestSlugDedup)."""
+        a = _event(
+            source_id="org_a",
+            title="Community Cleanup",
+            start=datetime(2026, 8, 1, 9, 0),
+            location="North Park",
+        )
+        b = _event(
+            source_id="org_b",
+            title="Community Cleanup",
+            start=datetime(2026, 8, 1, 9, 0),
+            location="South Park",
+        )
+
+        opportunities = run([a, b], PARTNERS_PATH)
+
+        assert len(opportunities) == 2
+        assert opportunities[0].slug == opportunities[1].slug == "community_cleanup_20260801"
 
 
 class TestTaxonomyDerivation:
