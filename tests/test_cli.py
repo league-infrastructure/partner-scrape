@@ -15,6 +15,7 @@ below, covering the new `discover-candidates` subcommand.
 
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -23,8 +24,12 @@ import pytest
 from partner_scrape import cli
 from partner_scrape.enrich.enricher import LLMEnricher
 from partner_scrape.enrich.llm_client import AnthropicLLMClient
+from partner_scrape.export.publish import project as real_publish_project
 from partner_scrape.fetch.fetcher import FetchResponse
 from partner_scrape.observability.reporter import YieldReporter
+
+#: The same fixture curated partner roster test_export_publish.py uses.
+PARTNERS_FIXTURE = Path(__file__).resolve().parent / "fixtures" / "partners.json"
 
 
 @pytest.fixture(autouse=True)
@@ -433,6 +438,54 @@ class TestPublishWiring:
 
         assert exit_code == 0
         assert call_order == ["publish", "mirror"]
+
+
+class TestPublishAndMirrorIntegration:
+    """Sprint 009 (ticket 005): a thin integration test proving the real
+    `publish.project()` output actually reaches a mirror target through
+    a full, otherwise-unstubbed `cli.main()` run -- `mirror_site_data`'s
+    own directory-tree-copy behavior is `test_export_mirror.py`'s job,
+    and `publish.project()`'s own projection logic is
+    `test_export_publish.py`'s job; this test only proves the two are
+    correctly wired together end to end via the CLI. Only `cli.run`
+    (the pipeline itself) is stubbed -- everything downstream of it
+    (`publish.project`, `mirror_site_data`) runs for real.
+    """
+
+    def test_published_tree_reaches_a_configured_mirror_target(self, monkeypatch, tmp_path):
+        site_dir = tmp_path / "site"
+        (site_dir / "src" / "data").mkdir(parents=True)
+        (site_dir / "src" / "data" / "partners.json").write_text(PARTNERS_FIXTURE.read_text())
+
+        target = tmp_path / "mirror-target"
+        (target / "src" / "data").mkdir(parents=True)
+
+        monkeypatch.setattr(cli, "run", lambda **kwargs: [])
+        # Un-stub the autouse fixture's no-op publish.project so the
+        # real projection runs and actually writes public/data/.
+        monkeypatch.setattr(cli.publish, "project", real_publish_project)
+
+        exit_code = cli.main(
+            [
+                "--no-enrich",
+                "--no-report",
+                "--site-dir",
+                str(site_dir),
+                "--mirror-site-dir",
+                str(target),
+            ]
+        )
+
+        assert exit_code == 0
+        primary_partners = (site_dir / "public" / "data" / "partners.json").read_text()
+        mirrored_partners = (target / "public" / "data" / "partners.json").read_text()
+        assert mirrored_partners == primary_partners
+        assert json.loads(mirrored_partners)["partner_count"] == 3
+        # Per-partner event files were carried across too, not just the
+        # top-level roster.
+        assert (
+            target / "public" / "data" / "partners" / "coastal_roots_farm" / "events.json"
+        ).exists()
 
 
 class TestHelp:
