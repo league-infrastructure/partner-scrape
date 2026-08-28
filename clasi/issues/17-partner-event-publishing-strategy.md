@@ -1,5 +1,6 @@
 ---
 status: pending
+sprint: '010'
 ---
 
 # Multi-pronged event-publishing strategy for partners (harmonized with the scraper)

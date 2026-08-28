@@ -1,4 +1,4 @@
-design_docs: disabled
+design_docs: enabled
 paths:
   db: .clasi/.clasi.db
   design: docs/design
@@ -7,3 +7,5 @@ paths:
   reflections: clasi/reflections
   sprints: clasi/sprints
 process: se
+sources:
+- partner_scrape
