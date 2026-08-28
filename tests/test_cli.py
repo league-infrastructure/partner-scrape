@@ -51,9 +51,25 @@ def _cache_dir(tmp_path, monkeypatch):
     non---dry-run) run, write a real `yield-history.json` into it. Every
     test in this file must stay hermetic, so `SITE_DIR` is pinned to the
     same `tmp_path` unconditionally.
+
+    As of ticket 004 (sprint 009), `cli.main()` also calls
+    `publish.project(...)` after the monkeypatched `cli.run` returns,
+    for any non-`--dry-run` invocation -- like `export_opportunities`,
+    it raises loudly (rather than skipping) when its curated
+    `partners.json` input is missing, which every test here would hit
+    since `cli.run` is a stub that never actually writes one. Stubbed
+    here to a no-op by default, matching how `cli.run` itself is always
+    replaced, so tests that only care about flag-parsing/wiring don't
+    need to know about this later pipeline step at all.
+    `TestPublishWiring` below un-stubs it to test the wiring itself.
     """
     monkeypatch.setenv("SCRAPE_CACHE_DIR", str(tmp_path))
     monkeypatch.setenv("SITE_DIR", str(tmp_path))
+    monkeypatch.setattr(
+        cli.publish,
+        "project",
+        lambda **kwargs: {"partner_count": 0, "current_event_count": 0, "past_event_count": 0},
+    )
     return tmp_path
 
 
@@ -323,6 +339,100 @@ class TestYieldReportWiring:
         out = capsys.readouterr().out
         assert "--no-report" in out
         assert "--yield-history" in out
+
+
+class TestPublishWiring:
+    """Ticket 004 (sprint 009): `publish.project(...)` is called after
+    `run()` returns and before the mirror step, skipped under
+    `--dry-run` the same way mirroring already is. `cli.run` and
+    `mirror_site_data` are monkeypatched throughout -- these tests prove
+    `cli.main` wires `publish.project` correctly, not `publish.project`'s
+    own behavior (that's `test_export_publish.py`'s job).
+    """
+
+    def test_publish_project_is_called_with_the_resolved_site_dir(self, monkeypatch, tmp_path):
+        captured = {}
+
+        def fake_project(**kwargs):
+            captured.update(kwargs)
+            return {"partner_count": 0, "current_event_count": 0, "past_event_count": 0}
+
+        monkeypatch.setattr(cli, "run", lambda **kwargs: [])
+        monkeypatch.setattr(cli.publish, "project", fake_project)
+
+        site_dir = tmp_path / "site"
+        exit_code = cli.main(["--no-enrich", "--no-report", "--site-dir", str(site_dir)])
+
+        assert exit_code == 0
+        assert captured["site_dir"] == site_dir
+        assert captured["partners_path"] == site_dir / "src" / "data" / "partners.json"
+
+    def test_publish_project_defaults_site_dir_via_config_when_flag_omitted(
+        self, monkeypatch, tmp_path
+    ):
+        captured = {}
+
+        def fake_project(**kwargs):
+            captured.update(kwargs)
+            return {"partner_count": 0, "current_event_count": 0, "past_event_count": 0}
+
+        monkeypatch.setattr(cli, "run", lambda **kwargs: [])
+        monkeypatch.setattr(cli.publish, "project", fake_project)
+        # `_cache_dir` autouse fixture already pins SITE_DIR to tmp_path.
+
+        exit_code = cli.main(["--no-enrich", "--no-report"])
+
+        assert exit_code == 0
+        assert captured["site_dir"] == tmp_path
+
+    def test_publish_project_is_skipped_under_dry_run(self, monkeypatch, tmp_path):
+        def _boom(**kwargs):
+            raise AssertionError("publish.project must not be called under --dry-run")
+
+        monkeypatch.setattr(cli, "run", lambda **kwargs: [])
+        monkeypatch.setattr(cli.publish, "project", _boom)
+
+        exit_code = cli.main(["--no-enrich", "--no-report", "--dry-run"])  # must not raise
+
+        assert exit_code == 0
+
+    def test_publish_project_runs_even_under_no_mirror(self, monkeypatch, tmp_path):
+        """`--no-mirror` only suppresses mirroring -- the published
+        public/data/ tree in the primary site_dir is still projected."""
+        captured = {}
+
+        def fake_project(**kwargs):
+            captured.update(kwargs)
+            return {"partner_count": 0, "current_event_count": 0, "past_event_count": 0}
+
+        monkeypatch.setattr(cli, "run", lambda **kwargs: [])
+        monkeypatch.setattr(cli.publish, "project", fake_project)
+
+        exit_code = cli.main(["--no-enrich", "--no-report", "--no-mirror"])
+
+        assert exit_code == 0
+        assert captured != {}
+
+    def test_publish_project_is_sequenced_before_mirror_site_data(self, monkeypatch, tmp_path):
+        call_order: list[str] = []
+
+        monkeypatch.setattr(cli, "run", lambda **kwargs: [])
+        monkeypatch.setattr(
+            cli.publish,
+            "project",
+            lambda **kwargs: (call_order.append("publish"), {"partner_count": 0, "current_event_count": 0, "past_event_count": 0})[1],
+        )
+        monkeypatch.setattr(
+            cli,
+            "mirror_site_data",
+            lambda *args, **kwargs: call_order.append("mirror"),
+        )
+        monkeypatch.setattr(cli, "get_mirror_site_dirs", lambda: [tmp_path / "mirror-target"])
+
+        exit_code = cli.main(["--no-enrich", "--no-report"])
+
+        assert exit_code == 0
+        assert call_order == ["publish", "mirror"]
 
 
 class TestHelp:

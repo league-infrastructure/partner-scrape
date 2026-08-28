@@ -23,6 +23,7 @@ import sys
 from pathlib import Path
 
 from partner_scrape.config import get_mirror_site_dirs, get_site_dir
+from partner_scrape.export import publish
 from partner_scrape.export.mirror import mirror_site_data
 from partner_scrape.enrich.cache import EnrichmentCache
 from partner_scrape.enrich.enricher import LLMEnricher
@@ -323,6 +324,25 @@ def main(argv: list[str] | None = None) -> int:
         enrichers=enrichers,
         reporter=yield_reporter,
     )
+
+    # Sprint 009 ticket 004: project every partner's accumulated
+    # per-partner log (written by partner_log.record() inside run(),
+    # across this and every prior run) into the published
+    # public/data/ tree. Unlike partner_log.record(), which only needs
+    # this run's Opportunities, publish.project() needs *every*
+    # partner's full history to produce a correct current/past split --
+    # a --source/--limit-scoped run must never regenerate the published
+    # tree from a partial view. So, like mirroring below, it is
+    # sequenced here rather than called from inside pipeline.run(), and
+    # skipped under --dry-run for the same reason mirroring is: it
+    # writes nothing anywhere. Sequenced before mirroring so a mirrored
+    # checkout always receives an already-projected, complete tree.
+    if not args.dry_run:
+        publish_site_dir = args.site_dir if args.site_dir is not None else get_site_dir()
+        publish.project(
+            site_dir=publish_site_dir,
+            partners_path=publish_site_dir / "src" / "data" / "partners.json",
+        )
 
     # Keep every other checkout of the site in step with the export
     # that was just written. Skipped under --dry-run, which promises to

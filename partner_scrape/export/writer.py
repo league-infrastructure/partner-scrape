@@ -42,12 +42,16 @@ from partner_scrape.normalize.run import WORK_BASED_LEARNING_TYPE, Opportunity
 #: counterpart in the site's schema. Derived from the dataclass fields
 #: rather than hand-listed so it can never drift from `Opportunity`
 #: itself.
-_SITE_SCHEMA_FIELDS: tuple[str, ...] = tuple(
+#:
+#: Sprint 009: promoted from `_SITE_SCHEMA_FIELDS` (non-underscore, no
+#: behavior change) so `export/publish.py` reuses the exact same field
+#: set for its own per-partner event files instead of re-deriving it.
+SITE_SCHEMA_FIELDS: tuple[str, ...] = tuple(
     f.name for f in fields(Opportunity) if f.name != "sources"
 )
 
 
-def _is_current_or_upcoming(opportunity: Opportunity, today: date) -> bool:
+def is_current_or_upcoming(opportunity: Opportunity, today: date) -> bool:
     """True if `opportunity`'s end date, or start date if no end date, is
     today or later (SUC-007 main flow step 1). Undated records (neither
     `date_start` nor `date_end` set) are excluded -- matching
@@ -62,6 +66,10 @@ def _is_current_or_upcoming(opportunity: Opportunity, today: date) -> bool:
     a record is current if `date_end` (the application deadline) is
     unset or still in the future; every other `opportunity_type` keeps
     the exact rule above, unchanged.
+
+    Sprint 009: promoted from `_is_current_or_upcoming` (non-underscore,
+    no behavior change) so `export/publish.py` reuses this exact
+    judgment for its current/past split instead of reimplementing it.
     """
     if opportunity.opportunity_type == WORK_BASED_LEARNING_TYPE:
         if not opportunity.date_end:
@@ -74,10 +82,15 @@ def _is_current_or_upcoming(opportunity: Opportunity, today: date) -> bool:
     return date.fromisoformat(date_str[:10]) >= today
 
 
-def _to_json_dict(opportunity: Opportunity) -> dict[str, Any]:
-    """Project `opportunity` onto exactly `_SITE_SCHEMA_FIELDS` -- this is
-    where `sources` (and any other future non-schema field) is dropped."""
-    return {name: getattr(opportunity, name) for name in _SITE_SCHEMA_FIELDS}
+def to_json_dict(opportunity: Opportunity) -> dict[str, Any]:
+    """Project `opportunity` onto exactly `SITE_SCHEMA_FIELDS` -- this is
+    where `sources` (and any other future non-schema field) is dropped.
+
+    Sprint 009: promoted from `_to_json_dict` (non-underscore, no
+    behavior change) so `export/publish.py` reuses this exact
+    serialization for its own per-partner event files.
+    """
+    return {name: getattr(opportunity, name) for name in SITE_SCHEMA_FIELDS}
 
 
 def _dedupe_slugs(payload: list[dict[str, Any]]) -> None:
@@ -137,10 +150,10 @@ def export_opportunities(
     resolved_site_dir = Path(site_dir) if site_dir is not None else get_site_dir()
     reference_date = today if today is not None else date.today()
 
-    current = [o for o in opportunities if _is_current_or_upcoming(o, reference_date)]
+    current = [o for o in opportunities if is_current_or_upcoming(o, reference_date)]
     current.sort(key=lambda o: o.date_start)
 
-    payload = [_to_json_dict(o) for o in current]
+    payload = [to_json_dict(o) for o in current]
     _dedupe_slugs(payload)
 
     if dry_run:

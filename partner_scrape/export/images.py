@@ -19,7 +19,7 @@ documented one-way module-dependency direction ("Export ... depends
 one-way on Normalize"; the new edge is Export -> this module, not
 Normalize -> this module). `normalize.run.Opportunity.image_src` ends up
 holding this call's return value, exported automatically by
-`export/writer.py`'s `_SITE_SCHEMA_FIELDS` (no writer.py edit needed).
+`export/writer.py`'s `SITE_SCHEMA_FIELDS` (no writer.py edit needed).
 
 ## Quality gate
 
