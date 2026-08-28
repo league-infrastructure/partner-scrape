@@ -1,5 +1,6 @@
 ---
 status: pending
+sprint: '010'
 ---
 
 # llms.txt + agent discovery pages (make the data easy for LLMs to find)

@@ -42,7 +42,7 @@ def _site_dir(tmp_path: Path) -> Path:
 
 
 def _opportunity(
-    slug: str = "coastal_roots_farm_farm_tour_20260801",
+    slug: str = "farm_tour_20260801",
     title: str = "Farm Tour",
     date_start: str = "2026-08-01T09:00:00-07:00",
     date_end: str = "",
@@ -228,12 +228,12 @@ class TestSlugDedup:
     def test_colliding_slugs_get_disambiguating_suffix_neither_dropped(self, tmp_path):
         site_dir = _site_dir(tmp_path)
         a = _opportunity(
-            slug="crf_farm_camp_20260801",
+            slug="farm_camp_20260801",
             title="Farm Camp Session A",
             date_start="2026-08-01T09:00:00-07:00",
         )
         b = _opportunity(
-            slug="crf_farm_camp_20260801",
+            slug="farm_camp_20260801",
             title="Farm Camp Session B",
             date_start="2026-08-02T09:00:00-07:00",
         )
@@ -243,8 +243,8 @@ class TestSlugDedup:
         slugs = [o["slug"] for o in payload]
         assert len(payload) == 2
         assert len(set(slugs)) == 2, "colliding slugs must be disambiguated, not dropped"
-        assert "crf_farm_camp_20260801" in slugs
-        assert "crf_farm_camp_20260801_2" in slugs
+        assert "farm_camp_20260801" in slugs
+        assert "farm_camp_20260801_2" in slugs
         titles = {o["title"] for o in payload}
         assert titles == {"Farm Camp Session A", "Farm Camp Session B"}
 
@@ -252,7 +252,7 @@ class TestSlugDedup:
         site_dir = _site_dir(tmp_path)
         events = [
             _opportunity(
-                slug="crf_farm_camp_20260801",
+                slug="farm_camp_20260801",
                 title=f"Session {i}",
                 date_start=f"2026-08-0{i}T09:00:00-07:00",
             )
@@ -263,10 +263,42 @@ class TestSlugDedup:
 
         slugs = {o["slug"] for o in payload}
         assert slugs == {
-            "crf_farm_camp_20260801",
-            "crf_farm_camp_20260801_2",
-            "crf_farm_camp_20260801_3",
+            "farm_camp_20260801",
+            "farm_camp_20260801_2",
+            "farm_camp_20260801_3",
         }
+
+    def test_slugs_from_different_partners_with_no_link_can_collide_and_still_get_disambiguated(
+        self, tmp_path
+    ):
+        """Reflects the new slug rule directly: `normalize.run()` no
+        longer includes an org/partner prefix in the slug (sprint 009
+        ticket 002), so two different partners' same-titled, same-day,
+        link-less events now arrive at `export_opportunities` with an
+        *identical* slug more often than the old truncation-collision
+        case did. `_dedupe_slugs` must disambiguate regardless of why
+        the slugs collided."""
+        site_dir = _site_dir(tmp_path)
+        a = _opportunity(
+            slug="community_cleanup_20260801",
+            title="Community Cleanup",
+            partner_name="North Park Alliance",
+            date_start="2026-08-01T09:00:00-07:00",
+        )
+        b = _opportunity(
+            slug="community_cleanup_20260801",
+            title="Community Cleanup",
+            partner_name="South Park Alliance",
+            date_start="2026-08-01T09:00:00-07:00",
+        )
+
+        payload = export_opportunities([a, b], site_dir=site_dir, today=date(2026, 7, 19))
+
+        slugs = [o["slug"] for o in payload]
+        assert len(payload) == 2
+        assert len(set(slugs)) == 2
+        assert "community_cleanup_20260801" in slugs
+        assert "community_cleanup_20260801_2" in slugs
 
 
 class TestSiteSchemaShape:

@@ -51,6 +51,7 @@ def _full_event(**overrides: Any) -> Event:
         age_grade_level=["Grades 6-8"],
         cost_range="Free",
         time_of_day=["Evening"],
+        opportunity_type="Out-of-school Programs",
     )
     event.set("title", event.title, source="generic_html", confidence=0.9)
     event.set("relevant", event.relevant, source="llm_enrichment", confidence=0.85)
@@ -120,6 +121,7 @@ class TestRoundTrip:
         assert stored.age_grade_level == ["Grades 6-8"]
         assert stored.cost_range == "Free"
         assert stored.time_of_day == ["Evening"]
+        assert stored.opportunity_type == "Out-of-school Programs"
 
     def test_round_trip_preserves_empty_field_provenance(self):
         store = EventStore(":memory:")

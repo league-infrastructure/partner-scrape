@@ -158,3 +158,13 @@ class TestClassifyOpportunityType:
 
     def test_unmatched_text_falls_back_to_default(self):
         assert classify_opportunity_type("Tide Pool Exploration") == "Out-of-school Programs"
+
+    def test_no_funding_opportunities_false_positive_on_the_word_grant(self):
+        """Regression (issue 13): matching "grant" as a keyword signal for
+        "Funding Opportunities" false-positived on ordinary nature-walk
+        titles. There is deliberately no such keyword rule -- only the
+        LLM classification path (enrich/llm_client.py) can ever produce
+        "Funding Opportunities"."""
+        for title in ["Bird Walk at Grant Park", "Anza-Borrego Grant Ranch Hike"]:
+            assert classify_opportunity_type(title) != "Funding Opportunities", title
+            assert classify_opportunity_type(title) == "Out-of-school Programs", title

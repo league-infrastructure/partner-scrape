@@ -9,6 +9,7 @@
   "age_grade_level": ["Adult"],
   "cost_range": "Less than $50",
   "time_of_day": ["Evening"],
+  "opportunity_type": "Out-of-school Programs",
   "relevant": false,
   "relevance_reason": "Adult-only wine tasting event, not a STEM learning opportunity for youth."
 }

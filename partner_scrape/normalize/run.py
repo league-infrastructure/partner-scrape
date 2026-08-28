@@ -22,13 +22,12 @@ docstrings for the rest of the ordering rationale.
 from __future__ import annotations
 
 import html
-import re
 from dataclasses import dataclass, field
 from datetime import date, datetime
 from pathlib import Path
 from typing import Any, Callable, Iterable
 
-from partner_scrape.model import Event
+from partner_scrape.model import Event, slugify
 from partner_scrape.normalize.collapse import collapse_recurring
 from partner_scrape.normalize.dedup import dedup_cross_source
 from partner_scrape.normalize.instance import Instance
@@ -62,9 +61,6 @@ WORK_BASED_LEARNING_TYPE = "Work-based Learning"
 #: `Event.start`/`.end` lack one; a future tz-aware source's own offset
 #: is left untouched.
 _TZ_OFFSET = "-07:00"
-
-_SLUG_NON_ALNUM_RE = re.compile(r"[^a-z0-9]+")
-_SLUG_STRIP_RE = re.compile(r"^_+|_+$")
 
 
 @dataclass
@@ -116,10 +112,6 @@ class Opportunity:
     sources: frozenset[str] = field(default_factory=frozenset)
 
 
-def _slugify(text: str) -> str:
-    return _SLUG_STRIP_RE.sub("", _SLUG_NON_ALNUM_RE.sub("_", text.lower()))
-
-
 def _iso(dt: datetime | None) -> str:
     """Format a `datetime` as ISO 8601, embedding `_TZ_OFFSET` if naive; `""` if unset."""
     if dt is None:
@@ -169,9 +161,18 @@ def _to_opportunity(
 
     text = build_taxonomy_text(event.title, event.description, event.categories, event.tags)
 
-    slug = (
-        f"{_slugify(org_name)[:40]}_{_slugify(event.title)[:60]}_{_date_slug_part(instance)}"
-    )
+    # The slug is a stable, cross-run identity (sprint 009, ticket 002),
+    # not merely a within-this-export display key -- export/partner_log.py
+    # (ticket 003) needs the same slug across separate pipeline runs to
+    # recognize "same event, possibly updated" rather than minting a new
+    # log entry every time. A per-event link is the strongest identity
+    # (it survives content edits that would otherwise change a
+    # title+date slug), so it wins when present; otherwise fall back to
+    # title+date. No org/partner prefix: ticket 003 stores this slug
+    # *inside* a partner-scoped directory, so the partner is already
+    # implied by where the slug lives -- see normalize/DESIGN.md.
+    link = event.registration_url or event.url
+    slug = slugify(link) if link else f"{slugify(event.title)}_{_date_slug_part(instance)}"
 
     latitude = str(event.latitude) if event.latitude is not None else str(partner.get("latitude", ""))
     longitude = str(event.longitude) if event.longitude is not None else str(partner.get("longitude", ""))
@@ -206,12 +207,24 @@ def _to_opportunity(
 
     is_internship = event.kind == "internship"
     availability = _internship_availability(event) if is_internship else _availability(instance)
-    # Internships force Work-based Learning by kind; everything else is
-    # classified from its own text rather than blindly stamped with the
-    # default (which flattened every event into "Out-of-school Programs"
-    # and left 7 of the site's 8 type filters permanently empty).
+    # Internships force Work-based Learning by kind, checked first and
+    # unconditionally. Otherwise: prefer an Event's own LLM-set
+    # opportunity_type (sprint 009, issue 13) over taxonomy.py's keyword
+    # fallback, via the same field_provenance-presence precedence as the
+    # four fields above -- LLM/fallback ran (field_provenance entry
+    # present) wins, else classify from the title directly (covers
+    # --no-enrich and any other enrichment-skipped path). This replaced
+    # a blind default that flattened every event into "Out-of-school
+    # Programs" and left 7 of the site's 8 type filters permanently
+    # empty.
     opportunity_type = (
-        WORK_BASED_LEARNING_TYPE if is_internship else classify_opportunity_type(event.title)
+        WORK_BASED_LEARNING_TYPE
+        if is_internship
+        else (
+            event.opportunity_type
+            if "opportunity_type" in event.field_provenance
+            else classify_opportunity_type(event.title)
+        )
     )
 
     # Event Image Downloader (sprint 008 ticket 008, issue 19 scraper
@@ -236,7 +249,7 @@ def _to_opportunity(
         partner_name=partner_name,
         partner_id=partner.get("id"),
         description=event.description,
-        link=event.registration_url or event.url,
+        link=link,
         availability=availability,
         date_start=_iso(event.start),
         date_end=_iso(event.end),

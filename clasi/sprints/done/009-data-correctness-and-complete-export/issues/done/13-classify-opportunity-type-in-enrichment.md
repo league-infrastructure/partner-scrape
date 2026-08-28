@@ -1,5 +1,8 @@
 ---
-status: pending
+status: done
+sprint: 009
+tickets:
+- 009-001
 ---
 
 # Classify opportunity_type during enrichment (fix empty type filters)

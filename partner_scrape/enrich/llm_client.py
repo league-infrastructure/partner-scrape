@@ -74,6 +74,15 @@ _COST_RANGE_VALUES = [
     "Greater than $200",
 ]
 _TIME_OF_DAY_VALUES = ["Morning", "Afternoon", "Evening", "All Day"]
+_OPPORTUNITY_TYPE_VALUES = [
+    "Out-of-school Programs",
+    "Online",
+    "Professional Development / Conferences",
+    "School Programs",
+    "Career Connections",
+    "Volunteering",
+    "Funding Opportunities",
+]
 
 
 @dataclass
@@ -103,6 +112,12 @@ class EnrichmentResult:
     age_grade_level: list[str] = field(default_factory=list)
     cost_range: str = ""
     time_of_day: list[str] = field(default_factory=list)
+    #: Sprint 009 (issue 13). Unlike `cost_range`'s `""` for "unknown",
+    #: this is never empty: the prompt instructs the model to fall back
+    #: to "Out-of-school Programs" -- the site's general bucket -- when
+    #: nothing more specific applies, matching
+    #: `normalize.taxonomy.classify_opportunity_type`'s own default.
+    opportunity_type: str = ""
 
     # Relevance verdict (SUC-011/SUC-012's gate) -- always produced.
     relevant: bool = True
@@ -210,6 +225,12 @@ be recovered. Never overwrite a field that already has a value.
    - age_grade_level: zero or more of {_AGE_GRADE_LEVEL_VALUES}
    - cost_range: exactly one of {_COST_RANGE_VALUES}, or "" if unknown
    - time_of_day: zero or more of {_TIME_OF_DAY_VALUES}
+   - opportunity_type: exactly one of {_OPPORTUNITY_TYPE_VALUES}, based \
+on what kind of opportunity this is (e.g. a fully virtual/remote program \
+is "Online"; a paid role/apprenticeship for a business is not this \
+schema's concern -- it is never sent to you). Use "Out-of-school \
+Programs" as the general default whenever nothing more specific \
+clearly applies -- this field is never left blank.
    - relevant: true if this is a STEM learning opportunity for youth \
 (not an adult-only program, not unrelated announcement/noise), else \
 false
@@ -302,6 +323,7 @@ def _result_from_dict(data: Any) -> EnrichmentResult:
         age_grade_level=_expect_str_list(data["age_grade_level"], "age_grade_level"),
         cost_range=_expect_str(data["cost_range"], "cost_range"),
         time_of_day=_expect_str_list(data["time_of_day"], "time_of_day"),
+        opportunity_type=_expect_str(data["opportunity_type"], "opportunity_type"),
         relevant=_expect_bool(data["relevant"], "relevant"),
         relevance_reason=_expect_str(data["relevance_reason"], "relevance_reason"),
     )

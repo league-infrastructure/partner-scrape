@@ -33,6 +33,8 @@ IdentityKey = tuple[str, str] | tuple[str, str, date | None]
 
 _PUNCT_RE = re.compile(r"[^\w\s]", flags=re.UNICODE)
 _WHITESPACE_RE = re.compile(r"\s+")
+_SLUG_NON_ALNUM_RE = re.compile(r"[^a-z0-9]+")
+_SLUG_STRIP_RE = re.compile(r"^_+|_+$")
 
 
 def normalize_title(title: str) -> str:
@@ -46,6 +48,20 @@ def normalize_title(title: str) -> str:
     lowered = title.lower()
     no_punctuation = _PUNCT_RE.sub("", lowered)
     return _WHITESPACE_RE.sub(" ", no_punctuation).strip()
+
+
+def slugify(text: str) -> str:
+    """Turn `text` into a URL-safe slug fragment.
+
+    Lowercases, collapses every run of non-alphanumeric characters into
+    a single underscore, and strips leading/trailing underscores.
+    Promoted from `normalize/run.py`'s private `_slugify` (sprint 009,
+    ticket 002) -- behavior unchanged, just relocated so both the event
+    slug (`normalize/run.py`) and the partner slug
+    (`export/partner_log.py`, ticket 003) share one primitive. Matches
+    `site/src/lib/helpers.ts`'s `slugify()` convention.
+    """
+    return _SLUG_STRIP_RE.sub("", _SLUG_NON_ALNUM_RE.sub("_", text.lower()))
 
 
 @dataclass(frozen=True)
@@ -114,6 +130,16 @@ class Event:
     age_grade_level: list[str] = field(default_factory=list)
     cost_range: str = ""
     time_of_day: list[str] = field(default_factory=list)
+
+    # opportunity_type classification (sprint 009, issue 13): threaded
+    # through the exact same LLM-enrichment/field_provenance pattern as
+    # the four classification fields above -- see enrich/DESIGN.md and
+    # normalize/DESIGN.md's sprint 009 additions. Default "" (not the
+    # site's "Out-of-school Programs" bucket) so an untouched Event still
+    # reproduces every pre-existing behavior exactly; the site-facing
+    # default is applied downstream, in normalize/taxonomy.py and the
+    # LLM prompt, never here.
+    opportunity_type: str = ""
 
     # Side-car provenance/confidence map, keyed by field name.
     field_provenance: dict[str, Provenance] = field(default_factory=dict)

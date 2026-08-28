@@ -6,11 +6,18 @@ import json
 
 import pytest
 
-from partner_scrape.export.mirror import IMAGES_SUBPATH, mirror_site_data
+from partner_scrape.export.mirror import IMAGES_SUBPATH, PUBLIC_DATA_SUBPATH, mirror_site_data
 
 
-def _make_site(root, *, data: dict[str, str] | None = None, images=()):
-    """Build a minimal site checkout: src/data plus opportunity images."""
+def _make_site(root, *, data: dict[str, str] | None = None, images=(), public_data=None):
+    """Build a minimal site checkout: src/data plus opportunity images
+    and (sprint 009, ticket 005) an optional public/data/ tree.
+
+    ``public_data`` maps a path *relative to* `public/data/` (e.g.
+    ``"partners.json"`` or ``"partners/coastal_roots_farm/events.json"``)
+    to its text content, mirroring how `publish.project()` actually lays
+    the tree out.
+    """
     data_dir = root / "src" / "data"
     data_dir.mkdir(parents=True)
     for name, body in (data or {}).items():
@@ -20,6 +27,12 @@ def _make_site(root, *, data: dict[str, str] | None = None, images=()):
         image_dir.mkdir(parents=True)
         for name, body in images:
             (image_dir / name).write_text(body)
+    if public_data:
+        public_data_dir = root / PUBLIC_DATA_SUBPATH
+        for relative_name, body in public_data.items():
+            path = public_data_dir / relative_name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(body)
     return root
 
 
@@ -34,6 +47,11 @@ def primary(tmp_path):
             "partners.json": json.dumps(["production roster"]),
         },
         images=[("event-a.jpg", "AAA")],
+        public_data={
+            "partners.json": json.dumps({"partners": [{"slug": "coastal-roots-farm"}]}),
+            "partners/coastal-roots-farm/events.json": json.dumps({"events": []}),
+            "partners/coastal-roots-farm/past-events.json": json.dumps({"events": []}),
+        },
     )
 
 
@@ -57,6 +75,14 @@ def test_curated_partners_json_is_never_overwritten(primary, tmp_path):
     The pipeline reads it to build the partner roster, and the two
     checkouts legitimately carry different ones -- copying production's
     over the beta site's would silently swap that roster.
+
+    Sprint 009 (ticket 005): `publish.project()` also writes a
+    *generated* `public/data/partners.json` -- a different file, at a
+    different path, with the identical basename. This is the regression
+    test that the two are never confused: the curated `src/data/`
+    roster stays exactly as the target had it, while the generated
+    `public/data/` one is mirrored from the primary normally, right
+    alongside it.
     """
     target = _make_site(
         tmp_path / "beta",
@@ -68,6 +94,9 @@ def test_curated_partners_json_is_never_overwritten(primary, tmp_path):
     assert json.loads((target / "src" / "data" / "partners.json").read_text()) == [
         "beta roster"
     ]
+    assert json.loads((target / PUBLIC_DATA_SUBPATH / "partners.json").read_text()) == {
+        "partners": [{"slug": "coastal-roots-farm"}]
+    }
 
 
 def test_images_are_copied_so_the_json_is_not_left_dangling(primary, tmp_path):
@@ -124,3 +153,128 @@ def test_several_targets_all_receive_the_export(primary, tmp_path):
         assert json.loads((target / "src" / "data" / "opportunities.json").read_text()) == [
             {"title": "Fresh"}
         ]
+
+
+# ---------------------------------------------------------------------
+# Sprint 009 (ticket 005): recursively mirroring publish.project()'s
+# public/data/ tree, alongside the existing flat-file/image copies.
+# ---------------------------------------------------------------------
+
+
+def test_public_data_tree_reaches_a_target_with_no_existing_tree(primary, tmp_path):
+    target = _make_site(tmp_path / "beta", data={})
+
+    mirror_site_data(primary, [target])
+
+    assert json.loads((target / PUBLIC_DATA_SUBPATH / "partners.json").read_text()) == {
+        "partners": [{"slug": "coastal-roots-farm"}]
+    }
+    assert json.loads(
+        (
+            target
+            / PUBLIC_DATA_SUBPATH
+            / "partners"
+            / "coastal-roots-farm"
+            / "events.json"
+        ).read_text()
+    ) == {"events": []}
+    assert json.loads(
+        (
+            target
+            / PUBLIC_DATA_SUBPATH
+            / "partners"
+            / "coastal-roots-farm"
+            / "past-events.json"
+        ).read_text()
+    ) == {"events": []}
+
+
+def test_public_data_byte_identical_file_is_not_rewritten(primary, tmp_path):
+    """Same size/mtime skip check `_mirror_images` already uses,
+    generalized to the recursive tree copy."""
+    target = _make_site(tmp_path / "beta", data={})
+    target_file = target / PUBLIC_DATA_SUBPATH / "partners.json"
+    target_file.parent.mkdir(parents=True)
+    source_text = (primary / PUBLIC_DATA_SUBPATH / "partners.json").read_text()
+    # Same length as the primary's file, different content -- proves the
+    # skip check is genuinely size-based and the target file is left
+    # completely untouched rather than merely "ending up equal".
+    stand_in = "x" * len(source_text)
+    assert stand_in != source_text
+    target_file.write_text(stand_in)
+
+    mirror_site_data(primary, [target])
+
+    assert target_file.read_text() == stand_in
+
+
+def test_stale_public_data_partner_directory_is_kept(primary, tmp_path):
+    """Additive, matching `_mirror_images`'s existing precedent: a
+    target checkout that has not rebuilt yet may still be serving a
+    partner page this run's projection no longer produces (e.g. a
+    partner dropped from the curated roster) -- deleting that directory
+    would break the page for a savings of only disk space."""
+    target = _make_site(
+        tmp_path / "beta",
+        data={},
+        public_data={"partners/dropped-partner/events.json": json.dumps({"events": ["stale"]})},
+    )
+
+    mirror_site_data(primary, [target])
+
+    assert json.loads(
+        (target / PUBLIC_DATA_SUBPATH / "partners" / "dropped-partner" / "events.json").read_text()
+    ) == {"events": ["stale"]}
+    # And the fresh tree still landed alongside it.
+    assert (target / PUBLIC_DATA_SUBPATH / "partners.json").exists()
+
+
+def test_a_missing_checkout_skips_the_public_data_tree_too(primary, tmp_path):
+    absent = tmp_path / "not-checked-out"
+
+    assert mirror_site_data(primary, [absent]) == []
+    assert not absent.exists()
+
+
+def test_a_target_missing_src_data_does_not_receive_the_public_data_tree(primary, tmp_path):
+    """A target missing src/data/ entirely is still skipped with a
+    warning, unchanged from today's existing behavior -- the public/data/
+    copy is not attempted for it (introduces no new failure mode)."""
+    no_src_data = tmp_path / "beta"
+    no_src_data.mkdir()
+
+    assert mirror_site_data(primary, [no_src_data]) == []
+    assert not (no_src_data / PUBLIC_DATA_SUBPATH).exists()
+
+
+def test_missing_primary_public_data_tree_is_not_an_error(tmp_path):
+    """The primary has not run publish.project() yet (no public/data/ at
+    all) -- the flat-file/image mirror must still succeed."""
+    primary_without_publish = _make_site(
+        tmp_path / "stem-ecosystem",
+        data={"opportunities.json": json.dumps([{"title": "Fresh"}])},
+    )
+    target = _make_site(tmp_path / "beta", data={})
+
+    assert mirror_site_data(primary_without_publish, [target]) == [target.resolve()]
+    assert not (target / PUBLIC_DATA_SUBPATH).exists()
+    assert json.loads((target / "src" / "data" / "opportunities.json").read_text()) == [
+        {"title": "Fresh"}
+    ]
+
+
+def test_dry_run_writes_nothing_for_the_public_data_tree(primary, tmp_path):
+    target = _make_site(tmp_path / "beta", data={})
+
+    assert mirror_site_data(primary, [target], dry_run=True) == [target.resolve()]
+
+    assert not (target / PUBLIC_DATA_SUBPATH).exists()
+
+
+def test_several_targets_all_receive_the_public_data_tree(primary, tmp_path):
+    targets = [_make_site(tmp_path / f"site-{i}", data={}) for i in range(3)]
+
+    mirror_site_data(primary, targets)
+
+    for target in targets:
+        assert (target / PUBLIC_DATA_SUBPATH / "partners.json").exists()

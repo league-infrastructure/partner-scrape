@@ -1,5 +1,11 @@
 ---
-status: pending
+status: done
+sprint: 009
+tickets:
+- 009-002
+- 009-003
+- 009-004
+- 009-005
 ---
 
 # Publish a complete, self-describing data export (partners + per-partner event lists)

@@ -39,6 +39,17 @@ from partner_scrape.model import Event, IdentityKey
 #: Subdirectory of `SCRAPE_CACHE_DIR` entries are stored under.
 _CACHE_SUBDIR = "enrichment_cache"
 
+#: Sprint 009 (issue 13). Bumped whenever `EnrichmentResult`'s shape
+#: changes. `content_hash` covers only an Event's *input* (enrichable)
+#: fields, so it cannot detect a change to the *stored value's* shape --
+#: adding `opportunity_type` doesn't touch any field the hash covers, so
+#: without this an old entry would either silently omit the new field
+#: forever or fail to deserialize. `lookup()` treats a missing or
+#: mismatched `schema_version` (including a pre-sprint-009 entry with no
+#: `schema_version` key at all) as a miss, exactly like a `content_hash`
+#: mismatch -- forcing exactly one re-enrichment per affected Event.
+_CACHE_SCHEMA_VERSION = 1
+
 
 def content_hash(event: Event) -> str:
     """Compute a stable hash over ``event``'s enrichable fields.
@@ -101,6 +112,7 @@ def _result_from_jsonable(data: dict[str, Any]) -> EnrichmentResult:
         age_grade_level=data["age_grade_level"],
         cost_range=data["cost_range"],
         time_of_day=data["time_of_day"],
+        opportunity_type=data["opportunity_type"],
         relevant=data["relevant"],
         relevance_reason=data["relevance_reason"],
     )
@@ -136,6 +148,11 @@ class EnrichmentCache:
             return None
         with open(path, encoding="utf-8") as f:
             entry = json.load(f)
+        if entry.get("schema_version") != _CACHE_SCHEMA_VERSION:
+            # Missing key (pre-sprint-009 entry) or a stale version --
+            # both are a miss, not a deserialization error. Forces
+            # exactly one re-enrichment per affected Event.
+            return None
         if entry["content_hash"] != content_hash(event):
             return None
         return _result_from_jsonable(entry["result"])
@@ -145,6 +162,7 @@ class EnrichmentCache:
         path = _entry_path(self.cache_dir, event.identity_key())
         path.parent.mkdir(parents=True, exist_ok=True)
         entry = {
+            "schema_version": _CACHE_SCHEMA_VERSION,
             "content_hash": content_hash(event),
             "result": _result_to_jsonable(result),
             "enriched_at": self._clock().isoformat(),

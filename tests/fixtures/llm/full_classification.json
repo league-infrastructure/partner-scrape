@@ -9,6 +9,7 @@
   "age_grade_level": ["Grades 6-8"],
   "cost_range": "Free",
   "time_of_day": ["Evening"],
+  "opportunity_type": "Out-of-school Programs",
   "relevant": true,
   "relevance_reason": "Hands-on youth robotics program at a public library."
 }
