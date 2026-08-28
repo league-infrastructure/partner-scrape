@@ -1,0 +1,140 @@
+---
+// Modeled on OpportunityCard.astro's structure (title anchor nested inside
+// <h3>), NOT PartnerCard.astro -- confirmed live that PartnerCard wraps its
+// whole card body in one outer <a>, so its <h3> has no nested <a> and the
+// map's `card.querySelector('h3 a')` returns null (a latent bug on the
+// Partners map today, sprint 011 Design Rationale). Team has no image/logo
+// field, unlike Opportunity, so the image row is dropped -- a real field
+// difference, not a style choice.
+interface Props {
+  team: {
+    team_id: string;
+    league: string;
+    program: string;
+    number: number;
+    name: string;
+    organization: string;
+    org_type: string;
+    city: string;
+    postal_code: string;
+    latitude: number | null;
+    longitude: number | null;
+    location_precision: string;
+    in_region: boolean;
+    website: string;
+    website_status: string;
+    organization_website: string;
+    rookie_year: number | null;
+    active: boolean;
+    last_season: number | null;
+    sponsors: string[];
+    org_key: string;
+    sibling_team_ids: string[];
+    matched_name: string;
+    needs_review: boolean;
+  };
+}
+
+const { team } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/+$/, ''); // "" or "/partner-scrape"
+
+const ORG_TYPE_LABELS: Record<string, string> = {
+  school: 'School-Sponsored',
+  family_community: 'Family / Community',
+  unknown: 'Unknown Sponsor',
+};
+const orgTypeLabel = ORG_TYPE_LABELS[team.org_type] ?? team.org_type;
+const title = `${team.league} ${team.number} — ${team.name}`;
+---
+
+<article
+  class="team-card card"
+  data-type={team.league}
+  data-orgtype={team.org_type}
+  data-region={team.in_region ? 'true' : 'false'}
+  data-title={`${team.number} ${team.name}`.toLowerCase()}
+  data-desc={`${team.organization} ${team.city}`.toLowerCase()}
+  data-lat={team.latitude}
+  data-lng={team.longitude}
+  data-precision={team.location_precision}
+  data-city={team.city}
+>
+  <div class="team-card-top">
+    <span class="tag tag-purple">{team.league}</span>
+    {!team.in_region && <span class="tag tag-teal">Outside SD County</span>}
+  </div>
+  <h3><a href={`${base}/teams/${team.team_id}`}>{title}</a></h3>
+  <p class="team-card-org">{team.organization || 'Family / Community Team'}</p>
+  <div class="team-card-meta">
+    <span class="team-card-city">{team.city || 'Location unknown'}</span>
+  </div>
+  <div class="team-card-tags">
+    <span class="tag tag-teal">{orgTypeLabel}</span>
+  </div>
+  <a href={`${base}/teams/${team.team_id}`} class="team-card-link">View Team →</a>
+</article>
+
+<style>
+  .team-card {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+  }
+
+  .team-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .team-card h3 {
+    font-size: 18px;
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+  .team-card h3 a {
+    color: var(--text-dark);
+  }
+  .team-card h3 a:hover {
+    color: var(--purple);
+  }
+
+  .team-card-org {
+    font-size: 13px;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+
+  .team-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+
+  .team-card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 12px;
+    flex-grow: 1;
+  }
+
+  .team-card-link {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--purple);
+  }
+  .team-card-link:hover {
+    color: var(--pink);
+  }
+
+  .team-card[data-hidden] {
+    display: none;
+  }
+</style>

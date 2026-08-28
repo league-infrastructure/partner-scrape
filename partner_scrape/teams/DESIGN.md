@@ -1,6 +1,6 @@
 # teams
 
-**Owner:** Eric Busboom · **Last reviewed:** 2026-08-28 (ticket 011-004) · **Status:** in-flux
+**Owner:** Eric Busboom · **Last reviewed:** 2026-08-28 (ticket 011-005) · **Status:** increments 1-4 complete (FTC + FRC + geocoding + site pages); increment 5 (FLL) deferred to a follow-on sprint
 
 ---
 
@@ -19,19 +19,30 @@ an undated directory entity," which nothing else in the codebase does.
 
 ## 2. Orientation
 
-**Ticket 011-004 (this ticket) adds the offline geocoding ladder —
-the increment that actually delivers the sprint's stated goal of
-*knowing where the teams are*.** `teams.pipeline.run_teams()` now runs
-both sources, links cross-league identity, and geocodes every merged
-`Team` through `teams.geo.geocode_teams()` before export. Measured
-against the real 211-team FTC+FRC corpus (`tests/fixtures/teams/`, the
-same live-captured fixtures ticket 011-003 uses) at this ticket's build
+**Ticket 011-004 added the offline geocoding ladder — the increment
+that actually delivers the sprint's stated goal of *knowing where the
+teams are*.** `teams.pipeline.run_teams()` runs both sources, links
+cross-league identity, and geocodes every merged `Team` through
+`teams.geo.geocode_teams()` before export. Measured against the real
+211-team FTC+FRC corpus (`tests/fixtures/teams/`, the same
+live-captured fixtures ticket 011-003 uses) at ticket 011-004's build
 (2026-08-28): **129 teams at school precision** (79 FTC + 50 FRC), **8
 at ZIP**, **70 at city**, **4 unresolved** (`"none"` — two Ensenada
 teams, plus two out-of-region teams whose city name is too ambiguous
 to guess, "San Antonio"/"Louisville"), **14 flagged `needs_review`**.
-Only site pages remain (`sprint.md`'s Migration Concerns:
-001→002→003→004→005, each needing the one before it):
+
+**Ticket 011-005 (this ticket) adds the `/teams` site section — the
+last increment of `sprint.md`'s Migration Concerns chain
+(001→002→003→004→005)** — and is the ticket that makes the whole
+sprint visible to a site visitor. It builds no new Python code in this
+subsystem at all; it is purely a consumer of `teams.json`, exactly as
+`sprint.md`'s Impact on Existing Components anticipated. See "Site
+Presentation Layer" below for what it built.
+
+Note on this ticket's own local build: a live `partner-scrape teams`
+run during this ticket's work returned only 19 FRC teams (171 total,
+not the 211/59 this doc's other measurements cite) — see Open
+Questions for why that figure is not treated as a new baseline here.
 
 ```
 BUILT (ticket 011-001):
@@ -73,8 +84,22 @@ BUILT (this ticket, 011-004):
                                         teams.pipeline)
   (feeds into ticket 011-002's export_teams(), unchanged)
 
-PLANNED (later tickets, not yet built):
-  → site/src/pages/teams/*                   (011-005)
+BUILT (this ticket, 011-005):
+  site/src/components/TeamCard.astro         modeled on OpportunityCard.astro
+     ↓                                       (title anchor nested inside <h3>),
+     ↓                                       NOT PartnerCard.astro -- see
+     ↓                                       Design Rationale below
+  site/src/components/TeamFilters.astro      clones OpportunityFilters.astro's
+     ↓                                       build-time facet-count tally()
+  site/src/pages/teams/index.astro           #results-grid / #map-container /
+     ↓                                       .results-count / .view-toggle,
+     ↓                                       List + Map (no Calendar -- Team
+     ↓                                       has no date field)
+  site/src/pages/teams/[slug].astro          getStaticPaths() over teams.json;
+     ↓                                       slug = Team.team_id (already
+     ↓                                       collision-free by construction)
+  Header.astro / Footer.astro                "Teams" added to both hard-coded
+                                              nav lists
 ```
 
 A freshly-extracted `Team` from either source still has
@@ -476,6 +501,46 @@ project's existing convention: `dev/fetch_tec_api.py`,
 `dev/export_site.py`, ...) rather than `teams/` makes that boundary
 visible in the directory layout itself, not just in a docstring.
 
+**Why city-precision teams render as one labelled badge per city, not
+individual pins, jittered dots, or a plain cluster marker (this
+ticket).** ~70 of 211 teams sit at `location_precision: "city"`, and
+most collapse onto the same handful of city centroids — plotting each
+as its own `circleMarker` would stack dozens of markers on one point
+and read, visually, as a single team. Three alternatives were rejected
+explicitly: jittering (adding a random offset) fabricates precision
+`teams.geo` never claimed and would shift on every regeneration, since
+nothing anchors the jitter to a stable seed; a plain unlabeled cluster
+marker (e.g. a generic clustering plugin) implies the cluster's
+centroid itself means something, which it does not — it is a city
+centroid, not a computed cluster center; a single stacked pin
+misrepresents 62 real teams as one. `teams/index.astro`'s map script
+instead groups every visible, in-region, city-precision card by
+`data-city` and renders one `L.divIcon` per city carrying a visible
+text label (`"San Diego — 40 teams"`) whose popup opens a `<ul>` list
+of that city's teams, rather than a single team's popup — the same
+distinction SUC-004's acceptance criteria draw. school/zip-precision
+teams (a real resolved coordinate) keep the existing `circleMarker`
+pin, unchanged from every other map on this site.
+
+**Why teams with `in_region: false` are excluded from the map
+entirely, not merely filterable (this ticket).** The ticket's own
+instructions left this an explicit decision to make and record.
+`Team.in_region` is not redundant with the map's own San Diego bounding
+box: measured live, one out-of-region team (`ftc-9902`, city-precision
+"San Clemente") has a city centroid that falls *inside* `SD_BOUNDS`
+(`lat` 33.449, within the box's `latMax` 33.5), so the bounding-box
+check alone would have silently plotted it as if it were a San Diego
+County team. `teams/index.astro`'s map script checks
+`card.dataset.region !== 'true'` before every other check, so an
+out-of-region team is never plotted regardless of its coordinates —
+this is a "San Diego teams" map, and a team flagged out-of-region by
+`sources.ftcscout.OUT_OF_REGION_CITIES` should not silently contradict
+that map's premise. Out-of-region teams are never removed from the
+list/filter view, though (SUC-004's Error Flows precedent: flagged,
+never dropped) — a "San Diego County Only" checkbox in `TeamFilters`
+lets a visitor narrow the list to in-region teams if they want to, but
+the default list shows everything, same as `teams.json` itself.
+
 ## 5. Interfaces
 
 ### Exposes
@@ -613,6 +678,42 @@ visible in the directory layout itself, not just in a docstring.
   subsystem; never imported by `teams.geo` or `teams.pipeline`. See its
   own module docstring for the exact CDE/NCES/Census Gazetteer
   endpoints and filtering rules.
+- **Site Presentation Layer** (ticket 011-005) — the browsable `/teams`
+  section, entirely in `site/src/`, entirely a read-only consumer of
+  `teams.json` (no code here writes back into this subsystem):
+  - `site/src/components/TeamCard.astro` — one team's summary card.
+    Title anchor nested inside `<h3>` (`<h3><a href={...}>{title}</a></h3>`),
+    matching `OpportunityCard.astro`, not `PartnerCard.astro` (see
+    Design Rationale for why this matters to the map). Every card
+    carries `data-type` (`Team.league`), `data-orgtype`
+    (`Team.org_type`), `data-region` (`Team.in_region`), `data-precision`
+    (`Team.location_precision`), `data-city`, `data-lat`/`data-lng`, and
+    `data-title`/`data-desc` for `scripts/filters.js`'s search.
+  - `site/src/components/TeamFilters.astro` — League and Organization
+    Type facets (build-time counted via the same `tally()` shape
+    `OpportunityFilters.astro` uses) plus a search box and a "San Diego
+    County Only" toggle bound to `data-region`.
+  - `site/src/pages/teams/index.astro` — the `/teams` index: List/Map
+    toggle (no Calendar view — `Team` has no date field, the same real
+    difference that makes Partner's simpler two-view toggle the closer
+    analog than Opportunity's three-view one here). The map is the one
+    piece of real new logic — see the city-badge Design Rationale entry
+    above.
+  - `site/src/pages/teams/[slug].astro` — one team's detail page.
+    `getStaticPaths()` returns one path per `Team.team_id` (already the
+    collision-free slug — `f"{league.lower()}-{number}"`, set at
+    extraction time — so no separate slug field or slugify step was
+    needed). Shows a mini-map with a location-precision caption
+    ("Approximate (city center)", etc.) when the team has coordinates,
+    and links to any `sibling_team_ids` (e.g. a school's FTC and FRC
+    teams, or two FTC teams from the same school).
+  - `Header.astro` / `Footer.astro` — "Teams" added to both hard-coded
+    nav lists (Header's primary nav and Footer's "Explore" group) —
+    they are two separate lists, not shared data, so both needed their
+    own edit.
+  - Every URL these pages emit goes through the same
+    `const base = import.meta.env.BASE_URL.replace(/\/+$/, '')`
+    convention every existing page uses.
 
 ### Consumes
 - **`registry.schema.SourceConfig` / `registry.loader.load_active_sources`
@@ -648,10 +749,27 @@ visible in the directory layout itself, not just in a docstring.
 
 ## 6. Open Questions / Known Limitations
 
-- The site pages do not exist yet — this doc now describes what
-  tickets 011-001 through 011-004 built (model + FTCScout + TBA +
-  export + CLI + merge + offline geocoding); see `sprint.md`'s Tickets
-  table for the remaining ticket (011-005).
+- **A live `partner-scrape teams` run during this ticket's (011-005)
+  work returned only 19 of the expected ~59 FRC teams (171 total, not
+  211).** No error or warning was logged — `sources.tba.TBASource`
+  completed without raising, it just surfaced fewer records than the
+  committed `tests/fixtures/teams/` corpus (captured 2026-08-27) or
+  this doc's own ticket-011-004 measurements describe. This doc's
+  historical counts (211 total, 129/8/70/4 by precision) are left
+  unchanged because they describe the stable, hermetic fixture corpus
+  the test suite actually asserts against, not one live run's result —
+  changing them on the strength of a single live capture would make
+  the doc track network conditions on one particular day rather than
+  the tested contract. This ticket's site pages are agnostic to the
+  exact team count (they render whatever `teams.json` contains and the
+  page-count-equals-team-count acceptance criterion was verified
+  against this run's actual 171-team output), so the discrepancy did
+  not block this ticket, but it is worth an operator checking
+  `meta.by_league["FRC"]` on the next real scheduled run — if it is
+  still well under 59, `sources.tba.SD_COUNTY_CITIES` or TBA's own
+  pagination (ticket 011-003's `TBASource.discover()`) may need a
+  fresh look. Out of scope for this ticket to diagnose further (011-003
+  already shipped and is `done`).
 - **`school-overrides.toml` ships empty as of this ticket.** The
   algorithmic rungs (exact match + the stopword-normalized Jaccard
   fuzzy tiers) resolved the real 211-team corpus well enough that no

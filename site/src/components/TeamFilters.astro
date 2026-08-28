@@ -1,0 +1,85 @@
+---
+// Clones OpportunityFilters.astro's build-time facet-count pattern
+// (sprint 011 ticket 005): counts computed once at build from teams.json,
+// not PartnerFilters.astro's uncounted checkbox list (the legacy pattern --
+// see PartnerFilters.astro's own file for the plain version this diverges
+// from).
+import teamsData from '../data/teams.json';
+
+const teams = teamsData.teams as any[];
+
+// === Build-time facet counts ===
+// Every facet here is a scalar field (league, org_type) -- unlike
+// Opportunity, Team has no array-valued facet fields, so tally() only
+// needs the scalar-equality branch OpportunityFilters' tally() also has.
+function tally(field: string): Map<string, number> {
+  const map = new Map<string, number>();
+  for (const team of teams) {
+    const v = team[field];
+    if (v == null || v === '') continue;
+    map.set(v, (map.get(v) ?? 0) + 1);
+  }
+  return map;
+}
+
+const leagueCounts = tally('league');
+const orgTypeCounts = tally('org_type');
+const inRegionCount = teams.filter(t => t.in_region).length;
+
+const leagues = [
+  { value: 'FTC', label: 'FTC — FIRST Tech Challenge' },
+  { value: 'FRC', label: 'FRC — FIRST Robotics Competition' },
+];
+const orgTypes = [
+  { value: 'school', label: 'School-Sponsored' },
+  { value: 'family_community', label: 'Family / Community' },
+  { value: 'unknown', label: 'Unknown Sponsor' },
+];
+
+// Checkbox facet sections (rendered uniformly with counts + per-section
+// clear, matching OpportunityFilters' `groups` shape).
+const groups = [
+  { title: 'League', filter: 'type', options: leagues, counts: leagueCounts },
+  { title: 'Organization Type', filter: 'orgtype', options: orgTypes, counts: orgTypeCounts },
+];
+---
+
+<aside class="filter-sidebar collapsed" id="team-filters">
+  <button class="btn filter-toggle" id="filter-toggle-btn">Filter Teams</button>
+
+  <div class="filter-group">
+    <div class="filter-group-title">Search</div>
+    <input type="text" class="filter-search" placeholder="Search team, number, or school…" data-filter="search" />
+  </div>
+
+  {groups.map(group => (
+    <div class="filter-group">
+      <div class="filter-group-title">{group.title}</div>
+      {group.options.map(opt => {
+        const c = group.counts.get(opt.value) ?? 0;
+        return (
+          <label class:list={['filter-option', { 'is-empty': c === 0 }]}>
+            <input type="checkbox" data-filter={group.filter} value={opt.value} disabled={c === 0} />
+            <span class="facet-name">{opt.label}</span>
+            <span class="facet-count">({c})</span>
+          </label>
+        );
+      })}
+      <a href="#" class="filter-clear-section" data-clear-section>Clear</a>
+    </div>
+  ))}
+
+  <div class="filter-group">
+    <div class="filter-group-title">Other</div>
+    <label class:list={['filter-option', { 'is-empty': inRegionCount === 0 }]}>
+      <input type="checkbox" data-filter="region" value="true" disabled={inRegionCount === 0} />
+      <span class="facet-name">San Diego County Only</span>
+      <span class="facet-count">({inRegionCount})</span>
+    </label>
+    <a href="#" class="filter-clear-section" data-clear-section>Clear</a>
+  </div>
+
+  <div class="filter-actions">
+    <a href="#" class="filter-clear-all" id="clear-filters" data-clear-all>Clear all filters</a>
+  </div>
+</aside>

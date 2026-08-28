@@ -1,0 +1,217 @@
+---
+// getStaticPaths() over teams.json; reuses the existing .detail-page +
+// mini-map pattern from opportunities/[slug].astro (sprint 011 ticket 005).
+// The slug is Team.team_id itself (f"{league.lower()}-{number}", set at
+// extraction time -- see partner_scrape/teams/DESIGN.md's Interfaces
+// section) rather than a bare number: team numbers collide across
+// programs (ftc-1622 vs frc-1622 are different teams), so team_id is
+// already the collision-free slug this page needs.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import teamsData from '../../data/teams.json';
+
+export function getStaticPaths() {
+  return (teamsData.teams as any[]).map(team => ({
+    params: { slug: team.team_id },
+    props: { team },
+  }));
+}
+
+const { team } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/+$/, ''); // "" or "/partner-scrape"
+
+const ORG_TYPE_LABELS: Record<string, string> = {
+  school: 'School-Sponsored',
+  family_community: 'Family / Community',
+  unknown: 'Unknown Sponsor',
+};
+const orgTypeLabel = ORG_TYPE_LABELS[team.org_type] ?? team.org_type;
+const title = `${team.league} ${team.number} — ${team.name}`;
+
+// A real, mappable coordinate: "none" precision teams carry no
+// latitude/longitude at all (see teams/geo.py's seven-rung ladder --
+// rung 7 is "no match", not a fabricated point).
+const hasLocation = team.latitude != null && team.longitude != null;
+
+const PRECISION_LABELS: Record<string, string> = {
+  school: 'Exact school location',
+  zip: 'Approximate (ZIP code center)',
+  city: 'Approximate (city center)',
+};
+const precisionLabel = PRECISION_LABELS[team.location_precision] ?? '';
+
+// Sibling teams (same organization, possibly a different league/program --
+// e.g. a school's FTC and FRC teams both trace back to the same org_key).
+// merge.py never fuses records, only links them, so each sibling is still
+// its own full Team; look each one up by ID for its own card/link.
+const siblingTeams = (team.sibling_team_ids as string[] | undefined)?.length
+  ? (teamsData.teams as any[]).filter(t => (team.sibling_team_ids as string[]).includes(t.team_id))
+  : [];
+---
+
+<BaseLayout
+  title={`${title} | SD STEM Ecosystem`}
+  description={`${team.league} team ${team.number}, ${team.organization || 'a San Diego County Family/Community team'}.`}
+>
+  <div class="detail-page">
+    <a href={`${base}/teams`} class="back-link">← Back to Teams</a>
+
+    <div class="detail-header">
+      <div class="team-detail-tags">
+        <span class="tag tag-purple">{team.league}</span>
+        <span class="tag tag-teal">{orgTypeLabel}</span>
+        {!team.in_region && <span class="tag tag-pink">Outside San Diego County</span>}
+        {team.needs_review && <span class="tag tag-pink">Location Needs Review</span>}
+      </div>
+      <h1>{title}</h1>
+      <p class="team-detail-org">{team.organization || 'Family / Community Team'}</p>
+    </div>
+
+    <div class="detail-body">
+      <div class="detail-content">
+        <p>
+          Team {team.number} ({team.league}) competes in {team.program}
+          {team.city && <> and is based in {team.city}</>}.
+          {team.rookie_year && <> Rookie year: {team.rookie_year}.</>}
+        </p>
+
+        {team.sponsors?.length > 0 && (
+          <div class="mt-3">
+            <h3>Sponsors</h3>
+            <div class="detail-tags">
+              {team.sponsors.map((s: string) => <span class="tag tag-purple">{s}</span>)}
+            </div>
+          </div>
+        )}
+
+        {siblingTeams.length > 0 && (
+          <div class="mt-3">
+            <h3>Also Fielded By This Organization</h3>
+            <ul class="team-sibling-list">
+              {siblingTeams.map(sib => (
+                <li>
+                  <a href={`${base}/teams/${sib.team_id}`}>{sib.league} {sib.number} — {sib.name}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+
+      <aside class="detail-sidebar">
+        <dl>
+          <dt>Program</dt>
+          <dd>{team.program}</dd>
+
+          <dt>Team Number</dt>
+          <dd>{team.number}</dd>
+
+          <dt>City</dt>
+          <dd>{team.city || 'Unknown'}</dd>
+
+          {team.rookie_year && (
+            <>
+              <dt>Rookie Year</dt>
+              <dd>{team.rookie_year}</dd>
+            </>
+          )}
+
+          {team.website && (
+            <>
+              <dt>Team Website</dt>
+              <dd><a href={team.website} target="_blank" rel="noopener">{team.website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}</a></dd>
+            </>
+          )}
+
+          {team.organization_website && team.organization_website !== team.website && (
+            <>
+              <dt>School / Organization Website</dt>
+              <dd><a href={team.organization_website} target="_blank" rel="noopener">{team.organization_website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}</a></dd>
+            </>
+          )}
+        </dl>
+
+        {hasLocation && (
+          <>
+            <div class="detail-mini-map" id="detail-map" data-lat={team.latitude} data-lng={team.longitude}></div>
+            {precisionLabel && <p class="team-precision-note">{precisionLabel}</p>}
+          </>
+        )}
+      </aside>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  const mapEl = document.getElementById('detail-map');
+  if (mapEl) {
+    const lat = parseFloat(mapEl.dataset.lat || '0');
+    const lng = parseFloat(mapEl.dataset.lng || '0');
+    if (!isNaN(lat) && !isNaN(lng) && lat !== 0) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+      document.head.appendChild(link);
+      const script = document.createElement('script');
+      script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+      script.onload = () => {
+        // @ts-ignore
+        const L = window.L;
+        const map = L.map('detail-map').setView([lat, lng], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; OpenStreetMap',
+        }).addTo(map);
+        L.marker([lat, lng]).addTo(map);
+      };
+      document.head.appendChild(script);
+    }
+  }
+</script>
+
+<style>
+  .team-detail-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 12px;
+  }
+
+  .team-detail-org {
+    font-size: 15px;
+    color: var(--text);
+    margin-top: 4px;
+  }
+
+  .detail-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .team-sibling-list {
+    list-style: none;
+    padding: 0;
+  }
+  .team-sibling-list li {
+    margin-bottom: 4px;
+  }
+  .team-sibling-list a {
+    color: var(--purple);
+  }
+  .team-sibling-list a:hover {
+    color: var(--pink);
+  }
+
+  .detail-mini-map {
+    height: 200px;
+    border-radius: 6px;
+    margin-top: 20px;
+    overflow: hidden;
+  }
+
+  .team-precision-note {
+    font-size: 12px;
+    color: var(--text);
+    opacity: 0.75;
+    margin-top: 6px;
+  }
+</style>
