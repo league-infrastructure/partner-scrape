@@ -1,7 +1,7 @@
 ---
 id: 009
 title: Data correctness and complete export
-status: executing
+status: done
 branch: sprint/009-data-correctness-and-complete-export
 use-cases: []
 issues:
