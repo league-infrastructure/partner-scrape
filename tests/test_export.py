@@ -162,6 +162,52 @@ class TestCurrentUpcomingFilter:
         assert [o["title"] for o in payload] == ["Upcoming Event"]
 
 
+class TestDSTBoundaryPartitioning:
+    """Regression for sprint 012 issue 19: `is_current_or_upcoming`
+    compares only `date_str[:10]` (the date portion) of `date_start`/
+    `date_end`, never the offset suffix (`export/writer.py`, confirmed
+    by inspection), so the DST-aware offset fix in `normalize/run.py`'s
+    `_iso()` changes no `export/` filtering behavior -- only the
+    offset's own correctness. These tests exercise
+    `is_current_or_upcoming` directly (no `export_opportunities`/site_dir
+    needed) against an `Opportunity` dated exactly on a DST-transition
+    boundary date, on each side of `today`, and confirm the partition is
+    unaffected by which offset (`-07:00` vs `-08:00`) the string carries.
+    """
+
+    def test_record_on_november_fall_back_date_is_current_on_the_boundary_day(self):
+        opp = _opportunity(
+            date_start="2026-10-01T09:00:00-07:00",
+            date_end="2026-11-01T01:30:00-07:00",  # the ambiguous fall-back hour
+        )
+
+        assert writer.is_current_or_upcoming(opp, today=date(2026, 11, 1)) is True
+
+    def test_record_on_november_fall_back_date_is_excluded_the_day_after(self):
+        opp = _opportunity(
+            date_start="2026-10-01T09:00:00-07:00",
+            date_end="2026-11-01T01:30:00-07:00",
+        )
+
+        assert writer.is_current_or_upcoming(opp, today=date(2026, 11, 2)) is False
+
+    def test_record_on_march_spring_forward_date_is_current_on_the_boundary_day(self):
+        opp = _opportunity(
+            date_start="2026-02-01T09:00:00-08:00",
+            date_end="2026-03-08T02:30:00-08:00",  # the nonexistent spring-forward hour
+        )
+
+        assert writer.is_current_or_upcoming(opp, today=date(2026, 3, 8)) is True
+
+    def test_record_on_march_spring_forward_date_is_excluded_the_day_after(self):
+        opp = _opportunity(
+            date_start="2026-02-01T09:00:00-08:00",
+            date_end="2026-03-08T02:30:00-08:00",
+        )
+
+        assert writer.is_current_or_upcoming(opp, today=date(2026, 3, 9)) is False
+
+
 class TestInternshipCurrentUpcomingFilter:
     """`opportunity_type == "Work-based Learning"` records get a
     non-event-shaped current/upcoming rule (sprint.md Design Rationale,

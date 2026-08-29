@@ -5,6 +5,16 @@
 email-privacy regression test and the two-hard-invariant tests below,
 via the real FTCScoutSource/sources.base.run chain -- no test in this
 module opens a real network socket.
+
+Sprint 012: ``_real_fixture_teams()`` was extended (not replaced) to
+also include the real, committed 48-team FLL static roster
+(``teams.sources.static_roster.StaticRosterSource``, reading the real
+``teams/data/fll-sd-teams.tsv`` -- no network, no fixture copy needed,
+since the committed roster already contains no contact field to leak).
+This confirms ``TestNoEmailInExport``'s privacy regression actually
+exercises the FLL rows this ticket adds, not just the pre-existing FTC
+ones -- exactly the sprint 011 ticket-011-003 lesson applied to this
+ticket's own new data source.
 """
 
 from __future__ import annotations
@@ -21,6 +31,7 @@ from partner_scrape.teams.export import TEAMS_SCHEMA_FIELDS, export_teams, to_js
 from partner_scrape.teams.model import Team
 from partner_scrape.teams.sources.base import run as run_source
 from partner_scrape.teams.sources.ftcscout import DEFAULT_API_BASE, DEFAULT_REGION, FTCScoutSource, _search_url
+from partner_scrape.teams.sources.static_roster import StaticRosterSource
 from partner_scrape.registry.schema import SourceConfig
 
 FIXTURES_DIR = Path(__file__).resolve().parents[1] / "fixtures" / "teams"
@@ -52,13 +63,37 @@ def _source_config() -> SourceConfig:
     )
 
 
+def _static_roster_source_config() -> SourceConfig:
+    return SourceConfig(
+        source_id="fll-sd",
+        org_name="FIRST LEGO League -- San Diego County (static roster)",
+        adapter_type="static_roster",
+        # No roster_path override -- StaticRosterSource falls back to
+        # DEFAULT_ROSTER_PATH, the real committed teams/data/
+        # fll-sd-teams.tsv, matching this file's "trust the real data"
+        # convention for the FTCScout fixture above.
+        config={},
+    )
+
+
 def _real_fixture_teams() -> list[Team]:
-    """All 152 San Diego FTC teams, extracted from the real live-captured
-    fixture through the real FTCScoutSource -- used by the privacy and
-    hard-invariant tests so they exercise realistic, full-scale output."""
+    """All 152 San Diego FTC teams (from the live-captured fixture,
+    through the real FTCScoutSource) plus the real, committed 48-team
+    FLL static roster (through the real StaticRosterSource, sprint
+    012) -- 200 teams total. Used by the privacy and hard-invariant
+    tests so they exercise realistic, full-scale output across every
+    source this subsystem has, not just the two live ones."""
     body = (FIXTURES_DIR / "ftcscout_search.json").read_text()
     fetcher = FixtureFetcher({SEARCH_URL: FetchResponse(url="", status=200, headers={}, body=body)})
-    return run_source(_source_config(), FTCScoutSource(), fetcher)
+    ftc_teams = run_source(_source_config(), FTCScoutSource(), fetcher)
+
+    # StaticRosterSource never touches the injected fetcher (it reads
+    # the committed roster straight off disk) -- reusing the same
+    # FixtureFetcher here is just convenient, not load-bearing; a
+    # Fetcher that raised on any call would work identically.
+    fll_teams = run_source(_static_roster_source_config(), StaticRosterSource(), fetcher)
+
+    return [*ftc_teams, *fll_teams]
 
 
 def _make_site(root: Path, *, opportunities: str = "[]", scrape_meta: str = "{}") -> Path:
@@ -181,8 +216,9 @@ class TestUnwritableSiteDirFailsLoudly:
 class TestHardInvariants:
     """SUC-001's two hard invariants: a `teams` run never writes or
     touches `opportunities.json`/`scrape-meta.json` -- covered here with
-    the full 152-team fixture set, not just a single hand-built Team, so
-    a real-scale export is what's actually proven byte-identical."""
+    the full 200-team (152 FTC + 48 FLL) fixture set, not just a single
+    hand-built Team, so a real-scale export is what's actually proven
+    byte-identical."""
 
     def test_opportunities_and_scrape_meta_are_byte_identical_after_a_teams_run(self, tmp_path):
         opportunities_body = json.dumps([{"title": "Untouched Opportunity"}])
@@ -214,8 +250,10 @@ class TestNoEmailInExport:
     email-address pattern. `model.Team` has no `email` field at all
     (tests/teams/test_model.py's job to prove that structurally) -- this
     test is the end-to-end regression that the *published artifact*
-    never leaks one either, over the full 152-team live-captured
-    fixture."""
+    never leaks one either, over the full 200-team fixture (152 FTC +
+    48 FLL, sprint 012) -- including the FLL rows whose upstream source
+    carries 6 real coach email addresses that must never reach this
+    file (see `sources/static_roster.py`'s module docstring)."""
 
     def test_written_json_contains_no_email_pattern(self, tmp_path):
         site = _make_site(tmp_path)

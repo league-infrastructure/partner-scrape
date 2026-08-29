@@ -715,6 +715,68 @@ class TestMixedDatetimeAwareness:
         assert all("+" not in o.date_start and "Z" not in o.date_start for o in opps)
 
 
+class TestDSTAwareExportOffset:
+    """`_iso()` resolves each naive datetime's UTC offset from
+    `zoneinfo.ZoneInfo("America/Los_Angeles")` at serialization time
+    (sprint 012, issue 19) instead of a hard-coded `-07:00` constant, so
+    the offset falls out of which side of the DST boundary the date
+    lands on. See `normalize/run.py::_iso`'s docstring for the fold
+    convention governing the two DST-transition edge cases below.
+    """
+
+    def test_july_date_serializes_with_daylight_time_offset(self):
+        event = _event(start=datetime(2026, 7, 15, 9, 0))
+
+        [opportunity] = run([event], PARTNERS_PATH)
+
+        assert opportunity.date_start == "2026-07-15T09:00:00-07:00"
+
+    def test_january_date_serializes_with_standard_time_offset(self):
+        event = _event(start=datetime(2026, 1, 15, 9, 0))
+
+        [opportunity] = run([event], PARTNERS_PATH)
+
+        assert opportunity.date_start == "2026-01-15T09:00:00-08:00"
+
+    def test_already_aware_datetime_offset_is_left_untouched(self):
+        """Regression: an Event whose start/end already carries `tzinfo`
+        (as `run()` coerces to naive before this point in the normal
+        pipeline, but `_iso` itself must still honor an aware value
+        exactly as before) is serialized with its own offset, not
+        relocalized into `_SITE_TZ`."""
+        from datetime import timezone
+
+        from partner_scrape.normalize.run import _iso
+
+        aware = datetime(2026, 7, 15, 9, 0, tzinfo=timezone.utc)
+
+        assert _iso(aware) == aware.isoformat()
+        assert _iso(aware) == "2026-07-15T09:00:00+00:00"
+
+    def test_november_fall_back_ambiguous_hour_resolves_to_daylight_time(self):
+        """2026's fall-back transition is 2026-11-01: the local clock
+        repeats 1:00-2:00am. The documented fold=0 (default) convention
+        resolves this to the earlier, pre-transition Daylight Time
+        occurrence."""
+        event = _event(start=datetime(2026, 11, 1, 1, 30, 0))
+
+        [opportunity] = run([event], PARTNERS_PATH)
+
+        assert opportunity.date_start == "2026-11-01T01:30:00-07:00"
+
+    def test_march_spring_forward_nonexistent_hour_resolves_to_standard_time(self):
+        """2026's spring-forward transition is 2026-03-08: the local
+        clock skips 2:00-3:00am entirely. The documented fold=0
+        (default) convention resolves this nonexistent local time to
+        `zoneinfo`'s own pre-transition-offset convention, i.e. Standard
+        Time."""
+        event = _event(start=datetime(2026, 3, 8, 2, 30, 0))
+
+        [opportunity] = run([event], PARTNERS_PATH)
+
+        assert opportunity.date_start == "2026-03-08T02:30:00-08:00"
+
+
 class TestEventImageResolution:
     """`run()`'s `image_resolver` DI seam (sprint 008 ticket 008, issue
     19): a plain injected callable, never an import of

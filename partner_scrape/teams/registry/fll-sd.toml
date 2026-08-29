@@ -1,0 +1,36 @@
+# FLL static roster -- a committed, contact-stripped, one-time import,
+# not a live acquisition source (no public FLL API, no third-party
+# aggregator; see teams/DESIGN.md's Orientation and Constraints).
+# Loaded via registry.loader.load_active_sources (reused verbatim, no
+# new schema) against this directory (partner_scrape/teams/registry/),
+# NOT the main partner_scrape/registry/sources/ directory -- teams
+# sources are structurally disjoint from the Opportunity registry (see
+# teams/DESIGN.md's Constraints and Invariants).
+#
+# `adapter_type` is read by teams.pipeline to select the matching
+# TeamSource ("static_roster" -> teams.sources.static_roster.
+# StaticRosterSource), not by adapters.base.ADAPTERS. This source is
+# never registered there, and it never calls the injected Fetcher --
+# see sources/static_roster.py's own module docstring.
+#
+# No [acquisition_policy] section: StaticRosterSource reads
+# config.roster_path straight off disk, so a rate limit / robots-respect
+# policy has no meaning here. The registry loader's own defaults
+# (registry/schema.py's _ACQUISITION_POLICY_DEFAULTS) fill in harmlessly
+# unused values when the section is omitted.
+
+org_name = "FIRST LEGO League -- San Diego County (static roster)"
+adapter_type = "static_roster"
+enabled = true
+
+[config]
+# Resolved relative to teams/data/ when not already an absolute path
+# (sources/static_roster.py's discover()).
+roster_path = "fll-sd-teams.tsv"
+
+# FLL's last-ever season (LEGO declined to renew its 28-year FIRST
+# partnership, 2026-03-19) -- teams.pipeline.run_teams() logs a loud
+# WARNING once date.today() passes this season's end (parsed as
+# June 1 of the second year, i.e. 2027-06-01). See teams/DESIGN.md's
+# Open Questions for what, if anything, replaces FLL.
+sunset_season = "2026-27"

@@ -266,6 +266,14 @@ class TestTeamsEndToEnd:
     opened. Matches this ticket's Acceptance Criteria: "partner-scrape
     teams --dry-run -v against ticket 001's fixture reports 152 FTC
     teams with no network access and no disk write."
+
+    Since sprint 012, the real registry also loads `fll-sd.toml`, whose
+    `StaticRosterSource` reads the real, committed 48-team FLL roster
+    straight off disk and never touches the fetcher -- it always
+    succeeds regardless of what this class's fixture Fetcher registers.
+    The two tests below whose whole point is FTCScout's own count add
+    `--source ftcscout` so the FLL roster doesn't fold into an assertion
+    about FTCScout specifically.
     """
 
     def test_dry_run_reports_152_teams_with_no_network_and_no_disk_write(
@@ -276,7 +284,7 @@ class TestTeamsEndToEnd:
 
         site_dir = tmp_path / "site"
         exit_code = cli.main(
-            ["teams", "--dry-run", "-v", "--site-dir", str(site_dir)]
+            ["teams", "--source", "ftcscout", "--dry-run", "-v", "--site-dir", str(site_dir)]
         )
 
         assert exit_code == 0
@@ -296,7 +304,7 @@ class TestTeamsEndToEnd:
         target = _make_site(tmp_path / "mirror-target")
         monkeypatch.setattr(cli, "get_mirror_site_dirs", lambda: [target])
 
-        exit_code = cli.main(["teams", "--site-dir", str(site_dir)])
+        exit_code = cli.main(["teams", "--source", "ftcscout", "--site-dir", str(site_dir)])
 
         assert exit_code == 0
         primary_teams = json.loads((site_dir / "src" / "data" / "teams.json").read_text())
