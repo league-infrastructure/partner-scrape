@@ -1,5 +1,12 @@
 ---
-status: pending
+status: in-progress
+sprint: '013'
+tickets:
+- 013-001
+- 013-002
+- 013-003
+- 013-004
+- 013-005
 ---
 
 # Scrape team websites for sponsors, and show which teams have one

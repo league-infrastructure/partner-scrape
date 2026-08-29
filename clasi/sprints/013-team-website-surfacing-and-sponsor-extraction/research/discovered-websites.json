@@ -1,0 +1,745 @@
+{
+ "meta": {
+  "purpose": "Websites discovered by agent-assisted web search on 2026-08-29, for teams whose upstream API carried none. Curated research input for sprint 013 \u2014 NOT pipeline output.",
+  "method": "Three parallel search agents over the 225 teams lacking a website. Each candidate required two independent signals (team number in host/path, nickname in title/host, number adjacent to FTC/FRC in body, or school named as that team's site) AND a successful fetch. Aggregators, social platforms, school generic homepages, and umbrella multi-team org sites were rejected.",
+  "reverified": "All 31 URLs re-fetched independently by the team-lead on 2026-08-29; all returned HTTP 200.",
+  "websites": 31,
+  "social_only": 21,
+  "coverage": "223 of 225 teams searched. ftc-23676 and ftc-32210 were not reached before the search budget ran out.",
+  "fll_note": "FLL sampled and confirmed to have no websites, matching the prior 0-of-48 hand-curation. Not exhaustively searched.",
+  "caveats": [
+   "Three entries are marked confidence=weak with reasons \u2014 treat as unverified until a live fetch confirms.",
+   "carlsbaded.org and sites.google.com each host more than one team at DISTINCT paths. Uniqueness must be checked on host+path, not host alone.",
+   "Several accepted sites belong to teams FIRST now lists as inactive; content may be several seasons stale."
+  ]
+ },
+ "websites": [
+  {
+   "team_id": "ftc-1622",
+   "website": "https://teamspyder.org",
+   "signals": [
+    "nickname-in-host",
+    "nickname-in-title",
+    "number-in-title",
+    "body-names-school-and-identifies-as-team"
+   ],
+   "verified_status": 200,
+   "social": [
+    "https://www.instagram.com/spyder1622",
+    "https://www.youtube.com/@spyder1622",
+    "https://twitter.com/team1622",
+    "https://twitter.com/frc1622"
+   ],
+   "notes": "Title 'Team Spyder 1622'. Body: 'Team Spyder is the robotics team that represents Poway High in FRC ... and FTC'. One org runs both FRC 1622 and FTC 1622; this is the correct site for the FTC entry. URL also declared as the team website on The Blue Alliance.",
+   "confidence": "strong",
+   "reverified_status": 200
+  },
+  {
+   "team_id": "ftc-3650",
+   "website": "https://www.ftc3650.org",
+   "signals": [
+    "number-in-host",
+    "nickname-in-title",
+    "number-adjacent-to-FTC-in-body",
+    "body-names-school"
+   ],
+   "verified_status": 200,
+   "social": [
+    "https://www.instagram.com/limitedliability3650/"
+   ],
+   "notes": "Title 'Home | Limited Liability FTC 3650'. Body: 'FTC 3650 Limited Liability is a school-based team at La Jolla Country Day School'. Note FRC 3650 is a different team ('RoboRaptors') \u2014 separate numbering namespace, not a conflict.",
+   "confidence": "strong",
+   "reverified_status": 200
+  },
+  {
+   "team_id": "frc-8891",
+   "website": "https://www.wildraccoons.org",
+   "signals": [
+    "nickname-in-host",
+    "nickname-in-title",
+    "number-in-title",
+    "number-adjacent-to-FRC-in-body",
+    "body-names-school"
+   ],
+   "verified_status": 200,
+   "social": [
+    "https://www.instagram.com/wild.raccoons8891",
+    "https://www.youtube.com/@wildraccoons8891",
+    "https://github.com/wildraccoons"
+   ],
+   "notes": "Title 'Wild Raccoons 8891'. Body: 'We are the Wild Raccoons FIRST Robotics Competition team 8891 of Oceanside High School'. Team also maintains a second verified site, https://wildraccoonsfrc8891.weebly.com (200, title 'THE WILD RACCOONS FRC TEAM 8891') \u2014 appears to be the older Weebly site; custom domain chosen as canonical.",
+   "confidence": "strong",
+   "reverified_status": 200
+  },
+  {
+   "team_id": "frc-9573",
+   "website": "https://marauder.tech",
+   "signals": [
+    "nickname-in-host",
+    "nickname-in-title",
+    "number-adjacent-to-FRC-in-body",
+    "body-names-school-and-city"
+   ],
+   "verified_status": 200,
+   "social": [
+    "https://www.instagram.com/frcmaraudertech9573",
+    "https://www.tiktok.com/@maraudertech.9573",
+    "https://github.com/maraudertech-frc-9573"
+   ],
+   "notes": "Title 'MarauderTech'. Body: 'MarauderTech 9573 is the FIRST Robotics Competition team from Mira Mesa High School, San Diego CA!'",
+   "confidence": "strong",
+   "reverified_status": 200
+  },
+  {
+   "team_id": "ftc-5135",
+   "website": "https://mchsrobotics.weebly.com/",
+   "signals": [
+    "number-in-body-adjacent-to-ftc",
+    "school-and-city-named"
+   ],
+   "verified_status": 200,
+   "social": [],
+   "notes": "'Sundevil Robotics' club site at Mt. Carmel High School, San Diego. Page states the club has a single FTC team, Team 5135 (Twitter handle @ftc5135). Nickname 'Team Uncopyrightable' does not appear on the page. Distinct host from 11285's site (mtcarmelrobotics.wordpress.com), so no host collision.",
+   "confidence": "strong",
+   "reverified_status": 200
+  },
+  {
+   "team_id": "ftc-6226",
+   "website": "http://chsbambusa.weebly.com/",
+   "signals": [
+    "nickname-in-host",
+    "nickname-in-heading",
+    "school-and-city-named"
+   ],
+   "verified_status": 200,
+   "social": [],
+   "notes": "Title 'Carlsbad High Robotics Team - Home', identifies itself as 'Team Bambusa' at Carlsbad High School, Carlsbad CA. Team number 6226 does NOT appear on the page - accepted on nickname-in-host + school/city match. Site content is dated (NXT era). Medium confidence.",
+   "confidence": "weak",
+   "weak_reason": "Nickname in host and heading, school and city match, but '6226' never appears on the page and content is NXT-era; may be long dead.",
+   "reverified_status": 200
+  },
+  {
+   "team_id": "ftc-7159",
+   "website": "https://7159roboravens.wixsite.com/new-official-website",
+   "signals": [
+    "number-in-host",
+    "nickname-in-host",
+    "nickname-in-title",
+    "school-and-city-named"
+   ],
+   "verified_status": 200,
+   "social": [],
+   "notes": "Title: 'FTC Team 7159 Robo Ravens | Canyon Crest Academy Robotics'. Workshop address 5951 Village Center Loop Rd, San Diego.",
+   "confidence": "strong",
+   "reverified_status": 200
+  },
+  {
+   "team_id": "ftc-7696",
+   "website": "https://rsfsingularity7696.wixsite.com/7696-rsf-singularity",
+   "signals": [
+    "number-in-host",
+    "number-in-path",
+    "nickname-in-host",
+    "nickname-in-title"
+   ],
+   "verified_status": 200,
+   "social": [
+    "https://www.youtube.com/channel/UCaQX_l9KjSfXJNhWbwtNaJQ",
+    "https://www.facebook.com/profile.php?id=100015332912359",
+    "https://www.instagram.com/the_singulartiy_7696/"
+   ],
+   "notes": "Title 'RSF Singularity | 7696'; page names R. Roger Rowe Middle School, Rancho Santa Fe. Social links taken from the team's own site.",
+   "confidence": "strong",
+   "reverified_status": 200
+  },
+  {
+   "team_id": "ftc-9049",
+   "website": "https://carlsbaded.org/robopuffs-2/",
+   "signals": [
+    "nickname-in-path",
+    "number-in-body-adjacent-to-team",
+    "school-and-city-named"
+   ],
+   "verified_status": 200,
+   "social": [],
+   "notes": "Team-specific page on the Carlsbad Educational Foundation site (the team's sponsoring org, not the school homepage). Opens with 'We are team #9049 - The Robopuffs!'",
+   "confidence": "strong",
+   "reverified_status": 200
+  },
+  {
+   "team_id": "ftc-9837",
+   "website": "http://ccagirlswhocode.weebly.com/robotics.html",
+   "signals": [
+    "number-in-body-adjacent-to-ftc",
+    "school-named-and-self-identifies"
+   ],
+   "verified_status": 200,
+   "social": [
+    "https://www.facebook.com/ccagwcravenettes/"
+   ],
+   "notes": "Body: 'Our robotics team, the FTC Ravenettes (team 9837), started in 2015 at Canyon Crest Academy.' Site root is 'CCA Girls Who Code'; the /robotics.html subpage is the team page, so that specific URL is used. Team is no longer active (last competed 2021).",
+   "confidence": "strong",
+   "reverified_status": 200
+  },
+  {
+   "team_id": "ftc-10092",
+   "website": "https://greengriffins.radrobotics.org/",
+   "signals": [
+    "nickname-in-host",
+    "number-in-body-adjacent-to-ftc"
+   ],
+   "verified_status": 200,
+   "social": [
+    "https://www.instagram.com/green.griffins_10092/",
+    "https://www.facebook.com/greengriffins10092/",
+    "https://x.com/griffins10092"
+   ],
+   "notes": "Body: 'Green.Griffins; 10092 is an 8th year FTC team based in San Diego.' Distinct from the parent org site radrobotics.org, which was rejected for 14195.",
+   "confidence": "strong",
+   "reverified_status": 200
+  },
+  {
+   "team_id": "ftc-10809",
+   "website": "https://carlsbaded.org/crow-force/",
+   "signals": [
+    "nickname-in-path",
+    "number-in-body-adjacent-to-team",
+    "school-and-city-named"
+   ],
+   "verified_status": 200,
+   "social": [],
+   "notes": "Team-specific page on the Carlsbad Educational Foundation site: 'CrowForce, Team #10809 from Sage Creek High School in Carlsbad, California'.",
+   "confidence": "strong",
+   "reverified_status": 200
+  },
+  {
+   "team_id": "ftc-11128",
+   "website": "https://www.teaminspiration.global/",
+   "signals": [
+    "nickname-in-host",
+    "number-in-body-adjacent-to-ftc",
+    "city-named"
+   ],
+   "verified_status": 200,
+   "social": [
+    "https://www.instagram.com/ftc11128inspiration/",
+    "https://www.facebook.com/teaminspiration11128/",
+    "https://github.com/InspirationRobotics"
+   ],
+   "notes": "Body identifies 'Team Inspiration, FTC #11128', San Diego. The older site team11128.wixsite.com/main explicitly redirects readers here ('We have moved websites').",
+   "confidence": "strong",
+   "reverified_status": 200
+  },
+  {
+   "team_id": "ftc-11212",
+   "website": "https://www.thecluelessftc.org/",
+   "signals": [
+    "nickname-in-host",
+    "number-in-body-adjacent-to-ftc",
+    "city-named"
+   ],
+   "verified_status": 200,
+   "social": [
+    "https://www.instagram.com/clueless11212_ftc/",
+    "https://www.youtube.com/@theclueless11212"
+   ],
+   "notes": "Body: 'FTC Team 11212, The Clueless', San Diego, 501(c)(3) under We Impact Corp. Social handles taken from the team's own site.",
+   "confidence": "strong",
+   "reverified_status": 200
+  },
+  {
+   "team_id": "ftc-11285",
+   "website": "https://mtcarmelrobotics.wordpress.com/",
+   "signals": [
+    "number-in-title",
+    "nickname-in-title",
+    "school-named-and-self-identifies"
+   ],
+   "verified_status": 200,
+   "social": [],
+   "notes": "Page title is literally '11285 Patent Pending'; site is dedicated to a single team at Mt. Carmel High School. Distinct host from 5135's site.",
+   "confidence": "strong",
+   "reverified_status": 200
+  },
+  {
+   "team_id": "ftc-12405",
+   "website": "https://lostctrl.webflow.io/",
+   "signals": [
+    "nickname-in-host",
+    "number-in-heading",
+    "school-named"
+   ],
+   "verified_status": 200,
+   "social": [
+    "https://www.instagram.com/lost_ctrl/",
+    "https://www.youtube.com/channel/UCMpYGWNHUtu12D7GIIUAqTg",
+    "https://twitter.com/TeamLostCtrl2"
+   ],
+   "notes": "Header reads 'FTC Team Lost Ctrl #12405'; page names El Camino High School. Content is from the 2019/20 SkyStone season - site is stale but live.",
+   "confidence": "strong",
+   "reverified_status": 200
+  },
+  {
+   "team_id": "ftc-12499",
+   "website": "https://www.gearup12499.com/",
+   "signals": [
+    "number-in-host",
+    "nickname-in-host",
+    "number-in-body-adjacent-to-team",
+    "city-named"
+   ],
+   "verified_status": 200,
+   "social": [
+    "https://www.instagram.com/gearup_12499/",
+    "https://github.com/GearUp12499-org"
+   ],
+   "notes": "gearup12499-org.github.io 301-redirects here. Body: 'Team 12499 Gear Up ... high school students from San Diego, California'.",
+   "confidence": "strong",
+   "reverified_status": 200
+  },
+  {
+   "team_id": "ftc-14496",
+   "website": "https://ftc14496robot.wixsite.com/roboctopi",
+   "signals": [
+    "number-in-host",
+    "nickname-in-path",
+    "nickname-in-title",
+    "number-in-body-adjacent-to-ftc"
+   ],
+   "verified_status": 200,
+   "social": [
+    "https://www.instagram.com/ftc14496roboctopi/",
+    "https://www.facebook.com/ftc14496/",
+    "https://www.youtube.com/channel/UCwQS9F93e1ZQHpyOfF47Gfw"
+   ],
+   "notes": "Title 'Roboctopi | San Diego FTC'. Their short domain roboctopi.com now returns 404 (both www and bare host), so the wixsite URL is used instead.",
+   "confidence": "strong",
+   "reverified_status": 200
+  },
+  {
+   "team_id": "ftc-14535",
+   "website": "https://sites.google.com/view/ftc-alpacas-14535",
+   "signals": [
+    "number-in-path",
+    "nickname-in-path",
+    "nickname-in-title",
+    "city-named"
+   ],
+   "verified_status": 200,
+   "social": [
+    "https://www.facebook.com/FTC14535/"
+   ],
+   "notes": "Title 'FTC-ALPACAS-14535'; body identifies Team 14535 'The Alpacas', San Diego, currently competing in DECODE.",
+   "confidence": "strong",
+   "reverified_status": 200
+  },
+  {
+   "team_id": "ftc-14968",
+   "website": "https://matadormechanics.my.canva.site/",
+   "signals": [
+    "nickname-in-host",
+    "nickname-in-title"
+   ],
+   "verified_status": 200,
+   "social": [],
+   "notes": "LOWER CONFIDENCE. Page renders as 'Matador Mechanics 25-26' but is a Canva site with little extractable text - no team number, school, or city on the page. Second corroborating signal is external: FIRST/FTCScout team records list this exact URL as team 14968's website. Nickname is distinctive and matches Mount Miguel HS ('Matadors'), Spring Valley.",
+   "confidence": "weak",
+   "weak_reason": "Canva page, almost no extractable text; number and school absent on-page. Corroboration is external (FIRST lists this URL), not on the page itself.",
+   "reverified_status": 200
+  },
+  {
+   "team_id": "ftc-15146",
+   "website": "https://garagebot15146.wordpress.com/",
+   "signals": [
+    "number-in-host",
+    "number-in-title",
+    "nickname-in-title",
+    "city-named"
+   ],
+   "verified_status": 200,
+   "social": [],
+   "notes": "Title: 'Garagebot 15146 - A FTC Robotics team based in Solana Beach, California'. Their other domain www.garagebot15146.org no longer resolves (DNS NXDOMAIN).",
+   "confidence": "strong",
+   "reverified_status": 200
+  },
+  {
+   "team_id": "ftc-18236",
+   "website": "https://robotics24.wixsite.com/robowaves18236",
+   "signals": [
+    "number-in-path",
+    "nickname-in-path",
+    "nickname-in-title",
+    "school-and-city-named"
+   ],
+   "verified_status": 200,
+   "social": [
+    "https://www.instagram.com/robowaves18236/",
+    "https://www.youtube.com/channel/UCOymmG9q32waVWs6YX76nAw",
+    "https://www.twitch.tv/robowaves"
+   ],
+   "notes": "Title: 'Robowaves 18236 | FIRST tech challenge | San Diego United States'; names The Waldorf School San Diego High School. Content last updated for the 2021-22 Freight Frenzy season.",
+   "confidence": "strong",
+   "reverified_status": 200
+  },
+  {
+   "team_id": "ftc-18755",
+   "website": "https://www.ljrobotics.org/",
+   "signals": [
+    "nickname-in-title",
+    "school-and-city-identified"
+   ],
+   "verified_status": 200,
+   "social": [],
+   "notes": "LOWER CONFIDENCE / program-level site. Title is 'Home | Vikings Robotics' (exact nickname match) and the page identifies itself as La Jolla High School's robotics team site, but it is branded around FRC team 2984 and contains no FTC mention and no occurrence of 18755. Same school + same registered nickname; it is the only La Jolla HS team on the target list so no host collision. Drop if you want strict team-level-only URLs.",
+   "confidence": "weak",
+   "weak_reason": "ljrobotics.org is La Jolla High's robotics PROGRAM site, branded around FRC 2984; never mentions FTC or 18755. Program-level, not team-level.",
+   "reverified_status": 200
+  },
+  {
+   "team_id": "ftc-21303",
+   "website": "https://sites.google.com/view/pandamoniumftc",
+   "signals": [
+    "number-in-title",
+    "nickname-in-title",
+    "number-adjacent-to-FTC-in-body"
+   ],
+   "verified_status": 200,
+   "social": [
+    "https://www.instagram.com/ftcpandamonium/"
+   ],
+   "notes": "Page title is literally 'Pandamonium 21303 FTC'. 21303 appears in page HTML; 31 FTC mentions.",
+   "confidence": "strong",
+   "reverified_status": 200
+  },
+  {
+   "team_id": "ftc-23251",
+   "website": "https://3fault.com/",
+   "signals": [
+    "nickname-in-title",
+    "number-adjacent-to-FTC-in-body",
+    "city-match"
+   ],
+   "verified_status": 200,
+   "social": [],
+   "notes": "Title 'Triple Fault | Home'; body contains 23251 and identifies the team as 'a passionate team of makers from San Diego'.",
+   "confidence": "strong",
+   "reverified_status": 200
+  },
+  {
+   "team_id": "ftc-23280",
+   "website": "https://cartrobotics.org/",
+   "signals": [
+    "nickname-in-host",
+    "nickname-in-title",
+    "number-adjacent-to-FTC-in-body",
+    "city-match"
+   ],
+   "verified_status": 200,
+   "social": [
+    "https://www.instagram.com/cart_ftc_23280/"
+   ],
+   "notes": "Title 'Home - C.A.R.T.Robotics'; body: 'FTC 23280 ... a local FIRST Tech Challenge team based in San Diego, originally founded in 2020 as a FLL team'. Instagram handle embeds 23280 and is linked from the site.",
+   "confidence": "strong",
+   "reverified_status": 200
+  },
+  {
+   "team_id": "ftc-23696",
+   "website": "https://kinematicflyingchickens.blogspot.com/",
+   "signals": [
+    "nickname-in-host",
+    "nickname-in-title",
+    "number-adjacent-to-FTC-in-body"
+   ],
+   "verified_status": 200,
+   "social": [
+    "https://www.instagram.com/ftc_kinematicflyingchickens/"
+   ],
+   "notes": "Body reads 'Home of the FTC Kinematic Flying Chickens #23696'. San Diego County (Del Mar Fairgrounds outreach).",
+   "confidence": "strong",
+   "reverified_status": 200
+  },
+  {
+   "team_id": "ftc-26235",
+   "website": "https://robogenesis.org/",
+   "signals": [
+    "nickname-in-host",
+    "number-in-heading",
+    "number-adjacent-to-FTC-in-body"
+   ],
+   "verified_status": 200,
+   "social": [
+    "https://www.instagram.com/teamrobogenesis/",
+    "https://www.youtube.com/@teamrobogenesis26235"
+   ],
+   "notes": "Heading 'RoboGenesis #26235'; 26235 present in HTML. Deliberately NOT assigned to ftc-22316 (RoboGeniuses, also Escondido) - the site names 26235 only.",
+   "confidence": "strong",
+   "reverified_status": 200
+  },
+  {
+   "team_id": "ftc-30556",
+   "website": "https://raisethebarrobotics.org/",
+   "signals": [
+    "number-adjacent-to-FTC-in-body",
+    "nickname-in-heading",
+    "organization-match"
+   ],
+   "verified_status": 200,
+   "social": [],
+   "notes": "JS-rendered site; raw payload contains 'FTC Team 30556 26-27', 'FTC Team 30556 25-26', 'Calendar Year 2026-2027 Team # 30556', 'Meet our robot, T3rm!nator' and 'Your T3rm!nator Team'. Matches registered org 'Raise the Bar Robotics' and nickname 'T3rm!n@tor'.",
+   "confidence": "strong",
+   "reverified_status": 200
+  },
+  {
+   "team_id": "ftc-31862",
+   "website": "https://seg-fault.org/",
+   "signals": [
+    "nickname-in-host",
+    "nickname-in-title",
+    "number-adjacent-to-FTC-in-title"
+   ],
+   "verified_status": 200,
+   "social": [],
+   "notes": "Title 'SegFault - FTC Team #31862'; 31862 present in body heading.",
+   "confidence": "strong",
+   "reverified_status": 200
+  },
+  {
+   "team_id": "ftc-32159",
+   "website": "https://carlsbaded.org/flight-risk/",
+   "signals": [
+    "nickname-in-title",
+    "number-adjacent-to-FTC-in-body",
+    "school-match"
+   ],
+   "verified_status": 200,
+   "social": [],
+   "notes": "Team-specific page (not the foundation homepage) on the Carlsbad Educational Foundation site: 'Team #32159 Flight Risk ... an FTC robotics club whose members are 95% freshmen at Sage Creek High School'. No other target team has a page on this host.",
+   "confidence": "strong",
+   "reverified_status": 200
+  }
+ ],
+ "social_only": [
+  {
+   "team_id": "frc-6659",
+   "website": null,
+   "signals": [],
+   "verified_status": null,
+   "social": [
+    "https://www.instagram.com/ehs.robotics",
+    "https://twitter.com/team6659",
+    "https://www.facebook.com/ehs-robotics-1606671419628388"
+   ],
+   "notes": "No team website found. Social handles are team-declared on The Blue Alliance. Team last competed 2019."
+  },
+  {
+   "team_id": "frc-6885",
+   "website": null,
+   "signals": [],
+   "verified_status": null,
+   "social": [
+    "https://www.instagram.com/olprobotics",
+    "https://www.instagram.com/thepilots_6885"
+   ],
+   "notes": "No team website found; FIRST lists website as N/A. Social handles team-declared on The Blue Alliance. Rejected ollrobotics.org (different school) and theacademyolp.org FLL page (school page, not this team)."
+  },
+  {
+   "team_id": "frc-9452",
+   "website": null,
+   "signals": [],
+   "verified_status": null,
+   "social": [
+    "https://www.instagram.com/lhssd_robotics",
+    "https://www.instagram.com/lhs_stingers9452",
+    "https://www.youtube.com/@lhssteelstingers"
+   ],
+   "notes": "No team website found. lhssd_robotics and the YouTube channel are team-declared on The Blue Alliance; lhs_stingers9452 profile title is 'LHS Steel Stingers 9452'."
+  },
+  {
+   "team_id": "frc-9730",
+   "website": null,
+   "signals": [],
+   "verified_status": null,
+   "social": [
+    "https://www.instagram.com/dlarobotics_9730",
+    "https://www.youtube.com/@frcteam9730",
+    "https://github.com/metal-maniacs"
+   ],
+   "notes": "No team website found. Social handles team-declared on The Blue Alliance."
+  },
+  {
+   "team_id": "frc-10586",
+   "website": null,
+   "signals": [],
+   "verified_status": null,
+   "social": [
+    "https://www.instagram.com/sdhs.robotics"
+   ],
+   "notes": "No team website found. Instagram handle team-declared on The Blue Alliance."
+  },
+  {
+   "team_id": "ftc-4216",
+   "website": null,
+   "signals": [],
+   "verified_status": 404,
+   "social": [
+    "https://www.facebook.com/ROH4216/",
+    "https://www.linkedin.com/in/roh4216/"
+   ],
+   "notes": "Former site roh4216.weebly.com is dead (HTTP 404 on both / and bare host) - rejected. Facebook/LinkedIn handles contain 'ROH4216' (Rise of Hephaestus 4216)."
+  },
+  {
+   "team_id": "ftc-5131",
+   "website": null,
+   "signals": [],
+   "verified_status": null,
+   "social": [
+    "https://www.facebook.com/pointlomahighrobotics/"
+   ],
+   "notes": "No team site. Facebook page is 'Point Loma High Robotics'; 5131 Pointers is the only FTC team listed at Point Loma HS. Not number-verified - medium confidence social."
+  },
+  {
+   "team_id": "ftc-9164",
+   "website": null,
+   "signals": [],
+   "verified_status": null,
+   "social": [
+    "https://www.facebook.com/ftc9164zorrobots/",
+    "https://twitter.com/zorrobots9164"
+   ],
+   "notes": "No team website found. Both handles contain the team number 9164."
+  },
+  {
+   "team_id": "ftc-9261",
+   "website": null,
+   "signals": [],
+   "verified_status": null,
+   "social": [
+    "https://x.com/levelup9261"
+   ],
+   "notes": "No team website. X account 'LevelUp FTC#9261 - Sage Creek'. sagecreekrobotics.blogspot.com covers all five Sage Creek teams, so it was NOT assigned to any single team."
+  },
+  {
+   "team_id": "ftc-9266",
+   "website": null,
+   "signals": [],
+   "verified_status": null,
+   "social": [
+    "https://github.com/Pyrobots"
+   ],
+   "notes": "No team website. GitHub org titled 'FTC 9266 - Pyrobots'. Not a social platform per se; recorded here as the only online presence."
+  },
+  {
+   "team_id": "ftc-8097",
+   "website": null,
+   "signals": [],
+   "verified_status": null,
+   "social": [
+    "https://www.instagram.com/botcats8097/"
+   ],
+   "notes": "No team website. Instagram handle contains the team number."
+  },
+  {
+   "team_id": "ftc-6016",
+   "website": null,
+   "signals": [],
+   "verified_status": null,
+   "social": [
+    "https://www.youtube.com/channel/UCTbbdTBCGgHhKtqfcU9ttyQ"
+   ],
+   "notes": "No team website. YouTube channel 'Mission Vista IronWolves' matches org + nickname; number not in the URL. Medium confidence."
+  },
+  {
+   "team_id": "ftc-10793",
+   "website": null,
+   "signals": [],
+   "verified_status": null,
+   "social": [
+    "https://www.facebook.com/FTC10793Voltrons/",
+    "https://www.instagram.com/ftc10793voltrons/",
+    "https://www.youtube.com/channel/UCl30veO0GvlbbWqaNaIaAuw"
+   ],
+   "notes": "No team website. All handles contain the team number 10793."
+  },
+  {
+   "team_id": "ftc-12823",
+   "website": null,
+   "signals": [],
+   "verified_status": null,
+   "social": [
+    "https://www.facebook.com/Crescendo12823/"
+   ],
+   "notes": "No team website. Facebook page 'FTC 12823 Crescendo'."
+  },
+  {
+   "team_id": "ftc-14140",
+   "website": null,
+   "signals": [],
+   "verified_status": null,
+   "social": [
+    "https://www.youtube.com/channel/UCwShBWX7cWq0Zd5oSoTtpMA"
+   ],
+   "notes": "No team website. YouTube channel 'FTC Team Crash Test'; its videos are titled 'Crash Test 14140 ...'. Number not in the channel URL - medium confidence."
+  },
+  {
+   "team_id": "ftc-15171",
+   "website": null,
+   "signals": [],
+   "verified_status": null,
+   "social": [
+    "https://github.com/FTC-Team-Scorpio"
+   ],
+   "notes": "ftcscorpio.com and www.ftcscorpio.com both fail TLS (expired certificate) - rejected as a non-loading page. GitHub org 'FTC Team Scorpio #15171' recorded instead."
+  },
+  {
+   "team_id": "ftc-16933",
+   "website": null,
+   "signals": [],
+   "verified_status": null,
+   "social": [
+    "https://github.com/Squash-16933"
+   ],
+   "notes": "No team website found. GitHub org name contains the team number."
+  },
+  {
+   "team_id": "ftc-18426",
+   "website": null,
+   "signals": [],
+   "verified_status": null,
+   "social": [
+    "https://www.instagram.com/dynabotsftc_18426/"
+   ],
+   "notes": "Instagram handle embeds team number 18426 + 'dynabots'. Rejected meadowbrookrobotics.com as website: TLS certificate expired and server returns HTTP 406 (mod_security) - page does not load."
+  },
+  {
+   "team_id": "ftc-21239",
+   "website": null,
+   "signals": [],
+   "verified_status": null,
+   "social": [
+    "https://www.instagram.com/teamallsystemsgo/"
+   ],
+   "notes": "Instagram profile title is 'All Systems Go | FTC Team 21239'. Team is in Louisville KY, not San Diego. No team website found."
+  },
+  {
+   "team_id": "ftc-22105",
+   "website": null,
+   "signals": [],
+   "verified_status": null,
+   "social": [
+    "https://www.instagram.com/ftc_runtimeterror/",
+    "https://www.linkedin.com/company/ftcruntimeterror"
+   ],
+   "notes": "No team website. Their linktr.ee/ftcruntimeterror hub (fetched, 200) states '@ftcruntimeterror represents FTC Team 22105 Runtime Terror' and links only to social/donation pages - treated as a link hub, not a website."
+  },
+  {
+   "team_id": "ftc-24730",
+   "website": null,
+   "signals": [],
+   "verified_status": null,
+   "social": [
+    "https://www.instagram.com/rustezerobotics/"
+   ],
+   "notes": "Instagram profile title is 'Rust\u2022eze Robotics | FTC Team 24730'. No team website found."
+  }
+ ]
+}
