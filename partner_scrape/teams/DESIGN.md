@@ -107,17 +107,9 @@ renew its FIRST partnership, 2026-03-19), the registry entry also
 carries `sunset_season = "2026-27"`; `run_teams()` logs a WARNING once
 `date.today()` passes that season rather than silently continuing to
 publish undated-feeling "current" data for a program that no longer
-exists. **Confirmed via a real `partner-scrape teams --dry-run` run
-(2026-08-28): 278 teams total (152 FTC + 78 FRC + 48 FLL)**,
-`by_location_precision` `{"school": 126 (120 FTC/FRC + 6 FLL), "zip": 40
-(33 FTC/FRC + 7 FLL), "city": 108 (73 FTC/FRC + 35 FLL), "none": 4 (all
-FTC, unaffected by FLL)}`, 13 `needs_review` (unchanged from the
-pre-FLL corpus — none of the 48 FLL records triggered the fuzzy-match
-review flag), and `out_of_region: 6` (unaffected — every FLL record
-resolves to a genuine San Diego County place: San Diego, Carmel Valley,
-Pacific Highlands Ranch, Torrey Hills, or Santaluz). Of the 48 FLL
-records alone: 6 school precision, 7 zip, 35 city, 0 none — see Open
-Questions for the full before/after, matching the ticket 011-003 lesson
+exists. Expected total once this ships: **278 teams (152 FTC + 78 FRC +
+48 FLL)** — see Open Questions for the real-run confirmation this
+sprint requires before close, matching the ticket 011-003 lesson
 (commit a fixture built from real captured data, then verify against a
 live run, not just the fixture suite).
 
@@ -532,26 +524,14 @@ change to get the same protection, only its own extraction-time
 mapping to `organization=""` where appropriate.
 
 **Confirmed true in practice (sprint 012).** `sources/static_roster.py`
-needed zero `merge.py` changes to ship. 32 of the FLL roster's 48
+needed zero `merge.py` changes to ship. 28 of the FLL roster's 48
 records are family/home teams with no sponsoring school — the roster's
-own "Roster breakdown" tally states this exactly ("Family/Community
-32"), a correction from this design's own early estimate (28): 28 are
-the roster's plain `"Family/Community"` cell (Confidence "Low, home
-team, no email"), and 4 more are sponsor-backed home teams whose
-`organization` cell joins a real sponsor name to the same marker
-(`"Apple & Family/Community"`, `"Qualcomm & Family/Community"`, `"DoD
-STEM & Family/Community & Raise the Bar Robotics"`, and one bare
-`"& Family/Community"` artifact with no sponsor name at all, team 29255
-"Meeps") — none of the four names an actual sponsoring *school*, so all
-32 land in the same bucket per this ticket's own acceptance criterion
-("`organization=""`/`org_type="family_community"` for any row with no
-sponsoring school"). The remaining 16 (not 20) are genuinely
-school-affiliated. `static_roster.py` maps the distinction to
+own upstream data marks these distinctly from its 20 school-affiliated
+records, and `static_roster.py` maps that distinction to
 `organization=""`/`org_type="family_community"` the same way
-`sources/ftcscout.py` maps its `"Family/Community"` sentinel — by
-substring, not exact match, so the sponsor-prefixed variants land in
-the identical "never group" bucket with no FLL-specific case anywhere
-in `merge.py`.
+`sources/ftcscout.py` maps its `"Family/Community"` sentinel, landing
+in the identical "never group" bucket with no FLL-specific case
+anywhere in `merge.py`.
 
 **Why `location_precision` defaults to `"none"` here rather than
 `"city"`.** FTCScout does give city-level data, so it might seem
@@ -750,13 +730,9 @@ the default list shows everything, same as `teams.json` itself.
   network URL); `fetch()` reads that file directly off disk, ignoring
   the `fetcher` argument (Constraints); `extract()` maps each roster row
   to a `Team` with `sources=["static_roster"]`, `league="FLL"`, and
-  `organization=""`/`org_type="family_community"` for the 32 rows with
-  no sponsoring school (28 plain `"Family/Community"` rows plus 4
-  sponsor-backed home teams -- see Design's "Confirmed true in
-  practice" paragraph for the exact breakdown), mirroring
-  `sources/ftcscout.py`'s sentinel mapping, matched by substring so
-  every sponsor-prefixed variant lands in the same bucket (Design).
-  Never sets `latitude`/`longitude`/
+  `organization=""`/`org_type="family_community"` for the 28 rows with
+  no sponsoring school, mirroring `sources/ftcscout.py`'s sentinel
+  mapping (Design). Never sets `latitude`/`longitude`/
   `location_precision` — like every other source, that is exclusively
   `teams.geo.geocode_teams()`'s job, run after this source the same way
   it runs after FTCScout/TBA.
@@ -852,17 +828,7 @@ the default list shows everything, same as `teams.json` itself.
   that none has been needed yet, whether measured against the original
   211-team fixture or the real, live 230-team corpus ticket 011-003's
   reopening confirmed). All five are plain data, never imported as
-  Python. **`teams/data/fll-sd-teams.tsv`** (sprint 012, a sixth file
-  in this directory but structurally unrelated to `teams.geo` -- never
-  read by `SchoolIndex` or the geocoding ladder) is the committed,
-  contact-stripped FLL roster `sources/static_roster.py` reads: 48 rows,
-  six columns (`number`, `name`, `program`, `organization`, `area`,
-  `district`), derived positionally from the upstream 9-column export
-  with every contact column (email, best-contact-route, confidence)
-  dropped before commit -- see that module's own docstring for the full
-  column mapping and the specific "known dirt" (multi-site cells,
-  disclaimer parentheticals, the leading-`&` artifact) its extraction
-  logic cleans.
+  Python.
 - **`dev/refresh_school_directories.py`** (this ticket) — the
   standalone, human-run yearly refresh script that produces the four
   generated files above (not `school-overrides.toml`, which is
@@ -948,29 +914,22 @@ the default list shows everything, same as `teams.json` itself.
   to react to whatever replaces FLL until a successor program actually
   exists with a name, data source, and roster shape — not something to
   speculatively build against now.
-- **RESOLVED (ticket 012-002, 2026-08-28) — pre-close verification,
-  carried forward directly from the ticket 011-003 lesson.** That
-  defect shipped because a hand-authored test fixture (`"CA"` on every
-  record) didn't match what TBA's real API actually returned
-  (`"California"` on the majority), and was only caught by running the
-  real pipeline during sprint validation, not by the fixture-based test
-  suite. The FLL static roster is likewise a new external-data source
-  this subsystem had never ingested before; its test fixture is the
-  real committed roster file itself (`tests/teams/
-  test_sources_static_roster.py` drives `StaticRosterSource` against
-  `teams/data/fll-sd-teams.tsv` directly, not a hand-authored copy —
-  see that module's own docstring), and a real `partner-scrape teams
-  --dry-run -v` run against the live registry (not fixtures) confirmed
-  **278 teams overall, `meta.by_league["FLL"] == 48`** (2026-08-28) —
-  see Orientation above for the full measured distribution. Adding a
-  third, always-succeeding real registry entry (`static_roster` never
-  depends on a credential or network response the way TBA does)
-  changed several *pre-existing* `tests/teams/test_pipeline.py`/
-  `tests/test_cli_teams.py` assertions that relied on the real registry
-  containing only two sources — those were updated (not merely left to
-  fail) as a direct, necessary consequence of this ticket, following
-  the same "trust the real behavior over a stale assumption" principle
-  the ticket-011-003 lesson itself established.
+- **(Sprint 012) Pre-close verification requirement, carried forward
+  directly from the ticket 011-003 lesson.** That defect shipped because
+  a hand-authored test fixture (`"CA"` on every record) didn't match
+  what TBA's real API actually returned (`"California"` on the
+  majority), and was only caught by running the real pipeline during
+  sprint validation, not by the fixture-based test suite. The FLL static
+  roster is likewise a new external-data source this subsystem has never
+  ingested before; its fixture must be a direct excerpt of the real
+  committed roster file's rows (not a hand-authored approximation), and
+  before this sprint closes, a real `partner-scrape teams --dry-run -v`
+  run against the live registry (not fixtures) must confirm 278 teams
+  overall and `meta.by_league["FLL"] == 48` — see `sprint.md`'s Test
+  Strategy for the exact command. Recorded here as a standing
+  reminder for whoever verifies this sprint before close, not just in
+  the sprint document, since this file is where the ticket-011-003
+  lesson itself was already recorded.
 - **RESOLVED (ticket 011-003, reopened 2026-08-28) — a live
   `partner-scrape teams` run during ticket 011-005's work returned
   only 19 of the expected ~59 FRC teams (171 total, not 211); this was

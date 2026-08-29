@@ -1,7 +1,7 @@
 ---
 id: '012'
 title: DST export fix and FLL roster import
-status: executing
+status: done
 branch: sprint/012-dst-export-fix-and-fll-roster-import
 use-cases: []
 issues: []
