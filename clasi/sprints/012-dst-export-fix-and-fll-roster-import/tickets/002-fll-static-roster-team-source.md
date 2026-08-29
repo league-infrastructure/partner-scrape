@@ -1,8 +1,9 @@
 ---
 id: '002'
 title: FLL static roster team source
-status: open
-use-cases: [SUC-002]
+status: done
+use-cases:
+- SUC-002
 depends-on: []
 github-issue: ''
 issue: 20-fll-static-roster-import.md
@@ -39,7 +40,7 @@ Open Questions sections).
 
 ## Acceptance Criteria
 
-- [ ] A new, committed roster data file exists under
+- [x] A new, committed roster data file exists under
       `partner_scrape/teams/data/` (e.g. `fll-sd-teams.tsv` or `.csv`),
       derived from the upstream
       `../robot-team-analysis/fll/sd-fll-teams-contact-list.md` export,
@@ -47,7 +48,7 @@ Open Questions sections).
       contact data) removed **before commit** — the committed file
       itself must never contain a contact field, not merely have one
       filtered out at read time.
-- [ ] `partner_scrape/teams/sources/static_roster.py` implements
+- [x] `partner_scrape/teams/sources/static_roster.py` implements
       `TeamSource` (`discover`/`fetch`/`extract`): `discover()` returns
       a single `TeamRef` pointing at the committed roster file (a local
       path, not a URL); `fetch()` reads that file directly off disk and
@@ -57,25 +58,25 @@ Open Questions sections).
       no sponsoring school (mirroring `sources/ftcscout.py`'s
       `Family/Community` sentinel mapping so `merge_teams()` never
       falsely groups unrelated home teams).
-- [ ] `partner_scrape/teams/registry/fll-sd.toml` is added:
+- [x] `partner_scrape/teams/registry/fll-sd.toml` is added:
       `adapter_type = "static_roster"`, `config.roster_path` pointing at
       the committed data file, `config.sunset_season = "2026-27"`.
-- [ ] `teams.pipeline._TEAM_SOURCES` gains a `"static_roster"` entry
+- [x] `teams.pipeline._TEAM_SOURCES` gains a `"static_roster"` entry
       mapping to `StaticRosterSource()`.
-- [ ] `teams.pipeline.run_teams()` logs `logging.WARNING` exactly once
+- [x] `teams.pipeline.run_teams()` logs `logging.WARNING` exactly once
       per run when any active source's `config["sunset_season"]` is
       present and `date.today()` is past the parsed season-end date
       (treat `"YYYY-YY"` as ending June 1 of the second year, e.g.
       `"2026-27"` → June 1, 2027) — and logs nothing when `sunset_season`
       is absent or not yet passed.
-- [ ] No location fields (`latitude`/`longitude`/`location_precision`)
+- [x] No location fields (`latitude`/`longitude`/`location_precision`)
       are set by `static_roster.py` itself — like every other source,
       that remains exclusively `teams.geo.geocode_teams()`'s job, run
       unchanged after this source the same way it runs after
       FTCScout/TBA.
-- [ ] `merge_teams()`, `geocode_teams()`, and `export_teams()` require
+- [x] `merge_teams()`, `geocode_teams()`, and `export_teams()` require
       no code change for this ticket to work end to end.
-- [ ] No `email` field is added anywhere, and no code path in this
+- [x] No `email` field is added anywhere, and no code path in this
       ticket reads a contact field from any source, upstream or
       committed.
 

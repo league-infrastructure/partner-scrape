@@ -267,8 +267,9 @@ def _add_teams_subcommand(subparsers: argparse._SubParsersAction) -> None:
         metavar="SOURCE",
         help=(
             "Only run this single acquisition source, by adapter_type "
-            "(e.g. 'ftcscout' or 'tba') -- not a Team Registry file's "
-            "stem. Omitted, every active team source runs."
+            "(e.g. 'ftcscout', 'tba', or 'static_roster') -- not a "
+            "Team Registry file's stem. Omitted, every active team "
+            "source runs."
         ),
     )
     parser.add_argument(

@@ -35,33 +35,55 @@ docstring), and this loop already treats any `Exception` from
 `run_team_source()` as "log and skip this source," regardless of which
 source raised it.
 
-Ticket 011-004 (this ticket) adds one more stage after `merge_teams()`
-and before `export_teams()`: `teams.geo.geocode_teams()`, the seven-rung
-offline location resolver. Like `merge_teams()`, it runs exactly once
-over the full merged `Team[]` (not per-source) and is not wrapped in
-its own try/except -- a malformed geocoding data file is a build-time
-defect `teams.geo.SchoolIndex` raises loudly for (see that module's own
+Ticket 011-004 adds one more stage after `merge_teams()` and before
+`export_teams()`: `teams.geo.geocode_teams()`, the seven-rung offline
+location resolver. Like `merge_teams()`, it runs exactly once over the
+full merged `Team[]` (not per-source) and is not wrapped in its own
+try/except -- a malformed geocoding data file is a build-time defect
+`teams.geo.SchoolIndex` raises loudly for (see that module's own
 docstring), not a per-record failure to isolate the way a source's
 network fetch is.
+
+Sprint 012 adds a third entry, `"static_roster"` (the committed FLL
+roster -- see `sources/static_roster.py`'s own module docstring), plus
+one new pre-flight check: `_check_sunset_seasons()`, called once per
+`run_teams()` call, right after the (possibly `--source`-filtered)
+active source list is resolved and before any source runs. It inspects
+every active source's `SourceConfig.config.get("sunset_season")` and
+logs exactly one `logging.WARNING` for the whole run if `today` (real
+`date.today()` by default; tests pass an explicit `today` the same way
+`export.export_opportunities()`'s own `today` parameter works) is past
+any of their parsed season-end dates -- never more than one log call
+regardless of how many sources are stale, and never raises: a sunset
+date is a staleness signal for an operator to notice, not a reason to
+stop publishing what may still be the best available data (see
+`teams/DESIGN.md`'s Constraints).
 """
 
 from __future__ import annotations
 
 import logging
+import re
+from datetime import date
 from pathlib import Path
 from typing import Any
 
 from partner_scrape.fetch import Fetcher, PoliteFetcher
 from partner_scrape.registry.loader import load_active_sources
+from partner_scrape.registry.schema import SourceConfig
 from partner_scrape.teams.export import export_teams
 from partner_scrape.teams.geo import geocode_teams
 from partner_scrape.teams.merge import merge_teams
 from partner_scrape.teams.model import Team
 from partner_scrape.teams.sources.base import TeamSource, run as run_team_source
 from partner_scrape.teams.sources.ftcscout import FTCScoutSource
+from partner_scrape.teams.sources.static_roster import StaticRosterSource
 from partner_scrape.teams.sources.tba import TBASource
 
 logger = logging.getLogger(__name__)
+
+#: Matches a `"YYYY-YY"` sunset-season config value, e.g. `"2026-27"`.
+_SUNSET_SEASON_RE = re.compile(r"(\d{4})-(\d{2})")
 
 #: This subsystem's own Team Registry directory -- `teams/registry/`,
 #: disjoint from `partner_scrape/registry/sources/` (see
@@ -76,7 +98,64 @@ DEFAULT_TEAMS_REGISTRY_DIR = Path(__file__).resolve().parent / "registry"
 _TEAM_SOURCES: dict[str, TeamSource] = {
     "ftcscout": FTCScoutSource(),
     "tba": TBASource(),
+    "static_roster": StaticRosterSource(),
 }
+
+
+def _parse_sunset_season(season: str) -> date | None:
+    """Parse a `"YYYY-YY"` sunset-season string into the date its
+    season is considered over: June 1 of the second year (e.g.
+    `"2026-27"` -> `2027-06-01`) -- an FLL season runs roughly
+    September through the following May/June, so "past the season" is
+    first meaningfully true once the *next* school year would have
+    already started preparing.
+
+    Returns `None` for a value that doesn't match the expected shape
+    (defensive: a malformed config value should silently produce no
+    warning, not crash a run over a typo in a TOML file).
+    """
+    match = _SUNSET_SEASON_RE.fullmatch(season.strip())
+    if not match:
+        return None
+    first_year = int(match.group(1))
+    suffix = int(match.group(2))
+    second_year = (first_year // 100) * 100 + suffix
+    if second_year <= first_year:
+        second_year += 100
+    return date(second_year, 6, 1)
+
+
+def _check_sunset_seasons(sources: list[SourceConfig], *, today: date | None = None) -> None:
+    """Log exactly one `logging.WARNING` if any of `sources` carries a
+    `sunset_season` whose parsed end date `today` has passed.
+
+    Never raises and never logs more than once per call, regardless of
+    how many active sources are stale -- see this module's own
+    docstring for the full rationale. `sources` is the already-resolved
+    (and possibly `--source`-filtered) active source list `run_teams()`
+    is about to dispatch; a source filtered out of this run's `sources`
+    is not checked, matching the operational intent ("only warn about
+    what this run is actually touching").
+    """
+    reference_date = today if today is not None else date.today()
+
+    stale: list[tuple[str, str, date]] = []
+    for source_config in sources:
+        season = source_config.config.get("sunset_season")
+        if not season:
+            continue
+        end_date = _parse_sunset_season(str(season))
+        if end_date is not None and reference_date > end_date:
+            stale.append((source_config.source_id, str(season), end_date))
+
+    if stale:
+        logger.warning(
+            "%d team source(s) past their sunset season -- data may no "
+            "longer be refreshable: %s. See teams/DESIGN.md's Open "
+            "Questions.",
+            len(stale),
+            ", ".join(f"{sid!r} ({season}, ended {end})" for sid, season, end in stale),
+        )
 
 
 def run_teams(
@@ -87,6 +166,7 @@ def run_teams(
     fetcher: Fetcher | None = None,
     dry_run: bool = False,
     geo_data_dir: str | Path | None = None,
+    today: date | None = None,
 ) -> dict[str, Any]:
     """Run the Teams pipeline end-to-end: Team Registry -> `TeamSource`(s)
     -> `merge_teams()` -> `geocode_teams()` -> `export_teams()`.
@@ -124,6 +204,12 @@ def run_teams(
             source/merge behavior can safely omit it and exercise the
             real committed data files, matching this module's existing
             "trust the real registry in tests" convention.
+        today: the reference date `_check_sunset_seasons()` compares
+            every active source's `sunset_season` against. Defaults to
+            real `date.today()` when omitted, matching
+            `export.export_opportunities()`'s own `today` parameter
+            convention. Tests should pass an explicit value for
+            determinism.
 
     Returns:
         `export_teams()`'s `{"meta": ..., "teams": [...]}` payload,
@@ -135,6 +221,11 @@ def run_teams(
 
     if source is not None:
         sources = [s for s in sources if s.adapter_type == source]
+
+    # A registry-level pre-flight check, independent of whether any
+    # source's acquisition later succeeds or fails -- see this module's
+    # own docstring and _check_sunset_seasons()'s.
+    _check_sunset_seasons(sources, today=today)
 
     active_fetcher = fetcher if fetcher is not None else PoliteFetcher()
 
