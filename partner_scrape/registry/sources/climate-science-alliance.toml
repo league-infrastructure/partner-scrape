@@ -5,6 +5,13 @@
 # Regional climate-resilience science network; workshops and public events.
 # org_name matches the exact name in data/partners_viable.csv so the
 # stem-ecosystem partner join resolves.
+#
+# Sprint 014 ticket 002 (issue 23): live-verified Wix site (2026-08-30 --
+# response carries <meta name="generator" content="Wix.com Website
+# Builder"/> plus static.wixstatic.com asset URLs), one of the "9 Wix
+# partner sources" plain HTTP cannot render. Flagged headless only after
+# this ticket's concurrency fix (dedicated single-worker executor +
+# PlaywrightFetcher lock) landed and was fixture-tested.
 
 org_name = "Climate Science Alliance"
 adapter_type = "generic_html"
@@ -16,4 +23,5 @@ site_url = "https://www.climatesciencealliance.org"
 [acquisition_policy]
 rate_limit_seconds = 1.0
 respect_robots = true
+fetch_strategy = "headless"
 discovered_via = "partners_viable.csv batch (real scrape exercise 2026-07-19)"

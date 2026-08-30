@@ -225,6 +225,48 @@ dependency graph.
   future sprint pushes the headless-flagged count meaningfully higher, a small pool
   of several browser pages/contexts (each with its own dedicated worker) would
   restore some parallelism — not needed at this sprint's scale, not built here.
+- **(Sprint 014, revision — found during ticket 002's required pre-close live
+  validation, not the original plan) `NETWORK_IDLE_TIMEOUT_MS` + `wait_until =
+  "networkidle"` times out for most real Wix marketing/listing pages, though the
+  concurrency fix itself is unaffected.** Live-testing the 8 newly-flagged Wix
+  sources (2026-08-30) found `PlaywrightFetcher.get()` raises `TimeoutError` under
+  the shipped 15s `networkidle` wait for 6 of 8 real homepage/listing fetches
+  (`gsdsef.org`, `xplorstem.com`, `sdrvc.org`, `titanbot.org`,
+  `lajollalibrary.org`, `techadventurecamp.com`) — these Wix sites keep a
+  persistent analytics/chat-widget connection open indefinitely, so the network
+  never truly idles. The *content* is not the problem: the same URLs fetched with
+  `wait_until="load"` instead consistently returned full, real, rendered text
+  (e.g. `gsdsef.org` in ~1s, real nav/program text) rather than an empty shell —
+  this is a wait-*strategy* mismatch, not a rendering or fetch failure. Per this
+  ticket's own explicit scope line ("extend `PlaywrightFetcher` with per-source
+  timeout/retry tuning while touching it anyway — rejected as scope creep"), this
+  is **left unfixed by ticket 002**, which only adds the lock and does not change
+  `wait_until`/`NETWORK_IDLE_TIMEOUT_MS` — changing either is a real, debatable
+  design trade-off (would it ever silently return a *genuinely* still-loading
+  page's partial content on some other site?) that deserves its own review, not a
+  same-ticket patch discovered mid-implementation. Recommended follow-up: a small
+  ticket to relax the wait strategy (e.g. `wait_until="load"`, evidenced above) —
+  until then, the 8 newly-flagged Wix sources will mostly fail their headless
+  fetch in production (isolated per-source, per the existing per-source
+  try/except — never fatal to a run, never cross-attributed, confirmed live
+  below), reducing but not eliminating this ticket's intended yield improvement
+  for that cohort. `sandiego-cv.aopsacademy.org` (the one non-Wix source this
+  ticket also flags headless) is unaffected — its content is a lighter JS shell
+  that reaches `networkidle` well inside the 15s bound.
+- **(Sprint 014) The dispatch-level thread-affinity hazard this ticket fixes is
+  not hypothetical — reproduced live during ticket 002's validation.** Two raw
+  Python threads (bypassing `pipeline.py`'s dispatch entirely, i.e. deliberately
+  recreating the pre-fix hazard) calling `.get()` on one shared, real
+  `PlaywrightFetcher` instance for two different real Wix URLs: the first call's
+  `networkidle` wait timed out and that thread exited; the second thread's call
+  then failed with Playwright's own real error, `"cannot switch to a different
+  thread (which happens to have exited)"` — exactly the thread-affinity failure
+  mode this section's Constraints already predicted, now confirmed against the
+  real `playwright` package rather than only reasoned about. A real production
+  run using `pipeline.py`'s actual dedicated single-worker executor (two real
+  registered headless sources, no fixtures) completed with both sources' calls
+  landing on the same worker thread and no such error — the fix works; the
+  hazard it fixes is real.
 - The cache has no eviction policy. It grows without bound and is pruned by hand.
 - `PoliteFetcher` has no retry/backoff. A transient 5xx or timeout is a status-0 or
   non-200 response for that run, recovered only on the next scheduled run.

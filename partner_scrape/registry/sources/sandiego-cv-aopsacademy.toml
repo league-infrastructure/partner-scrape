@@ -1,3 +1,11 @@
+# Sprint 014 ticket 002 (issue 23, "AoPS" named blocker): live-verified
+# client-rendered JS shell (2026-08-30 -- a plain fetch of the rendered
+# landing page returns ~540KB of markup but well under 500 characters of
+# real visible text, all nav/footer boilerplate; program/schedule content
+# never appears in the static response). Flagged headless only after
+# this ticket's concurrency fix (dedicated single-worker executor +
+# PlaywrightFetcher lock) landed and was fixture-tested.
+
 org_name = "AoPS (Art of Problem Solving) Academy"
 adapter_type = "generic_html"
 enabled = true
@@ -8,4 +16,5 @@ site_url = "https://sandiego-cv.aopsacademy.org"
 [acquisition_policy]
 rate_limit_seconds = 1.0
 respect_robots = true
+fetch_strategy = "headless"
 discovered_via = "partners_viable.csv tier-2 bulk registration (2026-07-20)"

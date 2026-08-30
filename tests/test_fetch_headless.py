@@ -14,6 +14,8 @@ this project's default environment, which does not install the
 from __future__ import annotations
 
 import sys
+import threading
+import time
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -272,3 +274,111 @@ class TestPoliteFetcherWrapsPlaywrightFetcher:
         navigated_urls = [call["url"] for call in page.calls]
         assert robots_url in navigated_urls
         assert url not in navigated_urls
+
+
+class TestPlaywrightFetcherConcurrencySafety:
+    """Sprint 014 ticket 002: ``PlaywrightFetcher.get()`` holds an
+    instance-owned ``threading.Lock`` for its whole duration (page
+    construction through ``content()``) as defense in depth against
+    concurrent, multi-threaded access to the one shared browser page --
+    see fetch/DESIGN.md's sprint 014 section. This proves the lock
+    actually *prevents interleaving*, not merely that it exists: an
+    instrumented fixture page double sleeps between ``goto()`` and
+    ``content()`` so that, absent the lock, a second thread's call
+    would almost certainly interleave into that window.
+    """
+
+    def test_two_threads_calling_get_on_one_instance_never_interleave(self):
+        url_a = "https://example.org/a"
+        url_b = "https://example.org/b"
+        pages = {url_a: (200, "A-content"), url_b: (200, "B-content")}
+
+        events: list[tuple[str, str]] = []
+        events_lock = threading.Lock()
+
+        class SlowFixtureHeadlessPage:
+            """Instrumented double: records (url, phase) into the
+            shared ``events`` list, with an artificial delay between
+            ``goto()`` and ``content()`` -- the window in which an
+            unlocked second thread's call would interleave.
+            """
+
+            def __init__(self) -> None:
+                self._current_url: str | None = None
+
+            def goto(self, url: str, timeout: float | None = None, wait_until: str | None = None):
+                with events_lock:
+                    events.append((url, "goto-start"))
+                self._current_url = url
+                time.sleep(0.05)
+                with events_lock:
+                    events.append((url, "goto-end"))
+                status, _html = pages[url]
+                return _FixtureNavigationResponse(status=status)
+
+            def content(self) -> str:
+                assert self._current_url is not None
+                with events_lock:
+                    events.append((self._current_url, "content"))
+                _status, html = pages[self._current_url]
+                return html
+
+        page = SlowFixtureHeadlessPage()
+        fetcher = PlaywrightFetcher(page_factory=lambda: page)
+        results: dict[str, object] = {}
+
+        def call(name: str, url: str) -> None:
+            results[name] = fetcher.get(url)
+
+        t1 = threading.Thread(target=call, args=("t1", url_a))
+        t2 = threading.Thread(target=call, args=("t2", url_b))
+        t1.start()
+        t2.start()
+        t1.join()
+        t2.join()
+
+        # Ownership assertion: every (goto-start, goto-end, content)
+        # triplet for one URL is contiguous -- never interrupted by the
+        # other URL's events. If the lock did not cover the whole
+        # get() call (or did not cover page construction through
+        # content()), the artificial delay above would let the other
+        # thread's goto-start land inside this window.
+        urls_in_order = [url for url, _phase in events]
+        assert urls_in_order in (
+            [url_a, url_a, url_a, url_b, url_b, url_b],
+            [url_b, url_b, url_b, url_a, url_a, url_a],
+        )
+
+        # Correctness, not just non-crashing: each call returns the
+        # content matching the URL IT requested -- never the other
+        # thread's content (misattribution is the actual hazard a bare
+        # "no exception raised" check would miss).
+        assert results["t1"].url == url_a
+        assert results["t1"].body == "A-content"
+        assert results["t2"].url == url_b
+        assert results["t2"].body == "B-content"
+
+    def test_page_construction_itself_is_covered_by_the_lock(self):
+        # Two threads racing on the very first get() call -- before
+        # self._page exists -- must not both build a page: the lock
+        # must cover _get_page() (construction), not just navigation.
+        build_calls: list[int] = []
+        build_lock = threading.Lock()
+        url = "https://example.org/first"
+        page = FixtureHeadlessPage(pages={url: (200, "content")})
+
+        def factory():
+            with build_lock:
+                build_calls.append(1)
+            time.sleep(0.02)
+            return page
+
+        fetcher = PlaywrightFetcher(page_factory=factory)
+
+        threads = [threading.Thread(target=fetcher.get, args=(url,)) for _ in range(5)]
+        for t in threads:
+            t.start()
+        for t in threads:
+            t.join()
+
+        assert len(build_calls) == 1

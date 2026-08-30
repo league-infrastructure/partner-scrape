@@ -24,10 +24,27 @@ import time, never in ``__init__``. Tests inject a fixture
 *dependency itself*, not just the network call, must be avoidable) and
 so never trigger that import; the whole default test suite runs with
 ``playwright`` fully uninstalled.
+
+**(Sprint 014)** ``PlaywrightFetcher.get()`` holds an instance-owned
+``threading.Lock`` for its whole duration -- page construction
+(:meth:`_get_page`) through :meth:`HeadlessPage.content`. This is
+defense in depth, not the load-bearing guarantee: a single shared
+Playwright ``Page`` is not safe for concurrent navigation from
+multiple threads, and Playwright's own sync API additionally expects
+to be driven from one consistent thread, which a bare lock cannot by
+itself guarantee (a lock serializes *when* calls run, not *which*
+thread runs them). The load-bearing guarantee -- every call to a
+given shared instance originates from one consistent thread for a
+run's lifetime -- is provided by ``pipeline.py``'s dedicated
+single-worker executor for ``headless``-strategy sources. See
+``fetch/DESIGN.md``'s sprint 014 section and
+``partner_scrape/DESIGN.md``'s new concurrency convention for the
+full rationale.
 """
 
 from __future__ import annotations
 
+import threading
 from typing import Callable, Protocol
 
 from partner_scrape.fetch.fetcher import DEFAULT_USER_AGENT, FetchResponse
@@ -150,11 +167,20 @@ class PlaywrightFetcher:
     Playwright page, built only on the first real ``get()`` call
     (never at ``__init__`` time, never at module import time) -- see
     :func:`_default_page_factory`.
+
+    **(Sprint 014)** ``self._lock`` (an instance-owned
+    ``threading.Lock``) is held for :meth:`get`'s whole duration --
+    page construction through :meth:`content` -- as defense in depth
+    against concurrent, multi-threaded access to the one shared page.
+    See this module's own docstring for why this lock alone does not
+    guarantee Playwright's thread-affinity expectation, and where that
+    guarantee actually lives.
     """
 
     def __init__(self, page_factory: Callable[[], HeadlessPage] | None = None) -> None:
         self._page_factory = page_factory or _default_page_factory
         self._page: HeadlessPage | None = None
+        self._lock = threading.Lock()
 
     def _get_page(self) -> HeadlessPage:
         if self._page is None:
@@ -171,24 +197,34 @@ class PlaywrightFetcher:
         ``PoliteFetcher``'s ``200 <= status < 300`` cache-write branch
         behaves identically for a headless fetch and a static one.
 
+        **(Sprint 014)** Holds ``self._lock`` for the method's entire
+        duration -- ``_get_page()`` (lazy page construction) through
+        ``page.content()`` -- so two threads calling ``get()`` on the
+        same instance concurrently never interleave their navigation
+        and content-read calls against the one shared page. Defense in
+        depth only: see the class docstring for why the real
+        thread-affinity guarantee lives in ``pipeline.py``'s dispatch,
+        not here.
+
         Raises:
             PlaywrightNotInstalledError: no ``page_factory`` was
                 injected and the ``playwright`` package is not
                 installed.
         """
-        page = self._get_page()
-        if headers:
-            set_extra_headers = getattr(page, "set_extra_http_headers", None)
-            if set_extra_headers is not None:
-                set_extra_headers(headers)
+        with self._lock:
+            page = self._get_page()
+            if headers:
+                set_extra_headers = getattr(page, "set_extra_http_headers", None)
+                if set_extra_headers is not None:
+                    set_extra_headers(headers)
 
-        navigation = page.goto(url, timeout=NETWORK_IDLE_TIMEOUT_MS, wait_until="networkidle")
-        body = page.content()
-        response_headers = dict(getattr(navigation, "headers", None) or {})
+            navigation = page.goto(url, timeout=NETWORK_IDLE_TIMEOUT_MS, wait_until="networkidle")
+            body = page.content()
+            response_headers = dict(getattr(navigation, "headers", None) or {})
 
-        return FetchResponse(
-            url=url,
-            status=navigation.status,
-            headers=response_headers,
-            body=body,
-        )
+            return FetchResponse(
+                url=url,
+                status=navigation.status,
+                headers=response_headers,
+                body=body,
+            )
