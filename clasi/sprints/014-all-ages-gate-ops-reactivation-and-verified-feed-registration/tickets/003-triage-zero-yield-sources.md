@@ -1,9 +1,11 @@
 ---
 id: '003'
 title: Triage zero-yield sources
-status: open
-use-cases: [SUC-006]
-depends-on: ['002']
+status: in-progress
+use-cases:
+- SUC-006
+depends-on:
+- '002'
 github-issue: ''
 issue: 24-triage-zero-yield-sources.md
 completes_issue: true

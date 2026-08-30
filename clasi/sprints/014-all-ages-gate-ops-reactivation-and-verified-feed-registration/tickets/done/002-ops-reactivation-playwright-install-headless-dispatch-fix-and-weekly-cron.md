@@ -1,7 +1,7 @@
 ---
 id: '002'
 title: 'Ops reactivation: Playwright install, headless dispatch fix, and weekly cron'
-status: in-progress
+status: done
 use-cases:
 - SUC-004
 - SUC-005
