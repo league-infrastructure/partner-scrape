@@ -1,6 +1,6 @@
 # teams
 
-**Owner:** Eric Busboom · **Last reviewed:** 2026-08-30 (sprint 013 ticket 006 — discovered-website/social overlay ingestion and existing-website repair) · **Status:** five sprint-011/012 increments complete (FTC + FRC + geocoding + site pages + FLL static roster); sprint 013 ticket 006 adds website/social overlay ingestion, ahead of that sprint's still-open website-verification and sponsor-extraction tickets
+**Owner:** Eric Busboom · **Last reviewed:** 2026-08-30 (sprint 013 ticket 001 — website liveness verification) · **Status:** five sprint-011/012 increments complete (FTC + FRC + geocoding + site pages + FLL static roster); sprint 013 ticket 006 adds website/social overlay ingestion, ticket 001 adds live website verification, ahead of that sprint's still-open sponsor-extraction tickets
 
 ---
 
@@ -200,12 +200,34 @@ BUILT (sprint 013, ticket 006):
      ↓                                       (host, path) dedup guard)
   run_teams() sequencing                     geocode_teams() -> ticket
                                               006's apply_website_overrides()
-                                              -> export_teams() (sprint
+                                              -> ticket 001's
+                                              verify_team_websites() ->
+                                              export_teams() (sprint
                                               013's still-open
-                                              verify_team_websites()/
-                                              extract_sponsors() tickets
+                                              extract_sponsors() ticket
                                               will thread in between the
                                               last two once built)
+
+BUILT (sprint 013, ticket 001):
+  teams.scrape.verify_team_websites(teams, fetcher)
+     ↓                                       per-team fetch.is_allowed()
+     ↓                                       robots check, then fetcher.get()
+     ↓                                       -- matches discovery/hub_scan.py's
+     ↓                                       per-page pattern exactly. Sets
+     ↓                                       website_status = "confirmed"
+     ↓                                       (2xx) / "unverified" (non-2xx,
+     ↓                                       transport-error status 0, robots
+     ↓                                       disallow, or an unexpected
+     ↓                                       Fetcher-layer exception) /
+     ↓                                       "none" (no website). Returns
+     ↓                                       {team_id: html} for confirmed
+     ↓                                       teams only -- a local dict
+     ↓                                       run_teams() holds, never a
+     ↓                                       Team field
+  run_teams() sequencing                     geocode_teams() ->
+                                              apply_website_overrides() ->
+                                              verify_team_websites() ->
+                                              export_teams()
 ```
 
 **Sprint 013 ticket 006 (2026-08-30) adds discovered-website/social
@@ -224,14 +246,78 @@ new committed overlay (`teams/data/discovered-websites.toml`) for any
 team whose `website` is still empty, plus `Team.social` for every team
 the overlay covers (website or social-only alike). It runs in
 `run_teams()` immediately after `geocode_teams()`, and it never sets
-`Team.website_status` — that stays sprint 013's still-open
-`teams.scrape.verify_team_websites()` ticket's sole responsibility,
-uniformly, once built (see Constraints and Design below). Live,
-confirmed via `partner-scrape teams --dry-run -v` (2026-08-30): teams
-carrying a non-empty `website` rose from 53 to 80 (51 FRC, 29 FTC — 53
-existing minus 4 cleared `firstinspires.org` junk values plus 31
-discovered), and 39 teams (7 FRC, 32 FTC) now carry a non-empty
-`social`.
+`Team.website_status` — that stays `teams.scrape.verify_team_websites()`'s
+(ticket 001, below) sole responsibility, uniformly (see Constraints and
+Design below). Live, confirmed via `partner-scrape teams --dry-run -v`
+(2026-08-30): teams carrying a non-empty `website` rose from 53 to 80
+(51 FRC, 29 FTC — 53 existing minus 4 cleared `firstinspires.org` junk
+values plus 31 discovered), and 39 teams (7 FRC, 32 FTC) now carry a
+non-empty `social`.
+
+**Sprint 013 ticket 001 (2026-08-30) adds the first stage that actually
+fetches a team's page: `teams.scrape.verify_team_websites()`.** For each
+`Team` with a non-empty `website` (by now the ticket 006-corrected,
+enlarged set of 80), it checks `fetch.is_allowed()` before any request —
+matching `discovery/hub_scan.py::scan_hub()`'s already-proven per-page
+robots-check-then-fetch pattern exactly, rather than relying on
+`PoliteFetcher.get()`'s own internal robots check (which raises
+`RobotsDisallowed` instead of letting a per-team loop continue cleanly).
+A 2xx response sets `website_status = "confirmed"` and hands the
+fetched body forward as `{team_id: html}`, kept by `run_teams()` as a
+plain local variable (`fetch_results`) — never assigned to any `Team`
+field, since `TEAMS_SCHEMA_FIELDS`'s `dataclasses.fields(Team)`
+derivation would auto-publish it into the public `teams.json` otherwise
+(see Constraints and sprint.md's Design Rationale). Anything else — a
+non-2xx, `UrllibFetcher`'s synthetic transport-error status `0`, a
+robots disallow, or (defensively) an unexpected exception from the
+injected `Fetcher` itself — sets `website_status = "unverified"` and
+logs a warning naming the team and the reason, isolated to that one
+team. It runs in `run_teams()` immediately after
+`apply_website_overrides()` and before `export_teams()`, unconditionally
+— sprint.md's own Migration Concerns note that website verification
+"always runs; it is the cheap, certain half," with no `--source` or
+other gating. See Constraints and Design below for the per-team
+exception-isolation decision and its (unplanned-at-ticket-write-time)
+interaction with ticket 006's already-shipped overlay data.
+
+Live, confirmed via `partner-scrape teams --dry-run -v` against the
+real 278-team registry (2026-08-30, full run 4m37s): **52 confirmed,
+28 unverified, 198 none, of 80 checked URLs — a 65% 2xx rate.** Every
+one of ticket 006's three `weak`-confidence discovered entries
+(`ftc-14968`, `ftc-6226`, `ftc-18755`) fetched clean and was promoted
+to `confirmed`, exactly as designed. Independently cross-checked
+against ticket 006's own same-day re-verification: all 31 web-search-
+discovered URLs and 3 of the 4 recoverable repaired triple-slash URLs
+fetched clean; the 3 known-dead repaired-URL domains
+(`www.neotechrobotics.org`/`TEAM3965.org`/`www.alphaknights.net`) all
+failed at the transport layer as expected, confirming ticket 006's
+independent verification. The 4th recoverable repaired URL,
+`westviewrobotics.com` (`frc-3341`), is the one real discrepancy worth
+recording: it is genuinely live (`curl` confirms `200`), but its
+robots.txt is a blanket `Disallow: /` — and `PoliteFetcher.get()`
+re-checks robots.txt against itself before returning robots.txt's own
+content, so fetching robots.txt *to evaluate* a blanket disallow trips
+that same disallow, raising `RobotsDisallowed` from inside this
+function's own `is_allowed()` call (caught by the `except Exception`
+above). `frc-2193` (`www.hilltoprobotics.com`) hit the identical case,
+independently discovered by this run rather than pre-known. Both are
+correctly `"unverified"` regardless of the exception mechanics — a site
+whose own robots.txt disallows everything must never be fetched or
+linked by this project's own "never bypass robots for third-party
+sites" principle, so "genuinely live but robots-forbidden" is not a
+bug in the *outcome*; it is a pre-existing, real interaction between
+`fetch.is_allowed()` and `PoliteFetcher.get()`'s own internal robots
+check whenever `is_allowed()` is called with a `PoliteFetcher` as its
+`fetcher` argument (also true of `discovery/hub_scan.py::scan_hub()`'s
+identical pattern, already shipped, unaffected by this ticket) — see
+Open Questions. Of the remaining 25 unverified URLs (declared,
+well-formed TBA websites this project had never independently fetched
+before this ticket), 18 failed at the transport layer (DNS/TLS/timeout)
+and 6 returned HTTP 404 — old FRC team sites that have gone offline in
+the years since TBA recorded them, not a defect in this ticket's fetch
+logic (`teams/DESIGN.md`'s own Migration Concerns already flagged
+"some discovered sites are known-stale" as an accepted, expected
+outcome, not unique to the newly-discovered set).
 
 A freshly-extracted `Team` from either source still has
 `location_precision == "none"` and no coordinates until
@@ -566,6 +652,54 @@ ticket 011-004's `geo.py` sets `Team.latitude`/`longitude`.
   Questions). The roster keeps publishing regardless; a sunset date is a
   staleness signal for an operator to notice and act on, not a reason to
   stop shipping data that may still be the best available answer.
+- **(Sprint 013 ticket 001) `verify_team_websites()` wraps its own
+  robots-check and fetch calls in `except Exception`, not just the
+  three named non-2xx/transport-error/robots-disallow outcomes.** A
+  real `Fetcher` (`UrllibFetcher`/`PoliteFetcher`) never raises here by
+  contract — a transport failure already comes back as
+  `FetchResponse(status=0)` — so this was written as defensive,
+  belt-and-suspenders isolation, matching `run_teams()`'s own
+  per-source `try/except` one level up. It turned out to matter for a
+  real, confirmed-live case, not just a theoretical one: a
+  `PoliteFetcher` whose target site's robots.txt blanket-disallows
+  everything (`Disallow: /`) raises `RobotsDisallowed` from *inside*
+  `fetch.is_allowed()`'s own `fetcher.get(robots_txt_url(url))` call —
+  `PoliteFetcher.get()` re-checks robots.txt against itself before
+  returning robots.txt's own content, and a blanket disallow also
+  matches the `/robots.txt` path itself, so fetching robots.txt to
+  *evaluate* the disallow trips the disallow. Observed live on
+  `frc-2193`'s site (`www.hilltoprobotics.com`) during this ticket's
+  own pre-close validation run — caught cleanly, logged, marked
+  `"unverified"`, zero impact on any other team. It also turned out to
+  matter immediately for test compatibility, not just defensively:
+  several pre-existing
+  `tests/teams/test_pipeline.py`/`tests/test_cli_teams.py` fixtures
+  (written before this ticket, driving the *real* Team Registry through
+  a strict dict-backed `FixtureFetcher` that raises `KeyError` for any
+  unregistered URL) now incidentally exercise this stage too, because
+  ticket 006's already-shipped overlay populates a real `website` for
+  29 FTC teams those fixtures never anticipated being fetched. Without
+  this catch, every one of those pre-existing tests would raise
+  `KeyError` out of `run_teams()` the moment this ticket wired the
+  stage in. Two of those tests asserted an exact fetcher-call list
+  (`test_dry_run_makes_exactly_one_fetch_call` /
+  `test_dry_run_reports_152_teams_with_no_network_and_no_disk_write`)
+  and needed updating regardless — the catch prevents a crash, not the
+  call attempt itself — see Open Questions for why touching those two
+  pre-existing tests was judged the correct call despite this ticket's
+  own testing note preferring no modification at all.
+- **(Sprint 013 ticket 001) `verify_team_websites()` is wired into
+  `run_teams()` unconditionally — no `--source` filter, no `dry_run`
+  gate.** Sprint.md's Migration Concerns states website verification
+  "always runs; it is the cheap, certain half," and a `--dry-run -v`
+  run is the sprint's own required live-validation mechanism (Test
+  Strategy) — gating verification behind `dry_run` would make that
+  validation step structurally impossible. This is also why it is not
+  wrapped in `run_teams()`'s own `try/except` the way per-source
+  acquisition is: `verify_team_websites()` already isolates every
+  per-team failure internally (the bullet above), so nothing would be
+  caught at that outer level that isn't already handled closer to its
+  source.
 
 ## 4. Design
 
@@ -777,6 +911,61 @@ data-file loader per concern" shape `geo.py` already established for
 location overrides/centroids, applied here to website/social data, not
 a new architectural pattern.
 
+**Why `teams.scrape.verify_team_websites()` returns a
+`dict[team_id, html]` rather than accepting an output parameter or
+storing anything on `Team`.** Matches `merge_teams()`/`geocode_teams()`'s
+own "mutate the list you're given, return it" shape for the parts of
+its job that *are* about `Team` (`website_status`), but a fetched HTML
+body is structurally different — it must never reach a `Team` field at
+all (Constraints, sprint.md's Design Rationale). A bare return value
+`run_teams()` holds as a local variable is the simplest shape with no
+field to forget to strip later, mirroring `model.Team`'s own "no email
+field, ever" guarantee applied to a different category of
+contact-carrying content. *Alternatives considered:* an output
+parameter (a caller-supplied mutable dict `verify_team_websites()`
+fills in) — rejected as no safer than a return value here (nothing
+downstream would still assign it to `Team`) while being a less
+idiomatic Python shape than every other function in this module
+already uses. *Consequences:* none identified — ticket 005's
+`extract_sponsors()` will take this dict as a plain parameter when it
+lands.
+
+**Why a disallowed-by-robots URL and a non-2xx/transport-error URL
+collapse to the same `"unverified"` outcome, rather than a third status
+value.** `Team.website_status` answers one question for a site
+visitor and `TeamCard`/the detail page (SUC-002, ticket 002): "is this
+link safe to publish as clickable?" Robots.txt disallowal, a 404, a
+500, and a DNS failure are all, from that consumer's perspective, the
+same answer — "no, don't link it" — and none of `sprint.md`'s SUC-001/
+SUC-002 acceptance criteria or the site components ticket 002 will
+build ever need to distinguish *why* a link isn't confirmed, only
+*whether* it is. Collapsing them keeps `website_status`'s vocabulary at
+the three values `teams/model.py`'s field comment already promised
+(`confirmed`/`unverified`/`none`) rather than growing a fourth for a
+distinction with no consumer. The *reason* is not lost — it is always
+in the per-team warning log line (Constraints, Interfaces below), which
+is where an operator investigating a specific dead link actually looks.
+
+**Why `verify_team_websites()` calls `fetcher.get(team.website)`
+directly after its own `is_allowed()` check, rather than passing
+`respect_robots=False` explicitly the way a `PoliteFetcher`-aware
+caller could.** This function's `fetcher` parameter is typed to the
+plain `Fetcher` protocol (`get(url, headers=None)`), matching
+`discovery/hub_scan.py::scan_hub()`'s own signature exactly — neither
+function assumes its caller passed a `PoliteFetcher` specifically
+(tests never do; only `cli.py`'s one production call site does). A real
+`PoliteFetcher.get()` will re-check robots.txt internally by default
+(`respect_robots=True`) on top of this function's own explicit check,
+which is redundant work but not a correctness problem: the two checks
+run the same `fetch.is_allowed()` logic, so a page allowed by the first
+check will not be disallowed by the second except in the vanishingly
+rare case robots.txt itself changed in between (whether such a case
+raised would still be caught by this function's own
+`except Exception` wrapper above, not propagate). Accepting this small,
+precedented redundancy (`hub_scan.py` already does the same) was judged
+simpler and more consistent than special-casing a `PoliteFetcher`
+instance to skip its second check.
+
 ## 5. Interfaces
 
 ### Exposes
@@ -784,7 +973,9 @@ a new architectural pattern.
   `number`, `name`, `organization`, `org_type`, `city`, `postal_code`,
   `latitude`, `longitude`, `location_precision`, `in_region`,
   `matched_name`, `needs_review` (this ticket), `website`,
-  `website_status`, `organization_website`, `social` (sprint 013 ticket
+  `website_status` (`"confirmed"`/`"unverified"`/`"none"`, sprint 013
+  ticket 001 — the first code to ever write it; see below),
+  `organization_website`, `social` (sprint 013 ticket
   006, `list[str]`, team-declared social URLs, raw strings with no
   platform label), `rookie_year`, `active`, `last_season`, `sponsors`,
   `org_key`, `sibling_team_ids`, `sources`.
@@ -794,8 +985,11 @@ a new architectural pattern.
   identity/organization/city/website/postal_code/sponsors/in-region
   fields; `teams.merge.merge_teams()` sets `org_key`/`sibling_team_ids`;
   `latitude`/`longitude`/`location_precision`/`organization_website`/
-  `matched_name`/`needs_review` are set last, by this ticket's
-  `teams.geo.geocode_teams()`.
+  `matched_name`/`needs_review` are set by `teams.geo.geocode_teams()`;
+  `website`/`social` are cleaned/enriched by (sprint 013 ticket 006)
+  `teams.website_overrides.apply_website_overrides()`; `website_status`
+  is set last, by (sprint 013 ticket 001)
+  `teams.scrape.verify_team_websites()`.
 - **`sources.base.TeamSource`** — the injectable per-source protocol
   (`discover(source, fetcher) -> Iterable[TeamRef]`,
   `fetch(ref, fetcher) -> RawTeamResponse`,
@@ -867,8 +1061,16 @@ a new architectural pattern.
   (sprint 013 ticket 006) cleans/enriches `website`/`social` via
   `teams.website_overrides.apply_website_overrides()`
   (`website_data_dir` overrides the overlay data directory, mainly for
-  tests) over the combined result, and hands it to `export_teams()`.
-  Returns that call's `{"meta": ..., "teams": [...]}` payload unchanged.
+  tests), then (sprint 013 ticket 001) fetches and classifies every
+  team's website via `teams.scrape.verify_team_websites()` (this stage
+  has no override parameter — it reuses the same `fetcher` `run_teams()`
+  already threads through, per sprint.md's Design Rationale), and hands
+  the result to `export_teams()`. The `dict[team_id, html]`
+  `verify_team_websites()` returns is kept as a local variable
+  (`fetch_results`) — not part of this function's own return value,
+  and not yet consumed by anything until ticket 005's
+  `extract_sponsors()` lands. Returns `export_teams()`'s
+  `{"meta": ..., "teams": [...]}` payload unchanged.
 - **`teams.geo.geocode_teams(teams, *, data_dir=None) -> list[Team]`**
   (this ticket) — resolves every `Team` through the seven-rung offline
   ladder in place; returns the same list (parallel in shape to
@@ -895,7 +1097,28 @@ a new architectural pattern.
   recur across distinct-path entries in the real overlay). Mutates and
   returns the same list, matching `merge_teams()`/`geocode_teams()`'s
   shape; idempotent. Called once by `run_teams()`, after
-  `geocode_teams()` and before `export_teams()`.
+  `geocode_teams()` and before `verify_team_websites()`.
+- **`teams.scrape.verify_team_websites(teams, fetcher, *, user_agent=
+  DEFAULT_USER_AGENT) -> dict[str, str]`** (sprint 013 ticket 001) —
+  fetches every `Team.website`, in place: an empty `website` sets
+  `website_status = "none"`; a URL disallowed by `fetch.is_allowed()`
+  (checked before any request, matching `discovery/hub_scan.py::
+  scan_hub()`'s per-page pattern) sets `"unverified"`; a 2xx response
+  sets `"confirmed"` and adds the fetched body to the returned dict,
+  keyed by `team_id`; anything else — non-2xx, `UrllibFetcher`'s
+  synthetic transport-error status `0`, or an unexpected `Fetcher`-layer
+  exception (defensive; see Constraints) — sets `"unverified"`. Every
+  outcome besides `"confirmed"` also logs a `logging.WARNING` naming the
+  team and the reason, isolated per team — never raises out of this
+  function regardless of cause. Logs one `logging.INFO` summary line
+  (aggregate confirmed/unverified/none counts and 2xx rate) after every
+  team is processed. Called once by `run_teams()`, after
+  `apply_website_overrides()` and before `export_teams()`, taking the
+  same `fetcher` every other network-touching stage already receives
+  (no dedicated data-dir-style override parameter of its own). See
+  Design for why the returned dict is a plain value, never a `Team`
+  field, and why robots-disallow/non-2xx/transport-error all collapse
+  to one `"unverified"` outcome.
 - **`teams.geo.SchoolIndex(data_dir=None)`** (this ticket) — loads all
   five `teams/data/` files once and exposes `resolve(team)` (the full
   ladder for one `Team`, mutating it in place), `resolve_school(org,
@@ -1195,3 +1418,42 @@ a new architectural pattern.
   and whether LLM-assisted website discovery is added later, are both
   explicitly out of scope for the whole sprint, not just this ticket —
   see `sprint.md`'s Design Rationale and Scope.
+- **(Sprint 013 ticket 001) `fetch.is_allowed()` called with a
+  `PoliteFetcher` as its `fetcher` argument raises `RobotsDisallowed`
+  instead of returning `False` for a site whose robots.txt blanket-
+  disallows everything (`Disallow: /`).** Discovered live during this
+  ticket's own pre-close validation, on two genuinely-live sites
+  (`frc-3341`/`westviewrobotics.com`, `frc-2193`/
+  `www.hilltoprobotics.com` — confirmed reachable via a plain `curl`,
+  see Orientation). Root cause: `is_allowed(url, fetcher, user_agent)`
+  fetches robots.txt via `fetcher.get(robots_txt_url(url))`; when
+  `fetcher` is a `PoliteFetcher`, that call is itself
+  `PoliteFetcher.get()`, which re-checks robots.txt permission
+  *against robots.txt's own URL* before returning its content — and a
+  blanket `Disallow: /` also matches the literal `/robots.txt` path,
+  so evaluating the disallow trips the disallow, raising
+  `RobotsDisallowed` from a context with no per-team boundary to catch
+  it cleanly. This is not new to this ticket: `discovery/hub_scan.py::
+  scan_hub()` calls `fetch.is_allowed()` with an identically-real
+  `PoliteFetcher` (via `cli.py`'s `_run_discover_candidates()`, already
+  shipped) and would hit the exact same case against any hub whose
+  robots.txt blanket-disallows everything — it has simply never been
+  exercised against such a hub yet. `verify_team_websites()`'s
+  defensive `except Exception` (Constraints) catches this cleanly and
+  marks the team `"unverified"`, which is arguably the *correct*
+  outcome regardless of the exception mechanics (a site whose own
+  robots.txt disallows everything must never be linked, per this
+  project's own robots-respecting principle) — but the code path
+  getting there is an accident of exception handling, not a designed
+  "blanket disallow" case with its own clean, boolean-returning
+  branch. **Not fixed in this ticket**: the root cause lives in
+  `fetch/robots.py`/`fetch/cache.py` (shared infrastructure, also used
+  by `hub_scan.py` and every future `fetch/` consumer), squarely
+  outside `teams/`'s scope and this ticket's acceptance criteria,
+  which only require that a robots disallow (by whatever mechanism)
+  never crash the run and always lands as `"unverified"` — both true
+  here. Worth a dedicated `fetch/` ticket: teach `is_allowed()` (or
+  `PoliteFetcher.get()`) to never apply its own robots check to a
+  robots.txt URL fetching itself, matching the robots.txt protocol's
+  own convention that the file is always fetchable regardless of its
+  content.

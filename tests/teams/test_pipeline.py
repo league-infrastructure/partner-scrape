@@ -143,12 +143,32 @@ class TestEndToEndAgainstTheRealRegistry:
         assert len(payload["teams"]) == 152
         assert not site.exists()
 
-    def test_dry_run_makes_exactly_one_fetch_call(self, tmp_path):
+    def test_dry_run_only_fetches_the_search_url_and_robots_txt_probes(self, tmp_path):
+        # Pre-ticket-013-001 this asserted `fetcher.calls == [SEARCH_URL]`
+        # exactly -- true when nothing downstream of acquisition ever
+        # touched the network. Sprint 013 ticket 001 added
+        # `verify_team_websites()`, wired unconditionally into
+        # `run_teams()` after `apply_website_overrides()` (SUC-001's
+        # Main Flow has no source-filter exception), so any team whose
+        # `website` the ticket 006 overlay populated now gets its
+        # robots.txt probed too -- this real, live-captured FTCScout
+        # fixture includes such teams (teams/DESIGN.md's Orientation:
+        # 29 FTC teams gained a website via the overlay). None of those
+        # robots.txt URLs are in `_ftcscout_fetcher()`'s canned
+        # `responses`, so each is caught by `verify_team_websites()`'s
+        # own per-team exception isolation and marked "unverified" --
+        # the "unreachable page," not "crash the run," outcome ticket
+        # 001 designed for. This test's original intent -- no *real
+        # page content* fetch beyond the FTCScout search endpoint --
+        # still holds and is asserted directly below.
         fetcher = _ftcscout_fetcher()
 
         run_teams(site_dir=tmp_path, fetcher=fetcher, dry_run=True)
 
-        assert fetcher.calls == [SEARCH_URL]
+        assert SEARCH_URL in fetcher.calls
+        assert all(
+            call == SEARCH_URL or call.endswith("/robots.txt") for call in fetcher.calls
+        )
 
     def test_real_run_writes_teams_json_to_site_dir(self, tmp_path):
         fetcher = _ftcscout_fetcher()

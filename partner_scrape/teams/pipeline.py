@@ -59,6 +59,25 @@ malformed overlay data file is a build-time defect
 `website_overrides._load_overlay` raises loudly for, not a per-record
 failure to isolate.
 
+Sprint 013 ticket 001 adds the next stage, immediately after
+`apply_website_overrides()` and before `export_teams()`:
+`teams.scrape.verify_team_websites()`, which fetches every team's
+(corrected, enlarged) `website` through this same `fetcher` parameter,
+robots-checked first (`fetch.is_allowed()`, matching
+`discovery/hub_scan.py::scan_hub()`'s per-page pattern), and sets
+`Team.website_status` to `"confirmed"`/`"unverified"`/`"none"`. Unlike
+`merge_teams()`/`geocode_teams()`/`apply_website_overrides()`, this
+stage's own per-team fetch failures are already isolated *inside*
+`verify_team_websites()` itself (never raising for one team's dead
+link or robots disallow), so `run_teams()` does not additionally wrap
+this call in a try/except either -- the one case this stage can still
+raise for is a `Fetcher`-level bug, which is exactly as fatal here as
+it would be for any other stage. Its returned `dict[team_id, html]` is
+kept as a local variable (`fetch_results`, deliberately never assigned
+to any `Team` field or `run_teams()`'s own return value -- see
+`teams.scrape`'s own module docstring) for sprint 013's still-open
+ticket 005 (`teams.sponsor_extract.extract_sponsors()`) to consume.
+
 Sprint 012 adds a third entry, `"static_roster"` (the committed FLL
 roster -- see `sources/static_roster.py`'s own module docstring), plus
 one new pre-flight check: `_check_sunset_seasons()`, called once per
@@ -90,6 +109,7 @@ from partner_scrape.teams.export import export_teams
 from partner_scrape.teams.geo import geocode_teams
 from partner_scrape.teams.merge import merge_teams
 from partner_scrape.teams.model import Team
+from partner_scrape.teams.scrape import verify_team_websites
 from partner_scrape.teams.sources.base import TeamSource, run as run_team_source
 from partner_scrape.teams.sources.ftcscout import FTCScoutSource
 from partner_scrape.teams.sources.static_roster import StaticRosterSource
@@ -187,7 +207,7 @@ def run_teams(
 ) -> dict[str, Any]:
     """Run the Teams pipeline end-to-end: Team Registry -> `TeamSource`(s)
     -> `merge_teams()` -> `geocode_teams()` -> `apply_website_overrides()`
-    -> `export_teams()`.
+    -> `verify_team_websites()` -> `export_teams()`.
 
     Args:
         registry_dir: Team Registry directory to load sources from.
@@ -312,8 +332,23 @@ def run_teams(
     # malformed overlay data file is a build-time defect
     # apply_website_overrides() raises loudly for, never a per-record
     # failure to isolate. Runs before sprint 013's
-    # verify_team_websites() (ticket 001, not yet wired in here) so
-    # that stage sees the corrected, enlarged website set.
+    # verify_team_websites() so that stage sees the corrected, enlarged
+    # website set.
     teams = apply_website_overrides(teams, data_dir=website_data_dir)
+
+    # Sprint 013 ticket 001: fetch and classify every team's (now
+    # corrected, enlarged) website, once over the full team list, same
+    # "operate on the whole list once" shape as the three stages above.
+    # Unlike those three, this stage isolates its own per-team fetch
+    # failures internally (see teams.scrape's own docstring) -- a dead
+    # link or robots disallow for one team never raises out of
+    # verify_team_websites(), so no additional try/except is needed
+    # here. The returned dict is a plain local variable, never assigned
+    # to any Team field or this function's return value (see this
+    # module's own docstring) -- sprint 013's still-open ticket 005
+    # (teams.sponsor_extract.extract_sponsors()) is its future
+    # consumer; ticket 001 only produces it in the right shape.
+    fetch_results = verify_team_websites(teams, active_fetcher)
+    _ = fetch_results  # not yet consumed -- ticket 005 wires this in
 
     return export_teams(teams, site_dir=site_dir, dry_run=dry_run)
