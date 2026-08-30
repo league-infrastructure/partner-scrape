@@ -1,7 +1,7 @@
 ---
 id: '014'
 title: All-Ages Gate, Ops Reactivation, and Verified-Feed Registration
-status: executing
+status: done
 branch: sprint/014-all-ages-gate-ops-reactivation-and-verified-feed-registration
 use-cases: []
 issues:
