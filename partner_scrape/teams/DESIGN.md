@@ -1,6 +1,6 @@
 # teams
 
-**Owner:** Eric Busboom · **Last reviewed:** 2026-08-30 (sprint 013 ticket 005, reopened — sponsor-name canonicalization) · **Status:** five sprint-011/012 increments complete (FTC + FRC + geocoding + site pages + FLL static roster); sprint 013 ticket 006 adds website/social overlay ingestion, ticket 001 adds live website verification, ticket 003 adds the deterministic (offline, LLM-free) half of sponsor extraction, ticket 004 adds the injectable LLM classification client and its content-hash cache, ticket 005 wires it all together (`sponsor_extract.py`: gather → cache → classify → validate → guard → normalize/dedup → provenance, sequenced into `run_teams()` after `verify_team_websites()`) — **sprint 013 is now feature-complete**. Ticket 005 was reopened once, over sponsor-name canonicalization (see below); with that fix in, live-verified again (2026-08-30, real 278-team registry): 52/80 team pages confirmed (65% 2xx), 32 teams had sponsor-shaped page content, 11 gained a new scraped sponsor, 0 per-team failures — all unchanged from the first pass. What changed: the raw sponsor-string count (130 distinct strings across 57 teams with sponsors) now canonicalizes to **110 distinct real companies** via the new `teams.sponsor_canonical` module (`canonical_key()`, layered on top of — never inside — `normalize.partners.normalize_org_name`, plus a corpus-wide `canonicalize_sponsors()` pass) — Qualcomm (the single most important data point) now counts as one entry across all ~20 teams it sponsors instead of three ("QualComm"/"Qualcomm"/"Qualcomm Inc"). See "(Sprint 013 ticket 005, reopened) Sponsor-name canonicalization" below for the full defect analysis (including the "&R" FTCScout-upstream-corruption root cause) and Open Questions for what the reopening resolved.
+**Owner:** Eric Busboom · **Last reviewed:** 2026-08-29 (sprint 013 — website verification and sponsor extraction added) · **Status:** all five sprint 011/012 increments complete (FTC + FRC + geocoding + site pages + FLL static roster), plus sprint 013's website verification and sponsor-extraction stages
 
 ---
 
@@ -113,6 +113,44 @@ sprint requires before close, matching the ticket 011-003 lesson
 (commit a fixture built from real captured data, then verify against a
 live run, not just the fixture suite).
 
+**Sprint 013 adds website verification and sponsor extraction — the
+first stages in this subsystem that fetch a page this project does not
+control and interpret its unstructured content.** Of the 278 teams, 53
+(all FRC, from TBA) carry a known `website`; `run_teams()` gained two
+new stages after `geocode_teams()`. First, `teams.scrape.
+verify_team_websites()` fetches each of those 53 URLs through the same
+`fetcher`/`PoliteFetcher` seam every other network-touching stage in
+this project already uses (robots.txt, per-domain throttle, and
+conditional-GET cache all apply with zero new plumbing), setting
+`Team.website_status` to `confirmed` (2xx), `unverified` (non-2xx,
+transport error, or robots disallow), or `none` (no known URL) —
+`website_status` existed on the dataclass since sprint 011 but no code
+had ever written it until now. Second, for every `confirmed` fetch,
+`teams.sponsor_extract.extract_sponsors()` runs a deterministic
+candidate-gathering pass (`teams.sponsor_candidates.
+gather_sponsor_candidates()` — headings matching
+`/sponsor|partner|thank/i`, `<img>` `alt`/`title` text, footer link
+text/hostnames) and, only when that pass finds something, a
+cache-checked LLM call (`teams.sponsor_llm.SponsorLLMClient.
+classify_sponsors()`) that *selects* — never generates — which
+candidates are genuine sponsor names. Every returned name is validated
+against the original candidate list before it is trusted; a name that
+is not verbatim in that list is dropped and logged, not published. This
+is a structural anti-hallucination guarantee, not a prompting
+convention — see Design, below, for why that distinction was the
+sprint's central design decision. Surviving names are deduplicated
+against any existing structured sponsors (today, only FTCScout's) via
+`normalize.partners.normalize_org_name` (reused, not reimplemented) and
+recorded with provenance in a new `Team.sponsor_provenance: dict[str,
+str]` field (`"structured"`/`"scraped"`). None of this touches
+`enrich/`, `adapters/`, `normalize.run()`, or `pipeline.run()` — the
+five new modules (`scrape.py`, `sponsor_candidates.py`, `sponsor_llm.py`,
+`sponsor_cache.py`, `sponsor_extract.py`) mirror `enrich/llm_client.py`'s
+and `enrich/cache.py`'s pattern in shape only, never by import. See
+Constraints, Design, and Interfaces below for the full detail; see
+`clasi/sprints/013-team-website-surfacing-and-sponsor-extraction/
+sprint.md` for the sprint-level plan this section elaborates.
+
 ```
 BUILT (ticket 011-001):
   registry.load_active_sources(teams/registry/)   reused verbatim
@@ -180,349 +218,40 @@ BUILT (sprint 012):
      ↓                                       a sunset-date staleness WARNING
   (feeds into merge_teams()/geocode_teams()/export_teams(), all unchanged)
 
-BUILT (sprint 013, ticket 006):
-  teams.website_overrides.apply_website_overrides(teams)
-     ↓                                       cleans junk firstinspires.org
-     ↓                                       values and repairs malformed
-     ↓                                       triple-slash URLs on every
-     ↓                                       team's existing website, then
-     ↓                                       applies teams/data/discovered-
-     ↓                                       websites.toml (31 discovered
-     ↓                                       websites + 21 social-only
-     ↓                                       teams, transcribed verbatim
-     ↓                                       from a web-search research
-     ↓                                       pass) -- never sets
-     ↓                                       website_status
-  teams/data/discovered-websites.toml        committed overlay, keyed by
-     ↓                                       team_id; first edge from
-     ↓                                       teams/ into partner_scrape.
-     ↓                                       model (slugify(), for a
-     ↓                                       (host, path) dedup guard)
-  run_teams() sequencing                     geocode_teams() -> ticket
-                                              006's apply_website_overrides()
-                                              -> ticket 001's
-                                              verify_team_websites() ->
-                                              ticket 005's
-                                              extract_sponsors() ->
-                                              export_teams() (final
-                                              sequencing, sprint 013
-                                              complete)
-
-BUILT (sprint 013, ticket 001):
-  teams.scrape.verify_team_websites(teams, fetcher)
-     ↓                                       per-team fetch.is_allowed()
-     ↓                                       robots check, then fetcher.get()
-     ↓                                       -- matches discovery/hub_scan.py's
-     ↓                                       per-page pattern exactly. Sets
-     ↓                                       website_status = "confirmed"
-     ↓                                       (2xx) / "unverified" (non-2xx,
-     ↓                                       transport-error status 0, robots
-     ↓                                       disallow, or an unexpected
-     ↓                                       Fetcher-layer exception) /
-     ↓                                       "none" (no website). Returns
-     ↓                                       {team_id: html} for confirmed
-     ↓                                       teams only -- a local dict
-     ↓                                       run_teams() holds, never a
-     ↓                                       Team field
-  run_teams() sequencing                     geocode_teams() ->
-                                              apply_website_overrides() ->
-                                              verify_team_websites() ->
-                                              export_teams()
-
-BUILT (sprint 013, ticket 003):
-  teams.sponsor_candidates.
-    gather_sponsor_candidates(html, page_url)  pure, offline, stateless --
-     ↓                                         no Team, no I/O, no cache.
-     ↓                                         Two independent signals:
-     ↓                                         (a) any short (<=60 char),
-     ↓                                         non-nav "heading trigger"
-     ↓                                         matching /sponsor|partner|
-     ↓                                         thank/i (broader than
-     ↓                                         <h1>-<h6> -- see Design)
-     ↓                                         and its following sibling
-     ↓                                         block's <img> alt/title +
-     ↓                                         outbound <a> text/hostname;
-     ↓                                         (b) every <footer>'s same
-     ↓                                         signals, independent of
-     ↓                                         any heading. Denylist +
-     ↓                                         own-hostname filter, dedup,
-     ↓                                         capped at 40. Called by
-     ↓                                         ticket 005's
-     ↓                                         sponsor_extract.py, once
-     ↓                                         per team with a fetched
-     ↓                                         page (sequenced into
-     ↓                                         run_teams()).
-
-BUILT (sprint 013, ticket 004):
-  teams.sponsor_llm.SponsorLLMClient          classifies (selects, never
-    AnthropicSponsorLLMClient                 generates) a bounded
-    FixtureSponsorLLMClient                   candidate list; system
-     ↓                                        prompt rebuilt per call
-     ↓                                        naming the team's own
-     ↓                                        organization/hostname,
-     ↓                                        FIRST/FTC/FRC/FLL program
-     ↓                                        names, and CMS/hosting
-     ↓                                        vendors as exclusions.
-     ↓                                        MODEL_ID = "claude-haiku-
-     ↓                                        4-5-20251001", redefined
-     ↓                                        locally (not imported).
-  teams.sponsor_cache.SponsorCache            content-hash cache, mirrors
-     ↓                                        (never imports) enrich/
-     ↓                                        cache.py's schema_version-
-     ↓                                        guarded shape; key is
-     ↓                                        (team_id, content_hash
-     ↓                                        (candidates)), baked
-     ↓                                        directly into the cache
-     ↓                                        filename -- a changed
-     ↓                                        candidate list is a plain
-     ↓                                        file-not-found miss.
-     ↓                                        Called by ticket 005's
-     ↓                                        sponsor_extract.py (a
-     ↓                                        cache hit skips the LLM
-     ↓                                        call entirely).
-
-BUILT (sprint 013, ticket 005 -- sponsor extraction, complete):
-  teams.sponsor_extract.
-    extract_sponsors(teams, fetch_results,     Orchestrates, once per team
-    llm_client, cache)                         with a fetched page: gather
-     ↓                                         candidates (skip if empty,
-     ↓                                         no cache/LLM touch) -> cache
-     ↓                                         lookup -> classify on a miss
-     ↓                                         (raw result cached before
-     ↓                                         validation) -> reject any
-     ↓                                         name not verbatim in the
-     ↓                                         candidate list (the actual
-     ↓                                         anti-hallucination
-     ↓                                         enforcement point, in code)
-     ↓                                         -> denylist guard (CMS/
-     ↓                                         hosting vendor names, own
-     ↓                                         organization, own
-     ↓                                         hostname, oversized/
-     ↓                                         caption-marker candidates
-     ↓                                         -- the last two added
-     ↓                                         after this ticket's own
-     ↓                                         required live-run sample
-     ↓                                         review, see Design) ->
-     ↓                                         dedup/merge into
-     ↓                                         Team.sponsors via
-     ↓                                         normalize.partners.
-     ↓                                         normalize_org_name (a
-     ↓                                         normalized key already
-     ↓                                         present keeps its
-     ↓                                         structured display name/
-     ↓                                         provenance) ->
-     ↓                                         Team.sponsor_provenance
-     ↓                                         updated. Per-team
-     ↓                                         try/except around cache-
-     ↓                                         through-merge (fail-open:
-     ↓                                         one team's failure never
-     ↓                                         touches another or aborts
-     ↓                                         the run). Mutates teams in
-     ↓                                         place.
-  run_teams() sequencing (final)               ... -> apply_website_
-                                                overrides() ->
-                                                verify_team_websites() ->
-                                                extract_sponsors() ->
-                                                export_teams(). New
-                                                llm_client/sponsor_cache
-                                                params, each defaulting to
-                                                a real
-                                                AnthropicSponsorLLMClient()/
-                                                SponsorCache() -- but
-                                                constructed lazily, only
-                                                when fetch_results is
-                                                non-empty and
-                                                no_sponsors is False, so a
-                                                run with nothing confirmed
-                                                (or --no-sponsors) never
-                                                touches the anthropic SDK
-                                                or requires a configured
-                                                cache directory.
-  cli.py --no-sponsors                         Skips extract_sponsors()
-                                                only; verify_team_
-                                                websites() always runs.
-  sources/ftcscout.py                          sponsor_provenance =
-                                                {name: "structured" for
-                                                name in sponsors}, set at
-                                                extraction time, not
-                                                backfilled later.
+BUILT (sprint 013):
+  teams.scrape.verify_team_websites()        per-team fetch via the existing
+     ↓                                       fetcher/PoliteFetcher seam,
+     ↓                                       robots-checked; sets
+     ↓                                       Team.website_status; hands the
+     ↓                                       fetched body forward in-memory
+     ↓                                       (never onto Team)
+  teams.sponsor_candidates.                  pure, offline: headings +
+    gather_sponsor_candidates()              alt/title text + footer link
+     ↓                                       text/hostnames -> candidate
+     ↓                                       strings, or [] (no LLM call)
+  teams.sponsor_llm.SponsorLLMClient         classifies (selects, never
+     ↓                                       generates) candidates via a
+     ↓                                       dataclass-derived JSON schema,
+     ↓                                       mirrors but never imports
+     ↓                                       enrich/llm_client.py
+  teams.sponsor_cache.SponsorCache           content-hash cache, mirrors but
+     ↓                                       never imports enrich/cache.py
+  teams.sponsor_extract.extract_sponsors()   orchestrates the above; verifies
+     ↓                                       every returned name is verbatim
+     ↓                                       in the candidate list; dedups
+     ↓                                       against structured sponsors via
+     ↓                                       normalize.partners.
+     ↓                                       normalize_org_name; sets
+     ↓                                       Team.sponsors/sponsor_provenance
+  teams.sources.ftcscout                     sets sponsor_provenance=
+     ↓                                       "structured" for its existing
+     ↓                                       sponsors
+  cli.py `teams --no-sponsors`               skips the LLM stage only;
+                                              website verification always runs
+  (feeds into teams.export.export_teams(), unchanged -- TEAMS_SCHEMA_FIELDS
+   auto-derives sponsor_provenance with no export.py change, same as every
+   prior sprint's new Team field)
 ```
-
-**Sprint 013 ticket 006 (2026-08-30) adds discovered-website/social
-overlay ingestion, plus repair of the existing 53 TBA-sourced
-websites.** Sprint 013 was planned assuming only those 53; a web-search
-discovery pass over the 225 teams whose upstream source carried none
-found 31 more websites and 21 social-only teams (committed as
-`clasi/sprints/013-team-website-surfacing-and-sponsor-extraction/
-research/discovered-websites.json`), and measuring the existing 53
-against the live export found 4 teams carrying
-`http://www.firstinspires.org/` (TBA's own program homepage, not a real
-team site) and 7 carrying a malformed triple-slash URL
-(`http:///host...`). `teams.website_overrides.apply_website_overrides()`
-cleans both defects on every team's existing `website` and applies the
-new committed overlay (`teams/data/discovered-websites.toml`) for any
-team whose `website` is still empty, plus `Team.social` for every team
-the overlay covers (website or social-only alike). It runs in
-`run_teams()` immediately after `geocode_teams()`, and it never sets
-`Team.website_status` — that stays `teams.scrape.verify_team_websites()`'s
-(ticket 001, below) sole responsibility, uniformly (see Constraints and
-Design below). Live, confirmed via `partner-scrape teams --dry-run -v`
-(2026-08-30): teams carrying a non-empty `website` rose from 53 to 80
-(51 FRC, 29 FTC — 53 existing minus 4 cleared `firstinspires.org` junk
-values plus 31 discovered), and 39 teams (7 FRC, 32 FTC) now carry a
-non-empty `social`.
-
-**Sprint 013 ticket 001 (2026-08-30) adds the first stage that actually
-fetches a team's page: `teams.scrape.verify_team_websites()`.** For each
-`Team` with a non-empty `website` (by now the ticket 006-corrected,
-enlarged set of 80), it checks `fetch.is_allowed()` before any request —
-matching `discovery/hub_scan.py::scan_hub()`'s already-proven per-page
-robots-check-then-fetch pattern exactly, rather than relying on
-`PoliteFetcher.get()`'s own internal robots check (which raises
-`RobotsDisallowed` instead of letting a per-team loop continue cleanly).
-A 2xx response sets `website_status = "confirmed"` and hands the
-fetched body forward as `{team_id: html}`, kept by `run_teams()` as a
-plain local variable (`fetch_results`) — never assigned to any `Team`
-field, since `TEAMS_SCHEMA_FIELDS`'s `dataclasses.fields(Team)`
-derivation would auto-publish it into the public `teams.json` otherwise
-(see Constraints and sprint.md's Design Rationale). Anything else — a
-non-2xx, `UrllibFetcher`'s synthetic transport-error status `0`, a
-robots disallow, or (defensively) an unexpected exception from the
-injected `Fetcher` itself — sets `website_status = "unverified"` and
-logs a warning naming the team and the reason, isolated to that one
-team. It runs in `run_teams()` immediately after
-`apply_website_overrides()` and before `export_teams()`, unconditionally
-— sprint.md's own Migration Concerns note that website verification
-"always runs; it is the cheap, certain half," with no `--source` or
-other gating. See Constraints and Design below for the per-team
-exception-isolation decision and its (unplanned-at-ticket-write-time)
-interaction with ticket 006's already-shipped overlay data.
-
-Live, confirmed via `partner-scrape teams --dry-run -v` against the
-real 278-team registry (2026-08-30, full run 4m37s): **52 confirmed,
-28 unverified, 198 none, of 80 checked URLs — a 65% 2xx rate.** Every
-one of ticket 006's three `weak`-confidence discovered entries
-(`ftc-14968`, `ftc-6226`, `ftc-18755`) fetched clean and was promoted
-to `confirmed`, exactly as designed. Independently cross-checked
-against ticket 006's own same-day re-verification: all 31 web-search-
-discovered URLs and 3 of the 4 recoverable repaired triple-slash URLs
-fetched clean; the 3 known-dead repaired-URL domains
-(`www.neotechrobotics.org`/`TEAM3965.org`/`www.alphaknights.net`) all
-failed at the transport layer as expected, confirming ticket 006's
-independent verification. The 4th recoverable repaired URL,
-`westviewrobotics.com` (`frc-3341`), is the one real discrepancy worth
-recording: it is genuinely live (`curl` confirms `200`), but its
-robots.txt is a blanket `Disallow: /` — and `PoliteFetcher.get()`
-re-checks robots.txt against itself before returning robots.txt's own
-content, so fetching robots.txt *to evaluate* a blanket disallow trips
-that same disallow, raising `RobotsDisallowed` from inside this
-function's own `is_allowed()` call (caught by the `except Exception`
-above). `frc-2193` (`www.hilltoprobotics.com`) hit the identical case,
-independently discovered by this run rather than pre-known. Both are
-correctly `"unverified"` regardless of the exception mechanics — a site
-whose own robots.txt disallows everything must never be fetched or
-linked by this project's own "never bypass robots for third-party
-sites" principle, so "genuinely live but robots-forbidden" is not a
-bug in the *outcome*; it is a pre-existing, real interaction between
-`fetch.is_allowed()` and `PoliteFetcher.get()`'s own internal robots
-check whenever `is_allowed()` is called with a `PoliteFetcher` as its
-`fetcher` argument (also true of `discovery/hub_scan.py::scan_hub()`'s
-identical pattern, already shipped, unaffected by this ticket) — see
-Open Questions. Of the remaining 25 unverified URLs (declared,
-well-formed TBA websites this project had never independently fetched
-before this ticket), 18 failed at the transport layer (DNS/TLS/timeout)
-and 6 returned HTTP 404 — old FRC team sites that have gone offline in
-the years since TBA recorded them, not a defect in this ticket's fetch
-logic (`teams/DESIGN.md`'s own Migration Concerns already flagged
-"some discovered sites are known-stale" as an accepted, expected
-outcome, not unique to the newly-discovered set).
-
-**Sprint 013 ticket 003 (2026-08-30) adds
-`teams.sponsor_candidates.gather_sponsor_candidates(html, page_url) ->
-list[str]` — the deterministic, offline half of sponsor extraction, and
-the sprint's central safety boundary.** There is no schema.org
-vocabulary for sponsorship, so `extract/ladder.py`'s confidence-ranked
-ladder does not apply; a real robotics team page marks its sponsors
-either under a heading ("Sponsors", "Our Partners", "Thank you to our
-current sponsors.") or in an unstructured `<footer>` logo wall, and this
-function gathers raw candidate *strings* from both signals — never a
-judgment about which is a genuine sponsor, that stays ticket 004/005's
-job. The safety property this exists to establish: an LLM classifying
-sponsors (ticket 004) can only ever *select from* this candidate list,
-never generate a name freely, and ticket 005's sponsor_extract.py rejects, in code, any
-returned name absent from it verbatim — fabricating an unseen company
-becomes structurally impossible only because this pass itself never
-invents one, it only lifts strings actually present on the page
-(sprint.md's Design Rationale). This is a pure function with no `Team`
-parameter, no cache, no network, no LLM call — it takes the HTML
-`verify_team_websites()` already fetched (ticket 001, above) and a URL,
-nothing else. **Not yet wired into `run_teams()`** — that is ticket
-005's `sponsor_extract.py`, still open; this ticket ships the function
-standalone, fully tested against real captured pages, with no pipeline
-caller yet.
-
-Validated offline against five real, live-captured team pages fetched
-directly while building this ticket (2026-08-30, all HTTP 200 — see
-`tests/teams/test_sponsor_candidates.py`'s module docstring for exact
-provenance and `tests/fixtures/teams/sponsor_page_*.html`): a plain
-`<h2>Sponsors</h2>` grid (`gearup12499.com`, ftc-12499) correctly
-recovers **"Qualcomm"** — the same company already the single most
-common structured sponsor in this project's existing 49-FTC-team
-corpus (18 of 49) — among 8 real sponsors; a plain `<h2>Partners</h2>`
-heading (`teamspyder.org`, frc-1622/ftc-1622) recovers "Robot Planet
-Ecuador"; a non-semantic `<p class="kicker">Sponsors</p>` label
-immediately followed by a "Thank you to our current sponsors." sibling
-paragraph (`ftc3650.org`, ftc-3650) recovers two real sponsors by
-`alt` text and hostname; a genuine `<footer>` logo wall with no nearby
-matching heading at all (`carlsbaded.org/crow-force/`, ftc-10809)
-recovers four real sponsor hostnames (`nordson.com`, `viasat.com`,
-`thermofisher.com`, `sigmaaldrich.com`) even though this particular
-page's `alt`/`title` attributes are messy filename-derived strings, not
-company names — proof the module's multiple signal types (heading text,
-`alt`, `title`, link text, hostname) are independently useful, not
-redundant; and a small real page with no sponsor-shaped section at all
-(`seg-fault.org`, ftc-31862) correctly returns `[]`.
-
-**Sprint 013 ticket 004 (2026-08-30) adds
-`teams.sponsor_llm.SponsorLLMClient`/`AnthropicSponsorLLMClient`/
-`FixtureSponsorLLMClient` and `teams.sponsor_cache.SponsorCache` — the
-injectable LLM-classification infrastructure ticket 005's orchestration
-(`sponsor_extract.py`) calls, no orchestration logic here.** Both modules mirror, but never
-import, `enrich/llm_client.py`/`enrich/cache.py` (sprint.md's Design
-Rationale: importing either, even for one small shared helper, would be
-the first crack in `teams/`'s zero-edges-into-`enrich/` invariant —
-`tests/teams/test_sponsor_llm.py`/`test_sponsor_cache.py`'s own AST
-scans enforce this directly, the same spirit as
-`test_sources_base.py`'s forbidden-import precedent). `SponsorLLMClient.
-classify_sponsors(candidates: list[str], context: dict) ->
-SponsorExtractionResult` is a **selection**, never generation, call —
-the same safety property ticket 003's own module docstring establishes
-from the other side: an LLM classifying sponsors can only ever select
-from `gather_sponsor_candidates()`'s already-narrowed candidate list,
-never invent a name freely, and ticket 005's sponsor_extract.py rejects, in code, any
-returned name absent from that list verbatim.
-`AnthropicSponsorLLMClient`'s system prompt is rebuilt fresh on every
-call (unlike `enrich/llm_client.py`'s static module-level
-`_SYSTEM_PROMPT`) specifically so it can name the team's own
-organization/school name and website hostname explicitly as exclusions
-— both come from the caller's `context` dict, not fixed vocabulary, so a
-static prompt could not name them. `SponsorCache` keys directly on
-`(team_id, content_hash(candidates))`, baked into the cache filename
-itself, rather than `EnrichmentCache`'s "stable identity key, content
-hash compared after loading" shape — a changed candidate list is a
-different key outright (a plain file-not-found miss), never a same-file
-staleness comparison, matching this ticket's own stated design (see
-Design, below). Not yet wired into `run_teams()` — no live Anthropic API
-call has been made against this client; every test in
-`tests/teams/test_sponsor_llm.py` either drives `FixtureSponsorLLMClient`
-directly or monkeypatches `anthropic.Anthropic` itself, matching
-`tests/test_enrich_llm_client.py`'s own no-network,
-no-`ANTHROPIC_API_KEY`-required testing policy. Ticket 005's
-`sponsor_extract.py` is this module's first real caller, and the
-sprint's required pre-close live `--dry-run -v` run (sprint.md's Test
-Strategy) is the first point this client's actual classification
-quality gets checked against real sponsor pages, not just canned
-fixture responses.
 
 A freshly-extracted `Team` from either source still has
 `location_precision == "none"` and no coordinates until
@@ -817,36 +546,6 @@ ticket 011-004's `geo.py` sets `Team.latitude`/`longitude`.
   Combined with `model.Team` having no `email` field at all (existing
   invariant, above), there are now two independent layers between any
   upstream contact data and a published `Team`.
-- **(Sprint 013 ticket 006) The one new outward edge this ticket adds —
-  `teams/website_overrides.py` importing `partner_scrape.model.slugify`
-  — does not touch the forbidden four (`enrich/`, `adapters/`,
-  `normalize.run()`, `pipeline.run()`).** `partner_scrape.model` is a
-  leaf, dependency-free string utility with no path back into any of
-  those four; this is the same shape of reuse `teams/merge.py` already
-  established for `normalize.partners.normalize_org_name`, applied to a
-  second existing utility rather than a new import boundary.
-  `tests/teams/test_sources_base.py`'s forbidden-import scan (which
-  covers `teams/sources/`, not this module) is unaffected either way,
-  since `slugify` is not one of the four scanned-for names.
-- **(Sprint 013 ticket 006) `website_overrides.apply_website_overrides()`
-  never sets `Team.website_status`, regardless of an overlay entry's
-  original discovery confidence.** The research file behind
-  `discovered-websites.toml` carries a per-entry `confidence`
-  (`strong`/`weak`) and a same-day `reverified_status: 200` on every
-  entry — deliberately not carried into the runtime TOML and never
-  consulted here. Setting `website_status="confirmed"` for a
-  `strong`-confidence/re-verified entry here would make this module a
-  second, partial, same-day-snapshot implementation of sprint 013's
-  still-open `teams.scrape.verify_team_websites()` ticket's job.
-  Instead, every declared website — the original 53 (cleaned/repaired),
-  the 31 newly discovered, `strong`- or `weak`-confidence alike — is
-  verified by exactly one mechanism, at `run_teams()`'s own run time,
-  once that ticket lands. This is the mechanism, not a special case, by
-  which a `weak`-confidence discovered entry will land as `unverified`
-  rather than being pre-confirmed by construction.
-  `tests/teams/test_website_overrides.py`'s `TestWebsiteStatusNeverTouched`
-  proves this directly, for both a `strong`- and all 3 `weak`-confidence
-  fixture entries, not just by the absence of code that would set it.
 - **(Sprint 012) A `sunset_season` past its date degrades to a loud
   warning, never a failure.** `teams.pipeline.run_teams()` parses
   `SourceConfig.config["sunset_season"]` (a `"YYYY-YY"` string, e.g.
@@ -857,147 +556,66 @@ ticket 011-004's `geo.py` sets `Team.latitude`/`longitude`.
   Questions). The roster keeps publishing regardless; a sunset date is a
   staleness signal for an operator to notice and act on, not a reason to
   stop shipping data that may still be the best available answer.
-- **(Sprint 013 ticket 001) `verify_team_websites()` wraps its own
-  robots-check and fetch calls in `except Exception`, not just the
-  three named non-2xx/transport-error/robots-disallow outcomes.** A
-  real `Fetcher` (`UrllibFetcher`/`PoliteFetcher`) never raises here by
-  contract — a transport failure already comes back as
-  `FetchResponse(status=0)` — so this was written as defensive,
-  belt-and-suspenders isolation, matching `run_teams()`'s own
-  per-source `try/except` one level up. It turned out to matter for a
-  real, confirmed-live case, not just a theoretical one: a
-  `PoliteFetcher` whose target site's robots.txt blanket-disallows
-  everything (`Disallow: /`) raises `RobotsDisallowed` from *inside*
-  `fetch.is_allowed()`'s own `fetcher.get(robots_txt_url(url))` call —
-  `PoliteFetcher.get()` re-checks robots.txt against itself before
-  returning robots.txt's own content, and a blanket disallow also
-  matches the `/robots.txt` path itself, so fetching robots.txt to
-  *evaluate* the disallow trips the disallow. Observed live on
-  `frc-2193`'s site (`www.hilltoprobotics.com`) during this ticket's
-  own pre-close validation run — caught cleanly, logged, marked
-  `"unverified"`, zero impact on any other team. It also turned out to
-  matter immediately for test compatibility, not just defensively:
-  several pre-existing
-  `tests/teams/test_pipeline.py`/`tests/test_cli_teams.py` fixtures
-  (written before this ticket, driving the *real* Team Registry through
-  a strict dict-backed `FixtureFetcher` that raises `KeyError` for any
-  unregistered URL) now incidentally exercise this stage too, because
-  ticket 006's already-shipped overlay populates a real `website` for
-  29 FTC teams those fixtures never anticipated being fetched. Without
-  this catch, every one of those pre-existing tests would raise
-  `KeyError` out of `run_teams()` the moment this ticket wired the
-  stage in. Two of those tests asserted an exact fetcher-call list
-  (`test_dry_run_makes_exactly_one_fetch_call` /
-  `test_dry_run_reports_152_teams_with_no_network_and_no_disk_write`)
-  and needed updating regardless — the catch prevents a crash, not the
-  call attempt itself — see Open Questions for why touching those two
-  pre-existing tests was judged the correct call despite this ticket's
-  own testing note preferring no modification at all.
-- **(Sprint 013 ticket 001) `verify_team_websites()` is wired into
-  `run_teams()` unconditionally — no `--source` filter, no `dry_run`
-  gate.** Sprint.md's Migration Concerns states website verification
-  "always runs; it is the cheap, certain half," and a `--dry-run -v`
-  run is the sprint's own required live-validation mechanism (Test
-  Strategy) — gating verification behind `dry_run` would make that
-  validation step structurally impossible. This is also why it is not
-  wrapped in `run_teams()`'s own `try/except` the way per-source
-  acquisition is: `verify_team_websites()` already isolates every
-  per-team failure internally (the bullet above), so nothing would be
-  caught at that outer level that isn't already handled closer to its
-  source.
-- **(Sprint 013 ticket 003) `gather_sponsor_candidates()` never receives
-  a team's organization/school name, and therefore cannot filter by
-  it.** Its signature is `(html, page_url) -> list[str]` — no `Team`,
-  by design (Design, below). Excluding a team's *own* organization name
-  from the sponsor list is real work this project needs, but it is
-  ticket 004's `classify_sponsors()` prompt's job, not this function's
-  — the LLM call receives that context, this deterministic pass does
-  not. What this function *does* filter deterministically is bounded to
-  what needs no page-specific context at all: the team's own hostname
-  (derived from `page_url` alone) and a small, fixed denylist of CMS/
-  hosting vendors, aggregators/the program itself, social platforms,
-  and navigation boilerplate (`_DENYLIST_TEXT`/`_DENYLIST_DOMAINS`) —
-  the categories the issue names as false-positive sources that are
-  obvious without knowing anything about the specific team.
-- **(Sprint 013 ticket 003) A denylisted candidate is dropped here, at
-  the deterministic stage — not deferred entirely to ticket 005's LLM
-  classification/verbatim check.** This is deliberate defense-in-depth,
-  not a substitute for that later stage (which still validates every
-  LLM-returned name verbatim against whatever this function *did*
-  return): filtering "Wix"/"Facebook"/"FIRST" et al. before they ever
-  become candidates keeps the list this function hands the LLM shorter
-  and more signal-dense (real value against the documented 40-candidate
-  cap — a page with a chatty footer full of social/CMS links would
-  otherwise crowd out real sponsors before the cap is reached), and it
-  means the guarantee "an obvious non-sponsor category never reaches
-  publication" holds even for a hypothetical future caller of this
-  function that skips the LLM stage entirely.
-- **(Sprint 013 ticket 003) Heading detection is broader than semantic
-  `<h1>`-`<h6>` tags, restricted to short, container-free elements
-  only.** A real, live-captured fixture (`ftc3650.org`) marks its
-  sponsor section with `<p class="kicker">Sponsors</p>` — a component-
-  library convention with no semantic heading tag at all, not a
-  contrived edge case; restricting to `<h1>`-`<h6>` would have missed
-  it entirely. Any element is a candidate "heading trigger" if: it is
-  not one of a small excluded set (`<a>`, `<img>`, `<nav>`, `<footer>`,
-  and other interactive/non-container tags — `_NEVER_HEADING_TAGS`); it
-  has no descendant element other than plain inline text formatting
-  (`<em>`/`<strong>`/`<span>`/... — `_INLINE_TEXT_TAGS`) — this is the
-  guard that makes the broadening safe (see the next bullet for why);
-  it is not nested inside a `<nav>` landmark anywhere in its ancestry;
-  and its own rendered text is short (≤60 characters) and matches
-  `/sponsor|partner|thank/i`.
-- **(Sprint 013 ticket 003) The "no non-inline descendant" restriction
-  above was added to fix a real false-positive found while building
-  this ticket's own fixtures, not a hypothetical concern.** An earlier
-  version of this function judged a heading trigger purely by its
-  *aggregate* rendered text length, which let a large `<section>`
-  wrapping an entire "Sponsors" sub-page (kicker label + a couple of
-  bare, alt-less `<img>` tags) register as "short" — because images
-  contribute nothing to text length — and then walk that section's
-  *following sibling section* ("Photos") for candidates, pulling in
-  unrelated photo-gallery `alt` captions as false sponsor candidates on
-  the real `ftc3650.org` fixture. Requiring a trigger to contain no
-  block-level/interactive descendant (only inline text formatting)
-  excludes any such wrapping container structurally — a genuine label
-  element (`<h2>`, `<p class="kicker">Sponsors</p>`) always qualifies;
-  a `<section>`/`<div>` wrapping real markup never does, regardless of
-  how short its aggregate text happens to be.
-- **(Sprint 013 ticket 003) `gather_sponsor_candidates()` has zero
-  imports beyond `lxml.html` and the standard library — no `fetch/`,
-  `enrich/`, `adapters/`, or `anthropic` SDK import, checked directly
-  by an AST scan in `tests/teams/test_sponsor_candidates.py`
-  (`TestNoForbiddenImports`), matching `tests/teams/
-  test_sources_base.py`'s own forbidden-import-scan precedent.** This
-  is stronger than "happens not to import fetch" — the module receives
-  already-fetched HTML as a plain string parameter; it has no mechanism
-  by which it *could* fetch anything, by construction, matching the
-  sprint's stated requirement that this half of sponsor extraction is
-  offline and LLM-free by construction, not by convention.
-- **(Sprint 013 ticket 004) `teams/sponsor_llm.py` and
-  `teams/sponsor_cache.py` each have zero imports from
-  `partner_scrape.enrich`, checked directly by an AST scan in
-  `tests/teams/test_sponsor_llm.py`/`test_sponsor_cache.py`
-  (`TestNoForbiddenImports`), matching `test_sources_base.py`'s and
-  `test_sponsor_candidates.py`'s own forbidden-import-scan precedent.**
-  `sponsor_cache.py` does import `teams.sponsor_llm.SponsorExtractionResult`
-  — a sibling module within `teams/`, not `enrich/` — the same shape
-  `enrich/cache.py` itself uses for `EnrichmentResult` from
-  `enrich.llm_client`; only the cross-package edge into `enrich/` is
-  forbidden, not intra-package reuse within `teams/`.
-- **(Sprint 013 ticket 004) `AnthropicSponsorLLMClient.classify_sponsors()`
-  never validates its own response against the candidate list it was
-  given — it only parses the JSON shape (`SponsorClassificationError` on
-  a malformed/wrong-typed response).** The verbatim-candidate check (any
-  returned name absent from the original candidate list is dropped and
-  logged, never trusted) is deliberately ticket 005's job, not this
-  client's: `sponsor_extract.py` is the one place that holds both the
-  candidate list *and* the classification result at the same time, and
-  duplicating the check here would let this module's own tests believe
-  the guarantee holds without the real caller-side data ever being
-  exercised. This client's own contract stops at "return a well-formed
-  `SponsorExtractionResult`," matching `enrich.llm_client.LLMClient`'s
-  equally narrow "parse and return `EnrichmentResult`" scope.
+- **(Sprint 013) Fetched HTML is never stored on a `Team` field,
+  structurally, not just by convention.** `teams.scrape.
+  verify_team_websites()` returns a plain `dict[str, str]` (team_id ->
+  fetched body) that `teams.pipeline.run_teams()` holds as a local
+  variable and passes directly to `teams.sponsor_extract.
+  extract_sponsors()` — it is never assigned to any `Team` attribute.
+  This matters because `teams/export.py`'s `TEAMS_SCHEMA_FIELDS` is
+  derived from `dataclasses.fields(Team)`, so any field added to the
+  dataclass publishes automatically to the public `teams.json`; a raw
+  HTML body reaching that mechanism would leak arbitrary third-party
+  page content — including, potentially, a coach's personal contact
+  info — into a public data contract with no review step. The same
+  category of guarantee `model.Team`'s "no email field, ever" docstring
+  already establishes for contact data (Constraints, above) is extended
+  here to a new mechanism (raw scraped content) that did not exist
+  before this sprint.
+- **(Sprint 013) A sponsor name is never published unless it appears
+  verbatim among a page's deterministically-gathered candidates.**
+  `teams.sponsor_extract.extract_sponsors()` validates every name
+  `SponsorLLMClient.classify_sponsors()` returns against the exact
+  candidate list `teams.sponsor_candidates.gather_sponsor_candidates()`
+  produced for that page; a returned name absent from that list is
+  dropped and logged, never trusted into `Team.sponsors`. This is the
+  sprint's central anti-hallucination guarantee (see Design, below) and
+  is enforced in code, not only requested in the LLM prompt —
+  `tests/teams/test_sponsor_extract.py` exercises it directly with a
+  fixture LLM client that deliberately returns an out-of-list name.
+- **(Sprint 013) An LLM call failure during sponsor extraction is
+  isolated per team, matching `enrich/`'s "fail open, always" project-wide
+  convention (`docs/design/design.md` Sec. 5's "Errors are isolated at
+  the level that owns the unit").** A missing `ANTHROPIC_API_KEY`, a
+  network error, or a malformed response during
+  `SponsorLLMClient.classify_sponsors()` is caught inside
+  `extract_sponsors()`'s per-team loop, logged, and leaves that team's
+  `sponsors`/`sponsor_provenance` exactly as the structured sources
+  already set them — it never raises out of `run_teams()` and never
+  affects any other team. Unlike `merge_teams()`/`geocode_teams()`
+  (deterministic stages this subsystem already treats as build-time-defect-only,
+  never per-record-isolated), sponsor extraction calls an external,
+  fallible service per team and is isolated the same way `sources/tba.py`'s
+  network calls already are.
+- **(Sprint 013) `teams.scrape.verify_team_websites()` checks
+  `fetch.is_allowed()` before ever calling `fetcher.get()`, the same
+  explicit-check-then-fetch pattern `discovery/hub_scan.py::scan_hub()`
+  already uses for its own many-independent-pages loop** — not
+  `fetch.cache.PoliteFetcher.get()`'s own internal robots check (which
+  raises `RobotsDisallowed`). Checking first and skipping (logged) avoids
+  a per-page `try/except RobotsDisallowed` around every one of the 53
+  fetches; when the injected `fetcher` *is* a real `PoliteFetcher`, its
+  own internal check is redundant but harmless (already confirmed
+  allowed) rather than a second, differently-shaped guard.
+- **(Sprint 013) `Team.sponsor_provenance` is purely additive to the
+  existing `Team.sponsors: list[str]`, never a replacement.** Every
+  existing consumer of `sponsors` (`TeamCard`'s Props interface, the
+  detail page's `team.sponsors.map(...)`, `tests/teams/test_model.py`,
+  `tests/teams/test_sources_ftcscout.py`) continues to see a flat
+  `list[str]` with no change; `sponsor_provenance[name]` is a parallel
+  lookup a consumer opts into only if it cares which claim is which. See
+  Design, below, for the alternative (a restructured `sponsors:
+  list[SponsorRecord]`) this rejected.
 
 ## 4. Design
 
@@ -1191,184 +809,152 @@ never dropped) — a "San Diego County Only" checkbox in `TeamFilters`
 lets a visitor narrow the list to in-region teams if they want to, but
 the default list shows everything, same as `teams.json` itself.
 
-**Why `website_overrides.py` (sprint 013 ticket 006) is a separate
-module, not folded into `teams.scrape`'s own website-verification
-logic.** Sprint 013's `teams.scrape.verify_team_websites()` ticket was
-already fully planned before the web-search discovery pass that this
-ticket's overlay data comes from existed. Folding discovered-website
-ingestion/cleanup directly into that ticket's function was rejected: it
-would conflate two independently-changing concerns (curated-data
-ingestion vs. live-fetch verification) in one function, and would mean
-editing already-approved content rather than adding alongside it.
-Giving `website_overrides.py` its own verification logic (using the
-research file's own same-day `reverified_status: 200`) was also
-rejected — see Constraints above. Instead this module owns exactly one
-thing, one sentence, no "and": populate and clean `Team.website`/
-`Team.social` from committed, curated data — the same "one committed-
-data-file loader per concern" shape `geo.py` already established for
-location overrides/centroids, applied here to website/social data, not
-a new architectural pattern.
+**(Sprint 013) Why sponsor extraction lives entirely inside `teams/` as
+new modules that mirror, but never import, `enrich/llm_client.py`/
+`enrich/cache.py`.** The issue that motivated this sprint explicitly
+points at `enrich/`'s JSON-schema-constrained LLM pattern and
+content-hash cache as the pattern to follow. Importing them directly was
+considered and rejected: `enrich.llm_client.LLMClient.enrich_event` is
+typed to `partner_scrape.model.Event`, and `enrich.cache.EnrichmentCache`
+is keyed by `Event.identity_key()` — neither generalizes to a `Team`/HTML
+candidate list without changing a public signature that would couple two
+modules already changing for unrelated reasons, mirroring
+`enrich/llm_client.py`'s own stated reason for not importing
+`normalize/taxonomy.py` despite vocabulary overlap ("duplication here is
+the accepted cost of keeping this module's one outward dependency the
+external Anthropic API, not another in-package module"). This subsystem's
+Purpose section and Constraints above already establish, and
+`tests/teams/test_sources_base.py` partially enforces, that `teams/` has
+zero edges into `enrich/`, `adapters/`, `normalize.run()`, or
+`pipeline.run()` — importing `enrich.llm_client` would be the first crack
+in that boundary, for a savings of roughly 60 lines of duplicated
+schema-building/cache logic. `teams/sponsor_llm.py` therefore duplicates a
+small (~15-line) JSON-schema-from-dataclass helper and
+`teams/sponsor_cache.py` duplicates `enrich/cache.py`'s content-hash-plus-
+schema-version shape; both are self-contained and unlikely to drift since
+neither dataclass they serialize (`SponsorExtractionResult`) changes as
+often as `EnrichmentResult` might.
 
-**Why `teams.scrape.verify_team_websites()` returns a
-`dict[team_id, html]` rather than accepting an output parameter or
-storing anything on `Team`.** Matches `merge_teams()`/`geocode_teams()`'s
-own "mutate the list you're given, return it" shape for the parts of
-its job that *are* about `Team` (`website_status`), but a fetched HTML
-body is structurally different — it must never reach a `Team` field at
-all (Constraints, sprint.md's Design Rationale). A bare return value
-`run_teams()` holds as a local variable is the simplest shape with no
-field to forget to strip later, mirroring `model.Team`'s own "no email
-field, ever" guarantee applied to a different category of
-contact-carrying content. *Alternatives considered:* an output
-parameter (a caller-supplied mutable dict `verify_team_websites()`
-fills in) — rejected as no safer than a return value here (nothing
-downstream would still assign it to `Team`) while being a less
-idiomatic Python shape than every other function in this module
-already uses. *Consequences:* none identified — ticket 005's
-`extract_sponsors()` takes this dict as a plain parameter (`fetch_results`).
+**(Sprint 013, ticket 006) The one new outward edge this sprint adds
+does not touch the forbidden four.** `teams/website_overrides.py`
+imports `partner_scrape.model.slugify` (reused for its host+path
+dedup key, per this sprint's "no second normalizer/slugifier"
+principle) — the first import from anywhere in `teams/` into the
+top-level `partner_scrape.model` module. `partner_scrape.model` is not
+one of the four boundaries this subsystem's zero-edges invariant
+actually guards (`enrich/`, `adapters/`, `normalize.run()`,
+`pipeline.run()`); it is a leaf, dependency-free string utility with no
+path back into any of those four, the same shape of reuse `teams/merge.py`
+already established for `normalize.partners.normalize_org_name`. The
+invariant `tests/teams/test_sources_base.py` enforces is unaffected.
 
-**Why a disallowed-by-robots URL and a non-2xx/transport-error URL
-collapse to the same `"unverified"` outcome, rather than a third status
-value.** `Team.website_status` answers one question for a site
-visitor and `TeamCard`/the detail page (SUC-002, ticket 002): "is this
-link safe to publish as clickable?" Robots.txt disallowal, a 404, a
-500, and a DNS failure are all, from that consumer's perspective, the
-same answer — "no, don't link it" — and none of `sprint.md`'s SUC-001/
-SUC-002 acceptance criteria or the site components ticket 002 will
-build ever need to distinguish *why* a link isn't confirmed, only
-*whether* it is. Collapsing them keeps `website_status`'s vocabulary at
-the three values `teams/model.py`'s field comment already promised
-(`confirmed`/`unverified`/`none`) rather than growing a fourth for a
-distinction with no consumer. The *reason* is not lost — it is always
-in the per-team warning log line (Constraints, Interfaces below), which
-is where an operator investigating a specific dead link actually looks.
+**(Sprint 013) Why the LLM's role is constrained classification over
+deterministically-gathered candidates, never open-ended generation.** The
+issue names false positives as the dominant risk — asking an LLM "what
+are this page's sponsors?" over a full footer will confidently return the
+CMS vendor, the hosting provider, the school district, or the site's own
+domain. Two alternatives were rejected: sending the whole page (or footer
+HTML) and asking the model to name sponsors freely, which is exactly the
+failure mode the issue warns about with no structural way to catch a
+hallucinated name; and a prompt-only guard with no candidate constraint,
+which relies entirely on the model following instructions with no
+code-level backstop. Instead, `teams.sponsor_llm.SponsorLLMClient.
+classify_sponsors()` is asked to *select from* a list
+`teams.sponsor_candidates.gather_sponsor_candidates()` already produced,
+and `teams.sponsor_extract.extract_sponsors()` rejects — in code — any
+returned name absent from that list (Constraints, above). Fabricating an
+unseen company is therefore structurally impossible, not merely
+discouraged: the deterministic candidate-gathering pass is the actual
+security boundary, and the LLM only narrows within it. The accepted
+cost is a false negative — a genuine sponsor named only in flowing body
+prose, never as a heading, `alt`/`title` text, or footer link, is missed —
+traded deliberately for the much stronger false-positive guarantee the
+issue itself prioritizes ("a wrong sponsor attributed to a real company
+is worse than an empty list").
 
-**Why `verify_team_websites()` calls `fetcher.get(team.website)`
-directly after its own `is_allowed()` check, rather than passing
-`respect_robots=False` explicitly the way a `PoliteFetcher`-aware
-caller could.** This function's `fetcher` parameter is typed to the
-plain `Fetcher` protocol (`get(url, headers=None)`), matching
-`discovery/hub_scan.py::scan_hub()`'s own signature exactly — neither
-function assumes its caller passed a `PoliteFetcher` specifically
-(tests never do; only `cli.py`'s one production call site does). A real
-`PoliteFetcher.get()` will re-check robots.txt internally by default
-(`respect_robots=True`) on top of this function's own explicit check,
-which is redundant work but not a correctness problem: the two checks
-run the same `fetch.is_allowed()` logic, so a page allowed by the first
-check will not be disallowed by the second except in the vanishingly
-rare case robots.txt itself changed in between (whether such a case
-raised would still be caught by this function's own
-`except Exception` wrapper above, not propagate). Accepting this small,
-precedented redundancy (`hub_scan.py` already does the same) was judged
-simpler and more consistent than special-casing a `PoliteFetcher`
-instance to skip its second check.
+**(Sprint 013) Why fetched HTML is threaded through `run_teams()` as a
+local `dict[team_id, str]`, never a `Team` field.** See Constraints,
+above, for the mechanism; the alternative considered was storing the raw
+body on `Team` temporarily and stripping it in `export.py` before
+publish — rejected because `export.py`'s whole design point (Sec. 5's
+Design entry on `export_teams()`'s field-set derivation) is never needing
+a field-specific exclusion list beyond the one existing `sources`
+exception; adding a second one for this purpose reintroduces exactly the
+drift risk that mechanism exists to avoid. Keeping fetched bodies as a
+plain local variable inside `run_teams()`'s own call stack means there is
+no field to forget to strip. The accepted consequence is that
+`verify_team_websites()` and `extract_sponsors()` must be sequenced
+directly inside `run_teams()` rather than being independently
+CLI-invokable stages — the same coupling `merge_teams()` and
+`geocode_teams()` already accept for the same single-call-sequencing
+reason.
 
-**(Sprint 013 ticket 003) Why sponsor candidate gathering is one pure
-function taking `(html, page_url)`, not a class, not a `Team`-typed
-parameter, and not merged into `teams.scrape.verify_team_websites()`
-itself.** *Context:* the issue and sprint.md are explicit that the
-LLM stage (ticket 004) must only ever *select from* a
-deterministically-gathered candidate list, never generate one freely --
-that guarantee only holds if the gathering step is fully separable,
-testable, and auditable on its own, independent of network state, LLM
-state, or a specific `Team` record. *Alternatives considered:* fold
-candidate-gathering directly into `verify_team_websites()`'s per-team
-loop (one fetch, one extraction, no second pass) -- rejected, because it
-would couple two independently-changing concerns (live-fetch
-verification, sprint.md's "cheap, certain half"; sponsor heuristics,
-the "substantial, uncertain part") in one function, and would make this
-module's own offline testability (five real fixtures, zero network,
-zero LLM calls in this ticket's entire test file) depend on
-`verify_team_websites()`'s fetch machinery instead of a bare HTML
-string. Accept a `Team` parameter instead of `(html, page_url)`, to let
-this function look at `Team.organization`/`Team.name` and filter the
-team's own name inline -- rejected, per the Constraints bullet above:
-that filtering is data the LLM classification step (ticket 004) needs
-context for anyway (it must apply the same exclusion to any LLM-
-returned name too, not just deterministic candidates), so doing it
-twice in two different modules was judged worse than doing it once,
-downstream, with full context. *Why this choice:* a pure function with
-exactly the two inputs it needs (the fetched body, the URL it was
-fetched from -- for the own-hostname check) is the smallest, most
-directly testable unit that satisfies the "candidates only, never a
-verdict" boundary sprint.md's Design Rationale describes. *Consequences:*
-none identified -- `sponsor_extract.py` (ticket 005) calls this
-function once per confirmed-fetch team, using the `dict[team_id, html]`
-`verify_team_websites()` returns plus each `Team.website` as
-`page_url`.
+**(Sprint 013) Why `Team.sponsor_provenance` is a new `dict[str, str]`
+alongside `sponsors: list[str]`, not a restructured `sponsors:
+list[SponsorRecord]`.** `TeamCard`'s Props interface, the detail page's
+`team.sponsors.map((s: string) => ...)` rendering, and every existing
+sponsor test/fixture (`tests/teams/test_model.py`,
+`tests/teams/test_sources_ftcscout.py`) already assume `sponsors` is a
+flat `list[str]`. Replacing it with a list of name+provenance records
+was considered and rejected — it would touch every one of those call
+sites for a benefit (structural typing) a parallel dict achieves
+losslessly. `sponsor_provenance[name]` answers "is this a structured or
+scraped claim?" for any name already in `sponsors`, at zero cost to
+existing code paths — the same purely-additive shape sprint 012's Design
+Rationale chose for `Team.sources` answering a parallel "is this record
+static or live?" question, rather than a new boolean/enum field. The
+accepted consequence: a consumer wanting a sponsor's name and provenance
+together must join the two fields by key rather than reading one list of
+records.
 
-**(Sprint 013 ticket 003) Why the denylist is organized as four small,
-named categories (`_DENYLIST_TEXT_CMS`/`_AGGREGATOR`/`_SOCIAL`/`_NAV`)
-rather than one flat set.** *Context:* the issue itself names these as
-four conceptually distinct false-positive sources (CMS/hosting vendor,
-the program/aggregator itself, a social platform, navigation
-boilerplate). *Alternatives considered:* one undifferentiated set of
-denylisted strings -- rejected as marginally simpler to write but
-strictly worse to maintain: a future contributor adding, say, a new
-social platform has no structural cue for where it belongs or whether
-a category is already reasonably complete. *Why this choice:* the
-categories mirror the issue's own framing exactly (see the module
-docstring's four bullet points), so the code and the requirement it
-implements stay legible side by side. *Consequences:* four sets
-unioned into one `_DENYLIST_TEXT` at import time -- a trivial cost for
-the maintainability gained.
+**(Sprint 013) Why sponsor name normalization reuses
+`normalize.partners.normalize_org_name`, never
+`teams.geo.normalize_school_name` or a new normalizer.** The issue
+directs this explicitly, and `teams/merge.py` already established the
+precedent of reusing `normalize_org_name`, read-only, for a different
+purpose (cross-league organization linking) rather than writing something
+new (see this section's own earlier entry, "Why `geo.normalize_school_name`
+is a separate function from `normalize.partners.normalize_org_name`").
+That earlier entry's reasoning does not reverse here: `geo.
+normalize_school_name` exists specifically for CDE/NCES's government-
+directory naming quirks for *place* names, which do not apply to
+*company* names at all — sponsor names are squarely `normalize_org_name`'s
+intended domain (organization-name variant matching), so, unlike
+`geo.py`'s deliberate divergence, there is no boundary-crossing concern
+reusing it here for a second purpose (sponsor consolidation) alongside its
+original one (partner-directory join).
 
-**(Sprint 013 ticket 004) Why `AnthropicSponsorLLMClient`'s system
-prompt is rebuilt per call from `context`, rather than a fixed
-module-level string like `enrich/llm_client.py`'s `_SYSTEM_PROMPT`.**
-*Context:* the acceptance criteria require the prompt to explicitly
-exclude the team's own organization name and website hostname by
-name, and both are per-team data the client only learns at call time.
-*Alternatives considered:* a static system prompt with the exclusion
-instruction phrased generically ("exclude the team's own name," with
-no specific name given) plus the actual organization/hostname folded
-into the user message instead -- rejected: `enrich/llm_client.py`'s own
-precedent keeps *task framing* in the system prompt and *record data*
-in the user message, and a generic instruction with no example to
-anchor to is exactly the kind of prompt-only guard sprint.md's Design
-Rationale already rejected for the deterministic/LLM split as a whole
-("a prompt-only guard with no candidate constraint ... relying entirely
-on the model following instructions, with no code-level backstop") --
-naming the specific string to exclude is strictly stronger than a
-generic category instruction. *Why this choice:* a per-call system
-prompt costs nothing extra (it is already a plain Python string built
-fresh, not a cached/pre-registered artifact) and lets the model see
-"exclude *this exact* organization name" rather than inferring which
-candidate is the team's own from context alone. *Consequences:* this
-client cannot benefit from Anthropic's prompt-caching on the system
-block the way a fixed prompt could (each call's system text differs by
-team) -- accepted, since sponsor classification runs once per team per
-candidate-set change (already gated by `SponsorCache`), not per-record
-at `enrich/`'s much higher volume where prompt caching matters more.
-
-**(Sprint 013 ticket 004) Why `SponsorCache` bakes
-`content_hash(candidates)` directly into the cache key/filename, rather
-than mirroring `EnrichmentCache`'s "stable identity key, content hash
-compared after loading" shape.** *Context:* `EnrichmentCache` is keyed
-by `Event.identity_key()` (an identity that outlives content edits — the
-same event, re-scraped with an updated description, should still
-resolve to the same cache slot and then register as stale) with
-`content_hash` stored inside the entry and compared on lookup.
-*Alternatives considered:* the identical shape for `SponsorCache` —
-keyed by `team_id` alone, with `content_hash(candidates)` stored and
-compared after loading — rejected: unlike an Event, there is no reason
-to look up "this team's classification regardless of which candidate
-set produced it"; the candidate set *is* the entire input a
-classification result is about, so a changed candidate list should
-simply be a different classification, not a staleness signal on the
-same one. *Why this choice:* the ticket's own stated design point
-applies directly — "a page's unrelated boilerplate changing ... never
-forces a re-classification the candidate set itself didn't change,"
-which a pure content-derived key achieves for free (no boilerplate
-change ever changes `gather_sponsor_candidates()`'s output, so the key
-is unchanged) without needing a second staleness-comparison step at
-all. *Consequences:* a `SponsorCache` entry has no notion of "this
-team's classification history" the way re-storing over the same
-`EnrichmentCache` key does — every distinct candidate set gets its own
-permanent entry, never overwritten by a differently-worded candidate
-list for the same team. This is an accepted, unbounded-growth tradeoff
-(mirroring `enrich/cache.py`'s own unbounded-growth acceptance) — sane
-for a small (~52-site) corpus that changes rarely.
+**(Sprint 013, ticket 006 — added post-planning) Why discovered-website
+ingestion is a separate module (`website_overrides.py`) that never sets
+`website_status`, rather than folded into `scrape.py` or given its own
+verification logic.** Ticket 001 (`scrape.py`'s `verify_team_websites()`)
+was already fully planned and approved before a web-search discovery
+pass (`clasi/sprints/013-team-website-surfacing-and-sponsor-extraction/
+research/discovered-websites.json`) found 31 more team websites and 21
+social-only teams, and measurement against the live export found 4
+`firstinspires.org` junk values and 7 malformed triple-slash URLs among
+the original 53. Two things were considered and rejected: folding the
+new ingestion/cleanup logic directly into `verify_team_websites()` —
+rejected, since editing ticket 001's already-approved content would
+conflate two independently-changing concerns (curated-data ingestion,
+live-fetch verification) in one function; and having
+`website_overrides.py` itself decide `website_status` for
+high-confidence or already-re-verified discovered entries (the research
+file's own `reverified_status: 200` on every entry, including the 3
+`weak`-confidence ones, made this a real temptation) — rejected, because
+it would make this module a second, partial, same-day-snapshot
+implementation of ticket 001's job. Instead, `website_overrides.py` owns
+exactly one thing (populate/clean `Team.website`/`Team.social` from
+committed, curated data — the one-sentence, no-"and" cohesion test) and
+`verify_team_websites()` remains the sole, uniform authority for
+`confirmed`/`unverified`, run immediately afterward so it verifies the
+corrected, enlarged set. This is the same "one committed-data-file
+loader per concern" shape `geo.py` already established for location
+overrides/centroids, applied here to website/social data — not a new
+architectural pattern, an application of an existing one. The accepted
+consequence is one more sequenced stage inside `run_teams()` (three now,
+after `geocode_teams()`), the same single-call-sequencing cost
+`merge_teams()`/`geocode_teams()` already require.
 
 ## 5. Interfaces
 
@@ -1377,12 +963,12 @@ for a small (~52-site) corpus that changes rarely.
   `number`, `name`, `organization`, `org_type`, `city`, `postal_code`,
   `latitude`, `longitude`, `location_precision`, `in_region`,
   `matched_name`, `needs_review` (this ticket), `website`,
-  `website_status` (`"confirmed"`/`"unverified"`/`"none"`, sprint 013
-  ticket 001 — the first code to ever write it; see below),
-  `organization_website`, `social` (sprint 013 ticket
-  006, `list[str]`, team-declared social URLs, raw strings with no
-  platform label), `rookie_year`, `active`, `last_season`, `sponsors`,
-  `org_key`, `sibling_team_ids`, `sources`.
+  `website_status`, `organization_website`, `rookie_year`, `active`,
+  `last_season`, `sponsors`, `sponsor_provenance` (sprint 013,
+  `dict[str, str]`, `display sponsor name -> "structured" | "scraped"`),
+  `social` (sprint 013 ticket 006, `list[str]`, team-declared social
+  URLs — raw, no platform label), `org_key`, `sibling_team_ids`,
+  `sources`.
   Every field defaults to an empty/neutral value; no `email` field
   exists (Constraints). Fields are populated incrementally across
   pipeline stages — `sources/ftcscout.py` and `sources/tba.py` set
@@ -1390,10 +976,13 @@ for a small (~52-site) corpus that changes rarely.
   fields; `teams.merge.merge_teams()` sets `org_key`/`sibling_team_ids`;
   `latitude`/`longitude`/`location_precision`/`organization_website`/
   `matched_name`/`needs_review` are set by `teams.geo.geocode_teams()`;
-  `website`/`social` are cleaned/enriched by (sprint 013 ticket 006)
+  `website`/`social` are then cleaned/filled by sprint 013 ticket 006's
   `teams.website_overrides.apply_website_overrides()`; `website_status`
-  is set last, by (sprint 013 ticket 001)
-  `teams.scrape.verify_team_websites()`.
+  is set next, by sprint 013's `teams.scrape.verify_team_websites()`
+  (which now runs after, and sees the corrected/enlarged `website` set
+  from, ticket 006's stage); `sponsor_provenance` and any scraped
+  additions to `sponsors` are set last of all, by sprint 013's
+  `teams.sponsor_extract.extract_sponsors()`.
 - **`sources.base.TeamSource`** — the injectable per-source protocol
   (`discover(source, fetcher) -> Iterable[TeamRef]`,
   `fetch(ref, fetcher) -> RawTeamResponse`,
@@ -1454,223 +1043,108 @@ for a small (~52-site) corpus that changes rarely.
   before `export_teams()`. See Constraints for the full identity rule
   and Design for why it keys on organization name, not team number.
 - **`pipeline.run_teams(*, registry_dir=None, source=None, site_dir=None,
-  fetcher=None, dry_run=False, geo_data_dir=None, website_data_dir=None) -> dict`**
-  — the programmatic entry point: loads the Team Registry (defaulting to
+  fetcher=None, dry_run=False, geo_data_dir=None, website_data_dir=None,
+  llm_client=None, sponsor_cache=None, no_sponsors=False) -> dict`** —
+  the programmatic entry point: loads the Team Registry (defaulting to
   the real seed, `teams/registry/`), dispatches each active source to
   its `TeamSource` via `_TEAM_SOURCES`, isolates any one source's
   failure (logged and skipped, matching `pipeline.run()`'s own SUC-008
   contract), links cross-league identity via `merge_teams()`, resolves
   every team's location via `teams.geo.geocode_teams()` (`geo_data_dir`
   overrides the geocoding data directory, mainly for tests), then
-  (sprint 013 ticket 006) cleans/enriches `website`/`social` via
-  `teams.website_overrides.apply_website_overrides()`
-  (`website_data_dir` overrides the overlay data directory, mainly for
-  tests), then (sprint 013 ticket 001) fetches and classifies every
-  team's website via `teams.scrape.verify_team_websites()` (this stage
-  has no override parameter — it reuses the same `fetcher` `run_teams()`
-  already threads through, per sprint.md's Design Rationale), and hands
-  the result to `export_teams()`. The `dict[team_id, html]`
-  `verify_team_websites()` returns is kept as a local variable
-  (`fetch_results`) — not part of this function's own return value,
-  and consumed by ticket 005's `extract_sponsors()` (the next stage,
-  immediately below) before `export_teams()` is called. Returns
-  `export_teams()`'s `{"meta": ..., "teams": [...]}` payload unchanged.
+  (sprint 013 ticket 006) calls `teams.website_overrides.
+  apply_website_overrides(teams, data_dir=website_data_dir)`, then
+  (sprint 013) calls `teams.scrape.verify_team_websites(teams, fetcher)`
+  and, unless `no_sponsors` (the `--no-sponsors` CLI flag),
+  `teams.sponsor_extract.extract_sponsors(teams, fetch_results,
+  llm_client, sponsor_cache)` — `llm_client` defaults to a real
+  `AnthropicSponsorLLMClient()` and `sponsor_cache` to a real
+  `SponsorCache()` when omitted, matching `fetcher`'s existing
+  default-to-production convention; tests inject fixture doubles for
+  all three (`website_data_dir` included). Hands the fully-populated
+  `Team[]` to `export_teams()`. Returns that call's `{"meta": ...,
+  "teams": [...]}` payload unchanged.
+- **`teams.website_overrides.apply_website_overrides(teams, data_dir=None)
+  -> list[Team]`** (sprint 013 ticket 006) — cleans every team's existing
+  `website` (clears a `firstinspires.org`/`www.firstinspires.org` junk
+  value; repairs a malformed `http:///`/`https:///` URL generically),
+  then, for a team whose `website` is still empty, applies a discovered
+  `website` from the committed overlay `teams/data/discovered-websites.toml`
+  (`data_dir` overrides the directory, mainly for tests) if that team's
+  `team_id` has one; sets `Team.social` from the overlay for any team_id
+  present there, website or social-only alike. Never sets
+  `Team.website_status` (Design — that stays `verify_team_websites()`'s
+  sole responsibility, uniformly, regardless of the overlay entry's
+  original discovery confidence). The loader mirrors, never imports,
+  `teams.geo`'s `_load_overrides`/`_require_file` shape (`tomllib`,
+  raises loudly at load time on a missing/malformed file); it also
+  guards against a data-authoring collision — two different `team_id`s
+  claiming the identical `(host, path)`, compared via
+  `partner_scrape.model.slugify` on the parsed URL, never on host alone
+  (Constraints: `carlsbaded.org`/`sites.google.com` each legitimately
+  recur across distinct-path entries). Mutates and returns the same
+  list, matching `merge_teams()`/`geocode_teams()`'s shape. Called once
+  by `run_teams()`, after `geocode_teams()` and before
+  `verify_team_websites()`.
+- **`teams.scrape.verify_team_websites(teams, fetcher) -> dict[str, str]`**
+  (sprint 013) — for each `Team` with a non-empty `website`: checks
+  `fetch.is_allowed()` first (Constraints), then fetches via `fetcher`.
+  Sets `Team.website_status` to `confirmed`/`unverified` in place; a
+  `Team` with no `website` gets `"none"`. Returns a `dict[team_id, str]`
+  of fetched bodies for every `confirmed` team only — never assigned to
+  any `Team` field (Constraints). Called once by `run_teams()`, after
+  `apply_website_overrides()` (ticket 006, so it sees the corrected,
+  enlarged `website` set) and before `extract_sponsors()`.
+- **`teams.sponsor_candidates.gather_sponsor_candidates(html, page_url) ->
+  list[str]`** (sprint 013) — pure, offline: parses `html` once (`lxml`),
+  collects text from headings matching `/sponsor|partner|thank/i` and
+  their following block plus every `<img alt>`/`<img title>` and outbound
+  link text/hostname inside any `<footer>` element, deduplicates, and caps
+  the result (e.g. 40). Returns `[]` (with a logged warning) for
+  unparseable HTML, and `[]` (no warning — the normal case) for a page
+  with no sponsor-shaped section. Never raises, never calls a network or
+  LLM API. See Design for why the LLM stage only ever selects from this
+  function's output.
+- **`teams.sponsor_llm.SponsorLLMClient`** (sprint 013) — the injectable
+  protocol (`classify_sponsors(candidates: list[str], context: dict) ->
+  SponsorExtractionResult`), parallel in shape to
+  `enrich.llm_client.LLMClient` but with no import relationship to it
+  (Design). `SponsorExtractionResult` (a small dataclass,
+  `confirmed_sponsors: list[str]`) drives a JSON-schema-from-dataclass
+  generation helper duplicated from, not imported from,
+  `enrich.llm_client._build_enrichment_json_schema`'s pattern.
+  `AnthropicSponsorLLMClient` is the real implementation
+  (`MODEL_ID = "claude-haiku-4-5-20251001"`, matching
+  `enrich.llm_client.MODEL_ID`'s value, redefined locally rather than
+  imported); `FixtureSponsorLLMClient` is the test double, mirroring
+  `enrich.llm_client.FixtureLLMClient`.
+- **`teams.sponsor_cache.SponsorCache`** (sprint 013) — a content-hash
+  cache keyed by `(team_id, content_hash(candidates))`, one JSON file per
+  key under `{SCRAPE_CACHE_DIR}/sponsor_extraction_cache/`, mirroring
+  (not importing) `enrich.cache.EnrichmentCache`'s
+  `schema_version`-guarded shape. Caching is keyed by the *candidate
+  list's* content hash, not the raw page body's, so a page's unrelated
+  boilerplate changing (a footer copyright year, an unrelated nav link)
+  never forces a re-classification the candidate set itself didn't
+  change.
 - **`teams.sponsor_extract.extract_sponsors(teams, fetch_results,
-  llm_client, cache) -> None`** (sprint 013 ticket 005) — orchestrates,
-  once per team with an entry in `fetch_results`: gather candidates
-  (`sponsor_candidates.gather_sponsor_candidates`, skipping straight to
-  the next team on an empty result) -> cache lookup
-  (`sponsor_cache.SponsorCache`) -> classify on a miss
-  (`sponsor_llm.SponsorLLMClient.classify_sponsors`, caching the raw
-  result before validation) -> reject any name not verbatim in the
-  candidate list (the actual anti-hallucination enforcement, in code)
-  -> denylist guard (CMS/hosting vendor names, the team's own
-  `organization`, the page's own hostname, an oversized or "@"/"#"-
-  marked caption-like candidate — the last two added after this
-  ticket's own required live-run sample review, see Design) -> dedup/
-  merge into `Team.sponsors` via `teams.sponsor_canonical.canonical_key`
-  (a key already present from a structured source keeps its display
-  name/provenance) -> `Team.sponsor_provenance` updated. Mutates `teams`
-  in place. Per-team `try/except` around the cache-lookup-through-merge
-  steps: any failure (network error, `SponsorClassificationError`,
-  missing `ANTHROPIC_API_KEY`) is logged and leaves that team's
-  `sponsors`/`sponsor_provenance` exactly as the structured sources
-  already set them — fail-open, never aborting the run for any other
-  team.
-- **`teams.sponsor_canonical.canonical_key(name) -> str`** (sprint 013
-  ticket 005, added on reopening) — the shared match key every
-  same-company decision in `teams/` now compares:
-  `normalize.partners.normalize_org_name` (reused verbatim, never
-  modified — Constraints) plus a trailing corporate-legal-suffix strip
-  (`Inc`/`Incorporated`/`LLC`/`Corp`/`Corporation`/`Co`/`Company`/`Ltd`/
-  `Limited`/`Plc`, checked as the *last* normalized token only).
-  `sponsor_extract.py::_merge_sponsors`/`_is_denylisted` both switched
-  to this key when the ticket was reopened, closing the exact gap the
-  first pass's `TestKnownNormalizeOrgNameLimitation` had documented
-  (see Open Questions).
-- **`teams.sponsor_canonical.canonicalize_sponsors(teams) -> None`**
-  (sprint 013 ticket 005, added on reopening) — the corpus-wide pass
-  `extract_sponsors()`'s own per-team merge cannot do: the same real
-  company reported under different spellings by *different* teams' own
-  structured records (e.g. "QualComm" for one team, "Qualcomm" for
-  eighteen others). Four passes over the full `Team[]`, mutating in
-  place: (1) local corruption/formatting cleanup needing no cross-team
-  data (`expand_local` — strips a literal trailing FTCScout `"&R"`
-  artifact, splits a bare-`"&"`-joined compound name, strips a trailing
-  `" logo"`-style alt-text artifact); (2) build a reference set of
-  already-clean names observed anywhere in this run; (3) resolve or
-  drop every hostname/filename-shaped name
-  (`teams.sponsor_canonical.is_slug_like`/`reconstruct_slug`) against
-  that reference — a name recoverable only by guessing (no reference
-  match, or an unmarked 4+-token slug) is dropped, never published
-  mangled; (4) token-prefix clustering (`_cluster_keys` — folds
-  "Francis Parker" into "Francis Parker School") plus one canonical
-  display chosen per cluster (`_pick_canonical_display` — prefers
-  structured provenance, then a suffix-free spelling, then the most
-  common raw spelling), rewritten onto every team that mentions it. A
-  team's own `sponsor_provenance` value for its own claim is never
-  altered — only the *display string* used as that claim's key
-  changes. Called once by `run_teams()`, after `extract_sponsors()`/
-  `--no-sponsors` and before `export_teams()`, unconditionally (a
-  `--no-sponsors` run's purely-structured sponsors still need this
-  pass). Never raises for any input it can receive. See that module's
-  own docstring for the full defect analysis (including why the "&R"
-  corruption is FTCScout's own upstream data, not a decode bug in this
-  project's code) and Open Questions for what is deliberately *not*
-  attempted (fuzzy business-relationship clustering of legally-distinct
-  entities).
+  llm_client, cache) -> None`** (sprint 013) — orchestrates, once per
+  team with an entry in `fetch_results`: gather candidates -> cache
+  lookup -> classify on a miss -> verbatim-candidate validation
+  (Constraints) -> a small denylist guard (CMS/hosting vendor names, the
+  team's own organization name, the page's own hostname) as
+  defense-in-depth -> dedup/merge into `Team.sponsors` against existing
+  structured sponsors via `normalize.partners.normalize_org_name` ->
+  `Team.sponsor_provenance` updated. Mutates `teams` in place (parallel
+  in shape to `merge_teams()`/`geocode_teams()`). Per-team try/except
+  around the classify step (Constraints) — an LLM failure for one team
+  never touches another.
 - **`teams.geo.geocode_teams(teams, *, data_dir=None) -> list[Team]`**
   (this ticket) — resolves every `Team` through the seven-rung offline
   ladder in place; returns the same list (parallel in shape to
   `merge_teams()`). `data_dir` defaults to `geo.DEFAULT_DATA_DIR` (the
   real committed `teams/data/`). Called once by `run_teams()`, after
-  `merge_teams()` and before `apply_website_overrides()`.
-- **`teams.website_overrides.apply_website_overrides(teams, data_dir=None)
-  -> list[Team]`** (sprint 013 ticket 006) — cleans every team's existing
-  `website` in place (clears a `firstinspires.org`/`www.firstinspires.org`
-  junk value; repairs a malformed `http:///`/`https:///` URL
-  generically, for any host), then, for a team whose `website` is still
-  empty, applies a discovered `website` from the committed overlay
-  `teams/data/discovered-websites.toml` (`data_dir` defaults to
-  `website_overrides.DEFAULT_DATA_DIR`, the real committed `teams/data/`)
-  if that `team_id` has one; sets `Team.social` from the overlay for any
-  `team_id` present there, website or social-only alike. Never sets
-  `Team.website_status` (Constraints). The loader mirrors, never
-  imports, `teams.geo`'s `_load_overrides`/`_require_file` shape
-  (`tomllib`, raises loudly at load time on a missing/malformed file);
-  it also guards against a data-authoring collision — two different
-  `team_id`s claiming the identical `(host, path)`, compared via
-  `partner_scrape.model.slugify` on the parsed URL's netloc+path, never
-  on host alone (`carlsbaded.org`/`sites.google.com` each legitimately
-  recur across distinct-path entries in the real overlay). Mutates and
-  returns the same list, matching `merge_teams()`/`geocode_teams()`'s
-  shape; idempotent. Called once by `run_teams()`, after
-  `geocode_teams()` and before `verify_team_websites()`.
-- **`teams.scrape.verify_team_websites(teams, fetcher, *, user_agent=
-  DEFAULT_USER_AGENT) -> dict[str, str]`** (sprint 013 ticket 001) —
-  fetches every `Team.website`, in place: an empty `website` sets
-  `website_status = "none"`; a URL disallowed by `fetch.is_allowed()`
-  (checked before any request, matching `discovery/hub_scan.py::
-  scan_hub()`'s per-page pattern) sets `"unverified"`; a 2xx response
-  sets `"confirmed"` and adds the fetched body to the returned dict,
-  keyed by `team_id`; anything else — non-2xx, `UrllibFetcher`'s
-  synthetic transport-error status `0`, or an unexpected `Fetcher`-layer
-  exception (defensive; see Constraints) — sets `"unverified"`. Every
-  outcome besides `"confirmed"` also logs a `logging.WARNING` naming the
-  team and the reason, isolated per team — never raises out of this
-  function regardless of cause. Logs one `logging.INFO` summary line
-  (aggregate confirmed/unverified/none counts and 2xx rate) after every
-  team is processed. Called once by `run_teams()`, after
-  `apply_website_overrides()` and before `export_teams()`, taking the
-  same `fetcher` every other network-touching stage already receives
-  (no dedicated data-dir-style override parameter of its own). See
-  Design for why the returned dict is a plain value, never a `Team`
-  field, and why robots-disallow/non-2xx/transport-error all collapse
-  to one `"unverified"` outcome.
-- **`teams.sponsor_candidates.gather_sponsor_candidates(html, page_url)
-  -> list[str]`** (sprint 013 ticket 003) — the deterministic, offline
-  half of sponsor extraction (see Orientation and Design). Parses
-  `html` once with `lxml`; gathers `<img>` `alt`/`title` text and
-  outbound `<a>` link text/hostname from two independent signals: (a)
-  the following-sibling block of any short (≤60 char), container-free
-  element matching `/sponsor|partner|thank/i` and not nested in a
-  `<nav>` (broader than `<h1>`-`<h6>` — see Constraints/Design for why),
-  and (b) every `<footer>` element on the page, regardless of any
-  nearby heading. Candidates are whitespace-cleaned, checked against the
-  team's own hostname (derived from `page_url`) and a fixed CMS/
-  aggregator/social/nav-boilerplate denylist, deduplicated
-  case-insensitively, and capped at `MAX_CANDIDATES = 40`. Returns `[]`
-  (with a `logging.WARNING`) for unparseable HTML, and `[]` (silently —
-  the normal case for most team pages) when neither signal is found.
-  Zero imports beyond `lxml.html` and the standard library — no
-  `fetch`/`enrich`/`adapters`/`anthropic` (Constraints). Called by
-  ticket 005's `sponsor_extract.py`, sequenced into `run_teams()`.
-- **`teams.sponsor_llm.SponsorLLMClient`** (sprint 013 ticket 004) — the
-  injectable protocol (`classify_sponsors(candidates: list[str],
-  context: dict[str, Any]) -> SponsorExtractionResult`), parallel in
-  shape to `enrich.llm_client.LLMClient` but with no import relationship
-  to it (Constraints/Design). `context` carries `"organization"` (the
-  team's own organization/school name) and `"hostname"` (the page's own
-  hostname), either of which may be absent or empty; both are named
-  explicitly in the exclusion list the system prompt builds.
-  `SponsorExtractionResult` (`confirmed_sponsors: list[str]`) drives
-  `SPONSOR_EXTRACTION_JSON_SCHEMA`, a JSON-schema-from-dataclass
-  generation helper duplicated from, not imported from,
-  `enrich.llm_client._build_enrichment_json_schema`'s pattern.
-  `SponsorClassificationError` is raised for any malformed/wrong-shaped
-  response (mirroring `enrich.llm_client.LLMEnrichmentError`) — it does
-  **not** cover "a returned name absent from the candidate list," which
-  is ticket 005's own verbatim-validation job, not this client's
-  (Constraints).
-- **`teams.sponsor_llm.AnthropicSponsorLLMClient`** (sprint 013 ticket
-  004) — the real implementation. Constructs `anthropic.Anthropic()`
-  with no explicit `api_key` (matching
-  `enrich.llm_client.AnthropicLLMClient`'s exact pattern — the SDK
-  resolves `ANTHROPIC_API_KEY` itself). `MODEL_ID =
-  "claude-haiku-4-5-20251001"` (redefined locally, same value as
-  `enrich.llm_client.MODEL_ID`, not imported). `classify_sponsors()`
-  sends `system` (a fresh per-call prompt naming `context`'s
-  organization/hostname plus the fixed FIRST/FTC/FRC/FLL program-name
-  and CMS/hosting-vendor exclusion lists — see Design for why this is
-  rebuilt per call, not a static module-level string) and `messages`
-  (one user turn carrying the bounded candidate list as JSON), with
-  `output_config={"format": {"type": "json_schema", "schema":
-  SPONSOR_EXTRACTION_JSON_SCHEMA}}`, matching
-  `AnthropicLLMClient.enrich_event()`'s request shape. No retry/caching
-  logic here (the `anthropic` SDK already retries; caching is
-  `SponsorCache`'s job, a different module).
-- **`teams.sponsor_llm.FixtureSponsorLLMClient`** (sprint 013 ticket
-  004) — the test double, mirroring
-  `enrich.llm_client.FixtureLLMClient`'s shape: canned
-  `SponsorExtractionResult`s in `responses`, looked up by
-  `key_fn(candidates, context)` (default: `tuple(candidates)`, since the
-  candidate list is this call's primary variable input), with every
-  `(candidates, context)` call recorded in order in `calls` — ticket
-  005's cache-hit call-counting tests will assert against this list.
-  Never constructs or calls `anthropic.Anthropic`.
-- **`teams.sponsor_cache.content_hash(candidates: list[str]) -> str`**
-  (sprint 013 ticket 004) — a stable SHA-256 hash over exactly the
-  candidate list a `classify_sponsors()` call would receive, nothing
-  else (not the raw page body, not any other `Team` field). Order-
-  sensitive, which is a non-issue in practice since
-  `gather_sponsor_candidates()` already returns a deterministic,
-  discovery-ordered list for an unchanged page.
-- **`teams.sponsor_cache.SponsorCache(cache_dir=None, clock=...)`**
-  (sprint 013 ticket 004) — `lookup(team_id, candidates) ->
-  SponsorExtractionResult | None` / `store(team_id, candidates, result)
-  -> None`. One JSON file per `(team_id, content_hash(candidates))` pair
-  under `{cache_dir}/sponsor_extraction_cache/` — the pair is hashed
-  together into the filename (neither component is filesystem-safe on
-  its own), so a changed candidate list is naturally a cache miss (a
-  different filename), not a same-file staleness comparison (see
-  Design, contrasting this with `EnrichmentCache`'s shape). A missing or
-  version-mismatched `schema_version` (`_CACHE_SCHEMA_VERSION = 1`) is
-  also treated as a miss, mirroring `enrich/cache.py`'s
-  stale-entry-is-a-miss convention. `cache_dir` defaults to
-  `config.get_scrape_cache_dir()`; every test in
-  `tests/teams/test_sponsor_cache.py` passes an explicit `tmp_path`.
-  Called by ticket 005's `sponsor_extract.py`, sequenced into
-  `run_teams()`.
+  `merge_teams()` and before `export_teams()`.
 - **`teams.geo.SchoolIndex(data_dir=None)`** (this ticket) — loads all
   five `teams/data/` files once and exposes `resolve(team)` (the full
   ladder for one `Team`, mutating it in place), `resolve_school(org,
@@ -1729,12 +1203,7 @@ for a small (~52-site) corpus that changes rarely.
   that none has been needed yet, whether measured against the original
   211-team fixture or the real, live 230-team corpus ticket 011-003's
   reopening confirmed). All five are plain data, never imported as
-  Python. Sprint 013 ticket 006 adds a sixth,
-  **`discovered-websites.toml`** (52 entries — 31 discovered websites +
-  21 social-only teams — transcribed verbatim from the sprint's
-  committed research artifact; `teams.website_overrides.
-  apply_website_overrides()` reads it, not `teams.geo.SchoolIndex`),
-  same "plain data, never imported as Python" convention.
+  Python.
 - **`dev/refresh_school_directories.py`** (this ticket) — the
   standalone, human-run yearly refresh script that produces the four
   generated files above (not `school-overrides.toml`, which is
@@ -1783,23 +1252,41 @@ for a small (~52-site) corpus that changes rarely.
 - **`registry.schema.SourceConfig` / `registry.loader.load_active_sources`
   (from `registry/`)** — reused verbatim for per-league source config;
   no new schema. See `registry/DESIGN.md`.
-- **`normalize.partners.normalize_org_name` (from `normalize/`)** (this
-  ticket) — `teams.merge`'s only edge into `normalize/`, read-only:
-  organization-name normalization for cross-league linking, reused
-  directly rather than reimplemented. This is a *new* caller of an
-  *existing* function, not a new dependency on `normalize/run()` or any
+- **`normalize.partners.normalize_org_name` (from `normalize/`)** —
+  `teams/`'s only edge into `normalize/`, read-only, with two call sites
+  now: `teams.merge.merge_teams()` (ticket 011-003, cross-league
+  organization linking) and, since sprint 013,
+  `teams.sponsor_extract.extract_sponsors()` (structured/scraped sponsor
+  name consolidation — Design). Both are new callers of the same
+  *existing* function, never a new dependency on `normalize/run()` or any
   other part of that pipeline — `teams/` still has no edge into
   `enrich/`, `normalize.run()`, `pipeline.run()`, or either existing
-  export writer (sprint.md's Impact on Existing Components). See
-  `normalize/DESIGN.md`.
-- **`fetch.Fetcher` (from `fetch/`)** — the protocol every `TeamSource`
-  method takes as an explicit argument. Production wiring to a real
-  `fetch.PoliteFetcher` instance happens in `cli.py`'s `_run_teams()`
-  handler, passed through `teams.pipeline.run_teams()`'s `fetcher`
-  parameter — nothing in `teams/sources/` or `teams/pipeline.py`
-  constructs a concrete fetcher's default itself except that one CLI
-  call site, matching `adapters/leaguesync.py`'s convention of taking
-  `Fetcher` as a parameter. See `fetch/DESIGN.md`.
+  export writer. See `normalize/DESIGN.md`.
+- **`fetch.Fetcher` / `fetch.is_allowed` (from `fetch/`)** — the protocol
+  every `TeamSource` method takes as an explicit argument. Production
+  wiring to a real `fetch.PoliteFetcher` instance happens in `cli.py`'s
+  `_run_teams()` handler, passed through `teams.pipeline.run_teams()`'s
+  `fetcher` parameter — nothing in `teams/sources/` or
+  `teams/pipeline.py` constructs a concrete fetcher's default itself
+  except that one CLI call site, matching `adapters/leaguesync.py`'s
+  convention of taking `Fetcher` as a parameter. Since sprint 013, the
+  same `fetcher` parameter is also `teams.scrape.
+  verify_team_websites()`'s only network dependency (Constraints,
+  Interfaces above), and `fetch.is_allowed` is called directly (not only
+  via `PoliteFetcher`'s internal check) to short-circuit a
+  robots-disallowed URL before ever calling `fetcher.get()`, matching
+  `discovery/hub_scan.py::scan_hub()`'s existing pattern. See
+  `fetch/DESIGN.md`.
+- **`anthropic` SDK (external)** (sprint 013) — `teams.sponsor_llm.
+  AnthropicSponsorLLMClient` constructs `anthropic.Anthropic()` with no
+  explicit `api_key`, resolving `ANTHROPIC_API_KEY` from the environment
+  itself, exactly matching `enrich.llm_client.AnthropicLLMClient`'s own
+  documented reason for not going through a `config.py` accessor. This is
+  a second, independent construction of the same SDK client type — not a
+  shared instance and not an import from `enrich/` (Design) — so a
+  missing/invalid key surfaces at `teams.sponsor_extract`'s own call site
+  and is caught by its per-team fail-open guard (Constraints), never by
+  anything in `enrich/`.
 - **`config.get_site_dir()` / `config.get_mirror_site_dirs()` /
   `config.get_tba_api_key()` / `config.get_tba_url()` (from
   `config.py`)** — the last two, this ticket, mirror
@@ -1969,188 +1456,49 @@ for a small (~52-site) corpus that changes rarely.
 - Whether `teams.json` is ever joined to the curated partner directory,
   and whether LLM-assisted website discovery is added later, are both
   explicitly out of scope for the whole sprint, not just this ticket —
-  see `sprint.md`'s Design Rationale and Scope.
-- **(Sprint 013 ticket 001) `fetch.is_allowed()` called with a
-  `PoliteFetcher` as its `fetcher` argument raises `RobotsDisallowed`
-  instead of returning `False` for a site whose robots.txt blanket-
-  disallows everything (`Disallow: /`).** Discovered live during this
-  ticket's own pre-close validation, on two genuinely-live sites
-  (`frc-3341`/`westviewrobotics.com`, `frc-2193`/
-  `www.hilltoprobotics.com` — confirmed reachable via a plain `curl`,
-  see Orientation). Root cause: `is_allowed(url, fetcher, user_agent)`
-  fetches robots.txt via `fetcher.get(robots_txt_url(url))`; when
-  `fetcher` is a `PoliteFetcher`, that call is itself
-  `PoliteFetcher.get()`, which re-checks robots.txt permission
-  *against robots.txt's own URL* before returning its content — and a
-  blanket `Disallow: /` also matches the literal `/robots.txt` path,
-  so evaluating the disallow trips the disallow, raising
-  `RobotsDisallowed` from a context with no per-team boundary to catch
-  it cleanly. This is not new to this ticket: `discovery/hub_scan.py::
-  scan_hub()` calls `fetch.is_allowed()` with an identically-real
-  `PoliteFetcher` (via `cli.py`'s `_run_discover_candidates()`, already
-  shipped) and would hit the exact same case against any hub whose
-  robots.txt blanket-disallows everything — it has simply never been
-  exercised against such a hub yet. `verify_team_websites()`'s
-  defensive `except Exception` (Constraints) catches this cleanly and
-  marks the team `"unverified"`, which is arguably the *correct*
-  outcome regardless of the exception mechanics (a site whose own
-  robots.txt disallows everything must never be linked, per this
-  project's own robots-respecting principle) — but the code path
-  getting there is an accident of exception handling, not a designed
-  "blanket disallow" case with its own clean, boolean-returning
-  branch. **Not fixed in this ticket**: the root cause lives in
-  `fetch/robots.py`/`fetch/cache.py` (shared infrastructure, also used
-  by `hub_scan.py` and every future `fetch/` consumer), squarely
-  outside `teams/`'s scope and this ticket's acceptance criteria,
-  which only require that a robots disallow (by whatever mechanism)
-  never crash the run and always lands as `"unverified"` — both true
-  here. Worth a dedicated `fetch/` ticket: teach `is_allowed()` (or
-  `PoliteFetcher.get()`) to never apply its own robots check to a
-  robots.txt URL fetching itself, matching the robots.txt protocol's
-  own convention that the file is always fetchable regardless of its
-  content.
-- **(Sprint 013 ticket 003) `gather_sponsor_candidates()`'s heading/
-  denylist heuristics are validated against five real captured pages,
-  not a large corpus.** Real-world evidence found and fixed one
-  genuine false-positive shape while building this ticket (a wrapping
-  container mistaken for a short heading — Constraints, above), and the
-  fixtures deliberately span several structurally different real sites
-  (a modern component-framework page, a WordPress/Divi site, a static
-  hand-built one, a Google Sites/legacy page) rather than one family —
-  but 5 pages is not 53 (the FRC teams with a known website as of this
-  ticket) let alone the larger set ticket 006 discovered. Ticket 004/
-  005's own required pre-close live validation (sprint.md's Test
-  Strategy: "a human samples the scraped sponsor output ... at minimum
-  every team that gained a sponsor from scraping") is the first point
-  this function's candidate lists get checked at real scale — if that
-  review surfaces a new false-positive *shape* (not just an individual
-  bad name a human should catch anyway), this module, not just the LLM
-  prompt or ticket 005's denylist, is the first place to look.
-- **(Sprint 013 ticket 004) `AnthropicSponsorLLMClient`'s actual
-  classification quality is entirely untested against the real
-  Anthropic API — every test in `tests/teams/test_sponsor_llm.py` uses
-  `FixtureSponsorLLMClient` or a monkeypatched `anthropic.Anthropic`
-  class.** This is deliberate (sprint.md's testing policy: no network,
-  no `ANTHROPIC_API_KEY` requirement in any test) and matches
-  `enrich/`'s own equivalent testing gap, but it means this ticket
-  proves the client's *request/response plumbing* is correct — schema
-  generation, prompt construction, error handling — not that
-  Claude Haiku actually classifies real sponsor candidate lists well.
-  That is explicitly deferred to ticket 005's required pre-close live
-  `--dry-run -v` run and human sampling (sprint.md's Test Strategy,
-  SUC-004's own last acceptance criterion), the same gate ticket 003's
-  deterministic candidate-gathering heuristics are held to above.
-  Also untested here, for the same reason: whether `ANTHROPIC_API_KEY`
-  is actually provisioned in CI (sprint.md's Migration Concerns flags
-  this as unverified, mirroring the pre-existing `TBA_KEY` gap) —
-  `AnthropicSponsorLLMClient()` itself never raises for a missing key
-  (construction is lazy; the SDK only resolves credentials on an actual
-  API call), so a missing key surfaces only when `classify_sponsors()`
-  is actually invoked, which ticket 005's fail-open per-team guard
-  (SUC-004's Error Flows) is responsible for catching.
-- **(Sprint 013 ticket 005) Live-run sample review, resolving the gap
-  the two entries above flagged.** `partner-scrape teams --dry-run -v`
-  against the real, live 278-team registry (2026-08-30): 52/80 team
-  pages confirmed (65% 2xx, matching ticket 001's own measurement), 32
-  teams had sponsor-shaped page content, 11 gained a new scraped
-  sponsor, 0 per-team failures. A full sample review (every team that
-  gained a scraped sponsor, not a subset) found:
-  - **One real defect, fixed before this ticket closed**: `frc-5137`'s
-    page embedded a social post whose full caption text (and, once the
-    first fix landed, a second independently-truncated fragment of the
-    same caption) was gathered as a candidate and confirmed by the
-    classification call — "A huge thank you to @generalatomics for
-    hosting Team 5137 Iron Kodiaks on Wednesday! ... #ironkodiaks
-    #team5137". `sponsor_candidates.py` has no length gate (only a
-    candidate-*count* cap), and this was well within any plausible
-    length the LLM might treat as a name. Fixed by adding two guards to
-    `sponsor_extract.py`'s own denylist step (Interfaces,
-    `extract_sponsors`): a length cap (`_MAX_SPONSOR_NAME_LENGTH = 80`
-    — the longest genuine name in this project's live data is under 50
-    chars) and an "@"/"#" social-caption-marker check
-    (`_looks_like_social_caption`), the second needed because the
-    truncated fragment alone was short enough to clear the length cap.
-    Re-verified live after the fix: `frc-5137` now correctly
-    contributes no scraped sponsor at all (its page had nothing else
-    sponsor-shaped).
-  - **Two items left open for a human to weigh, not code defects**:
-    (1) `frc-1613`'s scraped list includes "St. Michael School" among
-    ~19 otherwise-plausible local-business names; this team's
-    structured `organization` field is empty (neither FTCScout nor TBA
-    reported one for it), so the denylist's own-organization check
-    (Constraints) has nothing to compare against and cannot catch a
-    school that genuinely is this team's own affiliation if that's
-    what it is — cannot be resolved from this project's own data alone.
-    (2) **RESOLVED (ticket 005, reopened)**: several scraped names were
-    real companies but ugly, filename-derived display strings (e.g.
-    `"Nordson-Corporation-Logo-web"`, `"1280px-Thermo_Fisher_Scientific_
-    logo"` — three carlsbaded.org-hosted teams share these, since they
-    share one sponsor-page footer) rather than clean names — correct
-    attribution, poor formatting, deliberately left unfixed at this
-    ticket's first pass (matching this field's "provenance, not
-    curation" scope, Constraints). The reopening's
-    `sponsor_canonical.reconstruct_slug()` now recovers a clean display
-    name deterministically wherever the filename/hostname shape and
-    corpus-wide cross-reference allow it (both real examples here now
-    publish as `"Nordson"` and `"Thermo Fisher Scientific"`), and drops
-    the rest rather than publish something still mangled — no longer a
-    formatting gap, see the RESOLVED entry below.
-  - **RESOLVED (ticket 005, reopened 2026-08-30) — a pre-existing,
-    discovered-not-introduced gap**: `normalize_org_name` (reused
-    verbatim per this ticket's own explicit "do not write a second
-    normalizer" instruction) lowercases/strips punctuation/drops a
-    leading "the "/collapses whitespace, but does not strip corporate
-    suffixes — `normalize_org_name("Qualcomm Inc.") == "qualcomm inc"`,
-    not `"qualcomm"`. Sprint.md's own motivating dedup example
-    ("Qualcomm" merging with a scraped "Qualcomm Inc.") therefore did
-    not originally merge; the first pass's
-    `TestKnownNormalizeOrgNameLimitation` reproduced and asserted this
-    directly rather than silently working around it, and was correctly
-    left unchecked as an open acceptance criterion rather than
-    misreported. Not observed in the live 278-team corpus at the time
-    (structured/scraped overlap for the same team was still rare — 11
-    teams, none hitting this exact case), so it did not block the first
-    pass — but auditing the real, regenerated `teams.json` afterward
-    (57 teams with sponsors, 130 "distinct" sponsor strings) showed the
-    consequence was worse than this one example suggested: the same
-    real company is routinely reported under different spellings by
-    *different* teams' own structured records (no per-team merge,
-    however good, can ever see that), and several FTCScout-sourced
-    strings carried a literal `"&R"` corruption suffix on top. This is
-    what reopened the ticket. **Fix**: `teams.sponsor_canonical.py`
-    (new module) — `canonical_key()` layers a corporate-suffix strip on
-    top of `normalize_org_name` (never modifying it — the scope
-    boundary above still holds, since `normalize_org_name` remains the
-    curated partner-directory join's own shared key, untouched) and
-    `sponsor_extract.py::_merge_sponsors`/`_is_denylisted` now use it;
-    `canonicalize_sponsors()` is the new corpus-wide pass
-    `run_teams()` calls once, after `extract_sponsors()` and before
-    `export_teams()`. Live-verified after the fix (`partner-scrape
-    teams --site-dir site` against the real 278-team registry,
-    2026-08-30, same run measured in the top-of-file header): the same
-    130 raw distinct sponsor strings now canonicalize to **110 distinct
-    real companies**. Top 20 by team count, sampled critically —
-    nothing is an image filename, a bare hostname, a CMS vendor, or a
-    school that is really the crediting team's own affiliation (cross-
-    checked every top-20 entry against the crediting teams'
-    `organization` field directly): Qualcomm (22 teams — the single
-    most important data point, now one entry instead of three),
-    Nordson (6), DoD STEM (5), Solar Turbines (4), BAE Systems (4),
-    Francis Parker School (4 — the crediting teams' own `organization`
-    is "D Robotics Education", a different, unrelated org, so this is a
-    genuine external sponsorship, not a self-affiliation false
-    positive), Viasat (4), Teradata (3), Thermo Fisher Scientific (3),
-    Millipore Sigma (3), Gene Haas Foundation (3), RISE (3), Apple (3),
-    DoDea (3), Leidos (2), Robot Planet Ecuador (2), SAIC (2), PTC (2),
-    AFCEA (2), Carlsbad Educational Foundation (2). See
-    `sponsor_canonical.py`'s own
-    module docstring for the full defect analysis, including the "&R"
-    root-cause finding (FTCScout's own upstream data corruption,
-    confirmed present verbatim in the raw API fixture — not a decode
-    bug anywhere in this project's own code) and what is deliberately
-    *not* attempted (fuzzy business-relationship clustering of
-    legally-distinct-but-affiliated entities, e.g. "CAT" vs.
-    "Caterpillar", or "General Atomics Aeronautical" vs. "General
-    Atomics Sciences Education Foundation" — no deterministic string
-    transformation connects either pair, and merging them would need a
-    hand-curated alias table this module deliberately does not build).
+  see `sprint.md`'s Design Rationale and Scope. (Sprint 013) The new
+  per-team sponsor company-name data makes the partner-directory-join
+  question more concretely answerable but does not answer it — still
+  open.
+- **(Sprint 013) `ANTHROPIC_API_KEY` provisioning for the `teams`
+  subcommand's scheduled CI runs is unverified** — the exact gap sprint
+  011 flagged for `TBA_KEY` (provisioned locally, not confirmed in the
+  scheduled workflow's secrets). The main `run` pipeline already depends
+  on this key for event enrichment, so it likely already exists in CI,
+  but `teams` may run under a different workflow/secret scope. A missing
+  key degrades sponsor extraction to a logged warning and
+  structured-sponsors-only output (Constraints' fail-open guarantee),
+  never aborting the run — but scheduled sponsor extraction silently
+  produces nothing useful until this is confirmed.
+- **(Sprint 013) Structured+scraped sponsor overlap for the same team is
+  currently impossible in the live 278-team corpus** (FTC teams have no
+  `website`; FRC teams have no structured `sponsors` field), so
+  `extract_sponsors()`'s normalize/dedup/provenance-merge logic is built
+  to handle a real collision generally but is exercised only by fixture
+  tests, never a live one, this sprint. If a future source ever supplies
+  both for the same team, this is the first place to check that the merge
+  behaves as designed (structured display name and provenance win; the
+  scraped name is absorbed into the same normalized key).
+- **(Sprint 013) Whether the false-positive guard (verbatim-candidate
+  validation plus a small denylist) is sufficient without a required
+  human-sampling step on every future *scheduled* run, not just this
+  sprint's one-time close-time review, is unresolved.** This sprint
+  requires a human to sample the scraped sponsor output before close
+  (see `sprint.md`'s Test Strategy); whether an unattended
+  weekly/monthly re-run can be trusted to the code-level guard alone, or
+  needs the same review repeated, is a product/process decision this
+  sprint does not make.
+- **(Sprint 013) Sponsor data is not carried forward between `teams`
+  runs.** `Team` objects are rebuilt fresh from their sources every
+  `run_teams()` call, with no read-back of the previous `teams.json` —
+  the same stateless-rebuild convention every other stage in this
+  subsystem already follows (geocoding, merging). For deterministic
+  stages that is harmless; for sponsor scraping it means a transient
+  fetch failure or a momentarily-down team site on a *later* run silently
+  drops that team's previously-scraped sponsors (reverting to whatever
+  the structured sources alone provide — currently none, for an FRC
+  team) rather than preserving the last known-good result. Not solved
+  this sprint — "sponsors only ever grow" is not actually true of this
+  design, and a future sprint wanting persistence would need to read back
+  the prior `teams.json` before merging, which no stage in this
+  subsystem does today for any field.
