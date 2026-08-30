@@ -73,7 +73,7 @@ e.g. `sd-river-park-foundation`, which this ticket does not touch).
       explicitly out of this ticket's scope.
 - [x] `partner-scrape --dry-run --source <id>` run once per new source
       confirms non-zero, dated output before commit.
-- [ ] A live/staged export after registering Balboa Park shows at least
+- [x] A live/staged export after registering Balboa Park shows at least *(team-lead ruling: measurement recorded — 0 collapses, root cause = Fleet listing_html sets no Event.location so the venue component blocks the merge; accepted per the "record the result either way" framing; follow-up in issue 38)*
       one collapsed cross-source match against an existing Fleet/Nat
       source's own listing for the same event (demonstrating existing
       dedup applies) — and confirms no code change was needed in

@@ -39,38 +39,38 @@ adapters already finding them.
 
 ## Acceptance Criteria
 
-- [ ] `enrich/llm_client.py`'s `_SYSTEM_PROMPT` judges `relevant` as "a
+- [x] `enrich/llm_client.py`'s `_SYSTEM_PROMPT` judges `relevant` as "a
       STEM learning opportunity for any audience (children, teens,
       families, adults, educators, college-bound students)"; noise
       rejection language (non-STEM recreation, galas, closure notices,
       press releases, nav pages, no-content records) is unchanged.
-- [ ] A new `PROMPT_VERSION` constant exists in `llm_client.py`, bumped
+- [x] A new `PROMPT_VERSION` constant exists in `llm_client.py`, bumped
       by this change.
-- [ ] `enrich/cache.py`'s `EnrichmentCache` entries store `prompt_version`
+- [x] `enrich/cache.py`'s `EnrichmentCache` entries store `prompt_version`
       alongside the existing `schema_version`/`content_hash`; `.lookup()`
       treats a missing or mismatched `prompt_version` as a miss,
       independently of the `schema_version`/`content_hash` checks (never
       conflated into `_CACHE_SCHEMA_VERSION`).
-- [ ] Fixture test: an adult-audience-worded event (e.g. "a professional
+- [x] Fixture test: an adult-audience-worded event (e.g. "a professional
       development workshop for working engineers") enriches
       `relevant=True` with `Adult` in `age_grade_level`.
-- [ ] Fixture test: an existing noise fixture (gala, closure notice, nav
+- [x] Fixture test: an existing noise fixture (gala, closure notice, nav
       page) still enriches `relevant=False`.
-- [ ] Fixture test: a cache entry written at the old `PROMPT_VERSION` is
+- [x] Fixture test: a cache entry written at the old `PROMPT_VERSION` is
       a miss under the new one even though its `content_hash` is
       unchanged — the LLM client is called exactly once more for that
       event, proven by a call-counting assertion (matching
       `_CACHE_SCHEMA_VERSION`'s existing test convention).
-- [ ] Fixture test: a cache entry already at the current `PROMPT_VERSION`
+- [x] Fixture test: a cache entry already at the current `PROMPT_VERSION`
       remains a hit (no spurious re-enrichment).
-- [ ] Fixture test: `prompt_version` and `schema_version` are checked
+- [x] Fixture test: `prompt_version` and `schema_version` are checked
       independently — bumping one without the other forces exactly the
       intended re-check, not both or neither.
-- [ ] `kind="internship"` events still bypass this subsystem entirely,
+- [x] `kind="internship"` events still bypass this subsystem entirely,
       unchanged (they were never routed through the relevance prompt
       either way).
-- [ ] `event.trusted` still overrides the relevance gate, unchanged.
-- [ ] Full test suite stays green.
+- [x] `event.trusted` still overrides the relevance gate, unchanged.
+- [x] Full test suite stays green.
 
 ## Testing
 
