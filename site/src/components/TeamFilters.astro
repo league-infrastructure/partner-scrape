@@ -25,6 +25,12 @@ function tally(field: string): Map<string, number> {
 const leagueCounts = tally('league');
 const orgTypeCounts = tally('org_type');
 const inRegionCount = teams.filter(t => t.in_region).length;
+// Derived boolean facet, same shape as inRegionCount above -- not
+// tally(), since "has a website" means website_status === 'confirmed',
+// not a raw field value to count directly (an 'unverified' website must
+// not count toward this facet: a known-dead link is not "a website" for
+// a visitor deciding what's worth clicking).
+const hasWebsiteCount = teams.filter(t => t.website_status === 'confirmed').length;
 
 const leagues = [
   { value: 'FTC', label: 'FTC — FIRST Tech Challenge' },
@@ -75,6 +81,11 @@ const groups = [
       <input type="checkbox" data-filter="region" value="true" disabled={inRegionCount === 0} />
       <span class="facet-name">San Diego County Only</span>
       <span class="facet-count">({inRegionCount})</span>
+    </label>
+    <label class:list={['filter-option', { 'is-empty': hasWebsiteCount === 0 }]}>
+      <input type="checkbox" data-filter="website" value="true" disabled={hasWebsiteCount === 0} />
+      <span class="facet-name">Has a Website</span>
+      <span class="facet-count">({hasWebsiteCount})</span>
     </label>
     <a href="#" class="filter-clear-section" data-clear-section>Clear</a>
   </div>

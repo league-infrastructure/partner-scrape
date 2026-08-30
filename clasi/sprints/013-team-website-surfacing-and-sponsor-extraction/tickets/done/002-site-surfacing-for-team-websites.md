@@ -1,9 +1,11 @@
 ---
 id: '002'
 title: Site surfacing for team websites
-status: open
-use-cases: [SUC-002]
-depends-on: ['001']
+status: done
+use-cases:
+- SUC-002
+depends-on:
+- '001'
 github-issue: ''
 issue: 21-scrape-team-sites-for-sponsors.md
 completes_issue: true
@@ -45,21 +47,21 @@ Rationale for why the badge/facet/link-gating all key off
 
 ## Acceptance Criteria
 
-- [ ] `TeamCard.astro` renders a `SocialIcon` `website`-platform badge
+- [x] `TeamCard.astro` renders a `SocialIcon` `website`-platform badge
       if and only if `team.website_status === 'confirmed'`.
-- [ ] `TeamCard.astro` carries a `data-website` attribute (or equivalent)
+- [x] `TeamCard.astro` carries a `data-website` attribute (or equivalent)
       reflecting confirmed-status for `TeamFilters`' facet to match
       against.
-- [ ] `TeamFilters.astro` has a "Has a Website" checkbox facet with a
+- [x] `TeamFilters.astro` has a "Has a Website" checkbox facet with a
       build-time count of teams whose `website_status === 'confirmed'`;
       checking it narrows the visible list correctly.
-- [ ] `teams/[slug].astro`'s Team Website field is a clickable `<a>`
+- [x] `teams/[slug].astro`'s Team Website field is a clickable `<a>`
       only when `confirmed`; renders plain unlinked text with a note
       when `unverified`; renders nothing when `none` (existing behavior,
       unchanged).
-- [ ] `just build` succeeds; the `/teams` page count still equals the
+- [x] `just build` succeeds; the `/teams` page count still equals the
       team count in the `teams.json` it was built against.
-- [ ] No existing `TeamCard`/`TeamFilters`/detail-page test or fixture
+- [x] No existing `TeamCard`/`TeamFilters`/detail-page test or fixture
       needs an unrelated change — this ticket is additive to those
       components.
 
