@@ -1,10 +1,16 @@
-"""Enrichment Cache: identity_key -> (content_hash, EnrichmentResult, enriched_at).
+"""Enrichment Cache: identity_key -> (schema_version, prompt_version, content_hash,
+EnrichmentResult, enriched_at).
 
 See sprint.md's Architecture > Enrichment Cache, Design Rationale ("the
 Enrichment Cache is a new module, not reuse of Fetch & Cache's on-disk
 cache"). Tracks which Events have already been enriched at their current
 content so unchanged events skip a fresh LLM call -- cost control, per
 SUC-011.
+
+Sprint 014 (issue 22): each entry also carries `prompt_version`, an
+independent signal from `schema_version` -- see `_CACHE_SCHEMA_VERSION`
+and `PROMPT_VERSION` below for what each one answers and why they are
+checked separately, never conflated.
 
 Persisted under `SCRAPE_CACHE_DIR`, one JSON file per Event
 `identity_key()`, sharded the same way `fetch/cache.py` shards its
@@ -33,7 +39,7 @@ from pathlib import Path
 from typing import Any, Callable
 
 from partner_scrape import config
-from partner_scrape.enrich.llm_client import EnrichmentResult
+from partner_scrape.enrich.llm_client import PROMPT_VERSION, EnrichmentResult
 from partner_scrape.model import Event, IdentityKey
 
 #: Subdirectory of `SCRAPE_CACHE_DIR` entries are stored under.
@@ -153,6 +159,16 @@ class EnrichmentCache:
             # both are a miss, not a deserialization error. Forces
             # exactly one re-enrichment per affected Event.
             return None
+        if entry.get("prompt_version") != PROMPT_VERSION:
+            # Sprint 014 (issue 22). Independent of the schema_version
+            # check above -- this answers "is the stored *judgment*
+            # still valid under the current prompt," not "is the
+            # stored value's shape still current." A missing key
+            # (pre-sprint-014 entry) or a stale version is a miss,
+            # forcing exactly one re-enrichment per affected Event.
+            # content_hash cannot catch this: it deliberately covers
+            # only an Event's input fields, never the prompt text.
+            return None
         if entry["content_hash"] != content_hash(event):
             return None
         return _result_from_jsonable(entry["result"])
@@ -163,6 +179,7 @@ class EnrichmentCache:
         path.parent.mkdir(parents=True, exist_ok=True)
         entry = {
             "schema_version": _CACHE_SCHEMA_VERSION,
+            "prompt_version": PROMPT_VERSION,
             "content_hash": content_hash(event),
             "result": _result_to_jsonable(result),
             "enriched_at": self._clock().isoformat(),

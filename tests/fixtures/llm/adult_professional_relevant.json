@@ -1,0 +1,15 @@
+{
+  "start": "2026-09-10T09:00:00",
+  "end": "2026-09-10T16:00:00",
+  "all_day": false,
+  "location": "Qualcomm Conference Center, San Diego, CA",
+  "cost": "$150",
+  "registration_url": "https://example.org/register",
+  "areas_of_interest": ["Engineering"],
+  "age_grade_level": ["Adult"],
+  "cost_range": "Less than $200",
+  "time_of_day": ["Morning", "Afternoon"],
+  "opportunity_type": "Professional Development / Conferences",
+  "relevant": true,
+  "relevance_reason": "A professional development workshop in engineering for working engineers -- a STEM learning opportunity for an adult audience."
+}

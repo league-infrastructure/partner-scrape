@@ -9,6 +9,7 @@ sprint.md's testing policy.
 
 from __future__ import annotations
 
+import json
 import logging
 import threading
 import time
@@ -23,7 +24,12 @@ from partner_scrape.enrich.enricher import (
     LLM_SOURCE,
     LLMEnricher,
 )
-from partner_scrape.enrich.llm_client import EnrichmentResult, FixtureLLMClient, LLMEnrichmentError
+from partner_scrape.enrich.llm_client import (
+    PROMPT_VERSION,
+    EnrichmentResult,
+    FixtureLLMClient,
+    LLMEnrichmentError,
+)
 from partner_scrape.model import Event
 from partner_scrape.normalize.taxonomy import (
     build_taxonomy_text,
@@ -257,6 +263,76 @@ class TestCacheInvalidatesOnChangedContent:
         enricher.enrich([_event(description="second, changed description")])
 
         assert len(llm_client.calls) == 2
+
+
+# ---------------------------------------------------------------------
+# AC (sprint 014, issue 22): a PROMPT_VERSION bump forces exactly one
+# fresh LLM call per previously-cached Event whose content_hash is
+# unchanged -- proven here by a call-counting assertion through the
+# full LLMEnricher, matching _CACHE_SCHEMA_VERSION's existing
+# call-counting convention (TestCacheSkipsUnchangedEvents above).
+# ---------------------------------------------------------------------
+
+
+def _rewrite_cache_entry_prompt_version(tmp_path, prompt_version) -> None:
+    """Rewrite the sole cache entry file under ``tmp_path`` to carry
+    ``prompt_version`` (an int) or, if ``prompt_version`` is None, no
+    ``prompt_version`` key at all -- simulating a pre-sprint-014 entry.
+    """
+    [written] = list((tmp_path / "enrichment_cache").glob("*.json"))
+    entry = json.loads(written.read_text())
+    if prompt_version is None:
+        entry.pop("prompt_version", None)
+    else:
+        entry["prompt_version"] = prompt_version
+    written.write_text(json.dumps(entry))
+
+
+class TestPromptVersionBumpForcesExactlyOneAdditionalCall:
+    def test_stale_prompt_version_entry_is_a_miss_forcing_exactly_one_more_call(self, tmp_path):
+        cache = EnrichmentCache(cache_dir=tmp_path)
+        warm_up_client = FixtureLLMClient(responses={"Robotics Night": EnrichmentResult(relevant=True)})
+        LLMEnricher(warm_up_client, cache).enrich([_event()])
+        assert len(warm_up_client.calls) == 1
+
+        _rewrite_cache_entry_prompt_version(tmp_path, PROMPT_VERSION - 1)
+
+        fresh_client = FixtureLLMClient(responses={"Robotics Night": EnrichmentResult(relevant=True)})
+        LLMEnricher(fresh_client, cache).enrich([_event()])
+
+        assert len(fresh_client.calls) == 1  # exactly one more call, content unchanged
+
+    def test_missing_prompt_version_entry_is_a_miss_forcing_exactly_one_more_call(self, tmp_path):
+        """A pre-sprint-014 cache entry has no `prompt_version` key at
+        all -- must be treated the same as a stale version, not a
+        deserialization error."""
+        cache = EnrichmentCache(cache_dir=tmp_path)
+        warm_up_client = FixtureLLMClient(responses={"Robotics Night": EnrichmentResult(relevant=True)})
+        LLMEnricher(warm_up_client, cache).enrich([_event()])
+
+        _rewrite_cache_entry_prompt_version(tmp_path, None)
+
+        fresh_client = FixtureLLMClient(responses={"Robotics Night": EnrichmentResult(relevant=True)})
+        LLMEnricher(fresh_client, cache).enrich([_event()])
+
+        assert len(fresh_client.calls) == 1
+
+    def test_entry_already_at_the_current_prompt_version_is_a_hit_with_zero_calls(self, tmp_path):
+        """No spurious re-enrichment: an entry already written under the
+        current PROMPT_VERSION must not force another LLM call."""
+        cache = EnrichmentCache(cache_dir=tmp_path)
+        warm_up_client = FixtureLLMClient(responses={"Robotics Night": EnrichmentResult(relevant=True)})
+        LLMEnricher(warm_up_client, cache).enrich([_event()])
+
+        # Re-affirm the entry is at the current version (a no-op rewrite,
+        # proving the fixture helper itself doesn't force a miss).
+        _rewrite_cache_entry_prompt_version(tmp_path, PROMPT_VERSION)
+
+        should_not_be_called = FixtureLLMClient(responses={})
+        survivors = LLMEnricher(should_not_be_called, cache).enrich([_event()])
+
+        assert should_not_be_called.calls == []
+        assert survivors[0].relevant is True
 
 
 # ---------------------------------------------------------------------
