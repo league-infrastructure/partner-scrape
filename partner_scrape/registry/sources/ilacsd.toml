@@ -1,6 +1,28 @@
+# I Love A Clean San Diego -- DISABLED 2026-08-30 (sprint 014 ticket
+# 003 / issue 24 triage). Sibling registration to cleansd.toml (same
+# org, split across two historical domains -- see
+# dev/SCRAPER_GUIDELINES.md Section 8).
+#
+# Live re-probe 2026-08-30: www.ilacsd.org's TEC REST endpoint returns
+# HTTP 202 with an ``sg-captcha: challenge`` response header and a body
+# that meta-refreshes to /.well-known/sgcaptcha/ -- a real CAPTCHA
+# challenge (SiteGround's bot-protection product), not a simple
+# JS-rendering gap. The same sg-captcha challenge was independently
+# confirmed 2026-08-30 on several other unrelated orgs' sites this
+# triage pass touched (ecovivarium.toml, fitkidsamerica.toml,
+# namepa-net.toml, thriveps.toml) -- consistent with shared SiteGround
+# hosting rather than anything specific to this source.
+#
+# Not headless-fixable: a CAPTCHA challenge is designed to require
+# human (or third-party solving-service) interaction and is not
+# expected to be defeated by an unattended headless browser navigation.
+# See cleansd.toml's addendum for the separate reason headless would
+# not help even if the challenge were somehow passed (this is a JSON
+# API response, not an HTML page).
+
 org_name = "I Love A Clean San Diego"
 adapter_type = "tec_rest"
-enabled = true
+enabled = false  # disabled: www.ilacsd.org behind a SiteGround CAPTCHA challenge (sg-captcha, HTTP 202) -- confirmed live 2026-08-30
 
 [config]
 api_base = "https://www.ilacsd.org/wp-json/tribe/events/v1/events/"
@@ -8,4 +30,4 @@ api_base = "https://www.ilacsd.org/wp-json/tribe/events/v1/events/"
 [acquisition_policy]
 rate_limit_seconds = 1.0
 respect_robots = true
-discovered_via = "partners_viable.csv tier-1A bulk registration (2026-07-20)"
+discovered_via = "partners_viable.csv tier-1A bulk registration (2026-07-20); disabled sprint 014 ticket 003 (2026-08-30)"

@@ -11,7 +11,7 @@ from datetime import datetime
 from typing import Any
 
 from partner_scrape.enrich.cache import _CACHE_SCHEMA_VERSION, EnrichmentCache, content_hash
-from partner_scrape.enrich.llm_client import EnrichmentResult
+from partner_scrape.enrich.llm_client import PROMPT_VERSION, EnrichmentResult
 from partner_scrape.model import Event
 
 
@@ -225,3 +225,136 @@ class TestCacheSchemaVersion:
         cache.store(event, _sample_result(relevance_reason="fresh"))
 
         assert cache.lookup(event).relevance_reason == "fresh"
+
+
+# ---------------------------------------------------------------------
+# Cache prompt versioning (sprint 014, issue 22). content_hash covers
+# only *input* fields, never the prompt text, so it cannot detect a
+# change to the prompt's own semantics (the all-ages gate widening) --
+# an explicit, independent prompt_version is the signal that catches
+# that, mirroring _CACHE_SCHEMA_VERSION's convention above but checked
+# separately, never conflated with it.
+# ---------------------------------------------------------------------
+
+
+class TestCachePromptVersion:
+    def test_a_fresh_entry_is_written_with_the_current_prompt_version(self, tmp_path):
+        cache = EnrichmentCache(cache_dir=tmp_path)
+        cache.store(_sample_event(), _sample_result())
+
+        [written] = list((tmp_path / "enrichment_cache").glob("*.json"))
+        entry = json.loads(written.read_text())
+
+        assert entry["prompt_version"] == PROMPT_VERSION
+
+    def test_entry_missing_prompt_version_key_is_a_miss_not_a_deserialization_error(
+        self, tmp_path
+    ):
+        """A pre-sprint-014 cache entry has no `prompt_version` key at
+        all (it predates the concept, and was written under the old,
+        narrower K-12-only prompt). `lookup()` must treat that as a
+        miss -- forcing exactly one re-enrichment -- the same shape as
+        a missing `schema_version`, but checked independently."""
+        cache = EnrichmentCache(cache_dir=tmp_path)
+        event = _sample_event()
+        cache.store(event, _sample_result())
+
+        [written] = list((tmp_path / "enrichment_cache").glob("*.json"))
+        entry = json.loads(written.read_text())
+        del entry["prompt_version"]  # pre-sprint-014 entry
+        written.write_text(json.dumps(entry))
+
+        assert cache.lookup(event) is None
+
+    def test_entry_with_a_stale_prompt_version_is_a_miss(self, tmp_path):
+        cache = EnrichmentCache(cache_dir=tmp_path)
+        event = _sample_event()
+        cache.store(event, _sample_result())
+
+        [written] = list((tmp_path / "enrichment_cache").glob("*.json"))
+        entry = json.loads(written.read_text())
+        entry["prompt_version"] = PROMPT_VERSION - 1
+        written.write_text(json.dumps(entry))
+
+        assert cache.lookup(event) is None
+
+    def test_a_re_stored_entry_after_a_prompt_version_miss_is_a_hit_on_the_next_lookup(
+        self, tmp_path
+    ):
+        """After the one-time re-enrichment a stale/missing prompt
+        version forces, storing the fresh result must produce a normal
+        cache hit on the following lookup -- not a repeated miss."""
+        cache = EnrichmentCache(cache_dir=tmp_path)
+        event = _sample_event()
+
+        cache.store(event, _sample_result(relevance_reason="stale"))
+        [written] = list((tmp_path / "enrichment_cache").glob("*.json"))
+        entry = json.loads(written.read_text())
+        del entry["prompt_version"]
+        written.write_text(json.dumps(entry))
+        assert cache.lookup(event) is None  # forces the one-time miss
+
+        cache.store(event, _sample_result(relevance_reason="fresh"))
+
+        assert cache.lookup(event).relevance_reason == "fresh"
+
+
+class TestSchemaAndPromptVersionAreCheckedIndependently:
+    """AC: bumping one version without the other forces exactly the
+    intended re-check, not both or neither."""
+
+    def test_stale_schema_version_alone_is_a_miss_even_with_current_prompt_version(
+        self, tmp_path
+    ):
+        cache = EnrichmentCache(cache_dir=tmp_path)
+        event = _sample_event()
+        cache.store(event, _sample_result())
+
+        [written] = list((tmp_path / "enrichment_cache").glob("*.json"))
+        entry = json.loads(written.read_text())
+        entry["schema_version"] = _CACHE_SCHEMA_VERSION - 1
+        entry["prompt_version"] = PROMPT_VERSION
+        written.write_text(json.dumps(entry))
+
+        assert cache.lookup(event) is None
+
+    def test_stale_prompt_version_alone_is_a_miss_even_with_current_schema_version(
+        self, tmp_path
+    ):
+        cache = EnrichmentCache(cache_dir=tmp_path)
+        event = _sample_event()
+        cache.store(event, _sample_result())
+
+        [written] = list((tmp_path / "enrichment_cache").glob("*.json"))
+        entry = json.loads(written.read_text())
+        entry["schema_version"] = _CACHE_SCHEMA_VERSION
+        entry["prompt_version"] = PROMPT_VERSION - 1
+        written.write_text(json.dumps(entry))
+
+        assert cache.lookup(event) is None
+
+    def test_both_versions_current_is_a_hit(self, tmp_path):
+        cache = EnrichmentCache(cache_dir=tmp_path)
+        event = _sample_event()
+        cache.store(event, _sample_result())
+
+        [written] = list((tmp_path / "enrichment_cache").glob("*.json"))
+        entry = json.loads(written.read_text())
+        entry["schema_version"] = _CACHE_SCHEMA_VERSION
+        entry["prompt_version"] = PROMPT_VERSION
+        written.write_text(json.dumps(entry))
+
+        assert cache.lookup(event) is not None
+
+    def test_both_versions_stale_is_a_miss(self, tmp_path):
+        cache = EnrichmentCache(cache_dir=tmp_path)
+        event = _sample_event()
+        cache.store(event, _sample_result())
+
+        [written] = list((tmp_path / "enrichment_cache").glob("*.json"))
+        entry = json.loads(written.read_text())
+        entry["schema_version"] = _CACHE_SCHEMA_VERSION - 1
+        entry["prompt_version"] = PROMPT_VERSION - 1
+        written.write_text(json.dumps(entry))
+
+        assert cache.lookup(event) is None

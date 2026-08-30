@@ -1,0 +1,30 @@
+# Escondido Public Library -- LibCal iCal subscription feed (Stretch,
+# issue 25's "verify-first" list: registered because the plain `ical`
+# adapter consumes it unchanged, unlike Carlsbad -- see
+# clasi/sprints/014-.../tickets/004-register-verified-structured-feeds.md
+# notes). Escondido's calendar id (cid=16268) was confirmed live via a
+# web search of escondido.libcal.com and matches the issue's own
+# citation. Live-verified 2026-08-30 (sprint 014 ticket 004 / issue 25):
+#
+#   GET https://escondido.libcal.com/ical_subscribe.php?cid=16268
+#
+# returns HTTP 200, content-type text/calendar, a valid single
+# library-wide .ics feed, 159 VEVENTs.
+#
+# Escondido Public Library is its own independent city library system,
+# distinct from partners.json's "San Diego County Library" entry (which
+# covers unincorporated areas and other member cities) -- not
+# force-matched. No partners.json match -- candidate for issue 32's
+# roster expansion.
+
+org_name = "Escondido Public Library"
+adapter_type = "ical"
+enabled = true
+
+[config]
+feed_url = "https://escondido.libcal.com/ical_subscribe.php?cid=16268"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "sprint 014 ticket 004 registration (live iCal verification, 2026-08-30, issue 25, stretch)"

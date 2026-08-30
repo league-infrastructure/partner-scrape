@@ -1,6 +1,14 @@
+# North County San Diego STEM Circle -- DISABLED 2026-08-30 (sprint 014
+# ticket 003 / issue 24 triage). Live re-probe:
+# northcountysandiegostemcircle.org's sitemap.xml is real and reachable
+# but tiny (34 URLs, standard sitemaps.org 0.9 namespace) -- a small,
+# mostly-static informational site. No path matches EVENT_PATH_RE
+# (its "abouteventsjoin.html" page is a compound filename, not an
+# isolated /events?/ segment) -- confirmed live 2026-08-30.
+
 org_name = "North County San Diego STEM Circle"
 adapter_type = "generic_html"
-enabled = true
+enabled = false  # disabled: reachable site, real sitemap, but no page matches the event-path discovery pattern -- confirmed live 2026-08-30
 
 [config]
 site_url = "https://northcountysandiegostemcircle.org"
@@ -8,4 +16,4 @@ site_url = "https://northcountysandiegostemcircle.org"
 [acquisition_policy]
 rate_limit_seconds = 1.0
 respect_robots = true
-discovered_via = "partners_viable.csv tier-2 bulk registration (2026-07-20)"
+discovered_via = "partners_viable.csv tier-2 bulk registration (2026-07-20); disabled sprint 014 ticket 003 (2026-08-30)"

@@ -5,10 +5,19 @@
 # Escondido living reptile/insect science museum; classes and events.
 # org_name matches the exact name in data/partners_viable.csv so the
 # stem-ecosystem partner join resolves.
+#
+# DISABLED 2026-08-30 (sprint 014 ticket 003 / issue 24 triage). Live
+# re-probe: every path on www.ecovivarium.org (root, sitemap.xml,
+# sitemap_index.xml) returns HTTP 202 with an ``sg-captcha: challenge``
+# response header -- SiteGround's CAPTCHA bot-protection, the same
+# product independently confirmed 2026-08-30 on fitkidsamerica.toml,
+# namepa-net.toml, thriveps.toml, and ilacsd.toml. Not headless-fixable
+# (a CAPTCHA is designed to require human/solver interaction, not
+# defeated by unattended browser navigation).
 
 org_name = "EcoVivarium"
 adapter_type = "generic_html"
-enabled = true
+enabled = false  # disabled: entire site behind a SiteGround CAPTCHA challenge (sg-captcha, HTTP 202) -- confirmed live 2026-08-30
 
 [config]
 site_url = "https://www.ecovivarium.org"
@@ -16,4 +25,4 @@ site_url = "https://www.ecovivarium.org"
 [acquisition_policy]
 rate_limit_seconds = 1.0
 respect_robots = true
-discovered_via = "partners_viable.csv batch (real scrape exercise 2026-07-19)"
+discovered_via = "partners_viable.csv batch (real scrape exercise 2026-07-19); disabled sprint 014 ticket 003 (2026-08-30)"

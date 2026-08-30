@@ -1,6 +1,14 @@
+# SmartLab Learning -- DISABLED 2026-08-30 (sprint 014 ticket 003 /
+# issue 24 triage). Live re-probe: smartlablearning.com's sitemap.xml
+# is a real, reachable WordPress-SEO-plugin <sitemapindex> (standard
+# sitemaps.org 0.9 namespace), but recursing through its children
+# matches no EVENT_PATH_RE path -- confirmed live 2026-08-30. A
+# franchise-network marketing site with no content organized under any
+# matching URL path.
+
 org_name = "SmartLab Learning"
 adapter_type = "generic_html"
-enabled = true
+enabled = false  # disabled: reachable site, real sitemap, but no page matches the event-path discovery pattern -- confirmed live 2026-08-30
 
 [config]
 site_url = "https://www.smartlablearning.com"
@@ -8,4 +16,4 @@ site_url = "https://www.smartlablearning.com"
 [acquisition_policy]
 rate_limit_seconds = 1.0
 respect_robots = true
-discovered_via = "partners_viable.csv tier-2 bulk registration (2026-07-20)"
+discovered_via = "partners_viable.csv tier-2 bulk registration (2026-07-20); disabled sprint 014 ticket 003 (2026-08-30)"

@@ -1,0 +1,38 @@
+# UC San Diego Extended Studies -- UCSD Localist calendar API, filtered
+# to the Extended Studies group_id. This is a second, additional feed
+# for the same organization already registered as
+# extendedstudies-ucsd.toml (a generic_html scrape of
+# extendedstudies.ucsd.edu directly) -- the two source_ids are
+# deliberately distinct (registry/DESIGN.md: source_id is the join key
+# across the enrichment cache, sitemap snapshot, yield history, and
+# export attribution; reusing one would collide). Any overlapping
+# events between the two feeds are handled by the existing cross-source
+# dedup, the same as any other overlapping pair of sources -- no special
+# case needed. group_id confirmed live via calendar.ucsd.edu/api/2/groups
+# (2026-08-30, sprint 014 ticket 004): id=50232618629928, name="Extended
+# Studies".
+#
+# Live-verified 2026-08-30:
+#
+#   GET https://calendar.ucsd.edu/api/2/events?group_id=50232618629928&days=180&pp=1&page=1
+#
+# returns HTTP 200, page.total=2 (2 upcoming events in the 180-day
+# window).
+#
+# org_name matches partners.json's "UC San Diego Extended Studies"
+# exactly.
+
+org_name = "UC San Diego Extended Studies"
+adapter_type = "localist"
+enabled = true
+
+[config]
+api_base = "https://calendar.ucsd.edu/api/2/events"
+group_id = "50232618629928"
+days = 180
+pp = 50
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "sprint 014 ticket 004 registration (live UCSD Localist API verification, 2026-08-30, issue 25)"

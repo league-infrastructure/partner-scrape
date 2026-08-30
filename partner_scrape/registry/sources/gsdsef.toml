@@ -1,3 +1,12 @@
+# Sprint 014 ticket 002 (issue 23): live-verified Wix site (2026-08-30 --
+# response carries <meta name="generator" content="Wix.com Website
+# Builder"/> plus static.wixstatic.com asset URLs), one of the "9 Wix
+# partner sources" plain HTTP cannot render (matches the 2026-08-30 gap
+# analysis's own callout: "GSDSEF (Wix ... already partners and worth
+# fixing"). Flagged headless only after this ticket's concurrency fix
+# (dedicated single-worker executor + PlaywrightFetcher lock) landed and
+# was fixture-tested.
+
 org_name = "Greater San Diego Science and Engineering Fair"
 adapter_type = "generic_html"
 enabled = true
@@ -8,4 +17,17 @@ site_url = "https://gsdsef.org"
 [acquisition_policy]
 rate_limit_seconds = 1.0
 respect_robots = true
+fetch_strategy = "headless"
 discovered_via = "partners_viable.csv tier-2 bulk registration (2026-07-20)"
+
+# 2026-08-30 addendum (sprint 014 ticket 003 / issue 24 triage): still
+# zero-yield with fetch_strategy = "headless" in place -- root cause:
+# the sitemap probe gets HTTP 200 for /sitemap.xml but the body "did
+# not parse as sitemap XML (recognized root element)". Same
+# fetch/headless.py limitation as climate-science-alliance.toml's
+# addendum documents in full (PlaywrightFetcher.get()'s page.content()
+# call returns Chromium's rendered XML-viewer markup, not the raw
+# sitemap text) -- see that file for details. Out of this ticket's
+# declared scope to fix; flagged for a follow-up ticket.
+# fetch_strategy = "headless" is left in place as a correct disposition
+# of this site's original (Wix JS-rendering) zero-yield cause.

@@ -1,13 +1,31 @@
-# I Love A Clean San Diego -- The Events Calendar REST API.
-# Endpoint verified working in dev/fetch_tec_api.py's TEC_SITES list.
-# Note: the API is served from the cleansd.org domain, while the
-# partner list / mirrored site use ilacsd.org -- see
-# dev/SCRAPER_GUIDELINES.md Section 8 ("Sites requiring special
-# handling").
+# I Love A Clean San Diego -- DISABLED 2026-08-30 (sprint 014 ticket
+# 003 / issue 24 triage). This source and ilacsd.toml both register the
+# same organization against its two historically-split domains (see
+# dev/SCRAPER_GUIDELINES.md Section 8: "API uses cleansd.org, mirror
+# uses ilacsd.org").
+#
+# Live re-probe 2026-08-30: www.cleansd.org now sits behind Cloudflare
+# bot-management -- every request to the TEC REST endpoint (including
+# with a real browser User-Agent) returns HTTP 403 with Cloudflare's
+# challenge headers (cf-ray, "server: cloudflare", a __cf_bm cookie).
+# This is a live, reachable API endpoint being actively blocked, not a
+# moved/defunct site.
+#
+# fetch_strategy = "headless" was considered and rejected: this is a
+# JSON REST endpoint, not an HTML page. PlaywrightFetcher.get() reads
+# the fetched body via Playwright's page.content() (fetch/headless.py),
+# which serializes Chromium's *rendered document* -- appropriate for an
+# HTML page, but for a bare JSON/XML response Chromium either wraps it
+# in its own non-JSON viewer markup or aborts the navigation outright
+# (confirmed independently against several of this sprint's
+# headless-flagged sitemap.xml fetches -- see sdrvc.toml et al.'s
+# 2026-08-30 addendum). Flagging this source headless would not
+# recover the JSON payload even if it got past Cloudflare's challenge.
+# See ilacsd.toml for its own, differently-blocked twin.
 
 org_name = "I Love A Clean San Diego"
 adapter_type = "tec_rest"
-enabled = true
+enabled = false  # disabled: www.cleansd.org now behind Cloudflare bot-management (403 on every request) -- confirmed live 2026-08-30
 
 [config]
 api_base = "https://www.cleansd.org/wp-json/tribe/events/v1/events/"
@@ -16,4 +34,4 @@ domain = "www.cleansd.org"
 [acquisition_policy]
 rate_limit_seconds = 1.0
 respect_robots = true
-discovered_via = "dev/fetch_tec_api.py"
+discovered_via = "dev/fetch_tec_api.py; disabled sprint 014 ticket 003 (2026-08-30)"

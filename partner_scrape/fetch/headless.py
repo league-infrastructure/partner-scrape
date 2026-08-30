@@ -24,20 +24,53 @@ import time, never in ``__init__``. Tests inject a fixture
 *dependency itself*, not just the network call, must be avoidable) and
 so never trigger that import; the whole default test suite runs with
 ``playwright`` fully uninstalled.
+
+**(Sprint 014)** ``PlaywrightFetcher.get()`` holds an instance-owned
+``threading.Lock`` for its whole duration -- page construction
+(:meth:`_get_page`) through :meth:`HeadlessPage.content`. This is
+defense in depth, not the load-bearing guarantee: a single shared
+Playwright ``Page`` is not safe for concurrent navigation from
+multiple threads, and Playwright's own sync API additionally expects
+to be driven from one consistent thread, which a bare lock cannot by
+itself guarantee (a lock serializes *when* calls run, not *which*
+thread runs them). The load-bearing guarantee -- every call to a
+given shared instance originates from one consistent thread for a
+run's lifetime -- is provided by ``pipeline.py``'s dedicated
+single-worker executor for ``headless``-strategy sources. See
+``fetch/DESIGN.md``'s sprint 014 section and
+``partner_scrape/DESIGN.md``'s new concurrency convention for the
+full rationale.
 """
 
 from __future__ import annotations
 
+import threading
 from typing import Callable, Protocol
 
 from partner_scrape.fetch.fetcher import DEFAULT_USER_AGENT, FetchResponse
 
-#: Fixed network-idle wait timeout (milliseconds), applied before
-#: reading rendered content. No per-source tuning this ticket (see
-#: sprint.md's Architecture > Open Question 4) -- a future ``config``
-#: key can introduce per-source overrides if a real registered site
-#: ever needs one; this constant is the single source of truth until
-#: then.
+#: Fixed navigation wait timeout (milliseconds), applied before reading
+#: rendered content. No per-source tuning (see sprint.md's Architecture
+#: > Open Question 4) -- a future ``config`` key can introduce
+#: per-source overrides if a real registered site ever needs one; this
+#: constant is the single source of truth until then.
+#:
+#: **(Sprint 014 revision)** The name predates a same-ticket change:
+#: ``get()`` used to pass ``wait_until="networkidle"`` to
+#: ``page.goto()``, but live validation against the sprint's own
+#: newly-flagged Wix sources found that strategy times out for 8 of 8
+#: real Wix homepage fetches -- these sites keep a persistent
+#: background connection (analytics/chat widget) open indefinitely, so
+#: the network never truly idles, even though the real content
+#: finishes rendering well within a second. ``get()`` now passes
+#: ``wait_until="load"`` instead (a strictly less strict, still
+#: standard Playwright wait condition; content already reflects the
+#: fully hydrated page by the time ``load`` fires for every site
+#: tested). This constant still bounds that wait -- same value, same
+#: role, different condition -- kept as one name/one constant (no new
+#: per-source config surface) per this ticket's own scope boundary.
+#: See ``fetch/DESIGN.md``'s sprint 014 section for the full rationale
+#: and live evidence.
 NETWORK_IDLE_TIMEOUT_MS = 15_000
 
 #: Name of the optional dependency group (pyproject.toml
@@ -150,11 +183,20 @@ class PlaywrightFetcher:
     Playwright page, built only on the first real ``get()`` call
     (never at ``__init__`` time, never at module import time) -- see
     :func:`_default_page_factory`.
+
+    **(Sprint 014)** ``self._lock`` (an instance-owned
+    ``threading.Lock``) is held for :meth:`get`'s whole duration --
+    page construction through :meth:`content` -- as defense in depth
+    against concurrent, multi-threaded access to the one shared page.
+    See this module's own docstring for why this lock alone does not
+    guarantee Playwright's thread-affinity expectation, and where that
+    guarantee actually lives.
     """
 
     def __init__(self, page_factory: Callable[[], HeadlessPage] | None = None) -> None:
         self._page_factory = page_factory or _default_page_factory
         self._page: HeadlessPage | None = None
+        self._lock = threading.Lock()
 
     def _get_page(self) -> HeadlessPage:
         if self._page is None:
@@ -162,33 +204,53 @@ class PlaywrightFetcher:
         return self._page
 
     def get(self, url: str, headers: dict[str, str] | None = None) -> FetchResponse:
-        """Navigate to ``url``, wait for network-idle (bounded by
+        """Navigate to ``url``, wait for the page to finish loading
+        (``wait_until="load"``, bounded by
         :data:`NETWORK_IDLE_TIMEOUT_MS`), and return the rendered HTML
         as a ``FetchResponse``.
+
+        **(Sprint 014 revision)** Uses ``wait_until="load"``, not the
+        stricter ``"networkidle"`` this method used before the same
+        ticket's own live validation: real Wix sites (this ticket's
+        primary newly-flagged cohort) keep a persistent background
+        connection open indefinitely, so ``"networkidle"`` never fires
+        within the timeout even though the real content is already
+        fully rendered. See :data:`NETWORK_IDLE_TIMEOUT_MS`'s docstring
+        for the live evidence.
 
         ``status`` on the returned ``FetchResponse`` is always taken
         from the real navigation response -- never hardcoded -- so
         ``PoliteFetcher``'s ``200 <= status < 300`` cache-write branch
         behaves identically for a headless fetch and a static one.
 
+        **(Sprint 014)** Holds ``self._lock`` for the method's entire
+        duration -- ``_get_page()`` (lazy page construction) through
+        ``page.content()`` -- so two threads calling ``get()`` on the
+        same instance concurrently never interleave their navigation
+        and content-read calls against the one shared page. Defense in
+        depth only: see the class docstring for why the real
+        thread-affinity guarantee lives in ``pipeline.py``'s dispatch,
+        not here.
+
         Raises:
             PlaywrightNotInstalledError: no ``page_factory`` was
                 injected and the ``playwright`` package is not
                 installed.
         """
-        page = self._get_page()
-        if headers:
-            set_extra_headers = getattr(page, "set_extra_http_headers", None)
-            if set_extra_headers is not None:
-                set_extra_headers(headers)
+        with self._lock:
+            page = self._get_page()
+            if headers:
+                set_extra_headers = getattr(page, "set_extra_http_headers", None)
+                if set_extra_headers is not None:
+                    set_extra_headers(headers)
 
-        navigation = page.goto(url, timeout=NETWORK_IDLE_TIMEOUT_MS, wait_until="networkidle")
-        body = page.content()
-        response_headers = dict(getattr(navigation, "headers", None) or {})
+            navigation = page.goto(url, timeout=NETWORK_IDLE_TIMEOUT_MS, wait_until="load")
+            body = page.content()
+            response_headers = dict(getattr(navigation, "headers", None) or {})
 
-        return FetchResponse(
-            url=url,
-            status=navigation.status,
-            headers=response_headers,
-            body=body,
-        )
+            return FetchResponse(
+                url=url,
+                status=navigation.status,
+                headers=response_headers,
+                body=body,
+            )

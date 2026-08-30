@@ -1,6 +1,15 @@
+# Association for Women in Science San Diego Outreach -- DISABLED
+# 2026-08-30 (sprint 014 ticket 003 / issue 24 triage). Live re-probe:
+# the site root (https://www.awissd.org) is reachable (HTTP 200), but
+# none of the three candidate sitemap filenames discovery/sitemap.py
+# tries (sitemap_index.xml, sitemap.xml, sitemap-index.xml) exist
+# (all HTTP 404) -- confirmed live 2026-08-30, matching the pipeline's
+# own "No reachable sitemap" warning. No discovery mechanism this
+# adapter has can find any page on this site.
+
 org_name = "Association for Women in Science San Diego Outreach"
 adapter_type = "generic_html"
-enabled = true
+enabled = false  # disabled: no sitemap at any of the three candidate paths (all 404) -- confirmed live 2026-08-30
 
 [config]
 site_url = "https://www.awissd.org"
@@ -8,4 +17,4 @@ site_url = "https://www.awissd.org"
 [acquisition_policy]
 rate_limit_seconds = 1.0
 respect_robots = true
-discovered_via = "partners_viable.csv tier-1A bulk registration (2026-07-20)"
+discovered_via = "partners_viable.csv tier-1A bulk registration (2026-07-20); disabled sprint 014 ticket 003 (2026-08-30)"

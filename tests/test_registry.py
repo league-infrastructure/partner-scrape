@@ -156,16 +156,22 @@ class TestRealSeedRegistry:
         assert DEFAULT_SOURCES_DIR.parent.name == "registry"
 
     def test_known_tec_sites_load_as_enabled(self):
-        # Pre-existing count, updated for the "Bulk-register 73 tier-1/2
-        # partner sources (27 -> 100 sources)" registry growth (unrelated
-        # to source-level concurrency/URL cap): one more tec_rest source
-        # was added to the real seed registry, so the known-good count
-        # grew from 6 to 7. Not a behavior change -- this test just
+        # Pre-existing count, updated for sprint 014 ticket 003's
+        # zero-yield triage (2026-08-30): cleansd and ilacsd were
+        # disabled (both now bot/CAPTCHA-blocked -- see their TOML
+        # comments) and sd-river-park-foundation was re-typed from
+        # generic_html to tec_rest (a confirmed live TEC REST API), so
+        # the known-good count moved from 7 to 6 (-2, +1). Updated again
+        # for sprint 014 ticket 004's verified-feed registration
+        # (2026-08-30): 8 new tec_rest sources (balboa-park,
+        # sdcoastkeeper, ymcasd, comic-con-museum, sandiegoarchaeology,
+        # shpesd, thegarden, jasandiego), each live-verified before
+        # commit -- 6 + 8 = 14. Not a behavior change -- this test just
         # asserts against the real, current registry contents.
         sources = load_active_sources()
         tec_sources = [s for s in sources if s.adapter_type == "tec_rest"]
 
-        assert len(tec_sources) == 7
+        assert len(tec_sources) == 14
         assert all(s.enabled for s in tec_sources)
 
     def test_seed_source_org_names_match_dev_fetch_tec_api(self):
@@ -174,10 +180,15 @@ class TestRealSeedRegistry:
         assert sources["coastalrootsfarm"].org_name == "Coastal Roots Farm"
         assert sources["thelivingcoast"].org_name == "The Living Coast Discovery Center"
         assert sources["eefkids"].org_name == "EastLake Educational Foundation"
-        assert sources["cleansd"].org_name == "I Love A Clean San Diego"
+        # cleansd disabled sprint 014 ticket 003 (2026-08-30, Cloudflare
+        # bot-management) -- no longer in the active set; see
+        # registry/sources/cleansd.toml.
         assert sources["oceanconnectors"].org_name == "Ocean Connectors"
         assert (
             sources["visitcmod"].org_name == "San Diego Children's Discovery Museum"
+        )
+        assert sources["sd-river-park-foundation"].org_name == (
+            "The San Diego River Park Foundation"
         )
 
     def test_seed_source_api_bases_match_dev_fetch_tec_api(self):
@@ -192,11 +203,14 @@ class TestRealSeedRegistry:
         assert sources["eefkids"].config["api_base"] == (
             "https://eefkids.org/wp-json/tribe/events/v1/events/"
         )
-        assert sources["cleansd"].config["api_base"] == (
-            "https://www.cleansd.org/wp-json/tribe/events/v1/events/"
-        )
+        # cleansd disabled sprint 014 ticket 003 (2026-08-30, Cloudflare
+        # bot-management) -- no longer in the active set; see
+        # registry/sources/cleansd.toml.
         assert sources["oceanconnectors"].config["api_base"] == (
             "https://oceanconnectors.org/wp-json/tribe/events/v1/events/"
+        )
+        assert sources["sd-river-park-foundation"].config["api_base"] == (
+            "https://sandiegoriver.org/wp-json/tribe/events/v1/events/"
         )
         assert sources["visitcmod"].config["api_base"] == (
             "https://visitcmod.org/wp-json/tribe/events/v1/events/"

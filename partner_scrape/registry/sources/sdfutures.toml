@@ -1,6 +1,14 @@
+# San Diego Futures Foundation -- DISABLED 2026-08-30 (sprint 014
+# ticket 003 / issue 24 triage). Live re-probe: sdfutures.org (a
+# GoDaddy Website Builder site) has a real, reachable sitemap.xml (a
+# small two-child <sitemapindex>: sitemap.website.xml,
+# sitemap.ola.xml), but recursing through it matches no EVENT_PATH_RE
+# path -- confirmed live 2026-08-30. A small site with no content
+# organized under any matching URL path.
+
 org_name = "San Diego Futures Foundation"
 adapter_type = "generic_html"
-enabled = true
+enabled = false  # disabled: reachable site, real sitemap, but no page matches the event-path discovery pattern -- confirmed live 2026-08-30
 
 [config]
 site_url = "https://sdfutures.org"
@@ -8,4 +16,4 @@ site_url = "https://sdfutures.org"
 [acquisition_policy]
 rate_limit_seconds = 1.0
 respect_robots = true
-discovered_via = "partners_viable.csv tier-2 bulk registration (2026-07-20)"
+discovered_via = "partners_viable.csv tier-2 bulk registration (2026-07-20); disabled sprint 014 ticket 003 (2026-08-30)"

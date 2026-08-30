@@ -1,0 +1,22 @@
+# San Diego Coastkeeper -- cleanups, water-quality monitoring, Science
+# to Stewardship (HS) programming. Live-verified 2026-08-30 (sprint 014
+# ticket 004 / issue 25):
+#
+#   GET https://www.sdcoastkeeper.org/wp-json/tribe/events/v1/events/?per_page=1
+#
+# returns HTTP 200 with structured JSON, total=13 upcoming events.
+#
+# No partners.json match -- candidate for issue 32's roster expansion.
+
+org_name = "San Diego Coastkeeper"
+adapter_type = "tec_rest"
+enabled = true
+
+[config]
+api_base = "https://www.sdcoastkeeper.org/wp-json/tribe/events/v1/events/"
+domain = "sdcoastkeeper.org"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "sprint 014 ticket 004 registration (live TEC REST verification, 2026-08-30, issue 25)"

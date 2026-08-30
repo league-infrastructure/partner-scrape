@@ -18,19 +18,24 @@ name: Scheduled scrape and publish
 #
 # NOTE: GitHub only fires `schedule` triggers for workflow files that
 # exist on the repository's *default* branch, so this file has no effect
-# until this sprint's branch is merged to master -- see the runbook.
+# until this sprint's (014) branch is merged to master -- see the
+# runbook, docs/deploy/scheduled-run.md.
 
 on:
-  # The weekly auto-scrape is DISABLED until an operator configures
-  # SITE_REPO_TOKEN (a fine-grained PAT with contents:write on
-  # stem-ecosystem) -- see docs/deploy/scheduled-run.md. Without that
-  # secret this job cannot check out or push to the sibling repo, so a
-  # scheduled run just fails every Monday. Re-enable the cron below once
-  # the token is set.
-  #
-  # schedule:
-  #   # Weekly: every Monday at 13:00 UTC (~06:00 America/Los_Angeles).
-  #   - cron: '0 13 * * 1'
+  # (Sprint 014 ticket 002 / SUC-005) Re-enabled: this repo's own
+  # code-side prerequisite (this file, merged to master) is now
+  # satisfied. GitHub only evaluates `schedule` triggers for workflow
+  # files present on the default branch, so this has no effect until
+  # this sprint's branch is merged -- see docs/deploy/scheduled-run.md.
+  # One operator step remains before the FIRST unattended run can
+  # succeed: SITE_REPO_TOKEN (a fine-grained PAT with contents:write on
+  # stem-ecosystem) must be provisioned, per that same runbook. Until
+  # then this job fails fast at the "Verify SITE_REPO_TOKEN is
+  # configured" step below, every Monday, with an actionable message --
+  # not a silent no-op and not an opaque checkout failure.
+  schedule:
+    # Weekly: every Monday at 13:00 UTC (~06:00 America/Los_Angeles).
+    - cron: '0 13 * * 1'
   workflow_dispatch: {}
 
 # Manual activation/testing and the weekly cron should never race each
@@ -87,9 +92,25 @@ jobs:
         with:
           python-version: '3.13'
 
+      # (Sprint 014 ticket 002 / SUC-004) --extra headless installs the
+      # optional playwright package so JS-rendered/blocked sources
+      # (acquisition_policy.fetch_strategy = "headless") are no longer
+      # blind -- see fetch/headless.py's PlaywrightNotInstalledError,
+      # which is what a headless-flagged source raised here before this
+      # ticket.
       - name: Install dependencies
         working-directory: partner-scrape
-        run: uv sync --locked
+        run: uv sync --locked --extra headless
+
+      # The playwright PACKAGE (installed above) is not the browser
+      # itself -- it still needs a real Chromium binary, which uv sync
+      # does not provide. `--with-deps` also installs the OS-level
+      # libraries ubuntu-latest needs to actually run headless Chromium
+      # (first-ever browser-binary install in this project's CI --
+      # see sprint.md's Migration Concerns).
+      - name: Install Playwright's Chromium browser
+        working-directory: partner-scrape
+        run: uv run playwright install --with-deps chromium
 
       # CI runners are ephemeral -- config/prod/public.env's
       # SCRAPE_CACHE_DIR is a local Mac path that does not exist here, so

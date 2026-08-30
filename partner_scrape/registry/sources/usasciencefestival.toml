@@ -1,6 +1,14 @@
+# USA Science & Engineering Festival -- DISABLED 2026-08-30 (sprint 014
+# ticket 003 / issue 24 triage). Live re-probe found the entire site
+# behind a WAF: every request to usasciencefestival.org (root page,
+# sitemap.xml, sitemap_index.xml -- with or without a browser
+# User-Agent) returns a flat HTTP 403 Forbidden. Not a moved/defunct
+# domain (it resolves and the block page itself is served), but
+# nothing this project's fetchers send gets past the block.
+
 org_name = "USA Science & Engineering Festival"
 adapter_type = "generic_html"
-enabled = true
+enabled = false  # disabled: entire site returns HTTP 403 (WAF-blocked) on every path -- confirmed live 2026-08-30
 
 [config]
 site_url = "https://usasciencefestival.org"
@@ -8,4 +16,4 @@ site_url = "https://usasciencefestival.org"
 [acquisition_policy]
 rate_limit_seconds = 1.0
 respect_robots = true
-discovered_via = "partners_viable.csv tier-2 bulk registration (2026-07-20)"
+discovered_via = "partners_viable.csv tier-2 bulk registration (2026-07-20); disabled sprint 014 ticket 003 (2026-08-30)"

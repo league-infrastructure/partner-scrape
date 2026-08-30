@@ -1,0 +1,32 @@
+# UC San Diego Jacobs School of Engineering -- UCSD Localist calendar
+# API, filtered to the Jacobs School group_id. group_id confirmed live
+# via calendar.ucsd.edu/api/2/groups (2026-08-30, sprint 014 ticket
+# 004): id=50136653080297, name="Jacobs School of Engineering".
+#
+# Live-verified 2026-08-30:
+#
+#   GET https://calendar.ucsd.edu/api/2/events?group_id=50136653080297&days=180&pp=1&page=1
+#
+# returns HTTP 200, page.total=2 (2 upcoming events in the 180-day
+# window).
+#
+# No partners.json match -- distinct from the existing "Jacobs Institute
+# for Innovation in Education, University of San Diego" partner entry,
+# which is a different institution (University of San Diego, not UC San
+# Diego) -- not force-matched. Candidate for issue 32's roster
+# expansion.
+
+org_name = "UC San Diego Jacobs School of Engineering"
+adapter_type = "localist"
+enabled = true
+
+[config]
+api_base = "https://calendar.ucsd.edu/api/2/events"
+group_id = "50136653080297"
+days = 180
+pp = 50
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "sprint 014 ticket 004 registration (live UCSD Localist API verification, 2026-08-30, issue 25)"

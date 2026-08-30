@@ -1,19 +1,31 @@
-# The San Diego River Park Foundation -- registered as a generic_html source for the real-scrape
-# exercise (2026-07-19). Event URLs are discovered via the site's
-# sitemap (discovery/sitemap.py probes sitemap_index.xml / sitemap.xml /
-# sitemap-index.xml in order) and extracted with the standard ladder.
+# The San Diego River Park Foundation -- re-typed from generic_html to
+# tec_rest (2026-08-30 triage, sprint 014 ticket 003 / issue 24). Live
+# probing confirmed sandiegoriver.org runs The Events Calendar plugin
+# with a public REST API, not a bespoke HTML site:
+#
+#   GET https://sandiegoriver.org/wp-json/tribe/events/v1/events/?per_page=1
+#
+# returns HTTP 200 with structured JSON, total=73, total_pages=73 --
+# confirmed live 2026-08-30. The previous generic_html registration
+# (sitemap-diff discovery) already recovered 47 events via the
+# extraction ladder, but at lower per-field confidence than the
+# structured API gives for free (CONFIDENCE = 1.0 vs. the ladder's
+# 0.2-0.5 range) -- re-typing to tec_rest is a straight upgrade, not a
+# response to a failure.
+#
 # San Diego River stewardship nonprofit; outdoor education and volunteer events.
 # org_name matches the exact name in data/partners_viable.csv so the
 # stem-ecosystem partner join resolves.
 
 org_name = "The San Diego River Park Foundation"
-adapter_type = "generic_html"
+adapter_type = "tec_rest"
 enabled = true
 
 [config]
-site_url = "https://sandiegoriver.org"
+api_base = "https://sandiegoriver.org/wp-json/tribe/events/v1/events/"
+domain = "sandiegoriver.org"
 
 [acquisition_policy]
 rate_limit_seconds = 1.0
 respect_robots = true
-discovered_via = "partners_viable.csv batch (real scrape exercise 2026-07-19)"
+discovered_via = "sprint 014 ticket 003 triage (live TEC REST API verification, 2026-08-30)"

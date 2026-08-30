@@ -36,6 +36,7 @@ constructs a headless `Fetcher`.
 from __future__ import annotations
 
 import concurrent.futures
+import contextlib
 import logging
 import threading
 from dataclasses import dataclass
@@ -81,6 +82,32 @@ HEADLESS_FETCH_STRATEGY = "headless"
 #: substantially, low enough not to open an unbounded burst of sockets
 #: at once.
 DEFAULT_MAX_SOURCE_WORKERS = 8
+
+#: Worker count for the dedicated ``headless``-strategy executor
+#: (sprint 014). Always 1 -- see `run()`'s concurrent-dispatch branch
+#: below for why: `PlaywrightFetcher`'s single shared browser page is
+#: not safe under concurrent, multi-threaded access, and Playwright's
+#: own sync API additionally expects to be driven from one consistent
+#: thread. Routing every `headless`-strategy source through its own
+#: single-worker `ThreadPoolExecutor`, instead of the main
+#: `DEFAULT_MAX_SOURCE_WORKERS`-worker one, is what guarantees both:
+#: strictly one `_run_one_source` call in flight at a time for a
+#: `headless`-flagged source, and every one of those calls landing on
+#: the same worker thread for the run's lifetime. See fetch/DESIGN.md's
+#: and partner_scrape/DESIGN.md's sprint 014 sections.
+HEADLESS_DISPATCH_WORKERS = 1
+
+
+def _is_headless_source(source: SourceConfig) -> bool:
+    """Return whether `source` is flagged `fetch_strategy = "headless"`.
+
+    The one place this check is defined -- both `_run_one_source` (to
+    select a source's `Fetcher`) and `run()` (to partition sources
+    between the main and dedicated executors, sprint 014) call this
+    rather than re-reading `acquisition_policy` inline, so the two
+    can never drift apart on what counts as "headless".
+    """
+    return source.acquisition_policy.get("fetch_strategy", "static") == HEADLESS_FETCH_STRATEGY
 
 
 def _build_default_headless_fetcher() -> Fetcher:
@@ -254,8 +281,7 @@ def _run_one_source(
     own docstring) is not caught by per-source isolation, unchanged from
     before this function existed.
     """
-    fetch_strategy = source.acquisition_policy.get("fetch_strategy", "static")
-    if fetch_strategy == HEADLESS_FETCH_STRATEGY:
+    if _is_headless_source(source):
         source_fetcher = lazy_headless_fetcher.get()
     else:
         source_fetcher = active_fetcher
@@ -436,31 +462,78 @@ def run(
     # runs the exact same sequential `for` loop `run()` always has --
     # not merely a `ThreadPoolExecutor(max_workers=1)`, so there is no
     # thread-pool machinery of any kind on that path (`max_source_workers`'s
-    # own docstring above: "byte-for-byte the same code path").
+    # own docstring above: "byte-for-byte the same code path"). A
+    # strictly sequential run never has more than one `_run_one_source`
+    # call in flight at all, so the headless thread-affinity hazard
+    # below cannot occur here regardless of how many sources are
+    # flagged `headless` -- the dedicated executor exists only for the
+    # concurrent branch.
     results: list[_SourceResult]
     if max_source_workers <= 1:
         results = [
             _run_one_source(source, active_fetcher, lazy_headless_fetcher) for source in sources
         ]
     else:
-        # `min(...)` avoids spinning up idle worker threads beyond the
-        # number of sources actually being run; `max(1, ...)` keeps that
-        # from ever reaching 0 (ThreadPoolExecutor requires >= 1) for an
-        # empty `sources` list.
-        worker_count = max(1, min(max_source_workers, len(sources)))
+        # (Sprint 014) Every `headless`-strategy source is dispatched
+        # through its own dedicated, single-worker `ThreadPoolExecutor`
+        # instead of the main `max_source_workers`-worker one used for
+        # `static`-strategy sources. This is the load-bearing half of
+        # this sprint's concurrency fix (see `HEADLESS_DISPATCH_WORKERS`'s
+        # own docstring and fetch/DESIGN.md's sprint 014 section):
+        # `PlaywrightFetcher`'s single shared browser page is not safe
+        # under concurrent, multi-threaded access, and only *dispatch* --
+        # not a lock inside `PlaywrightFetcher` alone -- can guarantee
+        # every call to it comes from one consistent thread, which is
+        # what Playwright's own sync API additionally expects. Splitting
+        # sources up front (rather than, say, submitting everything to
+        # one pool and hoping) is what makes that guarantee possible: a
+        # `ThreadPoolExecutor` does not otherwise promise a given task
+        # always lands on the same worker.
+        static_sources = [s for s in sources if not _is_headless_source(s)]
+        headless_sources = [s for s in sources if _is_headless_source(s)]
+
         results_by_source_id: dict[str, _SourceResult] = {}
-        with concurrent.futures.ThreadPoolExecutor(max_workers=worker_count) as executor:
-            futures = [
-                executor.submit(_run_one_source, source, active_fetcher, lazy_headless_fetcher)
-                for source in sources
-            ]
+        futures: list[concurrent.futures.Future[_SourceResult]] = []
+        with contextlib.ExitStack() as stack:
+            # `min(...)` avoids spinning up idle worker threads beyond
+            # the number of sources actually being run; `max(1, ...)`
+            # keeps that from ever reaching 0 (ThreadPoolExecutor
+            # requires >= 1). Each executor is constructed only if it
+            # has at least one source to run, so a run with no
+            # `headless`-flagged source never spins up the dedicated
+            # executor at all (mirroring the pre-existing "avoid idle
+            # worker threads" convention below).
+            if static_sources:
+                worker_count = max(1, min(max_source_workers, len(static_sources)))
+                static_executor = stack.enter_context(
+                    concurrent.futures.ThreadPoolExecutor(max_workers=worker_count)
+                )
+                futures.extend(
+                    static_executor.submit(
+                        _run_one_source, source, active_fetcher, lazy_headless_fetcher
+                    )
+                    for source in static_sources
+                )
+            if headless_sources:
+                headless_executor = stack.enter_context(
+                    concurrent.futures.ThreadPoolExecutor(
+                        max_workers=HEADLESS_DISPATCH_WORKERS
+                    )
+                )
+                futures.extend(
+                    headless_executor.submit(
+                        _run_one_source, source, active_fetcher, lazy_headless_fetcher
+                    )
+                    for source in headless_sources
+                )
             for future in concurrent.futures.as_completed(futures):
                 result = future.result()
                 results_by_source_id[result.source.source_id] = result
         # Deterministic order regardless of completion order: the
         # registry's own source order, so a run's accumulated events and
         # reported data never depend on which worker happened to finish
-        # first (`max_source_workers`'s own docstring above).
+        # first (`max_source_workers`'s own docstring above) or which of
+        # the two executors ran it.
         results = [results_by_source_id[source.source_id] for source in sources]
 
     events: list[Event] = []

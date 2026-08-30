@@ -209,10 +209,22 @@ def _build_enrichment_json_schema() -> dict[str, Any]:
 ENRICHMENT_JSON_SCHEMA = _build_enrichment_json_schema()
 
 
+#: Sprint 014 (issue 22). Bumped whenever `_SYSTEM_PROMPT`'s *semantics*
+#: change -- a small, independent integer, imported by `cache.py` as a
+#: second cache-hit signal alongside `_CACHE_SCHEMA_VERSION`. It answers
+#: "is the stored *judgment* still valid under the current prompt,"
+#: distinct from and checked independently of `_CACHE_SCHEMA_VERSION`'s
+#: "is the stored *value's shape* still what this code expects." See
+#: `cache.py` and `enrich/DESIGN.md`'s Design Rationale for the full
+#: reasoning: `content_hash` deliberately covers only an Event's input
+#: fields, never the prompt text, so it cannot detect a prompt-semantics
+#: change on its own.
+PROMPT_VERSION = 1
+
 _SYSTEM_PROMPT = f"""You are helping curate a directory of STEM learning \
-opportunities for K-12 youth in the San Diego area. You are given one \
-event/program record scraped from a partner organization's website, as \
-JSON. Do two things:
+opportunities for learners of all ages in the San Diego area. You are \
+given one event/program record scraped from a partner organization's \
+website, as JSON. Do two things:
 
 1. Recover any of these fields that are missing (null): start date/time, \
 end date/time, whether the event is all-day, location, cost, \
@@ -231,9 +243,14 @@ is "Online"; a paid role/apprenticeship for a business is not this \
 schema's concern -- it is never sent to you). Use "Out-of-school \
 Programs" as the general default whenever nothing more specific \
 clearly applies -- this field is never left blank.
-   - relevant: true if this is a STEM learning opportunity for youth \
-(not an adult-only program, not unrelated announcement/noise), else \
-false
+   - relevant: true if this is a STEM learning opportunity for any \
+audience (children, teens, families, adults, educators, college-bound \
+students all count -- an adult or professional audience is never by \
+itself a reason to say false), false if it is non-STEM recreation, a \
+fundraising gala or other social/fundraising event, a facility closure \
+notice or other operational announcement, a press release, a \
+navigation/landing page with no actual program content, or any other \
+record with nothing evaluable to judge
    - relevance_reason: one short sentence explaining the relevant \
 verdict
 

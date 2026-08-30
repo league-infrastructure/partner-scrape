@@ -1,6 +1,13 @@
+# Design Code Build -- DISABLED 2026-08-30 (sprint 014 ticket 003 /
+# issue 24 triage). Live re-probe: designcodebuild.com no longer
+# resolves at all (DNS NXDOMAIN, confirmed both via direct lookup and
+# via the pipeline's own fetch layer: "URLError: nodename nor servname
+# provided, or not known" on every attempted request). The domain
+# appears to have lapsed or moved; this is not a fetch/adapter issue.
+
 org_name = "Design Code Build"
 adapter_type = "generic_html"
-enabled = true
+enabled = false  # disabled: domain no longer resolves (DNS NXDOMAIN) -- confirmed live 2026-08-30
 
 [config]
 site_url = "https://designcodebuild.com"
@@ -8,4 +15,4 @@ site_url = "https://designcodebuild.com"
 [acquisition_policy]
 rate_limit_seconds = 1.0
 respect_robots = true
-discovered_via = "partners_viable.csv tier-2 bulk registration (2026-07-20)"
+discovered_via = "partners_viable.csv tier-2 bulk registration (2026-07-20); disabled sprint 014 ticket 003 (2026-08-30)"

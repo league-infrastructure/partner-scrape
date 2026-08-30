@@ -13,6 +13,18 @@
 # expected to use "San Diego" in their location text, matching the
 # default keyword; revisit if a future run shows local postings being
 # missed.
+#
+# Re-verified live 2026-08-30 (sprint 014 ticket 003 / issue 24
+# triage): company slug still live (HTTP 200, valid JSON) -- postings
+# have grown substantially since sprint 006 planning, from 8 to 434
+# (a mix of San Diego, Seattle, and Remote roles). The live pipeline
+# run's adapter-level yield is 0: none of the current postings survive
+# ats_filters.classify_posting's STEM/internship/San-Diego-local test
+# (the board is now dominated by senior/non-internship engineering
+# roles). Kept enabled=true, matching this source's own convention --
+# worth re-checking whether classify_posting's internship heuristic is
+# still well-calibrated for a board this size, but that is a filter-
+# tuning question outside this ticket's triage scope, not a fetch bug.
 
 org_name = "Shield AI"
 adapter_type = "lever"

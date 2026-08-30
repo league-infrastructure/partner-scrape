@@ -1,6 +1,13 @@
+# Fit Kids America -- DISABLED 2026-08-30 (sprint 014 ticket 003 /
+# issue 24 triage). Live re-probe: every path on fitkidsamerica.org
+# returns HTTP 202 with an ``sg-captcha: challenge`` response header --
+# the same SiteGround CAPTCHA product independently confirmed 2026-08-30
+# on ecovivarium.toml, namepa-net.toml, thriveps.toml, and ilacsd.toml.
+# Not headless-fixable (see ecovivarium.toml's addendum).
+
 org_name = "Fit Kids America"
 adapter_type = "generic_html"
-enabled = true
+enabled = false  # disabled: entire site behind a SiteGround CAPTCHA challenge (sg-captcha, HTTP 202) -- confirmed live 2026-08-30
 
 [config]
 site_url = "https://fitkidsamerica.org"
@@ -8,4 +15,4 @@ site_url = "https://fitkidsamerica.org"
 [acquisition_policy]
 rate_limit_seconds = 1.0
 respect_robots = true
-discovered_via = "partners_viable.csv tier-1B bulk registration (2026-07-20)"
+discovered_via = "partners_viable.csv tier-1B bulk registration (2026-07-20); disabled sprint 014 ticket 003 (2026-08-30)"

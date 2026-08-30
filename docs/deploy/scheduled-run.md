@@ -11,6 +11,15 @@ executes automatically. No step below is run by an agent implementing a
 ticket; it is for a human operator to perform once, then again whenever
 the PAT rotates.
 
+**(Sprint 014 ticket 002 / SUC-005) Status: step 1's code-side
+prerequisite is done.** `.github/workflows/scheduled-run.yml`'s
+`schedule:` cron trigger is uncommented as of this sprint, and the
+dependency-install step now installs the optional `playwright` extra
+(and its Chromium binary) so headless-flagged sources work in this
+workflow too. **Steps 2–5 below remain operator-only and are not yet
+performed** — the weekly cron will not succeed until an operator
+completes them.
+
 No secret value is written anywhere in this repo, this document, or the
 workflow file itself — every secret is referenced only by name
 (`${{ secrets.ANTHROPIC_API_KEY }}` / `${{ secrets.SITE_REPO_TOKEN }}`)
@@ -37,6 +46,14 @@ that exist on the repository's **default branch**. Until
 the file to be present on a branch GitHub can see it push/PR against, but
 practically speaking: merge first). Merge this sprint's branch (or at
 least this file) to `master` before proceeding.
+
+**(Sprint 014)** The workflow file itself no longer needs an edit here —
+its `schedule:` trigger is already uncommented and its dependency-install
+step already installs `playwright` (the `headless` extra) plus its
+Chromium binary, both landed by sprint 014 ticket 002. Merging this
+sprint's branch to `master` is now the *entire* content of this step;
+everything else in this runbook (steps 2–5) is unchanged and still
+required before the first unattended run can succeed.
 
 ## 2. Create the fine-grained GitHub PAT
 

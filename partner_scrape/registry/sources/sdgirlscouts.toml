@@ -1,6 +1,23 @@
+# Girl Scouts San Diego -- DISABLED 2026-08-30 (sprint 014 ticket 003 /
+# issue 24 triage). Live re-probe: www.sdgirlscouts.org's sitemap.xml
+# is real and reachable (1,515 URLs), but the vast majority of
+# EVENT_PATH_RE-matching entries are PDF documents filed under a
+# ``/content/dam/sdgirlscouts-redesign/documents/Events/`` asset
+# directory (sponsorship packets, registration forms, news clippings --
+# "Events" here names a document-library folder, not event pages). This
+# fully consumes the 300-URL discovery cap (acquisition_policy.max_urls)
+# before any real HTML event page is ever reached, and every fetched
+# PDF is correctly dropped by generic_html's extraction ladder ("no
+# usable title in any ladder rung") -- confirmed live 2026-08-30. Same
+# class of problem as olivewood-gardens.toml ("over-mirrors ~700 blog
+# pages for ~1 real event; needs URL-filter tuning"): a future fix
+# would need the sitemap-diff discovery to exclude the
+# /content/dam/.../documents/ path (or a non-PDF content-type filter)
+# before real event pages can surface -- out of this ticket's scope.
+
 org_name = "Girl Scouts San Diego"
 adapter_type = "generic_html"
-enabled = true
+enabled = false  # disabled: sitemap's "Events" path is a PDF/document asset folder that exhausts the discovery cap before any real event page is reached -- confirmed live 2026-08-30
 
 [config]
 site_url = "https://www.sdgirlscouts.org"
@@ -8,4 +25,4 @@ site_url = "https://www.sdgirlscouts.org"
 [acquisition_policy]
 rate_limit_seconds = 1.0
 respect_robots = true
-discovered_via = "partners_viable.csv tier-2 bulk registration (2026-07-20)"
+discovered_via = "partners_viable.csv tier-2 bulk registration (2026-07-20); disabled sprint 014 ticket 003 (2026-08-30)"

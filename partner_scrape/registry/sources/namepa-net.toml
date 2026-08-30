@@ -1,6 +1,15 @@
+# North American Marine Environment Protection Association -- DISABLED
+# 2026-08-30 (sprint 014 ticket 003 / issue 24 triage). Live re-probe:
+# the site root (https://namepa.net) returns a flat HTTP 403, and both
+# sitemap candidate paths return HTTP 202 with an ``sg-captcha:
+# challenge`` response header -- the same SiteGround CAPTCHA product
+# independently confirmed 2026-08-30 on ecovivarium.toml,
+# fitkidsamerica.toml, thriveps.toml, and ilacsd.toml. Not
+# headless-fixable (see ecovivarium.toml's addendum).
+
 org_name = "North American Marine Environment Protaction Association"
 adapter_type = "generic_html"
-enabled = true
+enabled = false  # disabled: site returns HTTP 403 at the root and an sg-captcha challenge on sitemap paths -- confirmed live 2026-08-30
 
 [config]
 site_url = "https://namepa.net"
@@ -8,4 +17,4 @@ site_url = "https://namepa.net"
 [acquisition_policy]
 rate_limit_seconds = 1.0
 respect_robots = true
-discovered_via = "partners_viable.csv tier-2 bulk registration (2026-07-20)"
+discovered_via = "partners_viable.csv tier-2 bulk registration (2026-07-20); disabled sprint 014 ticket 003 (2026-08-30)"

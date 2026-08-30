@@ -1,4 +1,31 @@
-org_name = "Discover U at San Diego Public Library"
+# City of San Diego -- org_name corrected 2026-08-30 (sprint 014 ticket
+# 003 / issue 24). Previously registered as "Discover U at San Diego
+# Public Library", which names a specific Library-department program
+# (data/partners_viable.csv id 485, website
+# https://www.sandiego.gov/public-library) -- a different, narrower
+# organization than what this source actually scrapes.
+#
+# site_url stays the citywide domain root (https://www.sandiego.gov),
+# not the /public-library path: Drupal's simple_sitemap module serves
+# one sitemap for the whole site at the domain root
+# (https://www.sandiego.gov/sitemap.xml, a <sitemapindex> of 40+
+# paginated children) -- {site_url}/sitemap.xml resolves correctly only
+# from the root; https://www.sandiego.gov/public-library/sitemap.xml
+# 404s. So per SUC-006's explicit direction, org_name is corrected to
+# match site_url's actual scope (the whole city site) rather than the
+# reverse. This intentionally drops the stem-ecosystem partner join for
+# id 485 ("Discover U...") -- a supported no-match state (sprint.md's
+# Design Rationale on Balboa Park / no-match orgs) -- rather than
+# registering a URL that can't be crawled.
+#
+# Live 2026-08-30 re-run: 299 events found (300-URL discovery cap
+# reached; EVENT_PATH_RE matches ~10,256 citywide URLs, mostly
+# /calendar//program/-pattern department pages, e.g. the City Clerk's
+# meetings calendar) -- this source is NOT currently zero-yield; the
+# org_name/site_url mismatch was a real, independent bug, not the cause
+# of a yield problem.
+
+org_name = "City of San Diego"
 adapter_type = "generic_html"
 enabled = true
 
@@ -8,4 +35,4 @@ site_url = "https://www.sandiego.gov"
 [acquisition_policy]
 rate_limit_seconds = 1.0
 respect_robots = true
-discovered_via = "partners_viable.csv tier-2 bulk registration (2026-07-20)"
+discovered_via = "partners_viable.csv tier-2 bulk registration (2026-07-20); org_name corrected sprint 014 ticket 003 (2026-08-30)"

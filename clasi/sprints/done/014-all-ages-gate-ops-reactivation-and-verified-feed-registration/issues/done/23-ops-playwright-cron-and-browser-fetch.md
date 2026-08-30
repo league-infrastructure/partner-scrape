@@ -1,5 +1,8 @@
 ---
-status: pending
+status: done
+sprint: '014'
+tickets:
+- 014-002
 ---
 
 # Ops: install Playwright, re-enable the weekly cron, add a real-browser fetch path

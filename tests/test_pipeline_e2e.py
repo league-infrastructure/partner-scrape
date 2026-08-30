@@ -26,6 +26,7 @@ from __future__ import annotations
 import json
 import shutil
 import sys
+import threading
 from dataclasses import dataclass, field
 from datetime import date, datetime
 from pathlib import Path
@@ -1231,3 +1232,104 @@ class TestSourceLevelConcurrency:
         assert static_fetcher.calls == []
         titles = {r["title"] for r in payload}
         assert titles == {"Headless Fixture A Event", "Headless Fixture B Event"}
+
+
+# =============================================================================
+# Sprint 014 ticket 002: the dedicated single-worker executor for
+# `headless`-strategy sources (SUC-004's dispatch-level fixture test).
+# =============================================================================
+
+
+class TestHeadlessDedicatedExecutorThreadAffinity:
+    """`pipeline.run()` dispatches every `headless`-strategy source
+    through its own dedicated single-worker executor, so all of them
+    land on the same worker thread for the run's lifetime -- proven
+    here by recording `threading.current_thread()` inside a fixture
+    `page_factory`'s `goto()`, not merely inferred from the executor's
+    presence. Reuses `FETCH_STRATEGY_REGISTRY_DIR`'s two
+    headless-flagged sources (headless-a, headless-b) with
+    `max_source_workers=8` so both reach Pipeline's dispatch as close
+    to the same instant as real OS scheduling allows -- exactly the
+    scenario the dedicated executor exists to make safe. Wraps a real
+    `PoliteFetcher` + `PlaywrightFetcher` pair (only `page_factory` is
+    a fixture double), so this exercises the real production dispatch
+    path, matching `TestFlagshipEndToEnd`'s own convention, not a
+    bypass of it.
+    """
+
+    def test_two_headless_sources_land_on_the_same_worker_thread(self, tmp_path):
+        site_dir = _site_dir(tmp_path)
+        static_fetcher = FixtureFetcher({})  # never touched -- both active sources are headless
+        a_body = (FETCH_STRATEGY_REGISTRY_DIR / "headless_a_events.json").read_text()
+        b_body = (FETCH_STRATEGY_REGISTRY_DIR / "headless_b_events.json").read_text()
+        robots_body = (FETCH_FIXTURES_DIR / "robots_allow_all.txt").read_text()
+        recorded_threads: list[threading.Thread] = []
+
+        @dataclass
+        class _ThreadRecordingHeadlessPage:
+            """Mirrors `FixtureHeadlessPage` above, plus recording
+            `threading.current_thread()` on every `goto()` call -- the
+            one addition this test needs.
+            """
+
+            pages: dict[str, tuple[int, str]]
+            _current_url: str | None = field(default=None, repr=False)
+
+            def goto(self, url: str, timeout=None, wait_until=None):
+                recorded_threads.append(threading.current_thread())
+                status, _html = self.pages[url]
+                self._current_url = url
+                return _FixtureNavigationResponse(status=status)
+
+            def content(self) -> str:
+                assert self._current_url is not None
+                _status, html = self.pages[self._current_url]
+                return html
+
+        page = _ThreadRecordingHeadlessPage(
+            pages={
+                "https://headless-a.example/robots.txt": (200, robots_body),
+                "https://headless-b.example/robots.txt": (200, robots_body),
+                HEADLESS_A_PROBE_URL: (200, a_body),
+                HEADLESS_A_PAGE1_URL: (200, a_body),
+                HEADLESS_B_PROBE_URL: (200, b_body),
+                HEADLESS_B_PAGE1_URL: (200, b_body),
+            }
+        )
+
+        def headless_fetcher_factory():
+            # A real PoliteFetcher wrapping a real PlaywrightFetcher --
+            # only page_factory is a fixture double -- exercising the
+            # exact same robots.txt/rate-limit/cache path a real
+            # headless fetch would, matching TestFlagshipEndToEnd's own
+            # convention. The Throttle's clock/sleep are faked so this
+            # test never real-sleeps for per-domain rate limiting.
+            return PoliteFetcher(
+                cache_dir=tmp_path / "headless_cache",
+                fetcher=PlaywrightFetcher(page_factory=lambda: page),
+                throttle=Throttle(clock=lambda: 0.0, sleep=lambda seconds: None),
+            )
+
+        payload = run(
+            registry_dir=FETCH_STRATEGY_REGISTRY_DIR,
+            site_dir=site_dir,
+            fetcher=static_fetcher,
+            headless_fetcher_factory=headless_fetcher_factory,
+            limit=2,
+            today=TODAY,
+            max_source_workers=8,
+        )
+
+        titles = {r["title"] for r in payload}
+        assert titles == {"Headless Fixture A Event", "Headless Fixture B Event"}
+        assert static_fetcher.calls == []
+
+        # Both headless-flagged sources' real fetch calls (robots.txt +
+        # probe + page1, for each of headless-a and headless-b) landed
+        # on exactly one worker thread -- the dedicated single-worker
+        # executor's own thread -- never spread across two different
+        # OS threads, even though max_source_workers=8 lets both
+        # sources reach Pipeline's dispatch concurrently.
+        assert len(recorded_threads) >= 4
+        thread_idents = {t.ident for t in recorded_threads}
+        assert len(thread_idents) == 1

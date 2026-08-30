@@ -1,6 +1,15 @@
+# Traveling Miss T. (NBTutors LLC) -- DISABLED 2026-08-30 (sprint 014
+# ticket 003 / issue 24 triage). Live re-probe: www.travelingmisst.com
+# is a Shopify storefront (301-redirects to the canonical
+# travelingmisst.com host) -- its sitemap.xml is a real, reachable
+# <sitemapindex> whose children are Shopify's standard
+# products/collections/pages sitemaps, not an events calendar,
+# matching robolink.toml's exact pattern. Recursing through them
+# matches no EVENT_PATH_RE path -- confirmed live 2026-08-30.
+
 org_name = "Traveling Miss T. (NBTutors LLC)"
 adapter_type = "generic_html"
-enabled = true
+enabled = false  # disabled: Shopify storefront sitemap (products/collections/pages only), no event-path-matching pages -- confirmed live 2026-08-30
 
 [config]
 site_url = "https://www.travelingmisst.com"
@@ -8,4 +17,4 @@ site_url = "https://www.travelingmisst.com"
 [acquisition_policy]
 rate_limit_seconds = 1.0
 respect_robots = true
-discovered_via = "partners_viable.csv tier-1B bulk registration (2026-07-20)"
+discovered_via = "partners_viable.csv tier-1B bulk registration (2026-07-20); disabled sprint 014 ticket 003 (2026-08-30)"

@@ -1,34 +1,39 @@
-# San Diego Public Library -- registered against BiblioCommons like
-# SDCL, but its Events feature is confirmed DISABLED there: live
-# probing (2026-07-19) found SDPL's real BiblioCommons subdomain is
-# "sandiego" (via the same select_library dropdown SDCL's subdomain was
-# confirmed against -- <option value="sandiego">San Diego Public
-# Library</option>), but
-# https://gateway.bibliocommons.com/v2/libraries/sandiego/events
-# returns HTTP 403 with {"error": {"message": "The Events feature is
-# not available at San Diego Public Library"}}. SDPL evidently runs its
-# real events program elsewhere -- dev/SCRAPER_GUIDELINES.md Section 3
-# separately documents a Drupal-based extractor for sandiego.gov, which
-# this source does not attempt (out of scope for this bibliocommons
-# adapter; a future ticket could register sandiego.gov under
-# generic_html/listing_html instead).
+# San Diego Public Library -- DISABLED 2026-08-30 (sprint 014 ticket
+# 003 / issue 24 triage). Previously registered against BiblioCommons
+# with subdomain "sandiego" on the documented, deliberate basis that
+# SDPL's Events feature returned a confirmed HTTP 403 "not available"
+# response (see git history for the prior comment) -- a state this
+# adapter's non-200 handling already coped with gracefully.
 #
-# Registered here anyway, with the real confirmed subdomain, rather
-# than omitted: adapters/bibliocommons.py's existing non-200 handling
-# (identical to tec_rest/localist's "probe fails -> degrade to one
-# page; non-200 page -> log and yield zero events, never raise") already
-# copes with this correctly -- it yields zero events today without
-# crashing the run, and will start working with no code changes the day
-# BiblioCommons enables Events for SDPL. See
-# tests/test_adapters_bibliocommons.py's TestSourceWithEventsFeatureUnavailable
-# for the fixture-backed proof of this exact real response shape.
+# Live re-probe 2026-08-30 found that state has changed and gotten
+# worse, not better:
 #
-# org_name matches the exact name in data/partners_viable.csv so the
-# stem-ecosystem partner join resolves.
+#   GET https://gateway.bibliocommons.com/v2/libraries/sandiego/events
+#
+# now returns HTTP 410 Gone, {"error": {"message": "Site disabled",
+# "classification": "SiteDisabledError", "meta": {"homeLink":
+# "https://sdpl.na5.iiivega.com/", ...}}} -- and SDPL no longer appears
+# at all when searching "san diego" in the BiblioCommons
+# select_library picker (https://sdpl.bibliocommons.com/info/
+# select_library), which today lists only "sdcl" (San Diego County
+# Library, still live and unaffected -- see sdcl.toml). The homeLink in
+# the 410 response points at sdpl.na5.iiivega.com -- Innovative
+# Interfaces' Vega platform, a different ILS/discovery product
+# entirely. San Diego Public Library has evidently migrated off
+# BiblioCommons since this source was first registered.
+#
+# adapter_type = "bibliocommons" can never work again for this
+# organization: it is not a bug in this adapter, a config error, or a
+# transient outage, it is the wrong platform. Reaching SDPL's real
+# events calendar would need a new registration against Vega (out of
+# this ticket's scope -- no new adapter engineering, no new sources).
+# enabled = false rather than deleted, per registry/DESIGN.md's
+# disabled-with-reason convention, so this history round-trips through
+# load_sources().
 
 org_name = "San Diego Public Library"
 adapter_type = "bibliocommons"
-enabled = true
+enabled = false  # disabled: migrated off BiblioCommons to Vega (sdpl.na5.iiivega.com); gateway now returns 410 "Site disabled" -- confirmed live 2026-08-30
 
 [config]
 subdomain = "sandiego"
@@ -36,4 +41,4 @@ subdomain = "sandiego"
 [acquisition_policy]
 rate_limit_seconds = 1.0
 respect_robots = true
-discovered_via = "live BiblioCommons gateway API investigation (2026-07-19)"
+discovered_via = "live BiblioCommons gateway API investigation (2026-07-19); disabled sprint 014 ticket 003 (2026-08-30)"
