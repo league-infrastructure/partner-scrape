@@ -1,9 +1,13 @@
 ---
 id: '004'
 title: Register verified structured feeds
-status: open
-use-cases: [SUC-007, SUC-008]
-depends-on: ['002', '003']
+status: in-progress
+use-cases:
+- SUC-007
+- SUC-008
+depends-on:
+- '002'
+- '003'
 github-issue: ''
 issue: 25-register-verified-structured-feeds.md
 completes_issue: true
