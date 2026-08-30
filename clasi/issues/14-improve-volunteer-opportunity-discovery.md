@@ -67,4 +67,33 @@ their "get involved" page, etc.).
 Replaces the earlier "separate filter-gated volunteer section" idea
 (deleted) — the stakeholder decided the priority is *finding* more
 volunteer opportunities, not special-casing how they display.
-</content>
+
+## Research update (2026-08-30) — Strategy A is dead; go straight to Strategy B
+
+Live verification of the platforms settled the open questions:
+
+- **ToS forbid Strategy A on the major platforms.** VolunteerMatch now
+  redirects to Idealist, whose terms prohibit "spiders, robots,
+  scrapers, crawlers... data mining"; ActivityHero's ToS likewise
+  forbids scraping. JustServe, HandsOn San Diego (still active, 291
+  orgs, HandsOn Connect/Salesforce), and Points of Light Engage are
+  JS-only with no public API.
+- **Our STEM partners don't post to aggregators anyway.** They use
+  private, login-gated portals with no public listing feed: Volgistics
+  (SDZWA — 18+ only, Birch — 16+, the Nat — HS camp volunteers),
+  VolunteerMatters (Fleet — 18+, 6-month commitment), zFairs (GSDSEF
+  judges), SignUpGenius/Typeform/JotForm (JA). Galaxy Digital exists
+  only for the San Diego River Park Foundation; the zoo/Fleet/Nat/
+  ILACSD instances guessed in this issue's draft do not exist.
+- **What does exist as scrapable volunteer content:** UCSD Localist's
+  Volunteer event type (Wander the Wetlands, Weed Warriors), Coastkeeper
+  TEC (cleanups, monthly water-quality monitoring), Surfrider SD Google
+  Calendar, ILACSD (partner) — dated volunteer *events*, which the
+  normal pipeline + `Volunteering` type already handle once registered
+  (see issue 25).
+
+**Conclusion:** implement Strategy B — a per-partner volunteer link/
+profile (org, what volunteers do, age minimums, link to their portal)
+— as the primary mechanism, plus the dated volunteer-event sources
+above through the normal pipeline. Note age minimums explicitly: Fleet
+18+, SDZWA 18+, Birch 16+ — it matters for the teen audience.

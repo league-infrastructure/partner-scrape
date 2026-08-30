@@ -143,4 +143,3 @@ the LLM enrichment path touched by **issue 13**.
 - End-to-end: POST a sample webhook payload to the receiver, then run
   `ingest-mail` against the queue with a dry-run that never writes to the
   real `stem-ecosystem`.
-</content>
