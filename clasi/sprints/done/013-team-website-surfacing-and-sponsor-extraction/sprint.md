@@ -1,7 +1,7 @@
 ---
 id: '013'
 title: Team website surfacing and sponsor extraction
-status: ticketing
+status: done
 branch: sprint/013-team-website-surfacing-and-sponsor-extraction
 use-cases: []
 issues: []

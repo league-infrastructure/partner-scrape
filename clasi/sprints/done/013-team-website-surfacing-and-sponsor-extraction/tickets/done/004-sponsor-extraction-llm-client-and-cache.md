@@ -1,9 +1,11 @@
 ---
 id: '004'
 title: Sponsor extraction LLM client and cache
-status: open
-use-cases: [SUC-004]
-depends-on: ['003']
+status: done
+use-cases:
+- SUC-004
+depends-on:
+- '003'
 github-issue: ''
 issue: 21-scrape-team-sites-for-sponsors.md
 completes_issue: true
@@ -74,26 +76,26 @@ for this ticket's exact module contracts.
 
 ## Acceptance Criteria
 
-- [ ] `partner_scrape/teams/sponsor_llm.py` exists with
+- [x] `partner_scrape/teams/sponsor_llm.py` exists with
       `SponsorExtractionResult`, `SponsorLLMClient` (Protocol),
       `AnthropicSponsorLLMClient`, `FixtureSponsorLLMClient`, and a
       dataclass-derived JSON schema for `SponsorExtractionResult`.
-- [ ] `partner_scrape/teams/sponsor_llm.py` contains **zero** imports
+- [x] `partner_scrape/teams/sponsor_llm.py` contains **zero** imports
       from `partner_scrape.enrich` (verify with a grep/AST check, same
       spirit as `tests/teams/test_sources_base.py`'s forbidden-import
       scan).
-- [ ] `AnthropicSponsorLLMClient`'s system prompt explicitly instructs
+- [x] `AnthropicSponsorLLMClient`'s system prompt explicitly instructs
       the model to select only from the given candidates and to exclude
       the team's own organization name, program names, and named
       CMS/hosting vendors.
-- [ ] `partner_scrape/teams/sponsor_cache.py` exists with `SponsorCache`,
+- [x] `partner_scrape/teams/sponsor_cache.py` exists with `SponsorCache`,
       keyed by `(team_id, content_hash(candidates))`, under
       `{SCRAPE_CACHE_DIR}/sponsor_extraction_cache/`, with a
       `schema_version` guard matching `enrich/cache.py`'s
       stale-entry-is-a-miss convention.
-- [ ] `partner_scrape/teams/sponsor_cache.py` also contains zero imports
+- [x] `partner_scrape/teams/sponsor_cache.py` also contains zero imports
       from `partner_scrape.enrich`.
-- [ ] `FixtureSponsorLLMClient` records every call in an inspectable
+- [x] `FixtureSponsorLLMClient` records every call in an inspectable
       `calls` list for cache-hit call-counting tests (ticket 005 will use
       this).
 

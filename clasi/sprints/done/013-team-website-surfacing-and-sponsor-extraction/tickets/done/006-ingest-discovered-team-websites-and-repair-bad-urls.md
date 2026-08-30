@@ -1,8 +1,9 @@
 ---
 id: '006'
 title: Ingest discovered team websites and repair bad URLs
-status: open
-use-cases: [SUC-005]
+status: done
+use-cases:
+- SUC-005
 depends-on: []
 github-issue: ''
 issue: 21-scrape-team-sites-for-sponsors.md
@@ -189,52 +190,57 @@ Criteria and `sprint.md`'s `## Tickets` table for the resulting order.
 
 ## Acceptance Criteria
 
-- [ ] `partner_scrape/teams/data/discovered-websites.toml` exists,
+- [x] `partner_scrape/teams/data/discovered-websites.toml` exists,
       transcribed verbatim from `research/discovered-websites.json`'s
       `websites` and `social_only` lists (team_id, `website` where
       present, `social` list) — no fabricated or hand-invented entries.
-- [ ] `partner_scrape/teams/website_overrides.py` exists with
+- [x] `partner_scrape/teams/website_overrides.py` exists with
       `apply_website_overrides(teams: list[Team], data_dir: str | Path
       | None = None) -> list[Team]`, doing exactly the four things
       listed in Description, in order, and idempotent (calling it twice
       produces the same result).
-- [ ] A team whose `website` is `http://www.firstinspires.org/` (or the
+- [x] A team whose `website` is `http://www.firstinspires.org/` (or the
       `www.`-less form) has it cleared to `""`.
-- [ ] A team whose `website` is `http:///host...` (triple slash) has it
+- [x] A team whose `website` is `http:///host...` (triple slash) has it
       repaired to `http://host...`, generically, for any host —
       verified against all 7 real malformed values listed in
       Description (fixture-derived from the live `teams.json`, not
       hand-invented).
-- [ ] A team with an existing non-empty (post-cleanup) `website` is
+- [x] A team with an existing non-empty (post-cleanup) `website` is
       never overwritten by the overlay, even if the overlay also has an
       entry for that `team_id`.
-- [ ] A team with no existing website and a `website` entry in the
+- [x] A team with no existing website and a `website` entry in the
       overlay gets `Team.website` set from the overlay.
-- [ ] A team present only in the overlay's social-only list gets
+- [x] A team present only in the overlay's social-only list gets
       `Team.social` populated with no `Team.website` change.
-- [ ] `Team.website_status` is left exactly at its dataclass default
+- [x] `Team.website_status` is left exactly at its dataclass default
       (`""`) for every team this stage touches, including both
       `strong`- and (the 3) `weak`-confidence overlay entries alike —
       this stage never sets it, proven by a direct test, not just by
       the absence of code that would.
-- [ ] The `(host, path)` uniqueness guard raises on two different
+- [x] The `(host, path)` uniqueness guard raises on two different
       `team_id`s claiming an identical `(host, path)` pair, and does
       **not** raise for two different teams sharing only a host at
       distinct paths (`carlsbaded.org`, `sites.google.com` — real cases
       from the research file).
-- [ ] `Team.social: list[str]` (default `[]`) is added to
+- [x] `Team.social: list[str]` (default `[]`) is added to
       `partner_scrape/teams/model.py` and appears in
       `TEAMS_SCHEMA_FIELDS` with no `export.py` change required.
-- [ ] `teams.pipeline.run_teams()` calls `apply_website_overrides()`
+- [x] `teams.pipeline.run_teams()` calls `apply_website_overrides()`
       after `geocode_teams()` and before `export_teams()`, and accepts
       a new `website_data_dir` parameter.
-- [ ] Ticket 013-001's frontmatter `depends-on` is changed from `[]` to
-      `['006']` (the only edit made to that ticket file).
-- [ ] `sprint.md`'s `## Tickets` table lists this ticket ahead of
-      013-001 in execution order.
-- [ ] `partner_scrape/teams/` still has zero imports from `enrich/`,
+- [x] Ticket 013-001's frontmatter `depends-on` is changed from `[]` to
+      `['006']` (the only edit made to that ticket file). (Already in
+      place before this ticket's implementation pass — verified via
+      `read_artifact_frontmatter`, not re-edited.)
+- [x] `sprint.md`'s `## Tickets` table lists this ticket ahead of
+      013-001 in execution order. (Already in place before this
+      ticket's implementation pass.)
+- [x] `partner_scrape/teams/` still has zero imports from `enrich/`,
       `adapters/`, or `pipeline.run()` (existing regression test, if
-      any covers this — see Testing).
+      any covers this — see Testing). `website_overrides.py` imports
+      only `re`, `tomllib`, `dataclasses`, `pathlib`, `urllib.parse`,
+      `partner_scrape.model`, and `partner_scrape.teams.model`.
 
 ## Testing
 

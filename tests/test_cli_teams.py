@@ -98,6 +98,7 @@ class TestArgumentWiring:
         assert captured["source"] is None
         assert captured["site_dir"] is None
         assert captured["dry_run"] is False
+        assert captured["no_sponsors"] is False
         assert isinstance(captured["fetcher"], PoliteFetcher)
 
     def test_flags_are_parsed_and_forwarded(self, monkeypatch, tmp_path):
@@ -111,13 +112,22 @@ class TestArgumentWiring:
 
         site_dir = tmp_path / "site"
         exit_code = cli.main(
-            ["teams", "--dry-run", "--source", "ftcscout", "--site-dir", str(site_dir)]
+            [
+                "teams",
+                "--dry-run",
+                "--source",
+                "ftcscout",
+                "--site-dir",
+                str(site_dir),
+                "--no-sponsors",
+            ]
         )
 
         assert exit_code == 0
         assert captured["dry_run"] is True
         assert captured["source"] == "ftcscout"
         assert captured["site_dir"] == site_dir
+        assert captured["no_sponsors"] is True
 
     def test_prints_a_summary_including_the_written_team_count(self, monkeypatch, capsys):
         monkeypatch.setattr(
@@ -156,6 +166,7 @@ class TestArgumentWiring:
         assert "--source" in out
         assert "--site-dir" in out
         assert "--no-mirror" in out
+        assert "--no-sponsors" in out
 
     def test_top_level_help_text_mentions_the_teams_subcommand(self, capsys):
         with pytest.raises(SystemExit):
@@ -288,9 +299,23 @@ class TestTeamsEndToEnd:
         )
 
         assert exit_code == 0
-        # No live network call: every URL the fixture Fetcher was asked
-        # for came from its own canned `responses` dict.
-        assert fetcher.calls == [SEARCH_URL]
+        # No live network call: the fetcher is a fixture, never a real
+        # socket. Pre-ticket-013-001 this asserted `fetcher.calls ==
+        # [SEARCH_URL]` exactly. Sprint 013 ticket 001 added
+        # `verify_team_websites()`, wired unconditionally into
+        # `run_teams()` -- so any team whose `website` the ticket 006
+        # overlay populated (this real, live-captured FTCScout fixture
+        # includes such teams -- see
+        # tests/teams/test_pipeline.py's matching test for the full
+        # rationale) now gets its robots.txt probed too. None of those
+        # URLs are in this fixture's canned `responses`, so each is
+        # caught by `verify_team_websites()`'s own per-team exception
+        # isolation and marked "unverified" -- never a real page fetch,
+        # asserted directly below.
+        assert SEARCH_URL in fetcher.calls
+        assert all(
+            call == SEARCH_URL or call.endswith("/robots.txt") for call in fetcher.calls
+        )
         out = capsys.readouterr().out
         assert "152" in out
         assert "dry run" in out.lower()

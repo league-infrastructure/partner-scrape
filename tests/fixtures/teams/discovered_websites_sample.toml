@@ -1,0 +1,34 @@
+# Small fixture, copied verbatim from a subset of
+# clasi/sprints/013-team-website-surfacing-and-sponsor-extraction/
+# research/discovered-websites.json -- see tests/teams/test_website_overrides.py.
+# Covers: one strong-confidence website entry (ftc-1622), all 3
+# weak-confidence entries (ftc-6226, ftc-14968, ftc-18755), one
+# social-only entry (frc-6659), and the carlsbaded.org host-sharing
+# pair at distinct paths (ftc-9049, ftc-10809).
+
+["ftc-1622"]
+website = "https://teamspyder.org"
+social = ["https://www.instagram.com/spyder1622", "https://www.youtube.com/@spyder1622", "https://twitter.com/team1622", "https://twitter.com/frc1622"]
+
+["ftc-6226"]
+website = "http://chsbambusa.weebly.com/"
+social = []
+
+["ftc-14968"]
+website = "https://matadormechanics.my.canva.site/"
+social = []
+
+["ftc-18755"]
+website = "https://www.ljrobotics.org/"
+social = []
+
+["ftc-9049"]
+website = "https://carlsbaded.org/robopuffs-2/"
+social = []
+
+["ftc-10809"]
+website = "https://carlsbaded.org/crow-force/"
+social = []
+
+["frc-6659"]
+social = ["https://www.instagram.com/ehs.robotics", "https://twitter.com/team6659", "https://www.facebook.com/ehs-robotics-1606671419628388"]

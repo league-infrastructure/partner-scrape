@@ -152,6 +152,12 @@ def _extract_one(record: dict[str, Any]) -> Team:
 
     sponsors_raw = record.get("sponsors")
     sponsors = list(sponsors_raw) if isinstance(sponsors_raw, list) else []
+    # Sprint 013 ticket 005: every sponsor this structured API reports
+    # carries "structured" provenance from the moment it is created --
+    # not backfilled later -- so `teams.sponsor_extract.extract_sponsors()`
+    # can tell a pre-existing structured claim from a scraped one when it
+    # merges the two (`sponsor_provenance[name]`'s dedup contract).
+    sponsor_provenance = {name: "structured" for name in sponsors}
 
     rookie_year = record.get("rookieYear")
 
@@ -166,6 +172,7 @@ def _extract_one(record: dict[str, Any]) -> Team:
         city=city,
         rookie_year=rookie_year if isinstance(rookie_year, int) else None,
         sponsors=sponsors,
+        sponsor_provenance=sponsor_provenance,
         sources=[SOURCE_NAME],
         in_region=in_region,
     )

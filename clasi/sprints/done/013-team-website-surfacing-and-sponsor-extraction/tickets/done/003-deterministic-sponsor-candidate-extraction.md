@@ -1,9 +1,11 @@
 ---
 id: '003'
 title: Deterministic sponsor candidate extraction
-status: open
-use-cases: [SUC-003]
-depends-on: ['001']
+status: done
+use-cases:
+- SUC-003
+depends-on:
+- '001'
 github-issue: ''
 issue: 21-scrape-team-sites-for-sponsors.md
 completes_issue: true
@@ -48,22 +50,22 @@ entry describing this function's exact contract.
 
 ## Acceptance Criteria
 
-- [ ] `partner_scrape/teams/sponsor_candidates.py` exists with
+- [x] `partner_scrape/teams/sponsor_candidates.py` exists with
       `gather_sponsor_candidates(html: str, page_url: str) -> list[str]`.
-- [ ] Recognizes headings matching `/sponsor|partner|thank/i` (covering
+- [x] Recognizes headings matching `/sponsor|partner|thank/i` (covering
       at minimum "Sponsors", "Our Partners", and "Thank You to Our
       Sponsors"-style headings) and collects the following block's
       `alt`/`title`/link text.
-- [ ] Independently scans any `<footer>` element for `alt`/`title`/link
+- [x] Independently scans any `<footer>` element for `alt`/`title`/link
       text/hostname, whether or not a matching heading exists nearby.
-- [ ] Deduplicates candidates and caps the returned list at a fixed,
+- [x] Deduplicates candidates and caps the returned list at a fixed,
       documented size (e.g. 40).
-- [ ] A page with no matching heading and no footer signal returns `[]`.
-- [ ] Unparseable HTML returns `[]` with a logged warning — never raises
+- [x] A page with no matching heading and no footer signal returns `[]`.
+- [x] Unparseable HTML returns `[]` with a logged warning — never raises
       (matching `extract/ladder.py`'s and
       `discovery/hub_scan.py::_extract_candidates()`'s existing
       precedent for malformed-HTML handling).
-- [ ] Never imports or calls anything from `fetch/`, `enrich/`, or the
+- [x] Never imports or calls anything from `fetch/`, `enrich/`, or the
       `anthropic` SDK — this module is offline and LLM-free by
       construction.
 

@@ -75,6 +75,51 @@ def test_team_card_has_data_type_attribute():
     )
 
 
+# === TeamCard: website badge (013-002) -- confirmed only, via SocialIcon ===
+
+
+def test_team_card_imports_social_icon_website_platform():
+    source = TEAM_CARD.read_text(encoding="utf-8")
+    assert "import SocialIcon from './SocialIcon.astro'" in source, (
+        "the website badge must reuse SocialIcon.astro's 'website' "
+        "platform icon, not a new asset."
+    )
+    assert re.search(r"<SocialIcon\s+platform=\"website\"", source), (
+        "TeamCard.astro must render SocialIcon with platform=\"website\""
+    )
+
+
+def test_team_card_website_badge_gated_on_confirmed_status():
+    source = TEAM_CARD.read_text(encoding="utf-8")
+    # The badge must be gated on website_status === 'confirmed', not raw
+    # website truthiness -- an 'unverified' website (a URL that failed a
+    # live fetch) must never render the same badge as a working link.
+    assert re.search(
+        r"hasConfirmedWebsite\s*=\s*team\.website_status\s*===\s*['\"]confirmed['\"]",
+        source,
+    ), (
+        "the website badge must be derived from "
+        "team.website_status === 'confirmed', not team.website truthiness"
+    )
+    assert re.search(r"\{hasConfirmedWebsite\s*&&", source), (
+        "the SocialIcon badge must be conditionally rendered on "
+        "hasConfirmedWebsite"
+    )
+
+
+def test_team_card_has_data_website_attribute_for_filter_matching():
+    source = TEAM_CARD.read_text(encoding="utf-8")
+    assert re.search(
+        r"data-website=\{hasConfirmedWebsite\s*\?\s*['\"]true['\"]\s*:\s*['\"]false['\"]\}",
+        source,
+    ), (
+        "TeamCard must carry a data-website attribute reflecting "
+        "confirmed-status so TeamFilters' 'Has a Website' facet "
+        "(scripts/filters.js's dataset-attribute convention) can match "
+        "against it."
+    )
+
+
 # === TeamFilters: build-time facet-count pattern, not PartnerFilters' plain list ===
 
 
@@ -85,6 +130,38 @@ def test_team_filters_uses_build_time_tally_pattern():
         "TeamFilters.astro should clone OpportunityFilters.astro's "
         "build-time facet-count tally() pattern, not PartnerFilters.astro's "
         "uncounted checkbox list."
+    )
+
+
+def test_team_filters_has_website_facet_derived_not_tallied():
+    source = TEAM_FILTERS.read_text(encoding="utf-8")
+    # Modeled on inRegionCount, not tally(): website_status === 'confirmed'
+    # is a derived condition, not a raw field value to count directly.
+    assert re.search(
+        r"hasWebsiteCount\s*=\s*teams\.filter\(\s*t\s*=>\s*t\.website_status\s*===\s*['\"]confirmed['\"]\s*\)\.length",
+        source,
+    ), (
+        "TeamFilters.astro must derive a hasWebsiteCount the same way "
+        "inRegionCount is derived (teams.filter(...).length), not via "
+        "the generic tally() helper, since 'confirmed' is a derived "
+        "condition, not a raw field value."
+    )
+    assert re.search(r'data-filter="website"\s+value="true"', source), (
+        "the 'Has a Website' checkbox must use data-filter=\"website\" "
+        "value=\"true\" so it matches TeamCard's data-website attribute"
+    )
+    assert "Has a Website" in source
+
+
+def test_team_filters_website_facet_disabled_when_zero():
+    source = TEAM_FILTERS.read_text(encoding="utf-8")
+    assert re.search(
+        r"is-empty['\"]:\s*hasWebsiteCount\s*===\s*0",
+        source,
+    ), (
+        "the 'Has a Website' facet option must follow the same "
+        "is-empty/disabled pattern as every other facet when its count "
+        "is zero"
     )
 
 
@@ -208,6 +285,62 @@ def test_teams_detail_page_uses_get_static_paths_over_teams_json():
 def test_teams_detail_page_uses_base_url():
     source = TEAMS_DETAIL.read_text(encoding="utf-8")
     assert "import.meta.env.BASE_URL.replace(/\\/+$/, '')" in source
+
+
+# === Detail page: Team Website field gated on website_status (013-002) ===
+# Issue 21 is explicit: "a broken link published on a public directory is
+# worse than no link" -- a clickable <a> must never appear for a website
+# this project already knows failed a live fetch.
+
+
+def test_teams_detail_page_website_link_gated_on_confirmed():
+    source = TEAMS_DETAIL.read_text(encoding="utf-8")
+    assert re.search(
+        r"team\.website\s*&&\s*team\.website_status\s*===\s*['\"]confirmed['\"]",
+        source,
+    ), (
+        "the clickable Team Website <a> must be gated on "
+        "team.website_status === 'confirmed', not on team.website alone"
+    )
+
+
+def test_teams_detail_page_unverified_website_renders_plain_text_not_link():
+    source = TEAMS_DETAIL.read_text(encoding="utf-8")
+    assert re.search(
+        r"team\.website\s*&&\s*team\.website_status\s*===\s*['\"]unverified['\"]",
+        source,
+    ), "expected a branch gated on website_status === 'unverified'"
+
+    # Extract just the unverified branch's JSX block and confirm it emits
+    # no <a> element -- a bare URL as text with a note, per issue 21.
+    match = re.search(
+        r"\{team\.website\s*&&\s*team\.website_status\s*===\s*['\"]unverified['\"][\s\S]*?</dd>[\s\S]*?\)\}",
+        source,
+    )
+    assert match, "could not isolate the unverified-website JSX block"
+    unverified_block = match.group(0)
+    assert "<a " not in unverified_block and "<a>" not in unverified_block, (
+        "an 'unverified' website must render as plain unlinked text, "
+        "never a clickable <a>"
+    )
+    assert "not yet verified" in unverified_block.lower(), (
+        "the unverified website note must explain the link is unverified"
+    )
+
+
+def test_teams_detail_page_website_status_none_renders_nothing():
+    # No explicit 'none' branch is required or expected: team.website is
+    # empty for a 'none'-status team (no known URL), so both the
+    # 'confirmed' and 'unverified' branches' `team.website &&` guard
+    # already short-circuits -- this is existing, unchanged behavior.
+    # Guard that no unconditional third branch was added that would
+    # break this.
+    source = TEAMS_DETAIL.read_text(encoding="utf-8")
+    website_status_branches = re.findall(r"team\.website_status\s*===\s*['\"](\w+)['\"]", source)
+    assert set(website_status_branches) == {"confirmed", "unverified"}, (
+        f"expected exactly the 'confirmed'/'unverified' website_status "
+        f"branches, found {website_status_branches}"
+    )
 
 
 # === Nav: Teams added to both Header.astro and Footer.astro (separate lists) ===

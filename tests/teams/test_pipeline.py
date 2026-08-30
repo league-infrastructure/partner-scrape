@@ -37,6 +37,7 @@ import pytest
 
 from partner_scrape import config
 from partner_scrape.fetch.fetcher import FetchResponse
+from partner_scrape.fetch.robots import robots_txt_url
 from partner_scrape.teams import pipeline as teams_pipeline
 from partner_scrape.teams.model import Team
 from partner_scrape.teams.pipeline import (
@@ -44,8 +45,11 @@ from partner_scrape.teams.pipeline import (
     _parse_sunset_season,
     run_teams,
 )
+from partner_scrape.teams.sources.base import RawTeamResponse, TeamRef
 from partner_scrape.teams.sources.ftcscout import DEFAULT_API_BASE, DEFAULT_REGION, _search_url
 from partner_scrape.teams.sources.tba import _status_url, _teams_page_url
+from partner_scrape.teams.sponsor_cache import SponsorCache
+from partner_scrape.teams.sponsor_llm import FixtureSponsorLLMClient, SponsorExtractionResult
 
 FIXTURES_DIR = Path(__file__).resolve().parents[1] / "fixtures" / "teams"
 SEARCH_URL = _search_url(DEFAULT_API_BASE, DEFAULT_REGION)
@@ -143,12 +147,32 @@ class TestEndToEndAgainstTheRealRegistry:
         assert len(payload["teams"]) == 152
         assert not site.exists()
 
-    def test_dry_run_makes_exactly_one_fetch_call(self, tmp_path):
+    def test_dry_run_only_fetches_the_search_url_and_robots_txt_probes(self, tmp_path):
+        # Pre-ticket-013-001 this asserted `fetcher.calls == [SEARCH_URL]`
+        # exactly -- true when nothing downstream of acquisition ever
+        # touched the network. Sprint 013 ticket 001 added
+        # `verify_team_websites()`, wired unconditionally into
+        # `run_teams()` after `apply_website_overrides()` (SUC-001's
+        # Main Flow has no source-filter exception), so any team whose
+        # `website` the ticket 006 overlay populated now gets its
+        # robots.txt probed too -- this real, live-captured FTCScout
+        # fixture includes such teams (teams/DESIGN.md's Orientation:
+        # 29 FTC teams gained a website via the overlay). None of those
+        # robots.txt URLs are in `_ftcscout_fetcher()`'s canned
+        # `responses`, so each is caught by `verify_team_websites()`'s
+        # own per-team exception isolation and marked "unverified" --
+        # the "unreachable page," not "crash the run," outcome ticket
+        # 001 designed for. This test's original intent -- no *real
+        # page content* fetch beyond the FTCScout search endpoint --
+        # still holds and is asserted directly below.
         fetcher = _ftcscout_fetcher()
 
         run_teams(site_dir=tmp_path, fetcher=fetcher, dry_run=True)
 
-        assert fetcher.calls == [SEARCH_URL]
+        assert SEARCH_URL in fetcher.calls
+        assert all(
+            call == SEARCH_URL or call.endswith("/robots.txt") for call in fetcher.calls
+        )
 
     def test_real_run_writes_teams_json_to_site_dir(self, tmp_path):
         fetcher = _ftcscout_fetcher()
@@ -490,6 +514,245 @@ class TestGeocodingAggregateDistribution:
                 assert team["matched_name"] == ""
 
         assert payload["meta"]["out_of_region"] == 6
+
+
+_ALLOW_ALL_ROBOTS = "User-agent: *\nDisallow:\n"
+
+
+class _StubTeamSource:
+    """A `TeamSource` returning exactly the caller-supplied `Team`s,
+    ignoring the injected `Fetcher` entirely -- gives this class full
+    control over which `Team`s (and which `website`) `run_teams()`
+    dispatches to `verify_team_websites()`/`extract_sponsors()`, without
+    depending on the real 152-team FTCScout fixture (whose `website`
+    coverage depends on the committed ticket 006 overlay, not something
+    this class's tests should be coupled to)."""
+
+    def __init__(self, teams: list[Team]) -> None:
+        self._teams = teams
+
+    def discover(self, source, fetcher):
+        return [TeamRef(url="https://example.org/stub-source")]
+
+    def fetch(self, ref, fetcher):
+        return RawTeamResponse(ref=ref, status=200, body="")
+
+    def extract(self, raw, source):
+        return self._teams
+
+
+def _one_team_registry(tmp_path: Path) -> Path:
+    registry_dir = tmp_path / "registry"
+    registry_dir.mkdir()
+    (registry_dir / "ftc-sd.toml").write_text(
+        'org_name = "FTC"\nadapter_type = "ftcscout"\nenabled = true\n[config]\n'
+    )
+    return registry_dir
+
+
+class TestSponsorExtractionWiring:
+    """Sprint 013 ticket 005: `extract_sponsors()` sequenced after
+    `verify_team_websites()` and before `export_teams()`, with
+    injectable `llm_client`/`sponsor_cache` and a `no_sponsors` escape
+    hatch (the CLI's `--no-sponsors` flag)."""
+
+    _SPONSOR_HTML = (
+        "<html><body><h2>Sponsors</h2>"
+        '<div><a href="https://sponsor.example.com">Real Sponsor Co</a></div>'
+        "</body></html>"
+    )
+
+    def test_a_confirmed_team_gets_a_scraped_sponsor_via_the_injected_llm_client(
+        self, monkeypatch, tmp_path
+    ):
+        website = "https://www.teamspyder.org/"
+        team = Team(
+            team_id="ftc-1622",
+            league="FTC",
+            program="FIRST Tech Challenge",
+            number=1622,
+            name="Team Spyder",
+            organization="Poway High School",
+            website=website,
+        )
+        monkeypatch.setattr(teams_pipeline, "_TEAM_SOURCES", {"ftcscout": _StubTeamSource([team])})
+
+        fetcher = FixtureFetcher(
+            {
+                robots_txt_url(website): FetchResponse(url="", status=200, headers={}, body=_ALLOW_ALL_ROBOTS),
+                website: FetchResponse(url="", status=200, headers={}, body=self._SPONSOR_HTML),
+            }
+        )
+        llm_client = FixtureSponsorLLMClient(
+            responses={
+                ("Real Sponsor Co", "sponsor.example.com"): SponsorExtractionResult(
+                    confirmed_sponsors=["Real Sponsor Co"]
+                ),
+            }
+        )
+        sponsor_cache = SponsorCache(cache_dir=tmp_path / "cache")
+
+        payload = run_teams(
+            registry_dir=_one_team_registry(tmp_path),
+            site_dir=tmp_path,
+            fetcher=fetcher,
+            dry_run=True,
+            llm_client=llm_client,
+            sponsor_cache=sponsor_cache,
+        )
+
+        [published] = payload["teams"]
+        assert published["sponsors"] == ["Real Sponsor Co"]
+        assert published["sponsor_provenance"] == {"Real Sponsor Co": "scraped"}
+        assert len(llm_client.calls) == 1
+
+    def test_no_sponsors_skips_extraction_but_website_verification_still_runs(
+        self, monkeypatch, tmp_path
+    ):
+        website = "https://www.teamspyder.org/"
+        team = Team(
+            team_id="ftc-1622",
+            league="FTC",
+            program="FIRST Tech Challenge",
+            number=1622,
+            name="Team Spyder",
+            organization="Poway High School",
+            website=website,
+        )
+        monkeypatch.setattr(teams_pipeline, "_TEAM_SOURCES", {"ftcscout": _StubTeamSource([team])})
+
+        fetcher = FixtureFetcher(
+            {
+                robots_txt_url(website): FetchResponse(url="", status=200, headers={}, body=_ALLOW_ALL_ROBOTS),
+                website: FetchResponse(url="", status=200, headers={}, body=self._SPONSOR_HTML),
+            }
+        )
+
+        def _boom_llm_client():
+            raise AssertionError("AnthropicSponsorLLMClient must not be constructed under no_sponsors")
+
+        monkeypatch.setattr(teams_pipeline, "AnthropicSponsorLLMClient", _boom_llm_client)
+
+        payload = run_teams(
+            registry_dir=_one_team_registry(tmp_path),
+            site_dir=tmp_path,
+            fetcher=fetcher,
+            dry_run=True,
+            no_sponsors=True,
+        )
+
+        [published] = payload["teams"]
+        # verify_team_websites() (the cheap, certain half) still ran.
+        assert published["website_status"] == "confirmed"
+        # extract_sponsors() (the skippable half) never ran.
+        assert published["sponsors"] == []
+        assert published["sponsor_provenance"] == {}
+
+    def test_llm_client_and_sponsor_cache_default_to_real_implementations_when_omitted(
+        self, monkeypatch, tmp_path
+    ):
+        # A confirmed website whose page has no sponsor-shaped content
+        # at all -- fetch_results is non-empty (so run_teams() actually
+        # reaches the default-construction line below), but
+        # gather_sponsor_candidates() returns [] for this team, so
+        # extract_sponsors() never calls classify_sponsors() and no real
+        # network/API call is ever made. This proves run_teams() can
+        # default-construct AnthropicSponsorLLMClient()/SponsorCache()
+        # (matching fetcher's own default-to-production convention)
+        # without raising, even with no ANTHROPIC_API_KEY configured for
+        # this test (SCRAPE_CACHE_DIR is set below -- SponsorCache()'s
+        # own construction requires it, same as PoliteFetcher()'s does).
+        website = "https://www.teamspyder.org/"
+        team = Team(
+            team_id="ftc-1622",
+            league="FTC",
+            program="FIRST Tech Challenge",
+            number=1622,
+            name="Team Spyder",
+            website=website,
+        )
+        monkeypatch.setattr(teams_pipeline, "_TEAM_SOURCES", {"ftcscout": _StubTeamSource([team])})
+        monkeypatch.setenv("SCRAPE_CACHE_DIR", str(tmp_path / "cache"))
+
+        no_sponsor_content_html = "<html><body><p>Nothing sponsor-shaped here.</p></body></html>"
+        fetcher = FixtureFetcher(
+            {
+                robots_txt_url(website): FetchResponse(url="", status=200, headers={}, body=_ALLOW_ALL_ROBOTS),
+                website: FetchResponse(url="", status=200, headers={}, body=no_sponsor_content_html),
+            }
+        )
+
+        payload = run_teams(
+            registry_dir=_one_team_registry(tmp_path),
+            site_dir=tmp_path,
+            fetcher=fetcher,
+            dry_run=True,
+        )
+
+        [published] = payload["teams"]
+        assert published["website_status"] == "confirmed"
+        assert published["sponsors"] == []
+
+
+class TestCanonicalizeSponsorsWiring:
+    """Ticket 005's reopening: `canonicalize_sponsors()` sequenced after
+    `extract_sponsors()`/`--no-sponsors` and before `export_teams()`,
+    running unconditionally (even under `--no-sponsors`, since a
+    purely-structured sponsor list still needs cross-team spelling
+    canonicalization -- see `sponsor_canonical.py`'s own module
+    docstring)."""
+
+    def test_structured_sponsor_variants_from_different_teams_merge_via_run_teams(
+        self, monkeypatch, tmp_path
+    ):
+        team_a = Team(
+            team_id="ftc-1",
+            league="FTC",
+            program="FIRST Tech Challenge",
+            number=1,
+            name="Team One",
+            sponsors=["QualComm"],
+            sponsor_provenance={"QualComm": "structured"},
+        )
+        team_b = Team(
+            team_id="ftc-2",
+            league="FTC",
+            program="FIRST Tech Challenge",
+            number=2,
+            name="Team Two",
+            sponsors=["Qualcomm"],
+            sponsor_provenance={"Qualcomm": "structured"},
+        )
+        team_c = Team(
+            team_id="ftc-3",
+            league="FTC",
+            program="FIRST Tech Challenge",
+            number=3,
+            name="Team Three",
+            sponsors=["Qualcomm"],
+            sponsor_provenance={"Qualcomm": "structured"},
+        )
+        monkeypatch.setattr(
+            teams_pipeline, "_TEAM_SOURCES", {"ftcscout": _StubTeamSource([team_a, team_b, team_c])}
+        )
+
+        payload = run_teams(
+            registry_dir=_one_team_registry(tmp_path),
+            site_dir=tmp_path,
+            fetcher=FixtureFetcher({}),
+            dry_run=True,
+            no_sponsors=True,
+        )
+
+        published = {t["team_id"]: t for t in payload["teams"]}
+        # No website/scraping involved at all (no_sponsors=True) -- this
+        # merge can only have come from the unconditional
+        # canonicalize_sponsors() pass, decided here by frequency
+        # (two "Qualcomm" teams against one "QualComm" team).
+        assert published["ftc-1"]["sponsors"] == ["Qualcomm"]
+        assert published["ftc-2"]["sponsors"] == ["Qualcomm"]
+        assert published["ftc-3"]["sponsors"] == ["Qualcomm"]
+        assert published["ftc-1"]["sponsor_provenance"] == {"Qualcomm": "structured"}
 
 
 class TestParseSunsetSeason:

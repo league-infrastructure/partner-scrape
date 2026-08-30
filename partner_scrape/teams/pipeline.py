@@ -44,6 +44,70 @@ try/except -- a malformed geocoding data file is a build-time defect
 docstring), not a per-record failure to isolate the way a source's
 network fetch is.
 
+Sprint 013 ticket 006 adds one more stage, after `geocode_teams()` and
+before `export_teams()`: `teams.website_overrides.
+apply_website_overrides()`, which cleans junk/malformed values out of
+the existing `website` field and applies a committed overlay of
+websites/social links discovered by a web-search pass for teams whose
+upstream source reported none (see that module's own docstring). It
+runs *before* sprint 013's `teams.scrape.verify_team_websites()` (ticket
+001, whose `depends-on` now includes ticket 006) so that stage fetches
+the corrected, enlarged website set rather than the smaller, partly-
+broken one this pipeline originally assumed. Like `merge_teams()`/
+`geocode_teams()`, it is not wrapped in its own try/except -- a
+malformed overlay data file is a build-time defect
+`website_overrides._load_overlay` raises loudly for, not a per-record
+failure to isolate.
+
+Sprint 013 ticket 001 adds the next stage, immediately after
+`apply_website_overrides()` and before `export_teams()`:
+`teams.scrape.verify_team_websites()`, which fetches every team's
+(corrected, enlarged) `website` through this same `fetcher` parameter,
+robots-checked first (`fetch.is_allowed()`, matching
+`discovery/hub_scan.py::scan_hub()`'s per-page pattern), and sets
+`Team.website_status` to `"confirmed"`/`"unverified"`/`"none"`. Unlike
+`merge_teams()`/`geocode_teams()`/`apply_website_overrides()`, this
+stage's own per-team fetch failures are already isolated *inside*
+`verify_team_websites()` itself (never raising for one team's dead
+link or robots disallow), so `run_teams()` does not additionally wrap
+this call in a try/except either -- the one case this stage can still
+raise for is a `Fetcher`-level bug, which is exactly as fatal here as
+it would be for any other stage. Its returned `dict[team_id, html]` is
+kept as a local variable (`fetch_results`, deliberately never assigned
+to any `Team` field or `run_teams()`'s own return value -- see
+`teams.scrape`'s own module docstring) for `teams.sponsor_extract.
+extract_sponsors()` to consume.
+
+Sprint 013 ticket 005 adds the next stage, immediately after
+`verify_team_websites()` and before `export_teams()`:
+`teams.sponsor_extract.extract_sponsors()`, which consumes
+`fetch_results` (never assigned to a `Team` field, as above) to gather
+candidates, classify them via the injectable `llm_client`, validate/
+denylist-guard the result, and merge surviving names into
+`Team.sponsors`/`Team.sponsor_provenance`. `llm_client`/`sponsor_cache`
+are new `run_teams()` parameters, defaulting to a real
+`AnthropicSponsorLLMClient()`/`SponsorCache()` when omitted -- the same
+default-to-production convention `fetcher` already follows -- but
+constructed lazily, only when this stage actually runs, so a
+`--no-sponsors` run never touches the `anthropic` SDK at all. Like
+`verify_team_websites()`, `extract_sponsors()` isolates its own
+per-team failures internally (fail-open, SUC-004's Error Flows), so no
+additional try/except wraps this call either.
+
+Ticket 005's reopening adds one more stage, immediately after the
+`extract_sponsors()`/`--no-sponsors` branch above and before
+`export_teams()`: `teams.sponsor_canonical.canonicalize_sponsors()`,
+which mutates the full `Team[]` in place so the same real company is
+published under one consistent display name everywhere it is
+mentioned, not just within one team's own `sponsors` list -- see that
+module's own docstring for why a per-team merge (`extract_sponsors()`'s
+own step 6) can never catch a company two *different* teams' own
+structured records happen to spell differently. Runs unconditionally,
+even under `--no-sponsors`, since a purely-structured sponsor list
+still needs this cross-team pass. Like `merge_teams()`/`geocode_teams()`
+above, it is not wrapped in its own try/except -- it never raises for
+any input it can receive here.
+
 Sprint 012 adds a third entry, `"static_roster"` (the committed FLL
 roster -- see `sources/static_roster.py`'s own module docstring), plus
 one new pre-flight check: `_check_sunset_seasons()`, called once per
@@ -75,10 +139,16 @@ from partner_scrape.teams.export import export_teams
 from partner_scrape.teams.geo import geocode_teams
 from partner_scrape.teams.merge import merge_teams
 from partner_scrape.teams.model import Team
+from partner_scrape.teams.scrape import verify_team_websites
 from partner_scrape.teams.sources.base import TeamSource, run as run_team_source
 from partner_scrape.teams.sources.ftcscout import FTCScoutSource
 from partner_scrape.teams.sources.static_roster import StaticRosterSource
 from partner_scrape.teams.sources.tba import TBASource
+from partner_scrape.teams.sponsor_cache import SponsorCache
+from partner_scrape.teams.sponsor_canonical import canonicalize_sponsors
+from partner_scrape.teams.sponsor_extract import extract_sponsors
+from partner_scrape.teams.sponsor_llm import AnthropicSponsorLLMClient, SponsorLLMClient
+from partner_scrape.teams.website_overrides import apply_website_overrides
 
 logger = logging.getLogger(__name__)
 
@@ -166,10 +236,16 @@ def run_teams(
     fetcher: Fetcher | None = None,
     dry_run: bool = False,
     geo_data_dir: str | Path | None = None,
+    website_data_dir: str | Path | None = None,
+    llm_client: SponsorLLMClient | None = None,
+    sponsor_cache: SponsorCache | None = None,
+    no_sponsors: bool = False,
     today: date | None = None,
 ) -> dict[str, Any]:
     """Run the Teams pipeline end-to-end: Team Registry -> `TeamSource`(s)
-    -> `merge_teams()` -> `geocode_teams()` -> `export_teams()`.
+    -> `merge_teams()` -> `geocode_teams()` -> `apply_website_overrides()`
+    -> `verify_team_websites()` -> `extract_sponsors()` ->
+    `canonicalize_sponsors()` -> `export_teams()`.
 
     Args:
         registry_dir: Team Registry directory to load sources from.
@@ -204,6 +280,37 @@ def run_teams(
             source/merge behavior can safely omit it and exercise the
             real committed data files, matching this module's existing
             "trust the real registry in tests" convention.
+        website_data_dir: the directory `teams.website_overrides.
+            apply_website_overrides()` reads `discovered-websites.toml`
+            from (sprint 013 ticket 006). Defaults to
+            `website_overrides.DEFAULT_DATA_DIR` (the real committed
+            `teams/data/`) when omitted, mirroring `geo_data_dir`'s
+            convention exactly. Tests that need to control the overlay
+            precisely should pass an explicit fixture directory here.
+        llm_client: the injectable `SponsorLLMClient`
+            `extract_sponsors()` (sprint 013 ticket 005) classifies
+            sponsor candidates through. Defaults to a real
+            `AnthropicSponsorLLMClient()` when omitted -- the same
+            default-to-production convention `fetcher` already follows
+            -- constructed lazily, only when sponsor extraction actually
+            has at least one confirmed page to look at (`no_sponsors`
+            is `False` and `verify_team_websites()` produced a non-empty
+            `fetch_results`), so a `--no-sponsors` run and every test
+            that only cares about acquisition/merge/geocoding never
+            touch the `anthropic` SDK at all. Tests that do exercise
+            sponsor extraction inject a `FixtureSponsorLLMClient` here.
+        sponsor_cache: the `SponsorCache` `extract_sponsors()` looks up
+            and stores classification results in. Defaults to a real
+            `SponsorCache()` (the real configured cache directory) when
+            omitted, constructed lazily for the same reason as
+            `llm_client` above. Tests should always pass an explicit
+            `tmp_path`-based `SponsorCache` here.
+        no_sponsors: when `True`, skip `extract_sponsors()` entirely --
+            the CLI's `--no-sponsors` flag. `verify_team_websites()`
+            always runs regardless (SUC-001's cheap, certain half is
+            unconditional); only sponsor classification (the
+            uncertain, `ANTHROPIC_API_KEY`-dependent, Anthropic-API-cost
+            half) is skippable.
         today: the reference date `_check_sunset_seasons()` compares
             every active source's `sunset_season` against. Defaults to
             real `date.today()` when omitted, matching
@@ -279,5 +386,64 @@ def run_teams(
     # SchoolIndex raises loudly for (see teams/geo.py's own docstring),
     # never a per-record failure to isolate the way a source fetch is.
     teams = geocode_teams(teams, data_dir=geo_data_dir)
+
+    # Sprint 013 ticket 006: clean junk/malformed existing website
+    # values and apply the committed discovered-website/social overlay,
+    # once over the full merged+geocoded Team[], same shape as
+    # merge_teams()/geocode_teams() above and for the same reason -- a
+    # malformed overlay data file is a build-time defect
+    # apply_website_overrides() raises loudly for, never a per-record
+    # failure to isolate. Runs before sprint 013's
+    # verify_team_websites() so that stage sees the corrected, enlarged
+    # website set.
+    teams = apply_website_overrides(teams, data_dir=website_data_dir)
+
+    # Sprint 013 ticket 001: fetch and classify every team's (now
+    # corrected, enlarged) website, once over the full team list, same
+    # "operate on the whole list once" shape as the three stages above.
+    # Unlike those three, this stage isolates its own per-team fetch
+    # failures internally (see teams.scrape's own docstring) -- a dead
+    # link or robots disallow for one team never raises out of
+    # verify_team_websites(), so no additional try/except is needed
+    # here. The returned dict is a plain local variable, never assigned
+    # to any Team field or this function's return value (see this
+    # module's own docstring) -- teams.sponsor_extract.extract_sponsors()
+    # is its consumer, immediately below.
+    fetch_results = verify_team_websites(teams, active_fetcher)
+
+    # Sprint 013 ticket 005: the final new stage. --no-sponsors skips it
+    # entirely. llm_client/sponsor_cache are constructed lazily, only
+    # here, and only when there is at least one confirmed page to look
+    # at -- an empty fetch_results means extract_sponsors() would do
+    # nothing for any team regardless (its own per-team loop skips a
+    # team absent from fetch_results before any cache/LLM touch), so
+    # skipping construction here too means a run with no confirmed
+    # website (or --no-sponsors) never touches the anthropic SDK or
+    # requires a configured cache directory. Like verify_team_websites()
+    # immediately above, extract_sponsors() isolates its own per-team
+    # failures internally (fail-open, SUC-004's Error Flows), so no
+    # additional try/except wraps this call either.
+    if no_sponsors:
+        logger.info("Sponsor extraction skipped (--no-sponsors)")
+    elif not fetch_results:
+        logger.info("Sponsor extraction skipped (no confirmed team pages fetched)")
+    else:
+        active_llm_client = llm_client if llm_client is not None else AnthropicSponsorLLMClient()
+        active_sponsor_cache = sponsor_cache if sponsor_cache is not None else SponsorCache()
+        extract_sponsors(teams, fetch_results, active_llm_client, active_sponsor_cache)
+
+    # Sprint 013 ticket 005 (reopened): corpus-wide sponsor-name
+    # canonicalization, after extract_sponsors() (or --no-sponsors) and
+    # before export_teams(). Unlike extract_sponsors(), this runs
+    # unconditionally, even under --no-sponsors -- a purely-structured
+    # sponsor list still needs cross-team canonicalization, since the
+    # same real company is routinely reported under different raw
+    # spellings by different teams' own structured records (e.g.
+    # "QualComm" vs. "Qualcomm" vs. "Qualcomm Inc"), which no per-team
+    # dedup, however good, can ever see. See sponsor_canonical.py's own
+    # module docstring for the full rationale. Never raises for any
+    # input it can receive here (matches merge_teams()/geocode_teams()'s
+    # own "not wrapped in its own try/except" convention above).
+    canonicalize_sponsors(teams)
 
     return export_teams(teams, site_dir=site_dir, dry_run=dry_run)

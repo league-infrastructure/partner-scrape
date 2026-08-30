@@ -291,6 +291,18 @@ def _add_teams_subcommand(subparsers: argparse._SubParsersAction) -> None:
         ),
     )
     parser.add_argument(
+        "--no-sponsors",
+        action="store_true",
+        help=(
+            "Skip sponsor extraction (no ANTHROPIC_API_KEY needed, no "
+            "Anthropic API cost) -- website verification still runs, "
+            "and any pre-existing structured sponsor data is still "
+            "published. Sponsor extraction is the uncertain, "
+            "network+LLM-dependent half of this command; this is its "
+            "escape hatch."
+        ),
+    )
+    parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
@@ -306,7 +318,13 @@ def _run_teams(args: argparse.Namespace) -> int:
     the default concrete implementation" role `main()` already plays
     for the `run` command's `Fetcher`, and `_run_discover_candidates`
     plays for its own. Never calls `run`/`pipeline.run()` -- see cli.py's
-    module docstring.
+    module docstring. Sponsor extraction's `llm_client`/`sponsor_cache`
+    are left unset here, not constructed by this handler -- `run_teams()`
+    itself defaults and lazily constructs those (see its own docstring),
+    matching this command's existing "let run_teams() own its own
+    defaults" convention for `fetcher` not being any different from
+    `llm_client`/`sponsor_cache` in that respect, except `fetcher` is
+    always needed while the other two are skippable via `--no-sponsors`.
     """
     logging.basicConfig(
         level=logging.INFO if args.verbose else logging.WARNING,
@@ -318,6 +336,7 @@ def _run_teams(args: argparse.Namespace) -> int:
         site_dir=args.site_dir,
         fetcher=PoliteFetcher(),
         dry_run=args.dry_run,
+        no_sponsors=args.no_sponsors,
     )
     teams = payload["teams"]
 

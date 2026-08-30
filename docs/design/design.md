@@ -82,6 +82,22 @@ by `export/`'s current-and-upcoming filter if it were routed through
 `Opportunity`. See
 [`partner_scrape/teams/DESIGN.md`](../../partner_scrape/teams/DESIGN.md).
 
+**Sprint 013 addition — website verification and sponsor extraction,
+still inside `teams/`.** `run_teams()` gained two more stages after
+geocoding: fetching each team's already-known `website` (through the
+same `fetcher`/`PoliteFetcher` seam, not a new one) to set
+`website_status`, and — the substantial new piece — extracting sponsor
+names from that fetched HTML via a deterministic candidate-gathering
+pass constrained to an LLM *classification* call (never open-ended
+generation, the guard against a hallucinated sponsor). This sprint adds
+new modules (`teams/scrape.py`, `teams/sponsor_candidates.py`,
+`teams/sponsor_llm.py`, `teams/sponsor_cache.py`,
+`teams/sponsor_extract.py`) that mirror `enrich/`'s LLM-client/cache
+pattern in shape only — the "never touches `enrich/`" boundary above is
+unchanged; the new modules do not import it. See
+`partner_scrape/teams/DESIGN.md`'s own sprint 013 section for the full
+write-up.
+
 ## 4. Subsystem map
 
 The source root itself carries an overview doc; each subsystem carries its own, co-located
@@ -113,7 +129,9 @@ in its own directory.
 - [`partner_scrape/teams/DESIGN.md`](../../partner_scrape/teams/DESIGN.md) — (sprint 011)
   a second, independent pipeline: scrapes, geocodes, and publishes San Diego FIRST
   robotics teams (FTC/FRC) as `teams.json`, structurally disjoint from the
-  `Opportunity` pipeline above.
+  `Opportunity` pipeline above. (Sprint 013) also verifies each known team
+  website and extracts sponsor names from it, via new modules that mirror
+  but never import `enrich/`.
 
 ## 5. Global conventions
 
@@ -174,8 +192,23 @@ a new TOML file. `config.py` is the only module that touches `os.environ`.
   is an open product question, not resolved here: only 1 of 105 distinct team
   organizations is already a partner, while the other 104 are a candidate
   recruitment list for Fleet/League staff to act on, not an architectural decision.
+  (Sprint 013) The new per-team sponsor company-name data makes this question more
+  concretely answerable — which companies sponsor which teams is now visible — but
+  does not answer it; still an open product decision, not an architectural one.
 - (Sprint 012) `partner_scrape/teams/` now carries a third source,
   `static_roster` (FLL, 48 teams, one-time-dated per season), alongside the two
   live sources (FTCScout, TBA) — see `partner_scrape/teams/DESIGN.md`. FLL's
   season is documented as the program's last (`sunset_season = "2026-27"`); what
   replaces it, if anything, is unresolved and out of this project's control.
+- (Sprint 013) `ANTHROPIC_API_KEY` provisioning for the `teams` subcommand's
+  scheduled CI runs is unverified — mirrors the exact `TBA_KEY` gap sprint 011
+  flagged (provisioned locally, not confirmed in the scheduled workflow's
+  secrets). A missing key degrades sponsor extraction to a logged warning and
+  structured-sponsors-only output; it does not abort the run. See
+  `partner_scrape/teams/DESIGN.md`'s sprint 013 section.
+- (Sprint 013) Sponsor data is not persisted across `teams` runs — `Team`
+  objects are rebuilt fresh from their sources every call, with no read-back
+  of the previous `teams.json`, so a transient fetch failure on a later run
+  silently drops that team's previously-scraped sponsors rather than
+  preserving them. Not solved; see `partner_scrape/teams/DESIGN.md`'s Open
+  Questions.
