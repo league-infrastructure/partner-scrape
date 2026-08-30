@@ -109,7 +109,14 @@ class TestPlaywrightFetcherGet:
 
         assert response.status == 404
 
-    def test_applies_bounded_network_idle_wait(self):
+    def test_applies_bounded_load_wait_strategy(self):
+        # Sprint 014 revision: wait_until="load", not the stricter
+        # "networkidle" this method used before this ticket's own live
+        # validation found "networkidle" times out for real Wix sites
+        # that keep a persistent background connection open
+        # indefinitely (see NETWORK_IDLE_TIMEOUT_MS's docstring and
+        # fetch/DESIGN.md's sprint 014 section) -- the timeout bound
+        # itself (NETWORK_IDLE_TIMEOUT_MS) is unchanged.
         url = "https://example.org/events"
         page = FixtureHeadlessPage(pages={url: (200, "<html></html>")})
         fetcher = PlaywrightFetcher(page_factory=lambda: page)
@@ -117,7 +124,7 @@ class TestPlaywrightFetcherGet:
         fetcher.get(url)
 
         assert len(page.calls) == 1
-        assert page.calls[0]["wait_until"] == "networkidle"
+        assert page.calls[0]["wait_until"] == "load"
         assert page.calls[0]["timeout"] == NETWORK_IDLE_TIMEOUT_MS
 
     def test_page_factory_is_called_at_most_once_across_multiple_gets(self):
@@ -140,7 +147,7 @@ class TestPlaywrightFetcherGet:
         url = "https://example.org/slow"
         page = FixtureHeadlessPage(
             pages={},
-            errors={url: TimeoutError("networkidle wait timed out")},
+            errors={url: TimeoutError("load wait timed out")},
         )
         fetcher = PlaywrightFetcher(page_factory=lambda: page)
 

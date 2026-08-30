@@ -226,33 +226,42 @@ dependency graph.
   of several browser pages/contexts (each with its own dedicated worker) would
   restore some parallelism — not needed at this sprint's scale, not built here.
 - **(Sprint 014, revision — found during ticket 002's required pre-close live
-  validation, not the original plan) `NETWORK_IDLE_TIMEOUT_MS` + `wait_until =
-  "networkidle"` times out for most real Wix marketing/listing pages, though the
-  concurrency fix itself is unaffected.** Live-testing the 8 newly-flagged Wix
-  sources (2026-08-30) found `PlaywrightFetcher.get()` raises `TimeoutError` under
-  the shipped 15s `networkidle` wait for 6 of 8 real homepage/listing fetches
-  (`gsdsef.org`, `xplorstem.com`, `sdrvc.org`, `titanbot.org`,
-  `lajollalibrary.org`, `techadventurecamp.com`) — these Wix sites keep a
+  validation, resolved in the same ticket) `wait_until` changed from
+  `"networkidle"` to `"load"`; `NETWORK_IDLE_TIMEOUT_MS` unchanged.** Live-testing
+  the 8 newly-flagged Wix sources (2026-08-30) found `PlaywrightFetcher.get()`
+  raised `TimeoutError` under the original `networkidle` wait for all 8 real
+  homepage/listing fetches tested (`gsdsef.org`, `xplorstem.com`, `sdrvc.org`,
+  `titanbot.org`, `lajollalibrary.org`, `techadventurecamp.com`,
+  `climate-science-alliance.org`, `escondidocreek.org`) — these Wix sites keep a
   persistent analytics/chat-widget connection open indefinitely, so the network
-  never truly idles. The *content* is not the problem: the same URLs fetched with
-  `wait_until="load"` instead consistently returned full, real, rendered text
-  (e.g. `gsdsef.org` in ~1s, real nav/program text) rather than an empty shell —
-  this is a wait-*strategy* mismatch, not a rendering or fetch failure. Per this
-  ticket's own explicit scope line ("extend `PlaywrightFetcher` with per-source
-  timeout/retry tuning while touching it anyway — rejected as scope creep"), this
-  is **left unfixed by ticket 002**, which only adds the lock and does not change
-  `wait_until`/`NETWORK_IDLE_TIMEOUT_MS` — changing either is a real, debatable
-  design trade-off (would it ever silently return a *genuinely* still-loading
-  page's partial content on some other site?) that deserves its own review, not a
-  same-ticket patch discovered mid-implementation. Recommended follow-up: a small
-  ticket to relax the wait strategy (e.g. `wait_until="load"`, evidenced above) —
-  until then, the 8 newly-flagged Wix sources will mostly fail their headless
-  fetch in production (isolated per-source, per the existing per-source
-  try/except — never fatal to a run, never cross-attributed, confirmed live
-  below), reducing but not eliminating this ticket's intended yield improvement
-  for that cohort. `sandiego-cv.aopsacademy.org` (the one non-Wix source this
-  ticket also flags headless) is unaffected — its content is a lighter JS shell
-  that reaches `networkidle` well inside the 15s bound.
+  never truly idles. The *content* was never the problem: the same URLs fetched
+  with `wait_until="load"` instead consistently returned full, real, rendered
+  text (e.g. `gsdsef.org` in ~1s, real nav/program text) rather than an empty
+  shell — a wait-*strategy* mismatch, not a rendering or fetch failure.
+  Team-lead ruling (post-implementation review): a global default-strategy
+  change is not the "per-source timeout/retry tuning" this ticket's own Design
+  Rationale rejected as scope creep — that alternative was about adding a *new*,
+  per-source config surface, not correcting the one shared default every source
+  already uses identically; and ticket 003's zero-yield triage depends on
+  headless fetching actually working against real sites, making this load-bearing
+  for the sprint, not merely nice-to-have. Fixed here: `get()` now passes
+  `wait_until="load"` (still bounded by the same, unchanged
+  `NETWORK_IDLE_TIMEOUT_MS`) — no new config surface, no per-source override
+  added, matching the one thing the original alternatives-analysis actually
+  rejected. Re-validated live post-fix, through the exact production
+  construction path (`pipeline._build_default_headless_fetcher()`): `gsdsef.org`,
+  `xplorstem.com`, and `sdrvc.org` (3 of the 8 newly-flagged Wix sites) all
+  return HTTP 200 with 1MB+ of real rendered HTML (thousands of characters of
+  real visible nav/program text, not an empty shell) through
+  `PlaywrightFetcher.get()` unchanged. `sandiego-cv.aopsacademy.org` (the one
+  non-Wix source this ticket also flags headless) was already unaffected by the
+  original strategy — its content is a lighter JS shell that reached
+  `networkidle` well inside the 15s bound either way — and remains unaffected by
+  this change. Existing fixture tests updated to assert `wait_until == "load"`
+  (`tests/test_fetch_headless.py`); no other test depended on the literal
+  `"networkidle"` string. This closes what was recorded as a "recommended
+  follow-up" in the ticket's initial live-validation pass — resolved in the same
+  ticket instead, per the ruling above.
 - **(Sprint 014) The dispatch-level thread-affinity hazard this ticket fixes is
   not hypothetical — reproduced live during ticket 002's validation.** Two raw
   Python threads (bypassing `pipeline.py`'s dispatch entirely, i.e. deliberately

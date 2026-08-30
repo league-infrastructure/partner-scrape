@@ -49,12 +49,28 @@ from typing import Callable, Protocol
 
 from partner_scrape.fetch.fetcher import DEFAULT_USER_AGENT, FetchResponse
 
-#: Fixed network-idle wait timeout (milliseconds), applied before
-#: reading rendered content. No per-source tuning this ticket (see
-#: sprint.md's Architecture > Open Question 4) -- a future ``config``
-#: key can introduce per-source overrides if a real registered site
-#: ever needs one; this constant is the single source of truth until
-#: then.
+#: Fixed navigation wait timeout (milliseconds), applied before reading
+#: rendered content. No per-source tuning (see sprint.md's Architecture
+#: > Open Question 4) -- a future ``config`` key can introduce
+#: per-source overrides if a real registered site ever needs one; this
+#: constant is the single source of truth until then.
+#:
+#: **(Sprint 014 revision)** The name predates a same-ticket change:
+#: ``get()`` used to pass ``wait_until="networkidle"`` to
+#: ``page.goto()``, but live validation against the sprint's own
+#: newly-flagged Wix sources found that strategy times out for 8 of 8
+#: real Wix homepage fetches -- these sites keep a persistent
+#: background connection (analytics/chat widget) open indefinitely, so
+#: the network never truly idles, even though the real content
+#: finishes rendering well within a second. ``get()`` now passes
+#: ``wait_until="load"`` instead (a strictly less strict, still
+#: standard Playwright wait condition; content already reflects the
+#: fully hydrated page by the time ``load`` fires for every site
+#: tested). This constant still bounds that wait -- same value, same
+#: role, different condition -- kept as one name/one constant (no new
+#: per-source config surface) per this ticket's own scope boundary.
+#: See ``fetch/DESIGN.md``'s sprint 014 section for the full rationale
+#: and live evidence.
 NETWORK_IDLE_TIMEOUT_MS = 15_000
 
 #: Name of the optional dependency group (pyproject.toml
@@ -188,9 +204,19 @@ class PlaywrightFetcher:
         return self._page
 
     def get(self, url: str, headers: dict[str, str] | None = None) -> FetchResponse:
-        """Navigate to ``url``, wait for network-idle (bounded by
+        """Navigate to ``url``, wait for the page to finish loading
+        (``wait_until="load"``, bounded by
         :data:`NETWORK_IDLE_TIMEOUT_MS`), and return the rendered HTML
         as a ``FetchResponse``.
+
+        **(Sprint 014 revision)** Uses ``wait_until="load"``, not the
+        stricter ``"networkidle"`` this method used before the same
+        ticket's own live validation: real Wix sites (this ticket's
+        primary newly-flagged cohort) keep a persistent background
+        connection open indefinitely, so ``"networkidle"`` never fires
+        within the timeout even though the real content is already
+        fully rendered. See :data:`NETWORK_IDLE_TIMEOUT_MS`'s docstring
+        for the live evidence.
 
         ``status`` on the returned ``FetchResponse`` is always taken
         from the real navigation response -- never hardcoded -- so
@@ -218,7 +244,7 @@ class PlaywrightFetcher:
                 if set_extra_headers is not None:
                     set_extra_headers(headers)
 
-            navigation = page.goto(url, timeout=NETWORK_IDLE_TIMEOUT_MS, wait_until="networkidle")
+            navigation = page.goto(url, timeout=NETWORK_IDLE_TIMEOUT_MS, wait_until="load")
             body = page.content()
             response_headers = dict(getattr(navigation, "headers", None) or {})
 

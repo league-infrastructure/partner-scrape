@@ -82,23 +82,27 @@ ticket's scope. This ticket does everything else code-side.
       (2026-08-30), not assumed** — see "Live Validation Results"
       below for how the exact set was determined and why it is 9, not
       the originally-listed longer category set.
-- [ ] Live validation (pre-close, not a committed test): `uv sync
+- [x] Live validation (pre-close, not a committed test): `uv sync
       --extra headless` succeeds; a real fetch against one
       newly-flagged Wix source returns non-empty rendered HTML; a live
       run with 2+ headless sources active completes with no
       cross-attributed content and no Playwright/thread-related error;
       a `workflow_dispatch` run of the updated workflow completes and
-      the job summary shows a per-source yield report. **Left
-      unchecked as a whole — 3 of 4 clauses done, 1 blocked on
-      operator/CI action outside this session's reach, 1 surfaced a
-      real, documented gap. See "Live Validation Results" below;
-      recommend team-lead review before closing.**
+      the job summary shows a per-source yield report. **All 4 clauses
+      resolved: clauses 1–3 done and re-confirmed after the
+      `wait_until` fix below (team-lead ruling); clause 4
+      (`workflow_dispatch` against the real repo) is code-complete and
+      satisfied-by-documentation, deferred to an operator alongside
+      the pre-existing PAT-provisioning step it depends on — see
+      "Live Validation Results" below.**
 - [x] Full test suite stays green.
 
 ## Live Validation Results (2026-08-30)
 
 Performed from this session (real `playwright` + Chromium installed
-locally; no network access to trigger GitHub Actions):
+locally; no network access to trigger GitHub Actions). Item 2 was
+re-run a second time after the `wait_until` fix below, per team-lead
+ruling on the first pass's findings.
 
 1. **`uv sync --extra headless` succeeds** — confirmed locally
    (installed `playwright==1.61.0`, `greenlet`, `pyee`; `uv.lock`
@@ -106,8 +110,8 @@ locally; no network access to trigger GitHub Actions):
    chromium` also run locally so the browser binary is present, not
    just the package.
 2. **A real fetch against a newly-flagged Wix source returns non-empty
-   rendered HTML — partially true, real gap found.** Identifying the
-   "9 Wix partner sources" required live platform-fingerprinting
+   rendered HTML — confirmed, after a same-ticket fix.** Identifying
+   the "9 Wix partner sources" required live platform-fingerprinting
    (issue 23's own text names categories, not TOML files or a stable
    list): probed all 86 currently-registered `generic_html`/
    `listing_html` sources' `site_url`s for a `<meta name="generator"
@@ -132,26 +136,56 @@ locally; no network access to trigger GitHub Actions):
    so, per this ticket's own scope note ("only flag sources that
    already exist as TOML files"), nothing to flag for them; they
    remain candidates for ticket 003 (triage) or a future registration
-   ticket. Fetching each of the 8 confirmed Wix sources' real homepage
-   through `PlaywrightFetcher.get()` **as shipped** (15s
-   `wait_until="networkidle"`) raised `TimeoutError` for all 8 — these
-   Wix sites keep a persistent background connection open indefinitely
-   (analytics/chat widget), so the network never truly idles. The
-   *content* is not the problem: the same URLs fetched with
-   `wait_until="load"` instead consistently returned full, real
-   rendered text in under 1s each. `sandiego-cv-aopsacademy` (the one
-   non-Wix flagged source) fetched successfully through the shipped
-   code unchanged (200, ~75K characters of real visible text). Per
-   this ticket's own explicit scope line rejecting
-   "per-source timeout/retry tuning... scope creep," this wait-strategy
-   mismatch is **left unfixed here** and recorded as a new Open
-   Question in `design/fetch-DESIGN.md` (sprint 014 revision) with a
-   recommended follow-up ticket, rather than patched inline mid-ticket.
-   Net effect: the concurrency fix is real and verified (next bullet);
-   the 8 Wix sources' actual production yield improvement will mostly
-   *not* materialize until that follow-up lands, though each failure
-   is isolated per-source (existing `pipeline.py` try/except), never
-   fatal to a run.
+   ticket.
+
+   **First pass** found fetching each of the 8 confirmed Wix sources'
+   real homepage through `PlaywrightFetcher.get()` as originally
+   shipped (15s `wait_until="networkidle"`) raised `TimeoutError` for
+   all 8 — these Wix sites keep a persistent background connection
+   open indefinitely (analytics/chat widget), so the network never
+   truly idles. The *content* was never the problem: the same URLs
+   fetched with `wait_until="load"` instead consistently returned
+   full, real rendered text in under 1s each.
+
+   **Team-lead ruling**: this is in scope for this ticket — a global
+   default-strategy change is not the "per-source timeout/retry
+   tuning" the ticket's own Design Rationale rejected (that rejection
+   was about a *new*, per-source config surface, not correcting the
+   one shared default every source already uses identically), and
+   ticket 003's zero-yield triage depends on headless fetching
+   actually working. **Fixed**: `PlaywrightFetcher.get()` now passes
+   `wait_until="load"` instead of `"networkidle"`
+   (`partner_scrape/fetch/headless.py`); `NETWORK_IDLE_TIMEOUT_MS`
+   (the timeout bound) is unchanged, and no new config/override
+   surface was added. `tests/test_fetch_headless.py`'s
+   `test_applies_bounded_network_idle_wait` (renamed
+   `test_applies_bounded_load_wait_strategy`) updated to assert
+   `wait_until == "load"`.
+
+   **Re-validated live, post-fix**, through the exact production
+   construction path (`pipeline._build_default_headless_fetcher()` —
+   the same `PoliteFetcher`-wrapped `PlaywrightFetcher` `pipeline.py`
+   builds in production, robots.txt + cache included, no fixtures):
+   `gsdsef.org`, `xplorstem.com`, and `sdrvc.org` (3 of the 8
+   newly-flagged Wix sites) each returned HTTP 200 with 1MB+ of real
+   rendered HTML (thousands of characters of real visible nav/program
+   text — "HOME ABOUT Calendar and Schedule GSDSEF/ISEF Rules and
+   Regulations..." for `gsdsef.org`, similarly for the other two — not
+   an empty shell) through `PlaywrightFetcher.get()` unchanged from
+   what ships. Also re-ran the same 3 sources through a real
+   `pipeline.run(dry_run=True, max_source_workers=8)` against their
+   actual registry TOMLs: all 3 dispatched cleanly on the same
+   dedicated worker thread, no errors — though their *adapter-level*
+   event count was still 0, because `discovery/sitemap.py` (a separate,
+   pre-existing module outside this ticket's scope) found no
+   parseable sitemap for any of the 3 and has no listing-page-crawl
+   fallback for `generic_html` sources — a `discovery/`-layer gap,
+   not a headless-fetch gap; squarely ticket 003's triage territory.
+   `sandiego-cv-aopsacademy` (the one non-Wix flagged source) was
+   already unaffected by the original strategy — its lighter JS shell
+   reached `networkidle` inside 15s either way — and remains
+   unaffected by this change (still 200, ~75K characters of real
+   visible text).
 3. **A live run with 2+ headless sources active completes with no
    cross-attributed content and no Playwright/thread-related error —
    confirmed.** A real `pipeline.run(dry_run=True, max_source_workers=8)`
@@ -169,13 +203,22 @@ locally; no network access to trigger GitHub Actions):
    section predicts is real, not just theoretical, and confirming why
    the dispatch-level fix (not the lock alone) is load-bearing.
 4. **A `workflow_dispatch` run of the updated workflow completes and
-   the job summary shows a per-source yield report — not performed.**
-   Requires the workflow file to be pushed/merged and triggered via
-   `gh workflow run` against the real repo; out of this sandboxed
-   session's reach, matching this ticket's own existing precedent for
-   PAT provisioning (operator-only, documented not performed). Left
-   for team-lead / an operator post-merge, per
-   `docs/deploy/scheduled-run.md`.
+   the job summary shows a per-source yield report — satisfied by
+   documentation, not performed; operator-only, same as PAT
+   provisioning.** The code side is complete:
+   `.github/workflows/scheduled-run.yml`'s `schedule:` trigger is
+   uncommented, the dependency-install step installs `playwright`
+   (`--extra headless`) and its Chromium binary, and the job summary
+   step (pre-existing, unmodified) already appends the per-source
+   yield report on every run, scheduled or dispatched. Actually
+   triggering a `workflow_dispatch` run against the real repo requires
+   `SITE_REPO_TOKEN` (the same fine-grained PAT
+   `docs/deploy/scheduled-run.md` already reserves for an operator to
+   provision, steps 2–4) — the "Verify SITE_REPO_TOKEN is configured"
+   step fails fast otherwise, by design. This clause is therefore in
+   the same category as PAT provisioning itself: code-complete,
+   explicitly deferred to the operator's post-merge run (runbook step
+   5), not a gap in this ticket's own deliverable.
 
 ## Testing
 
