@@ -1,6 +1,6 @@
 # teams
 
-**Owner:** Eric Busboom · **Last reviewed:** 2026-08-30 (sprint 013 ticket 001 — website liveness verification) · **Status:** five sprint-011/012 increments complete (FTC + FRC + geocoding + site pages + FLL static roster); sprint 013 ticket 006 adds website/social overlay ingestion, ticket 001 adds live website verification, ahead of that sprint's still-open sponsor-extraction tickets
+**Owner:** Eric Busboom · **Last reviewed:** 2026-08-30 (sprint 013 ticket 003 — deterministic sponsor candidate extraction) · **Status:** five sprint-011/012 increments complete (FTC + FRC + geocoding + site pages + FLL static roster); sprint 013 ticket 006 adds website/social overlay ingestion, ticket 001 adds live website verification, ticket 003 adds the deterministic (offline, LLM-free) half of sponsor extraction, ahead of that sprint's still-open ticket 004/005 (LLM classification + orchestration, not yet wired into `run_teams()`)
 
 ---
 
@@ -228,6 +228,29 @@ BUILT (sprint 013, ticket 001):
                                               apply_website_overrides() ->
                                               verify_team_websites() ->
                                               export_teams()
+
+BUILT (sprint 013, ticket 003):
+  teams.sponsor_candidates.
+    gather_sponsor_candidates(html, page_url)  pure, offline, stateless --
+     ↓                                         no Team, no I/O, no cache.
+     ↓                                         Two independent signals:
+     ↓                                         (a) any short (<=60 char),
+     ↓                                         non-nav "heading trigger"
+     ↓                                         matching /sponsor|partner|
+     ↓                                         thank/i (broader than
+     ↓                                         <h1>-<h6> -- see Design)
+     ↓                                         and its following sibling
+     ↓                                         block's <img> alt/title +
+     ↓                                         outbound <a> text/hostname;
+     ↓                                         (b) every <footer>'s same
+     ↓                                         signals, independent of
+     ↓                                         any heading. Denylist +
+     ↓                                         own-hostname filter, dedup,
+     ↓                                         capped at 40. NOT YET
+     ↓                                         CALLED by run_teams() --
+     ↓                                         still-open ticket 005's
+     ↓                                         sponsor_extract.py is the
+     ↓                                         first caller once it lands
 ```
 
 **Sprint 013 ticket 006 (2026-08-30) adds discovered-website/social
@@ -318,6 +341,52 @@ the years since TBA recorded them, not a defect in this ticket's fetch
 logic (`teams/DESIGN.md`'s own Migration Concerns already flagged
 "some discovered sites are known-stale" as an accepted, expected
 outcome, not unique to the newly-discovered set).
+
+**Sprint 013 ticket 003 (2026-08-30) adds
+`teams.sponsor_candidates.gather_sponsor_candidates(html, page_url) ->
+list[str]` — the deterministic, offline half of sponsor extraction, and
+the sprint's central safety boundary.** There is no schema.org
+vocabulary for sponsorship, so `extract/ladder.py`'s confidence-ranked
+ladder does not apply; a real robotics team page marks its sponsors
+either under a heading ("Sponsors", "Our Partners", "Thank you to our
+current sponsors.") or in an unstructured `<footer>` logo wall, and this
+function gathers raw candidate *strings* from both signals — never a
+judgment about which is a genuine sponsor, that stays ticket 004/005's
+job. The safety property this exists to establish: an LLM classifying
+sponsors (ticket 004) can only ever *select from* this candidate list,
+never generate a name freely, and ticket 005 will reject in code any
+returned name absent from it verbatim — fabricating an unseen company
+becomes structurally impossible only because this pass itself never
+invents one, it only lifts strings actually present on the page
+(sprint.md's Design Rationale). This is a pure function with no `Team`
+parameter, no cache, no network, no LLM call — it takes the HTML
+`verify_team_websites()` already fetched (ticket 001, above) and a URL,
+nothing else. **Not yet wired into `run_teams()`** — that is ticket
+005's `sponsor_extract.py`, still open; this ticket ships the function
+standalone, fully tested against real captured pages, with no pipeline
+caller yet.
+
+Validated offline against five real, live-captured team pages fetched
+directly while building this ticket (2026-08-30, all HTTP 200 — see
+`tests/teams/test_sponsor_candidates.py`'s module docstring for exact
+provenance and `tests/fixtures/teams/sponsor_page_*.html`): a plain
+`<h2>Sponsors</h2>` grid (`gearup12499.com`, ftc-12499) correctly
+recovers **"Qualcomm"** — the same company already the single most
+common structured sponsor in this project's existing 49-FTC-team
+corpus (18 of 49) — among 8 real sponsors; a plain `<h2>Partners</h2>`
+heading (`teamspyder.org`, frc-1622/ftc-1622) recovers "Robot Planet
+Ecuador"; a non-semantic `<p class="kicker">Sponsors</p>` label
+immediately followed by a "Thank you to our current sponsors." sibling
+paragraph (`ftc3650.org`, ftc-3650) recovers two real sponsors by
+`alt` text and hostname; a genuine `<footer>` logo wall with no nearby
+matching heading at all (`carlsbaded.org/crow-force/`, ftc-10809)
+recovers four real sponsor hostnames (`nordson.com`, `viasat.com`,
+`thermofisher.com`, `sigmaaldrich.com`) even though this particular
+page's `alt`/`title` attributes are messy filename-derived strings, not
+company names — proof the module's multiple signal types (heading text,
+`alt`, `title`, link text, hostname) are independently useful, not
+redundant; and a small real page with no sponsor-shaped section at all
+(`seg-fault.org`, ftc-31862) correctly returns `[]`.
 
 A freshly-extracted `Team` from either source still has
 `location_precision == "none"` and no coordinates until
@@ -700,6 +769,75 @@ ticket 011-004's `geo.py` sets `Team.latitude`/`longitude`.
   per-team failure internally (the bullet above), so nothing would be
   caught at that outer level that isn't already handled closer to its
   source.
+- **(Sprint 013 ticket 003) `gather_sponsor_candidates()` never receives
+  a team's organization/school name, and therefore cannot filter by
+  it.** Its signature is `(html, page_url) -> list[str]` — no `Team`,
+  by design (Design, below). Excluding a team's *own* organization name
+  from the sponsor list is real work this project needs, but it is
+  ticket 004's `classify_sponsors()` prompt's job, not this function's
+  — the LLM call receives that context, this deterministic pass does
+  not. What this function *does* filter deterministically is bounded to
+  what needs no page-specific context at all: the team's own hostname
+  (derived from `page_url` alone) and a small, fixed denylist of CMS/
+  hosting vendors, aggregators/the program itself, social platforms,
+  and navigation boilerplate (`_DENYLIST_TEXT`/`_DENYLIST_DOMAINS`) —
+  the categories the issue names as false-positive sources that are
+  obvious without knowing anything about the specific team.
+- **(Sprint 013 ticket 003) A denylisted candidate is dropped here, at
+  the deterministic stage — not deferred entirely to ticket 005's LLM
+  classification/verbatim check.** This is deliberate defense-in-depth,
+  not a substitute for that later stage (which still validates every
+  LLM-returned name verbatim against whatever this function *did*
+  return): filtering "Wix"/"Facebook"/"FIRST" et al. before they ever
+  become candidates keeps the list this function hands the LLM shorter
+  and more signal-dense (real value against the documented 40-candidate
+  cap — a page with a chatty footer full of social/CMS links would
+  otherwise crowd out real sponsors before the cap is reached), and it
+  means the guarantee "an obvious non-sponsor category never reaches
+  publication" holds even for a hypothetical future caller of this
+  function that skips the LLM stage entirely.
+- **(Sprint 013 ticket 003) Heading detection is broader than semantic
+  `<h1>`-`<h6>` tags, restricted to short, container-free elements
+  only.** A real, live-captured fixture (`ftc3650.org`) marks its
+  sponsor section with `<p class="kicker">Sponsors</p>` — a component-
+  library convention with no semantic heading tag at all, not a
+  contrived edge case; restricting to `<h1>`-`<h6>` would have missed
+  it entirely. Any element is a candidate "heading trigger" if: it is
+  not one of a small excluded set (`<a>`, `<img>`, `<nav>`, `<footer>`,
+  and other interactive/non-container tags — `_NEVER_HEADING_TAGS`); it
+  has no descendant element other than plain inline text formatting
+  (`<em>`/`<strong>`/`<span>`/... — `_INLINE_TEXT_TAGS`) — this is the
+  guard that makes the broadening safe (see the next bullet for why);
+  it is not nested inside a `<nav>` landmark anywhere in its ancestry;
+  and its own rendered text is short (≤60 characters) and matches
+  `/sponsor|partner|thank/i`.
+- **(Sprint 013 ticket 003) The "no non-inline descendant" restriction
+  above was added to fix a real false-positive found while building
+  this ticket's own fixtures, not a hypothetical concern.** An earlier
+  version of this function judged a heading trigger purely by its
+  *aggregate* rendered text length, which let a large `<section>`
+  wrapping an entire "Sponsors" sub-page (kicker label + a couple of
+  bare, alt-less `<img>` tags) register as "short" — because images
+  contribute nothing to text length — and then walk that section's
+  *following sibling section* ("Photos") for candidates, pulling in
+  unrelated photo-gallery `alt` captions as false sponsor candidates on
+  the real `ftc3650.org` fixture. Requiring a trigger to contain no
+  block-level/interactive descendant (only inline text formatting)
+  excludes any such wrapping container structurally — a genuine label
+  element (`<h2>`, `<p class="kicker">Sponsors</p>`) always qualifies;
+  a `<section>`/`<div>` wrapping real markup never does, regardless of
+  how short its aggregate text happens to be.
+- **(Sprint 013 ticket 003) `gather_sponsor_candidates()` has zero
+  imports beyond `lxml.html` and the standard library — no `fetch/`,
+  `enrich/`, `adapters/`, or `anthropic` SDK import, checked directly
+  by an AST scan in `tests/teams/test_sponsor_candidates.py`
+  (`TestNoForbiddenImports`), matching `tests/teams/
+  test_sources_base.py`'s own forbidden-import-scan precedent.** This
+  is stronger than "happens not to import fetch" — the module receives
+  already-fetched HTML as a plain string parameter; it has no mechanism
+  by which it *could* fetch anything, by construction, matching the
+  sprint's stated requirement that this half of sponsor extraction is
+  offline and LLM-free by construction, not by convention.
 
 ## 4. Design
 
@@ -966,6 +1104,56 @@ precedented redundancy (`hub_scan.py` already does the same) was judged
 simpler and more consistent than special-casing a `PoliteFetcher`
 instance to skip its second check.
 
+**(Sprint 013 ticket 003) Why sponsor candidate gathering is one pure
+function taking `(html, page_url)`, not a class, not a `Team`-typed
+parameter, and not merged into `teams.scrape.verify_team_websites()`
+itself.** *Context:* the issue and sprint.md are explicit that the
+LLM stage (ticket 004) must only ever *select from* a
+deterministically-gathered candidate list, never generate one freely --
+that guarantee only holds if the gathering step is fully separable,
+testable, and auditable on its own, independent of network state, LLM
+state, or a specific `Team` record. *Alternatives considered:* fold
+candidate-gathering directly into `verify_team_websites()`'s per-team
+loop (one fetch, one extraction, no second pass) -- rejected, because it
+would couple two independently-changing concerns (live-fetch
+verification, sprint.md's "cheap, certain half"; sponsor heuristics,
+the "substantial, uncertain part") in one function, and would make this
+module's own offline testability (five real fixtures, zero network,
+zero LLM calls in this ticket's entire test file) depend on
+`verify_team_websites()`'s fetch machinery instead of a bare HTML
+string. Accept a `Team` parameter instead of `(html, page_url)`, to let
+this function look at `Team.organization`/`Team.name` and filter the
+team's own name inline -- rejected, per the Constraints bullet above:
+that filtering is data the LLM classification step (ticket 004) needs
+context for anyway (it must apply the same exclusion to any LLM-
+returned name too, not just deterministic candidates), so doing it
+twice in two different modules was judged worse than doing it once,
+downstream, with full context. *Why this choice:* a pure function with
+exactly the two inputs it needs (the fetched body, the URL it was
+fetched from -- for the own-hostname check) is the smallest, most
+directly testable unit that satisfies the "candidates only, never a
+verdict" boundary sprint.md's Design Rationale describes. *Consequences:*
+none identified -- `sponsor_extract.py` (ticket 005) will call this
+function once per confirmed-fetch team, using the `dict[team_id, html]`
+`verify_team_websites()` already returns plus each `Team.website` as
+`page_url`.
+
+**(Sprint 013 ticket 003) Why the denylist is organized as four small,
+named categories (`_DENYLIST_TEXT_CMS`/`_AGGREGATOR`/`_SOCIAL`/`_NAV`)
+rather than one flat set.** *Context:* the issue itself names these as
+four conceptually distinct false-positive sources (CMS/hosting vendor,
+the program/aggregator itself, a social platform, navigation
+boilerplate). *Alternatives considered:* one undifferentiated set of
+denylisted strings -- rejected as marginally simpler to write but
+strictly worse to maintain: a future contributor adding, say, a new
+social platform has no structural cue for where it belongs or whether
+a category is already reasonably complete. *Why this choice:* the
+categories mirror the issue's own framing exactly (see the module
+docstring's four bullet points), so the code and the requirement it
+implements stay legible side by side. *Consequences:* four sets
+unioned into one `_DENYLIST_TEXT` at import time -- a trivial cost for
+the maintainability gained.
+
 ## 5. Interfaces
 
 ### Exposes
@@ -1119,6 +1307,25 @@ instance to skip its second check.
   Design for why the returned dict is a plain value, never a `Team`
   field, and why robots-disallow/non-2xx/transport-error all collapse
   to one `"unverified"` outcome.
+- **`teams.sponsor_candidates.gather_sponsor_candidates(html, page_url)
+  -> list[str]`** (sprint 013 ticket 003) — the deterministic, offline
+  half of sponsor extraction (see Orientation and Design). Parses
+  `html` once with `lxml`; gathers `<img>` `alt`/`title` text and
+  outbound `<a>` link text/hostname from two independent signals: (a)
+  the following-sibling block of any short (≤60 char), container-free
+  element matching `/sponsor|partner|thank/i` and not nested in a
+  `<nav>` (broader than `<h1>`-`<h6>` — see Constraints/Design for why),
+  and (b) every `<footer>` element on the page, regardless of any
+  nearby heading. Candidates are whitespace-cleaned, checked against the
+  team's own hostname (derived from `page_url`) and a fixed CMS/
+  aggregator/social/nav-boilerplate denylist, deduplicated
+  case-insensitively, and capped at `MAX_CANDIDATES = 40`. Returns `[]`
+  (with a `logging.WARNING`) for unparseable HTML, and `[]` (silently —
+  the normal case for most team pages) when neither signal is found.
+  Zero imports beyond `lxml.html` and the standard library — no
+  `fetch`/`enrich`/`adapters`/`anthropic` (Constraints). **Not yet
+  called by `run_teams()`** — ticket 005's `sponsor_extract.py` is the
+  first production caller, once it lands.
 - **`teams.geo.SchoolIndex(data_dir=None)`** (this ticket) — loads all
   five `teams/data/` files once and exposes `resolve(team)` (the full
   ladder for one `Team`, mutating it in place), `resolve_school(org,
@@ -1457,3 +1664,20 @@ instance to skip its second check.
   robots.txt URL fetching itself, matching the robots.txt protocol's
   own convention that the file is always fetchable regardless of its
   content.
+- **(Sprint 013 ticket 003) `gather_sponsor_candidates()`'s heading/
+  denylist heuristics are validated against five real captured pages,
+  not a large corpus.** Real-world evidence found and fixed one
+  genuine false-positive shape while building this ticket (a wrapping
+  container mistaken for a short heading — Constraints, above), and the
+  fixtures deliberately span several structurally different real sites
+  (a modern component-framework page, a WordPress/Divi site, a static
+  hand-built one, a Google Sites/legacy page) rather than one family —
+  but 5 pages is not 53 (the FRC teams with a known website as of this
+  ticket) let alone the larger set ticket 006 discovered. Ticket 004/
+  005's own required pre-close live validation (sprint.md's Test
+  Strategy: "a human samples the scraped sponsor output ... at minimum
+  every team that gained a sponsor from scraping") is the first point
+  this function's candidate lists get checked at real scale — if that
+  review surfaces a new false-positive *shape* (not just an individual
+  bad name a human should catch anyway), this module, not just the LLM
+  prompt or ticket 005's denylist, is the first place to look.
