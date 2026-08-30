@@ -1,7 +1,7 @@
 ---
 id: '004'
 title: Register verified structured feeds
-status: in-progress
+status: done
 use-cases:
 - SUC-007
 - SUC-008
