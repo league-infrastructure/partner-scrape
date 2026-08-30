@@ -5,10 +5,19 @@
 # Carlsbad lagoon Discovery Center; hands-on nature/watershed education events.
 # org_name matches the exact name in data/partners_viable.csv so the
 # stem-ecosystem partner join resolves.
+#
+# DISABLED 2026-08-30 (sprint 014 ticket 003 / issue 24 triage). Live
+# re-probe: www.aguahedionda.org's sitemap.xml is real and reachable
+# (~88 URLs, standard sitemaps.org 0.9 namespace), but none of its
+# paths match EVENT_PATH_RE (no /events?/, /programs?/, /classes/,
+# /camps?/, /workshops?/, /calendar/, /courses?/, or /training/
+# segment) -- confirmed live 2026-08-30. A real, active organization
+# whose site content simply isn't organized under any URL path this
+# discovery mechanism looks for; not a fetch failure.
 
 org_name = "Agua Hedionda Lagoon Foundation"
 adapter_type = "generic_html"
-enabled = true
+enabled = false  # disabled: reachable site, real sitemap, but no page matches the event-path discovery pattern -- confirmed live 2026-08-30
 
 [config]
 site_url = "https://www.aguahedionda.org"
@@ -16,4 +25,4 @@ site_url = "https://www.aguahedionda.org"
 [acquisition_policy]
 rate_limit_seconds = 1.0
 respect_robots = true
-discovered_via = "partners_viable.csv batch (real scrape exercise 2026-07-19)"
+discovered_via = "partners_viable.csv batch (real scrape exercise 2026-07-19); disabled sprint 014 ticket 003 (2026-08-30)"

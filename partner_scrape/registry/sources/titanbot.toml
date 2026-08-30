@@ -4,6 +4,18 @@
 # partner sources" plain HTTP cannot render. Flagged headless only after
 # this ticket's concurrency fix (dedicated single-worker executor +
 # PlaywrightFetcher lock) landed and was fixture-tested.
+#
+# 2026-08-30 addendum (sprint 014 ticket 003 / issue 24 triage): still
+# zero-yield with fetch_strategy = "headless" in place -- root cause:
+# ``playwright._impl._errors.Error: Page.goto: net::ERR_ABORTED at
+# https://titanbot.org/sitemap.xml``. Same fetch/headless.py
+# limitation as escondido-creek-conservancy.toml's addendum documents
+# in full (PlaywrightFetcher.get() cannot reliably retrieve a raw .xml
+# sitemap via page.goto()+page.content()) -- see that file for details.
+# Out of this ticket's declared scope to fix; flagged for a follow-up
+# ticket. fetch_strategy = "headless" is left in place as a correct
+# disposition of this site's original (Wix JS-rendering) zero-yield
+# cause.
 
 org_name = "FRC Team 2543 TitanBot"
 adapter_type = "generic_html"

@@ -1,6 +1,20 @@
+# National Girls Collaborative -- DISABLED 2026-08-30 (sprint 014
+# ticket 003 / issue 24 triage). Live re-probe: ngcproject.org's
+# sitemap.xml is real and reachable (~421 URLs, standard sitemaps.org
+# 0.9 namespace) and does carry STEM-programming content
+# (/get-moving-steam-event, /events-announcements, /brite-program-...),
+# but none of it sits under an EVENT_PATH_RE-matching path *segment*
+# (e.g. "events-announcements" and "get-moving-steam-event" are
+# compound slugs, not an isolated /event(s)?/ segment) -- confirmed
+# live 2026-08-30. A real content mismatch between this organization's
+# URL conventions and this discovery mechanism's path pattern, not a
+# fetch failure; a future fix would need either a broader
+# EVENT_PATH_RE or a listing_html registration against a specific known
+# events page.
+
 org_name = "National Girls Collaborative"
 adapter_type = "generic_html"
-enabled = true
+enabled = false  # disabled: reachable site with real STEM content, but no page matches the event-path discovery pattern (compound slugs, no isolated /events?/ segment) -- confirmed live 2026-08-30
 
 [config]
 site_url = "https://www.ngcproject.org"
@@ -8,4 +22,4 @@ site_url = "https://www.ngcproject.org"
 [acquisition_policy]
 rate_limit_seconds = 1.0
 respect_robots = true
-discovered_via = "partners_viable.csv tier-2 bulk registration (2026-07-20)"
+discovered_via = "partners_viable.csv tier-2 bulk registration (2026-07-20); disabled sprint 014 ticket 003 (2026-08-30)"

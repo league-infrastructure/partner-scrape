@@ -1,7 +1,7 @@
 ---
 id: '003'
 title: Triage zero-yield sources
-status: in-progress
+status: done
 use-cases:
 - SUC-006
 depends-on:
@@ -43,35 +43,82 @@ dispatch fix has landed.
 
 ## Acceptance Criteria
 
-- [ ] A current per-source yield report is regenerated (live dry-run
+- [x] A current per-source yield report is regenerated (live dry-run
       against the real, active registry) and used as the authoritative
       "which sources are zero-yield" list for this ticket, not the
       stale committed snapshot.
-- [ ] Every source in that current zero-yield set has one of the four
+- [x] Every source in that current zero-yield set has one of the four
       dispositions (fixed / re-typed / marked headless / disabled with
       reason) recorded, verifiable by reading its TOML or, for a code
       fix, its diff.
-- [ ] `sd-river-park-foundation.toml` is `adapter_type = "tec_rest"`
+- [x] `sd-river-park-foundation.toml` is `adapter_type = "tec_rest"`
       with a working `api_base` pointed at the verified TEC endpoint.
-- [ ] `sandiego-gov.toml`'s `org_name` and `site_url` refer to the same
+- [x] `sandiego-gov.toml`'s `org_name` and `site_url` refer to the same
       organization (corrected in place, or split into two source files
       if the TOML was genuinely conflating two organizations).
-- [ ] The named Tier-1 candidates (`sdpl`, `cleansd`, `ilacsd`,
+- [x] The named Tier-1 candidates (`sdpl`, `cleansd`, `ilacsd`,
       `eefkids`) are each individually probed and dispositioned, not
       lumped into a generic "still broken" note.
-- [ ] The four ATS boards (`boundlessbio`, `gossamerbio`,
+- [x] The four ATS boards (`boundlessbio`, `gossamerbio`,
       `elementbiosciences`, `shieldai`) are re-verified live; a
       genuinely-empty board (zero open matching postings) stays
       `enabled = true` with a comment confirming the token is still
       live — not disabled just for returning zero this run.
-- [ ] Any adapter-level code fix found along the way has a
+- [x] Any adapter-level code fix found along the way has a
       fixture-based regression test; no committed test depends on live
       network access — live probing is a diagnosis step, not something
-      that ships as a test.
-- [ ] A disabled source is never deleted — `enabled = false` with an
+      that ships as a test. (No adapter-level code bug was found; all
+      dispositions were TOML-only. Two real code-level bugs *were*
+      found, both outside this ticket's declared file scope — see the
+      Deviations note below.)
+- [x] A disabled source is never deleted — `enabled = false` with an
       inline reason comment is the only mechanism used, preserving
       history.
-- [ ] Full test suite stays green.
+- [x] Full test suite stays green.
+
+## Deviations / Findings for Follow-up (2026-08-30)
+
+Two genuine code-level bugs were discovered during live investigation,
+both outside `registry/*.toml` and `adapters/*.py` (this ticket's
+declared file-scope) and therefore documented, not fixed, here:
+
+1. **`fetch/headless.py`'s `PlaywrightFetcher.get()` cannot reliably
+   retrieve a raw, non-HTML resource** (confirmed against every one of
+   the 9 sources ticket 002 flagged `fetch_strategy = "headless"`, all
+   of which remain zero-yield). It reads the fetched body via
+   `page.content()`, which serializes Chromium's *rendered document* --
+   correct for an HTML page, but for a bare `.xml` sitemap Chromium
+   either wraps the content in its own XML-viewer markup (a silent
+   "did not parse as sitemap XML" failure -- 5 sources) or aborts
+   navigation outright (`net::ERR_ABORTED` -- 4 sources, caught by
+   `pipeline.py`'s per-source isolation). See the dated addendum
+   comment on each of the 9 sources' TOML
+   (`climate-science-alliance.toml`, `escondido-creek-conservancy.toml`,
+   `gsdsef.toml`, `lajollalibrary.toml`, `sandiego-cv-aopsacademy.toml`,
+   `sdrvc.toml`, `techadventurecamp.toml`, `titanbot.toml`,
+   `xplorstem.toml`) for full detail. `fetch_strategy = "headless"` is
+   left in place on all 9 (a correct disposition of each site's
+   original JS-rendering zero-yield cause); this separate fetch-layer
+   bug is a new, independent finding for a follow-up ticket.
+2. **`discovery/sitemap.py`'s per-URL sitemap parsing is
+   namespace-strict while its root-tag acceptance is namespace-agnostic.**
+   `_parse_urlset()` queries `root.findall("sm:url", _NS)` against a
+   hardcoded `_NS = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}`,
+   while `_local_name()`'s root-acceptance check ignores namespace
+   entirely. A sitemap declaring any other namespace (e.g.
+   `sandiego.edu`'s legacy `xmlns="http://www.google.com/schemas/sitemap/0.84"`)
+   passes root acceptance but then silently yields zero `<url>`
+   matches, even when real, matching event pages exist in it. See
+   `sandiego.toml`'s comment for the full root-cause writeup. A future
+   fix is narrow and low-risk: fall back to a namespace-agnostic
+   `local-name()` query when the namespace-qualified one returns empty.
+
+Both are flagged for the team-lead to route to a follow-up ticket
+rather than fixed here, per this ticket's own scope note ("flag rather
+than silently expanding scope") and the sprint's Exception Protocol.
+Neither blocked this ticket's own completion: every affected source
+already had a valid, recorded disposition (`marked headless` for the
+9 fetch/ sources; `disabled with reason` for `sandiego.toml`).
 
 ## Testing
 

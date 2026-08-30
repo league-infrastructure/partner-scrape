@@ -1,6 +1,13 @@
+# Strategic Energy Innovations -- DISABLED 2026-08-30 (sprint 014
+# ticket 003 / issue 24 triage). Live re-probe: www.energizeschools.org's
+# sitemap.xml is real and reachable (~106 URLs, standard sitemaps.org
+# 0.9 namespace), but none of its paths match EVENT_PATH_RE -- confirmed
+# live 2026-08-30. A real, active organization whose site content isn't
+# organized under any matching URL path.
+
 org_name = "Strategic Energy Innovations"
 adapter_type = "generic_html"
-enabled = true
+enabled = false  # disabled: reachable site, real sitemap, but no page matches the event-path discovery pattern -- confirmed live 2026-08-30
 
 [config]
 site_url = "https://www.energizeschools.org"
@@ -8,4 +15,4 @@ site_url = "https://www.energizeschools.org"
 [acquisition_policy]
 rate_limit_seconds = 1.0
 respect_robots = true
-discovered_via = "partners_viable.csv tier-2 bulk registration (2026-07-20)"
+discovered_via = "partners_viable.csv tier-2 bulk registration (2026-07-20); disabled sprint 014 ticket 003 (2026-08-30)"

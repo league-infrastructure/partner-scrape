@@ -1,6 +1,43 @@
+# Jacobs Institute for Innovation in Education, University of San Diego
+# -- DISABLED 2026-08-30 (sprint 014 ticket 003 / issue 24 triage).
+#
+# Root-caused, not just re-confirmed zero: www.sandiego.edu/sitemap.xml
+# is real, reachable, and contains 3,469 URLs, including genuine
+# EVENT_PATH_RE-matching pages (e.g. https://www.sandiego.edu/alumni/
+# events/, .../alumni/events/homecoming-and-reunions/). But this
+# sitemap declares xmlns="http://www.google.com/schemas/sitemap/0.84"
+# (the legacy Google sitemap namespace), while
+# discovery/sitemap.py's _parse_urlset() queries
+# root.findall("sm:url", _NS) against a hardcoded
+# _NS = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"} --
+# _local_name() correctly recognizes the root <urlset> tag regardless
+# of namespace (so this sitemap passes the root-acceptance check), but
+# the per-URL findall() is namespace-strict, so it silently matches
+# zero <url> elements against a 0.84-namespaced document. This is why
+# no "did not parse" warning appears in the logs for this source (the
+# root parsed fine) and yet 0 URLs are ever extracted, despite real
+# matching content existing.
+#
+# This is a genuine discovery/sitemap.py bug (namespace-agnostic root
+# check, namespace-strict child query), not a registry misconfiguration
+# and not this source's own adapter -- out of this ticket's declared
+# scope (registry/*.toml + adapters/*.py only; discovery/ is a separate
+# subsystem). Flagged here for a future ticket: the fix is narrow and
+# low-risk (fall back to a namespace-agnostic local-name() XPath query,
+# or try the document's own declared namespace, when the hardcoded 0.9
+# query returns empty).
+#
+# org_name/site_url also names a real, independent mismatch, same
+# family as sandiego-gov.toml's: "Jacobs Institute for Innovation in
+# Education" is one specific USD institute, while site_url is the whole
+# university's domain. Left as-is (not corrected in either direction)
+# since fixing it would not change this source's underlying zero-yield
+# cause -- see the namespace bug above -- and re-scoping site_url to a
+# Jacobs-Institute-specific path was not verified live this pass.
+
 org_name = "Jacobs Institute for Innovation in Education, University of San Diego"
 adapter_type = "generic_html"
-enabled = true
+enabled = false  # disabled: discovery/sitemap.py's namespace-strict URL query returns zero matches against this site's 0.84-namespaced sitemap, even though matching event pages exist -- confirmed live 2026-08-30, root cause identified
 
 [config]
 site_url = "https://www.sandiego.edu"
@@ -8,4 +45,4 @@ site_url = "https://www.sandiego.edu"
 [acquisition_policy]
 rate_limit_seconds = 1.0
 respect_robots = true
-discovered_via = "partners_viable.csv tier-2 bulk registration (2026-07-20)"
+discovered_via = "partners_viable.csv tier-2 bulk registration (2026-07-20); disabled sprint 014 ticket 003 (2026-08-30)"

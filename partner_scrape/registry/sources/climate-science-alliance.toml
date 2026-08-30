@@ -25,3 +25,28 @@ rate_limit_seconds = 1.0
 respect_robots = true
 fetch_strategy = "headless"
 discovered_via = "partners_viable.csv batch (real scrape exercise 2026-07-19)"
+
+# 2026-08-30 addendum (sprint 014 ticket 003 / issue 24 triage): a
+# fresh live dry-run confirms this source is still zero-yield with
+# fetch_strategy = "headless" in place, and root-caused why: the
+# sitemap probe gets HTTP 200 for /sitemap.xml but the body "did not
+# parse as sitemap XML (recognized root element)". A plain (non-
+# headless) fetch of the same URL returns real, valid <sitemapindex>
+# XML (confirmed live via curl) -- so the site is fine; the problem is
+# PlaywrightFetcher.get() (fetch/headless.py) reading the response body
+# via page.content(), which serializes Chromium's *rendered document*.
+# For an HTML page that's exactly right; for a bare XML resource,
+# Chromium's built-in XML viewer wraps the content in its own markup
+# rather than returning the raw text, so it never parses as
+# <urlset>/<sitemapindex>. The same limitation was independently
+# confirmed against gsdsef.toml, sandiego-cv-aopsacademy.toml,
+# sdrvc.toml, and techadventurecamp.toml (identical "did not parse"
+# failure) and escondido-creek-conservancy.toml / titanbot.toml /
+# xplorstem.toml / lajollalibrary.toml (a harder net::ERR_ABORTED
+# navigation crash for the same underlying reason). This is a fetch/
+# subsystem issue, out of this ticket's declared scope (registry/*.toml
+# + adapters/*.py only) -- flagged for a follow-up ticket rather than
+# fixed here. fetch_strategy = "headless" is left in place; it remains
+# a valid, correctly-diagnosed cause of this site's original zero-yield
+# (a real Wix JS-rendering gap), even though this separate sitemap-fetch
+# bug is what's actually blocking recovery now.

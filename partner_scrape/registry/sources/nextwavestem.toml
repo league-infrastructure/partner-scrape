@@ -1,6 +1,17 @@
+# NextWave STEM -- DISABLED 2026-08-30 (sprint 014 ticket 003 / issue
+# 24 triage). Live re-probe: nextwavestem.com's sitemap.xml is real and
+# reachable (578 URLs, standard sitemaps.org 0.9 namespace) and clearly
+# STEM-program content (e.g. /beginner-learners-stem-3-5-programming,
+# /stem-training-professional-development), but every one of those
+# slugs is a compound hyphenated string, never an isolated
+# /program(s)?/ or /course(s)?/ path segment EVENT_PATH_RE requires --
+# confirmed live 2026-08-30. A real content mismatch between this
+# organization's URL conventions and this discovery mechanism's path
+# pattern, not a fetch failure.
+
 org_name = "NextWave STEM"
 adapter_type = "generic_html"
-enabled = true
+enabled = false  # disabled: reachable site with real STEM content, but no page matches the event-path discovery pattern (compound slugs, no isolated segment) -- confirmed live 2026-08-30
 
 [config]
 site_url = "https://nextwavestem.com"
@@ -8,4 +19,4 @@ site_url = "https://nextwavestem.com"
 [acquisition_policy]
 rate_limit_seconds = 1.0
 respect_robots = true
-discovered_via = "partners_viable.csv tier-2 bulk registration (2026-07-20)"
+discovered_via = "partners_viable.csv tier-2 bulk registration (2026-07-20); disabled sprint 014 ticket 003 (2026-08-30)"

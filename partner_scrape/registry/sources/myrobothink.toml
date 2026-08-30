@@ -1,6 +1,16 @@
+# RoboThink - Robotics & Video Game Coding -- DISABLED 2026-08-30
+# (sprint 014 ticket 003 / issue 24 triage). Live re-probe:
+# www.myrobothink.com's sitemap_index.xml is real and reachable (a
+# standard WordPress-SEO-plugin sitemap index -- post-sitemap.xml,
+# page-sitemap.xml, franchises-sitemap.xml, etc.), but recursing
+# through it matches no EVENT_PATH_RE path across the whole site --
+# confirmed live 2026-08-30 (this is a franchise-locator/marketing
+# site; class scheduling appears to live behind a separate
+# booking-platform integration, not on-site pages).
+
 org_name = "RoboThink - Robotics & Video Game Coding"
 adapter_type = "generic_html"
-enabled = true
+enabled = false  # disabled: reachable site, real sitemap, but no page matches the event-path discovery pattern -- confirmed live 2026-08-30
 
 [config]
 site_url = "https://www.myrobothink.com"
@@ -8,4 +18,4 @@ site_url = "https://www.myrobothink.com"
 [acquisition_policy]
 rate_limit_seconds = 1.0
 respect_robots = true
-discovered_via = "partners_viable.csv tier-2 bulk registration (2026-07-20)"
+discovered_via = "partners_viable.csv tier-2 bulk registration (2026-07-20); disabled sprint 014 ticket 003 (2026-08-30)"

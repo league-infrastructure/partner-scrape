@@ -12,6 +12,11 @@
 # (``curl -s https://boards-api.greenhouse.io/v1/boards/boundlessbio/
 # jobs``) before treating a persistent zero-result run as meaningful
 # signal, rather than solely trusting this planning-pass snapshot.
+#
+# Re-verified live 2026-08-30 (sprint 014 ticket 003 / issue 24
+# triage): the board token is still live (HTTP 200, valid JSON), 0
+# jobs -- an unchanged, confirmed-current legitimate empty-board state.
+# Kept enabled=true per this file's own convention above.
 
 org_name = "Boundless Bio"
 adapter_type = "greenhouse"

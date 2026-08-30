@@ -13,6 +13,14 @@
 # No location_keywords override: every posting observed during the
 # planning-pass check was already labeled "San Diego, California,
 # United States", so the default ["San Diego"] match is sufficient.
+#
+# Re-verified live 2026-08-30 (sprint 014 ticket 003 / issue 24
+# triage): board token still live (HTTP 200, valid JSON), still 2 raw
+# postings -- unchanged from the sprint 006 planning-pass count. The
+# live pipeline run's adapter-level yield is 0, i.e. neither posting
+# currently survives ats_filters.classify_posting's STEM/internship/
+# San-Diego-local test; this is the filter doing its job, not a fetch
+# failure. Kept enabled=true, matching this source's own convention.
 
 org_name = "Gossamer Bio"
 adapter_type = "greenhouse"
