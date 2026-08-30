@@ -1,6 +1,6 @@
 # teams
 
-**Owner:** Eric Busboom · **Last reviewed:** 2026-08-30 (sprint 013 ticket 003 — deterministic sponsor candidate extraction) · **Status:** five sprint-011/012 increments complete (FTC + FRC + geocoding + site pages + FLL static roster); sprint 013 ticket 006 adds website/social overlay ingestion, ticket 001 adds live website verification, ticket 003 adds the deterministic (offline, LLM-free) half of sponsor extraction, ahead of that sprint's still-open ticket 004/005 (LLM classification + orchestration, not yet wired into `run_teams()`)
+**Owner:** Eric Busboom · **Last reviewed:** 2026-08-30 (sprint 013 ticket 004 — sponsor extraction LLM client and cache) · **Status:** five sprint-011/012 increments complete (FTC + FRC + geocoding + site pages + FLL static roster); sprint 013 ticket 006 adds website/social overlay ingestion, ticket 001 adds live website verification, ticket 003 adds the deterministic (offline, LLM-free) half of sponsor extraction, ticket 004 adds the injectable LLM classification client and its content-hash cache, ahead of that sprint's still-open ticket 005 (orchestration — gather → cache → classify → validate → guard → normalize/dedup → provenance — not yet wired into `run_teams()`)
 
 ---
 
@@ -251,6 +251,35 @@ BUILT (sprint 013, ticket 003):
      ↓                                         still-open ticket 005's
      ↓                                         sponsor_extract.py is the
      ↓                                         first caller once it lands
+
+BUILT (sprint 013, ticket 004):
+  teams.sponsor_llm.SponsorLLMClient          classifies (selects, never
+    AnthropicSponsorLLMClient                 generates) a bounded
+    FixtureSponsorLLMClient                   candidate list; system
+     ↓                                        prompt rebuilt per call
+     ↓                                        naming the team's own
+     ↓                                        organization/hostname,
+     ↓                                        FIRST/FTC/FRC/FLL program
+     ↓                                        names, and CMS/hosting
+     ↓                                        vendors as exclusions.
+     ↓                                        MODEL_ID = "claude-haiku-
+     ↓                                        4-5-20251001", redefined
+     ↓                                        locally (not imported).
+  teams.sponsor_cache.SponsorCache            content-hash cache, mirrors
+     ↓                                        (never imports) enrich/
+     ↓                                        cache.py's schema_version-
+     ↓                                        guarded shape; key is
+     ↓                                        (team_id, content_hash
+     ↓                                        (candidates)), baked
+     ↓                                        directly into the cache
+     ↓                                        filename -- a changed
+     ↓                                        candidate list is a plain
+     ↓                                        file-not-found miss.
+     ↓                                        NOT YET CALLED by
+     ↓                                        run_teams() -- still-open
+     ↓                                        ticket 005's
+     ↓                                        sponsor_extract.py is the
+     ↓                                        first caller once it lands
 ```
 
 **Sprint 013 ticket 006 (2026-08-30) adds discovered-website/social
@@ -387,6 +416,47 @@ company names — proof the module's multiple signal types (heading text,
 `alt`, `title`, link text, hostname) are independently useful, not
 redundant; and a small real page with no sponsor-shaped section at all
 (`seg-fault.org`, ftc-31862) correctly returns `[]`.
+
+**Sprint 013 ticket 004 (2026-08-30) adds
+`teams.sponsor_llm.SponsorLLMClient`/`AnthropicSponsorLLMClient`/
+`FixtureSponsorLLMClient` and `teams.sponsor_cache.SponsorCache` — the
+injectable LLM-classification infrastructure ticket 005's orchestration
+will call, no orchestration logic here.** Both modules mirror, but never
+import, `enrich/llm_client.py`/`enrich/cache.py` (sprint.md's Design
+Rationale: importing either, even for one small shared helper, would be
+the first crack in `teams/`'s zero-edges-into-`enrich/` invariant —
+`tests/teams/test_sponsor_llm.py`/`test_sponsor_cache.py`'s own AST
+scans enforce this directly, the same spirit as
+`test_sources_base.py`'s forbidden-import precedent). `SponsorLLMClient.
+classify_sponsors(candidates: list[str], context: dict) ->
+SponsorExtractionResult` is a **selection**, never generation, call —
+the same safety property ticket 003's own module docstring establishes
+from the other side: an LLM classifying sponsors can only ever select
+from `gather_sponsor_candidates()`'s already-narrowed candidate list,
+never invent a name freely, and ticket 005 will reject in code any
+returned name absent from that list verbatim.
+`AnthropicSponsorLLMClient`'s system prompt is rebuilt fresh on every
+call (unlike `enrich/llm_client.py`'s static module-level
+`_SYSTEM_PROMPT`) specifically so it can name the team's own
+organization/school name and website hostname explicitly as exclusions
+— both come from the caller's `context` dict, not fixed vocabulary, so a
+static prompt could not name them. `SponsorCache` keys directly on
+`(team_id, content_hash(candidates))`, baked into the cache filename
+itself, rather than `EnrichmentCache`'s "stable identity key, content
+hash compared after loading" shape — a changed candidate list is a
+different key outright (a plain file-not-found miss), never a same-file
+staleness comparison, matching this ticket's own stated design (see
+Design, below). Not yet wired into `run_teams()` — no live Anthropic API
+call has been made against this client; every test in
+`tests/teams/test_sponsor_llm.py` either drives `FixtureSponsorLLMClient`
+directly or monkeypatches `anthropic.Anthropic` itself, matching
+`tests/test_enrich_llm_client.py`'s own no-network,
+no-`ANTHROPIC_API_KEY`-required testing policy. Ticket 005's
+`sponsor_extract.py` is this module's first real caller, and the
+sprint's required pre-close live `--dry-run -v` run (sprint.md's Test
+Strategy) is the first point this client's actual classification
+quality gets checked against real sponsor pages, not just canned
+fixture responses.
 
 A freshly-extracted `Team` from either source still has
 `location_precision == "none"` and no coordinates until
@@ -838,6 +908,30 @@ ticket 011-004's `geo.py` sets `Team.latitude`/`longitude`.
   by which it *could* fetch anything, by construction, matching the
   sprint's stated requirement that this half of sponsor extraction is
   offline and LLM-free by construction, not by convention.
+- **(Sprint 013 ticket 004) `teams/sponsor_llm.py` and
+  `teams/sponsor_cache.py` each have zero imports from
+  `partner_scrape.enrich`, checked directly by an AST scan in
+  `tests/teams/test_sponsor_llm.py`/`test_sponsor_cache.py`
+  (`TestNoForbiddenImports`), matching `test_sources_base.py`'s and
+  `test_sponsor_candidates.py`'s own forbidden-import-scan precedent.**
+  `sponsor_cache.py` does import `teams.sponsor_llm.SponsorExtractionResult`
+  — a sibling module within `teams/`, not `enrich/` — the same shape
+  `enrich/cache.py` itself uses for `EnrichmentResult` from
+  `enrich.llm_client`; only the cross-package edge into `enrich/` is
+  forbidden, not intra-package reuse within `teams/`.
+- **(Sprint 013 ticket 004) `AnthropicSponsorLLMClient.classify_sponsors()`
+  never validates its own response against the candidate list it was
+  given — it only parses the JSON shape (`SponsorClassificationError` on
+  a malformed/wrong-typed response).** The verbatim-candidate check (any
+  returned name absent from the original candidate list is dropped and
+  logged, never trusted) is deliberately ticket 005's job, not this
+  client's: `sponsor_extract.py` is the one place that holds both the
+  candidate list *and* the classification result at the same time, and
+  duplicating the check here would let this module's own tests believe
+  the guarantee holds without the real caller-side data ever being
+  exercised. This client's own contract stops at "return a well-formed
+  `SponsorExtractionResult`," matching `enrich.llm_client.LLMClient`'s
+  equally narrow "parse and return `EnrichmentResult`" scope.
 
 ## 4. Design
 
@@ -1154,6 +1248,63 @@ implements stay legible side by side. *Consequences:* four sets
 unioned into one `_DENYLIST_TEXT` at import time -- a trivial cost for
 the maintainability gained.
 
+**(Sprint 013 ticket 004) Why `AnthropicSponsorLLMClient`'s system
+prompt is rebuilt per call from `context`, rather than a fixed
+module-level string like `enrich/llm_client.py`'s `_SYSTEM_PROMPT`.**
+*Context:* the acceptance criteria require the prompt to explicitly
+exclude the team's own organization name and website hostname by
+name, and both are per-team data the client only learns at call time.
+*Alternatives considered:* a static system prompt with the exclusion
+instruction phrased generically ("exclude the team's own name," with
+no specific name given) plus the actual organization/hostname folded
+into the user message instead -- rejected: `enrich/llm_client.py`'s own
+precedent keeps *task framing* in the system prompt and *record data*
+in the user message, and a generic instruction with no example to
+anchor to is exactly the kind of prompt-only guard sprint.md's Design
+Rationale already rejected for the deterministic/LLM split as a whole
+("a prompt-only guard with no candidate constraint ... relying entirely
+on the model following instructions, with no code-level backstop") --
+naming the specific string to exclude is strictly stronger than a
+generic category instruction. *Why this choice:* a per-call system
+prompt costs nothing extra (it is already a plain Python string built
+fresh, not a cached/pre-registered artifact) and lets the model see
+"exclude *this exact* organization name" rather than inferring which
+candidate is the team's own from context alone. *Consequences:* this
+client cannot benefit from Anthropic's prompt-caching on the system
+block the way a fixed prompt could (each call's system text differs by
+team) -- accepted, since sponsor classification runs once per team per
+candidate-set change (already gated by `SponsorCache`), not per-record
+at `enrich/`'s much higher volume where prompt caching matters more.
+
+**(Sprint 013 ticket 004) Why `SponsorCache` bakes
+`content_hash(candidates)` directly into the cache key/filename, rather
+than mirroring `EnrichmentCache`'s "stable identity key, content hash
+compared after loading" shape.** *Context:* `EnrichmentCache` is keyed
+by `Event.identity_key()` (an identity that outlives content edits — the
+same event, re-scraped with an updated description, should still
+resolve to the same cache slot and then register as stale) with
+`content_hash` stored inside the entry and compared on lookup.
+*Alternatives considered:* the identical shape for `SponsorCache` —
+keyed by `team_id` alone, with `content_hash(candidates)` stored and
+compared after loading — rejected: unlike an Event, there is no reason
+to look up "this team's classification regardless of which candidate
+set produced it"; the candidate set *is* the entire input a
+classification result is about, so a changed candidate list should
+simply be a different classification, not a staleness signal on the
+same one. *Why this choice:* the ticket's own stated design point
+applies directly — "a page's unrelated boilerplate changing ... never
+forces a re-classification the candidate set itself didn't change,"
+which a pure content-derived key achieves for free (no boilerplate
+change ever changes `gather_sponsor_candidates()`'s output, so the key
+is unchanged) without needing a second staleness-comparison step at
+all. *Consequences:* a `SponsorCache` entry has no notion of "this
+team's classification history" the way re-storing over the same
+`EnrichmentCache` key does — every distinct candidate set gets its own
+permanent entry, never overwritten by a differently-worded candidate
+list for the same team. This is an accepted, unbounded-growth tradeoff
+(mirroring `enrich/cache.py`'s own unbounded-growth acceptance) — sane
+for a small (~52-site) corpus that changes rarely.
+
 ## 5. Interfaces
 
 ### Exposes
@@ -1326,6 +1477,72 @@ the maintainability gained.
   `fetch`/`enrich`/`adapters`/`anthropic` (Constraints). **Not yet
   called by `run_teams()`** — ticket 005's `sponsor_extract.py` is the
   first production caller, once it lands.
+- **`teams.sponsor_llm.SponsorLLMClient`** (sprint 013 ticket 004) — the
+  injectable protocol (`classify_sponsors(candidates: list[str],
+  context: dict[str, Any]) -> SponsorExtractionResult`), parallel in
+  shape to `enrich.llm_client.LLMClient` but with no import relationship
+  to it (Constraints/Design). `context` carries `"organization"` (the
+  team's own organization/school name) and `"hostname"` (the page's own
+  hostname), either of which may be absent or empty; both are named
+  explicitly in the exclusion list the system prompt builds.
+  `SponsorExtractionResult` (`confirmed_sponsors: list[str]`) drives
+  `SPONSOR_EXTRACTION_JSON_SCHEMA`, a JSON-schema-from-dataclass
+  generation helper duplicated from, not imported from,
+  `enrich.llm_client._build_enrichment_json_schema`'s pattern.
+  `SponsorClassificationError` is raised for any malformed/wrong-shaped
+  response (mirroring `enrich.llm_client.LLMEnrichmentError`) — it does
+  **not** cover "a returned name absent from the candidate list," which
+  is ticket 005's own verbatim-validation job, not this client's
+  (Constraints).
+- **`teams.sponsor_llm.AnthropicSponsorLLMClient`** (sprint 013 ticket
+  004) — the real implementation. Constructs `anthropic.Anthropic()`
+  with no explicit `api_key` (matching
+  `enrich.llm_client.AnthropicLLMClient`'s exact pattern — the SDK
+  resolves `ANTHROPIC_API_KEY` itself). `MODEL_ID =
+  "claude-haiku-4-5-20251001"` (redefined locally, same value as
+  `enrich.llm_client.MODEL_ID`, not imported). `classify_sponsors()`
+  sends `system` (a fresh per-call prompt naming `context`'s
+  organization/hostname plus the fixed FIRST/FTC/FRC/FLL program-name
+  and CMS/hosting-vendor exclusion lists — see Design for why this is
+  rebuilt per call, not a static module-level string) and `messages`
+  (one user turn carrying the bounded candidate list as JSON), with
+  `output_config={"format": {"type": "json_schema", "schema":
+  SPONSOR_EXTRACTION_JSON_SCHEMA}}`, matching
+  `AnthropicLLMClient.enrich_event()`'s request shape. No retry/caching
+  logic here (the `anthropic` SDK already retries; caching is
+  `SponsorCache`'s job, a different module).
+- **`teams.sponsor_llm.FixtureSponsorLLMClient`** (sprint 013 ticket
+  004) — the test double, mirroring
+  `enrich.llm_client.FixtureLLMClient`'s shape: canned
+  `SponsorExtractionResult`s in `responses`, looked up by
+  `key_fn(candidates, context)` (default: `tuple(candidates)`, since the
+  candidate list is this call's primary variable input), with every
+  `(candidates, context)` call recorded in order in `calls` — ticket
+  005's cache-hit call-counting tests will assert against this list.
+  Never constructs or calls `anthropic.Anthropic`.
+- **`teams.sponsor_cache.content_hash(candidates: list[str]) -> str`**
+  (sprint 013 ticket 004) — a stable SHA-256 hash over exactly the
+  candidate list a `classify_sponsors()` call would receive, nothing
+  else (not the raw page body, not any other `Team` field). Order-
+  sensitive, which is a non-issue in practice since
+  `gather_sponsor_candidates()` already returns a deterministic,
+  discovery-ordered list for an unchanged page.
+- **`teams.sponsor_cache.SponsorCache(cache_dir=None, clock=...)`**
+  (sprint 013 ticket 004) — `lookup(team_id, candidates) ->
+  SponsorExtractionResult | None` / `store(team_id, candidates, result)
+  -> None`. One JSON file per `(team_id, content_hash(candidates))` pair
+  under `{cache_dir}/sponsor_extraction_cache/` — the pair is hashed
+  together into the filename (neither component is filesystem-safe on
+  its own), so a changed candidate list is naturally a cache miss (a
+  different filename), not a same-file staleness comparison (see
+  Design, contrasting this with `EnrichmentCache`'s shape). A missing or
+  version-mismatched `schema_version` (`_CACHE_SCHEMA_VERSION = 1`) is
+  also treated as a miss, mirroring `enrich/cache.py`'s
+  stale-entry-is-a-miss convention. `cache_dir` defaults to
+  `config.get_scrape_cache_dir()`; every test in
+  `tests/teams/test_sponsor_cache.py` passes an explicit `tmp_path`.
+  Not yet called by `run_teams()` — ticket 005's `sponsor_extract.py` is
+  the first caller, once it lands.
 - **`teams.geo.SchoolIndex(data_dir=None)`** (this ticket) — loads all
   five `teams/data/` files once and exposes `resolve(team)` (the full
   ladder for one `Team`, mutating it in place), `resolve_school(org,
@@ -1681,3 +1898,25 @@ the maintainability gained.
   review surfaces a new false-positive *shape* (not just an individual
   bad name a human should catch anyway), this module, not just the LLM
   prompt or ticket 005's denylist, is the first place to look.
+- **(Sprint 013 ticket 004) `AnthropicSponsorLLMClient`'s actual
+  classification quality is entirely untested against the real
+  Anthropic API — every test in `tests/teams/test_sponsor_llm.py` uses
+  `FixtureSponsorLLMClient` or a monkeypatched `anthropic.Anthropic`
+  class.** This is deliberate (sprint.md's testing policy: no network,
+  no `ANTHROPIC_API_KEY` requirement in any test) and matches
+  `enrich/`'s own equivalent testing gap, but it means this ticket
+  proves the client's *request/response plumbing* is correct — schema
+  generation, prompt construction, error handling — not that
+  Claude Haiku actually classifies real sponsor candidate lists well.
+  That is explicitly deferred to ticket 005's required pre-close live
+  `--dry-run -v` run and human sampling (sprint.md's Test Strategy,
+  SUC-004's own last acceptance criterion), the same gate ticket 003's
+  deterministic candidate-gathering heuristics are held to above.
+  Also untested here, for the same reason: whether `ANTHROPIC_API_KEY`
+  is actually provisioned in CI (sprint.md's Migration Concerns flags
+  this as unverified, mirroring the pre-existing `TBA_KEY` gap) —
+  `AnthropicSponsorLLMClient()` itself never raises for a missing key
+  (construction is lazy; the SDK only resolves credentials on an actual
+  API call), so a missing key surfaces only when `classify_sponsors()`
+  is actually invoked, which ticket 005's fail-open per-team guard
+  (SUC-004's Error Flows) is responsible for catching.
