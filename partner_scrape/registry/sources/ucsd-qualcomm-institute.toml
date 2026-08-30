@@ -1,0 +1,31 @@
+# Qualcomm Institute (UC San Diego) -- UCSD Localist calendar API,
+# filtered to the Qualcomm Institute group_id. group_id confirmed live
+# via calendar.ucsd.edu/api/2/groups (2026-08-30, sprint 014 ticket
+# 004): id=49659491876817, name="Qualcomm Institute".
+#
+# Live-verified 2026-08-30:
+#
+#   GET https://calendar.ucsd.edu/api/2/events?group_id=49659491876817&days=180&pp=1&page=1
+#
+# returns HTTP 200, page.total=82 (82 upcoming events in the 180-day
+# window).
+#
+# No partners.json match -- distinct from the existing "Qualcomm
+# Incorporated" partner entry, which is the company, not the UCSD
+# research institute -- not force-matched. Candidate for issue 32's
+# roster expansion.
+
+org_name = "Qualcomm Institute"
+adapter_type = "localist"
+enabled = true
+
+[config]
+api_base = "https://calendar.ucsd.edu/api/2/events"
+group_id = "49659491876817"
+days = 180
+pp = 50
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "sprint 014 ticket 004 registration (live UCSD Localist API verification, 2026-08-30, issue 25)"

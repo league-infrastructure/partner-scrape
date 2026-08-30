@@ -1,0 +1,22 @@
+# Comic-Con Museum -- STEAM makerspace events (part of Comic-Con
+# International's site, under the /museum/ path). Live-verified
+# 2026-08-30 (sprint 014 ticket 004 / issue 25):
+#
+#   GET https://www.comic-con.org/museum/wp-json/tribe/events/v1/events/?per_page=1
+#
+# returns HTTP 200 with structured JSON, total=732 upcoming events.
+#
+# No partners.json match -- candidate for issue 32's roster expansion.
+
+org_name = "Comic-Con Museum"
+adapter_type = "tec_rest"
+enabled = true
+
+[config]
+api_base = "https://www.comic-con.org/museum/wp-json/tribe/events/v1/events/"
+domain = "comic-con.org"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "sprint 014 ticket 004 registration (live TEC REST verification, 2026-08-30, issue 25)"

@@ -161,13 +161,17 @@ class TestRealSeedRegistry:
         # disabled (both now bot/CAPTCHA-blocked -- see their TOML
         # comments) and sd-river-park-foundation was re-typed from
         # generic_html to tec_rest (a confirmed live TEC REST API), so
-        # the known-good count moved from 7 to 6 (-2, +1). Not a
-        # behavior change -- this test just asserts against the real,
-        # current registry contents.
+        # the known-good count moved from 7 to 6 (-2, +1). Updated again
+        # for sprint 014 ticket 004's verified-feed registration
+        # (2026-08-30): 8 new tec_rest sources (balboa-park,
+        # sdcoastkeeper, ymcasd, comic-con-museum, sandiegoarchaeology,
+        # shpesd, thegarden, jasandiego), each live-verified before
+        # commit -- 6 + 8 = 14. Not a behavior change -- this test just
+        # asserts against the real, current registry contents.
         sources = load_active_sources()
         tec_sources = [s for s in sources if s.adapter_type == "tec_rest"]
 
-        assert len(tec_sources) == 6
+        assert len(tec_sources) == 14
         assert all(s.enabled for s in tec_sources)
 
     def test_seed_source_org_names_match_dev_fetch_tec_api(self):

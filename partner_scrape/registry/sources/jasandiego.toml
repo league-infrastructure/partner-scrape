@@ -1,0 +1,24 @@
+# Junior Achievement of San Diego County -- jasandiego.org, currently
+# unregistered despite being an existing partner. Live-verified
+# 2026-08-30 (sprint 014 ticket 004 / issue 25):
+#
+#   GET https://jasandiego.org/wp-json/tribe/events/v1/events/?per_page=1
+#
+# returns HTTP 200 with structured JSON, total=1 upcoming event ("2026
+# San Diego Business Hall of Fame").
+#
+# org_name matches partners.json's "Junior Achievement of San Diego
+# County" exactly.
+
+org_name = "Junior Achievement of San Diego County"
+adapter_type = "tec_rest"
+enabled = true
+
+[config]
+api_base = "https://jasandiego.org/wp-json/tribe/events/v1/events/"
+domain = "jasandiego.org"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "sprint 014 ticket 004 registration (live TEC REST verification, 2026-08-30, issue 25)"

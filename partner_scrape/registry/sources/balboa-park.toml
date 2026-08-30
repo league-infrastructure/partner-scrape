@@ -1,0 +1,33 @@
+# Balboa Park -- park-wide TEC REST calendar, covering every institution
+# in the park (Fleet Science Center, San Diego Natural History Museum,
+# and others already scraped individually via their own sources).
+# Live-verified 2026-08-30 (sprint 014 ticket 004 / issue 25):
+#
+#   GET https://balboapark.org/wp-json/tribe/events/v1/events/?per_page=1
+#
+# returns HTTP 200 with structured JSON, total=170 upcoming events.
+#
+# Registering this alongside Fleet/Nat's own sources is a deliberate,
+# accepted overlap -- normalize/dedup.py's existing cross-source
+# identity (normalized_title + date + normalized_venue) collapses exact
+# title matches; a Balboa Park entry titled generically differently from
+# the hosting institution's own listing will publish separately. See
+# design/normalize-DESIGN.md's Open Questions and sprint.md's Design
+# Rationale ("register Balboa Park and accept its cross-source-dedup
+# imperfection"). No new dedup mechanism is added.
+#
+# No partners.json match ("Balboa Park" is the park itself, not a single
+# partner organization) -- candidate for issue 32's roster expansion.
+
+org_name = "Balboa Park"
+adapter_type = "tec_rest"
+enabled = true
+
+[config]
+api_base = "https://balboapark.org/wp-json/tribe/events/v1/events/"
+domain = "balboapark.org"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "sprint 014 ticket 004 registration (live TEC REST verification, 2026-08-30, issue 25)"

@@ -1,0 +1,21 @@
+# Oceanside Public Library -- LibraryMarket iCal feed, weekly
+# CSUSM-led STEM programming among general library events. Live-verified
+# 2026-08-30 (sprint 014 ticket 004 / issue 25):
+#
+#   GET https://oceansidepl.librarycalendar.com/events/feed/ical
+#
+# returns HTTP 200, a valid .ics calendar, 917 VEVENTs.
+#
+# No partners.json match -- candidate for issue 32's roster expansion.
+
+org_name = "Oceanside Public Library"
+adapter_type = "ical"
+enabled = true
+
+[config]
+feed_url = "https://oceansidepl.librarycalendar.com/events/feed/ical"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "sprint 014 ticket 004 registration (live iCal verification, 2026-08-30, issue 25)"
