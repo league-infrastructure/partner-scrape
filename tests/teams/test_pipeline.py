@@ -694,6 +694,67 @@ class TestSponsorExtractionWiring:
         assert published["sponsors"] == []
 
 
+class TestCanonicalizeSponsorsWiring:
+    """Ticket 005's reopening: `canonicalize_sponsors()` sequenced after
+    `extract_sponsors()`/`--no-sponsors` and before `export_teams()`,
+    running unconditionally (even under `--no-sponsors`, since a
+    purely-structured sponsor list still needs cross-team spelling
+    canonicalization -- see `sponsor_canonical.py`'s own module
+    docstring)."""
+
+    def test_structured_sponsor_variants_from_different_teams_merge_via_run_teams(
+        self, monkeypatch, tmp_path
+    ):
+        team_a = Team(
+            team_id="ftc-1",
+            league="FTC",
+            program="FIRST Tech Challenge",
+            number=1,
+            name="Team One",
+            sponsors=["QualComm"],
+            sponsor_provenance={"QualComm": "structured"},
+        )
+        team_b = Team(
+            team_id="ftc-2",
+            league="FTC",
+            program="FIRST Tech Challenge",
+            number=2,
+            name="Team Two",
+            sponsors=["Qualcomm"],
+            sponsor_provenance={"Qualcomm": "structured"},
+        )
+        team_c = Team(
+            team_id="ftc-3",
+            league="FTC",
+            program="FIRST Tech Challenge",
+            number=3,
+            name="Team Three",
+            sponsors=["Qualcomm"],
+            sponsor_provenance={"Qualcomm": "structured"},
+        )
+        monkeypatch.setattr(
+            teams_pipeline, "_TEAM_SOURCES", {"ftcscout": _StubTeamSource([team_a, team_b, team_c])}
+        )
+
+        payload = run_teams(
+            registry_dir=_one_team_registry(tmp_path),
+            site_dir=tmp_path,
+            fetcher=FixtureFetcher({}),
+            dry_run=True,
+            no_sponsors=True,
+        )
+
+        published = {t["team_id"]: t for t in payload["teams"]}
+        # No website/scraping involved at all (no_sponsors=True) -- this
+        # merge can only have come from the unconditional
+        # canonicalize_sponsors() pass, decided here by frequency
+        # (two "Qualcomm" teams against one "QualComm" team).
+        assert published["ftc-1"]["sponsors"] == ["Qualcomm"]
+        assert published["ftc-2"]["sponsors"] == ["Qualcomm"]
+        assert published["ftc-3"]["sponsors"] == ["Qualcomm"]
+        assert published["ftc-1"]["sponsor_provenance"] == {"Qualcomm": "structured"}
+
+
 class TestParseSunsetSeason:
     def test_parses_yyyy_yy_to_june_first_of_second_year(self):
         assert _parse_sunset_season("2026-27") == date(2027, 6, 1)

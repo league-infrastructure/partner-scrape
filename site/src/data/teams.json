@@ -1,6 +1,6 @@
 {
  "meta": {
-  "generated": "2026-08-30T17:51:20Z",
+  "generated": "2026-08-30T19:50:04Z",
   "total": 278,
   "by_league": {
    "FLL": 48,
@@ -40,6 +40,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -67,6 +68,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "solana highlands elem school",
    "sibling_team_ids": []
   },
@@ -94,6 +96,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -121,6 +124,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "qualcomm technologies inc sycamore ridge elementary sch",
    "sibling_team_ids": []
   },
@@ -148,6 +152,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -175,6 +180,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "mission bay montessori academy sage canyon elementary school monterey ridge elementary",
    "sibling_team_ids": []
   },
@@ -202,6 +208,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -229,6 +236,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "ocean air",
    "sibling_team_ids": []
   },
@@ -256,6 +264,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "torrey hills carmel creek elementary",
    "sibling_team_ids": []
   },
@@ -283,6 +292,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -310,6 +320,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -337,6 +348,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -364,6 +376,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -391,6 +404,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -418,6 +432,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -445,6 +460,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -472,6 +488,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -499,6 +516,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -526,6 +544,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "solana ranch elementary school pacific trails middle school",
    "sibling_team_ids": []
   },
@@ -553,6 +572,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -580,6 +600,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "qualcomm stone ranch elementary pacific trails middle",
    "sibling_team_ids": []
   },
@@ -607,6 +628,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -634,6 +656,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -661,6 +684,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -688,6 +712,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -715,6 +740,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "solana pacific elementary sch",
    "sibling_team_ids": []
   },
@@ -742,6 +768,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -769,6 +796,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -796,6 +824,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "carmel valley middle pacific trails middle",
    "sibling_team_ids": [
     "fll-65412"
@@ -825,6 +854,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -852,6 +882,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "carmel valley middle pacific trails middle",
    "sibling_team_ids": [
     "fll-62466"
@@ -881,6 +912,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -908,6 +940,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "pacific trails middle",
    "sibling_team_ids": []
   },
@@ -935,6 +968,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -962,6 +996,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -989,6 +1024,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -1016,6 +1052,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -1043,6 +1080,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "torrey hills",
    "sibling_team_ids": []
   },
@@ -1070,6 +1108,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "pacific sky",
    "sibling_team_ids": []
   },
@@ -1097,6 +1136,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -1124,6 +1164,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -1151,6 +1192,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -1178,6 +1220,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -1205,6 +1248,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "autra academy",
    "sibling_team_ids": [
     "fll-72141"
@@ -1234,6 +1278,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "autra academy",
    "sibling_team_ids": [
     "fll-72139"
@@ -1263,6 +1308,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -1290,6 +1336,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -1317,6 +1364,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "carmel del mar elementary",
    "sibling_team_ids": []
   },
@@ -1343,7 +1391,16 @@
    "rookie_year": 2002,
    "active": true,
    "last_season": null,
-   "sponsors": [],
+   "sponsors": [
+    "Qualcomm",
+    "Nordson",
+    "Leidos"
+   ],
+   "sponsor_provenance": {
+    "Qualcomm": "scraped",
+    "Nordson": "scraped",
+    "Leidos": "scraped"
+   },
    "org_key": "preuss school",
    "sibling_team_ids": []
   },
@@ -1371,6 +1428,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -1398,6 +1456,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -1425,6 +1484,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "serra high school",
    "sibling_team_ids": []
   },
@@ -1452,6 +1512,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -1479,6 +1540,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -1505,7 +1567,14 @@
    "rookie_year": 2005,
    "active": true,
    "last_season": null,
-   "sponsors": [],
+   "sponsors": [
+    "NimbleBit",
+    "EP Wealth Advisors"
+   ],
+   "sponsor_provenance": {
+    "NimbleBit": "scraped",
+    "EP Wealth Advisors": "scraped"
+   },
    "org_key": "high tech high school",
    "sibling_team_ids": []
   },
@@ -1533,6 +1602,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "kearny high educational complex",
    "sibling_team_ids": []
   },
@@ -1559,7 +1629,48 @@
    "rookie_year": 2005,
    "active": true,
    "last_season": null,
-   "sponsors": [],
+   "sponsors": [
+    "Allen and Jeannette Guillory Thomason Foundation",
+    "Delta Fire & Safety",
+    "Stine Home + Yard",
+    "Conservative Pain Mgmt",
+    "Evolution Motion Solutions",
+    "Cohen, Schwarz & Co.",
+    "Bertrand Farms",
+    "Techneaux Technology Services",
+    "Stuller Family Foundation",
+    "Ken & Jean Dugas",
+    "Tony Chachere's",
+    "Iowa Fluid Power (IFP)",
+    "Connector Specialists",
+    "Shop Rite Inc.",
+    "Supreme Rice",
+    "Stella Maris LLC",
+    "St. Michael School",
+    "Southwind Healthcare & Rehabilitation",
+    "Rayne State Bank"
+   ],
+   "sponsor_provenance": {
+    "Allen and Jeannette Guillory Thomason Foundation": "scraped",
+    "Delta Fire & Safety": "scraped",
+    "Stine Home + Yard": "scraped",
+    "Conservative Pain Mgmt": "scraped",
+    "Evolution Motion Solutions": "scraped",
+    "Cohen, Schwarz & Co.": "scraped",
+    "Bertrand Farms": "scraped",
+    "Techneaux Technology Services": "scraped",
+    "Stuller Family Foundation": "scraped",
+    "Ken & Jean Dugas": "scraped",
+    "Tony Chachere's": "scraped",
+    "Iowa Fluid Power (IFP)": "scraped",
+    "Connector Specialists": "scraped",
+    "Shop Rite Inc.": "scraped",
+    "Supreme Rice": "scraped",
+    "Stella Maris LLC": "scraped",
+    "St. Michael School": "scraped",
+    "Southwind Healthcare & Rehabilitation": "scraped",
+    "Rayne State Bank": "scraped"
+   },
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -1586,7 +1697,12 @@
    "rookie_year": 2005,
    "active": true,
    "last_season": null,
-   "sponsors": [],
+   "sponsors": [
+    "Robot Planet Ecuador"
+   ],
+   "sponsor_provenance": {
+    "Robot Planet Ecuador": "scraped"
+   },
    "org_key": "poway high school",
    "sibling_team_ids": [
     "ftc-1622",
@@ -1617,6 +1733,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "familycommunity",
    "sibling_team_ids": [
     "frc-4919",
@@ -1650,6 +1767,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -1677,6 +1795,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -1704,6 +1823,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -1730,7 +1850,24 @@
    "rookie_year": 2007,
    "active": true,
    "last_season": null,
-   "sponsors": [],
+   "sponsors": [
+    "SAIC",
+    "Solar Turbines",
+    "California Protons",
+    "Pluribus Digital",
+    "PCH Litho",
+    "General Atomics Sciences Education Foundation",
+    "Nordson"
+   ],
+   "sponsor_provenance": {
+    "SAIC": "scraped",
+    "Solar Turbines": "scraped",
+    "California Protons": "scraped",
+    "Pluribus Digital": "scraped",
+    "PCH Litho": "scraped",
+    "General Atomics Sciences Education Foundation": "scraped",
+    "Nordson": "scraped"
+   },
    "org_key": "san dieguito high sch academy",
    "sibling_team_ids": []
   },
@@ -1758,6 +1895,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -1785,6 +1923,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -1812,6 +1951,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "francis parker",
    "sibling_team_ids": []
   },
@@ -1839,6 +1979,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "eastlake high school",
    "sibling_team_ids": []
   },
@@ -1866,6 +2007,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -1893,6 +2035,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -1920,6 +2063,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "rancho bernardo high school",
    "sibling_team_ids": []
   },
@@ -1947,6 +2091,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -1974,6 +2119,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "coronado high school",
    "sibling_team_ids": [
     "ftc-24029",
@@ -2004,6 +2150,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "escondido charter high school",
    "sibling_team_ids": []
   },
@@ -2031,6 +2178,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "la jolla senior high school",
    "sibling_team_ids": [
     "ftc-18755"
@@ -2060,6 +2208,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "classical academy high school",
    "sibling_team_ids": []
   },
@@ -2087,6 +2236,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -2114,6 +2264,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "canyon crest academy",
    "sibling_team_ids": [
     "ftc-14425",
@@ -2145,6 +2296,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -2172,6 +2324,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -2199,6 +2352,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "san pasqual high school",
    "sibling_team_ids": []
   },
@@ -2226,6 +2380,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "westview high school",
    "sibling_team_ids": []
   },
@@ -2253,6 +2408,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -2280,6 +2436,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -2307,6 +2464,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "torrey pines high school",
    "sibling_team_ids": []
   },
@@ -2334,6 +2492,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "sweetwater high school",
    "sibling_team_ids": []
   },
@@ -2361,6 +2520,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "del norte high school",
    "sibling_team_ids": [
     "ftc-12666"
@@ -2390,6 +2550,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -2417,6 +2578,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "santana high school",
    "sibling_team_ids": []
   },
@@ -2444,6 +2606,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -2471,6 +2634,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -2498,6 +2662,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "scripps ranch high school",
    "sibling_team_ids": []
   },
@@ -2525,6 +2690,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "mission bay high school",
    "sibling_team_ids": []
   },
@@ -2552,6 +2718,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "high tech high north county",
    "sibling_team_ids": []
   },
@@ -2579,6 +2746,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "north co trade tech high sch",
    "sibling_team_ids": [
     "ftc-19937"
@@ -2608,6 +2776,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -2635,6 +2804,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "san diego hssci tech",
    "sibling_team_ids": []
   },
@@ -2662,6 +2832,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "montgomery high school",
    "sibling_team_ids": []
   },
@@ -2689,6 +2860,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "patrick henry high school",
    "sibling_team_ids": []
   },
@@ -2716,6 +2888,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "familycommunity",
    "sibling_team_ids": [
     "frc-1709",
@@ -2749,6 +2922,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "cathedral catholic high school",
    "sibling_team_ids": []
   },
@@ -2776,6 +2950,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "mission hills high school",
    "sibling_team_ids": []
   },
@@ -2803,6 +2978,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "ideate high academy",
    "sibling_team_ids": []
   },
@@ -2830,6 +3006,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "clairemont high school",
    "sibling_team_ids": []
   },
@@ -2857,6 +3034,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "national univ acad 1001 steam",
    "sibling_team_ids": []
   },
@@ -2884,6 +3062,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -2911,6 +3090,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "la costa canyon high",
    "sibling_team_ids": []
   },
@@ -2938,6 +3118,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "southwest high school",
    "sibling_team_ids": []
   },
@@ -2965,6 +3146,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -2992,6 +3174,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "rancho buena vista high school",
    "sibling_team_ids": []
   },
@@ -3023,6 +3206,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "escondido high school",
    "sibling_team_ids": []
   },
@@ -3050,6 +3234,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "san marcos high school",
    "sibling_team_ids": []
   },
@@ -3080,6 +3265,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "academy of our lady of peace",
    "sibling_team_ids": []
   },
@@ -3107,6 +3293,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "familycommunity",
    "sibling_team_ids": [
     "frc-1709",
@@ -3140,6 +3327,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "chula vista high school",
    "sibling_team_ids": []
   },
@@ -3167,6 +3355,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "hilltop high school",
    "sibling_team_ids": []
   },
@@ -3194,6 +3383,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "familycommunity",
    "sibling_team_ids": [
     "frc-1709",
@@ -3227,6 +3417,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "familycommunity",
    "sibling_team_ids": [
     "frc-1709",
@@ -3260,6 +3451,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "familycommunity",
    "sibling_team_ids": [
     "frc-1709",
@@ -3293,6 +3485,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "hoover high school",
    "sibling_team_ids": []
   },
@@ -3324,6 +3517,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "oceanside high school",
    "sibling_team_ids": []
   },
@@ -3355,6 +3549,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "lincoln high school",
    "sibling_team_ids": []
   },
@@ -3386,6 +3581,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "mira mesa high school",
    "sibling_team_ids": []
   },
@@ -3417,6 +3613,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "del lago academy",
    "sibling_team_ids": []
   },
@@ -3444,6 +3641,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "bright horizon academy",
    "sibling_team_ids": []
   },
@@ -3473,6 +3671,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "san diego high",
    "sibling_team_ids": []
   },
@@ -3500,6 +3699,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "st augustine high school",
    "sibling_team_ids": []
   },
@@ -3534,8 +3734,15 @@
    "sponsors": [
     "BAE Systems",
     "PTC",
-    "Qualcomm"
+    "Qualcomm",
+    "Robot Planet Ecuador"
    ],
+   "sponsor_provenance": {
+    "BAE Systems": "structured",
+    "PTC": "structured",
+    "Qualcomm": "structured",
+    "Robot Planet Ecuador": "scraped"
+   },
    "org_key": "poway high school",
    "sibling_team_ids": [
     "frc-1622",
@@ -3568,6 +3775,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "la jolla country day school",
    "sibling_team_ids": [
     "ftc-9367"
@@ -3597,6 +3805,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "mesa verde middle",
    "sibling_team_ids": []
   },
@@ -3627,6 +3836,10 @@
     "The Loewy Foundation",
     "AFCEA"
    ],
+   "sponsor_provenance": {
+    "The Loewy Foundation": "structured",
+    "AFCEA": "structured"
+   },
    "org_key": "grauer school",
    "sibling_team_ids": []
   },
@@ -3660,6 +3873,10 @@
     "RISE-Robotics Inspiring Science and Engineering",
     "DoD STEM"
    ],
+   "sponsor_provenance": {
+    "RISE-Robotics Inspiring Science and Engineering": "structured",
+    "DoD STEM": "structured"
+   },
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -3687,6 +3904,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "pacific ridge school",
    "sibling_team_ids": [
     "ftc-9266"
@@ -3718,6 +3936,9 @@
    "sponsors": [
     "BAE Systems"
    ],
+   "sponsor_provenance": {
+    "BAE Systems": "structured"
+   },
    "org_key": "carlsbad high school",
    "sibling_team_ids": [
     "ftc-6226",
@@ -3750,6 +3971,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "point loma high school",
    "sibling_team_ids": []
   },
@@ -3777,6 +3999,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "mt carmel high school",
    "sibling_team_ids": []
   },
@@ -3804,6 +4027,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "mater dei catholic high school",
    "sibling_team_ids": []
   },
@@ -3837,6 +4061,11 @@
     "SAIC",
     "American Elements"
    ],
+   "sponsor_provenance": {
+    "Leidos": "structured",
+    "SAIC": "structured",
+    "American Elements": "structured"
+   },
    "org_key": "mission vista high school",
    "sibling_team_ids": []
   },
@@ -3866,6 +4095,9 @@
    "sponsors": [
     "BAE Systems"
    ],
+   "sponsor_provenance": {
+    "BAE Systems": "structured"
+   },
    "org_key": "carlsbad high school",
    "sibling_team_ids": [
     "ftc-5015",
@@ -3899,8 +4131,14 @@
     "Qualcomm",
     "Teradata",
     "Francis Parker School",
-    "Solar Turbines, Inc&R"
+    "Solar Turbines"
    ],
+   "sponsor_provenance": {
+    "Qualcomm": "structured",
+    "Teradata": "structured",
+    "Francis Parker School": "structured",
+    "Solar Turbines": "structured"
+   },
    "org_key": "d robotics education",
    "sibling_team_ids": [
     "ftc-10092",
@@ -3932,6 +4170,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "canyon crest academy",
    "sibling_team_ids": [
     "frc-3128",
@@ -3963,6 +4202,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "san diego jewish academy",
    "sibling_team_ids": []
   },
@@ -3994,6 +4234,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -4025,6 +4266,9 @@
    "sponsors": [
     "Carlsbad Educational Foundation"
    ],
+   "sponsor_provenance": {
+    "Carlsbad Educational Foundation": "structured"
+   },
    "org_key": "sage creek high school",
    "sibling_team_ids": [
     "ftc-10809",
@@ -4059,6 +4303,9 @@
    "sponsors": [
     "Centurion Foundation"
    ],
+   "sponsor_provenance": {
+    "Centurion Foundation": "structured"
+   },
    "org_key": "university city high school",
    "sibling_team_ids": [
     "ftc-11288"
@@ -4088,6 +4335,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "r roger rowe middle",
    "sibling_team_ids": []
   },
@@ -4118,6 +4366,10 @@
     "Qualcomm",
     "Human BioMolecular Research Institute"
    ],
+   "sponsor_provenance": {
+    "Qualcomm": "structured",
+    "Human BioMolecular Research Institute": "structured"
+   },
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -4145,8 +4397,19 @@
    "active": true,
    "last_season": null,
    "sponsors": [
-    "BAE Systems"
+    "BAE Systems",
+    "Nordson",
+    "Viasat",
+    "Thermo Fisher Scientific",
+    "Millipore Sigma"
    ],
+   "sponsor_provenance": {
+    "BAE Systems": "structured",
+    "Nordson": "scraped",
+    "Viasat": "scraped",
+    "Thermo Fisher Scientific": "scraped",
+    "Millipore Sigma": "scraped"
+   },
    "org_key": "carlsbad high school",
    "sibling_team_ids": [
     "ftc-5015",
@@ -4180,6 +4443,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "cetys preparatoria",
    "sibling_team_ids": []
   },
@@ -4209,9 +4473,11 @@
    "active": true,
    "last_season": null,
    "sponsors": [
-    "Carlsbad Educational Foundation",
     "Carlsbad Educational Foundation"
    ],
+   "sponsor_provenance": {
+    "Carlsbad Educational Foundation": "structured"
+   },
    "org_key": "sage creek high school",
    "sibling_team_ids": [
     "ftc-10809",
@@ -4246,6 +4512,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "pacific ridge school",
    "sibling_team_ids": [
     "ftc-4262"
@@ -4275,6 +4542,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "la jolla country day school",
    "sibling_team_ids": [
     "ftc-3650"
@@ -4306,6 +4574,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "canyon crest academy",
    "sibling_team_ids": [
     "frc-3128",
@@ -4337,6 +4606,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "tricity christian school",
    "sibling_team_ids": [
     "ftc-22529",
@@ -4368,6 +4638,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "san clemente high school",
    "sibling_team_ids": []
   },
@@ -4402,8 +4673,14 @@
     "Qualcomm",
     "CAT",
     "Teradata",
-    "Francis Parker School&R"
+    "Francis Parker School"
    ],
+   "sponsor_provenance": {
+    "Qualcomm": "structured",
+    "CAT": "structured",
+    "Teradata": "structured",
+    "Francis Parker School": "structured"
+   },
    "org_key": "d robotics education",
    "sibling_team_ids": [
     "ftc-14195",
@@ -4439,6 +4716,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "prepa calp",
    "sibling_team_ids": []
   },
@@ -4465,7 +4743,18 @@
    "rookie_year": 2015,
    "active": true,
    "last_season": null,
-   "sponsors": [],
+   "sponsors": [
+    "Nordson",
+    "Viasat",
+    "Thermo Fisher Scientific",
+    "Millipore Sigma"
+   ],
+   "sponsor_provenance": {
+    "Nordson": "scraped",
+    "Viasat": "scraped",
+    "Thermo Fisher Scientific": "scraped",
+    "Millipore Sigma": "scraped"
+   },
    "org_key": "sage creek high school",
    "sibling_team_ids": [
     "ftc-15097",
@@ -4505,6 +4794,10 @@
     "Qualcomm",
     "Advancing Science, Technology and Arts"
    ],
+   "sponsor_provenance": {
+    "Qualcomm": "structured",
+    "Advancing Science, Technology and Arts": "structured"
+   },
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -4544,6 +4837,16 @@
     "RISE",
     "REV Robotics"
    ],
+   "sponsor_provenance": {
+    "Qualcomm": "structured",
+    "General Atomic": "structured",
+    "HiTec": "structured",
+    "Viasat": "structured",
+    "Ragnar": "structured",
+    "Gene Haas Foundation": "structured",
+    "RISE": "structured",
+    "REV Robotics": "structured"
+   },
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -4573,6 +4876,9 @@
    "sponsors": [
     "Mt Carmel High School"
    ],
+   "sponsor_provenance": {
+    "Mt Carmel High School": "structured"
+   },
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -4601,8 +4907,12 @@
    "last_season": null,
    "sponsors": [
     "DoD STEM",
-    "Qualcomm Inc"
+    "Qualcomm"
    ],
+   "sponsor_provenance": {
+    "DoD STEM": "structured",
+    "Qualcomm": "structured"
+   },
    "org_key": "university city high school",
    "sibling_team_ids": [
     "ftc-8380"
@@ -4636,6 +4946,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "el camino high school",
    "sibling_team_ids": []
   },
@@ -4665,7 +4976,26 @@
    "rookie_year": 2016,
    "active": true,
    "last_season": null,
-   "sponsors": [],
+   "sponsors": [
+    "Apple",
+    "Qualcomm",
+    "ASML",
+    "HP",
+    "ICE",
+    "GoBilda",
+    "Polymaker",
+    "RISE"
+   ],
+   "sponsor_provenance": {
+    "Apple": "scraped",
+    "Qualcomm": "scraped",
+    "ASML": "scraped",
+    "HP": "scraped",
+    "ICE": "scraped",
+    "GoBilda": "scraped",
+    "Polymaker": "scraped",
+    "RISE": "scraped"
+   },
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -4696,6 +5026,10 @@
     "Rancho Santa Fe Education Foundation",
     "Qualcomm"
    ],
+   "sponsor_provenance": {
+    "Rancho Santa Fe Education Foundation": "structured",
+    "Qualcomm": "structured"
+   },
    "org_key": "r roger rowe school",
    "sibling_team_ids": []
   },
@@ -4723,6 +5057,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "del norte high school",
    "sibling_team_ids": [
     "frc-3749"
@@ -4754,6 +5089,9 @@
    "sponsors": [
     "Apple"
    ],
+   "sponsor_provenance": {
+    "Apple": "structured"
+   },
    "org_key": "black mountain middle school",
    "sibling_team_ids": [
     "ftc-13084",
@@ -4791,6 +5129,12 @@
     "GoBilda",
     "Misumi USA"
    ],
+   "sponsor_provenance": {
+    "Big Blue Saw": "structured",
+    "Solidworks": "structured",
+    "GoBilda": "structured",
+    "Misumi USA": "structured"
+   },
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -4818,6 +5162,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "black mountain middle school",
    "sibling_team_ids": [
     "ftc-12778",
@@ -4848,6 +5193,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "julian high school",
    "sibling_team_ids": []
   },
@@ -4875,6 +5221,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -4902,6 +5249,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "meadowbrook middle school",
    "sibling_team_ids": [
     "ftc-16589",
@@ -4934,6 +5282,9 @@
    "sponsors": [
     "Girl Scout South West Texas"
    ],
+   "sponsor_provenance": {
+    "Girl Scout South West Texas": "structured"
+   },
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -4961,6 +5312,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "feaster charter school",
    "sibling_team_ids": []
   },
@@ -4991,6 +5343,10 @@
     "William A. Steen & Associates",
     "Booz Allen Hamilton"
    ],
+   "sponsor_provenance": {
+    "William A. Steen & Associates": "structured",
+    "Booz Allen Hamilton": "structured"
+   },
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -5020,6 +5376,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -5052,8 +5409,16 @@
     "Qualcomm",
     "Solar Turbines",
     "PTC",
-    "Caterpillar&R"
+    "Caterpillar"
    ],
+   "sponsor_provenance": {
+    "R&D Robotics Education": "structured",
+    "Francis Parker School": "structured",
+    "Qualcomm": "structured",
+    "Solar Turbines": "structured",
+    "PTC": "structured",
+    "Caterpillar": "structured"
+   },
    "org_key": "d robotics education",
    "sibling_team_ids": [
     "ftc-10092",
@@ -5085,6 +5450,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -5112,8 +5478,13 @@
    "active": true,
    "last_season": null,
    "sponsors": [
-    "General Atomics Aeronautical Inc.&Classical Academy High School"
+    "General Atomics Aeronautical Inc.",
+    "Classical Academy High School"
    ],
+   "sponsor_provenance": {
+    "General Atomics Aeronautical Inc.": "structured",
+    "Classical Academy High School": "structured"
+   },
    "org_key": "classical academy online",
    "sibling_team_ids": []
   },
@@ -5141,6 +5512,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "canyon crest academy",
    "sibling_team_ids": [
     "frc-3128",
@@ -5176,6 +5548,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -5205,6 +5578,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -5232,6 +5606,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -5262,6 +5637,10 @@
     "Rise Hub",
     "Matador Engineering"
    ],
+   "sponsor_provenance": {
+    "Rise Hub": "structured",
+    "Matador Engineering": "structured"
+   },
    "org_key": "mount miguel high school",
    "sibling_team_ids": []
   },
@@ -5289,6 +5668,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "lakeside middle school",
    "sibling_team_ids": []
   },
@@ -5316,6 +5696,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "sage creek high school",
    "sibling_team_ids": [
     "ftc-10809",
@@ -5348,6 +5729,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -5377,6 +5759,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -5404,6 +5787,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "correia middle school",
    "sibling_team_ids": []
   },
@@ -5431,6 +5815,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -5458,6 +5843,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "maranatha christian school",
    "sibling_team_ids": []
   },
@@ -5485,6 +5871,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "orange glen high school",
    "sibling_team_ids": []
   },
@@ -5512,6 +5899,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "meadowbrook middle school",
    "sibling_team_ids": [
     "ftc-13224",
@@ -5542,6 +5930,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "design 39 campus",
    "sibling_team_ids": [
     "ftc-19793"
@@ -5575,6 +5964,11 @@
     "Renesas",
     "Qualcomm"
    ],
+   "sponsor_provenance": {
+    "Teqnobot": "structured",
+    "Renesas": "structured",
+    "Qualcomm": "structured"
+   },
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -5602,6 +5996,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -5629,6 +6024,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "e3 civic high school",
    "sibling_team_ids": [
     "ftc-24982"
@@ -5662,6 +6058,11 @@
     "DoD STEM",
     "Apple"
    ],
+   "sponsor_provenance": {
+    "Qualcomm": "structured",
+    "DoD STEM": "structured",
+    "Apple": "structured"
+   },
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -5691,6 +6092,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "league of amazing programmers",
    "sibling_team_ids": []
   },
@@ -5720,6 +6122,9 @@
    "sponsors": [
     "Bourns, Inc."
    ],
+   "sponsor_provenance": {
+    "Bourns, Inc.": "structured"
+   },
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -5747,6 +6152,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -5781,6 +6187,14 @@
     "DataBricks",
     "HITECH"
    ],
+   "sponsor_provenance": {
+    "Dave's Hot Chicken": "structured",
+    "SainSmart": "structured",
+    "Fusion Education Inc": "structured",
+    "Matterhackers": "structured",
+    "DataBricks": "structured",
+    "HITECH": "structured"
+   },
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -5812,6 +6226,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "waldorf school of san diego",
    "sibling_team_ids": []
   },
@@ -5839,6 +6254,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -5866,6 +6282,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -5896,6 +6313,10 @@
     "Qualcomm",
     "DoD"
    ],
+   "sponsor_provenance": {
+    "Qualcomm": "structured",
+    "DoD": "structured"
+   },
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -5925,6 +6346,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "meadowbrook middle school",
    "sibling_team_ids": [
     "ftc-13224",
@@ -5955,6 +6377,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -5982,6 +6405,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "la jolla senior high school",
    "sibling_team_ids": [
     "frc-2984"
@@ -6011,6 +6435,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "oak valley middle school",
    "sibling_team_ids": []
   },
@@ -6038,6 +6463,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -6065,6 +6491,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -6094,6 +6521,9 @@
    "sponsors": [
     "Qualcomm"
    ],
+   "sponsor_provenance": {
+    "Qualcomm": "structured"
+   },
    "org_key": "design 39 campus",
    "sibling_team_ids": [
     "ftc-16652"
@@ -6123,10 +6553,15 @@
    "active": true,
    "last_season": null,
    "sponsors": [
-    "QualComm",
+    "Qualcomm",
     "Nordson",
-    "Rev Robotics"
+    "REV Robotics"
    ],
+   "sponsor_provenance": {
+    "Qualcomm": "structured",
+    "Nordson": "structured",
+    "REV Robotics": "structured"
+   },
    "org_key": "north co trade tech high sch",
    "sibling_team_ids": [
     "frc-4486"
@@ -6156,6 +6591,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -6183,6 +6619,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "liberty charter high school",
    "sibling_team_ids": []
   },
@@ -6211,8 +6648,12 @@
    "last_season": null,
    "sponsors": [
     "Qualcomm",
-    "DoDEA"
+    "DoDea"
    ],
+   "sponsor_provenance": {
+    "Qualcomm": "structured",
+    "DoDea": "structured"
+   },
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -6240,6 +6681,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "poway high school",
    "sibling_team_ids": [
     "frc-1622",
@@ -6275,6 +6717,10 @@
     "Gene Haas Foundation",
     "Dow"
    ],
+   "sponsor_provenance": {
+    "Gene Haas Foundation": "structured",
+    "Dow": "structured"
+   },
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -6304,6 +6750,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -6333,6 +6780,9 @@
    "sponsors": [
     "Boys"
    ],
+   "sponsor_provenance": {
+    "Boys": "structured"
+   },
    "org_key": "girls clubs of america",
    "sibling_team_ids": [
     "ftc-26637"
@@ -6368,6 +6818,10 @@
     "Family",
     "Community"
    ],
+   "sponsor_provenance": {
+    "Family": "structured",
+    "Community": "structured"
+   },
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -6395,6 +6849,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -6422,6 +6877,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "high tech middle sch mesa",
    "sibling_team_ids": []
   },
@@ -6449,6 +6905,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "tricity christian school",
    "sibling_team_ids": [
     "ftc-22567",
@@ -6480,6 +6937,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "tricity christian school",
    "sibling_team_ids": [
     "ftc-22529",
@@ -6511,6 +6969,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "bishops school",
    "sibling_team_ids": []
   },
@@ -6538,6 +6997,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -6565,6 +7025,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -6594,6 +7055,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -6621,6 +7083,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -6648,6 +7111,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -6679,6 +7143,9 @@
    "sponsors": [
     "RISE"
    ],
+   "sponsor_provenance": {
+    "RISE": "structured"
+   },
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -6706,6 +7173,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "sage creek high school",
    "sibling_team_ids": [
     "ftc-10809",
@@ -6740,6 +7208,9 @@
    "sponsors": [
     "LeXT Robo Academy"
    ],
+   "sponsor_provenance": {
+    "LeXT Robo Academy": "structured"
+   },
    "org_key": "us stem education foundation",
    "sibling_team_ids": []
   },
@@ -6776,6 +7247,16 @@
     "The Coronado Times",
     "JPL"
    ],
+   "sponsor_provenance": {
+    "Amazon": "structured",
+    "Qualcomm": "structured",
+    "Dr. Mullins Orthodontics": "structured",
+    "DoDea": "structured",
+    "Coronado Schools Foundation": "structured",
+    "City of Coronado": "structured",
+    "The Coronado Times": "structured",
+    "JPL": "structured"
+   },
    "org_key": "coronado high school",
    "sibling_team_ids": [
     "frc-2827",
@@ -6806,6 +7287,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "francis parker school",
    "sibling_team_ids": [
     "ftc-26471",
@@ -6838,6 +7320,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "cristo rey san diego high school",
    "sibling_team_ids": []
   },
@@ -6865,6 +7348,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "black mountain middle school",
    "sibling_team_ids": [
     "ftc-12778",
@@ -6900,6 +7384,12 @@
     "U.S. Bank Foundation",
     "BD Medical"
    ],
+   "sponsor_provenance": {
+    "Qualcomm": "structured",
+    "Collins Aerospace": "structured",
+    "U.S. Bank Foundation": "structured",
+    "BD Medical": "structured"
+   },
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -6927,6 +7417,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -6959,6 +7450,12 @@
     "U.S. Bank Foundation",
     "BD Medical"
    ],
+   "sponsor_provenance": {
+    "Qualcomm": "structured",
+    "Collins Aerospace": "structured",
+    "U.S. Bank Foundation": "structured",
+    "BD Medical": "structured"
+   },
    "org_key": "eastlake middle school",
    "sibling_team_ids": []
   },
@@ -6986,6 +7483,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -7022,6 +7520,14 @@
     "image On T-Shirt Printing & Embroidery",
     "Lakeside Stadium Association"
    ],
+   "sponsor_provenance": {
+    "Funded Youth": "structured",
+    "Pass 2 Pay Backflow": "structured",
+    "San Diego Laser Cutting": "structured",
+    "The Best Dog for Me, LLC": "structured",
+    "image On T-Shirt Printing & Embroidery": "structured",
+    "Lakeside Stadium Association": "structured"
+   },
    "org_key": "funded youth",
    "sibling_team_ids": []
   },
@@ -7049,6 +7555,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "e3 civic high school",
    "sibling_team_ids": [
     "ftc-16881"
@@ -7078,13 +7585,21 @@
    "active": true,
    "last_season": null,
    "sponsors": [
-    "DOD STEM",
+    "DoD STEM",
     "Qualcomm",
     "CAT",
     "Teradata",
-    "Francis Parker",
-    "Solar Turbines, Inc&R"
+    "Francis Parker School",
+    "Solar Turbines"
    ],
+   "sponsor_provenance": {
+    "DoD STEM": "structured",
+    "Qualcomm": "structured",
+    "CAT": "structured",
+    "Teradata": "structured",
+    "Francis Parker School": "structured",
+    "Solar Turbines": "structured"
+   },
    "org_key": "d robotics education",
    "sibling_team_ids": [
     "ftc-10092",
@@ -7116,6 +7631,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -7143,6 +7659,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "rock academy",
    "sibling_team_ids": []
   },
@@ -7174,10 +7691,16 @@
    "last_season": null,
    "sponsors": [
     "Gene Haas Foundation",
-    "AFCEA San Diego",
+    "AFCEA",
     "FTCSIM",
     "Harbor Freight"
    ],
+   "sponsor_provenance": {
+    "Gene Haas Foundation": "structured",
+    "AFCEA": "structured",
+    "FTCSIM": "structured",
+    "Harbor Freight": "structured"
+   },
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -7205,6 +7728,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "francis parker school",
    "sibling_team_ids": [
     "ftc-24041",
@@ -7239,6 +7763,9 @@
    "sponsors": [
     "Boys"
    ],
+   "sponsor_provenance": {
+    "Boys": "structured"
+   },
    "org_key": "girls clubs of america",
    "sibling_team_ids": [
     "ftc-22026"
@@ -7268,6 +7795,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "youth emergency shelter san diego youth services",
    "sibling_team_ids": []
   },
@@ -7303,6 +7831,15 @@
     "City of Coronado",
     "JPL"
    ],
+   "sponsor_provenance": {
+    "Amazon": "structured",
+    "Qualcomm": "structured",
+    "Coronado Schools Foundation": "structured",
+    "The Coronado Times": "structured",
+    "DoDea": "structured",
+    "City of Coronado": "structured",
+    "JPL": "structured"
+   },
    "org_key": "coronado high school",
    "sibling_team_ids": [
     "frc-2827",
@@ -7335,6 +7872,9 @@
    "sponsors": [
     "Canyon Crest Academy"
    ],
+   "sponsor_provenance": {
+    "Canyon Crest Academy": "structured"
+   },
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -7362,6 +7902,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "san diego french american school",
    "sibling_team_ids": [
     "ftc-27602"
@@ -7391,6 +7932,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "san diego french american school",
    "sibling_team_ids": [
     "ftc-27600"
@@ -7420,6 +7962,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "crawford high",
    "sibling_team_ids": []
   },
@@ -7447,8 +7990,11 @@
    "active": true,
    "last_season": null,
    "sponsors": [
-    "Dod stem"
+    "DoD STEM"
    ],
+   "sponsor_provenance": {
+    "DoD STEM": "structured"
+   },
    "org_key": "raise the bar robotics",
    "sibling_team_ids": []
   },
@@ -7476,6 +8022,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "pacific academy",
    "sibling_team_ids": []
   },
@@ -7506,6 +8053,10 @@
     "The Watch Lady",
     "Thyme To Go"
    ],
+   "sponsor_provenance": {
+    "The Watch Lady": "structured",
+    "Thyme To Go": "structured"
+   },
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -7533,6 +8084,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -7560,6 +8112,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -7587,6 +8140,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "coastal academy charter",
    "sibling_team_ids": []
   },
@@ -7614,6 +8168,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "bear valley middle",
    "sibling_team_ids": []
   },
@@ -7641,6 +8196,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -7668,6 +8224,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -7695,6 +8252,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -7722,6 +8280,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "francis parker school",
    "sibling_team_ids": [
     "ftc-24041",
@@ -7754,6 +8313,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "francis parker school",
    "sibling_team_ids": [
     "ftc-24041",
@@ -7786,6 +8346,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -7813,6 +8374,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "sage creek high",
    "sibling_team_ids": [
     "ftc-32159"
@@ -7841,7 +8403,18 @@
    "rookie_year": 2025,
    "active": true,
    "last_season": null,
-   "sponsors": [],
+   "sponsors": [
+    "Nordson",
+    "Viasat",
+    "Thermo Fisher Scientific",
+    "Millipore Sigma"
+   ],
+   "sponsor_provenance": {
+    "Nordson": "scraped",
+    "Viasat": "scraped",
+    "Thermo Fisher Scientific": "scraped",
+    "Millipore Sigma": "scraped"
+   },
    "org_key": "sage creek high",
    "sibling_team_ids": [
     "ftc-32158"
@@ -7871,6 +8444,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "black mountain middle",
    "sibling_team_ids": []
   },
@@ -7898,6 +8472,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "tricity christian school",
    "sibling_team_ids": [
     "ftc-22529",
@@ -7929,6 +8504,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -7956,6 +8532,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "olive peirce middle",
    "sibling_team_ids": []
   },
@@ -7983,6 +8560,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "millennial tech middle",
    "sibling_team_ids": []
   },
@@ -8010,6 +8588,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "",
    "sibling_team_ids": []
   },
@@ -8037,6 +8616,7 @@
    "active": true,
    "last_season": null,
    "sponsors": [],
+   "sponsor_provenance": {},
    "org_key": "francis parker school",
    "sibling_team_ids": [
     "ftc-24041",

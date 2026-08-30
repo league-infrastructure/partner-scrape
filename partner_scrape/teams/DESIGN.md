@@ -1,6 +1,6 @@
 # teams
 
-**Owner:** Eric Busboom · **Last reviewed:** 2026-08-30 (sprint 013 ticket 005 — sponsor extraction orchestration and normalization) · **Status:** five sprint-011/012 increments complete (FTC + FRC + geocoding + site pages + FLL static roster); sprint 013 ticket 006 adds website/social overlay ingestion, ticket 001 adds live website verification, ticket 003 adds the deterministic (offline, LLM-free) half of sponsor extraction, ticket 004 adds the injectable LLM classification client and its content-hash cache, ticket 005 wires it all together (`sponsor_extract.py`: gather → cache → classify → validate → guard → normalize/dedup → provenance, sequenced into `run_teams()` after `verify_team_websites()`) — **sprint 013 is now feature-complete**. Live-verified (2026-08-30, real 278-team registry): 52/80 team pages confirmed (65% 2xx), 32 teams had sponsor-shaped page content, 11 gained a new scraped sponsor (48 new distinct scraped names, 130 distinct sponsor strings total vs. an 87-string structured-only baseline), 0 per-team failures. Human-sampled before close; see Design's "(Sprint 013) Live-run sample review" note below for the two real defects the sample caught and fixed (an Instagram-caption fragment published as a "sponsor," addressed with a new length/marker-based denylist guard) and the ones left open for a human to weigh (a possible school-name false positive, several real-but-ugly filename-derived display names) — plus the `normalize_org_name` corporate-suffix gap discovered while implementing dedup (see Constraints).
+**Owner:** Eric Busboom · **Last reviewed:** 2026-08-30 (sprint 013 ticket 005, reopened — sponsor-name canonicalization) · **Status:** five sprint-011/012 increments complete (FTC + FRC + geocoding + site pages + FLL static roster); sprint 013 ticket 006 adds website/social overlay ingestion, ticket 001 adds live website verification, ticket 003 adds the deterministic (offline, LLM-free) half of sponsor extraction, ticket 004 adds the injectable LLM classification client and its content-hash cache, ticket 005 wires it all together (`sponsor_extract.py`: gather → cache → classify → validate → guard → normalize/dedup → provenance, sequenced into `run_teams()` after `verify_team_websites()`) — **sprint 013 is now feature-complete**. Ticket 005 was reopened once, over sponsor-name canonicalization (see below); with that fix in, live-verified again (2026-08-30, real 278-team registry): 52/80 team pages confirmed (65% 2xx), 32 teams had sponsor-shaped page content, 11 gained a new scraped sponsor, 0 per-team failures — all unchanged from the first pass. What changed: the raw sponsor-string count (130 distinct strings across 57 teams with sponsors) now canonicalizes to **110 distinct real companies** via the new `teams.sponsor_canonical` module (`canonical_key()`, layered on top of — never inside — `normalize.partners.normalize_org_name`, plus a corpus-wide `canonicalize_sponsors()` pass) — Qualcomm (the single most important data point) now counts as one entry across all ~20 teams it sponsors instead of three ("QualComm"/"Qualcomm"/"Qualcomm Inc"). See "(Sprint 013 ticket 005, reopened) Sponsor-name canonicalization" below for the full defect analysis (including the "&R" FTCScout-upstream-corruption root cause) and Open Questions for what the reopening resolved.
 
 ---
 
@@ -1488,15 +1488,57 @@ for a small (~52-site) corpus that changes rarely.
   `organization`, the page's own hostname, an oversized or "@"/"#"-
   marked caption-like candidate — the last two added after this
   ticket's own required live-run sample review, see Design) -> dedup/
-  merge into `Team.sponsors` via `normalize.partners.normalize_org_name`
-  (a normalized key already present from a structured source keeps its
-  display name/provenance) -> `Team.sponsor_provenance` updated.
-  Mutates `teams` in place. Per-team `try/except` around the cache-
-  lookup-through-merge steps: any failure (network error,
-  `SponsorClassificationError`, missing `ANTHROPIC_API_KEY`) is logged
-  and leaves that team's `sponsors`/`sponsor_provenance` exactly as the
-  structured sources already set them — fail-open, never aborting the
-  run for any other team.
+  merge into `Team.sponsors` via `teams.sponsor_canonical.canonical_key`
+  (a key already present from a structured source keeps its display
+  name/provenance) -> `Team.sponsor_provenance` updated. Mutates `teams`
+  in place. Per-team `try/except` around the cache-lookup-through-merge
+  steps: any failure (network error, `SponsorClassificationError`,
+  missing `ANTHROPIC_API_KEY`) is logged and leaves that team's
+  `sponsors`/`sponsor_provenance` exactly as the structured sources
+  already set them — fail-open, never aborting the run for any other
+  team.
+- **`teams.sponsor_canonical.canonical_key(name) -> str`** (sprint 013
+  ticket 005, added on reopening) — the shared match key every
+  same-company decision in `teams/` now compares:
+  `normalize.partners.normalize_org_name` (reused verbatim, never
+  modified — Constraints) plus a trailing corporate-legal-suffix strip
+  (`Inc`/`Incorporated`/`LLC`/`Corp`/`Corporation`/`Co`/`Company`/`Ltd`/
+  `Limited`/`Plc`, checked as the *last* normalized token only).
+  `sponsor_extract.py::_merge_sponsors`/`_is_denylisted` both switched
+  to this key when the ticket was reopened, closing the exact gap the
+  first pass's `TestKnownNormalizeOrgNameLimitation` had documented
+  (see Open Questions).
+- **`teams.sponsor_canonical.canonicalize_sponsors(teams) -> None`**
+  (sprint 013 ticket 005, added on reopening) — the corpus-wide pass
+  `extract_sponsors()`'s own per-team merge cannot do: the same real
+  company reported under different spellings by *different* teams' own
+  structured records (e.g. "QualComm" for one team, "Qualcomm" for
+  eighteen others). Four passes over the full `Team[]`, mutating in
+  place: (1) local corruption/formatting cleanup needing no cross-team
+  data (`expand_local` — strips a literal trailing FTCScout `"&R"`
+  artifact, splits a bare-`"&"`-joined compound name, strips a trailing
+  `" logo"`-style alt-text artifact); (2) build a reference set of
+  already-clean names observed anywhere in this run; (3) resolve or
+  drop every hostname/filename-shaped name
+  (`teams.sponsor_canonical.is_slug_like`/`reconstruct_slug`) against
+  that reference — a name recoverable only by guessing (no reference
+  match, or an unmarked 4+-token slug) is dropped, never published
+  mangled; (4) token-prefix clustering (`_cluster_keys` — folds
+  "Francis Parker" into "Francis Parker School") plus one canonical
+  display chosen per cluster (`_pick_canonical_display` — prefers
+  structured provenance, then a suffix-free spelling, then the most
+  common raw spelling), rewritten onto every team that mentions it. A
+  team's own `sponsor_provenance` value for its own claim is never
+  altered — only the *display string* used as that claim's key
+  changes. Called once by `run_teams()`, after `extract_sponsors()`/
+  `--no-sponsors` and before `export_teams()`, unconditionally (a
+  `--no-sponsors` run's purely-structured sponsors still need this
+  pass). Never raises for any input it can receive. See that module's
+  own docstring for the full defect analysis (including why the "&R"
+  corruption is FTCScout's own upstream data, not a decode bug in this
+  project's code) and Open Questions for what is deliberately *not*
+  attempted (fuzzy business-relationship clustering of legally-distinct
+  entities).
 - **`teams.geo.geocode_teams(teams, *, data_dir=None) -> list[Team]`**
   (this ticket) — resolves every `Team` through the seven-rung offline
   ladder in place; returns the same list (parallel in shape to
@@ -2039,29 +2081,76 @@ for a small (~52-site) corpus that changes rarely.
     (Constraints) has nothing to compare against and cannot catch a
     school that genuinely is this team's own affiliation if that's
     what it is — cannot be resolved from this project's own data alone.
-    (2) Several scraped names are real companies but ugly, filename-
-    derived display strings (e.g. `"Nordson-Corporation-Logo-web"`,
-    `"1280px-Thermo_Fisher_Scientific_logo"` — three carlsbaded.org-
-    hosted teams share these, since they share one sponsor-page
-    footer) rather than clean names — correct attribution, poor
-    formatting; no cleanup attempted here, matching this field's
-    "provenance, not curation" scope (Constraints, "raw candidate
-    strings, not a curated name" note above).
-  - **A pre-existing, discovered-not-introduced gap**: `normalize_org_name`
-    (reused verbatim per this ticket's own explicit "do not write a
-    second normalizer" instruction) lowercases/strips punctuation/drops
-    a leading "the "/collapses whitespace, but does not strip corporate
+    (2) **RESOLVED (ticket 005, reopened)**: several scraped names were
+    real companies but ugly, filename-derived display strings (e.g.
+    `"Nordson-Corporation-Logo-web"`, `"1280px-Thermo_Fisher_Scientific_
+    logo"` — three carlsbaded.org-hosted teams share these, since they
+    share one sponsor-page footer) rather than clean names — correct
+    attribution, poor formatting, deliberately left unfixed at this
+    ticket's first pass (matching this field's "provenance, not
+    curation" scope, Constraints). The reopening's
+    `sponsor_canonical.reconstruct_slug()` now recovers a clean display
+    name deterministically wherever the filename/hostname shape and
+    corpus-wide cross-reference allow it (both real examples here now
+    publish as `"Nordson"` and `"Thermo Fisher Scientific"`), and drops
+    the rest rather than publish something still mangled — no longer a
+    formatting gap, see the RESOLVED entry below.
+  - **RESOLVED (ticket 005, reopened 2026-08-30) — a pre-existing,
+    discovered-not-introduced gap**: `normalize_org_name` (reused
+    verbatim per this ticket's own explicit "do not write a second
+    normalizer" instruction) lowercases/strips punctuation/drops a
+    leading "the "/collapses whitespace, but does not strip corporate
     suffixes — `normalize_org_name("Qualcomm Inc.") == "qualcomm inc"`,
     not `"qualcomm"`. Sprint.md's own motivating dedup example
-    ("Qualcomm" merging with a scraped "Qualcomm Inc.") therefore does
-    not currently merge; `tests/teams/test_sponsor_extract.py`'s
-    `TestKnownNormalizeOrgNameLimitation` reproduces and asserts this
-    directly rather than silently working around it. Not observed in
-    the live 278-team corpus (structured/scraped overlap for the same
-    team is still rare — 11 teams this run, none hitting this exact
-    case), so it did not block this ticket, but is flagged for a
-    product decision: extend `normalize_org_name` with common
-    corporate-suffix stripping (a change to a module shared with the
-    curated partner-directory join, outside `teams/`'s own boundary —
-    the same reason this ticket did not make that change unilaterally),
-    or accept the gap.
+    ("Qualcomm" merging with a scraped "Qualcomm Inc.") therefore did
+    not originally merge; the first pass's
+    `TestKnownNormalizeOrgNameLimitation` reproduced and asserted this
+    directly rather than silently working around it, and was correctly
+    left unchecked as an open acceptance criterion rather than
+    misreported. Not observed in the live 278-team corpus at the time
+    (structured/scraped overlap for the same team was still rare — 11
+    teams, none hitting this exact case), so it did not block the first
+    pass — but auditing the real, regenerated `teams.json` afterward
+    (57 teams with sponsors, 130 "distinct" sponsor strings) showed the
+    consequence was worse than this one example suggested: the same
+    real company is routinely reported under different spellings by
+    *different* teams' own structured records (no per-team merge,
+    however good, can ever see that), and several FTCScout-sourced
+    strings carried a literal `"&R"` corruption suffix on top. This is
+    what reopened the ticket. **Fix**: `teams.sponsor_canonical.py`
+    (new module) — `canonical_key()` layers a corporate-suffix strip on
+    top of `normalize_org_name` (never modifying it — the scope
+    boundary above still holds, since `normalize_org_name` remains the
+    curated partner-directory join's own shared key, untouched) and
+    `sponsor_extract.py::_merge_sponsors`/`_is_denylisted` now use it;
+    `canonicalize_sponsors()` is the new corpus-wide pass
+    `run_teams()` calls once, after `extract_sponsors()` and before
+    `export_teams()`. Live-verified after the fix (`partner-scrape
+    teams --site-dir site` against the real 278-team registry,
+    2026-08-30, same run measured in the top-of-file header): the same
+    130 raw distinct sponsor strings now canonicalize to **110 distinct
+    real companies**. Top 20 by team count, sampled critically —
+    nothing is an image filename, a bare hostname, a CMS vendor, or a
+    school that is really the crediting team's own affiliation (cross-
+    checked every top-20 entry against the crediting teams'
+    `organization` field directly): Qualcomm (22 teams — the single
+    most important data point, now one entry instead of three),
+    Nordson (6), DoD STEM (5), Solar Turbines (4), BAE Systems (4),
+    Francis Parker School (4 — the crediting teams' own `organization`
+    is "D Robotics Education", a different, unrelated org, so this is a
+    genuine external sponsorship, not a self-affiliation false
+    positive), Viasat (4), Teradata (3), Thermo Fisher Scientific (3),
+    Millipore Sigma (3), Gene Haas Foundation (3), RISE (3), Apple (3),
+    DoDea (3), Leidos (2), Robot Planet Ecuador (2), SAIC (2), PTC (2),
+    AFCEA (2), Carlsbad Educational Foundation (2). See
+    `sponsor_canonical.py`'s own
+    module docstring for the full defect analysis, including the "&R"
+    root-cause finding (FTCScout's own upstream data corruption,
+    confirmed present verbatim in the raw API fixture — not a decode
+    bug anywhere in this project's own code) and what is deliberately
+    *not* attempted (fuzzy business-relationship clustering of
+    legally-distinct-but-affiliated entities, e.g. "CAT" vs.
+    "Caterpillar", or "General Atomics Aeronautical" vs. "General
+    Atomics Sciences Education Foundation" — no deterministic string
+    transformation connects either pair, and merging them would need a
+    hand-curated alias table this module deliberately does not build).

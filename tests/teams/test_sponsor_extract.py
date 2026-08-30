@@ -159,19 +159,21 @@ class TestHallucinationGuard:
 
 class TestStructuredScrapedDedup:
     """AC: "Qualcomm" (structured) and a scraped "Qualcomm Inc." for the
-    same team collapse to one entry via normalize_org_name, keeping the
-    structured display name and "structured" provenance.
+    same team collapse to one entry via the shared match key, keeping
+    the structured display name and "structured" provenance.
 
-    ``normalize_org_name`` (reused verbatim -- module docstring, "never
-    a second normalizer") lowercases, strips punctuation, drops a
-    leading "the ", and collapses whitespace; it does **not** strip
-    corporate suffixes ("Inc.", "Incorporated", "LLC", ...) --
-    confirmed directly: ``normalize_org_name("Qualcomm Inc.") ==
-    "qualcomm inc"``, not ``"qualcomm"``. The case/punctuation/leading-
-    article variant below is what this reused function actually
-    collapses; ``TestKnownNormalizeOrgNameLimitation`` documents the
-    corporate-suffix case it does not, so that gap is asserted and
-    visible rather than silently assumed away."""
+    ``_merge_sponsors`` matches via ``teams.sponsor_canonical.
+    canonical_key`` -- ``normalize_org_name`` (reused verbatim, module
+    docstring's "never a second normalizer") plus a corporate-suffix
+    strip ``sponsor_canonical.py`` layers on top of it. This ticket's
+    original pass reused ``normalize_org_name`` directly, which does
+    **not** strip corporate suffixes ("Inc.", "Incorporated", "LLC",
+    ...): ``normalize_org_name("Qualcomm Inc.") == "qualcomm inc"``, not
+    ``"qualcomm"``, so sprint.md's own motivating dedup example did not
+    actually collapse (see ``TestPreviouslyKnownLimitationNowResolved``
+    below and ``sponsor_canonical.py``'s own module docstring for the
+    full story of why and how this was fixed when the ticket was
+    reopened)."""
 
     def test_a_case_and_punctuation_variant_is_absorbed_into_the_existing_structured_entry(
         self, tmp_path
@@ -194,25 +196,25 @@ class TestStructuredScrapedDedup:
         assert team.sponsor_provenance == {"Qualcomm": "structured"}
 
 
-class TestKnownNormalizeOrgNameLimitation:
-    """Documents a real gap discovered while implementing this ticket:
-    sprint.md/this ticket's own acceptance criteria give "Qualcomm"
-    (structured) merging with a scraped "Qualcomm Inc." as the
-    motivating dedup example, but ``normalize_org_name`` -- which this
-    ticket must reuse verbatim, per its own explicit "do not write a
-    second normalizer" instruction -- does not strip corporate suffixes,
-    so this exact pair does **not** collapse. Reproduced and asserted
-    here (rather than silently worked around) so it stays visible: a
-    scraped "Qualcomm Inc." currently publishes as a second, separate
-    "scraped" entry alongside the structured "Qualcomm" one. See this
-    ticket's own completion notes for the recommendation (extend
-    `normalize_org_name` with common corporate-suffix stripping in a
-    follow-up, if this is judged worth fixing -- out of this ticket's
-    scope, since `normalize_org_name` is shared with the curated
-    partner-directory join and changing it is a decision beyond
-    `teams/`'s own boundary)."""
+class TestPreviouslyKnownLimitationNowResolved:
+    """This ticket's *first* pass documented a real gap: sprint.md's own
+    motivating dedup example ("Qualcomm" structured merging with a
+    scraped "Qualcomm Inc.") did not actually collapse, because
+    ``normalize_org_name`` -- reused verbatim, per this ticket's own
+    "do not write a second normalizer" instruction -- does not strip
+    corporate suffixes. That was correctly left unchecked rather than
+    misreported, and the ticket was reopened over it: the consequence
+    across the *whole* live corpus was worse than this one example
+    suggested (130 "distinct" sponsor strings for ~110 real companies).
 
-    def test_qualcomm_inc_does_not_currently_merge_with_qualcomm(self, tmp_path):
+    The fix (``sponsor_canonical.canonical_key``, layered *on top of*
+    ``normalize_org_name`` -- never a change to that shared function
+    itself, per this ticket's own scope boundary) closes this exact gap:
+    reproduced here as the resolved case, replacing the old
+    ``TestKnownNormalizeOrgNameLimitation`` class that asserted the
+    former (broken) behavior."""
+
+    def test_qualcomm_inc_now_merges_with_qualcomm(self, tmp_path):
         team = _team(sponsors=["Qualcomm"], sponsor_provenance={"Qualcomm": "structured"})
         html = '<html><body><h2>Sponsors</h2><div><img alt="Qualcomm Inc."></div></body></html>'
         candidates = gather_sponsor_candidates(html, team.website)
@@ -227,13 +229,11 @@ class TestKnownNormalizeOrgNameLimitation:
 
         extract_sponsors([team], {team.team_id: html}, llm_client, cache)
 
-        # Documented current behavior, not the aspirational outcome:
-        # two separate entries, not one.
-        assert team.sponsors == ["Qualcomm", "Qualcomm Inc."]
-        assert team.sponsor_provenance == {
-            "Qualcomm": "structured",
-            "Qualcomm Inc.": "scraped",
-        }
+        # Now collapses to one entry, keeping the structured display
+        # name and provenance -- the originally-motivating example from
+        # sprint.md's own Design Rationale.
+        assert team.sponsors == ["Qualcomm"]
+        assert team.sponsor_provenance == {"Qualcomm": "structured"}
 
 
 class TestCacheHitSkipsTheLlmCall:

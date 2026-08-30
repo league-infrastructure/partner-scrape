@@ -98,28 +98,40 @@ ticket implements.
       original candidate list is dropped and logged, never published —
       tested directly with a fixture client that returns an out-of-list
       name.
-- [ ] ~~"Qualcomm" (structured) and a scraped "Qualcomm Inc." for the
-      same team collapse to one entry via `normalize_org_name`, keeping
-      the structured display name and `"structured"` provenance.~~
-      **Does not currently happen — discovered during implementation,
-      left unchecked rather than misreported.** `normalize_org_name`
-      (reused verbatim, per this ticket's own "do not write a second
+- [x] "Qualcomm" (structured) and a scraped "Qualcomm Inc." for the
+      same team collapse to one entry via the shared canonicalization
+      key, keeping the structured display name and `"structured"`
+      provenance. **Resolved on reopening (2026-08-30).** The first
+      pass correctly left this unchecked: `normalize_org_name` (reused
+      verbatim, per this ticket's own "do not write a second
       normalizer" instruction) lowercases/strips punctuation/drops a
       leading "the "/collapses whitespace, but does **not** strip
-      corporate suffixes: `normalize_org_name("Qualcomm Inc.") ==
-      "qualcomm inc"`, not `"qualcomm"`, so this exact pair does not
-      collapse. The dedup *mechanism* is implemented and tested
-      correctly for what the reused normalizer actually does (case/
-      punctuation/leading-article variants merge correctly — see
-      `TestStructuredScrapedDedup`); the corporate-suffix case is
-      reproduced and asserted as known current behavior in
-      `TestKnownNormalizeOrgNameLimitation`
-      (`tests/teams/test_sponsor_extract.py`), not silently worked
-      around. See `teams/DESIGN.md`'s Open Questions for the
-      recommendation (extend `normalize_org_name`, a module shared with
-      the curated partner-directory join and outside `teams/`'s own
-      boundary — a decision beyond this ticket's scope to make
-      unilaterally — or accept the gap).
+      corporate suffixes, so `normalize_org_name("Qualcomm Inc.") ==
+      "qualcomm inc"`, not `"qualcomm"`, and this exact pair did not
+      collapse. Auditing the real, regenerated `teams.json` afterward
+      showed the consequence was worse than this one example
+      suggested — 130 "distinct" sponsor strings for ~110 real
+      companies, with Qualcomm itself split three ways across
+      different teams' own structured records — which is what reopened
+      the ticket. **Fix, without modifying `normalize_org_name`** (the
+      scope boundary holds: it remains the curated partner-directory
+      join's own untouched shared key): a new module,
+      `partner_scrape/teams/sponsor_canonical.py`, adds
+      `canonical_key()` (normalize_org_name + a corporate-suffix strip)
+      as the shared match key `sponsor_extract.py::_merge_sponsors`/
+      `_is_denylisted` now use instead of calling `normalize_org_name`
+      directly, plus a new corpus-wide `canonicalize_sponsors()` pass
+      (`run_teams()`, after `extract_sponsors()`, before
+      `export_teams()`) that also closes the *cross-team* spelling gap
+      no per-team merge could ever see. Directly tested in
+      `tests/teams/test_sponsor_extract.py`'s
+      `TestPreviouslyKnownLimitationNowResolved` (replacing the old
+      `TestKnownNormalizeOrgNameLimitation`, which asserted the former,
+      now-fixed behavior) and comprehensively in the new
+      `tests/teams/test_sponsor_canonical.py`. Live-verified: 130 raw
+      distinct sponsor strings now canonicalize to 110 real companies;
+      see "Live verification record" below for the full re-run and
+      critical top-20 review.
 - [x] A cache hit makes zero LLM calls (verified via
       `FixtureSponsorLLMClient.calls`).
 - [x] An LLM call failure (simulated: exception-raising fixture client,
@@ -248,3 +260,79 @@ sample review" Open Questions entry. Both (1) and (2) of this section's
 required pre-close gate are satisfied: the live run was measured and
 recorded above, and the human sample review found one real defect
 (fixed) and no other obviously-wrong entry.
+
+### Reopening: sponsor-name canonicalization (2026-08-30)
+
+Reopened over the one unchecked acceptance criterion above: the
+consequence of `normalize_org_name` not stripping corporate suffixes
+was worse than the "Qualcomm"/"Qualcomm Inc." example suggested, once
+measured against the real regenerated `teams.json` (57 teams with
+sponsors, 130 "distinct" sponsor strings for what is really ~110
+companies — Qualcomm, the single most important data point, split
+three ways).
+
+**Root cause of the `"&R"` corruption** (`"Solar Turbines, Inc&R"`,
+`"Francis Parker School&R"`, `"Caterpillar&R"`): investigated directly
+against `tests/fixtures/teams/ftcscout_search.json` — every one of
+these strings appears **byte-for-byte identical in FTCScout's own raw
+API response**, and `sources/ftcscout.py::_extract_one` does nothing to
+a sponsor string beyond `list(sponsors_raw)`. There is no
+`html.unescape` or any other decode step anywhere in this project's own
+code between the API response and `Team.sponsors` — the corruption is
+baked into the data FTCScout's API hands us, not a bug on this side.
+(Best reconstruction of *their* bug: `"&R"` sits exactly where a `"®"`
+mark would naturally appear, consistent with their own ingestion
+mis-decoding and truncating a `&reg;`/`&REG;` entity — not reproducible
+or fixable from here.) A fourth real corruption instance,
+`"General Atomics Aeronautical Inc.&Classical Academy High School"`
+(also verbatim in the same raw fixture), joins two unrelated sponsor
+names with a bare, unspaced `"&"`.
+
+**Fix**: `partner_scrape/teams/sponsor_canonical.py` (new module,
+inside `teams/`, layered on top of — never modifying —
+`normalize.partners.normalize_org_name`, per this ticket's own scope
+boundary). `canonical_key()` (`normalize_org_name` + corporate-suffix
+stripping) is now the shared match key `sponsor_extract.py`'s
+per-team merge uses instead of calling `normalize_org_name` directly.
+`canonicalize_sponsors()` is a new corpus-wide pass — local corruption/
+formatting cleanup, hostname/filename reconstruction against a
+corpus-wide reference of already-clean names (recovering e.g.
+`"nordson.com"` → `"Nordson"`, `"1280px-Thermo_Fisher_Scientific_logo"`
+→ `"Thermo Fisher Scientific"`, dropping anything it cannot
+deterministically recover, e.g. `"te.com"`, `"haascnc.com"`), and
+token-prefix clustering (folding `"Francis Parker"` into `"Francis
+Parker School"`) — called once by `run_teams()`, after
+`extract_sponsors()`/`--no-sponsors` and before `export_teams()`,
+unconditionally. See that module's own docstring for the full defect
+analysis and design rationale, including what is deliberately **not**
+attempted: fuzzy business-relationship clustering of legally-distinct
+entities (`"CAT"` vs. `"Caterpillar"`; `"General Atomics Aeronautical"`
+vs. `"General Atomics Sciences Education Foundation"` — no
+deterministic string transformation connects either pair).
+
+**Live re-verification** (`partner-scrape teams --site-dir site`
+against the real 278-team registry, 2026-08-30): website verification
+and sponsor-scraping numbers are unchanged from the first pass (52/80
+confirmed, 32 teams with sponsor-shaped content, 11 gained a scraped
+sponsor, 0 failures) — this fix only touches display-name
+canonicalization, not extraction. **The 130 raw distinct sponsor
+strings now canonicalize to 110 distinct real companies.** Top 20 by
+team count, read critically (cross-checked every entry's crediting
+team(s) against their own `organization` field): Qualcomm (22 — one
+entry instead of three), Nordson (6), DoD STEM (5), Solar Turbines (4),
+BAE Systems (4), Francis Parker School (4 — crediting teams'
+`organization` is "D Robotics Education", a genuinely different org,
+not a self-affiliation false positive), Viasat (4), Teradata (3),
+Thermo Fisher Scientific (3), Millipore Sigma (3), Gene Haas Foundation
+(3), RISE (3), Apple (3), DoDea (3), Leidos (2), Robot Planet Ecuador
+(2), SAIC (2), PTC (2), AFCEA (2), Carlsbad Educational Foundation (2).
+Nothing in the top 20, or in the full 110, is an image filename, a bare
+hostname, or a CMS vendor — confirmed programmatically (no remaining
+entry matches a filename/hostname/logo-artifact shape) as well as by
+inspection. `site/src/data/teams.json` was regenerated from this run
+and is committed with this fix.
+
+Scoped tests: `uv run pytest tests/teams/ tests/test_cli_teams.py -q`
+— 390 passed (up from 346 at the first pass' close: 42 new tests in
+`tests/teams/test_sponsor_canonical.py`, 2 replaced in
+`test_sponsor_extract.py`, 1 new pipeline-wiring test).

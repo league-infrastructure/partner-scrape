@@ -78,7 +78,7 @@ to any `Team` field or `run_teams()`'s own return value -- see
 `teams.scrape`'s own module docstring) for `teams.sponsor_extract.
 extract_sponsors()` to consume.
 
-Sprint 013 ticket 005 adds the final stage, immediately after
+Sprint 013 ticket 005 adds the next stage, immediately after
 `verify_team_websites()` and before `export_teams()`:
 `teams.sponsor_extract.extract_sponsors()`, which consumes
 `fetch_results` (never assigned to a `Team` field, as above) to gather
@@ -93,6 +93,20 @@ constructed lazily, only when this stage actually runs, so a
 `verify_team_websites()`, `extract_sponsors()` isolates its own
 per-team failures internally (fail-open, SUC-004's Error Flows), so no
 additional try/except wraps this call either.
+
+Ticket 005's reopening adds one more stage, immediately after the
+`extract_sponsors()`/`--no-sponsors` branch above and before
+`export_teams()`: `teams.sponsor_canonical.canonicalize_sponsors()`,
+which mutates the full `Team[]` in place so the same real company is
+published under one consistent display name everywhere it is
+mentioned, not just within one team's own `sponsors` list -- see that
+module's own docstring for why a per-team merge (`extract_sponsors()`'s
+own step 6) can never catch a company two *different* teams' own
+structured records happen to spell differently. Runs unconditionally,
+even under `--no-sponsors`, since a purely-structured sponsor list
+still needs this cross-team pass. Like `merge_teams()`/`geocode_teams()`
+above, it is not wrapped in its own try/except -- it never raises for
+any input it can receive here.
 
 Sprint 012 adds a third entry, `"static_roster"` (the committed FLL
 roster -- see `sources/static_roster.py`'s own module docstring), plus
@@ -131,6 +145,7 @@ from partner_scrape.teams.sources.ftcscout import FTCScoutSource
 from partner_scrape.teams.sources.static_roster import StaticRosterSource
 from partner_scrape.teams.sources.tba import TBASource
 from partner_scrape.teams.sponsor_cache import SponsorCache
+from partner_scrape.teams.sponsor_canonical import canonicalize_sponsors
 from partner_scrape.teams.sponsor_extract import extract_sponsors
 from partner_scrape.teams.sponsor_llm import AnthropicSponsorLLMClient, SponsorLLMClient
 from partner_scrape.teams.website_overrides import apply_website_overrides
@@ -229,7 +244,8 @@ def run_teams(
 ) -> dict[str, Any]:
     """Run the Teams pipeline end-to-end: Team Registry -> `TeamSource`(s)
     -> `merge_teams()` -> `geocode_teams()` -> `apply_website_overrides()`
-    -> `verify_team_websites()` -> `extract_sponsors()` -> `export_teams()`.
+    -> `verify_team_websites()` -> `extract_sponsors()` ->
+    `canonicalize_sponsors()` -> `export_teams()`.
 
     Args:
         registry_dir: Team Registry directory to load sources from.
@@ -415,5 +431,19 @@ def run_teams(
         active_llm_client = llm_client if llm_client is not None else AnthropicSponsorLLMClient()
         active_sponsor_cache = sponsor_cache if sponsor_cache is not None else SponsorCache()
         extract_sponsors(teams, fetch_results, active_llm_client, active_sponsor_cache)
+
+    # Sprint 013 ticket 005 (reopened): corpus-wide sponsor-name
+    # canonicalization, after extract_sponsors() (or --no-sponsors) and
+    # before export_teams(). Unlike extract_sponsors(), this runs
+    # unconditionally, even under --no-sponsors -- a purely-structured
+    # sponsor list still needs cross-team canonicalization, since the
+    # same real company is routinely reported under different raw
+    # spellings by different teams' own structured records (e.g.
+    # "QualComm" vs. "Qualcomm" vs. "Qualcomm Inc"), which no per-team
+    # dedup, however good, can ever see. See sponsor_canonical.py's own
+    # module docstring for the full rationale. Never raises for any
+    # input it can receive here (matches merge_teams()/geocode_teams()'s
+    # own "not wrapped in its own try/except" convention above).
+    canonicalize_sponsors(teams)
 
     return export_teams(teams, site_dir=site_dir, dry_run=dry_run)

@@ -34,13 +34,23 @@ denylist (common CMS/hosting vendor names, the team's own
 defense-in-depth, catching anything a permissive classification might
 still let through even after the verbatim check.
 
-Sponsor-name deduplication reuses
-``normalize.partners.normalize_org_name`` (never a second normalizer,
-per sprint.md's Design Rationale) as the match key: a scraped name whose
-normalized key already appears among a team's existing (structured)
-sponsors is absorbed into that entry rather than duplicated -- the
-structured display name and ``"structured"`` provenance always win over
-a same-company scraped variant.
+Sponsor-name deduplication uses ``teams.sponsor_canonical.canonical_key``
+as the match key -- ``normalize.partners.normalize_org_name`` (never a
+second normalizer, per sprint.md's Design Rationale) plus a corporate-
+suffix strip ``sponsor_canonical.py`` layers on top of it (added when
+this ticket was reopened: the corporate-suffix gap below meant a
+structured "Qualcomm" and a scraped "Qualcomm Inc." for the same team
+did not originally collapse -- see that module's own docstring for the
+full story). A scraped name whose canonical key already appears among a
+team's existing (structured) sponsors is absorbed into that entry
+rather than duplicated -- the structured display name and
+``"structured"`` provenance always win over a same-company scraped
+variant. Cross-team canonicalization (the same company spelled
+differently by two different teams' own structured records) is
+``teams.pipeline.run_teams()``'s separate
+``sponsor_canonical.canonicalize_sponsors()`` pass, run once over the
+whole team list after this module's own per-team extraction -- see that
+module's docstring.
 
 Every per-team failure -- a network error, a malformed LLM response
 (``SponsorClassificationError``), a missing ``ANTHROPIC_API_KEY`` -- is
@@ -64,10 +74,10 @@ from __future__ import annotations
 import logging
 from urllib.parse import urlparse
 
-from partner_scrape.normalize.partners import normalize_org_name
 from partner_scrape.teams.model import Team
 from partner_scrape.teams.sponsor_cache import SponsorCache
 from partner_scrape.teams.sponsor_candidates import gather_sponsor_candidates
+from partner_scrape.teams.sponsor_canonical import canonical_key
 from partner_scrape.teams.sponsor_llm import SponsorLLMClient
 
 logger = logging.getLogger(__name__)
@@ -147,7 +157,7 @@ def _is_denylisted(name: str, organization: str, own_host: str) -> bool:
     candidate) should still be dropped as defense-in-depth: a common
     CMS/hosting vendor name, the page's own hostname (a team that lists
     its own domain as if it were a sponsor), the team's own
-    ``organization`` (compared via :func:`normalize_org_name`, so "Poway
+    ``organization`` (compared via :func:`canonical_key`, so "Poway
     High School" and "Poway High" match), a candidate longer than
     :data:`_MAX_SPONSOR_NAME_LENGTH`, or one containing an "@"/"#"
     social-caption marker (:func:`_looks_like_social_caption`) -- a
@@ -166,7 +176,7 @@ def _is_denylisted(name: str, organization: str, own_host: str) -> bool:
         return True
     if own_host and cleaned in (own_host, f"www.{own_host}"):
         return True
-    if organization and normalize_org_name(name) == normalize_org_name(organization):
+    if organization and canonical_key(name) == canonical_key(organization):
         return True
     return False
 
@@ -225,18 +235,18 @@ def _classify_and_guard(
 
 def _merge_sponsors(team: Team, confirmed: list[str]) -> bool:
     """Step 6 of SUC-004's Main Flow: dedup ``confirmed`` against
-    ``team.sponsors``' existing entries via :func:`normalize_org_name`.
-    A normalized key already present (structured or previously scraped)
-    keeps its existing display name and provenance; a genuinely new key
-    is appended to ``sponsors`` with ``"scraped"`` provenance.
+    ``team.sponsors``' existing entries via :func:`canonical_key`.
+    A key already present (structured or previously scraped) keeps its
+    existing display name and provenance; a genuinely new key is
+    appended to ``sponsors`` with ``"scraped"`` provenance.
 
     Mutates ``team`` in place. Returns whether ``team`` gained at least
     one new sponsor.
     """
-    existing_keys = {normalize_org_name(name) for name in team.sponsors}
+    existing_keys = {canonical_key(name) for name in team.sponsors}
     gained = False
     for name in confirmed:
-        key = normalize_org_name(name)
+        key = canonical_key(name)
         if not key or key in existing_keys:
             continue
         team.sponsors.append(name)
