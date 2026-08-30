@@ -1,5 +1,8 @@
 ---
-status: pending
+status: in-progress
+sprint: '014'
+tickets:
+- 014-004
 ---
 
 # Register the verified structured feeds (zero new adapters)
