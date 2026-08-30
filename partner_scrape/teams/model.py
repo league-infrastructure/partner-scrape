@@ -130,6 +130,18 @@ class Team:
     active: bool = True
     last_season: int | None = None
     sponsors: list[str] = field(default_factory=list)
+    sponsor_provenance: dict[str, str] = field(default_factory=dict)  # sprint 013
+    # ticket 005: display sponsor name -> "structured" | "scraped", one
+    # entry per name already present in `sponsors`. Purely additive
+    # alongside the flat list -- never a restructured `list[SponsorRecord]`
+    # -- so every existing `sponsors`-consuming call site (TeamCard, the
+    # detail page, every pre-005 test/fixture) keeps working unchanged.
+    # Set by `sources/ftcscout.py` (`"structured"`, for every sponsor its
+    # structured API already reports) and by
+    # `teams.sponsor_extract.extract_sponsors()` (`"scraped"`, for a name
+    # lifted from a fetched team page and classified by the sponsor LLM).
+    # See sprint.md's Design Rationale for why a parallel dict was chosen
+    # over restructuring `sponsors` itself.
 
     # Cross-league identity -- set by teams/merge.py (ticket 011-003),
     # untouched by a single-source extraction.

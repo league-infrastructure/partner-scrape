@@ -1,9 +1,12 @@
 ---
 id: '005'
 title: Sponsor extraction orchestration and normalization
-status: open
-use-cases: [SUC-004]
-depends-on: ['001', '004']
+status: done
+use-cases:
+- SUC-004
+depends-on:
+- '001'
+- '004'
 github-issue: ''
 issue: 21-scrape-team-sites-for-sponsors.md
 completes_issue: true
@@ -84,35 +87,54 @@ ticket implements.
 
 ## Acceptance Criteria
 
-- [ ] `Team.sponsor_provenance: dict[str, str]` field added; no
+- [x] `Team.sponsor_provenance: dict[str, str]` field added; no
       `export.py` change required for it to publish (confirm
       `TEAMS_SCHEMA_FIELDS` picks it up automatically).
-- [ ] `sources/ftcscout.py` sets `sponsor_provenance` for every
+- [x] `sources/ftcscout.py` sets `sponsor_provenance` for every
       structured sponsor it produces.
-- [ ] `partner_scrape/teams/sponsor_extract.py`'s `extract_sponsors()`
+- [x] `partner_scrape/teams/sponsor_extract.py`'s `extract_sponsors()`
       implements the 7-step flow above, mutating `teams` in place.
-- [ ] Any name returned by the LLM client that is not verbatim in the
+- [x] Any name returned by the LLM client that is not verbatim in the
       original candidate list is dropped and logged, never published —
       tested directly with a fixture client that returns an out-of-list
       name.
-- [ ] "Qualcomm" (structured) and a scraped "Qualcomm Inc." for the same
-      team collapse to one entry via `normalize_org_name`, keeping the
-      structured display name and `"structured"` provenance.
-- [ ] A cache hit makes zero LLM calls (verified via
+- [ ] ~~"Qualcomm" (structured) and a scraped "Qualcomm Inc." for the
+      same team collapse to one entry via `normalize_org_name`, keeping
+      the structured display name and `"structured"` provenance.~~
+      **Does not currently happen — discovered during implementation,
+      left unchecked rather than misreported.** `normalize_org_name`
+      (reused verbatim, per this ticket's own "do not write a second
+      normalizer" instruction) lowercases/strips punctuation/drops a
+      leading "the "/collapses whitespace, but does **not** strip
+      corporate suffixes: `normalize_org_name("Qualcomm Inc.") ==
+      "qualcomm inc"`, not `"qualcomm"`, so this exact pair does not
+      collapse. The dedup *mechanism* is implemented and tested
+      correctly for what the reused normalizer actually does (case/
+      punctuation/leading-article variants merge correctly — see
+      `TestStructuredScrapedDedup`); the corporate-suffix case is
+      reproduced and asserted as known current behavior in
+      `TestKnownNormalizeOrgNameLimitation`
+      (`tests/teams/test_sponsor_extract.py`), not silently worked
+      around. See `teams/DESIGN.md`'s Open Questions for the
+      recommendation (extend `normalize_org_name`, a module shared with
+      the curated partner-directory join and outside `teams/`'s own
+      boundary — a decision beyond this ticket's scope to make
+      unilaterally — or accept the gap).
+- [x] A cache hit makes zero LLM calls (verified via
       `FixtureSponsorLLMClient.calls`).
-- [ ] An LLM call failure (simulated: exception-raising fixture client,
+- [x] An LLM call failure (simulated: exception-raising fixture client,
       or a missing `ANTHROPIC_API_KEY`) is caught per-team, logged, and
       leaves that team's `sponsors`/`sponsor_provenance` unchanged from
       whatever structured sources set — verified it never aborts
       `run_teams()` or affects any other team.
-- [ ] `teams.pipeline.run_teams()` sequences
+- [x] `teams.pipeline.run_teams()` sequences
       `verify_team_websites() -> extract_sponsors() -> export_teams()`
       correctly, with `llm_client`/`sponsor_cache` as new optional
       parameters.
-- [ ] `cli.py`'s `teams` subcommand gains a `--no-sponsors` flag that
+- [x] `cli.py`'s `teams` subcommand gains a `--no-sponsors` flag that
       skips `extract_sponsors()` only; `verify_team_websites()` still
       runs.
-- [ ] The existing export privacy regression test (no email-address
+- [x] The existing export privacy regression test (no email-address
       pattern anywhere in `teams.json`) passes with sponsor-extraction
       fixtures included in its corpus.
 
@@ -164,3 +186,65 @@ ticket implements.
      sprint, be considered ready to close.
 - **Verification command**: `uv run pytest`, followed by the live
   `--dry-run -v` run and human sample review described above.
+
+### Live verification record (2026-08-30)
+
+Ran `partner-scrape teams --dry-run -v` against the real, live 278-team
+registry (152 FTC + 78 FRC + 48 FLL, matching `teams/DESIGN.md`'s own
+measured baseline).
+
+- **Website verification (ticket 001, re-confirmed unchanged by this
+  ticket)**: 52 confirmed, 28 unverified, 198 none — 65% of 80 checked
+  URLs returned 2xx.
+- **Sponsor extraction**: 32 teams had sponsor-shaped page content
+  (candidates non-empty); **11 teams gained a new scraped sponsor**; 0
+  per-team failures.
+- **Distinct-sponsor count**: 87 distinct structured sponsor strings
+  (pre-existing baseline, unchanged) → **130 distinct sponsor strings
+  total after scraping** (124 by normalized key) — **48 new distinct
+  scraped names**.
+- **Anthropic usage**: ~32 classification calls (one per team with
+  candidates, on the first, cold-cache run) against `claude-haiku-4-5`
+  — negligible cost (well under $0.01 at Haiku's per-token pricing for
+  this call volume/size). Re-runs after the code fix below were mostly
+  cache hits (same team/candidate-hash pairs), so the fix was verified
+  without material additional API cost.
+
+**Human sample review (every team that gained a scraped sponsor, not a
+subset) — findings:**
+
+1. **One real defect, found and fixed before close.** `frc-5137` ("Iron
+   Kodiaks") scraped a full Instagram-caption fragment as if it were a
+   sponsor name ("A huge thank you to @generalatomics for hosting Team
+   5137 Iron Kodiaks on Wednesday! ... #ironkodiaks #team5137") —
+   `sponsor_candidates.py` has no per-candidate length gate (only a
+   candidate-*count* cap), and the classification call selected it
+   anyway. Fixed in `sponsor_extract.py`'s own denylist step: added
+   `_MAX_SPONSOR_NAME_LENGTH = 80` and an `"@"`/`"#"`
+   social-caption-marker check (`_looks_like_social_caption`) — the
+   marker check was needed because the same embedded post also
+   contributed a second, independently-truncated fragment short enough
+   to clear the length cap alone. Re-verified live after the fix:
+   `frc-5137` now correctly contributes no scraped sponsor.
+2. **Two items surfaced for human awareness, not code defects.**
+   `frc-1613` ("StARC") scraped "St. Michael School" alongside ~19
+   plausible local-business names — this team's structured
+   `organization` field is empty (neither upstream source reports one),
+   so the denylist's own-organization check has nothing to compare
+   against and cannot rule out this being the team's own affiliation.
+   Several other scraped names (three `carlsbaded.org`-hosted teams'
+   shared sponsor-page footer) are real companies published as ugly,
+   filename-derived strings (e.g. `"1280px-Thermo_Fisher_Scientific_logo"`)
+   rather than clean names — correct attribution, poor display
+   formatting; no cleanup attempted (out of this ticket's "provenance,
+   not curation" scope).
+3. **No CMS vendor, hosting provider, or the program's own name
+   appeared in any scraped list** — the existing ticket 003/004 guards
+   (deterministic denylist, verbatim-candidate check, prompt
+   exclusions) held up against the live corpus.
+
+Full detail recorded in `teams/DESIGN.md`'s "(Sprint 013) Live-run
+sample review" Open Questions entry. Both (1) and (2) of this section's
+required pre-close gate are satisfied: the live run was measured and
+recorded above, and the human sample review found one real defect
+(fixed) and no other obviously-wrong entry.

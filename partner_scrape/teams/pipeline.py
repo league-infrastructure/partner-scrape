@@ -75,8 +75,24 @@ raise for is a `Fetcher`-level bug, which is exactly as fatal here as
 it would be for any other stage. Its returned `dict[team_id, html]` is
 kept as a local variable (`fetch_results`, deliberately never assigned
 to any `Team` field or `run_teams()`'s own return value -- see
-`teams.scrape`'s own module docstring) for sprint 013's still-open
-ticket 005 (`teams.sponsor_extract.extract_sponsors()`) to consume.
+`teams.scrape`'s own module docstring) for `teams.sponsor_extract.
+extract_sponsors()` to consume.
+
+Sprint 013 ticket 005 adds the final stage, immediately after
+`verify_team_websites()` and before `export_teams()`:
+`teams.sponsor_extract.extract_sponsors()`, which consumes
+`fetch_results` (never assigned to a `Team` field, as above) to gather
+candidates, classify them via the injectable `llm_client`, validate/
+denylist-guard the result, and merge surviving names into
+`Team.sponsors`/`Team.sponsor_provenance`. `llm_client`/`sponsor_cache`
+are new `run_teams()` parameters, defaulting to a real
+`AnthropicSponsorLLMClient()`/`SponsorCache()` when omitted -- the same
+default-to-production convention `fetcher` already follows -- but
+constructed lazily, only when this stage actually runs, so a
+`--no-sponsors` run never touches the `anthropic` SDK at all. Like
+`verify_team_websites()`, `extract_sponsors()` isolates its own
+per-team failures internally (fail-open, SUC-004's Error Flows), so no
+additional try/except wraps this call either.
 
 Sprint 012 adds a third entry, `"static_roster"` (the committed FLL
 roster -- see `sources/static_roster.py`'s own module docstring), plus
@@ -114,6 +130,9 @@ from partner_scrape.teams.sources.base import TeamSource, run as run_team_source
 from partner_scrape.teams.sources.ftcscout import FTCScoutSource
 from partner_scrape.teams.sources.static_roster import StaticRosterSource
 from partner_scrape.teams.sources.tba import TBASource
+from partner_scrape.teams.sponsor_cache import SponsorCache
+from partner_scrape.teams.sponsor_extract import extract_sponsors
+from partner_scrape.teams.sponsor_llm import AnthropicSponsorLLMClient, SponsorLLMClient
 from partner_scrape.teams.website_overrides import apply_website_overrides
 
 logger = logging.getLogger(__name__)
@@ -203,11 +222,14 @@ def run_teams(
     dry_run: bool = False,
     geo_data_dir: str | Path | None = None,
     website_data_dir: str | Path | None = None,
+    llm_client: SponsorLLMClient | None = None,
+    sponsor_cache: SponsorCache | None = None,
+    no_sponsors: bool = False,
     today: date | None = None,
 ) -> dict[str, Any]:
     """Run the Teams pipeline end-to-end: Team Registry -> `TeamSource`(s)
     -> `merge_teams()` -> `geocode_teams()` -> `apply_website_overrides()`
-    -> `verify_team_websites()` -> `export_teams()`.
+    -> `verify_team_websites()` -> `extract_sponsors()` -> `export_teams()`.
 
     Args:
         registry_dir: Team Registry directory to load sources from.
@@ -249,6 +271,30 @@ def run_teams(
             `teams/data/`) when omitted, mirroring `geo_data_dir`'s
             convention exactly. Tests that need to control the overlay
             precisely should pass an explicit fixture directory here.
+        llm_client: the injectable `SponsorLLMClient`
+            `extract_sponsors()` (sprint 013 ticket 005) classifies
+            sponsor candidates through. Defaults to a real
+            `AnthropicSponsorLLMClient()` when omitted -- the same
+            default-to-production convention `fetcher` already follows
+            -- constructed lazily, only when sponsor extraction actually
+            has at least one confirmed page to look at (`no_sponsors`
+            is `False` and `verify_team_websites()` produced a non-empty
+            `fetch_results`), so a `--no-sponsors` run and every test
+            that only cares about acquisition/merge/geocoding never
+            touch the `anthropic` SDK at all. Tests that do exercise
+            sponsor extraction inject a `FixtureSponsorLLMClient` here.
+        sponsor_cache: the `SponsorCache` `extract_sponsors()` looks up
+            and stores classification results in. Defaults to a real
+            `SponsorCache()` (the real configured cache directory) when
+            omitted, constructed lazily for the same reason as
+            `llm_client` above. Tests should always pass an explicit
+            `tmp_path`-based `SponsorCache` here.
+        no_sponsors: when `True`, skip `extract_sponsors()` entirely --
+            the CLI's `--no-sponsors` flag. `verify_team_websites()`
+            always runs regardless (SUC-001's cheap, certain half is
+            unconditional); only sponsor classification (the
+            uncertain, `ANTHROPIC_API_KEY`-dependent, Anthropic-API-cost
+            half) is skippable.
         today: the reference date `_check_sunset_seasons()` compares
             every active source's `sunset_season` against. Defaults to
             real `date.today()` when omitted, matching
@@ -345,10 +391,29 @@ def run_teams(
     # verify_team_websites(), so no additional try/except is needed
     # here. The returned dict is a plain local variable, never assigned
     # to any Team field or this function's return value (see this
-    # module's own docstring) -- sprint 013's still-open ticket 005
-    # (teams.sponsor_extract.extract_sponsors()) is its future
-    # consumer; ticket 001 only produces it in the right shape.
+    # module's own docstring) -- teams.sponsor_extract.extract_sponsors()
+    # is its consumer, immediately below.
     fetch_results = verify_team_websites(teams, active_fetcher)
-    _ = fetch_results  # not yet consumed -- ticket 005 wires this in
+
+    # Sprint 013 ticket 005: the final new stage. --no-sponsors skips it
+    # entirely. llm_client/sponsor_cache are constructed lazily, only
+    # here, and only when there is at least one confirmed page to look
+    # at -- an empty fetch_results means extract_sponsors() would do
+    # nothing for any team regardless (its own per-team loop skips a
+    # team absent from fetch_results before any cache/LLM touch), so
+    # skipping construction here too means a run with no confirmed
+    # website (or --no-sponsors) never touches the anthropic SDK or
+    # requires a configured cache directory. Like verify_team_websites()
+    # immediately above, extract_sponsors() isolates its own per-team
+    # failures internally (fail-open, SUC-004's Error Flows), so no
+    # additional try/except wraps this call either.
+    if no_sponsors:
+        logger.info("Sponsor extraction skipped (--no-sponsors)")
+    elif not fetch_results:
+        logger.info("Sponsor extraction skipped (no confirmed team pages fetched)")
+    else:
+        active_llm_client = llm_client if llm_client is not None else AnthropicSponsorLLMClient()
+        active_sponsor_cache = sponsor_cache if sponsor_cache is not None else SponsorCache()
+        extract_sponsors(teams, fetch_results, active_llm_client, active_sponsor_cache)
 
     return export_teams(teams, site_dir=site_dir, dry_run=dry_run)

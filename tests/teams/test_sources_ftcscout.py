@@ -161,6 +161,11 @@ class TestExactSchoolNamedTeam:
         assert spyder.city == "Poway"
         assert spyder.rookie_year == 2007
         assert spyder.sponsors == ["BAE Systems", "PTC", "Qualcomm"]
+        assert spyder.sponsor_provenance == {
+            "BAE Systems": "structured",
+            "PTC": "structured",
+            "Qualcomm": "structured",
+        }
         assert spyder.in_region is True
 
 
@@ -278,6 +283,24 @@ class TestSponsors:
 
         rancho = next(t for t in teams if t.number == 7696)  # "Singularity"
         assert rancho.sponsors == []
+
+    def test_every_sponsor_carries_structured_provenance(self):
+        # Sprint 013 ticket 005: every sponsor this structured API
+        # reports is "structured" from the moment it is created -- not
+        # backfilled by a later pipeline stage.
+        teams = _extract_real_fixture()
+
+        with_sponsors = [t for t in teams if t.sponsors]
+        assert with_sponsors  # sanity: the fixture actually exercises this
+        for team in with_sponsors:
+            assert set(team.sponsor_provenance) == set(team.sponsors)
+            assert all(provenance == "structured" for provenance in team.sponsor_provenance.values())
+
+    def test_teams_with_no_sponsors_get_an_empty_provenance_dict(self):
+        teams = _extract_real_fixture()
+
+        rancho = next(t for t in teams if t.number == 7696)  # "Singularity"
+        assert rancho.sponsor_provenance == {}
 
 
 class TestMalformedRecordIsolation:

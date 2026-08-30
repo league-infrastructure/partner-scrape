@@ -1,6 +1,6 @@
 # teams
 
-**Owner:** Eric Busboom · **Last reviewed:** 2026-08-30 (sprint 013 ticket 004 — sponsor extraction LLM client and cache) · **Status:** five sprint-011/012 increments complete (FTC + FRC + geocoding + site pages + FLL static roster); sprint 013 ticket 006 adds website/social overlay ingestion, ticket 001 adds live website verification, ticket 003 adds the deterministic (offline, LLM-free) half of sponsor extraction, ticket 004 adds the injectable LLM classification client and its content-hash cache, ahead of that sprint's still-open ticket 005 (orchestration — gather → cache → classify → validate → guard → normalize/dedup → provenance — not yet wired into `run_teams()`)
+**Owner:** Eric Busboom · **Last reviewed:** 2026-08-30 (sprint 013 ticket 005 — sponsor extraction orchestration and normalization) · **Status:** five sprint-011/012 increments complete (FTC + FRC + geocoding + site pages + FLL static roster); sprint 013 ticket 006 adds website/social overlay ingestion, ticket 001 adds live website verification, ticket 003 adds the deterministic (offline, LLM-free) half of sponsor extraction, ticket 004 adds the injectable LLM classification client and its content-hash cache, ticket 005 wires it all together (`sponsor_extract.py`: gather → cache → classify → validate → guard → normalize/dedup → provenance, sequenced into `run_teams()` after `verify_team_websites()`) — **sprint 013 is now feature-complete**. Live-verified (2026-08-30, real 278-team registry): 52/80 team pages confirmed (65% 2xx), 32 teams had sponsor-shaped page content, 11 gained a new scraped sponsor (48 new distinct scraped names, 130 distinct sponsor strings total vs. an 87-string structured-only baseline), 0 per-team failures. Human-sampled before close; see Design's "(Sprint 013) Live-run sample review" note below for the two real defects the sample caught and fixed (an Instagram-caption fragment published as a "sponsor," addressed with a new length/marker-based denylist guard) and the ones left open for a human to weigh (a possible school-name false positive, several real-but-ugly filename-derived display names) — plus the `normalize_org_name` corporate-suffix gap discovered while implementing dedup (see Constraints).
 
 ---
 
@@ -202,11 +202,11 @@ BUILT (sprint 013, ticket 006):
                                               006's apply_website_overrides()
                                               -> ticket 001's
                                               verify_team_websites() ->
-                                              export_teams() (sprint
-                                              013's still-open
-                                              extract_sponsors() ticket
-                                              will thread in between the
-                                              last two once built)
+                                              ticket 005's
+                                              extract_sponsors() ->
+                                              export_teams() (final
+                                              sequencing, sprint 013
+                                              complete)
 
 BUILT (sprint 013, ticket 001):
   teams.scrape.verify_team_websites(teams, fetcher)
@@ -246,11 +246,12 @@ BUILT (sprint 013, ticket 003):
      ↓                                         signals, independent of
      ↓                                         any heading. Denylist +
      ↓                                         own-hostname filter, dedup,
-     ↓                                         capped at 40. NOT YET
-     ↓                                         CALLED by run_teams() --
-     ↓                                         still-open ticket 005's
-     ↓                                         sponsor_extract.py is the
-     ↓                                         first caller once it lands
+     ↓                                         capped at 40. Called by
+     ↓                                         ticket 005's
+     ↓                                         sponsor_extract.py, once
+     ↓                                         per team with a fetched
+     ↓                                         page (sequenced into
+     ↓                                         run_teams()).
 
 BUILT (sprint 013, ticket 004):
   teams.sponsor_llm.SponsorLLMClient          classifies (selects, never
@@ -275,11 +276,76 @@ BUILT (sprint 013, ticket 004):
      ↓                                        filename -- a changed
      ↓                                        candidate list is a plain
      ↓                                        file-not-found miss.
-     ↓                                        NOT YET CALLED by
-     ↓                                        run_teams() -- still-open
-     ↓                                        ticket 005's
-     ↓                                        sponsor_extract.py is the
-     ↓                                        first caller once it lands
+     ↓                                        Called by ticket 005's
+     ↓                                        sponsor_extract.py (a
+     ↓                                        cache hit skips the LLM
+     ↓                                        call entirely).
+
+BUILT (sprint 013, ticket 005 -- sponsor extraction, complete):
+  teams.sponsor_extract.
+    extract_sponsors(teams, fetch_results,     Orchestrates, once per team
+    llm_client, cache)                         with a fetched page: gather
+     ↓                                         candidates (skip if empty,
+     ↓                                         no cache/LLM touch) -> cache
+     ↓                                         lookup -> classify on a miss
+     ↓                                         (raw result cached before
+     ↓                                         validation) -> reject any
+     ↓                                         name not verbatim in the
+     ↓                                         candidate list (the actual
+     ↓                                         anti-hallucination
+     ↓                                         enforcement point, in code)
+     ↓                                         -> denylist guard (CMS/
+     ↓                                         hosting vendor names, own
+     ↓                                         organization, own
+     ↓                                         hostname, oversized/
+     ↓                                         caption-marker candidates
+     ↓                                         -- the last two added
+     ↓                                         after this ticket's own
+     ↓                                         required live-run sample
+     ↓                                         review, see Design) ->
+     ↓                                         dedup/merge into
+     ↓                                         Team.sponsors via
+     ↓                                         normalize.partners.
+     ↓                                         normalize_org_name (a
+     ↓                                         normalized key already
+     ↓                                         present keeps its
+     ↓                                         structured display name/
+     ↓                                         provenance) ->
+     ↓                                         Team.sponsor_provenance
+     ↓                                         updated. Per-team
+     ↓                                         try/except around cache-
+     ↓                                         through-merge (fail-open:
+     ↓                                         one team's failure never
+     ↓                                         touches another or aborts
+     ↓                                         the run). Mutates teams in
+     ↓                                         place.
+  run_teams() sequencing (final)               ... -> apply_website_
+                                                overrides() ->
+                                                verify_team_websites() ->
+                                                extract_sponsors() ->
+                                                export_teams(). New
+                                                llm_client/sponsor_cache
+                                                params, each defaulting to
+                                                a real
+                                                AnthropicSponsorLLMClient()/
+                                                SponsorCache() -- but
+                                                constructed lazily, only
+                                                when fetch_results is
+                                                non-empty and
+                                                no_sponsors is False, so a
+                                                run with nothing confirmed
+                                                (or --no-sponsors) never
+                                                touches the anthropic SDK
+                                                or requires a configured
+                                                cache directory.
+  cli.py --no-sponsors                         Skips extract_sponsors()
+                                                only; verify_team_
+                                                websites() always runs.
+  sources/ftcscout.py                          sponsor_provenance =
+                                                {name: "structured" for
+                                                name in sponsors}, set at
+                                                extraction time, not
+                                                backfilled later.
 ```
 
 **Sprint 013 ticket 006 (2026-08-30) adds discovered-website/social
@@ -383,7 +449,7 @@ function gathers raw candidate *strings* from both signals — never a
 judgment about which is a genuine sponsor, that stays ticket 004/005's
 job. The safety property this exists to establish: an LLM classifying
 sponsors (ticket 004) can only ever *select from* this candidate list,
-never generate a name freely, and ticket 005 will reject in code any
+never generate a name freely, and ticket 005's sponsor_extract.py rejects, in code, any
 returned name absent from it verbatim — fabricating an unseen company
 becomes structurally impossible only because this pass itself never
 invents one, it only lifts strings actually present on the page
@@ -421,7 +487,7 @@ redundant; and a small real page with no sponsor-shaped section at all
 `teams.sponsor_llm.SponsorLLMClient`/`AnthropicSponsorLLMClient`/
 `FixtureSponsorLLMClient` and `teams.sponsor_cache.SponsorCache` — the
 injectable LLM-classification infrastructure ticket 005's orchestration
-will call, no orchestration logic here.** Both modules mirror, but never
+(`sponsor_extract.py`) calls, no orchestration logic here.** Both modules mirror, but never
 import, `enrich/llm_client.py`/`enrich/cache.py` (sprint.md's Design
 Rationale: importing either, even for one small shared helper, would be
 the first crack in `teams/`'s zero-edges-into-`enrich/` invariant —
@@ -433,7 +499,7 @@ SponsorExtractionResult` is a **selection**, never generation, call —
 the same safety property ticket 003's own module docstring establishes
 from the other side: an LLM classifying sponsors can only ever select
 from `gather_sponsor_candidates()`'s already-narrowed candidate list,
-never invent a name freely, and ticket 005 will reject in code any
+never invent a name freely, and ticket 005's sponsor_extract.py rejects, in code, any
 returned name absent from that list verbatim.
 `AnthropicSponsorLLMClient`'s system prompt is rebuilt fresh on every
 call (unlike `enrich/llm_client.py`'s static module-level
@@ -1159,8 +1225,7 @@ fills in) — rejected as no safer than a return value here (nothing
 downstream would still assign it to `Team`) while being a less
 idiomatic Python shape than every other function in this module
 already uses. *Consequences:* none identified — ticket 005's
-`extract_sponsors()` will take this dict as a plain parameter when it
-lands.
+`extract_sponsors()` takes this dict as a plain parameter (`fetch_results`).
 
 **Why a disallowed-by-robots URL and a non-2xx/transport-error URL
 collapse to the same `"unverified"` outcome, rather than a third status
@@ -1227,9 +1292,9 @@ exactly the two inputs it needs (the fetched body, the URL it was
 fetched from -- for the own-hostname check) is the smallest, most
 directly testable unit that satisfies the "candidates only, never a
 verdict" boundary sprint.md's Design Rationale describes. *Consequences:*
-none identified -- `sponsor_extract.py` (ticket 005) will call this
+none identified -- `sponsor_extract.py` (ticket 005) calls this
 function once per confirmed-fetch team, using the `dict[team_id, html]`
-`verify_team_websites()` already returns plus each `Team.website` as
+`verify_team_websites()` returns plus each `Team.website` as
 `page_url`.
 
 **(Sprint 013 ticket 003) Why the denylist is organized as four small,
@@ -1407,9 +1472,31 @@ for a small (~52-site) corpus that changes rarely.
   the result to `export_teams()`. The `dict[team_id, html]`
   `verify_team_websites()` returns is kept as a local variable
   (`fetch_results`) — not part of this function's own return value,
-  and not yet consumed by anything until ticket 005's
-  `extract_sponsors()` lands. Returns `export_teams()`'s
-  `{"meta": ..., "teams": [...]}` payload unchanged.
+  and consumed by ticket 005's `extract_sponsors()` (the next stage,
+  immediately below) before `export_teams()` is called. Returns
+  `export_teams()`'s `{"meta": ..., "teams": [...]}` payload unchanged.
+- **`teams.sponsor_extract.extract_sponsors(teams, fetch_results,
+  llm_client, cache) -> None`** (sprint 013 ticket 005) — orchestrates,
+  once per team with an entry in `fetch_results`: gather candidates
+  (`sponsor_candidates.gather_sponsor_candidates`, skipping straight to
+  the next team on an empty result) -> cache lookup
+  (`sponsor_cache.SponsorCache`) -> classify on a miss
+  (`sponsor_llm.SponsorLLMClient.classify_sponsors`, caching the raw
+  result before validation) -> reject any name not verbatim in the
+  candidate list (the actual anti-hallucination enforcement, in code)
+  -> denylist guard (CMS/hosting vendor names, the team's own
+  `organization`, the page's own hostname, an oversized or "@"/"#"-
+  marked caption-like candidate — the last two added after this
+  ticket's own required live-run sample review, see Design) -> dedup/
+  merge into `Team.sponsors` via `normalize.partners.normalize_org_name`
+  (a normalized key already present from a structured source keeps its
+  display name/provenance) -> `Team.sponsor_provenance` updated.
+  Mutates `teams` in place. Per-team `try/except` around the cache-
+  lookup-through-merge steps: any failure (network error,
+  `SponsorClassificationError`, missing `ANTHROPIC_API_KEY`) is logged
+  and leaves that team's `sponsors`/`sponsor_provenance` exactly as the
+  structured sources already set them — fail-open, never aborting the
+  run for any other team.
 - **`teams.geo.geocode_teams(teams, *, data_dir=None) -> list[Team]`**
   (this ticket) — resolves every `Team` through the seven-rung offline
   ladder in place; returns the same list (parallel in shape to
@@ -1474,9 +1561,8 @@ for a small (~52-site) corpus that changes rarely.
   (with a `logging.WARNING`) for unparseable HTML, and `[]` (silently —
   the normal case for most team pages) when neither signal is found.
   Zero imports beyond `lxml.html` and the standard library — no
-  `fetch`/`enrich`/`adapters`/`anthropic` (Constraints). **Not yet
-  called by `run_teams()`** — ticket 005's `sponsor_extract.py` is the
-  first production caller, once it lands.
+  `fetch`/`enrich`/`adapters`/`anthropic` (Constraints). Called by
+  ticket 005's `sponsor_extract.py`, sequenced into `run_teams()`.
 - **`teams.sponsor_llm.SponsorLLMClient`** (sprint 013 ticket 004) — the
   injectable protocol (`classify_sponsors(candidates: list[str],
   context: dict[str, Any]) -> SponsorExtractionResult`), parallel in
@@ -1541,8 +1627,8 @@ for a small (~52-site) corpus that changes rarely.
   stale-entry-is-a-miss convention. `cache_dir` defaults to
   `config.get_scrape_cache_dir()`; every test in
   `tests/teams/test_sponsor_cache.py` passes an explicit `tmp_path`.
-  Not yet called by `run_teams()` — ticket 005's `sponsor_extract.py` is
-  the first caller, once it lands.
+  Called by ticket 005's `sponsor_extract.py`, sequenced into
+  `run_teams()`.
 - **`teams.geo.SchoolIndex(data_dir=None)`** (this ticket) — loads all
   five `teams/data/` files once and exposes `resolve(team)` (the full
   ladder for one `Team`, mutating it in place), `resolve_school(org,
@@ -1920,3 +2006,62 @@ for a small (~52-site) corpus that changes rarely.
   API call), so a missing key surfaces only when `classify_sponsors()`
   is actually invoked, which ticket 005's fail-open per-team guard
   (SUC-004's Error Flows) is responsible for catching.
+- **(Sprint 013 ticket 005) Live-run sample review, resolving the gap
+  the two entries above flagged.** `partner-scrape teams --dry-run -v`
+  against the real, live 278-team registry (2026-08-30): 52/80 team
+  pages confirmed (65% 2xx, matching ticket 001's own measurement), 32
+  teams had sponsor-shaped page content, 11 gained a new scraped
+  sponsor, 0 per-team failures. A full sample review (every team that
+  gained a scraped sponsor, not a subset) found:
+  - **One real defect, fixed before this ticket closed**: `frc-5137`'s
+    page embedded a social post whose full caption text (and, once the
+    first fix landed, a second independently-truncated fragment of the
+    same caption) was gathered as a candidate and confirmed by the
+    classification call — "A huge thank you to @generalatomics for
+    hosting Team 5137 Iron Kodiaks on Wednesday! ... #ironkodiaks
+    #team5137". `sponsor_candidates.py` has no length gate (only a
+    candidate-*count* cap), and this was well within any plausible
+    length the LLM might treat as a name. Fixed by adding two guards to
+    `sponsor_extract.py`'s own denylist step (Interfaces,
+    `extract_sponsors`): a length cap (`_MAX_SPONSOR_NAME_LENGTH = 80`
+    — the longest genuine name in this project's live data is under 50
+    chars) and an "@"/"#" social-caption-marker check
+    (`_looks_like_social_caption`), the second needed because the
+    truncated fragment alone was short enough to clear the length cap.
+    Re-verified live after the fix: `frc-5137` now correctly
+    contributes no scraped sponsor at all (its page had nothing else
+    sponsor-shaped).
+  - **Two items left open for a human to weigh, not code defects**:
+    (1) `frc-1613`'s scraped list includes "St. Michael School" among
+    ~19 otherwise-plausible local-business names; this team's
+    structured `organization` field is empty (neither FTCScout nor TBA
+    reported one for it), so the denylist's own-organization check
+    (Constraints) has nothing to compare against and cannot catch a
+    school that genuinely is this team's own affiliation if that's
+    what it is — cannot be resolved from this project's own data alone.
+    (2) Several scraped names are real companies but ugly, filename-
+    derived display strings (e.g. `"Nordson-Corporation-Logo-web"`,
+    `"1280px-Thermo_Fisher_Scientific_logo"` — three carlsbaded.org-
+    hosted teams share these, since they share one sponsor-page
+    footer) rather than clean names — correct attribution, poor
+    formatting; no cleanup attempted here, matching this field's
+    "provenance, not curation" scope (Constraints, "raw candidate
+    strings, not a curated name" note above).
+  - **A pre-existing, discovered-not-introduced gap**: `normalize_org_name`
+    (reused verbatim per this ticket's own explicit "do not write a
+    second normalizer" instruction) lowercases/strips punctuation/drops
+    a leading "the "/collapses whitespace, but does not strip corporate
+    suffixes — `normalize_org_name("Qualcomm Inc.") == "qualcomm inc"`,
+    not `"qualcomm"`. Sprint.md's own motivating dedup example
+    ("Qualcomm" merging with a scraped "Qualcomm Inc.") therefore does
+    not currently merge; `tests/teams/test_sponsor_extract.py`'s
+    `TestKnownNormalizeOrgNameLimitation` reproduces and asserts this
+    directly rather than silently working around it. Not observed in
+    the live 278-team corpus (structured/scraped overlap for the same
+    team is still rare — 11 teams this run, none hitting this exact
+    case), so it did not block this ticket, but is flagged for a
+    product decision: extend `normalize_org_name` with common
+    corporate-suffix stripping (a change to a module shared with the
+    curated partner-directory join, outside `teams/`'s own boundary —
+    the same reason this ticket did not make that change unilaterally),
+    or accept the gap.

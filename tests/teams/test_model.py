@@ -42,6 +42,7 @@ class TestTeamDefaults:
         assert team.active is True
         assert team.last_season is None
         assert team.sponsors == []
+        assert team.sponsor_provenance == {}
         assert team.org_key == ""
         assert team.sibling_team_ids == []
         assert team.sources == []
@@ -51,10 +52,12 @@ class TestTeamDefaults:
         b = Team()
 
         a.sponsors.append("Qualcomm")
+        a.sponsor_provenance["Qualcomm"] = "structured"
         a.sibling_team_ids.append("frc-1622")
         a.sources.append("ftcscout")
 
         assert b.sponsors == []
+        assert b.sponsor_provenance == {}
         assert b.sibling_team_ids == []
         assert b.sources == []
 
@@ -80,6 +83,11 @@ class TestTeamDefaults:
             active=True,
             last_season=2026,
             sponsors=["BAE Systems", "PTC", "Qualcomm"],
+            sponsor_provenance={
+                "BAE Systems": "structured",
+                "PTC": "structured",
+                "Qualcomm": "structured",
+            },
             org_key="poway-high-school",
             sibling_team_ids=["frc-1622"],
             sources=["ftcscout"],
@@ -88,6 +96,11 @@ class TestTeamDefaults:
         assert team.team_id == "ftc-1622"
         assert team.number == 1622
         assert team.sponsors == ["BAE Systems", "PTC", "Qualcomm"]
+        assert team.sponsor_provenance == {
+            "BAE Systems": "structured",
+            "PTC": "structured",
+            "Qualcomm": "structured",
+        }
         assert team.sibling_team_ids == ["frc-1622"]
 
 

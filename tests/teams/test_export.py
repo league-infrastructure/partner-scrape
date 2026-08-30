@@ -15,6 +15,14 @@ This confirms ``TestNoEmailInExport``'s privacy regression actually
 exercises the FLL rows this ticket adds, not just the pre-existing FTC
 ones -- exactly the sprint 011 ticket-011-003 lesson applied to this
 ticket's own new data source.
+
+Sprint 013 ticket 005: ``_real_fixture_teams()`` was extended again to
+also run one team's fetched page through the real
+``teams.sponsor_extract.extract_sponsors()`` (a fixture LLM client, no
+network) so the privacy regression -- and every other assertion driven
+by this helper -- exercises output that includes a scraped sponsor name
+and ``sponsor_provenance``, not just the two structured sources' own
+fields.
 """
 
 from __future__ import annotations
@@ -32,6 +40,10 @@ from partner_scrape.teams.model import Team
 from partner_scrape.teams.sources.base import run as run_source
 from partner_scrape.teams.sources.ftcscout import DEFAULT_API_BASE, DEFAULT_REGION, FTCScoutSource, _search_url
 from partner_scrape.teams.sources.static_roster import StaticRosterSource
+from partner_scrape.teams.sponsor_cache import content_hash
+from partner_scrape.teams.sponsor_candidates import gather_sponsor_candidates
+from partner_scrape.teams.sponsor_extract import extract_sponsors
+from partner_scrape.teams.sponsor_llm import FixtureSponsorLLMClient, SponsorExtractionResult
 from partner_scrape.registry.schema import SourceConfig
 
 FIXTURES_DIR = Path(__file__).resolve().parents[1] / "fixtures" / "teams"
@@ -76,13 +88,48 @@ def _static_roster_source_config() -> SourceConfig:
     )
 
 
+@dataclass
+class _InMemorySponsorCache:
+    """A `SponsorCache`-shaped double (`.lookup`/`.store`, keyed the
+    same way) that never touches disk -- used only by
+    `_real_fixture_teams()` below, which is called from many test
+    methods, not all of which have a `tmp_path` to hand a real
+    `SponsorCache` a cache directory."""
+
+    _store: dict[tuple[str, str], SponsorExtractionResult] = field(default_factory=dict)
+
+    def lookup(self, team_id: str, candidates: list[str]) -> SponsorExtractionResult | None:
+        return self._store.get((team_id, content_hash(candidates)))
+
+    def store(self, team_id: str, candidates: list[str], result: SponsorExtractionResult) -> None:
+        self._store[(team_id, content_hash(candidates))] = result
+
+
+#: A synthetic sponsor-shaped page for the one team `_real_fixture_teams()`
+#: runs through `extract_sponsors()` -- see that function's own docstring
+#: for why (sprint 013 ticket 005).
+_SCRAPED_SPONSOR_HTML = (
+    "<html><body><h2>Sponsors</h2>"
+    '<div><a href="https://scraped-sponsor.example.com">Scraped Sponsor Co</a></div>'
+    "</body></html>"
+)
+
+
 def _real_fixture_teams() -> list[Team]:
     """All 152 San Diego FTC teams (from the live-captured fixture,
     through the real FTCScoutSource) plus the real, committed 48-team
     FLL static roster (through the real StaticRosterSource, sprint
     012) -- 200 teams total. Used by the privacy and hard-invariant
     tests so they exercise realistic, full-scale output across every
-    source this subsystem has, not just the two live ones."""
+    source this subsystem has, not just the two live ones.
+
+    Sprint 013 ticket 005: also runs "Team Spyder" (ftc-1622) through
+    `extract_sponsors()` with a synthetic fetched page and a
+    `FixtureSponsorLLMClient` (no network), so the returned corpus
+    carries a real scraped sponsor name and populated
+    `sponsor_provenance` too -- not just the two structured sources'
+    own fields.
+    """
     body = (FIXTURES_DIR / "ftcscout_search.json").read_text()
     fetcher = FixtureFetcher({SEARCH_URL: FetchResponse(url="", status=200, headers={}, body=body)})
     ftc_teams = run_source(_source_config(), FTCScoutSource(), fetcher)
@@ -93,7 +140,18 @@ def _real_fixture_teams() -> list[Team]:
     # Fetcher that raised on any call would work identically.
     fll_teams = run_source(_static_roster_source_config(), StaticRosterSource(), fetcher)
 
-    return [*ftc_teams, *fll_teams]
+    teams = [*ftc_teams, *fll_teams]
+
+    spyder = next(t for t in teams if t.team_id == "ftc-1622")
+    candidates = gather_sponsor_candidates(_SCRAPED_SPONSOR_HTML, spyder.website)
+    llm_client = FixtureSponsorLLMClient(
+        responses={
+            tuple(candidates): SponsorExtractionResult(confirmed_sponsors=["Scraped Sponsor Co"]),
+        }
+    )
+    extract_sponsors([spyder], {spyder.team_id: _SCRAPED_SPONSOR_HTML}, llm_client, _InMemorySponsorCache())
+
+    return teams
 
 
 def _make_site(root: Path, *, opportunities: str = "[]", scrape_meta: str = "{}") -> Path:
@@ -286,3 +344,19 @@ class TestNoEmailInExport:
                 assert not _EMAIL_PATTERN.search(str(node))
 
         _walk(parsed)
+
+
+class TestSponsorExtractionFixtureIsWired:
+    """Sanity check that `_real_fixture_teams()`'s sponsor-extraction
+    step (sprint 013 ticket 005, added to this file's own corpus so
+    `TestNoEmailInExport` exercises sponsor-extraction output too) is
+    actually producing output -- so a silent regression there could not
+    hide behind the privacy regression test still passing vacuously."""
+
+    def test_team_spyder_carries_the_scraped_sponsor_and_provenance(self, tmp_path):
+        site = _make_site(tmp_path)
+        payload = export_teams(_real_fixture_teams(), site_dir=site)
+
+        spyder = next(t for t in payload["teams"] if t["team_id"] == "ftc-1622")
+        assert "Scraped Sponsor Co" in spyder["sponsors"]
+        assert spyder["sponsor_provenance"]["Scraped Sponsor Co"] == "scraped"

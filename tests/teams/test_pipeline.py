@@ -37,6 +37,7 @@ import pytest
 
 from partner_scrape import config
 from partner_scrape.fetch.fetcher import FetchResponse
+from partner_scrape.fetch.robots import robots_txt_url
 from partner_scrape.teams import pipeline as teams_pipeline
 from partner_scrape.teams.model import Team
 from partner_scrape.teams.pipeline import (
@@ -44,8 +45,11 @@ from partner_scrape.teams.pipeline import (
     _parse_sunset_season,
     run_teams,
 )
+from partner_scrape.teams.sources.base import RawTeamResponse, TeamRef
 from partner_scrape.teams.sources.ftcscout import DEFAULT_API_BASE, DEFAULT_REGION, _search_url
 from partner_scrape.teams.sources.tba import _status_url, _teams_page_url
+from partner_scrape.teams.sponsor_cache import SponsorCache
+from partner_scrape.teams.sponsor_llm import FixtureSponsorLLMClient, SponsorExtractionResult
 
 FIXTURES_DIR = Path(__file__).resolve().parents[1] / "fixtures" / "teams"
 SEARCH_URL = _search_url(DEFAULT_API_BASE, DEFAULT_REGION)
@@ -510,6 +514,184 @@ class TestGeocodingAggregateDistribution:
                 assert team["matched_name"] == ""
 
         assert payload["meta"]["out_of_region"] == 6
+
+
+_ALLOW_ALL_ROBOTS = "User-agent: *\nDisallow:\n"
+
+
+class _StubTeamSource:
+    """A `TeamSource` returning exactly the caller-supplied `Team`s,
+    ignoring the injected `Fetcher` entirely -- gives this class full
+    control over which `Team`s (and which `website`) `run_teams()`
+    dispatches to `verify_team_websites()`/`extract_sponsors()`, without
+    depending on the real 152-team FTCScout fixture (whose `website`
+    coverage depends on the committed ticket 006 overlay, not something
+    this class's tests should be coupled to)."""
+
+    def __init__(self, teams: list[Team]) -> None:
+        self._teams = teams
+
+    def discover(self, source, fetcher):
+        return [TeamRef(url="https://example.org/stub-source")]
+
+    def fetch(self, ref, fetcher):
+        return RawTeamResponse(ref=ref, status=200, body="")
+
+    def extract(self, raw, source):
+        return self._teams
+
+
+def _one_team_registry(tmp_path: Path) -> Path:
+    registry_dir = tmp_path / "registry"
+    registry_dir.mkdir()
+    (registry_dir / "ftc-sd.toml").write_text(
+        'org_name = "FTC"\nadapter_type = "ftcscout"\nenabled = true\n[config]\n'
+    )
+    return registry_dir
+
+
+class TestSponsorExtractionWiring:
+    """Sprint 013 ticket 005: `extract_sponsors()` sequenced after
+    `verify_team_websites()` and before `export_teams()`, with
+    injectable `llm_client`/`sponsor_cache` and a `no_sponsors` escape
+    hatch (the CLI's `--no-sponsors` flag)."""
+
+    _SPONSOR_HTML = (
+        "<html><body><h2>Sponsors</h2>"
+        '<div><a href="https://sponsor.example.com">Real Sponsor Co</a></div>'
+        "</body></html>"
+    )
+
+    def test_a_confirmed_team_gets_a_scraped_sponsor_via_the_injected_llm_client(
+        self, monkeypatch, tmp_path
+    ):
+        website = "https://www.teamspyder.org/"
+        team = Team(
+            team_id="ftc-1622",
+            league="FTC",
+            program="FIRST Tech Challenge",
+            number=1622,
+            name="Team Spyder",
+            organization="Poway High School",
+            website=website,
+        )
+        monkeypatch.setattr(teams_pipeline, "_TEAM_SOURCES", {"ftcscout": _StubTeamSource([team])})
+
+        fetcher = FixtureFetcher(
+            {
+                robots_txt_url(website): FetchResponse(url="", status=200, headers={}, body=_ALLOW_ALL_ROBOTS),
+                website: FetchResponse(url="", status=200, headers={}, body=self._SPONSOR_HTML),
+            }
+        )
+        llm_client = FixtureSponsorLLMClient(
+            responses={
+                ("Real Sponsor Co", "sponsor.example.com"): SponsorExtractionResult(
+                    confirmed_sponsors=["Real Sponsor Co"]
+                ),
+            }
+        )
+        sponsor_cache = SponsorCache(cache_dir=tmp_path / "cache")
+
+        payload = run_teams(
+            registry_dir=_one_team_registry(tmp_path),
+            site_dir=tmp_path,
+            fetcher=fetcher,
+            dry_run=True,
+            llm_client=llm_client,
+            sponsor_cache=sponsor_cache,
+        )
+
+        [published] = payload["teams"]
+        assert published["sponsors"] == ["Real Sponsor Co"]
+        assert published["sponsor_provenance"] == {"Real Sponsor Co": "scraped"}
+        assert len(llm_client.calls) == 1
+
+    def test_no_sponsors_skips_extraction_but_website_verification_still_runs(
+        self, monkeypatch, tmp_path
+    ):
+        website = "https://www.teamspyder.org/"
+        team = Team(
+            team_id="ftc-1622",
+            league="FTC",
+            program="FIRST Tech Challenge",
+            number=1622,
+            name="Team Spyder",
+            organization="Poway High School",
+            website=website,
+        )
+        monkeypatch.setattr(teams_pipeline, "_TEAM_SOURCES", {"ftcscout": _StubTeamSource([team])})
+
+        fetcher = FixtureFetcher(
+            {
+                robots_txt_url(website): FetchResponse(url="", status=200, headers={}, body=_ALLOW_ALL_ROBOTS),
+                website: FetchResponse(url="", status=200, headers={}, body=self._SPONSOR_HTML),
+            }
+        )
+
+        def _boom_llm_client():
+            raise AssertionError("AnthropicSponsorLLMClient must not be constructed under no_sponsors")
+
+        monkeypatch.setattr(teams_pipeline, "AnthropicSponsorLLMClient", _boom_llm_client)
+
+        payload = run_teams(
+            registry_dir=_one_team_registry(tmp_path),
+            site_dir=tmp_path,
+            fetcher=fetcher,
+            dry_run=True,
+            no_sponsors=True,
+        )
+
+        [published] = payload["teams"]
+        # verify_team_websites() (the cheap, certain half) still ran.
+        assert published["website_status"] == "confirmed"
+        # extract_sponsors() (the skippable half) never ran.
+        assert published["sponsors"] == []
+        assert published["sponsor_provenance"] == {}
+
+    def test_llm_client_and_sponsor_cache_default_to_real_implementations_when_omitted(
+        self, monkeypatch, tmp_path
+    ):
+        # A confirmed website whose page has no sponsor-shaped content
+        # at all -- fetch_results is non-empty (so run_teams() actually
+        # reaches the default-construction line below), but
+        # gather_sponsor_candidates() returns [] for this team, so
+        # extract_sponsors() never calls classify_sponsors() and no real
+        # network/API call is ever made. This proves run_teams() can
+        # default-construct AnthropicSponsorLLMClient()/SponsorCache()
+        # (matching fetcher's own default-to-production convention)
+        # without raising, even with no ANTHROPIC_API_KEY configured for
+        # this test (SCRAPE_CACHE_DIR is set below -- SponsorCache()'s
+        # own construction requires it, same as PoliteFetcher()'s does).
+        website = "https://www.teamspyder.org/"
+        team = Team(
+            team_id="ftc-1622",
+            league="FTC",
+            program="FIRST Tech Challenge",
+            number=1622,
+            name="Team Spyder",
+            website=website,
+        )
+        monkeypatch.setattr(teams_pipeline, "_TEAM_SOURCES", {"ftcscout": _StubTeamSource([team])})
+        monkeypatch.setenv("SCRAPE_CACHE_DIR", str(tmp_path / "cache"))
+
+        no_sponsor_content_html = "<html><body><p>Nothing sponsor-shaped here.</p></body></html>"
+        fetcher = FixtureFetcher(
+            {
+                robots_txt_url(website): FetchResponse(url="", status=200, headers={}, body=_ALLOW_ALL_ROBOTS),
+                website: FetchResponse(url="", status=200, headers={}, body=no_sponsor_content_html),
+            }
+        )
+
+        payload = run_teams(
+            registry_dir=_one_team_registry(tmp_path),
+            site_dir=tmp_path,
+            fetcher=fetcher,
+            dry_run=True,
+        )
+
+        [published] = payload["teams"]
+        assert published["website_status"] == "confirmed"
+        assert published["sponsors"] == []
 
 
 class TestParseSunsetSeason:
