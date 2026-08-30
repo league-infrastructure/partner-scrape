@@ -1,0 +1,203 @@
+# Websites and social links discovered by agent-assisted web search
+# (2026-08-29) for teams whose upstream source (FTCScout/TBA) reported
+# none. Derived verbatim from the sprint 013 research artifact:
+# clasi/sprints/013-team-website-surfacing-and-sponsor-extraction/
+# research/discovered-websites.json -- see that file's `meta` block
+# for method/coverage/caveats. Curated input, read offline at
+# runtime -- never a live search from the pipeline.
+#
+# `website` is present only for the 31 discovered-website entries
+# (absent for the 21 social-only teams). `social` is always present
+# (may be empty). This file carries NO confidence/verification
+# field and none is consulted at runtime: teams.scrape.
+# verify_team_websites() (ticket 013-001) is the sole, uniform
+# source of truth for confirmed/unverified, for every team
+# regardless of how confidently its website was discovered -- see
+# website_overrides.py's own module docstring.
+
+["ftc-1622"]
+website = "https://teamspyder.org"
+social = ["https://www.instagram.com/spyder1622", "https://www.youtube.com/@spyder1622", "https://twitter.com/team1622", "https://twitter.com/frc1622"]
+
+["ftc-3650"]
+website = "https://www.ftc3650.org"
+social = ["https://www.instagram.com/limitedliability3650/"]
+
+["frc-8891"]
+website = "https://www.wildraccoons.org"
+social = ["https://www.instagram.com/wild.raccoons8891", "https://www.youtube.com/@wildraccoons8891", "https://github.com/wildraccoons"]
+
+["frc-9573"]
+website = "https://marauder.tech"
+social = ["https://www.instagram.com/frcmaraudertech9573", "https://www.tiktok.com/@maraudertech.9573", "https://github.com/maraudertech-frc-9573"]
+
+["ftc-5135"]
+website = "https://mchsrobotics.weebly.com/"
+social = []
+
+["ftc-6226"]
+website = "http://chsbambusa.weebly.com/"
+social = []
+
+["ftc-7159"]
+website = "https://7159roboravens.wixsite.com/new-official-website"
+social = []
+
+["ftc-7696"]
+website = "https://rsfsingularity7696.wixsite.com/7696-rsf-singularity"
+social = ["https://www.youtube.com/channel/UCaQX_l9KjSfXJNhWbwtNaJQ", "https://www.facebook.com/profile.php?id=100015332912359", "https://www.instagram.com/the_singulartiy_7696/"]
+
+["ftc-9049"]
+website = "https://carlsbaded.org/robopuffs-2/"
+social = []
+
+["ftc-9837"]
+website = "http://ccagirlswhocode.weebly.com/robotics.html"
+social = ["https://www.facebook.com/ccagwcravenettes/"]
+
+["ftc-10092"]
+website = "https://greengriffins.radrobotics.org/"
+social = ["https://www.instagram.com/green.griffins_10092/", "https://www.facebook.com/greengriffins10092/", "https://x.com/griffins10092"]
+
+["ftc-10809"]
+website = "https://carlsbaded.org/crow-force/"
+social = []
+
+["ftc-11128"]
+website = "https://www.teaminspiration.global/"
+social = ["https://www.instagram.com/ftc11128inspiration/", "https://www.facebook.com/teaminspiration11128/", "https://github.com/InspirationRobotics"]
+
+["ftc-11212"]
+website = "https://www.thecluelessftc.org/"
+social = ["https://www.instagram.com/clueless11212_ftc/", "https://www.youtube.com/@theclueless11212"]
+
+["ftc-11285"]
+website = "https://mtcarmelrobotics.wordpress.com/"
+social = []
+
+["ftc-12405"]
+website = "https://lostctrl.webflow.io/"
+social = ["https://www.instagram.com/lost_ctrl/", "https://www.youtube.com/channel/UCMpYGWNHUtu12D7GIIUAqTg", "https://twitter.com/TeamLostCtrl2"]
+
+["ftc-12499"]
+website = "https://www.gearup12499.com/"
+social = ["https://www.instagram.com/gearup_12499/", "https://github.com/GearUp12499-org"]
+
+["ftc-14496"]
+website = "https://ftc14496robot.wixsite.com/roboctopi"
+social = ["https://www.instagram.com/ftc14496roboctopi/", "https://www.facebook.com/ftc14496/", "https://www.youtube.com/channel/UCwQS9F93e1ZQHpyOfF47Gfw"]
+
+["ftc-14535"]
+website = "https://sites.google.com/view/ftc-alpacas-14535"
+social = ["https://www.facebook.com/FTC14535/"]
+
+["ftc-14968"]
+website = "https://matadormechanics.my.canva.site/"
+social = []
+
+["ftc-15146"]
+website = "https://garagebot15146.wordpress.com/"
+social = []
+
+["ftc-18236"]
+website = "https://robotics24.wixsite.com/robowaves18236"
+social = ["https://www.instagram.com/robowaves18236/", "https://www.youtube.com/channel/UCOymmG9q32waVWs6YX76nAw", "https://www.twitch.tv/robowaves"]
+
+["ftc-18755"]
+website = "https://www.ljrobotics.org/"
+social = []
+
+["ftc-21303"]
+website = "https://sites.google.com/view/pandamoniumftc"
+social = ["https://www.instagram.com/ftcpandamonium/"]
+
+["ftc-23251"]
+website = "https://3fault.com/"
+social = []
+
+["ftc-23280"]
+website = "https://cartrobotics.org/"
+social = ["https://www.instagram.com/cart_ftc_23280/"]
+
+["ftc-23696"]
+website = "https://kinematicflyingchickens.blogspot.com/"
+social = ["https://www.instagram.com/ftc_kinematicflyingchickens/"]
+
+["ftc-26235"]
+website = "https://robogenesis.org/"
+social = ["https://www.instagram.com/teamrobogenesis/", "https://www.youtube.com/@teamrobogenesis26235"]
+
+["ftc-30556"]
+website = "https://raisethebarrobotics.org/"
+social = []
+
+["ftc-31862"]
+website = "https://seg-fault.org/"
+social = []
+
+["ftc-32159"]
+website = "https://carlsbaded.org/flight-risk/"
+social = []
+
+["frc-6659"]
+social = ["https://www.instagram.com/ehs.robotics", "https://twitter.com/team6659", "https://www.facebook.com/ehs-robotics-1606671419628388"]
+
+["frc-6885"]
+social = ["https://www.instagram.com/olprobotics", "https://www.instagram.com/thepilots_6885"]
+
+["frc-9452"]
+social = ["https://www.instagram.com/lhssd_robotics", "https://www.instagram.com/lhs_stingers9452", "https://www.youtube.com/@lhssteelstingers"]
+
+["frc-9730"]
+social = ["https://www.instagram.com/dlarobotics_9730", "https://www.youtube.com/@frcteam9730", "https://github.com/metal-maniacs"]
+
+["frc-10586"]
+social = ["https://www.instagram.com/sdhs.robotics"]
+
+["ftc-4216"]
+social = ["https://www.facebook.com/ROH4216/", "https://www.linkedin.com/in/roh4216/"]
+
+["ftc-5131"]
+social = ["https://www.facebook.com/pointlomahighrobotics/"]
+
+["ftc-9164"]
+social = ["https://www.facebook.com/ftc9164zorrobots/", "https://twitter.com/zorrobots9164"]
+
+["ftc-9261"]
+social = ["https://x.com/levelup9261"]
+
+["ftc-9266"]
+social = ["https://github.com/Pyrobots"]
+
+["ftc-8097"]
+social = ["https://www.instagram.com/botcats8097/"]
+
+["ftc-6016"]
+social = ["https://www.youtube.com/channel/UCTbbdTBCGgHhKtqfcU9ttyQ"]
+
+["ftc-10793"]
+social = ["https://www.facebook.com/FTC10793Voltrons/", "https://www.instagram.com/ftc10793voltrons/", "https://www.youtube.com/channel/UCl30veO0GvlbbWqaNaIaAuw"]
+
+["ftc-12823"]
+social = ["https://www.facebook.com/Crescendo12823/"]
+
+["ftc-14140"]
+social = ["https://www.youtube.com/channel/UCwShBWX7cWq0Zd5oSoTtpMA"]
+
+["ftc-15171"]
+social = ["https://github.com/FTC-Team-Scorpio"]
+
+["ftc-16933"]
+social = ["https://github.com/Squash-16933"]
+
+["ftc-18426"]
+social = ["https://www.instagram.com/dynabotsftc_18426/"]
+
+["ftc-21239"]
+social = ["https://www.instagram.com/teamallsystemsgo/"]
+
+["ftc-22105"]
+social = ["https://www.instagram.com/ftc_runtimeterror/", "https://www.linkedin.com/company/ftcruntimeterror"]
+
+["ftc-24730"]
+social = ["https://www.instagram.com/rustezerobotics/"]

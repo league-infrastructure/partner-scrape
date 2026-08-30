@@ -1,6 +1,6 @@
 # teams
 
-**Owner:** Eric Busboom · **Last reviewed:** 2026-08-28 (sprint 012 — FLL static roster added) · **Status:** all five increments complete (FTC + FRC + geocoding + site pages + FLL static roster)
+**Owner:** Eric Busboom · **Last reviewed:** 2026-08-30 (sprint 013 ticket 006 — discovered-website/social overlay ingestion and existing-website repair) · **Status:** five sprint-011/012 increments complete (FTC + FRC + geocoding + site pages + FLL static roster); sprint 013 ticket 006 adds website/social overlay ingestion, ahead of that sprint's still-open website-verification and sponsor-extraction tickets
 
 ---
 
@@ -179,7 +179,59 @@ BUILT (sprint 012):
   teams.pipeline._TEAM_SOURCES               gains one entry; run_teams() gains
      ↓                                       a sunset-date staleness WARNING
   (feeds into merge_teams()/geocode_teams()/export_teams(), all unchanged)
+
+BUILT (sprint 013, ticket 006):
+  teams.website_overrides.apply_website_overrides(teams)
+     ↓                                       cleans junk firstinspires.org
+     ↓                                       values and repairs malformed
+     ↓                                       triple-slash URLs on every
+     ↓                                       team's existing website, then
+     ↓                                       applies teams/data/discovered-
+     ↓                                       websites.toml (31 discovered
+     ↓                                       websites + 21 social-only
+     ↓                                       teams, transcribed verbatim
+     ↓                                       from a web-search research
+     ↓                                       pass) -- never sets
+     ↓                                       website_status
+  teams/data/discovered-websites.toml        committed overlay, keyed by
+     ↓                                       team_id; first edge from
+     ↓                                       teams/ into partner_scrape.
+     ↓                                       model (slugify(), for a
+     ↓                                       (host, path) dedup guard)
+  run_teams() sequencing                     geocode_teams() -> ticket
+                                              006's apply_website_overrides()
+                                              -> export_teams() (sprint
+                                              013's still-open
+                                              verify_team_websites()/
+                                              extract_sponsors() tickets
+                                              will thread in between the
+                                              last two once built)
 ```
+
+**Sprint 013 ticket 006 (2026-08-30) adds discovered-website/social
+overlay ingestion, plus repair of the existing 53 TBA-sourced
+websites.** Sprint 013 was planned assuming only those 53; a web-search
+discovery pass over the 225 teams whose upstream source carried none
+found 31 more websites and 21 social-only teams (committed as
+`clasi/sprints/013-team-website-surfacing-and-sponsor-extraction/
+research/discovered-websites.json`), and measuring the existing 53
+against the live export found 4 teams carrying
+`http://www.firstinspires.org/` (TBA's own program homepage, not a real
+team site) and 7 carrying a malformed triple-slash URL
+(`http:///host...`). `teams.website_overrides.apply_website_overrides()`
+cleans both defects on every team's existing `website` and applies the
+new committed overlay (`teams/data/discovered-websites.toml`) for any
+team whose `website` is still empty, plus `Team.social` for every team
+the overlay covers (website or social-only alike). It runs in
+`run_teams()` immediately after `geocode_teams()`, and it never sets
+`Team.website_status` — that stays sprint 013's still-open
+`teams.scrape.verify_team_websites()` ticket's sole responsibility,
+uniformly, once built (see Constraints and Design below). Live,
+confirmed via `partner-scrape teams --dry-run -v` (2026-08-30): teams
+carrying a non-empty `website` rose from 53 to 80 (51 FRC, 29 FTC — 53
+existing minus 4 cleared `firstinspires.org` junk values plus 31
+discovered), and 39 teams (7 FRC, 32 FTC) now carry a non-empty
+`social`.
 
 A freshly-extracted `Team` from either source still has
 `location_precision == "none"` and no coordinates until
@@ -474,6 +526,36 @@ ticket 011-004's `geo.py` sets `Team.latitude`/`longitude`.
   Combined with `model.Team` having no `email` field at all (existing
   invariant, above), there are now two independent layers between any
   upstream contact data and a published `Team`.
+- **(Sprint 013 ticket 006) The one new outward edge this ticket adds —
+  `teams/website_overrides.py` importing `partner_scrape.model.slugify`
+  — does not touch the forbidden four (`enrich/`, `adapters/`,
+  `normalize.run()`, `pipeline.run()`).** `partner_scrape.model` is a
+  leaf, dependency-free string utility with no path back into any of
+  those four; this is the same shape of reuse `teams/merge.py` already
+  established for `normalize.partners.normalize_org_name`, applied to a
+  second existing utility rather than a new import boundary.
+  `tests/teams/test_sources_base.py`'s forbidden-import scan (which
+  covers `teams/sources/`, not this module) is unaffected either way,
+  since `slugify` is not one of the four scanned-for names.
+- **(Sprint 013 ticket 006) `website_overrides.apply_website_overrides()`
+  never sets `Team.website_status`, regardless of an overlay entry's
+  original discovery confidence.** The research file behind
+  `discovered-websites.toml` carries a per-entry `confidence`
+  (`strong`/`weak`) and a same-day `reverified_status: 200` on every
+  entry — deliberately not carried into the runtime TOML and never
+  consulted here. Setting `website_status="confirmed"` for a
+  `strong`-confidence/re-verified entry here would make this module a
+  second, partial, same-day-snapshot implementation of sprint 013's
+  still-open `teams.scrape.verify_team_websites()` ticket's job.
+  Instead, every declared website — the original 53 (cleaned/repaired),
+  the 31 newly discovered, `strong`- or `weak`-confidence alike — is
+  verified by exactly one mechanism, at `run_teams()`'s own run time,
+  once that ticket lands. This is the mechanism, not a special case, by
+  which a `weak`-confidence discovered entry will land as `unverified`
+  rather than being pre-confirmed by construction.
+  `tests/teams/test_website_overrides.py`'s `TestWebsiteStatusNeverTouched`
+  proves this directly, for both a `strong`- and all 3 `weak`-confidence
+  fixture entries, not just by the absence of code that would set it.
 - **(Sprint 012) A `sunset_season` past its date degrades to a loud
   warning, never a failure.** `teams.pipeline.run_teams()` parses
   `SourceConfig.config["sunset_season"]` (a `"YYYY-YY"` string, e.g.
@@ -677,6 +759,24 @@ never dropped) — a "San Diego County Only" checkbox in `TeamFilters`
 lets a visitor narrow the list to in-region teams if they want to, but
 the default list shows everything, same as `teams.json` itself.
 
+**Why `website_overrides.py` (sprint 013 ticket 006) is a separate
+module, not folded into `teams.scrape`'s own website-verification
+logic.** Sprint 013's `teams.scrape.verify_team_websites()` ticket was
+already fully planned before the web-search discovery pass that this
+ticket's overlay data comes from existed. Folding discovered-website
+ingestion/cleanup directly into that ticket's function was rejected: it
+would conflate two independently-changing concerns (curated-data
+ingestion vs. live-fetch verification) in one function, and would mean
+editing already-approved content rather than adding alongside it.
+Giving `website_overrides.py` its own verification logic (using the
+research file's own same-day `reverified_status: 200`) was also
+rejected — see Constraints above. Instead this module owns exactly one
+thing, one sentence, no "and": populate and clean `Team.website`/
+`Team.social` from committed, curated data — the same "one committed-
+data-file loader per concern" shape `geo.py` already established for
+location overrides/centroids, applied here to website/social data, not
+a new architectural pattern.
+
 ## 5. Interfaces
 
 ### Exposes
@@ -684,8 +784,10 @@ the default list shows everything, same as `teams.json` itself.
   `number`, `name`, `organization`, `org_type`, `city`, `postal_code`,
   `latitude`, `longitude`, `location_precision`, `in_region`,
   `matched_name`, `needs_review` (this ticket), `website`,
-  `website_status`, `organization_website`, `rookie_year`, `active`,
-  `last_season`, `sponsors`, `org_key`, `sibling_team_ids`, `sources`.
+  `website_status`, `organization_website`, `social` (sprint 013 ticket
+  006, `list[str]`, team-declared social URLs, raw strings with no
+  platform label), `rookie_year`, `active`, `last_season`, `sponsors`,
+  `org_key`, `sibling_team_ids`, `sources`.
   Every field defaults to an empty/neutral value; no `email` field
   exists (Constraints). Fields are populated incrementally across
   pipeline stages — `sources/ftcscout.py` and `sources/tba.py` set
@@ -754,14 +856,17 @@ the default list shows everything, same as `teams.json` itself.
   before `export_teams()`. See Constraints for the full identity rule
   and Design for why it keys on organization name, not team number.
 - **`pipeline.run_teams(*, registry_dir=None, source=None, site_dir=None,
-  fetcher=None, dry_run=False, geo_data_dir=None) -> dict`** — the
-  programmatic entry point: loads the Team Registry (defaulting to the
-  real seed, `teams/registry/`), dispatches each active source to its
-  `TeamSource` via `_TEAM_SOURCES`, isolates any one source's failure
-  (logged and skipped, matching `pipeline.run()`'s own SUC-008
+  fetcher=None, dry_run=False, geo_data_dir=None, website_data_dir=None) -> dict`**
+  — the programmatic entry point: loads the Team Registry (defaulting to
+  the real seed, `teams/registry/`), dispatches each active source to
+  its `TeamSource` via `_TEAM_SOURCES`, isolates any one source's
+  failure (logged and skipped, matching `pipeline.run()`'s own SUC-008
   contract), links cross-league identity via `merge_teams()`, resolves
-  every team's location via `teams.geo.geocode_teams()` (this ticket;
-  `geo_data_dir` overrides the geocoding data directory, mainly for
+  every team's location via `teams.geo.geocode_teams()` (`geo_data_dir`
+  overrides the geocoding data directory, mainly for tests), then
+  (sprint 013 ticket 006) cleans/enriches `website`/`social` via
+  `teams.website_overrides.apply_website_overrides()`
+  (`website_data_dir` overrides the overlay data directory, mainly for
   tests) over the combined result, and hands it to `export_teams()`.
   Returns that call's `{"meta": ..., "teams": [...]}` payload unchanged.
 - **`teams.geo.geocode_teams(teams, *, data_dir=None) -> list[Team]`**
@@ -769,7 +874,28 @@ the default list shows everything, same as `teams.json` itself.
   ladder in place; returns the same list (parallel in shape to
   `merge_teams()`). `data_dir` defaults to `geo.DEFAULT_DATA_DIR` (the
   real committed `teams/data/`). Called once by `run_teams()`, after
-  `merge_teams()` and before `export_teams()`.
+  `merge_teams()` and before `apply_website_overrides()`.
+- **`teams.website_overrides.apply_website_overrides(teams, data_dir=None)
+  -> list[Team]`** (sprint 013 ticket 006) — cleans every team's existing
+  `website` in place (clears a `firstinspires.org`/`www.firstinspires.org`
+  junk value; repairs a malformed `http:///`/`https:///` URL
+  generically, for any host), then, for a team whose `website` is still
+  empty, applies a discovered `website` from the committed overlay
+  `teams/data/discovered-websites.toml` (`data_dir` defaults to
+  `website_overrides.DEFAULT_DATA_DIR`, the real committed `teams/data/`)
+  if that `team_id` has one; sets `Team.social` from the overlay for any
+  `team_id` present there, website or social-only alike. Never sets
+  `Team.website_status` (Constraints). The loader mirrors, never
+  imports, `teams.geo`'s `_load_overrides`/`_require_file` shape
+  (`tomllib`, raises loudly at load time on a missing/malformed file);
+  it also guards against a data-authoring collision — two different
+  `team_id`s claiming the identical `(host, path)`, compared via
+  `partner_scrape.model.slugify` on the parsed URL's netloc+path, never
+  on host alone (`carlsbaded.org`/`sites.google.com` each legitimately
+  recur across distinct-path entries in the real overlay). Mutates and
+  returns the same list, matching `merge_teams()`/`geocode_teams()`'s
+  shape; idempotent. Called once by `run_teams()`, after
+  `geocode_teams()` and before `export_teams()`.
 - **`teams.geo.SchoolIndex(data_dir=None)`** (this ticket) — loads all
   five `teams/data/` files once and exposes `resolve(team)` (the full
   ladder for one `Team`, mutating it in place), `resolve_school(org,
@@ -828,7 +954,12 @@ the default list shows everything, same as `teams.json` itself.
   that none has been needed yet, whether measured against the original
   211-team fixture or the real, live 230-team corpus ticket 011-003's
   reopening confirmed). All five are plain data, never imported as
-  Python.
+  Python. Sprint 013 ticket 006 adds a sixth,
+  **`discovered-websites.toml`** (52 entries — 31 discovered websites +
+  21 social-only teams — transcribed verbatim from the sprint's
+  committed research artifact; `teams.website_overrides.
+  apply_website_overrides()` reads it, not `teams.geo.SchoolIndex`),
+  same "plain data, never imported as Python" convention.
 - **`dev/refresh_school_directories.py`** (this ticket) — the
   standalone, human-run yearly refresh script that produces the four
   generated files above (not `school-overrides.toml`, which is

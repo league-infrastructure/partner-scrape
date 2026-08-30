@@ -117,6 +117,13 @@ class Team:
     # public-school match only (NCES's private-school data carries no
     # website column). Deliberately a separate field from Team.website --
     # never presented as the team's own site.
+    social: list[str] = field(default_factory=list)  # team-declared social
+    # URLs (Instagram/YouTube/Twitter/etc.), raw strings with no platform
+    # label. Set by sprint 013 ticket 006's
+    # teams.website_overrides.apply_website_overrides() from the
+    # committed teams/data/discovered-websites.toml overlay -- empty for
+    # any team absent from that overlay. Never derived from website_status
+    # or any live fetch; this is curated, offline data only.
 
     # Program metadata
     rookie_year: int | None = None

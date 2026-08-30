@@ -44,6 +44,21 @@ try/except -- a malformed geocoding data file is a build-time defect
 docstring), not a per-record failure to isolate the way a source's
 network fetch is.
 
+Sprint 013 ticket 006 adds one more stage, after `geocode_teams()` and
+before `export_teams()`: `teams.website_overrides.
+apply_website_overrides()`, which cleans junk/malformed values out of
+the existing `website` field and applies a committed overlay of
+websites/social links discovered by a web-search pass for teams whose
+upstream source reported none (see that module's own docstring). It
+runs *before* sprint 013's `teams.scrape.verify_team_websites()` (ticket
+001, whose `depends-on` now includes ticket 006) so that stage fetches
+the corrected, enlarged website set rather than the smaller, partly-
+broken one this pipeline originally assumed. Like `merge_teams()`/
+`geocode_teams()`, it is not wrapped in its own try/except -- a
+malformed overlay data file is a build-time defect
+`website_overrides._load_overlay` raises loudly for, not a per-record
+failure to isolate.
+
 Sprint 012 adds a third entry, `"static_roster"` (the committed FLL
 roster -- see `sources/static_roster.py`'s own module docstring), plus
 one new pre-flight check: `_check_sunset_seasons()`, called once per
@@ -79,6 +94,7 @@ from partner_scrape.teams.sources.base import TeamSource, run as run_team_source
 from partner_scrape.teams.sources.ftcscout import FTCScoutSource
 from partner_scrape.teams.sources.static_roster import StaticRosterSource
 from partner_scrape.teams.sources.tba import TBASource
+from partner_scrape.teams.website_overrides import apply_website_overrides
 
 logger = logging.getLogger(__name__)
 
@@ -166,10 +182,12 @@ def run_teams(
     fetcher: Fetcher | None = None,
     dry_run: bool = False,
     geo_data_dir: str | Path | None = None,
+    website_data_dir: str | Path | None = None,
     today: date | None = None,
 ) -> dict[str, Any]:
     """Run the Teams pipeline end-to-end: Team Registry -> `TeamSource`(s)
-    -> `merge_teams()` -> `geocode_teams()` -> `export_teams()`.
+    -> `merge_teams()` -> `geocode_teams()` -> `apply_website_overrides()`
+    -> `export_teams()`.
 
     Args:
         registry_dir: Team Registry directory to load sources from.
@@ -204,6 +222,13 @@ def run_teams(
             source/merge behavior can safely omit it and exercise the
             real committed data files, matching this module's existing
             "trust the real registry in tests" convention.
+        website_data_dir: the directory `teams.website_overrides.
+            apply_website_overrides()` reads `discovered-websites.toml`
+            from (sprint 013 ticket 006). Defaults to
+            `website_overrides.DEFAULT_DATA_DIR` (the real committed
+            `teams/data/`) when omitted, mirroring `geo_data_dir`'s
+            convention exactly. Tests that need to control the overlay
+            precisely should pass an explicit fixture directory here.
         today: the reference date `_check_sunset_seasons()` compares
             every active source's `sunset_season` against. Defaults to
             real `date.today()` when omitted, matching
@@ -279,5 +304,16 @@ def run_teams(
     # SchoolIndex raises loudly for (see teams/geo.py's own docstring),
     # never a per-record failure to isolate the way a source fetch is.
     teams = geocode_teams(teams, data_dir=geo_data_dir)
+
+    # Sprint 013 ticket 006: clean junk/malformed existing website
+    # values and apply the committed discovered-website/social overlay,
+    # once over the full merged+geocoded Team[], same shape as
+    # merge_teams()/geocode_teams() above and for the same reason -- a
+    # malformed overlay data file is a build-time defect
+    # apply_website_overrides() raises loudly for, never a per-record
+    # failure to isolate. Runs before sprint 013's
+    # verify_team_websites() (ticket 001, not yet wired in here) so
+    # that stage sees the corrected, enlarged website set.
+    teams = apply_website_overrides(teams, data_dir=website_data_dir)
 
     return export_teams(teams, site_dir=site_dir, dry_run=dry_run)
