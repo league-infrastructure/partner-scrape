@@ -835,6 +835,19 @@ schema-version shape; both are self-contained and unlikely to drift since
 neither dataclass they serialize (`SponsorExtractionResult`) changes as
 often as `EnrichmentResult` might.
 
+**(Sprint 013, ticket 006) The one new outward edge this sprint adds
+does not touch the forbidden four.** `teams/website_overrides.py`
+imports `partner_scrape.model.slugify` (reused for its host+path
+dedup key, per this sprint's "no second normalizer/slugifier"
+principle) — the first import from anywhere in `teams/` into the
+top-level `partner_scrape.model` module. `partner_scrape.model` is not
+one of the four boundaries this subsystem's zero-edges invariant
+actually guards (`enrich/`, `adapters/`, `normalize.run()`,
+`pipeline.run()`); it is a leaf, dependency-free string utility with no
+path back into any of those four, the same shape of reuse `teams/merge.py`
+already established for `normalize.partners.normalize_org_name`. The
+invariant `tests/teams/test_sources_base.py` enforces is unaffected.
+
 **(Sprint 013) Why the LLM's role is constrained classification over
 deterministically-gathered candidates, never open-ended generation.** The
 issue names false positives as the dominant risk — asking an LLM "what
@@ -911,6 +924,38 @@ intended domain (organization-name variant matching), so, unlike
 reusing it here for a second purpose (sponsor consolidation) alongside its
 original one (partner-directory join).
 
+**(Sprint 013, ticket 006 — added post-planning) Why discovered-website
+ingestion is a separate module (`website_overrides.py`) that never sets
+`website_status`, rather than folded into `scrape.py` or given its own
+verification logic.** Ticket 001 (`scrape.py`'s `verify_team_websites()`)
+was already fully planned and approved before a web-search discovery
+pass (`clasi/sprints/013-team-website-surfacing-and-sponsor-extraction/
+research/discovered-websites.json`) found 31 more team websites and 21
+social-only teams, and measurement against the live export found 4
+`firstinspires.org` junk values and 7 malformed triple-slash URLs among
+the original 53. Two things were considered and rejected: folding the
+new ingestion/cleanup logic directly into `verify_team_websites()` —
+rejected, since editing ticket 001's already-approved content would
+conflate two independently-changing concerns (curated-data ingestion,
+live-fetch verification) in one function; and having
+`website_overrides.py` itself decide `website_status` for
+high-confidence or already-re-verified discovered entries (the research
+file's own `reverified_status: 200` on every entry, including the 3
+`weak`-confidence ones, made this a real temptation) — rejected, because
+it would make this module a second, partial, same-day-snapshot
+implementation of ticket 001's job. Instead, `website_overrides.py` owns
+exactly one thing (populate/clean `Team.website`/`Team.social` from
+committed, curated data — the one-sentence, no-"and" cohesion test) and
+`verify_team_websites()` remains the sole, uniform authority for
+`confirmed`/`unverified`, run immediately afterward so it verifies the
+corrected, enlarged set. This is the same "one committed-data-file
+loader per concern" shape `geo.py` already established for location
+overrides/centroids, applied here to website/social data — not a new
+architectural pattern, an application of an existing one. The accepted
+consequence is one more sequenced stage inside `run_teams()` (three now,
+after `geocode_teams()`), the same single-call-sequencing cost
+`merge_teams()`/`geocode_teams()` already require.
+
 ## 5. Interfaces
 
 ### Exposes
@@ -921,7 +966,9 @@ original one (partner-directory join).
   `website_status`, `organization_website`, `rookie_year`, `active`,
   `last_season`, `sponsors`, `sponsor_provenance` (sprint 013,
   `dict[str, str]`, `display sponsor name -> "structured" | "scraped"`),
-  `org_key`, `sibling_team_ids`, `sources`.
+  `social` (sprint 013 ticket 006, `list[str]`, team-declared social
+  URLs — raw, no platform label), `org_key`, `sibling_team_ids`,
+  `sources`.
   Every field defaults to an empty/neutral value; no `email` field
   exists (Constraints). Fields are populated incrementally across
   pipeline stages — `sources/ftcscout.py` and `sources/tba.py` set
@@ -929,9 +976,12 @@ original one (partner-directory join).
   fields; `teams.merge.merge_teams()` sets `org_key`/`sibling_team_ids`;
   `latitude`/`longitude`/`location_precision`/`organization_website`/
   `matched_name`/`needs_review` are set by `teams.geo.geocode_teams()`;
-  `website_status` is set last, by sprint 013's
-  `teams.scrape.verify_team_websites()`; `sponsor_provenance` and any
-  scraped additions to `sponsors` are set last of all, by sprint 013's
+  `website`/`social` are then cleaned/filled by sprint 013 ticket 006's
+  `teams.website_overrides.apply_website_overrides()`; `website_status`
+  is set next, by sprint 013's `teams.scrape.verify_team_websites()`
+  (which now runs after, and sees the corrected/enlarged `website` set
+  from, ticket 006's stage); `sponsor_provenance` and any scraped
+  additions to `sponsors` are set last of all, by sprint 013's
   `teams.sponsor_extract.extract_sponsors()`.
 - **`sources.base.TeamSource`** — the injectable per-source protocol
   (`discover(source, fetcher) -> Iterable[TeamRef]`,
@@ -993,24 +1043,49 @@ original one (partner-directory join).
   before `export_teams()`. See Constraints for the full identity rule
   and Design for why it keys on organization name, not team number.
 - **`pipeline.run_teams(*, registry_dir=None, source=None, site_dir=None,
-  fetcher=None, dry_run=False, geo_data_dir=None, llm_client=None,
-  sponsor_cache=None, no_sponsors=False) -> dict`** — the programmatic
-  entry point: loads the Team Registry (defaulting to the real seed,
-  `teams/registry/`), dispatches each active source to its `TeamSource`
-  via `_TEAM_SOURCES`, isolates any one source's failure (logged and
-  skipped, matching `pipeline.run()`'s own SUC-008 contract), links
-  cross-league identity via `merge_teams()`, resolves every team's
-  location via `teams.geo.geocode_teams()` (`geo_data_dir` overrides the
-  geocoding data directory, mainly for tests), then (sprint 013) calls
-  `teams.scrape.verify_team_websites(teams, fetcher)` and, unless
-  `no_sponsors` (the `--no-sponsors` CLI flag), `teams.sponsor_extract.
-  extract_sponsors(teams, fetch_results, llm_client, sponsor_cache)` —
-  `llm_client` defaults to a real `AnthropicSponsorLLMClient()` and
-  `sponsor_cache` to a real `SponsorCache()` when omitted, matching
-  `fetcher`'s existing default-to-production convention; tests inject
-  fixture doubles for both. Hands the fully-populated `Team[]` to
-  `export_teams()`. Returns that call's `{"meta": ..., "teams": [...]}`
-  payload unchanged.
+  fetcher=None, dry_run=False, geo_data_dir=None, website_data_dir=None,
+  llm_client=None, sponsor_cache=None, no_sponsors=False) -> dict`** —
+  the programmatic entry point: loads the Team Registry (defaulting to
+  the real seed, `teams/registry/`), dispatches each active source to
+  its `TeamSource` via `_TEAM_SOURCES`, isolates any one source's
+  failure (logged and skipped, matching `pipeline.run()`'s own SUC-008
+  contract), links cross-league identity via `merge_teams()`, resolves
+  every team's location via `teams.geo.geocode_teams()` (`geo_data_dir`
+  overrides the geocoding data directory, mainly for tests), then
+  (sprint 013 ticket 006) calls `teams.website_overrides.
+  apply_website_overrides(teams, data_dir=website_data_dir)`, then
+  (sprint 013) calls `teams.scrape.verify_team_websites(teams, fetcher)`
+  and, unless `no_sponsors` (the `--no-sponsors` CLI flag),
+  `teams.sponsor_extract.extract_sponsors(teams, fetch_results,
+  llm_client, sponsor_cache)` — `llm_client` defaults to a real
+  `AnthropicSponsorLLMClient()` and `sponsor_cache` to a real
+  `SponsorCache()` when omitted, matching `fetcher`'s existing
+  default-to-production convention; tests inject fixture doubles for
+  all three (`website_data_dir` included). Hands the fully-populated
+  `Team[]` to `export_teams()`. Returns that call's `{"meta": ...,
+  "teams": [...]}` payload unchanged.
+- **`teams.website_overrides.apply_website_overrides(teams, data_dir=None)
+  -> list[Team]`** (sprint 013 ticket 006) — cleans every team's existing
+  `website` (clears a `firstinspires.org`/`www.firstinspires.org` junk
+  value; repairs a malformed `http:///`/`https:///` URL generically),
+  then, for a team whose `website` is still empty, applies a discovered
+  `website` from the committed overlay `teams/data/discovered-websites.toml`
+  (`data_dir` overrides the directory, mainly for tests) if that team's
+  `team_id` has one; sets `Team.social` from the overlay for any team_id
+  present there, website or social-only alike. Never sets
+  `Team.website_status` (Design — that stays `verify_team_websites()`'s
+  sole responsibility, uniformly, regardless of the overlay entry's
+  original discovery confidence). The loader mirrors, never imports,
+  `teams.geo`'s `_load_overrides`/`_require_file` shape (`tomllib`,
+  raises loudly at load time on a missing/malformed file); it also
+  guards against a data-authoring collision — two different `team_id`s
+  claiming the identical `(host, path)`, compared via
+  `partner_scrape.model.slugify` on the parsed URL, never on host alone
+  (Constraints: `carlsbaded.org`/`sites.google.com` each legitimately
+  recur across distinct-path entries). Mutates and returns the same
+  list, matching `merge_teams()`/`geocode_teams()`'s shape. Called once
+  by `run_teams()`, after `geocode_teams()` and before
+  `verify_team_websites()`.
 - **`teams.scrape.verify_team_websites(teams, fetcher) -> dict[str, str]`**
   (sprint 013) — for each `Team` with a non-empty `website`: checks
   `fetch.is_allowed()` first (Constraints), then fetches via `fetcher`.
@@ -1018,7 +1093,8 @@ original one (partner-directory join).
   `Team` with no `website` gets `"none"`. Returns a `dict[team_id, str]`
   of fetched bodies for every `confirmed` team only — never assigned to
   any `Team` field (Constraints). Called once by `run_teams()`, after
-  `geocode_teams()` and before `extract_sponsors()`.
+  `apply_website_overrides()` (ticket 006, so it sees the corrected,
+  enlarged `website` set) and before `extract_sponsors()`.
 - **`teams.sponsor_candidates.gather_sponsor_candidates(html, page_url) ->
   list[str]`** (sprint 013) — pure, offline: parses `html` once (`lxml`),
   collects text from headings matching `/sponsor|partner|thank/i` and

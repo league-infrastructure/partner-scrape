@@ -7,6 +7,7 @@ tickets:
 - 013-003
 - 013-004
 - 013-005
+- 013-006
 ---
 
 # Scrape team websites for sponsors, and show which teams have one

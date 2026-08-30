@@ -3,7 +3,7 @@ id: '001'
 title: Fetch and verify team websites
 status: open
 use-cases: [SUC-001]
-depends-on: []
+depends-on: ['006']
 github-issue: ''
 issue: 21-scrape-team-sites-for-sponsors.md
 completes_issue: true

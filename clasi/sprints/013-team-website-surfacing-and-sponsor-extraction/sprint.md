@@ -264,12 +264,15 @@ time (a fabricated sponsor, not just an undercount).
 
 **Substantial** — this sprint touches 3+ modules inside `teams/`
 (`model.py`, a new `scrape.py`, three new `sponsor_*.py` modules,
-`sources/ftcscout.py`, `pipeline.py`) plus three site components, adds a
-new intra-subsystem dependency chain (`pipeline` → `scrape`/
-`sponsor_extract` → `sponsor_candidates`/`sponsor_llm`/`sponsor_cache`),
-and changes the data model (`Team.sponsor_provenance`, a new field). Any
-one of these signals alone would clear the substantial bar; this sprint
-has all three.
+`sources/ftcscout.py`, `pipeline.py`, plus a 7th new module added
+post-planning by ticket 006, `website_overrides.py`) plus three site
+components, adds a new intra-subsystem dependency chain (`pipeline` →
+`scrape`/`sponsor_extract`/`website_overrides` →
+`sponsor_candidates`/`sponsor_llm`/`sponsor_cache`/`partner_scrape.model.slugify`),
+and changes the data model (`Team.sponsor_provenance` and, from ticket
+006, `Team.social`, both new fields). Any one of these signals alone
+would clear the substantial bar; this sprint has all three, and ticket
+006's own addendum independently repeats two of them.
 
 This project has the persistent per-subsystem design-doc set enabled
 (`design_docs_opt_in`), so per `architecture-authoring`'s Mode 2a the full
@@ -313,32 +316,68 @@ a small denylist as defense-in-depth, then dedup/merge into
 `normalize.partners.normalize_org_name` (reused, not reimplemented),
 recording provenance in the new `Team.sponsor_provenance` field.
 
+**Amendment (ticket 006, added post-planning).** One new module
+(`teams/website_overrides.py`), one new committed data file, one new
+purely-additive data-model field (`Team.social`), and one new outward
+edge (`teams/` → `partner_scrape.model.slugify`) — by this sprint's own
+tier signals (a data-model change, a new cross-module edge) this
+addendum clears the substantial bar on its own, even considered in
+isolation from the rest of the sprint, so it gets the same diagram
+treatment below rather than being waved through as a small addition.
+`apply_website_overrides()` cleans junk/malformed values out of the
+existing 53 TBA-sourced websites and applies a new committed overlay
+(`teams/data/discovered-websites.toml`, transcribed from this sprint's
+`research/discovered-websites.json`) that adds 31 more discovered
+websites and social links for 21 social-only teams, found by web-search
+discovery after this sprint's original planning. It runs in
+`run_teams()` immediately before `verify_team_websites()` (ticket 001,
+whose `depends-on` now includes ticket 006), so 001 fetches the
+corrected, enlarged set. It never sets `website_status` — that stays
+`verify_team_websites()`'s sole responsibility, uniformly, so a
+weak-confidence discovered entry lands as `unverified` rather than
+being pre-confirmed by construction, not by a special case. The one new
+outward edge, `teams/` → `partner_scrape.model.slugify` (reused for a
+host+path dedup key, never a second slugifier), is not one of the four
+forbidden targets (`enrich/`, `adapters/`, `normalize.run()`,
+`pipeline.run()`), so the subsystem's tested zero-import invariant into
+those four is unaffected — see the Component/Module Diagram and
+Dependency Graph below, both extended with ticket 006's node and edges,
+and the matching Design Rationale entries. See SUC-005 and ticket 006
+for the full detail; `design/teams-DESIGN.md` §4/§5 carries the
+corresponding module write-up.
+
 ### Architecture Overview
 
 | Module | Change | Use case served |
 |---|---|---|
-| `teams/model.py` | + `sponsor_provenance: dict[str, str]` field | SUC-004 |
+| `teams/model.py` | + `sponsor_provenance: dict[str, str]` field, + `social: list[str]` field (ticket 006) | SUC-004, SUC-005 |
+| `teams/website_overrides.py` (new, ticket 006) | `apply_website_overrides()`: cleans junk/malformed existing `website` values, applies discovered-website/social overlay data, never sets `website_status` | SUC-005 |
 | `teams/scrape.py` (new) | `verify_team_websites()`: per-team fetch, robots-checked, sets `website_status`, hands HTML forward in-memory | SUC-001 |
 | `teams/sponsor_candidates.py` (new) | `gather_sponsor_candidates()`: deterministic, offline HTML → candidate strings | SUC-003 |
 | `teams/sponsor_llm.py` (new) | `SponsorLLMClient` protocol, `SponsorExtractionResult`, real `AnthropicSponsorLLMClient`, fixture double | SUC-004 |
 | `teams/sponsor_cache.py` (new) | Content-hash cache for sponsor classification results | SUC-004 |
 | `teams/sponsor_extract.py` (new) | Orchestrates gather → cache → classify → validate → guard → normalize/dedup → provenance | SUC-004 |
 | `teams/sources/ftcscout.py` | Sets `sponsor_provenance="structured"` for its existing sponsors | SUC-004 |
-| `teams/pipeline.py` | Sequences the two new stages after `geocode_teams()`; new `llm_client`/`sponsor_cache` params | SUC-001, SUC-004 |
+| `teams/pipeline.py` | Sequences the three new stages after `geocode_teams()` (`website_overrides` → `scrape` → sponsor extraction); new `website_data_dir` (ticket 006) plus `llm_client`/`sponsor_cache` params | SUC-001, SUC-004, SUC-005 |
 | `cli.py` | `--no-sponsors` flag on the `teams` subcommand | SUC-004 |
 | `site/.../TeamCard.astro` | Website badge, keyed on `website_status === 'confirmed'` | SUC-002 |
 | `site/.../TeamFilters.astro` | "Has a Website" facet | SUC-002 |
 | `site/.../teams/[slug].astro` | Website link gated on `confirmed` status | SUC-002 |
 
 **Component/Module Diagram** (required: 6 new modules, new cross-module
-dependencies):
+dependencies; extended below with ticket 006's 7th new module and one
+new data file — a real cross-module edge, `Team.social` data-model
+change, and a data-authoring uniqueness guard, which together clear the
+substantial bar on their own even considered in isolation):
 
 ```mermaid
 graph TD
     SRC["Sources + Team Registry<br/>(ftcscout / tba / static_roster)<br/>existing"] --> MERGE["merge_teams()<br/>existing"]
     MERGE --> GEO["geocode_teams()<br/>existing"]
+    DISC[("discovered-websites.toml<br/>NEW (ticket 006), committed data")] --> WEBOV
+    GEO --> WEBOV["Website/Social Overlay<br/>NEW (ticket 006): teams/website_overrides.py"]
     FETCH["fetch.PoliteFetcher<br/>existing"] --> VERIFY
-    GEO --> VERIFY["Website Verifier<br/>NEW: teams/scrape.py"]
+    WEBOV --> VERIFY["Website Verifier<br/>NEW: teams/scrape.py"]
     VERIFY -- "fetched HTML, in-memory only" --> CAND["Sponsor Candidate Gatherer<br/>NEW: sponsor_candidates.py"]
     CAND -- "candidate strings" --> ORCH["Sponsor Extractor<br/>NEW: sponsor_extract.py"]
     LLMC["Sponsor LLM Client + Cache<br/>NEW: sponsor_llm.py + sponsor_cache.py"] <--> ORCH
@@ -352,8 +391,10 @@ graph TD
 
 ```mermaid
 graph LR
-    pipeline["teams.pipeline"] --> scrape["teams.scrape (NEW)"]
+    pipeline["teams.pipeline"] --> website_overrides["teams.website_overrides (NEW, ticket 006)"]
+    pipeline --> scrape["teams.scrape (NEW)"]
     pipeline --> sponsor_extract["teams.sponsor_extract (NEW)"]
+    website_overrides --> model_slugify["partner_scrape.model.slugify (existing, read-only)"]
     sponsor_extract --> sponsor_candidates["teams.sponsor_candidates (NEW)"]
     sponsor_extract --> sponsor_llm["teams.sponsor_llm (NEW)"]
     sponsor_extract --> sponsor_cache["teams.sponsor_cache (NEW)"]
@@ -364,9 +405,11 @@ graph LR
 
 No new edge crosses into `enrich/`, `adapters/`, `normalize.run()`, or
 `pipeline.run()` — the system-level dependency direction
-`docs/design/design.md` Sec. 3 documents is unchanged. Every edge above is
-either internal to `teams/` or a reuse of a dependency that already
-existed (`fetch/`, `normalize.partners`).
+`docs/design/design.md` Sec. 3 documents is unchanged. Every edge above
+is either internal to `teams/`, a reuse of a dependency that already
+existed (`fetch/`, `normalize.partners`), or (ticket 006) a first-time
+but non-forbidden reuse of a leaf utility (`partner_scrape.model.slugify`
+— see Design Rationale below).
 
 No entity-relationship diagram: the only data-model change is one
 additional field (`sponsor_provenance: dict[str, str]`) on the existing
@@ -494,9 +537,69 @@ described in the table above and in Design Rationale below.
   raising out of the loop). This sprint's `verify_team_websites()` follows
   that exact, already-proven pattern rather than inventing a new one.
   *Consequences:* none identified.
+- **Decision (ticket 006): `website_overrides.py` never sets
+  `Team.website_status`, regardless of an overlay entry's discovery
+  confidence.** *Context:* the discovered-website research carries a
+  per-entry `confidence` (`strong`/`weak`) and, for every entry, a
+  `reverified_status: 200` from the team-lead's own independent
+  re-fetch — a tempting shortcut would be to treat that re-fetch as
+  good enough to mark `website_status="confirmed"` directly, especially
+  for `strong`-confidence entries. *Alternatives considered:* set
+  `confirmed` for `strong`-confidence/re-verified entries and
+  `unverified` only for the 3 `weak` ones — rejected: it would make
+  `website_overrides.py` a second, partial implementation of
+  `verify_team_websites()`'s job (ticket 001), running against a
+  same-day snapshot rather than `run_teams()`'s own live fetch, and it
+  would special-case confidence in code where the honest answer is
+  "not this stage's job at all." *Why this choice:* leaving
+  `website_status` untouched here means every declared website — the
+  original 53, the newly discovered 31, `strong` or `weak` confidence
+  alike — is verified by exactly one mechanism, `verify_team_websites()`,
+  at `run_teams()`'s own run time, matching how `location_precision`
+  is reserved solely for what `teams/geo.py`'s ladder actually resolved
+  (`design/teams-DESIGN.md` §4) rather than a plausible-looking
+  shortcut set earlier in the pipeline. *Consequences:* a `weak`-confidence
+  site that turns out to be dead is simply `unverified`, indistinguishable
+  from any other unverified declared website, which is the correct,
+  honest outcome the issue's "a broken link published is worse than no
+  link" principle already established for every other website in this
+  sprint.
+- **Decision (ticket 006): the discovered-website/social overlay is a
+  separate module (`website_overrides.py`), not folded into
+  `teams/scrape.py`.** *Context:* both modules touch `Team.website`,
+  and 001 was already-planned before 006 existed. *Alternatives
+  considered:* add the overlay/cleanup logic directly into
+  `scrape.py`'s `verify_team_websites()` — rejected, since it would
+  require editing ticket 001's already-approved content and conflate
+  two independently-changing concerns (curated-data ingestion vs. live
+  fetch verification) in one function. *Why this choice:* a separate
+  module with its own single responsibility (one sentence, no "and":
+  "populate and clean `Team.website`/`Team.social` from committed,
+  curated data") keeps `scrape.py`'s own responsibility unchanged from
+  how ticket 001 already documents it, and matches this subsystem's
+  existing convention of one committed-data-file loader per concern
+  (`geo.py` for location overrides/centroids, this module for website
+  overrides). *Consequences:* `run_teams()` gains one more sequenced
+  stage (three now, after `geocode_teams()`: `website_overrides` →
+  `scrape` → sponsor extraction) — an accepted, small addition to the
+  same single-call-sequencing shape `merge_teams()`/`geocode_teams()`
+  already require.
 
 ### Migration Concerns
 
+- **No schema/backfill migration** for `Team.social` (ticket 006) either
+  — same `dataclasses.fields()` auto-derivation as `sponsor_provenance`
+  below, defaults to `[]`.
+- **Some discovered sites are known-stale.** The research artifact's own
+  caveats note several accepted sites belong to teams FIRST now lists as
+  inactive, and 3 entries are `weak`-confidence for reasons ranging from
+  no on-page team-number match to a program-level (not team-specific)
+  site. This is accepted, not a defect to fix in ticket 006: every one of
+  these still goes through ticket 001's ordinary live-fetch verification
+  before ever being marked `confirmed`, exactly like any other declared
+  website. A stale-but-live site is expected to verify `confirmed`; a
+  genuinely dead one verifies `unverified`, same as the 3 dead domains
+  among the 7 repaired malformed URLs.
 - **`ANTHROPIC_API_KEY` provisioning for the `teams` subcommand's
   scheduled runs is unverified** — mirrors the exact gap sprint 011
   flagged for `TBA_KEY` (provisioned locally, not yet confirmed in the
@@ -728,6 +831,60 @@ Parent: UC-004
         scraped output and confirms no obviously-wrong entry before this
         sprint closes.
 
+### SUC-005: Ingest discovered team websites and repair known-bad URLs
+Parent: UC-005
+
+*Added post-planning: web-search discovery (research/discovered-websites.json)
+found websites for 31 teams beyond the 53 originally assumed, plus 21
+social-only teams, and measurement against the live export found 4 junk
+and 7 malformed values among the original 53. This SUC and ticket 006
+cover ingesting and repairing that data before SUC-001's fetch runs.*
+
+- **Actor**: Engine
+- **Preconditions**: `merge_teams()`/`geocode_teams()` have run;
+  `teams/data/discovered-websites.toml` (transcribed from the sprint's
+  committed research artifact) is present.
+- **Main Flow**:
+  1. `teams.pipeline.run_teams()` calls
+     `teams.website_overrides.apply_website_overrides(teams,
+     data_dir=website_data_dir)` after `geocode_teams()` and before
+     `verify_team_websites()` (SUC-001).
+  2. Every team's existing `website` is cleaned: a `firstinspires.org`
+     junk value is cleared; a malformed triple-slash URL is repaired.
+  3. A team whose `website` is still empty after cleanup, and whose
+     `team_id` has a discovered `website` in the overlay data, gets it
+     set.
+  4. Any team present in the overlay data (website or social-only)
+     gets `Team.social` set from its declared social links.
+  5. `Team.website_status` is left untouched by this stage for every
+     team — SUC-001's live fetch is the sole, uniform source of truth
+     for `confirmed`/`unverified`, regardless of how confidently a
+     website was discovered.
+- **Postconditions**: `Team.website` reflects the corrected, enlarged
+  set (53 cleaned + up to 31 discovered) and `Team.social` is populated
+  where known, ready for SUC-001's fetch; no team's `website_status` has
+  been set by this stage.
+- **Error Flows**: a missing or malformed overlay data file raises
+  loudly at load time (a build-time defect, matching `teams/geo.py`'s
+  `SchoolIndex` convention) rather than silently producing an empty
+  overlay; a data-authoring collision (two `team_id`s claiming the
+  identical `(host, path)`) raises the same way — checked on host+path,
+  never host alone, so teams that legitimately share a host at distinct
+  paths (`carlsbaded.org`, `sites.google.com`) are never mistaken for a
+  collision.
+- **Acceptance Criteria**:
+  - [ ] Fixture test: a `firstinspires.org` value is cleared; a
+        triple-slash value is repaired generically.
+  - [ ] Fixture test: an existing non-empty `website` is never
+        overwritten by the overlay.
+  - [ ] Fixture test: a social-only team gets `Team.social` populated
+        with no `Team.website` change.
+  - [ ] Fixture test: `Team.website_status` stays at its dataclass
+        default for both `strong`- and `weak`-confidence overlay
+        entries alike.
+  - [ ] Fixture test: the host+path uniqueness guard does not misfire
+        on two teams sharing only a host.
+
 ## GitHub Issues
 
 (GitHub issues linked to this sprint's tickets. Format: `owner/repo#N`.)
@@ -746,13 +903,21 @@ Before tickets can be created, all of the following must be true:
 
 | # | Title | Depends On |
 |---|-------|------------|
-| 001 | Fetch and verify team websites | — |
+| 006 | Ingest discovered team websites and repair bad URLs | — |
+| 001 | Fetch and verify team websites | 006 |
 | 002 | Site surfacing for team websites | 001 |
 | 003 | Deterministic sponsor candidate extraction | 001 |
 | 004 | Sponsor extraction LLM client and cache | 003 |
 | 005 | Sponsor extraction orchestration and normalization | 001, 004 |
 
-Tickets execute serially in the order listed. 001+002 are the cheap,
-certain site-surfacing win and land first; 003→004→005 is the substantial,
-uncertain sponsor-extraction chain, sequenced by real dependency (each
-stage consumes the previous stage's output shape).
+Tickets execute serially in the order listed. **006 was added after this
+sprint's original planning and now runs first**: web-search discovery
+(done and committed at `research/discovered-websites.json`) found 31
+more team websites and 21 social-only teams beyond the 53 originally
+assumed, and the existing 53 turned out to include 4 junk values and 7
+malformed URLs measured against the live export — 006 ingests the
+discovered set and repairs the existing one so 001 fetches the corrected,
+enlarged set rather than the smaller, partly-broken one the original plan
+assumed. 001+002 remain the cheap, certain site-surfacing win; 003→004→005
+is the substantial, uncertain sponsor-extraction chain, sequenced by real
+dependency (each stage consumes the previous stage's output shape).
