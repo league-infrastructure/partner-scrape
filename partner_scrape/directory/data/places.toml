@@ -1,0 +1,268 @@
+# Curated "where to go any day" San Diego STEM places -- a static,
+# hand-researched roster (the FLL `static_roster` precedent -- see
+# `directory/sources/static_roster.py`'s own module docstring), never a
+# live scrape (issue 35's explicit instruction). Every category issue
+# 35 named has at least one entry below -- see `directory/DESIGN.md`'s
+# coverage table.
+#
+# Coordinates are curated from each place's own published address
+# (`latitude`/`longitude` set directly below, verified against a public
+# source -- an official site, NPS/county/city page, or a corroborating
+# map listing -- never a live geocoder call). One entry (`atlas-labs`)
+# has no single confident street-level coordinate to curate yet (it is
+# not open); it omits `latitude`/`longitude` entirely and falls back to
+# the shared `geo_ladder.GeoLadder`'s ZIP-centroid rung at pipeline
+# time (`directory/pipeline.py`'s `_apply_geo_fallback`), never a
+# guess.
+#
+# `related_partner_id` is a deliberate, hand-verified join against
+# `site/src/data/partners.json`'s own `id` field -- never auto-derived
+# (ticket 018-007's own instruction: "do not attempt an automatic
+# cross-reference join this sprint... hand-copy the value"). Omitted
+# entirely where no confident partner-roster match exists, rather than
+# forced.
+
+[[place]]
+place_id = "sdpl-idea-lab-central"
+name = "IDEA Lab at San Diego Central Library"
+category = "makerspace"
+description = "Free public makerspace on the Central Library's 4th floor: 3D printers, laser/vinyl cutters, sewing machines, a recording studio, and a Bloomberg terminal. No membership fee -- open to anyone with a library card."
+address = "330 Park Blvd, 4th Floor Room 435, San Diego, CA 92101"
+city = "San Diego"
+postal_code = "92101"
+latitude = 32.7089
+longitude = -117.1542
+website = "https://www.sandiego.gov/public-library/central-library/idea-lab"
+related_partner_id = 85
+
+[[place]]
+place_id = "sdpl-idea-lab-san-ysidro"
+name = "Kilroy Realty IDEA Lab (San Ysidro Branch Library)"
+category = "makerspace"
+description = "Free public makerspace at the San Ysidro Branch Library focused on digital textile arts: 3D printer, die-cut machine, sewing/embroidery machines, serger, button maker, and heat press."
+address = "4235 Beyer Blvd, San Diego, CA 92173"
+city = "San Diego"
+postal_code = "92173"
+latitude = 32.5577
+longitude = -117.0432
+website = "https://www.sandiego.gov/public-library/idea/sy"
+related_partner_id = 85
+
+[[place]]
+place_id = "atlas-labs"
+name = "Atlas Labs"
+category = "makerspace"
+description = "A members-only hardware makerspace and production floor -- wood shop, metal shop, digital fabrication, electronics, and a robotics lab. Unlike the two free public SDPL IDEA Labs above, membership starts at $69/month."
+address = "2293 Verus Street, San Diego, CA 92154"
+city = "San Diego"
+postal_code = "92154"
+website = "https://atlaslabs.build/"
+status = "opening"
+status_note = "Opening January 2027 -- not yet operating; founding memberships open now."
+
+[[place]]
+place_id = "fleet-science-center-planetarium"
+name = "Heikoff Dome Theater (Fleet Science Center Planetarium)"
+category = "planetarium"
+description = "The Fleet Science Center's domed planetarium and giant-screen theater in Balboa Park, showing space and nature films alongside the museum's hands-on science exhibits."
+address = "1875 El Prado, San Diego, CA 92101"
+city = "San Diego"
+postal_code = "92101"
+latitude = 32.7308603
+longitude = -117.1469718
+website = "http://www.fleetscience.org"
+related_partner_id = 121
+
+[[place]]
+place_id = "palomar-college-planetarium"
+name = "Palomar College Planetarium"
+category = "planetarium"
+description = "A public planetarium on the Palomar College campus in San Marcos, offering seasonal public shows on the night sky."
+address = "1140 West Mission Road, San Marcos, CA 92069"
+city = "San Marcos"
+postal_code = "92069"
+latitude = 33.1434
+longitude = -117.1611
+website = "https://www.palomar.edu/planetarium/"
+related_partner_id = 751
+
+[[place]]
+place_id = "palomar-observatory"
+name = "Palomar Observatory"
+category = "observatory"
+description = "Caltech's historic research observatory atop Palomar Mountain, home of the 200-inch Hale Telescope; the visitor center and grounds are open to the public daily."
+address = "35899 Canfield Road, Palomar Mountain, CA 92060"
+city = "Palomar Mountain"
+postal_code = "92060"
+latitude = 33.3564
+longitude = -116.865
+website = "https://sites.astro.caltech.edu/palomar/"
+related_partner_id = 749
+
+[[place]]
+place_id = "mount-laguna-observatory"
+name = "SDSU Mount Laguna Observatory"
+category = "observatory"
+description = "San Diego State University's research observatory in the Cleveland National Forest, offering public star parties on select nights."
+address = "Sunrise Highway near Los Huecos Road, Mount Laguna, CA 91948"
+city = "Mount Laguna"
+postal_code = "91948"
+latitude = 32.8424
+longitude = -116.428
+website = "https://astronomy.sdsu.edu/mount-laguna-observatory-facilities/"
+related_partner_id = 750
+
+[[place]]
+place_id = "cabrillo-national-monument-tidepools"
+name = "Cabrillo National Monument Tidepools"
+category = "tide-pool"
+description = "Rocky-shore tidepools at the tip of Point Loma, part of Cabrillo National Monument -- best explored during a low tide; check NPS tide charts before visiting."
+address = "1800 Cabrillo Memorial Drive, San Diego, CA 92106"
+city = "San Diego"
+postal_code = "92106"
+latitude = 32.6722
+longitude = -117.2418
+website = "https://www.nps.gov/cabr/"
+related_partner_id = 734
+
+[[place]]
+place_id = "birch-aquarium-tide-pool-plaza"
+name = "Preuss Tide Pool Plaza (Birch Aquarium)"
+category = "tide-pool"
+description = "An outdoor, docent-staffed touch-tidepool exhibit on Birch Aquarium's oceanview terrace -- sea stars, anemones, and hermit crabs -- included with aquarium admission."
+address = "2300 Expedition Way, La Jolla, CA 92037"
+city = "La Jolla"
+postal_code = "92037"
+latitude = 32.8656956
+longitude = -117.2503842
+website = "https://aquarium.ucsd.edu/exhibits/tide-pool-plaza"
+related_partner_id = 238
+
+[[place]]
+place_id = "la-jolla-coast-blvd-tidepools"
+name = "La Jolla Tidepools (Coast Blvd)"
+category = "tide-pool"
+description = "Natural rocky tidepools along Coast Blvd between La Jolla Cove and Hospital Point -- sea anemones, crabs, and octopuses at low tide. No visitor center or organized program; wear shoes with grip."
+address = "Coast Blvd, La Jolla, CA 92037"
+city = "La Jolla"
+postal_code = "92037"
+latitude = 32.84972
+longitude = -117.2725
+website = "https://www.nps.gov/places/la-jolla-tidepools-and-the-children-s-pool.htm"
+
+[[place]]
+place_id = "agua-hedionda-discovery-center"
+name = "Agua Hedionda Discovery Center"
+category = "nature-center"
+description = "The Agua Hedionda Lagoon Foundation's hands-on nature center on the lagoon's north shore: live-animal touch tanks, trails, and lagoon-ecology exhibits, free to visit."
+address = "1580 Cannon Road, Carlsbad, CA 92008"
+city = "Carlsbad"
+postal_code = "92008"
+latitude = 33.1398566
+longitude = -117.307518
+website = "https://www.aguahedionda.org/"
+related_partner_id = 489
+
+[[place]]
+place_id = "living-coast-discovery-center"
+name = "Living Coast Discovery Center"
+category = "nature-center"
+description = "A nature center and zoo on the Sweetwater Marsh National Wildlife Refuge in Chula Vista, with native wetland wildlife, sea turtles, and raptors."
+address = "1000 Gunpowder Point Dr, Chula Vista, CA 91910"
+city = "Chula Vista"
+postal_code = "91910"
+latitude = 32.6401018
+longitude = -117.1103432
+website = "http://www.thelivingcoast.org/"
+related_partner_id = 46
+
+[[place]]
+place_id = "tijuana-river-estuary-visitor-center"
+name = "Tijuana River National Estuarine Research Reserve Visitor Center"
+category = "nature-center"
+description = "The Tijuana Estuary's visitor center in Imperial Beach: exhibits on the reserve's wetland ecology plus guided walks and a native-plant demonstration garden."
+address = "301 Caspian Way, Imperial Beach, CA 91932"
+city = "Imperial Beach"
+postal_code = "91932"
+latitude = 32.5748
+longitude = -117.1265
+website = "https://tijuanaestuary.org/"
+related_partner_id = 733
+
+[[place]]
+place_id = "mission-trails-visitor-center"
+name = "Mission Trails Regional Park Visitor and Interpretive Center"
+category = "nature-center"
+description = "Mission Trails Regional Park's visitor center: exhibits on local natural and cultural history, a theater, and trailheads for Cowles Mountain and the Old Mission Dam."
+address = "One Father Junipero Serra Trail, San Diego, CA 92119"
+city = "San Diego"
+postal_code = "92119"
+latitude = 32.8347
+longitude = -117.0392
+website = "https://www.mtrp.org/"
+related_partner_id = 732
+
+[[place]]
+place_id = "stelzer-county-park-nature-center"
+name = "Louis A. Stelzer County Park Nature Center"
+category = "nature-center"
+description = "A County of San Diego park in Lakeside with a small nature center, oak-woodland trails, and ranger-led environmental education programs."
+address = "11470 Wildcat Canyon Road, Lakeside, CA 92040"
+city = "Lakeside"
+postal_code = "92040"
+latitude = 32.88287
+longitude = -116.89689
+website = "https://www.sdparks.org/content/sdparks/en/park-pages/LouisStelzer.html"
+related_partner_id = 731
+
+[[place]]
+place_id = "oceanside-library-discovery-lab"
+name = "Discovery Lab (Oceanside Public Library)"
+category = "library-maker-lab"
+description = "Oceanside Public Library's free maker lab: 3D printers, a Glowforge laser engraver, Cricut machines, and a sublimation printer/heat press, plus a weekly teen Discovery Lab session."
+address = "330 North Coast Highway, Oceanside, CA 92054"
+city = "Oceanside"
+postal_code = "92054"
+latitude = 33.1959
+longitude = -117.3795
+website = "https://oceansidelibrary.com/resources-services/in-library-services/innovation-lab/"
+related_partner_id = 758
+
+[[place]]
+place_id = "carlsbad-library-exploration-hub"
+name = "Exploration HUB (Carlsbad City Library, Dove Library)"
+category = "library-maker-lab"
+description = "Carlsbad City Library's technology lab and makerspace at Dove Library: two 3D printers, Silhouette Cameo cutting machines, and digitization services, free for teens and adults."
+address = "1775 Dove Lane, Carlsbad, CA 92011"
+city = "Carlsbad"
+postal_code = "92011"
+latitude = 33.0958
+longitude = -117.2694
+website = "https://library.carlsbadca.gov/services/exploration-hub-21"
+related_partner_id = 759
+
+[[place]]
+place_id = "escondido-library-maker-program"
+name = "3D Printing & Maker Program (Escondido Public Library)"
+category = "library-maker-lab"
+description = "Escondido Public Library offers free 3D printing (submit a design online, pick it up about two weeks later) and monthly TinkerCAD design classes to library cardholders."
+address = "239 South Kalmia Street, Escondido, CA 92025"
+city = "Escondido"
+postal_code = "92025"
+latitude = 33.1226
+longitude = -117.0839
+website = "https://library.escondido.org/"
+related_partner_id = 760
+
+[[place]]
+place_id = "chula-vista-library-innovation-station"
+name = "Innovation Station (Chula Vista Public Library, Civic Center Branch)"
+category = "library-maker-lab"
+description = "A maker space and STEM lab at the Civic Center Branch, modeled on Qualcomm's Thinkabit Lab: robotics, 3D design, engineering, and coding activities for youth and teens."
+address = "365 F Street, Chula Vista, CA 91910"
+city = "Chula Vista"
+postal_code = "91910"
+latitude = 32.6373
+longitude = -117.0842
+website = "https://www.chulavistaca.gov/departments/library/innovation-station"
+related_partner_id = 762

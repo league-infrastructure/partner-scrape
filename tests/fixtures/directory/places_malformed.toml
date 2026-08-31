@@ -1,0 +1,31 @@
+# Hand-authored malformed entries for per-record error isolation
+# testing (tests/directory/test_sources_static_roster.py's
+# TestMalformedEntryIsolation) -- the real committed
+# directory/data/places.toml has no malformed entries of its own.
+
+[[place]]
+# Missing place_id and name entirely.
+category = "makerspace"
+
+[[place]]
+place_id = "no-category"
+name = "Missing Category"
+# category omitted
+
+[[place]]
+place_id = "bad-category"
+name = "Bad Category"
+category = "science-museum"
+
+[[place]]
+place_id = "opening-no-note"
+name = "Opening With No Note"
+category = "observatory"
+status = "opening"
+# status_note omitted -- must be present whenever status != "open"
+
+[[place]]
+place_id = "good-place"
+name = "Good Place"
+category = "nature-center"
+description = "The one well-formed entry in this fixture."
