@@ -15,6 +15,25 @@ most, one new adapter class — never by editing the pipeline, the normalizer, o
 exporter. Nothing else in the system owns per-vendor protocol knowledge; if vendor
 quirks appear outside this directory, the boundary has leaked.
 
+**(Sprint 016 ticket 004)** `robotevents.py` (new) adds an eleventh adapter type,
+`robotevents` — VEX Robotics Competition (V5RC/VIQRC) and Aerial Drone Competition
+tournament events, via RobotEvents API v2 (`robotevents.com/api/v2`), the first robotics
+league besides FIRST this project ingests. Structurally it is `tec_rest`/`localist`'s
+exact shape (probe `page=1` at a cheap `per_page`, learn `meta.last_page`, enumerate the
+rest) with `leaguesync`'s auth convention (`Authorization: Bearer <token>`, via the new
+`config.get_robotevents_api_key()`/`get_robotevents_url()`, mirroring
+`get_tba_api_key()`/`get_tba_url()`). One documented deviation from `localist`'s
+probe-failure handling: a `401` probe response raises `RuntimeError` immediately (matching
+`teams/sources/tba.py`'s explicit-401-raise precedent) rather than degrading to "assume 1
+page" — an auth failure is not a transient probe hiccup, and raising here is what lets
+`pipeline.run()`'s existing per-source isolation catch it, rather than silently returning
+zero events for a broken credential. No `ROBOTEVENTS_KEY` was available during this
+ticket's execution (see `config.py`'s own docstring), so the exact `/events` request/
+response shape was confirmed against RobotEvents' own published OpenAPI schema (via the
+open-source `robotevents` npm client's generated types) rather than a live probe —
+documented in `robotevents.py`'s own module docstring, to be re-verified live the first
+time a token is provisioned.
+
 ## 2. Orientation
 
 The public contract is `base.py`'s `Adapter` Protocol: three methods, `discover` →
@@ -49,11 +68,11 @@ but previously never threaded anywhere — finally reach `PoliteFetcher.get()`. 
 `ADAPTERS` dispatch dict, instantiates it, materializes `discover()`'s output, truncates
 it to the source's `max_urls` cap, then loops fetch→extract accumulating events.
 
-Ten adapter types are registered today, in two families:
+Eleven adapter types are registered today, in two families:
 
 | Family | Types | Shape |
 |---|---|---|
-| Structured API | `tec_rest`, `wp_rest`, `ical`, `localist`, `bibliocommons`, `greenhouse`, `lever`, `leaguesync` | Known endpoint, JSON/iCal parsing, `CONFIDENCE = 1.0` |
+| Structured API | `tec_rest`, `wp_rest`, `ical`, `localist`, `bibliocommons`, `greenhouse`, `lever`, `leaguesync`, `robotevents` | Known endpoint, JSON/iCal parsing, `CONFIDENCE = 1.0` |
 | HTML | `generic_html`, `listing_html` | URL discovery via `discovery/`, field recovery via `extract/`'s ladder |
 
 `ats_filters.py` is a shared helper, not an adapter: the deterministic
@@ -225,6 +244,9 @@ three methods is a valid `Adapter`.
 - **`config.get_leaguesync_api_key` / `get_leaguesync_url` (from `config.py`)** — the
   `leaguesync` adapter's credentials, read through the one module allowed to touch
   `os.environ`.
+- **`config.get_robotevents_api_key` / `get_robotevents_url` (from `config.py`)**
+  — **(Sprint 016 ticket 004)** the `robotevents` adapter's credentials, same
+  `os.environ`-isolation convention as `leaguesync`'s pair above.
 
 ## 6. Open Questions / Known Limitations
 

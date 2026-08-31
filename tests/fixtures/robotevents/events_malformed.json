@@ -1,0 +1,25 @@
+{
+  "meta": {
+    "current_page": 1,
+    "last_page": 1,
+    "per_page": 50,
+    "total": 3
+  },
+  "data": [
+    {
+      "id": 11111,
+      "sku": "RE-VRC-25-0001",
+      "name": "",
+      "start": "2026-02-27T08:00:00-08:00",
+      "location": {"venue": "Nowhere"},
+      "program": {"id": 1, "name": "VEX Robotics Competition"},
+      "event_type": "tournament"
+    },
+    "not-an-object",
+    {
+      "id": 22222,
+      "sku": "RE-VRC-25-0002",
+      "name": "Synthetic Valid VEX Event"
+    }
+  ]
+}

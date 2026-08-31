@@ -50,6 +50,16 @@ parsing — this batch's single highest-yield feed. Both are committed with
 `acquisition_policy.respect_robots = false`, completing the 5-of-5 robots-gated
 batch from issue 38/40.
 
+**(Sprint 016 ticket 004)** `sources/robotevents-vex-sd.toml` (new) registers the
+first non-FIRST robotics league this project ingests — VEX Robotics Competition
+(V5RC/VIQRC) and the Aerial Drone Competition, CA Region 4, via the new
+`robotevents` adapter (`adapters/DESIGN.md`'s own sprint-016 addendum). Registered
+`enabled = true` with no live verification — no `ROBOTEVENTS_KEY` was provisioned
+during this ticket's execution — mirroring `frc-sd.toml`'s TBA precedent (§3's
+"malformed or missing-required-field file is logged and skipped" isolation
+covers a bad *file*; a missing *credential* is `pipeline.run()`'s existing
+per-source isolation instead, unaffected by this file being present).
+
 ## 2. Orientation
 
 Four data directories, three schema/loader pairs:

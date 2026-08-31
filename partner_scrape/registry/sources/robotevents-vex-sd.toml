@@ -1,0 +1,60 @@
+# VEX Robotics Competition (V5RC/VIQRC) + Aerial Drone Competition --
+# CA Region 4 (San Diego/Imperial), via RobotEvents API v2
+# (robotevents.com/api/v2). VEX is the other major robotics league in
+# San Diego (roughly a dozen local V5RC/VIQRC tournaments per season
+# plus two ~96-team regional championships, Feb 27-Mar 1 2026 at Town &
+# Country) and, along with the Aerial Drone Competition (RECF + partner
+# Robolink, same platform), was entirely absent from the opportunity
+# pipeline before sprint 016 -- robotevents.com 403s a plain fetch, so
+# the structured API is the only viable path (clasi/sprints/016-.../
+# issues/26-robotevents-adapter-vex-and-drones.md).
+#
+# Auth: Authorization: Bearer <token> -- config.get_robotevents_api_key()
+# reads ROBOTEVENTS_KEY from the assembled .env (config/prod/secrets.env,
+# SOPS-encrypted). **Not yet provisioned as of this ticket** -- unlike
+# TBA_KEY (provisioned in ticket 011-003), no RobotEvents account/token
+# exists in this project yet. Per sprint.md's Migration Concerns and
+# this ticket's own instruction, this source is registered regardless
+# (matching frc-sd.toml's TBA precedent): a missing/invalid
+# ROBOTEVENTS_KEY is isolated per-source by pipeline.run()'s existing
+# mechanism (logged, skipped, never aborts the run), it is not a reason
+# to withhold registration.
+#
+# Provisioning steps for an operator to complete (matching TBA_KEY's
+# original gap, config.py's ROBOTEVENTS_API_KEY_ENV_VAR docstring):
+#   1. Create a free account at https://www.robotevents.com.
+#   2. Generate a personal access token (RobotEvents API v2 docs,
+#      linked from the account settings page -- gated behind login, so
+#      this ticket could not screenshot/confirm the exact page path
+#      without an account).
+#   3. Add it to config/prod/secrets.env (and config/dev/secrets.env)
+#      as ROBOTEVENTS_KEY via `sops -e` / the project's existing SOPS
+#      workflow, matching TBA_KEY's existing entry.
+#
+# `region`/`event_types`/`start` below are this adapter's actual query
+# filters (see adapters/robotevents.py's module docstring for why there
+# is no season_ids default: RobotEvents' season IDs are opaque
+# incrementing integers with no derivable pattern, and no token was
+# available this ticket to look the current V5RC/VIQRC/ADC season IDs
+# up live via /seasons). `region = "CA"` is this ticket's best-available
+# guess at RobotEvents' own `region` query semantics (a free string,
+# per its OpenAPI schema) -- NOT live-confirmed against a real response
+# (no token available); re-verify the very first live dry-run once
+# ROBOTEVENTS_KEY exists, and widen/replace it here if CA Region 4's
+# events don't actually carry `region = "CA"` on RobotEvents' side.
+
+org_name = "VEX Robotics Competition -- San Diego/Imperial (CA Region 4)"
+adapter_type = "robotevents"
+enabled = true
+
+[config]
+region = "CA"
+event_types = ["tournament"]
+
+[acquisition_policy]
+# A keyed REST API, not a scraped HTML site -- no robots.txt to
+# respect, matching leaguesync.toml's same reasoning for its own
+# same-origin API source.
+respect_robots = false
+rate_limit_seconds = 1.0
+discovered_via = "clasi/sprints/016-feed-robustness-venue-dedup-and-the-vex-league/issues/26-robotevents-adapter-vex-and-drones.md -- registered without live verification (no ROBOTEVENTS_KEY provisioned this ticket), matching frc-sd.toml's TBA precedent for a registered-but-uncredentialed source"

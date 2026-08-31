@@ -68,6 +68,43 @@ TBA_URL_ENV_VAR = "TBA_URL"
 #: TBA source's build.
 DEFAULT_TBA_URL = "https://www.thebluealliance.com"
 
+#: Environment variable holding the Bearer token for RobotEvents API v2
+#: (``adapters.robotevents``, sprint 016 ticket 004; ``teams.sources.
+#: robotevents``, ticket 005). Assembled by dotconfig into
+#: ``config/prod/secrets.env`` -- there is no sane default, so it must
+#: be set explicitly, matching ``get_tba_api_key()``'s convention
+#: exactly. **Not yet provisioned** in ``config/prod/secrets.env`` as of
+#: this ticket (sprint.md's Migration Concerns) -- getting a real value
+#: requires a RobotEvents account (robotevents.com), the same
+#: operator-provisioning gap ``TBA_KEY`` had before ticket 011-003.
+#: Both ``pipeline.run()`` and ``teams.pipeline.run_teams()`` isolate
+#: this source's failure the same way they isolate any other source's
+#: (a missing/invalid key degrades that one source, never aborts the
+#: run) -- see ``registry/sources/robotevents-vex-sd.toml``'s own
+#: comment for the provisioning steps (account -> API key -> SOPS
+#: ``secrets.env`` entry).
+ROBOTEVENTS_API_KEY_ENV_VAR = "ROBOTEVENTS_KEY"
+
+#: Environment variable overriding the RobotEvents API's base URL.
+#: Overridable so a future staging/mirror deployment doesn't require a
+#: code change, matching ``TBA_URL_ENV_VAR``'s convention.
+ROBOTEVENTS_URL_ENV_VAR = "ROBOTEVENTS_URL"
+
+#: Default base URL for RobotEvents API v2. Unlike ``DEFAULT_TBA_URL``,
+#: this was **not** confirmed via a live authenticated probe during
+#: this ticket -- no ``ROBOTEVENTS_KEY`` was available (Migration
+#: Concerns), and every documented RobotEvents v2 endpoint requires the
+#: Bearer token, so there is no unauthenticated live call this ticket
+#: could run instead. Confirmed instead against RobotEvents' own
+#: published OpenAPI schema, via the ``baseUrl`` the actively-maintained
+#: open-source ``robotevents`` npm client
+#: (https://github.com/brenapp/robotevents) is generated against and
+#: constructs its client with (``createClient()`` in
+#: ``src/utils/client.ts``: ``baseUrl: "https://www.robotevents.com/api/v2"``).
+#: Re-verify live (``GET /events`` with a real token) the first time one
+#: is provisioned.
+DEFAULT_ROBOTEVENTS_URL = "https://www.robotevents.com/api/v2"
+
 # This package's own directory, e.g. .../partner-scrape/partner_scrape
 _PACKAGE_DIR = Path(__file__).resolve().parent
 
@@ -227,3 +264,47 @@ def get_tba_url() -> str:
     if value:
         return value
     return DEFAULT_TBA_URL
+
+
+def get_robotevents_api_key() -> str:
+    """Return the RobotEvents API v2 Bearer token, stripped of quotes.
+
+    Reads ``ROBOTEVENTS_KEY`` from the environment on every call (no
+    caching), mirroring ``get_tba_api_key()`` exactly -- including the
+    quote-stripping the assembled ``.env`` needs (dotconfig's
+    round-trip of a SOPS-decrypted secret carries surrounding single
+    quotes, e.g. ``ROBOTEVENTS_KEY='abc123'``) -- so callers get the
+    bare token, never the quote characters.
+
+    Raises:
+        RuntimeError: if ``ROBOTEVENTS_KEY`` is not set (or is empty
+            after stripping) -- there is no safe default for an API
+            credential, matching ``get_tba_api_key()``'s convention.
+            This is the failure mode both ``pipeline.run()`` and
+            ``teams.pipeline.run_teams()`` must isolate (see
+            :data:`ROBOTEVENTS_API_KEY_ENV_VAR`'s own docstring): a
+            missing ``ROBOTEVENTS_KEY`` degrades to that one source
+            being skipped, it must never raise out of the whole run.
+    """
+    value = os.environ.get(ROBOTEVENTS_API_KEY_ENV_VAR)
+    if value is not None:
+        value = value.strip().strip("'\"").strip()
+    if not value:
+        raise RuntimeError(
+            f"{ROBOTEVENTS_API_KEY_ENV_VAR} is not set. Configure it via the "
+            "assembled .env (see config/prod/secrets.env) before running "
+            "the robotevents adapter/team source."
+        )
+    return value
+
+
+def get_robotevents_url() -> str:
+    """Return RobotEvents API v2's base URL.
+
+    Reads ``ROBOTEVENTS_URL`` from the environment if set; otherwise
+    returns :data:`DEFAULT_ROBOTEVENTS_URL`.
+    """
+    value = os.environ.get(ROBOTEVENTS_URL_ENV_VAR)
+    if value:
+        return value
+    return DEFAULT_ROBOTEVENTS_URL
