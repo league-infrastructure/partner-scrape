@@ -165,7 +165,6 @@ class TestArgumentWiring:
         assert "--dry-run" in out
         assert "--source" in out
         assert "--site-dir" in out
-        assert "--no-mirror" in out
         assert "--no-sponsors" in out
 
     def test_top_level_help_text_mentions_the_teams_subcommand(self, capsys):
@@ -174,70 +173,6 @@ class TestArgumentWiring:
 
         out = capsys.readouterr().out
         assert "teams" in out
-
-
-class TestMirrorWiring:
-    def test_mirror_is_called_when_not_dry_run_and_not_no_mirror(self, monkeypatch, tmp_path):
-        monkeypatch.setattr(
-            cli, "run_teams", lambda **kwargs: {"meta": {"total": 0}, "teams": []}
-        )
-        captured = {}
-
-        def fake_mirror(primary, targets, **kwargs):
-            captured["primary"] = primary
-            captured["targets"] = targets
-
-        monkeypatch.setattr(cli, "mirror_site_data", fake_mirror)
-        monkeypatch.setattr(cli, "get_mirror_site_dirs", lambda: [tmp_path / "mirror-target"])
-
-        site_dir = tmp_path / "site"
-        exit_code = cli.main(["teams", "--site-dir", str(site_dir)])
-
-        assert exit_code == 0
-        assert captured["primary"] == site_dir
-        assert captured["targets"] == [tmp_path / "mirror-target"]
-
-    def test_no_mirror_flag_skips_mirroring(self, monkeypatch, tmp_path):
-        def _boom(*args, **kwargs):
-            raise AssertionError("mirror_site_data must not be called under --no-mirror")
-
-        monkeypatch.setattr(
-            cli, "run_teams", lambda **kwargs: {"meta": {"total": 0}, "teams": []}
-        )
-        monkeypatch.setattr(cli, "mirror_site_data", _boom)
-        monkeypatch.setattr(cli, "get_mirror_site_dirs", lambda: [tmp_path / "mirror-target"])
-
-        exit_code = cli.main(["teams", "--no-mirror"])  # must not raise
-
-        assert exit_code == 0
-
-    def test_dry_run_skips_mirroring(self, monkeypatch, tmp_path):
-        def _boom(*args, **kwargs):
-            raise AssertionError("mirror_site_data must not be called under --dry-run")
-
-        monkeypatch.setattr(
-            cli, "run_teams", lambda **kwargs: {"meta": {"total": 0}, "teams": []}
-        )
-        monkeypatch.setattr(cli, "mirror_site_data", _boom)
-        monkeypatch.setattr(cli, "get_mirror_site_dirs", lambda: [tmp_path / "mirror-target"])
-
-        exit_code = cli.main(["teams", "--dry-run"])  # must not raise
-
-        assert exit_code == 0
-
-    def test_no_mirror_targets_configured_skips_mirror_call(self, monkeypatch, tmp_path):
-        def _boom(*args, **kwargs):
-            raise AssertionError("mirror_site_data must not be called with no targets")
-
-        monkeypatch.setattr(
-            cli, "run_teams", lambda **kwargs: {"meta": {"total": 0}, "teams": []}
-        )
-        monkeypatch.setattr(cli, "mirror_site_data", _boom)
-        monkeypatch.setattr(cli, "get_mirror_site_dirs", lambda: [])
-
-        exit_code = cli.main(["teams"])  # must not raise
-
-        assert exit_code == 0
 
 
 class TestNeverCrossesIntoTheOtherPipeline:
@@ -321,45 +256,23 @@ class TestTeamsEndToEnd:
         assert "dry run" in out.lower()
         assert not site_dir.exists()
 
-    def test_real_run_writes_teams_json_and_mirrors_to_a_target(self, monkeypatch, tmp_path):
+    def test_real_run_writes_teams_json(self, monkeypatch, tmp_path):
         fetcher = _ftcscout_fixture_fetcher()
         monkeypatch.setattr(cli, "PoliteFetcher", lambda: fetcher)
 
         site_dir = _make_site(tmp_path / "site")
-        target = _make_site(tmp_path / "mirror-target")
-        monkeypatch.setattr(cli, "get_mirror_site_dirs", lambda: [target])
 
         exit_code = cli.main(["teams", "--source", "ftcscout", "--site-dir", str(site_dir)])
 
         assert exit_code == 0
         primary_teams = json.loads((site_dir / "src" / "data" / "teams.json").read_text())
         assert primary_teams["meta"]["total"] == 152
-        mirrored_teams = json.loads((target / "src" / "data" / "teams.json").read_text())
-        assert mirrored_teams == primary_teams
-
-    def test_no_mirror_flag_leaves_the_target_untouched(self, monkeypatch, tmp_path):
-        fetcher = _ftcscout_fixture_fetcher()
-        monkeypatch.setattr(cli, "PoliteFetcher", lambda: fetcher)
-
-        site_dir = _make_site(tmp_path / "site")
-        target = _make_site(tmp_path / "mirror-target")
-        monkeypatch.setattr(cli, "get_mirror_site_dirs", lambda: [target])
-
-        exit_code = cli.main(["teams", "--site-dir", str(site_dir), "--no-mirror"])
-
-        assert exit_code == 0
-        assert not (target / "src" / "data" / "teams.json").exists()
 
     def test_never_writes_opportunities_json_or_scrape_meta_anywhere(
         self, monkeypatch, tmp_path
     ):
         fetcher = _ftcscout_fixture_fetcher()
         monkeypatch.setattr(cli, "PoliteFetcher", lambda: fetcher)
-        # No mirror target configured here -- keeps this test hermetic to
-        # tmp_path (an unmonkeypatched get_mirror_site_dirs() would
-        # default to this repo's own site/ checkout, which every other
-        # test in this class explicitly avoids via a fixture target).
-        monkeypatch.setattr(cli, "get_mirror_site_dirs", lambda: [])
 
         site_dir = _make_site(tmp_path / "site")
         cli.main(["teams", "--site-dir", str(site_dir)])

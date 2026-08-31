@@ -1,18 +1,19 @@
 # partner-scrape
 
-Docker-based system that mirrors partner websites and saves full HTML content plus response headers for offline data extraction.
+The San Diego STEM Ecosystem event aggregator engine: fetches and
+normalizes opportunities from partner organizations' websites and
+exports them into the `stem-ecosystem` site.
 
 ---
 
 ## Running the engine
 
-`partner_scrape/` is the new aggregator engine (sprint 001) that
-replaces the legacy `dev/`/`scraper/`/`run_mirrors.py` mock-up described
-below. It reads a data-driven Source Registry, politely fetches and
-caches each source, ingests events via a per-source adapter (The Events
-Calendar REST, WordPress REST, or iCal/RSS), normalizes and deduplicates
-them into the site's opportunity schema, and exports current+upcoming
-opportunities into the sibling `stem-ecosystem` repo.
+`partner_scrape/` is the aggregator engine (sprint 001 onward). It reads
+a data-driven Source Registry, politely fetches and caches each source,
+ingests events via a per-source adapter (The Events Calendar REST,
+WordPress REST, or iCal/RSS), normalizes and deduplicates them into the
+site's opportunity schema, and exports current+upcoming opportunities
+into the sibling `stem-ecosystem` repo.
 
 ### Install
 
@@ -63,153 +64,25 @@ Every test runs against recorded fixtures under `tests/fixtures/` --
 no network access, no `ANTHROPIC_API_KEY` usage, no writes to the real
 `../stem-ecosystem` checkout.
 
----
+### Beta preview
 
-## Overview
-
-`partner-scrape` crawls each partner's website (listed in `data/partners_viable.csv`), saves every text-based page as two files, and stores them in a structured mirror directory:
-
-```
-data/mirrors/
-└── www.example.com/
-    ├── _index/
-    │   ├── content.html   ← raw HTML body
-    │   └── meta.json      ← URL, HTTP status, all response headers, timestamp
-    ├── about/
-    │   ├── content.html
-    │   └── meta.json
-    └── programs/youth-education/
-        ├── content.html
-        └── meta.json
-```
-
-Binary resources (images, video, audio, fonts, archives, …) are intentionally **skipped** – only HTML and other text-based pages are saved.
+`partner-scrape` also hosts a GitHub Pages beta preview of the
+`stem-ecosystem` site (`.github/workflows/pages.yml`). `site/` is
+**not** tracked content in this repo -- the workflow's build job
+checks out `league-infrastructure/stem-ecosystem` at `ref: master`
+into `site/` at build time, so the beta always builds from
+stem-ecosystem's actual current source. For local `just dev`/`just
+build`, clone `stem-ecosystem` yourself into a gitignored `site/`
+directory (or point the `justfile`'s `site :=` variable elsewhere);
+see the `justfile` for details.
 
 ---
 
-## Quick Start
-
-### Option A – Docker (recommended)
-
-```bash
-# Build the image
-docker compose build
-
-# Mirror all 153 partner sites
-docker compose run scraper
-
-# Mirror only the first 5 sites (smoke test)
-docker compose run scraper --limit 5
-
-# Resume a previously interrupted run
-docker compose run scraper --resume
-
-# Mirror a single URL
-docker compose run scraper --url https://www.example.com
-```
-
-Mirrored files are written to `./data/mirrors/` on the host (volume-mounted into the container).
-
-### Option B – Local Python
-
-```bash
-# Create and activate a virtual environment
-python -m venv .venv
-source .venv/bin/activate      # Windows: .venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Mirror all partners
-python run_mirrors.py
-
-# Mirror only the first 3 (quick test)
-python run_mirrors.py --limit 3
-
-# Mirror a single URL
-python run_mirrors.py --url https://www.aguahedionda.org/
-```
-
----
-
-## Project Layout
-
-```
-partner-scrape/
-├── Dockerfile                 # Container build instructions
-├── docker-compose.yml         # Compose service definition
-├── requirements.txt           # Python dependencies
-├── scrapy.cfg                 # Scrapy project config
-├── run_mirrors.py             # Main entry-point (reads CSV, schedules crawls)
-├── scraper/
-│   ├── settings.py            # Scrapy settings (throttling, concurrency, …)
-│   └── spiders/
-│       └── mirror_spider.py   # MirrorSpider – crawls one domain, saves pages
-└── data/
-    ├── partners_viable.csv    # Source of truth: partner names + website URLs
-    └── mirrors/               # Generated at runtime (git-ignored)
-```
-
----
-
-## CLI Reference
-
-```
-python run_mirrors.py [options]
-
-Options:
-  --csv PATH        Path to the partners CSV (default: data/partners_viable.csv)
-  --output-dir DIR  Root directory for mirrored content (default: data/mirrors)
-  --limit N         Mirror only the first N partners
-  --resume          Skip partners whose mirror directory already has content
-  --url URL         Mirror a single URL (bypasses the CSV)
-  -h, --help        Show this help message
-```
-
----
-
-## Data Structure
-
-Each crawled page produces two files inside `data/mirrors/{domain}/{url_path}/`:
-
-| File | Contents |
-|------|----------|
-| `content.html` | Raw HTTP response body (HTML, plain text, XML, …) |
-| `meta.json` | `url`, `status`, `headers` (full response headers), `timestamp` |
-
-### Example `meta.json`
-
-```json
-{
-  "url": "https://www.aguahedionda.org/",
-  "status": 200,
-  "headers": {
-    "Content-Type": ["text/html; charset=UTF-8"],
-    "X-Frame-Options": ["SAMEORIGIN"]
-  },
-  "timestamp": "2024-01-15T12:34:56.789012+00:00"
-}
-```
-
----
-
-## Scrapy Settings Highlights
-
-| Setting | Value | Purpose |
-|---------|-------|---------|
-| `ROBOTSTXT_OBEY` | `True` | Respect each site's robots.txt |
-| `DOWNLOAD_DELAY` | `1 s` | Minimum delay between requests to the same domain |
-| `AUTOTHROTTLE_ENABLED` | `True` | Automatically slow down when the server is under load |
-| `CONCURRENT_REQUESTS_PER_DOMAIN` | `4` | Limits parallel requests per host |
-| `DOWNLOAD_MAXSIZE` | `10 MB` | Skip responses larger than 10 MB |
-| `DEPTH_LIMIT` | `20` | Maximum link depth per domain |
-
----
-
-## Future Work
-
-A parallel `data/scrapers/{domain}/` directory (next phase) will contain AI-generated extractor scripts that read the mirrored HTML and pull out:
-
-- Upcoming events
-- Organisation description and metadata
-- Logo image URLs (for a subsequent download pass)
+*A pre-`partner_scrape/` Scrapy-based prototype mirrored partner sites
+for offline extraction before this package existed, along with a
+standalone entry-point script and its Docker/Compose tooling. It has
+been retired and removed from the working tree; see git history for
+reference. `dev/refresh_school_directories.py` is unrelated and
+remains -- it is a live, standalone maintenance script for the
+`teams/` subsystem's offline geocoding data, documented in
+`partner_scrape/teams/DESIGN.md`.*

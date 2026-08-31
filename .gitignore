@@ -44,7 +44,7 @@ Thumbs.db
 .clasi/.clasi.db
 .clasi/log/
 
-# Beta site build artifacts
-site/node_modules/
-site/dist/
-site/.astro/
+# Beta site: build-time-only checkout of stem-ecosystem (CI checks it out
+# fresh into site/; a local site/ is a developer's own gitignored manual
+# clone of stem-ecosystem, never tracked here)
+site/

@@ -43,9 +43,8 @@ import logging
 import sys
 from pathlib import Path
 
-from partner_scrape.config import get_mirror_site_dirs, get_site_dir
+from partner_scrape.config import get_site_dir
 from partner_scrape.export import publish
-from partner_scrape.export.mirror import mirror_site_data
 from partner_scrape.enrich.cache import EnrichmentCache
 from partner_scrape.enrich.enricher import LLMEnricher
 from partner_scrape.enrich.llm_client import AnthropicLLMClient
@@ -102,26 +101,6 @@ def _build_parser() -> argparse.ArgumentParser:
         help=(
             "Sibling stem-ecosystem checkout to write opportunities.json / "
             "scrape-meta.json into (default: ../stem-ecosystem, or $SITE_DIR)."
-        ),
-    )
-    parser.add_argument(
-        "--mirror-site-dir",
-        dest="mirror_site_dirs",
-        type=Path,
-        action="append",
-        help=(
-            "Additional site checkout to copy the finished export into "
-            "(repeatable). Defaults to this repo's own site/, so a scrape "
-            "refreshes the beta site `just dev` serves as well as "
-            "--site-dir. Override the default with $MIRROR_SITE_DIRS."
-        ),
-    )
-    parser.add_argument(
-        "--no-mirror",
-        action="store_true",
-        help=(
-            "Do not copy the export into any additional site checkout -- "
-            "write only to --site-dir."
         ),
     )
     parser.add_argument(
@@ -300,14 +279,6 @@ def _add_teams_subcommand(subparsers: argparse._SubParsersAction) -> None:
         ),
     )
     parser.add_argument(
-        "--no-mirror",
-        action="store_true",
-        help=(
-            "Do not copy teams.json into any additional site checkout -- "
-            "write only to --site-dir."
-        ),
-    )
-    parser.add_argument(
         "--no-sponsors",
         action="store_true",
         help=(
@@ -372,14 +343,6 @@ def _add_directory_subcommand(subparsers: argparse._SubParsersAction) -> None:
         ),
     )
     parser.add_argument(
-        "--no-mirror",
-        action="store_true",
-        help=(
-            "Do not copy places.json/clubs.json into any additional site "
-            "checkout -- write only to --site-dir."
-        ),
-    )
-    parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
@@ -416,16 +379,6 @@ def _run_directory(args: argparse.Namespace) -> int:
     # those doubles rather than requiring every one of them to grow a
     # "clubs" key it has no reason to know about.
     clubs = payload.get("clubs", [])
-
-    # Keep every other checkout of the site in step, same convention as
-    # the `run`/`teams` commands' own mirroring step -- skipped under
-    # --dry-run/--no-mirror, which both promise not to touch any
-    # checkout beyond (or including) --site-dir.
-    if not args.dry_run and not args.no_mirror:
-        targets = get_mirror_site_dirs()
-        if targets:
-            primary = args.site_dir if args.site_dir is not None else get_site_dir()
-            mirror_site_data(primary, targets)
 
     clubs_noun = "club" if len(clubs) == 1 else "clubs"
     noun = "place" if len(places) == 1 else "places"
@@ -466,16 +419,6 @@ def _run_teams(args: argparse.Namespace) -> int:
         no_sponsors=args.no_sponsors,
     )
     teams = payload["teams"]
-
-    # Keep every other checkout of the site in step, same convention as
-    # the `run` command's own mirroring step -- skipped under
-    # --dry-run/--no-mirror, which both promise not to touch any
-    # checkout beyond (or including) --site-dir.
-    if not args.dry_run and not args.no_mirror:
-        targets = get_mirror_site_dirs()
-        if targets:
-            primary = args.site_dir if args.site_dir is not None else get_site_dir()
-            mirror_site_data(primary, targets)
 
     noun = "team" if len(teams) == 1 else "teams"
     suffix = " (dry run -- nothing written)" if args.dry_run else ""
@@ -589,11 +532,9 @@ def main(argv: list[str] | None = None) -> int:
     # this run's Opportunities, publish.project() needs *every*
     # partner's full history to produce a correct current/past split --
     # a --source/--limit-scoped run must never regenerate the published
-    # tree from a partial view. So, like mirroring below, it is
-    # sequenced here rather than called from inside pipeline.run(), and
-    # skipped under --dry-run for the same reason mirroring is: it
-    # writes nothing anywhere. Sequenced before mirroring so a mirrored
-    # checkout always receives an already-projected, complete tree.
+    # tree from a partial view. So it is sequenced here rather than
+    # called from inside pipeline.run(), and skipped under --dry-run:
+    # it writes nothing anywhere.
     #
     # Sprint 018 ticket 001 (issue 43): publish.project() reads every
     # partner's *entire* accumulated .jsonl history, including lines
@@ -601,18 +542,15 @@ def main(argv: list[str] | None = None) -> int:
     # `Opportunity` -- a KeyError there is a real, standing failure mode
     # (confirmed via a live production run's traceback, not
     # hypothetical), and it used to be fatal to the whole process: an
-    # uncaught exception here crashed `main()` before the mirror step
-    # below ever ran, which is why that step "did not fire" on
-    # 2026-08-31 despite every one of its own preconditions being met --
-    # it was never reached at all. publish.project() failing must never
-    # again take mirroring down with it: this run's own opportunities.json/
+    # uncaught exception here crashed `main()` before the rest of this
+    # function ran. publish.project() failing must never again take the
+    # rest of the run down with it: this run's own opportunities.json/
     # teams.json/etc. were already written straight to --site-dir by
-    # run() above, independently of publish.project(), so every other
-    # checkout still deserves them even when the public/data/ projection
-    # itself is broken. Matches this codebase's per-source error-
-    # isolation convention (pipeline._run_one_source): logged loudly via
-    # logger.exception, never a bare silent pass -- surfaced to the
-    # caller as a non-zero exit code below instead.
+    # run() above, independently of publish.project(). Matches this
+    # codebase's per-source error-isolation convention
+    # (pipeline._run_one_source): logged loudly via logger.exception,
+    # never a bare silent pass -- surfaced to the caller as a non-zero
+    # exit code below instead.
     publish_failed = False
     if not args.dry_run:
         publish_site_dir = args.site_dir if args.site_dir is not None else get_site_dir()
@@ -625,25 +563,10 @@ def main(argv: list[str] | None = None) -> int:
             publish_failed = True
             logger.exception(
                 "publish.project() failed; public/data/ was not refreshed "
-                "this run. Continuing to the mirror step below so "
-                "src/data/ exports still reach every checkout -- "
+                "this run. Continuing so the rest of this run's output "
+                "(yield report, exit code) is still produced -- "
                 "investigate and re-run to refresh public/data/."
             )
-
-    # Keep every other checkout of the site in step with the export
-    # that was just written. Skipped under --dry-run, which promises to
-    # write nothing anywhere. Runs even when publish.project() failed
-    # above (see that block's comment) -- only --dry-run/--no-mirror
-    # skip this step.
-    if not args.dry_run and not args.no_mirror:
-        targets = (
-            args.mirror_site_dirs
-            if args.mirror_site_dirs is not None
-            else get_mirror_site_dirs()
-        )
-        if targets:
-            primary = args.site_dir if args.site_dir is not None else get_site_dir()
-            mirror_site_data(primary, targets)
 
     noun = "opportunity" if len(payload) == 1 else "opportunities"
     suffix = " (dry run -- nothing written)" if args.dry_run else ""

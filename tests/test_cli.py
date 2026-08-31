@@ -15,8 +15,6 @@ below, covering the new `discover-candidates` subcommand.
 
 from __future__ import annotations
 
-import json
-import logging
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -25,12 +23,8 @@ import pytest
 from partner_scrape import cli
 from partner_scrape.enrich.enricher import LLMEnricher
 from partner_scrape.enrich.llm_client import AnthropicLLMClient
-from partner_scrape.export.publish import project as real_publish_project
 from partner_scrape.fetch.fetcher import FetchResponse
 from partner_scrape.observability.reporter import YieldReporter
-
-#: The same fixture curated partner roster test_export_publish.py uses.
-PARTNERS_FIXTURE = Path(__file__).resolve().parent / "fixtures" / "partners.json"
 
 
 @pytest.fixture(autouse=True)
@@ -349,11 +343,10 @@ class TestYieldReportWiring:
 
 class TestPublishWiring:
     """Ticket 004 (sprint 009): `publish.project(...)` is called after
-    `run()` returns and before the mirror step, skipped under
-    `--dry-run` the same way mirroring already is. `cli.run` and
-    `mirror_site_data` are monkeypatched throughout -- these tests prove
-    `cli.main` wires `publish.project` correctly, not `publish.project`'s
-    own behavior (that's `test_export_publish.py`'s job).
+    `run()` returns, skipped under `--dry-run`. `cli.run` is
+    monkeypatched throughout -- these tests prove `cli.main` wires
+    `publish.project` correctly, not `publish.project`'s own behavior
+    (that's `test_export_publish.py`'s job).
     """
 
     def test_publish_project_is_called_with_the_resolved_site_dir(self, monkeypatch, tmp_path):
@@ -402,183 +395,11 @@ class TestPublishWiring:
 
         assert exit_code == 0
 
-    def test_publish_project_runs_even_under_no_mirror(self, monkeypatch, tmp_path):
-        """`--no-mirror` only suppresses mirroring -- the published
-        public/data/ tree in the primary site_dir is still projected."""
-        captured = {}
-
-        def fake_project(**kwargs):
-            captured.update(kwargs)
-            return {"partner_count": 0, "current_event_count": 0, "past_event_count": 0}
-
-        monkeypatch.setattr(cli, "run", lambda **kwargs: [])
-        monkeypatch.setattr(cli.publish, "project", fake_project)
-
-        exit_code = cli.main(["--no-enrich", "--no-report", "--no-mirror"])
-
-        assert exit_code == 0
-        assert captured != {}
-
-    def test_publish_project_is_sequenced_before_mirror_site_data(self, monkeypatch, tmp_path):
-        call_order: list[str] = []
-
-        monkeypatch.setattr(cli, "run", lambda **kwargs: [])
-        monkeypatch.setattr(
-            cli.publish,
-            "project",
-            lambda **kwargs: (call_order.append("publish"), {"partner_count": 0, "current_event_count": 0, "past_event_count": 0})[1],
-        )
-        monkeypatch.setattr(
-            cli,
-            "mirror_site_data",
-            lambda *args, **kwargs: call_order.append("mirror"),
-        )
-        monkeypatch.setattr(cli, "get_mirror_site_dirs", lambda: [tmp_path / "mirror-target"])
-
-        exit_code = cli.main(["--no-enrich", "--no-report"])
-
-        assert exit_code == 0
-        assert call_order == ["publish", "mirror"]
-
-
-class TestPublishAndMirrorIntegration:
-    """Sprint 009 (ticket 005): a thin integration test proving the real
-    `publish.project()` output actually reaches a mirror target through
-    a full, otherwise-unstubbed `cli.main()` run -- `mirror_site_data`'s
-    own directory-tree-copy behavior is `test_export_mirror.py`'s job,
-    and `publish.project()`'s own projection logic is
-    `test_export_publish.py`'s job; this test only proves the two are
-    correctly wired together end to end via the CLI. Only `cli.run`
-    (the pipeline itself) is stubbed -- everything downstream of it
-    (`publish.project`, `mirror_site_data`) runs for real.
-    """
-
-    def test_published_tree_reaches_a_configured_mirror_target(self, monkeypatch, tmp_path):
-        site_dir = tmp_path / "site"
-        (site_dir / "src" / "data").mkdir(parents=True)
-        (site_dir / "src" / "data" / "partners.json").write_text(PARTNERS_FIXTURE.read_text())
-
-        target = tmp_path / "mirror-target"
-        (target / "src" / "data").mkdir(parents=True)
-
-        monkeypatch.setattr(cli, "run", lambda **kwargs: [])
-        # Un-stub the autouse fixture's no-op publish.project so the
-        # real projection runs and actually writes public/data/.
-        monkeypatch.setattr(cli.publish, "project", real_publish_project)
-
-        exit_code = cli.main(
-            [
-                "--no-enrich",
-                "--no-report",
-                "--site-dir",
-                str(site_dir),
-                "--mirror-site-dir",
-                str(target),
-            ]
-        )
-
-        assert exit_code == 0
-        primary_partners = (site_dir / "public" / "data" / "partners.json").read_text()
-        mirrored_partners = (target / "public" / "data" / "partners.json").read_text()
-        assert mirrored_partners == primary_partners
-        assert json.loads(mirrored_partners)["partner_count"] == 3
-        # Per-partner event files were carried across too, not just the
-        # top-level roster.
-        assert (
-            target / "public" / "data" / "partners" / "coastal_roots_farm" / "events.json"
-        ).exists()
-
-
-class TestMirrorWiring:
-    """Sprint 018 ticket 001 (issue 43): regression coverage for the
-    default `run` path's mirror step.
-
-    A 2026-08-31 production run wrote 350 opportunities to the primary
-    --site-dir but never mirrored them into this repo's own site/
-    checkout. The mirror block's own condition/target-resolution logic
-    (below) was never the problem -- it is proven correct here, and was
-    separately confirmed against the real production default target
-    (`config.DEFAULT_MIRROR_SITE_DIR`) via a live re-run during this
-    ticket's investigation. The actual cause: `publish.project()`,
-    called immediately before the mirror block, raised an uncaught
-    `KeyError` reconstructing a legacy `.jsonl` log line recorded before
-    the `eligibility` field existed on `Opportunity` (sprint 015,
-    `b0570aa`) -- crashing `main()` before the mirror block was ever
-    reached, which is why the run's stdout showed no mirror-related
-    lines at all: the code path that would have logged them never ran.
-    See cli.py's own comment at the `publish.project()` call site for
-    the full writeup.
-    """
-
-    def test_default_run_path_invokes_mirror_site_data_when_config_unset(
-        self, monkeypatch, tmp_path
-    ):
-        """The default (no-subcommand) path must call `mirror_site_data()`
-        under its own documented defaults -- no --dry-run, no
-        --no-mirror, no --mirror-site-dir override, and `MIRROR_SITE_DIRS`
-        unset -- exactly issue 43's reported preconditions. `get_mirror_
-        site_dirs()` itself is left unmocked (real config.py resolution),
-        so this proves the default path reaches a real, non-empty target
-        list, not just that *some* call happened."""
-        monkeypatch.delenv("MIRROR_SITE_DIRS", raising=False)
-        monkeypatch.setattr(cli, "run", lambda **kwargs: [{"slug": "a"}])
-
-        calls = []
-        monkeypatch.setattr(
-            cli,
-            "mirror_site_data",
-            lambda *args, **kwargs: calls.append((args, kwargs)),
-        )
-
-        expected_targets = cli.get_mirror_site_dirs()
-
-        exit_code = cli.main(["--no-enrich", "--no-report"])
-
-        assert exit_code == 0
-        assert len(calls) == 1
-        (primary, targets), kwargs = calls[0]
-        assert primary == tmp_path  # SITE_DIR, pinned by the autouse fixture
-        assert targets == expected_targets
-        assert targets  # non-empty: the default really does resolve somewhere
-        assert kwargs == {}
-
-    def test_mirror_still_runs_when_publish_project_raises(self, monkeypatch, caplog):
-        """The actual 2026-08-31 root cause, reproduced directly:
-        `publish.project()` raising (a real `KeyError` on legacy
-        `.jsonl` data missing a field added after it was logged) must no
-        longer crash `main()` before the mirror step below it runs. The
-        exception is surfaced -- logged, non-zero exit -- never silently
-        swallowed."""
-        monkeypatch.setattr(cli, "run", lambda **kwargs: [{"slug": "a"}])
-
-        def _boom(**kwargs):
-            raise KeyError("eligibility")
-
-        monkeypatch.setattr(cli.publish, "project", _boom)
-
-        calls = []
-        monkeypatch.setattr(
-            cli,
-            "mirror_site_data",
-            lambda *args, **kwargs: calls.append((args, kwargs)),
-        )
-        monkeypatch.setattr(cli, "get_mirror_site_dirs", lambda: [Path("/tmp/mirror-target")])
-
-        with caplog.at_level(logging.ERROR, logger="partner_scrape.cli"):
-            exit_code = cli.main(["--no-enrich", "--no-report"])
-
-        # Mirror still ran -- a broken publish.project() must not take
-        # every other checkout's export down with it.
-        assert len(calls) == 1
-        # The failure surfaces: non-zero exit, not a bare silent pass.
-        assert exit_code == 1
-        assert "publish.project() failed" in caplog.text
-
     def test_exit_code_stays_zero_when_publish_project_succeeds(self, monkeypatch):
-        """Companion to the above: a successful run must not regress to
-        always reporting failure now that a failure path exists."""
+        """A successful run (payload written, publish.project() succeeds
+        via the autouse fixture's no-op stub) must report a zero exit
+        code."""
         monkeypatch.setattr(cli, "run", lambda **kwargs: [{"slug": "a"}])
-        monkeypatch.setattr(cli, "mirror_site_data", lambda *args, **kwargs: None)
 
         exit_code = cli.main(["--no-enrich", "--no-report"])
 

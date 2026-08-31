@@ -2,17 +2,24 @@
 (`partner_scrape/directory/data/places.toml`).
 
 Data-only-ticket tests, matching sprint.md's Test Strategy precedent
-for a curated dataset (ticket 003's own `TestBatchARegistryJoinIntegrity`
-class): these pin down properties of the *real* committed data --
-unique ids, in-bounding-box coordinates, no hijacked domain, category
-coverage, and a hand-verified join against the real partner roster --
-rather than a synthetic fixture, so a future edit to `places.toml`
+for a curated dataset (ticket 003's own registry-source-name tests):
+these pin down properties of the *real* committed data -- unique ids,
+in-bounding-box coordinates, no hijacked domain, and category coverage
+-- rather than a synthetic fixture, so a future edit to `places.toml`
 that regresses one of these is caught directly.
+
+Sprint 019 ticket 002 removed `partner-scrape/site/` as a tracked
+directory (build-time-only CI checkout of `stem-ecosystem` now), which
+took `site/src/data/partners.json` with it. The `related_partner_id`
+join-integrity check that used to verify each hand-copied
+`related_partner_id` resolves against that file is tracked for recovery
+as pipeline-level validation in issue 48, not reproduced here against a
+re-copied fixture (that would recreate the exact two-copies-of-the-
+same-file problem the site consolidation exists to eliminate).
 """
 
 from __future__ import annotations
 
-import json
 from pathlib import Path
 
 from partner_scrape.directory.model import VALID_CATEGORIES
@@ -22,9 +29,6 @@ from partner_scrape.registry.loader import load_active_sources
 
 DIRECTORY_REGISTRY_DIR = (
     Path(__file__).resolve().parents[2] / "partner_scrape" / "directory" / "registry"
-)
-PARTNERS_JSON_PATH = (
-    Path(__file__).resolve().parents[2] / "site" / "src" / "data" / "partners.json"
 )
 
 # site/src/pages/partners/index.astro's own SD_BOUNDS -- the same
@@ -46,11 +50,6 @@ def _real_places():
     sources = load_active_sources(DIRECTORY_REGISTRY_DIR)
     static_roster = next(s for s in sources if s.adapter_type == "static_roster")
     return run(static_roster, StaticRosterSource(), _NeverCalledFetcher())
-
-
-def _real_partner_ids() -> set[int]:
-    data = json.loads(PARTNERS_JSON_PATH.read_text())
-    return {row["id"] for row in data}
 
 
 class TestUniqueIds:
@@ -100,42 +99,6 @@ class TestWebsiteUrlsAreWellFormed:
         for place in _real_places():
             if place.website:
                 assert place.website.startswith(("http://", "https://")), place.place_id
-
-
-class TestRelatedPartnerIdJoinIntegrity:
-    """Ticket 007's own instruction: "reuse the same curated address/
-    coordinates rather than re-researching -- but do not attempt an
-    automatic cross-reference join this sprint... hand-copy the
-    value." This test verifies every hand-copied `related_partner_id`
-    actually resolves to a real row in the current partner roster, the
-    same spot-check discipline ticket 003's own
-    `TestBatchARegistryJoinIntegrity` applied to its own hand-verified
-    org_name matches.
-    """
-
-    def test_every_related_partner_id_exists_in_the_real_roster(self):
-        partner_ids = _real_partner_ids()
-        for place in _real_places():
-            if place.related_partner_id is not None:
-                assert place.related_partner_id in partner_ids, (
-                    place.place_id,
-                    place.related_partner_id,
-                )
-
-    def test_a_representative_sample_of_joins_point_at_the_expected_org(self):
-        partners_by_id = {row["id"]: row for row in json.loads(PARTNERS_JSON_PATH.read_text())}
-        by_id = {p.place_id: p for p in _real_places()}
-
-        expected = {
-            "fleet-science-center-planetarium": "Fleet Science Center",
-            "palomar-observatory": "Palomar Observatory",
-            "birch-aquarium-tide-pool-plaza": "Birch Aquarium at Scripps Institution of Oceanography",
-            "living-coast-discovery-center": "The Living Coast Discovery Center",
-        }
-        for place_id, expected_name in expected.items():
-            partner_id = by_id[place_id].related_partner_id
-            assert partner_id is not None, place_id
-            assert partners_by_id[partner_id]["name"] == expected_name
 
 
 class TestNoLiveGeocodedCoordinate:

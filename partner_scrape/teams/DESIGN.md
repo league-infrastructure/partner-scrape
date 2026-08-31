@@ -219,10 +219,7 @@ BUILT (ticket 011-002):
      ↓                                (meta envelope + teams array)
   cli.py `teams` subcommand           partner-scrape teams [--dry-run]
                                        [--source ftcscout|tba] [--site-dir DIR]
-                                       [--no-mirror] [-v]
-     ↓ (unless --no-mirror/--dry-run)
-  export.mirror_site_data()           reused unmodified, teams.json added
-                                       to MIRRORED_DATA_FILES
+                                       [-v]
 
 BUILT (ticket 011-003):
   sources.tba.TBASource                probes /api/v3/status for
@@ -324,6 +321,16 @@ BUILT (sprint 016 ticket 005):
   (feeds into merge_teams()/geocode_teams()/export_teams(), all
    unchanged -- a fourth source needed zero change to any of the three,
    exactly as sprint 012's static_roster addition already confirmed)
+
+REMOVED (sprint 019, ticket 001): the `[--no-mirror]`-gated
+`export.mirror_site_data()` call ticket 011-002 (above) added after
+`teams.export.export_teams()` is gone -- `export/mirror.py` and the
+`--mirror-site-dir`/`--no-mirror` CLI flags were removed outright
+across the repo, since `partner-scrape` no longer tracks a second site
+checkout to mirror into (`site/` becomes a build-time-only CI checkout
+of `stem-ecosystem`, sprint 019 ticket 002). `cli.py`'s `teams`
+subcommand now returns as soon as `teams.export.export_teams()`
+completes.
 
 A freshly-extracted `Team` from either source still has
 `location_precision == "none"` and no coordinates until
@@ -1332,16 +1339,14 @@ after `geocode_teams()`), the same single-call-sequencing cost
   payload without touching disk. **Never** writes or touches
   `opportunities.json`/`scrape-meta.json` (Constraints).
 - **`partner-scrape teams [--dry-run] [--source ftcscout|tba|
-  static_roster|robotevents] [--site-dir DIR] [--no-mirror] [-v]`**
+  static_roster|robotevents] [--site-dir DIR] [-v]`**
   (`cli.py`) — the CLI entry
-  point. Constructs a real `PoliteFetcher()` and calls `run_teams()`;
-  unless `--dry-run`/`--no-mirror`, also calls `export.mirror_site_data`
-  (reused, unmodified) against `config.get_mirror_site_dirs()`. Never
-  calls `run`/`pipeline.run()` — see `cli.py`'s own module docstring
-  and Constraints above.
-- **`export/mirror.py`'s `MIRRORED_DATA_FILES`** — gained one entry,
-  `"teams.json"`, in ticket 011-002; no change in this ticket. See
-  `export/DESIGN.md`.
+  point. Constructs a real `PoliteFetcher()` and calls `run_teams()`.
+  Never calls `run`/`pipeline.run()` — see `cli.py`'s own module
+  docstring and Constraints above. **(Sprint 019, ticket 001)** the
+  `--no-mirror` flag and the post-export `export.mirror_site_data`
+  call this bullet used to describe were removed outright — see
+  `export/DESIGN.md`'s sprint 019 note.
 - **`teams/data/*`** (this ticket) — the five committed offline
   geocoding data files `teams.geo.SchoolIndex` reads:
   `sd-schools-public.tsv` (CDE public schools, San Diego County,
@@ -1444,16 +1449,13 @@ after `geocode_teams()`), the same single-call-sequencing cost
   missing/invalid key surfaces at `teams.sponsor_extract`'s own call site
   and is caught by its per-team fail-open guard (Constraints), never by
   anything in `enrich/`.
-- **`config.get_site_dir()` / `config.get_mirror_site_dirs()` /
-  `config.get_tba_api_key()` / `config.get_tba_url()` (from
-  `config.py`)** — the last two, this ticket, mirror
-  `get_leaguesync_api_key()`/`get_leaguesync_url()` line-for-line,
-  including the SOPS-decrypted-secret quote-stripping; `config.py`
-  remains the only module reading `os.environ`. The site-dir/mirror
-  accessors are ticket 011-002's, reused unmodified. See the root
+- **`config.get_site_dir()` / `config.get_tba_api_key()` /
+  `config.get_tba_url()` (from `config.py`)** — the last two, this
+  ticket, mirror `get_leaguesync_api_key()`/`get_leaguesync_url()`
+  line-for-line, including the SOPS-decrypted-secret quote-stripping;
+  `config.py` remains the only module reading `os.environ`.
+  `get_site_dir()` is ticket 011-002's, reused unmodified. See the root
   `partner_scrape/DESIGN.md`.
-- **`export.mirror_site_data` (from `export/`)** — reused, unmodified,
-  to propagate `teams.json` into extra checkouts. See `export/DESIGN.md`.
 
 ## 6. Open Questions / Known Limitations
 
