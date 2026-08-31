@@ -136,6 +136,41 @@ pre-ticket-004 behavior exactly. The fallback value is recorded via `Event.set()
 TOML, not a guess extracted from ambiguous markup, so it is trusted at the ladder's own
 top tier rather than a lower one.
 
+**`ical.py` hardening against two live-measured parse failures. (Sprint 016
+ticket 001)** Sprint 015 ticket 005's live dry-run verification found the
+two highest-yield feeds in the robots-gated batch (`county-parks`, 553 raw
+VEVENTs; `sd-astronomy-association`, 677 raw VEVENTs) both returned zero
+events, from two distinct `ical.py` bugs unrelated to the robots-policy
+question that ticket resolved. Both fixes stay entirely inside `ical.py`:
+
+1. **Tockify's `X-PUBLISHED-TTL:P15M`.** A calendar-level `X-` property
+   whose value `icalendar`'s duration parser can read as 15 *months*
+   under ISO-8601 grammar rather than the 15 *minutes* Tockify evidently
+   intends, which can abort `Calendar.from_ical()` before a single
+   `VEVENT` is read. `extract()` now strips the exact `X-PUBLISHED-TTL:`
+   line (via `_X_PUBLISHED_TTL_RE`, a small pre-parse regex) before the
+   body reaches `from_ical()` — a property this adapter never reads
+   anyway. Deliberately a targeted strip of the one evidenced property,
+   not a general X-property sanitizer: a different malformed `X-`
+   property still fails loudly through the existing top-level
+   `except Exception` around `from_ical()`, until a second real case
+   justifies widening the pre-parse.
+2. **A `VEVENT` with more than one `RRULE` property.** `icalendar`
+   returns a Python `list` for `component.get("rrule")` in this case;
+   `_extract_component` previously assumed a single `vRecur` and crashed
+   (`AttributeError: 'list' object has no attribute 'to_ical'`) — an
+   exception type outside `extract()`'s then-existing per-`VEVENT` catch
+   (`ValueError, TypeError, KeyError`), so it escaped the per-record loop
+   and aborted the whole source. `_extract_component` now detects a
+   list-valued `rrule_prop`, logs a warning naming how many additional
+   rules were discarded, and salvages via the first rule — matching RFC
+   5545's technical allowance for multiple `RRULE`s while keeping the
+   expansion itself unchanged. `extract()`'s per-`VEVENT` catch is also
+   widened from the three-exception tuple to `except Exception`,
+   matching this module's own top-level precedent above and the §3
+   per-record-isolation invariant directly — the narrower tuple was
+   itself the bug that let the `AttributeError` propagate.
+
 **ATS adapters are a filtered family.** `greenhouse` and `lever` read public job-board
 JSON, then run `ats_filters.classify_posting()` to decide whether a posting is an
 internship, is STEM, and is San Diego-local. Postings that survive become

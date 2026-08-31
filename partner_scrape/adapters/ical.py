@@ -20,6 +20,7 @@ scope cut (this ticket's Description), not a silently-missing feature.
 from __future__ import annotations
 
 import logging
+import re
 from datetime import date, datetime, time, timedelta
 from typing import Any, Iterable
 
@@ -50,6 +51,17 @@ MAX_RRULE_WINDOW_DAYS = 180
 
 #: See :data:`MAX_RRULE_WINDOW_DAYS`.
 MAX_RRULE_INSTANCES = 52
+
+#: **(Sprint 016 ticket 001)** Tockify's non-standard ``X-PUBLISHED-TTL``
+#: property (observed value ``P15M`` -- presumably intended as ``PT15M``,
+#: 15 minutes, not the 15-month reading the ISO-8601 duration grammar would
+#: give it) is a property this adapter never reads. A targeted pre-parse
+#: strip removes the whole line before the body reaches
+#: ``icalendar.Calendar.from_ical()`` -- a narrow, evidenced fix (one real
+#: feed, one property), not a general X-property sanitizer. See
+#: ``adapters/DESIGN.md``'s sprint-016 addendum for the alternatives
+#: considered.
+_X_PUBLISHED_TTL_RE = re.compile(r"(?im)^X-PUBLISHED-TTL:[^\r\n]*\r?\n?")
 
 
 def _as_datetime(value: date | datetime) -> tuple[datetime, bool]:
@@ -115,8 +127,13 @@ class ICalAdapter:
             logger.warning("iCal feed %s returned an empty body; skipping", raw.ref.url)
             return []
 
+        # (Sprint 016 ticket 001) Strip the one non-standard X- property
+        # known to break icalendar's parser before from_ical() ever sees
+        # it -- see _X_PUBLISHED_TTL_RE's docstring.
+        body = _X_PUBLISHED_TTL_RE.sub("", raw.body)
+
         try:
-            calendar = icalendar.Calendar.from_ical(raw.body)
+            calendar = icalendar.Calendar.from_ical(body)
         except Exception as exc:
             # icalendar raises several distinct exception types for
             # malformed input (ValueError, its own parser errors, ...) --
@@ -129,7 +146,14 @@ class ICalAdapter:
         for component in calendar.walk("VEVENT"):
             try:
                 events.extend(self._extract_component(component, source))
-            except (ValueError, TypeError, KeyError) as exc:
+            except Exception as exc:
+                # (Sprint 016 ticket 001) Widened from
+                # (ValueError, TypeError, KeyError) to match this module's
+                # own top-level `except Exception` above and
+                # adapters/DESIGN.md's per-record isolation invariant --
+                # a narrower tuple here previously let an AttributeError
+                # (a list-valued RRULE, see _extract_component) escape
+                # this loop and abort the whole source.
                 logger.warning("Skipping malformed VEVENT in %s: %s", raw.ref.url, exc)
         return events
 
@@ -159,6 +183,22 @@ class ICalAdapter:
         rrule_prop = component.get("rrule")
         if rrule_prop is None:
             return [self._build_event(component, dtstart, all_day, duration, uid, source)]
+
+        if isinstance(rrule_prop, list):
+            # (Sprint 016 ticket 001) icalendar returns a list of vRecur
+            # when a VEVENT carries more than one RRULE property (RFC 5545
+            # technically permits it, though most calendar tools write
+            # only one). Salvage via the first rule rather than dropping
+            # the whole record -- see adapters/DESIGN.md's sprint-016
+            # addendum for why this is preferred over raising.
+            discarded = len(rrule_prop) - 1
+            logger.warning(
+                "VEVENT %s has %d RRULE properties; using the first and discarding %d",
+                uid or "<no UID>",
+                len(rrule_prop),
+                discarded,
+            )
+            rrule_prop = rrule_prop[0]
 
         rrule_text = rrule_prop.to_ical().decode("utf-8")
         occurrences = _expand_rrule(dtstart, rrule_text)

@@ -1,0 +1,35 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Tockify//EN
+X-PUBLISHED-TTL:P15M
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+UID:evt-ranger-talk@tockify.com
+DTSTAMP:20260701T000000Z
+DTSTART:20260815T090000
+DTEND:20260815T100000
+SUMMARY:Ranger Talk: Tide Pool Ecology
+DESCRIPTION:A county parks ranger-led talk on tide pool ecosystems.
+LOCATION:Cabrillo National Monument, San Diego, CA
+END:VEVENT
+BEGIN:VEVENT
+UID:evt-star-party@sdaa.org
+DTSTAMP:20260701T000000Z
+DTSTART:20260801T190000
+DTEND:20260801T210000
+SUMMARY:Star Party at Tierra del Sol
+DESCRIPTION:Monthly star party -- this VEVENT carries two RRULEs.
+LOCATION:Tierra del Sol Observatory Site, Boulevard, CA
+RRULE:FREQ=WEEKLY;COUNT=3
+RRULE:FREQ=DAILY;COUNT=10
+END:VEVENT
+BEGIN:VEVENT
+UID:evt-trail-hike@tockify.com
+DTSTAMP:20260701T000000Z
+DTSTART:20260822T100000
+DTEND:20260822T113000
+SUMMARY:Guided Trail Hike
+DESCRIPTION:A ranger-led hike through the canyon trails.
+LOCATION:Mission Trails Regional Park, San Diego, CA
+END:VEVENT
+END:VCALENDAR
