@@ -1,7 +1,7 @@
 ---
 id: 008
 title: Clubs data model and Hack Club chapters proof of concept
-status: open
+status: in-progress
 use-cases:
 - SUC-005
 depends-on:
