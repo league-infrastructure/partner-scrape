@@ -1,0 +1,80 @@
+{
+ "generated_at": "2026-08-31T00:40:44Z",
+ "partner_slug": "san_diego_natural_history_museum",
+ "kind": "current",
+ "event_count": 2,
+ "events": [
+  {
+   "slug": "https_www_sdnhm_org_calendar_residents_free_days",
+   "title": "Residents Free Days",
+   "partner_name": "San Diego Natural History Museum",
+   "partner_id": 24,
+   "description": "Residents of San Diego County receive general admission to The Nat the first Tuesday of every month. Here's what you need to know.",
+   "link": "https://www.sdnhm.org/calendar/residents-free-days/",
+   "availability": "",
+   "date_start": "2026-09-01T00:00:00-07:00",
+   "date_end": "",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "All Day"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science",
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "The Nat (San Diego Natural History Museum)",
+   "latitude": "32.7320808",
+   "longitude": "-117.1473395",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_diego_natural_history.png",
+   "image_src": ""
+  },
+  {
+   "slug": "https_www_sdnhm_org_calendar_nattalks_and_films",
+   "title": "Talks and Workshops",
+   "partner_name": "San Diego Natural History Museum",
+   "partner_id": 24,
+   "description": "Find out what the experts are saying. The Nat offers talks, classes, film festivals, and other ways of learning and engaging with weird, fascinating, and inspiring subjects.",
+   "link": "https://www.sdnhm.org/calendar/nattalks-and-films/",
+   "availability": "",
+   "date_start": "2026-09-29T00:00:00-07:00",
+   "date_end": "",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "All Day"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego Natural History Museum, San Diego, CA",
+   "latitude": "32.7320808",
+   "longitude": "-117.1473395",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_diego_natural_history.png",
+   "image_src": "23d39e43d1e240d8.jpg"
+  }
+ ]
+}

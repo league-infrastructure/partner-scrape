@@ -1,0 +1,299 @@
+{
+ "generated_at": "2026-08-31T00:40:43Z",
+ "partner_slug": "national_society_of_black_engineers_san_diego",
+ "kind": "past",
+ "event_count": 9,
+ "events": [
+  {
+   "slug": "https_nsbe_org_programs_pci_competitions",
+   "title": "Pre-Collegiate Competitions | NSBE",
+   "partner_name": "National Society of Black Engineers - San Diego",
+   "partner_id": 402,
+   "description": "NSBE’s pre-collegiate competitions engage students in grades 4–12 in hands-on STEM challenges — from wind turbine design to robotics and math contests — building real-world engineering skills through friendly competition.",
+   "link": "https://nsbe.org/programs/pci-competitions/",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Grades 6-8",
+    "Grades 9-12"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering",
+    "Mathematics",
+    "Physics"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "5995 DANDRIDGE LN Unit 138, San Diego, CA, 92115",
+   "latitude": "32.7476852",
+   "longitude": "-117.0680417",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "national_society_of_black.png",
+   "image_src": "8106cc6405b88839.png"
+  },
+  {
+   "slug": "https_nsbe_org_program_engineering_diversity",
+   "title": "NSBE Engineering Diversity Program",
+   "partner_name": "National Society of Black Engineers - San Diego",
+   "partner_id": 402,
+   "description": "NSBE’s Engineering Diversity program connects collegiate members to multi-industry career pathways, internship pipelines, and the professional communities that shape engineering’s future.",
+   "link": "https://nsbe.org/program/engineering-diversity/",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Career Connections",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "5995 DANDRIDGE LN Unit 138, San Diego, CA, 92115",
+   "latitude": "32.7476852",
+   "longitude": "-117.0680417",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "national_society_of_black.png",
+   "image_src": "8106cc6405b88839.png"
+  },
+  {
+   "slug": "https_nsbe_org_program_torch",
+   "title": "T.O.R.C.H. | NSBE Community Outreach",
+   "partner_name": "National Society of Black Engineers - San Diego",
+   "partner_id": 402,
+   "description": "T.O.R.C.H. empowers NSBE collegiate members to lead community outreach initiatives that connect engineering to underserved communities and inspire the next generation of STEM students.",
+   "link": "https://nsbe.org/program/torch/",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Family",
+    "Grades 9-12",
+    "Grades 6-8"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "5995 DANDRIDGE LN Unit 138, San Diego, CA, 92115",
+   "latitude": "32.7476852",
+   "longitude": "-117.0680417",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "national_society_of_black.png",
+   "image_src": "8106cc6405b88839.png"
+  },
+  {
+   "slug": "https_nsbe_org_program_national_leadership_institute",
+   "title": "NSBE National Leadership Institute",
+   "partner_name": "National Society of Black Engineers - San Diego",
+   "partner_id": 402,
+   "description": "NSBE’s National Leadership Institute is an immersive leadership development experience for collegiate members ready to lead chapters, campuses, and eventually industries.",
+   "link": "https://nsbe.org/program/national-leadership-institute/",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "5995 DANDRIDGE LN Unit 138, San Diego, CA, 92115",
+   "latitude": "32.7476852",
+   "longitude": "-117.0680417",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "national_society_of_black.png",
+   "image_src": "8106cc6405b88839.png"
+  },
+  {
+   "slug": "https_nsbe_org_program_academic_excellence",
+   "title": "NSBE Academic Excellence Program",
+   "partner_name": "National Society of Black Engineers - San Diego",
+   "partner_id": 402,
+   "description": "NSBE’s Academic Excellence program recognizes and supports high-achieving engineering students through the APEx designation, scholarships, and resources designed to help members excel.",
+   "link": "https://nsbe.org/program/academic-excellence/",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "5995 DANDRIDGE LN Unit 138, San Diego, CA, 92115",
+   "latitude": "32.7476852",
+   "longitude": "-117.0680417",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "national_society_of_black.png",
+   "image_src": "8106cc6405b88839.png"
+  },
+  {
+   "slug": "https_nsbe_org_program_tmal",
+   "title": "Try-Math-A-Lon | NSBE Early Math Program",
+   "partner_name": "National Society of Black Engineers - San Diego",
+   "partner_id": 402,
+   "description": "Try-Math-A-Lon is NSBE’s math enrichment program for early learners, building numerical fluency and enthusiasm for mathematics before the transition to middle school.",
+   "link": "https://nsbe.org/program/tmal/",
+   "availability": "",
+   "date_start": "2024-11-11T00:00:00-08:00",
+   "date_end": "",
+   "age_grade_level": [
+    "Grades 6-8"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Mathematics"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "5995 DANDRIDGE LN Unit 138, San Diego, CA, 92115",
+   "latitude": "32.7476852",
+   "longitude": "-117.0680417",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "national_society_of_black.png",
+   "image_src": "758cb1fcc4250bab.webp"
+  },
+  {
+   "slug": "https_nsbe_org_program_kidwind",
+   "title": "KidWind | Wind Energy STEM Program | NSBE",
+   "partner_name": "National Society of Black Engineers - San Diego",
+   "partner_id": 402,
+   "description": "KidWind through NSBE challenges students in grades 4–12 to design and test wind turbines, connecting engineering concepts to real-world clean energy solutions.",
+   "link": "https://nsbe.org/program/kidwind/",
+   "availability": "",
+   "date_start": "2025-01-03T00:00:00-08:00",
+   "date_end": "",
+   "age_grade_level": [
+    "Grades 6-8",
+    "Grades 9-12"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering",
+    "Physics"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "5995 DANDRIDGE LN Unit 138, San Diego, CA, 92115",
+   "latitude": "32.7476852",
+   "longitude": "-117.0680417",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "national_society_of_black.png",
+   "image_src": "fdad8e5e232f16d0.png"
+  },
+  {
+   "slug": "https_nsbe_org_program_mathcounts",
+   "title": "MATHCOUNTS | NSBE Middle School Math Program",
+   "partner_name": "National Society of Black Engineers - San Diego",
+   "partner_id": 402,
+   "description": "NSBE’s MATHCOUNTS program prepares middle school students in grades 6–8 for one of the nation’s most prestigious math competitions, building problem-solving confidence along the way.",
+   "link": "https://nsbe.org/program/mathcounts/",
+   "availability": "",
+   "date_start": "2025-03-09T00:00:00-08:00",
+   "date_end": "",
+   "age_grade_level": [
+    "Grades 6-8"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Mathematics"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "5995 DANDRIDGE LN Unit 138, San Diego, CA, 92115",
+   "latitude": "32.7476852",
+   "longitude": "-117.0680417",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "national_society_of_black.png",
+   "image_src": "bb387feed51a4195.png"
+  },
+  {
+   "slug": "https_nsbe_org_program_ten80",
+   "title": "Ten80 | STEM & Entrepreneurship | NSBE",
+   "partner_name": "National Society of Black Engineers - San Diego",
+   "partner_id": 402,
+   "description": "Ten80 through NSBE engages students in grades 6–12 with STEM challenges tied to real-world engineering and entrepreneurship, using racing and design as the hook.",
+   "link": "https://nsbe.org/program/ten80/",
+   "availability": "",
+   "date_start": "2025-03-09T00:00:00-08:00",
+   "date_end": "",
+   "age_grade_level": [
+    "Grades 6-8",
+    "Grades 9-12"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "All Day"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering",
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "5995 DANDRIDGE LN Unit 138, San Diego, CA, 92115",
+   "latitude": "32.7476852",
+   "longitude": "-117.0680417",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "national_society_of_black.png",
+   "image_src": "a812d59aa6b6f0f2.png"
+  }
+ ]
+}

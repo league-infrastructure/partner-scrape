@@ -1,0 +1,43 @@
+{
+ "generated_at": "2026-08-31T00:56:16Z",
+ "partner_slug": "the_league_of_amazing_programmers",
+ "kind": "current",
+ "event_count": 1,
+ "events": [
+  {
+   "slug": "https_jtl_pike13_com",
+   "title": "Intro to Robotics (Robot Riot)",
+   "partner_name": "The LEAGUE of Amazing Programmers",
+   "partner_id": 287,
+   "description": "Build & Code: Micro:Bit Robotics Take your coding skills to the next level by building and programming your own robot! In this exciting hands-on camp, students will use the Micro:Bit microcontroller to bring their creations to life. You'll learn how to program sensors, motors, and LEDs using Python, JavaScript, or block-based coding. Work with friends to design, build, and code robots that can move, interact, and respond to their environment. This camp is perfect for young engineers and programmers who want to explore the world of robotics in a fun and interactive way! All equipment will be provided by The League of AMAZING Programmers. If you would like to keep your robot at the end of the course there will be an additional fee of $55.00 for the starter kit. As we progress through the course there may be optional add ons to the robot that can be purchased through amazon, those are optional and will be communicated if/when your child gets to that point.",
+   "link": "https://jtl.pike13.com",
+   "availability": "",
+   "date_start": "2026-09-06T20:00:00-07:00",
+   "date_end": "2026-09-06T21:30:00-07:00",
+   "age_grade_level": [
+    "Grades 6-8",
+    "Grades 9-12"
+   ],
+   "cost_range": "Less than $100",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Coding/Computer Science/Cyber Security",
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Carmel Valley Campus (CV), San Diego",
+   "latitude": "32.9474",
+   "longitude": "-117.239",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "the_league_of_amazing.png",
+   "image_src": ""
+  }
+ ]
+}

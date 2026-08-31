@@ -1,0 +1,39 @@
+{
+ "generated_at": "2026-08-31T00:40:43Z",
+ "partner_slug": "girls_who_code",
+ "kind": "past",
+ "event_count": 1,
+ "events": [
+  {
+   "slug": "https_girlswhocode_com_programs",
+   "title": "Join 670,000 Girls Who Code today!",
+   "partner_name": "Girls Who Code",
+   "partner_id": 227,
+   "description": "Learn to code! Free summer programs and after-school clubs for teen girls. Explore coding in a fun and friendly environment. Find a program near you!",
+   "link": "https://girlswhocode.com/programs",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Grades 9-12"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "437 Halsey Street, New York, 10010",
+   "latitude": "40.6836883",
+   "longitude": "-73.9349485",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "girls_who_code.jpg",
+   "image_src": "59b2fe4f6fb2f78a.jpg"
+  }
+ ]
+}

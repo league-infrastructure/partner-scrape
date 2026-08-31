@@ -1,0 +1,108 @@
+{
+ "generated_at": "2026-08-31T00:40:43Z",
+ "partner_slug": "biomimicry_san_diego",
+ "kind": "past",
+ "event_count": 3,
+ "events": [
+  {
+   "slug": "http_tedxafc2013_eventbrite_com",
+   "title": "TEDx_AFC – Learning from Nature's Genius — Biomimicry San Diego",
+   "partner_name": "Biomimicry San Diego",
+   "partner_id": 33,
+   "description": "In The spirit of Ideas worth spreading, TED has created a program called TEDx. TEDx is a program of local, self-organized events that bring people together to share a TED-like experience.&nbsp;   To register for the TEDxAFC:  http://tedxafc2013.eventbrite.com/&nbsp;",
+   "link": "http://tedxafc2013.eventbrite.com/",
+   "availability": "",
+   "date_start": "2013-10-05T06:00:00-07:00",
+   "date_end": "2013-10-05T14:00:00-07:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Morning",
+    "Afternoon"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego, California, 92101",
+   "latitude": "32.7269669",
+   "longitude": "-117.1647094",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "biomimicry_san_diego.jpg",
+   "image_src": ""
+  },
+  {
+   "slug": "https_www_biomimicrysandiego_org_events",
+   "title": "Biomimicry Design Challenge",
+   "partner_name": "Biomimicry San Diego",
+   "partner_id": 33,
+   "description": "",
+   "link": "https://www.biomimicrysandiego.org/events",
+   "availability": "",
+   "date_start": "2013-11-06T00:00:00-08:00",
+   "date_end": "2013-11-06T00:00:00-08:00",
+   "age_grade_level": [],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego, California, 92101",
+   "latitude": "32.7269669",
+   "longitude": "-117.1647094",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "biomimicry_san_diego.jpg",
+   "image_src": ""
+  },
+  {
+   "slug": "https_www_biomimicrysandiego_org_events_2013_11_6_elemental_biomimicry_documentary_screening_group_discussion",
+   "title": "Elemental – Biomimicry Documentary Screening & Group Discussion — Biomimicry San Diego",
+   "partner_name": "Biomimicry San Diego",
+   "partner_id": 33,
+   "description": "Biomimicry San Diego is facilitating the only screening of the documentary Elemental in San Diego.&nbsp;  Elemental tells the story of three individuals united by their deep connection with nature and driven to confront some of the most pressing ecological challenges of our time.  The film follo",
+   "link": "https://www.biomimicrysandiego.org/events/2013/11/6/elemental-biomimicry-documentary-screening-group-discussion",
+   "availability": "",
+   "date_start": "2013-11-06T16:30:00-08:00",
+   "date_end": "2013-11-06T18:30:00-08:00",
+   "age_grade_level": [
+    "Adult",
+    "Grades 9-12"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology",
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego, California, 92101",
+   "latitude": "32.7269669",
+   "longitude": "-117.1647094",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "biomimicry_san_diego.jpg",
+   "image_src": ""
+  }
+ ]
+}

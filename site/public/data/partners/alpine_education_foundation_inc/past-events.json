@@ -1,0 +1,76 @@
+{
+ "generated_at": "2026-08-31T00:40:43Z",
+ "partner_slug": "alpine_education_foundation_inc",
+ "kind": "past",
+ "event_count": 2,
+ "events": [
+  {
+   "slug": "https_aef4kids_org_programs_punkin_chunkin",
+   "title": "Punkin' Chunkin' - Alpine Education Foundation",
+   "partner_name": "Alpine Education Foundation Inc.",
+   "partner_id": 228,
+   "description": "",
+   "link": "https://aef4kids.org/programs/punkin-chunkin/",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8",
+    "Grades 9-12"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering",
+    "Physics"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "2710 Alpine Blvd, Ste. K, PMB 101, Alpine, CA, 91901",
+   "latitude": "32.8349618",
+   "longitude": "-116.7553278",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "alpine_education_foundation_inc.jpg",
+   "image_src": ""
+  },
+  {
+   "slug": "https_aef4kids_org_camps",
+   "title": "Camps - Alpine Education Foundation",
+   "partner_name": "Alpine Education Foundation Inc.",
+   "partner_id": 228,
+   "description": "Discover fun and educational kids camps by Alpine Education Foundation with hands-on learning, STEM activities, and creative experiences.",
+   "link": "https://aef4kids.org/camps/",
+   "availability": "",
+   "date_start": "2026-07-10T00:00:00-07:00",
+   "date_end": "",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "All Day"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science",
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "2710 Alpine Blvd, Ste. K, PMB 101, Alpine, CA, 91901",
+   "latitude": "32.8349618",
+   "longitude": "-116.7553278",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "alpine_education_foundation_inc.jpg",
+   "image_src": ""
+  }
+ ]
+}

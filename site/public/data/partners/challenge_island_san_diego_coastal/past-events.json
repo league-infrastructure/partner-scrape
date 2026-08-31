@@ -1,0 +1,181 @@
+{
+ "generated_at": "2026-08-31T00:40:43Z",
+ "partner_slug": "challenge_island_san_diego_coastal",
+ "kind": "past",
+ "event_count": 5,
+ "events": [
+  {
+   "slug": "https_challenge_island_com_program_slimetopia",
+   "title": "Slimetopia® STEAM Camp by Challenge Island | Slime & Learning",
+   "partner_name": "Challenge Island San Diego Coastal",
+   "partner_id": 289,
+   "description": "Discover Slimetopia® STEAM Camp by Challenge Island—slime-filled STEAM summer camps, field trips, and enrichment programs kids love.",
+   "link": "https://challenge-island.com/program/slimetopia/",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering",
+    "Physical Science",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego, California, 92121",
+   "latitude": "32.8981142",
+   "longitude": "-117.2029363",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "challenge_island_san_diego.png",
+   "image_src": "386d479686958e7f.jpg"
+  },
+  {
+   "slug": "https_challenge_island_com_program_onsite_field_trips",
+   "title": "Onsite Field Trips",
+   "partner_name": "Challenge Island San Diego Coastal",
+   "partner_id": 289,
+   "description": "Award-winning STEM field trips for students. Educational, onsite programs aligned to standards with hands-on STEAM learning.",
+   "link": "https://challenge-island.com/program/onsite-field-trips/",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Grades 6-8",
+    "Grades 9-12"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "School Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology",
+    "Coding/Computer Science/Cyber Security",
+    "Engineering",
+    "Physical Science",
+    "Mathematics",
+    "Chemistry",
+    "Physics",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego, California, 92121",
+   "latitude": "32.8981142",
+   "longitude": "-117.2029363",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "challenge_island_san_diego.png",
+   "image_src": "e1bdc36be2fb512a.jpg"
+  },
+  {
+   "slug": "https_challenge_island_com_program_girl_scout_workshops",
+   "title": "Girl Scout Workshops",
+   "partner_name": "Challenge Island San Diego Coastal",
+   "partner_id": 289,
+   "description": "Over 100,000 Girl Scouts have participated in Challenge Island STEM workshops. Earn badges, fun patches, and hands-on learning experiences.",
+   "link": "https://challenge-island.com/program/girl-scout-workshops/",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering",
+    "General Science",
+    "Mathematics",
+    "Physical Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego, California, 92121",
+   "latitude": "32.8981142",
+   "longitude": "-117.2029363",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "challenge_island_san_diego.png",
+   "image_src": "3b7e80975b14bbee.png"
+  },
+  {
+   "slug": "https_challenge_island_com_program_birthday_parties",
+   "title": "Birthday Parties",
+   "partner_name": "Challenge Island San Diego Coastal",
+   "partner_id": 289,
+   "description": "#1 STEAM program providing the Best FUN and educational private birthday parties for boys and girls in elementary and middle schools.",
+   "link": "https://challenge-island.com/program/birthday-parties/",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego, California, 92121",
+   "latitude": "32.8981142",
+   "longitude": "-117.2029363",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "challenge_island_san_diego.png",
+   "image_src": "3d3b597ee303a8eb.png"
+  },
+  {
+   "slug": "https_challenge_island_com_program_camps",
+   "title": "Camps by Challenge Island",
+   "partner_name": "Challenge Island San Diego Coastal",
+   "partner_id": 289,
+   "description": "Award-winning STEM Camps & STEAM Summer Camps: Educational, Fun, Hands-On learning for elementary and middle school kids. Get in touch!",
+   "link": "https://challenge-island.com/program/camps/",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Grades 6-8",
+    "Grades 9-12"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego, California, 92121",
+   "latitude": "32.8981142",
+   "longitude": "-117.2029363",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "challenge_island_san_diego.png",
+   "image_src": "b701aea7d805c0c9.jpg"
+  }
+ ]
+}

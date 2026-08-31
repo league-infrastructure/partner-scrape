@@ -1,0 +1,43 @@
+{
+ "generated_at": "2026-08-31T00:40:43Z",
+ "partner_slug": "coastal_roots_farm",
+ "kind": "current",
+ "event_count": 1,
+ "events": [
+  {
+   "slug": "https_coastalrootsfarm_org_event_monthly_farm_tour_september_2026",
+   "title": "Monthly Farm Tour – September 2026",
+   "partner_name": "Coastal Roots Farm",
+   "partner_id": 412,
+   "description": "Get a behind-the-scenes look at Coastal Roots Farm. On this guided tour, you’ll enjoy a gentle walk through our ever-evolving gardens, educational spaces, chicken coops, compost operations, and vibrant Food Forest. Learn about our unique growing methods and how we cultivate food, community, and justice. The tour includes a hill and mixed terrain. We recommend wearing flat shoes, a sun hat, and bringing a water bottle. Learn about accessibility accommodations on the Farm. Pre-registration required. 🗓️ Sunday, September 20 🕒 10:30-12 p.m. | 📍Meet at the Coastal Roots Farm Coffee Cart 🎟️ $25/person. About Coastal Roots Farm We're nonprofit community farm and education center rooted in Jewish values and regenerative agriculture. We grow over 80,000 pounds of organic produce each year on our 18-acre farm, with more than 75% donated to community members experiencing food insecurity. Each year, we also welcome over 15,000 youth and adults for outdoor education, Jewish life programs, and community events that inspire environmental stewardship, climate action, and connection to Jewish tradition.",
+   "link": "https://coastalrootsfarm.org/event/monthly-farm-tour-september-2026/",
+   "availability": "Repeats 2 times through 2026-09-20",
+   "date_start": "2026-09-20T10:30:00-07:00",
+   "date_end": "2026-09-20T12:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Less than $50",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology",
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Coastal Roots Farm, San Diego, CA",
+   "latitude": "33.0560503",
+   "longitude": "-117.2834447",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "coastal_roots_farm.jpg",
+   "image_src": "d64985154a7d72c1.png"
+  }
+ ]
+}

@@ -1,0 +1,37 @@
+{
+ "generated_at": "2026-08-31T00:40:43Z",
+ "partner_slug": "bsd_education",
+ "kind": "past",
+ "event_count": 1,
+ "events": [
+  {
+   "slug": "https_www_sassymamahk_com_event_virtual_spring_tech_camps_with_bsd_education_new_tab",
+   "title": "Virtual Spring Tech Camps With BSD Education",
+   "partner_name": "BSD Education",
+   "partner_id": 507,
+   "description": "",
+   "link": "https://www.sassymamahk.com/event/virtual-spring-tech-camps-with-bsd-education/#new_tab",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "bsd_education.png",
+   "image_src": "3dab220dc8dbff09.jpg"
+  }
+ ]
+}
