@@ -10,14 +10,20 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from partner_scrape.model import Event
+from partner_scrape.model import Event, normalize_title
 from partner_scrape.normalize.dedup import (
     cross_source_identity,
     dedup_cross_source,
+    normalize_venue,
     pick_best,
     score_event,
 )
 from partner_scrape.normalize.instance import Instance
+
+#: The exact recorded Balboa Park / Fleet strings (sprint 015 ticket
+#: 004's live measurement, sprint 016 ticket 003's fixture basis).
+BALBOA_PARK_TEC_VENUE = "Fleet Science Center, 1875 El Prado, San Diego, CA"
+FLEET_DEFAULT_LOCATION = "1875 El Prado, San Diego, CA 92101"
 
 
 def _event(
@@ -41,6 +47,37 @@ def _event(
 
 def _instance(event: Event) -> Instance:
     return Instance(event=event, sources=frozenset({event.source_id}))
+
+
+class TestNormalizeVenue:
+    def test_balboa_park_and_fleet_strings_normalize_to_the_same_token(self):
+        """The recorded sprint 015 ticket 004 mismatch pair -- must now match."""
+        assert normalize_venue(BALBOA_PARK_TEC_VENUE) == normalize_venue(FLEET_DEFAULT_LOCATION)
+        assert normalize_venue(BALBOA_PARK_TEC_VENUE) == "1875 el prado"
+
+    def test_different_street_numbers_on_the_same_street_do_not_match(self):
+        """Two real, different Balboa Park buildings -- must never collapse."""
+        assert normalize_venue("1875 El Prado, San Diego, CA") != normalize_venue(
+            "1889 El Prado, San Diego, CA"
+        )
+
+    def test_comma_less_string_falls_back_to_normalize_title_unchanged(self):
+        """A comma-less string is never treated as a single street-address
+        segment, even if it starts with a digit -- prevents city/state/ZIP
+        text from being swallowed into the venue token."""
+        assert normalize_venue("1875 El Prado San Diego CA 92101") == normalize_title(
+            "1875 El Prado San Diego CA 92101"
+        )
+
+    def test_comma_delimited_but_no_segment_matches_shape_falls_back(self):
+        """Two purely name-based venue strings -- no segment starts with a
+        street number, so the whole-string fallback applies."""
+        assert normalize_venue("Fleet Science Center, Balboa Park") == normalize_title(
+            "Fleet Science Center, Balboa Park"
+        )
+
+    def test_empty_location_falls_back_to_normalize_title(self):
+        assert normalize_venue("") == normalize_title("")
 
 
 class TestCrossSourceIdentity:
@@ -207,6 +244,82 @@ class TestDedupCrossSource:
                 title="Family STEM Night",
                 start=datetime(2026, 8, 15, 9, 0),
                 location="Balboa Park",
+            )
+        )
+
+        merged = dedup_cross_source([a, b])
+
+        assert len(merged) == 2
+
+    def test_balboa_park_and_fleet_educator_open_house_collapses(self):
+        """The recorded sprint 015 ticket 004 mismatch pair, same title+date --
+        must now collapse per issue 39 / sprint 016 ticket 003."""
+        a = _instance(
+            _event(
+                source_id="balboa-park",
+                title="Educator Open House",
+                start=datetime(2026, 9, 24, 17, 0),
+                location=BALBOA_PARK_TEC_VENUE,
+                confidence=1.0,
+            )
+        )
+        b = _instance(
+            _event(
+                source_id="fleet-science-center",
+                title="Educator Open House",
+                start=datetime(2026, 9, 24, 17, 0),
+                location=FLEET_DEFAULT_LOCATION,
+                confidence=1.0,
+            )
+        )
+
+        merged = dedup_cross_source([a, b])
+
+        assert len(merged) == 1
+        assert merged[0].sources == frozenset({"balboa-park", "fleet-science-center"})
+
+    def test_different_street_numbers_do_not_collapse(self):
+        """Two real, different Balboa Park buildings on the same street --
+        must never collapse (issue 39's over-collapse guard)."""
+        a = _instance(
+            _event(
+                source_id="tec_source",
+                title="Member Preview Night",
+                start=datetime(2026, 9, 24, 17, 0),
+                location="1875 El Prado, San Diego, CA",
+            )
+        )
+        b = _instance(
+            _event(
+                source_id="wp_source",
+                title="Member Preview Night",
+                start=datetime(2026, 9, 24, 17, 0),
+                location="1889 El Prado, San Diego, CA",
+            )
+        )
+
+        merged = dedup_cross_source([a, b])
+
+        assert len(merged) == 2
+
+    def test_no_detectable_street_address_reproduces_todays_fallback_outcome(self):
+        """Two purely name-based venue strings with no comma at all --
+        proves the fallback path (today's exact normalize_title-only
+        behavior), not just the new address-match path."""
+        a = _instance(
+            _event(
+                source_id="tec_source",
+                title="Member Preview Night",
+                start=datetime(2026, 9, 24, 17, 0),
+                location="Fleet Science Center",
+            )
+        )
+        b = _instance(
+            _event(
+                source_id="wp_source",
+                title="Member Preview Night",
+                start=datetime(2026, 9, 24, 17, 0),
+                location="The Fleet",
             )
         )
 

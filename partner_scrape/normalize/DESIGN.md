@@ -340,7 +340,28 @@ title+date collision case.
   differently by each source). No `normalize/` code changed this sprint — an address-level
   canonicalization or fuzzy-venue match is the same future-sprint deferral this entry
   already anticipated, now with a concrete, reproducible example instead of a hypothetical
-  one. See sprint 015 ticket 004's Notes for the full measurement.
+  one. See sprint 015 ticket 004's Notes for the full measurement. **(Resolved, sprint 016
+  ticket 003, issue 39.)** `dedup.py` gains `normalize_venue(location: str) -> str`, used
+  only by `cross_source_identity()`'s third tuple component: it splits `location` on
+  commas, looks for a segment matching a leading street number plus street name
+  (`^\d+\s+\S`), and if found, normalizes *that segment alone* — deliberately dropping any
+  org-name prefix and city/state/ZIP suffix, so both measured strings above reduce to
+  `"1875 el prado"` regardless of formatting. A location with no comma at all, or no
+  digit-leading segment, falls back to `normalize_title(location)` unchanged — today's exact
+  prior behavior, preserved as a conservative floor rather than replaced. Deliberately not a
+  general address parser or fuzzy matcher (see sprint 016's `sprint.md` Architecture > Design
+  Rationale for the rejected alternatives and why a fuzzy threshold specifically would have
+  falsely collapsed `"1875 El Prado"` with `"1889 El Prado"`, two real, different Balboa Park
+  buildings). Live re-measured post-fix against the same `balboa-park` +
+  `fleet-science-center` pair: the "Educator Open House" (2026-09-24) record now collapses to
+  one `Opportunity` carrying `sources = {"balboa-park", "fleet-science-center"}` — the first
+  cross-source collapse ever measured for this pair, up from 0 in both sprint 014 and sprint
+  015's measurements. See sprint 016 ticket 003's Notes for the full measurement. The
+  residual limitation this entry originally named — two orgs describing the same event with
+  materially different *titles* won't merge, e.g. a hub calendar's generic "Member Preview
+  Night" against an institution's differently-titled listing — is unchanged and still
+  accepted, not fixed: this ticket only closes the venue-string-format gap, not the
+  title-matching one.
 - **(Sprint 014)** `partners.py`'s `find_partner` no-match behavior (keep the org name,
   leave `partner_id` unset — already the tested, non-fatal path) is now exercised by
   design, not just as an edge case: several of this sprint's ~20 newly-registered sources
