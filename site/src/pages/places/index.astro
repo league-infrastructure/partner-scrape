@@ -1,0 +1,156 @@
+---
+// Copies teams/index.astro's structure (List/Map toggle, filter sidebar,
+// results-grid) -- the direct precedent ticket 018-009 was told to follow.
+// Places, like Teams, are standing/undated entities: no "upcoming"/"past"
+// framing from the Opportunities pages (issue 35's own instruction).
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PlaceFilters from '../../components/PlaceFilters.astro';
+import PlaceCard from '../../components/PlaceCard.astro';
+import placesData from '../../data/places.json';
+
+const places = placesData.places as any[];
+
+// Group-then-alphabetize, the same shape teams/index.astro's own sort
+// gives visitors (siblings from the same facet sort adjacently) --
+// category here plays the role league/organization plays there.
+const sorted = [...places].sort((a, b) => {
+  const cmp = a.category.localeCompare(b.category);
+  if (cmp !== 0) return cmp;
+  return a.name.localeCompare(b.name);
+});
+---
+
+<BaseLayout title="Places | SD STEM Ecosystem">
+  <section class="hero hero-sm">
+    <h1>San Diego STEM Places</h1>
+    <p>Makerspaces, planetariums, observatories, tide pools, nature centers, and library maker labs to visit any day.</p>
+  </section>
+
+  <div class="listing-layout">
+    <PlaceFilters />
+    <div class="results-area">
+      <div class="results-header">
+        <span class="results-count">Showing {sorted.length} of {sorted.length}</span>
+        <div class="view-toggle">
+          <button class="active" data-view="grid">List</button>
+          <button data-view="map">Map</button>
+        </div>
+      </div>
+      <div class="results-grid" id="results-grid">
+        {sorted.map(place => <PlaceCard place={place} />)}
+      </div>
+      <div class="map-container" id="map-container" style="display:none;"></div>
+    </div>
+  </div>
+</BaseLayout>
+
+<script src="../../scripts/filters.js"></script>
+
+<script>
+  // List/Map toggle -- copied from teams/index.astro, including the San
+  // Diego bounding box and #c83e8e marker colour, with one deliberate
+  // change from that precedent (and from partners/index.astro): an
+  // out-of-bounds entry is never silently skipped (ticket 018-009's own
+  // AC). Places is a small, hand-curated dataset that is not expected to
+  // ever produce an out-of-bounds pin, but the map must not reintroduce
+  // partners/index.astro's silent-drop pattern if a future curation error
+  // ever does. `setMaxBounds()` is deliberately NOT called here (unlike
+  // teams/partners) so a visitor can always pan/zoom out far enough to see
+  // an outlier -- the initial `fitBounds()` view still centers on San
+  // Diego County by default.
+  const viewBtns = document.querySelectorAll('.view-toggle button');
+  const grid = document.getElementById('results-grid');
+  const mapContainer = document.getElementById('map-container');
+
+  viewBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      viewBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      if (btn.dataset.view === 'map') {
+        if (grid) grid.style.display = 'none';
+        if (mapContainer) {
+          mapContainer.style.display = 'block';
+          initMap();
+        }
+      } else {
+        if (grid) grid.style.display = '';
+        if (mapContainer) mapContainer.style.display = 'none';
+      }
+    });
+  });
+
+  let mapInit = false;
+  function initMap() {
+    if (mapInit) return;
+    mapInit = true;
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+    document.head.appendChild(link);
+
+    const script = document.createElement('script');
+    script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    script.onload = () => {
+      // @ts-ignore
+      const L = window.L;
+      const map = L.map('map-container').setView([32.7157, -117.1611], 10);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
+      }).addTo(map);
+
+      // San Diego County bounding box -- used only to compute the initial
+      // view and to decide the marker style below, never to drop a pin.
+      const SD_BOUNDS = { latMin: 32.4, latMax: 33.5, lngMin: -117.7, lngMax: -116.0 };
+      const sdBounds = [[SD_BOUNDS.latMin, SD_BOUNDS.lngMin], [SD_BOUNDS.latMax, SD_BOUNDS.lngMax]];
+      map.fitBounds(sdBounds);
+
+      const cards = document.querySelectorAll('.place-card');
+      cards.forEach(card => {
+        if (card.hasAttribute('data-hidden')) return;
+
+        const lat = parseFloat(card.dataset.lat);
+        const lng = parseFloat(card.dataset.lng);
+        if (isNaN(lat) || isNaN(lng)) return; // location_precision "none": no coordinate exists at all
+
+        const name = card.querySelector('h3')?.textContent || '';
+        const href = card.querySelector('h3 a')?.getAttribute('href') || '#';
+        const outOfBounds =
+          lat < SD_BOUNDS.latMin || lat > SD_BOUNDS.latMax || lng < SD_BOUNDS.lngMin || lng > SD_BOUNDS.lngMax;
+
+        // Every place with a coordinate gets a marker -- an out-of-bounds
+        // one is visibly flagged (a distinct colour plus a note in its
+        // popup) rather than silently omitted.
+        const color = outOfBounds ? '#f5a623' : '#c83e8e';
+        const popup = outOfBounds
+          ? `<a href="${href}">${name}</a><br><span class="place-map-oob-note">Outside the typical San Diego County map view</span>`
+          : `<a href="${href}">${name}</a>`;
+        L.circleMarker([lat, lng], { radius: 5, color, fillColor: color, fillOpacity: 0.9, weight: 1 })
+          .addTo(map).bindPopup(popup);
+      });
+    };
+    document.head.appendChild(script);
+  }
+</script>
+
+<style>
+  .hero-sm {
+    min-height: auto;
+    padding: 100px 20px 40px;
+  }
+  .hero-sm h1 {
+    font-size: 36px;
+  }
+  .hero-sm p {
+    margin-top: 8px;
+    opacity: 0.85;
+  }
+
+  /* Injected into the DOM by Leaflet at runtime, so must be :global --
+     Astro's scoped-style attribute never applies to it (matching
+     teams/index.astro's own .team-city-badge precedent for the same
+     reason). */
+  :global(.place-map-oob-note) {
+    font-size: 11px;
+    opacity: 0.8;
+  }
+</style>

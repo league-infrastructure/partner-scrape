@@ -1,0 +1,186 @@
+---
+// getStaticPaths() over clubs.json; reuses the existing .detail-page +
+// mini-map pattern from teams/[slug].astro and places/[slug].astro. The
+// slug is Club.club_id itself (already doubles as this Club's stable URL
+// slug, matching Team.team_id's/Place.place_id's identical convention).
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import clubsData from '../../data/clubs.json';
+
+export function getStaticPaths() {
+  return (clubsData.clubs as any[]).map(club => ({
+    params: { slug: club.club_id },
+    props: { club },
+  }));
+}
+
+const { club } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/+$/, ''); // "" or "/partner-scrape"
+
+const CLUB_TYPE_LABELS: Record<string, string> = {
+  'hack-club': 'Hack Club',
+};
+const clubTypeLabel = CLUB_TYPE_LABELS[club.club_type] ?? club.club_type;
+
+const displayUrl = (url: string) => url.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
+
+// A real, mappable coordinate: "none" precision clubs carry no
+// latitude/longitude at all (directory/model.py's ClubLocationPrecision --
+// never a guessed point).
+const hasLocation = club.latitude != null && club.longitude != null;
+
+const PRECISION_LABELS: Record<string, string> = {
+  school: 'Exact school location',
+  zip: 'Approximate (ZIP code center)',
+  city: 'Approximate (city center)',
+};
+const precisionLabel = PRECISION_LABELS[club.location_precision] ?? '';
+
+const isActive = club.status === 'active';
+---
+
+<BaseLayout
+  title={`${club.name} | SD STEM Ecosystem`}
+  description={`${clubTypeLabel} chapter at ${club.host_school || 'a San Diego County school'}.`}
+>
+  <div class="detail-page">
+    <a href={`${base}/clubs`} class="back-link">← Back to Clubs</a>
+
+    <div class="detail-header">
+      <div class="club-detail-tags">
+        <span class="tag tag-purple">{clubTypeLabel}</span>
+        {!isActive && <span class="tag tag-pink">Inactive</span>}
+        {club.needs_review && <span class="tag tag-pink">Location Needs Review</span>}
+      </div>
+      <h1>{club.name}</h1>
+      <p class="club-detail-school">{club.host_school}</p>
+    </div>
+
+    <div class="detail-body">
+      <div class="detail-content">
+        <p>
+          {club.name} meets at {club.host_school || 'a San Diego County school'}
+          {club.city && <> in {club.city}</>}.
+        </p>
+
+        {club.meeting_note && (
+          <div class="mt-3">
+            <h3>Meeting Schedule</h3>
+            <p>{club.meeting_note}</p>
+          </div>
+        )}
+
+        {!isActive && club.status_note && (
+          <div class="mt-3">
+            <h3>Status</h3>
+            <p>{club.status_note}</p>
+          </div>
+        )}
+
+        {club.needs_review && (
+          <div class="mt-3">
+            <p class="club-needs-review-note">
+              This chapter's location is an approximate match and has not yet been
+              manually confirmed -- treat the map position as a best guess, not an exact one.
+            </p>
+          </div>
+        )}
+      </div>
+
+      <aside class="detail-sidebar">
+        <dl>
+          <dt>Type</dt>
+          <dd>{clubTypeLabel}</dd>
+
+          <dt>Host School</dt>
+          <dd>{club.host_school || 'Unknown'}</dd>
+
+          <dt>City</dt>
+          <dd>{club.city || 'Unknown'}</dd>
+
+          {club.website && (
+            <>
+              <dt>Club Website</dt>
+              <dd><a href={club.website} target="_blank" rel="noopener">{displayUrl(club.website)}</a></dd>
+            </>
+          )}
+
+          {club.host_school_website && club.host_school_website !== club.website && (
+            <>
+              <dt>School Website</dt>
+              <dd><a href={`https://${displayUrl(club.host_school_website)}`} target="_blank" rel="noopener">{displayUrl(club.host_school_website)}</a></dd>
+            </>
+          )}
+        </dl>
+
+        {hasLocation && (
+          <>
+            <div class="detail-mini-map" id="detail-map" data-lat={club.latitude} data-lng={club.longitude}></div>
+            {precisionLabel && <p class="club-precision-note">{precisionLabel}{club.needs_review ? ' — needs review' : ''}</p>}
+          </>
+        )}
+      </aside>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  const mapEl = document.getElementById('detail-map');
+  if (mapEl) {
+    const lat = parseFloat(mapEl.dataset.lat || '0');
+    const lng = parseFloat(mapEl.dataset.lng || '0');
+    if (!isNaN(lat) && !isNaN(lng) && lat !== 0) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+      document.head.appendChild(link);
+      const script = document.createElement('script');
+      script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+      script.onload = () => {
+        // @ts-ignore
+        const L = window.L;
+        const map = L.map('detail-map').setView([lat, lng], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; OpenStreetMap',
+        }).addTo(map);
+        L.marker([lat, lng]).addTo(map);
+      };
+      document.head.appendChild(script);
+    }
+  }
+</script>
+
+<style>
+  .club-detail-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 12px;
+  }
+
+  .club-detail-school {
+    font-size: 15px;
+    color: var(--text);
+    margin-top: 4px;
+  }
+
+  .club-needs-review-note {
+    font-size: 13px;
+    color: var(--text);
+    opacity: 0.85;
+    font-style: italic;
+  }
+
+  .detail-mini-map {
+    height: 200px;
+    border-radius: 6px;
+    margin-top: 20px;
+    overflow: hidden;
+  }
+
+  .club-precision-note {
+    font-size: 12px;
+    color: var(--text);
+    opacity: 0.75;
+    margin-top: 6px;
+  }
+</style>

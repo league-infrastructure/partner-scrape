@@ -1,0 +1,138 @@
+---
+// Copies teams/index.astro's/places/index.astro's List/Map + card-grid
+// shape -- the same "read as part of the same site" bar ticket 018-009's
+// AC sets. Deliberately NO filter sidebar: clubs.json holds 4 entries, all
+// one club_type this sprint (issue 35's Hack Club proof of concept) --
+// a filter facet with a single, always-checked option has nothing to
+// filter (ticket's own "don't over-build a 4-item dataset" note). The
+// `.listing-layout` grid is reused with its sidebar column collapsed
+// (below) rather than duplicating that layout's spacing/max-width rules.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ClubCard from '../../components/ClubCard.astro';
+import clubsData from '../../data/clubs.json';
+
+const clubs = clubsData.clubs as any[];
+
+const sorted = [...clubs].sort((a, b) => a.name.localeCompare(b.name));
+---
+
+<BaseLayout title="Clubs | SD STEM Ecosystem">
+  <section class="hero hero-sm">
+    <h1>San Diego STEM Clubs</h1>
+    <p>Student-run clubs meeting at San Diego County schools. Hack Club chapters are the first type listed here; more club types are on the way.</p>
+  </section>
+
+  <div class="listing-layout clubs-listing-layout">
+    <div class="results-area">
+      <div class="results-header">
+        <span class="results-count">Showing {sorted.length} of {sorted.length}</span>
+        <div class="view-toggle">
+          <button class="active" data-view="grid">List</button>
+          <button data-view="map">Map</button>
+        </div>
+      </div>
+      <div class="results-grid" id="results-grid">
+        {sorted.map(club => <ClubCard club={club} />)}
+      </div>
+      <div class="map-container" id="map-container" style="display:none;"></div>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  // List/Map toggle -- copied from places/index.astro, same non-silent-drop
+  // out-of-bounds handling (ticket 018-009's own AC).
+  const viewBtns = document.querySelectorAll('.view-toggle button');
+  const grid = document.getElementById('results-grid');
+  const mapContainer = document.getElementById('map-container');
+
+  viewBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      viewBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      if (btn.dataset.view === 'map') {
+        if (grid) grid.style.display = 'none';
+        if (mapContainer) {
+          mapContainer.style.display = 'block';
+          initMap();
+        }
+      } else {
+        if (grid) grid.style.display = '';
+        if (mapContainer) mapContainer.style.display = 'none';
+      }
+    });
+  });
+
+  let mapInit = false;
+  function initMap() {
+    if (mapInit) return;
+    mapInit = true;
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+    document.head.appendChild(link);
+
+    const script = document.createElement('script');
+    script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    script.onload = () => {
+      // @ts-ignore
+      const L = window.L;
+      const map = L.map('map-container').setView([32.7157, -117.1611], 10);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
+      }).addTo(map);
+
+      const SD_BOUNDS = { latMin: 32.4, latMax: 33.5, lngMin: -117.7, lngMax: -116.0 };
+      const sdBounds = [[SD_BOUNDS.latMin, SD_BOUNDS.lngMin], [SD_BOUNDS.latMax, SD_BOUNDS.lngMax]];
+      map.fitBounds(sdBounds);
+
+      const cards = document.querySelectorAll('.club-card');
+      cards.forEach(card => {
+        if (card.hasAttribute('data-hidden')) return;
+
+        const lat = parseFloat(card.dataset.lat);
+        const lng = parseFloat(card.dataset.lng);
+        if (isNaN(lat) || isNaN(lng)) return; // location_precision "none": no coordinate exists at all
+
+        const name = card.querySelector('h3')?.textContent || '';
+        const href = card.querySelector('h3 a')?.getAttribute('href') || '#';
+        const outOfBounds =
+          lat < SD_BOUNDS.latMin || lat > SD_BOUNDS.latMax || lng < SD_BOUNDS.lngMin || lng > SD_BOUNDS.lngMax;
+
+        const color = outOfBounds ? '#f5a623' : '#c83e8e';
+        const popup = outOfBounds
+          ? `<a href="${href}">${name}</a><br><span class="club-map-oob-note">Outside the typical San Diego County map view</span>`
+          : `<a href="${href}">${name}</a>`;
+        L.circleMarker([lat, lng], { radius: 5, color, fillColor: color, fillOpacity: 0.9, weight: 1 })
+          .addTo(map).bindPopup(popup);
+      });
+    };
+    document.head.appendChild(script);
+  }
+</script>
+
+<style>
+  .hero-sm {
+    min-height: auto;
+    padding: 100px 20px 40px;
+  }
+  .hero-sm h1 {
+    font-size: 36px;
+  }
+  .hero-sm p {
+    margin-top: 8px;
+    opacity: 0.85;
+  }
+
+  /* No filter sidebar on this page (see module comment above) -- collapse
+     .listing-layout's normal 280px-sidebar + 1fr grid to a single column
+     rather than duplicating its spacing/max-width rules in a new class. */
+  .clubs-listing-layout {
+    grid-template-columns: 1fr;
+  }
+
+  :global(.club-map-oob-note) {
+    font-size: 11px;
+    opacity: 0.8;
+  }
+</style>

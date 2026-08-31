@@ -1,0 +1,16 @@
+# Hand corrections for the shared geo_ladder.GeoLadder's rung 1 --
+# consulted first, before any algorithmic rung. See
+# `partner_scrape/teams/data/school-overrides.toml` for the full format
+# documentation (this file follows it exactly); not duplicated here.
+#
+# Ticket 018-007: intentionally empty (header comments only, zero
+# entries) and paired with genuinely empty `sd-schools-public.tsv` /
+# `sd-schools-private.tsv` under this same directory -- Places never
+# route through the ladder's organization-name school-matching rungs
+# (a Place has no "organization" to match; see
+# `directory/model.py`'s `LocationPrecision` docstring), so this
+# directory has no real school data to carry, only the empty files
+# `geo_ladder.GeoLadder.__init__` requires to exist. Ticket 018-008
+# (Clubs -- Hack Club chapters are school-hosted) is expected to
+# populate real school data here for the first time; this ticket does
+# not, per its own "do not block on Clubs existing" scope.

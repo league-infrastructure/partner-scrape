@@ -332,3 +332,113 @@ def test_teams_json_is_not_written_under_dry_run(tmp_path):
     mirror_site_data(primary, [target], dry_run=True)
 
     assert not (target / "src" / "data" / "teams.json").exists()
+
+
+# ---------------------------------------------------------------------
+# Sprint 018 (ticket 007): places.json joins MIRRORED_DATA_FILES,
+# reusing the exact same flat-file copy mechanism as
+# opportunities.json/scrape-meta.json/ads.json/teams.json -- no new
+# copy logic to test, just that the allowlist entry is present and
+# honored.
+# ---------------------------------------------------------------------
+
+
+def test_mirrored_data_files_includes_places_json():
+    assert "places.json" in MIRRORED_DATA_FILES
+
+
+def test_places_json_reaches_the_target_when_present(tmp_path):
+    primary = _make_site(
+        tmp_path / "stem-ecosystem",
+        data={
+            "places.json": json.dumps(
+                {"meta": {"total": 1}, "places": [{"place_id": "sdpl-idea-lab-central"}]}
+            )
+        },
+    )
+    target = _make_site(tmp_path / "beta", data={})
+
+    mirror_site_data(primary, [target])
+
+    mirrored = json.loads((target / "src" / "data" / "places.json").read_text())
+    assert mirrored == {"meta": {"total": 1}, "places": [{"place_id": "sdpl-idea-lab-central"}]}
+
+
+def test_a_missing_places_json_on_the_primary_is_not_an_error(tmp_path):
+    """Mirrors `teams.json`'s existing precedent: a source file that
+    simply doesn't exist yet (no `directory` run has ever happened in
+    this checkout) is skipped, not fatal -- the rest of the mirror
+    still succeeds."""
+    primary = _make_site(tmp_path / "stem-ecosystem", data={})
+    target = _make_site(tmp_path / "beta", data={})
+
+    assert mirror_site_data(primary, [target]) == [target.resolve()]
+    assert not (target / "src" / "data" / "places.json").exists()
+
+
+def test_places_json_is_not_written_under_dry_run(tmp_path):
+    primary = _make_site(
+        tmp_path / "stem-ecosystem",
+        data={"places.json": json.dumps({"meta": {"total": 0}, "places": []})},
+    )
+    target = _make_site(tmp_path / "beta", data={})
+
+    mirror_site_data(primary, [target], dry_run=True)
+
+    assert not (target / "src" / "data" / "places.json").exists()
+
+
+# ---------------------------------------------------------------------
+# Sprint 018 (ticket 008): clubs.json joins MIRRORED_DATA_FILES too,
+# reusing the exact same flat-file copy mechanism -- no new copy logic
+# to test, just that the allowlist entry is present and honored.
+# Mirrors places.json's own test shape immediately above exactly.
+# ---------------------------------------------------------------------
+
+
+def test_mirrored_data_files_includes_clubs_json():
+    assert "clubs.json" in MIRRORED_DATA_FILES
+
+
+def test_clubs_json_reaches_the_target_when_present(tmp_path):
+    primary = _make_site(
+        tmp_path / "stem-ecosystem",
+        data={
+            "clubs.json": json.dumps(
+                {"meta": {"total": 1}, "clubs": [{"club_id": "hack-club-university-city-high"}]}
+            )
+        },
+    )
+    target = _make_site(tmp_path / "beta", data={})
+
+    mirror_site_data(primary, [target])
+
+    mirrored = json.loads((target / "src" / "data" / "clubs.json").read_text())
+    assert mirrored == {
+        "meta": {"total": 1},
+        "clubs": [{"club_id": "hack-club-university-city-high"}],
+    }
+
+
+def test_a_missing_clubs_json_on_the_primary_is_not_an_error(tmp_path):
+    """Mirrors `places.json`'s existing precedent: a source file that
+    simply doesn't exist yet (no `directory` run has ever happened in
+    this checkout) is skipped, not fatal -- the rest of the mirror
+    still succeeds."""
+    primary = _make_site(tmp_path / "stem-ecosystem", data={})
+    target = _make_site(tmp_path / "beta", data={})
+
+    assert mirror_site_data(primary, [target]) == [target.resolve()]
+    assert not (target / "src" / "data" / "clubs.json").exists()
+
+
+def test_clubs_json_is_not_written_under_dry_run(tmp_path):
+    primary = _make_site(
+        tmp_path / "stem-ecosystem",
+        data={"clubs.json": json.dumps({"meta": {"total": 0}, "clubs": []})},
+    )
+    target = _make_site(tmp_path / "beta", data={})
+
+    mirror_site_data(primary, [target], dry_run=True)
+
+    assert not (target / "src" / "data" / "clubs.json").exists()

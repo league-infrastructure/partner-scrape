@@ -55,7 +55,7 @@ re-measuring later, not solved speculatively here.
 from __future__ import annotations
 
 import json
-from dataclasses import fields
+from dataclasses import MISSING, fields
 from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -73,11 +73,6 @@ from partner_scrape.normalize.run import Opportunity
 #: because a caller-supplied `log_dir` always overrides it in practice;
 #: this is only a default.
 _LOG_SUBDIR = "partner_log"
-
-#: `Opportunity`'s full field set, used to reconstruct an `Opportunity`
-#: from a persisted log line (which also carries `content_hash`, not an
-#: `Opportunity` field).
-_OPPORTUNITY_FIELD_NAMES: tuple[str, ...] = tuple(f.name for f in fields(Opportunity))
 
 
 def _default_log_dir() -> Path:
@@ -128,8 +123,40 @@ def _to_opportunity(entry: dict[str, Any]) -> Opportunity:
     fields are pulled across, so `content_hash` is dropped naturally.
     `sources` round-trips list -> `frozenset` -- the inverse of
     `partner_log._to_log_dict`'s `frozenset` -> sorted-list conversion.
+
+    The per-partner `.jsonl` log is strictly append-only and never
+    migrated (`export/DESIGN.md`'s append-only invariant): a line
+    recorded before some field existed on `Opportunity` simply lacks
+    that key. Subscripting `entry` directly for a field it doesn't have
+    would raise `KeyError` and break `project()` on every such line --
+    every line recorded before sprint 015 added `eligibility`, for
+    example. Instead, each field missing from `entry` falls back to
+    `Opportunity`'s own dataclass default for that field, discovered
+    generically via `dataclasses.fields()` rather than by name -- so a
+    field added to `Opportunity` after a line was recorded is tolerated
+    automatically, with no special case here to update when the next
+    field is added.
     """
-    kwargs: dict[str, Any] = {name: entry[name] for name in _OPPORTUNITY_FIELD_NAMES}
+    kwargs: dict[str, Any] = {}
+    for f in fields(Opportunity):
+        if f.name in entry:
+            kwargs[f.name] = entry[f.name]
+        elif f.default is not MISSING:
+            kwargs[f.name] = f.default
+        elif f.default_factory is not MISSING:  # type: ignore[misc]
+            kwargs[f.name] = f.default_factory()
+        else:
+            # No dataclass default exists for this field, and it's
+            # absent from `entry` too. Not expected for any real log
+            # line -- `partner_log.record()` always wrote every field
+            # that existed on `Opportunity` at record time, and a
+            # non-defaulted field can only be one that existed from the
+            # start (dataclass field-ordering requires every defaulted
+            # field to follow every non-defaulted one). Subscript
+            # `entry` anyway, to raise the same `KeyError` naming this
+            # field rather than inventing a value for a field the
+            # dataclass itself declares required.
+            kwargs[f.name] = entry[f.name]
     kwargs["sources"] = frozenset(kwargs["sources"])
     return Opportunity(**kwargs)
 

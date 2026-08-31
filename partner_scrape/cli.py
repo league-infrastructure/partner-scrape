@@ -21,6 +21,19 @@ reason as `discover-candidates` plus one more: rosters refresh
 annually while opportunities refresh weekly, and a future TBA
 credential failure (ticket 011-003) must never sit inside `run`'s own
 process/exit code. Also purely additive.
+
+Ticket 007 (sprint 018) adds the `directory` subcommand, dispatching to
+`directory.pipeline.run_directory()` -- structurally separate from (and
+never calling into) `run`'s or `teams`'s own paths, for the same
+"disjoint standing-data pipeline" reasoning as `teams` above. One
+subcommand covers both Places (ticket 007) and Clubs (ticket 018-008,
+the sprint's Hack Club chapters proof of concept), per sprint.md's Open
+Questions recommendation ("one directory command ... mirrors teams"),
+rather than a second subcommand -- `directory.pipeline.run_directory()`
+itself is where ticket 018-008 added its Club dispatch, not a new CLI
+subcommand or CLI flag. Also purely additive: this subcommand's own
+flags, defaults, and printed output shape are unchanged by ticket
+018-008 beyond reporting a clubs count alongside the places count.
 """
 
 from __future__ import annotations
@@ -57,9 +70,12 @@ from partner_scrape.observability.snapshot import load_snapshot, save_snapshot
 # module.
 from partner_scrape.pipeline import Enricher, run
 
+from partner_scrape.directory.pipeline import run_directory
 from partner_scrape.discovery.candidate_pipeline import discover_candidates
 from partner_scrape.registry.hub_schema import load_hubs
 from partner_scrape.teams.pipeline import run_teams
+
+logger = logging.getLogger(__name__)
 
 
 def _build_parser() -> argparse.ArgumentParser:
@@ -178,6 +194,7 @@ def _build_parser() -> argparse.ArgumentParser:
     subparsers = parser.add_subparsers(dest="command")
     _add_discover_candidates_subcommand(subparsers)
     _add_teams_subcommand(subparsers)
+    _add_directory_subcommand(subparsers)
 
     return parser
 
@@ -310,6 +327,116 @@ def _add_teams_subcommand(subparsers: argparse._SubParsersAction) -> None:
     )
 
 
+def _add_directory_subcommand(subparsers: argparse._SubParsersAction) -> None:
+    parser = subparsers.add_parser(
+        "directory",
+        help="Publish the curated Places and Clubs directories as places.json and clubs.json.",
+        description=(
+            "Run the Directory pipeline: load this subsystem's own "
+            "Registry (partner_scrape/directory/registry/, disjoint from "
+            "the Opportunity Source Registry and from teams/registry/), "
+            "acquire each active place/club source, and publish "
+            "{site_dir}/src/data/places.json and "
+            "{site_dir}/src/data/clubs.json. Never runs the normal "
+            "scrape/export or the teams pipeline -- opportunities.json, "
+            "scrape-meta.json, and teams.json are never touched by this "
+            "command."
+        ),
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Compute the places.json/clubs.json payloads without writing anything to --site-dir.",
+    )
+    parser.add_argument(
+        "--source",
+        dest="source",
+        default=None,
+        metavar="SOURCE",
+        help=(
+            "Only run this single acquisition source, by adapter_type "
+            "(e.g. 'static_roster' or 'hack_club_static_roster') -- not "
+            "a Registry file's stem. Omitted, every active place/club "
+            "source runs."
+        ),
+    )
+    parser.add_argument(
+        "--site-dir",
+        type=Path,
+        default=None,
+        help=(
+            "Sibling stem-ecosystem checkout to write places.json and "
+            "clubs.json into (default: ../stem-ecosystem, or $SITE_DIR) "
+            "-- same default and override as the `run`/`teams` "
+            "commands' --site-dir."
+        ),
+    )
+    parser.add_argument(
+        "--no-mirror",
+        action="store_true",
+        help=(
+            "Do not copy places.json/clubs.json into any additional site "
+            "checkout -- write only to --site-dir."
+        ),
+    )
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        action="store_true",
+        help="Enable INFO-level logging (per-source place counts, skip reasons).",
+    )
+
+
+def _run_directory(args: argparse.Namespace) -> int:
+    """Handler for the `directory` subcommand.
+
+    Constructs its own default `Fetcher` (a real `PoliteFetcher()`) and
+    passes it explicitly into `run_directory()` -- the same "CLI
+    constructs the default concrete implementation" role `_run_teams`
+    already plays for its own pipeline. Never calls
+    `run`/`pipeline.run()` or `run_teams()` -- see cli.py's module
+    docstring.
+    """
+    logging.basicConfig(
+        level=logging.INFO if args.verbose else logging.WARNING,
+        format="%(levelname)s %(name)s: %(message)s",
+    )
+
+    payload = run_directory(
+        source=args.source,
+        site_dir=args.site_dir,
+        fetcher=PoliteFetcher(),
+        dry_run=args.dry_run,
+    )
+    places = payload["places"]
+    # `.get(..., [])`, not `payload["clubs"]`: the real `run_directory()`
+    # always populates "clubs" (a list, possibly empty), but existing
+    # ticket-007 wiring tests monkeypatch `cli.run_directory` with a
+    # places-only fake payload -- this stays backward compatible with
+    # those doubles rather than requiring every one of them to grow a
+    # "clubs" key it has no reason to know about.
+    clubs = payload.get("clubs", [])
+
+    # Keep every other checkout of the site in step, same convention as
+    # the `run`/`teams` commands' own mirroring step -- skipped under
+    # --dry-run/--no-mirror, which both promise not to touch any
+    # checkout beyond (or including) --site-dir.
+    if not args.dry_run and not args.no_mirror:
+        targets = get_mirror_site_dirs()
+        if targets:
+            primary = args.site_dir if args.site_dir is not None else get_site_dir()
+            mirror_site_data(primary, targets)
+
+    clubs_noun = "club" if len(clubs) == 1 else "clubs"
+    noun = "place" if len(places) == 1 else "places"
+    suffix = " (dry run -- nothing written)" if args.dry_run else ""
+    print(
+        f"partner-scrape directory: wrote {len(places)} {noun} and "
+        f"{len(clubs)} {clubs_noun}{suffix}."
+    )
+    return 0
+
+
 def _run_teams(args: argparse.Namespace) -> int:
     """Handler for the `teams` subcommand.
 
@@ -405,6 +532,9 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "teams":
         return _run_teams(args)
 
+    if args.command == "directory":
+        return _run_directory(args)
+
     logging.basicConfig(
         level=logging.INFO if args.verbose else logging.WARNING,
         format="%(levelname)s %(name)s: %(message)s",
@@ -464,16 +594,47 @@ def main(argv: list[str] | None = None) -> int:
     # skipped under --dry-run for the same reason mirroring is: it
     # writes nothing anywhere. Sequenced before mirroring so a mirrored
     # checkout always receives an already-projected, complete tree.
+    #
+    # Sprint 018 ticket 001 (issue 43): publish.project() reads every
+    # partner's *entire* accumulated .jsonl history, including lines
+    # written before a field (e.g. `eligibility`, sprint 015) existed on
+    # `Opportunity` -- a KeyError there is a real, standing failure mode
+    # (confirmed via a live production run's traceback, not
+    # hypothetical), and it used to be fatal to the whole process: an
+    # uncaught exception here crashed `main()` before the mirror step
+    # below ever ran, which is why that step "did not fire" on
+    # 2026-08-31 despite every one of its own preconditions being met --
+    # it was never reached at all. publish.project() failing must never
+    # again take mirroring down with it: this run's own opportunities.json/
+    # teams.json/etc. were already written straight to --site-dir by
+    # run() above, independently of publish.project(), so every other
+    # checkout still deserves them even when the public/data/ projection
+    # itself is broken. Matches this codebase's per-source error-
+    # isolation convention (pipeline._run_one_source): logged loudly via
+    # logger.exception, never a bare silent pass -- surfaced to the
+    # caller as a non-zero exit code below instead.
+    publish_failed = False
     if not args.dry_run:
         publish_site_dir = args.site_dir if args.site_dir is not None else get_site_dir()
-        publish.project(
-            site_dir=publish_site_dir,
-            partners_path=publish_site_dir / "src" / "data" / "partners.json",
-        )
+        try:
+            publish.project(
+                site_dir=publish_site_dir,
+                partners_path=publish_site_dir / "src" / "data" / "partners.json",
+            )
+        except Exception:
+            publish_failed = True
+            logger.exception(
+                "publish.project() failed; public/data/ was not refreshed "
+                "this run. Continuing to the mirror step below so "
+                "src/data/ exports still reach every checkout -- "
+                "investigate and re-run to refresh public/data/."
+            )
 
     # Keep every other checkout of the site in step with the export
     # that was just written. Skipped under --dry-run, which promises to
-    # write nothing anywhere.
+    # write nothing anywhere. Runs even when publish.project() failed
+    # above (see that block's comment) -- only --dry-run/--no-mirror
+    # skip this step.
     if not args.dry_run and not args.no_mirror:
         targets = (
             args.mirror_site_dirs
@@ -499,7 +660,13 @@ def main(argv: list[str] | None = None) -> int:
             assert yield_history_path is not None  # set above whenever yield_reporter is
             save_snapshot(yield_history_path, report)
 
-    return 0
+    # A publish.project() failure above is real (public/data/ is stale
+    # until re-run) even though the rest of this run succeeded -- signal
+    # it via a non-zero exit rather than the unconditional 0 this
+    # function returned before sprint 018 ticket 001, so the failure is
+    # visible to a caller/CI job checking the exit code, not just to
+    # whoever happens to read the log.
+    return 1 if publish_failed else 0
 
 
 if __name__ == "__main__":

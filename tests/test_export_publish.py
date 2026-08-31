@@ -24,7 +24,8 @@ from typing import Any
 import pytest
 
 from partner_scrape.export import partner_log, publish
-from partner_scrape.export.publish import project
+from partner_scrape.export.partner_log import _to_log_dict, published_content_hash
+from partner_scrape.export.publish import _to_opportunity, project
 from partner_scrape.export.writer import SITE_SCHEMA_FIELDS, export_opportunities
 from partner_scrape.normalize.run import WORK_BASED_LEARNING_TYPE, Opportunity
 
@@ -362,6 +363,89 @@ class TestLegacyExportUnaffected:
         assert before_meta == after_meta
         # And the new tree was written alongside it, additively.
         assert (site_dir / "public" / "data" / "partners.json").exists()
+
+
+class TestLegacyLogLineTolerance:
+    """Sprint 018 ticket 010, issue 45: `_to_opportunity()` reconstructs
+    an `Opportunity` from a persisted log line, and the per-partner log
+    is strictly append-only (`export/DESIGN.md`) -- a line recorded
+    before some field existed on `Opportunity` simply lacks that key.
+    `eligibility` (sprint 015 ticket 008) is the concrete field that
+    broke every real accumulated line, but these tests build the legacy
+    shape by deleting keys from a real `_to_log_dict()` entry rather
+    than hand-writing a fixture, so they'd equally catch a regression on
+    any other field."""
+
+    def test_line_missing_eligibility_reconstructs_with_the_dataclass_default(self):
+        opp = _opportunity()
+        entry = _to_log_dict(opp, published_content_hash(opp))
+        assert "eligibility" in entry  # sanity: current schema does carry it
+        del entry["eligibility"]  # simulate a pre-sprint-015 log line
+
+        reconstructed = _to_opportunity(entry)
+
+        assert reconstructed.eligibility == ""  # Opportunity's own dataclass default
+        # Every field still present in `entry` is used verbatim.
+        assert reconstructed.slug == opp.slug
+        assert reconstructed.title == opp.title
+        assert reconstructed.sources == opp.sources
+
+    def test_line_missing_several_newer_fields_reconstructs_with_each_default(self):
+        opp = _opportunity()
+        entry = _to_log_dict(opp, published_content_hash(opp))
+        for name in ("eligibility", "image_src", "sources"):
+            del entry[name]
+
+        reconstructed = _to_opportunity(entry)
+
+        assert reconstructed.eligibility == ""
+        assert reconstructed.image_src == ""
+        assert reconstructed.sources == frozenset()
+        # A field still present in `entry` remains unaffected.
+        assert reconstructed.slug == opp.slug
+        assert reconstructed.title == opp.title
+
+    def test_project_succeeds_over_a_mix_of_legacy_and_current_schema_lines(self, tmp_path):
+        log_dir = tmp_path / "partner_log"
+        site_dir = _site_dir(tmp_path)
+
+        # A legacy line: pre-sprint-015 shape, missing `eligibility`,
+        # written directly to disk -- `record()` only ever writes
+        # current-schema lines, so a real legacy line can't be produced
+        # by calling it.
+        legacy_opp = _opportunity(slug="legacy_event", title="Legacy Event")
+        legacy_entry = _to_log_dict(legacy_opp, published_content_hash(legacy_opp))
+        del legacy_entry["eligibility"]
+        partner_dir = log_dir / "coastal_roots_farm"
+        partner_dir.mkdir(parents=True)
+        (partner_dir / "opportunities.jsonl").write_text(
+            json.dumps(legacy_entry, sort_keys=True, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+        )
+
+        # A current-schema line for a second event at the same partner,
+        # appended the real way via `record()`.
+        current_opp = _opportunity(
+            slug="current_event",
+            title="Current Event",
+            date_start="2026-08-02T09:00:00-07:00",
+            eligibility="Grades 6-8",
+        )
+        partner_log.record([current_opp], log_dir=log_dir, partners_path=PARTNERS_PATH)
+        lines = (partner_dir / "opportunities.jsonl").read_text().splitlines()
+        assert len(lines) == 2, "both the legacy and current-schema lines must be on disk"
+
+        summary = project(
+            site_dir=site_dir, log_dir=log_dir, partners_path=PARTNERS_PATH, today=date(2026, 7, 19)
+        )
+
+        assert summary["partner_count"] == 3
+        events = {e["title"]: e for e in _events_json(site_dir, "coastal_roots_farm")["events"]}
+        assert set(events) == {"Legacy Event", "Current Event"}
+        # The legacy line's missing field defaulted correctly...
+        assert events["Legacy Event"]["eligibility"] == ""
+        # ...and the current-schema line's own value survived untouched.
+        assert events["Current Event"]["eligibility"] == "Grades 6-8"
 
 
 class TestSiteDirErrors:

@@ -56,7 +56,24 @@ logger = logging.getLogger(__name__)
 #: mirroring reuses this exact allowlist/copy mechanism unmodified, the
 #: same way `teams`'s CLI subcommand reuses `mirror_site_data` itself
 #: rather than duplicating it.
-MIRRORED_DATA_FILES = ("opportunities.json", "scrape-meta.json", "ads.json", "teams.json")
+#:
+#: Sprint 018 (ticket 007): `"places.json"` is written by
+#: `directory/export.py`, a third structurally separate module (see
+#: `directory/DESIGN.md`) -- same additive extension, same reused
+#: mechanism, no change to `mirror_site_data`'s own copy logic.
+#:
+#: Sprint 018 (ticket 008): `"clubs.json"` joins too, written by the
+#: same `directory/export.py` (now that the `Club` model and its Hack
+#: Club chapters source exist) -- same additive extension, same reused
+#: mechanism, no change to `mirror_site_data`'s own copy logic.
+MIRRORED_DATA_FILES = (
+    "opportunities.json",
+    "scrape-meta.json",
+    "ads.json",
+    "teams.json",
+    "places.json",
+    "clubs.json",
+)
 
 #: Event images referenced by the mirrored `opportunities.json`. Without
 #: these the copied JSON would point at images the target checkout does

@@ -19,6 +19,23 @@ an undated directory entity," which nothing else in the codebase does.
 
 ## 2. Orientation
 
+**Ticket 018-006 extracted the general-purpose parts of the ladder
+below into a new shared module, `partner_scrape/geo_ladder.py`,** so
+the sprint 018 `directory/` module (Places, Clubs — school-based Hack
+Club chapters need the same CDE/NCES school-matching rungs) can depend
+on the ladder without depending on `teams/` or duplicating its logic.
+`teams.geo.SchoolIndex` is now a thin subclass of
+`geo_ladder.GeoLadder`, adding only `Team`-field stamping
+(`SchoolIndex.resolve(team)`); `teams.geo.geocode_teams()`'s signature
+and behavior, and every rung's ordering/thresholds described below,
+are unchanged — see `teams/geo.py`'s own updated docstring and
+`geo_ladder.py`'s own docstring for the extraction's exact split, and
+`tests/teams/test_geo_regression.py` for the byte-identical-output
+proof. The rung-by-rung description in this document remains an
+accurate description of *behavior*; it is not duplicated in
+`geo_ladder.py`'s docstring, which instead documents the same ladder
+from its own, `Team`-independent point of view.
+
 **Ticket 011-004 added the offline geocoding ladder — the increment
 that actually delivers the sprint's stated goal of *knowing where the
 teams are*.** `teams.pipeline.run_teams()` runs both sources, links
@@ -1261,27 +1278,45 @@ after `geocode_teams()`), the same single-call-sequencing cost
   around the classify step (Constraints) — an LLM failure for one team
   never touches another.
 - **`teams.geo.geocode_teams(teams, *, data_dir=None) -> list[Team]`**
-  (this ticket) — resolves every `Team` through the seven-rung offline
-  ladder in place; returns the same list (parallel in shape to
-  `merge_teams()`). `data_dir` defaults to `geo.DEFAULT_DATA_DIR` (the
-  real committed `teams/data/`). Called once by `run_teams()`, after
-  `merge_teams()` and before `export_teams()`.
-- **`teams.geo.SchoolIndex(data_dir=None)`** (this ticket) — loads all
-  five `teams/data/` files once and exposes `resolve(team)` (the full
-  ladder for one `Team`, mutating it in place), `resolve_school(org,
-  city)` (rungs 1-4, cached), `resolve_zip(postal_code)`/
-  `resolve_city(city)` (rungs 5-6, uncached — already O(1) dict
-  lookups), and `match_calls` (a counter of actual, uncached rungs-1-4
-  ladder runs — what `tests/teams/test_geo.py`'s per-school-caching
-  tests assert against). Raises `RuntimeError` if any data file under
-  `data_dir` is missing or malformed — fails loudly at construction,
-  per SUC-003's Error Flows ("a bad geocoding table is a build-time
-  defect"). See Constraints for the caching design and Design for the
-  rung ordering.
+  (this ticket; internals extracted to `geo_ladder.py` in ticket
+  018-006, signature/behavior unchanged) — resolves every `Team`
+  through the seven-rung offline ladder in place; returns the same
+  list (parallel in shape to `merge_teams()`). `data_dir` defaults to
+  `geo.DEFAULT_DATA_DIR` (the real committed `teams/data/`). Called
+  once by `run_teams()`, after `merge_teams()` and before
+  `export_teams()`.
+- **`teams.geo.SchoolIndex(data_dir=None)`** (this ticket; as of
+  018-006, a thin subclass of `geo_ladder.GeoLadder` — see Orientation)
+  — loads all five `teams/data/` files once (inherited
+  `GeoLadder.__init__`) and exposes `resolve(team)` (`SchoolIndex`'s
+  own method: the full ladder for one `Team`, mutating it in place, via
+  the inherited `GeoLadder.locate()`), `resolve_school(org, city)`
+  (rungs 1-4, cached), `resolve_zip(postal_code)`/`resolve_city(city)`
+  (rungs 5-6, uncached — already O(1) dict lookups), and `match_calls`
+  (a counter of actual, uncached rungs-1-4 ladder runs — what
+  `tests/teams/test_geo.py`'s per-school-caching tests assert against)
+  — the latter four all inherited from `GeoLadder` unchanged. Raises
+  `RuntimeError` if any data file under `data_dir` is missing or
+  malformed — fails loudly at construction, per SUC-003's Error Flows
+  ("a bad geocoding table is a build-time defect"). See Constraints for
+  the caching design and Design for the rung ordering.
 - **`teams.geo.normalize_school_name(name) -> str` /
-  `normalize_city_name(city) -> str`** (this ticket) — the two
-  normalizers `SchoolIndex` matches against; see Design for why these
-  are separate from `normalize.partners.normalize_org_name`.
+  `normalize_city_name(city) -> str`** (this ticket; re-exported from
+  `geo_ladder.py` as of 018-006, still importable from `teams.geo`
+  unchanged) — the two normalizers `SchoolIndex` matches against; see
+  Design for why these are separate from
+  `normalize.partners.normalize_org_name`.
+- **`partner_scrape.geo_ladder.GeoLadder(data_dir)` /
+  `.locate(organization, city, postal_code="") -> LocationMatch`**
+  (new, ticket 018-006) — the shared, `Team`-independent engine
+  `teams.geo.SchoolIndex` now subclasses. `data_dir` is required (no
+  default — unlike `SchoolIndex`, `GeoLadder` has no opinion about
+  which subsystem's data directory to fall back to). `locate()` is the
+  one generic entry point running the full ladder and returning a
+  `LocationMatch` (`latitude`, `longitude`, `location_precision`,
+  `matched_name`, `needs_review`, `website`) without mutating anything
+  — see `geo_ladder.py`'s own docstring for the full design and
+  `tests/test_geo_ladder.py` for its `Team`-independent test coverage.
 - **`export.export_teams(teams, site_dir=None, *, dry_run=False) -> dict`**
   — writes `{site_dir}/src/data/teams.json` as
   `{"meta": {...}, "teams": [...]}`. `meta` carries `generated`

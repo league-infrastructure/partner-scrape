@@ -1,0 +1,86 @@
+{
+ "meta": {
+  "generated": "2026-08-31T18:55:13Z",
+  "total": 4,
+  "by_club_type": {
+   "hack-club": 4
+  },
+  "by_location_precision": {
+   "school": 4
+  }
+ },
+ "clubs": [
+  {
+   "club_id": "hack-club-helix-charter-high",
+   "name": "Hack Club at Helix Charter High School",
+   "club_type": "hack-club",
+   "host_school": "Helix Charter High School",
+   "city": "La Mesa",
+   "postal_code": "91941",
+   "latitude": 32.755905,
+   "longitude": -117.03981,
+   "location_precision": "school",
+   "matched_name": "Helix High",
+   "needs_review": true,
+   "website": "",
+   "host_school_website": "www.helixcharter.net",
+   "meeting_note": "",
+   "status": "active",
+   "status_note": ""
+  },
+  {
+   "club_id": "hack-club-la-jolla-high",
+   "name": "Hack Club at La Jolla High School",
+   "club_type": "hack-club",
+   "host_school": "La Jolla High School",
+   "city": "La Jolla",
+   "postal_code": "92037",
+   "latitude": 32.833607,
+   "longitude": -117.27403,
+   "location_precision": "school",
+   "matched_name": "La Jolla High",
+   "needs_review": false,
+   "website": "",
+   "host_school_website": "www.lajollahigh.sandiegounified.org/",
+   "meeting_note": "",
+   "status": "active",
+   "status_note": ""
+  },
+  {
+   "club_id": "hack-club-mater-dei-catholic-high",
+   "name": "Hack Club at Mater Dei Catholic High School",
+   "club_type": "hack-club",
+   "host_school": "Mater Dei Catholic High School",
+   "city": "Chula Vista",
+   "postal_code": "91913",
+   "latitude": 32.621445,
+   "longitude": -116.975624,
+   "location_precision": "school",
+   "matched_name": "Mater Dei Catholic High School",
+   "needs_review": false,
+   "website": "",
+   "host_school_website": "",
+   "meeting_note": "",
+   "status": "active",
+   "status_note": ""
+  },
+  {
+   "club_id": "hack-club-university-city-high",
+   "name": "Hack Club at University City High School",
+   "club_type": "hack-club",
+   "host_school": "University City High School",
+   "city": "San Diego",
+   "postal_code": "92122",
+   "latitude": 32.861197,
+   "longitude": -117.20954,
+   "location_precision": "school",
+   "matched_name": "University City High",
+   "needs_review": false,
+   "website": "",
+   "host_school_website": "www.universitycityhigh.org",
+   "meeting_note": "",
+   "status": "active",
+   "status_note": ""
+  }
+ ]
+}

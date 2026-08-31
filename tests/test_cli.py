@@ -16,6 +16,7 @@ below, covering the new `discover-candidates` subcommand.
 from __future__ import annotations
 
 import json
+import logging
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -486,6 +487,102 @@ class TestPublishAndMirrorIntegration:
         assert (
             target / "public" / "data" / "partners" / "coastal_roots_farm" / "events.json"
         ).exists()
+
+
+class TestMirrorWiring:
+    """Sprint 018 ticket 001 (issue 43): regression coverage for the
+    default `run` path's mirror step.
+
+    A 2026-08-31 production run wrote 350 opportunities to the primary
+    --site-dir but never mirrored them into this repo's own site/
+    checkout. The mirror block's own condition/target-resolution logic
+    (below) was never the problem -- it is proven correct here, and was
+    separately confirmed against the real production default target
+    (`config.DEFAULT_MIRROR_SITE_DIR`) via a live re-run during this
+    ticket's investigation. The actual cause: `publish.project()`,
+    called immediately before the mirror block, raised an uncaught
+    `KeyError` reconstructing a legacy `.jsonl` log line recorded before
+    the `eligibility` field existed on `Opportunity` (sprint 015,
+    `b0570aa`) -- crashing `main()` before the mirror block was ever
+    reached, which is why the run's stdout showed no mirror-related
+    lines at all: the code path that would have logged them never ran.
+    See cli.py's own comment at the `publish.project()` call site for
+    the full writeup.
+    """
+
+    def test_default_run_path_invokes_mirror_site_data_when_config_unset(
+        self, monkeypatch, tmp_path
+    ):
+        """The default (no-subcommand) path must call `mirror_site_data()`
+        under its own documented defaults -- no --dry-run, no
+        --no-mirror, no --mirror-site-dir override, and `MIRROR_SITE_DIRS`
+        unset -- exactly issue 43's reported preconditions. `get_mirror_
+        site_dirs()` itself is left unmocked (real config.py resolution),
+        so this proves the default path reaches a real, non-empty target
+        list, not just that *some* call happened."""
+        monkeypatch.delenv("MIRROR_SITE_DIRS", raising=False)
+        monkeypatch.setattr(cli, "run", lambda **kwargs: [{"slug": "a"}])
+
+        calls = []
+        monkeypatch.setattr(
+            cli,
+            "mirror_site_data",
+            lambda *args, **kwargs: calls.append((args, kwargs)),
+        )
+
+        expected_targets = cli.get_mirror_site_dirs()
+
+        exit_code = cli.main(["--no-enrich", "--no-report"])
+
+        assert exit_code == 0
+        assert len(calls) == 1
+        (primary, targets), kwargs = calls[0]
+        assert primary == tmp_path  # SITE_DIR, pinned by the autouse fixture
+        assert targets == expected_targets
+        assert targets  # non-empty: the default really does resolve somewhere
+        assert kwargs == {}
+
+    def test_mirror_still_runs_when_publish_project_raises(self, monkeypatch, caplog):
+        """The actual 2026-08-31 root cause, reproduced directly:
+        `publish.project()` raising (a real `KeyError` on legacy
+        `.jsonl` data missing a field added after it was logged) must no
+        longer crash `main()` before the mirror step below it runs. The
+        exception is surfaced -- logged, non-zero exit -- never silently
+        swallowed."""
+        monkeypatch.setattr(cli, "run", lambda **kwargs: [{"slug": "a"}])
+
+        def _boom(**kwargs):
+            raise KeyError("eligibility")
+
+        monkeypatch.setattr(cli.publish, "project", _boom)
+
+        calls = []
+        monkeypatch.setattr(
+            cli,
+            "mirror_site_data",
+            lambda *args, **kwargs: calls.append((args, kwargs)),
+        )
+        monkeypatch.setattr(cli, "get_mirror_site_dirs", lambda: [Path("/tmp/mirror-target")])
+
+        with caplog.at_level(logging.ERROR, logger="partner_scrape.cli"):
+            exit_code = cli.main(["--no-enrich", "--no-report"])
+
+        # Mirror still ran -- a broken publish.project() must not take
+        # every other checkout's export down with it.
+        assert len(calls) == 1
+        # The failure surfaces: non-zero exit, not a bare silent pass.
+        assert exit_code == 1
+        assert "publish.project() failed" in caplog.text
+
+    def test_exit_code_stays_zero_when_publish_project_succeeds(self, monkeypatch):
+        """Companion to the above: a successful run must not regress to
+        always reporting failure now that a failure path exists."""
+        monkeypatch.setattr(cli, "run", lambda **kwargs: [{"slug": "a"}])
+        monkeypatch.setattr(cli, "mirror_site_data", lambda *args, **kwargs: None)
+
+        exit_code = cli.main(["--no-enrich", "--no-report"])
+
+        assert exit_code == 0
 
 
 class TestHelp:
