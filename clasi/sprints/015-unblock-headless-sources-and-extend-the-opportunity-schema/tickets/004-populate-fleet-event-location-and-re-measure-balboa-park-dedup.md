@@ -52,22 +52,92 @@ the result either way" framing.
 
 ## Acceptance Criteria
 
-- [ ] `ListingHtmlAdapter.extract()` sets `Event.location` from
+- [x] `ListingHtmlAdapter.extract()` sets `Event.location` from
       `source.config.get("default_location", "")` only when the
       extraction ladder left `location` empty — never overriding a
       ladder-recovered value.
-- [ ] A fixture test proves both branches: ladder recovers a location
+- [x] A fixture test proves both branches: ladder recovers a location
       (fallback does not fire) and ladder recovers none (fallback
       fires).
-- [ ] `fleet-science-center.toml` sets `config.default_location`.
-- [ ] The Balboa Park ↔ Fleet dedup measurement is re-run live
+- [x] `fleet-science-center.toml` sets `config.default_location`.
+- [x] The Balboa Park ↔ Fleet dedup measurement is re-run live
       post-fix and its collapse count is recorded in this ticket's
       Notes, whatever the result — not silently omitted if still zero.
-- [ ] No other `listing_html` source's behavior changes (no
+- [x] No other `listing_html` source's behavior changes (no
       `default_location` key set for any source but Fleet this
       sprint).
-- [ ] Full test suite stays green; the live re-measurement is a
+- [x] Full test suite stays green; the live re-measurement is a
       diagnosis step, not a committed test.
+
+## Notes (ticket 004 completion, 2026-08-30)
+
+**Fix implemented as designed.** `ListingHtmlAdapter.extract()`
+(`partner_scrape/adapters/listing_html.py`) now sets `Event.location`
+from `source.config.get("default_location", "")` when, after the
+extraction ladder runs, `event.location` is still falsy — never
+re-`set()`s a ladder-recovered value. Recorded at a new
+`CONFIDENCE_DEFAULT_LOCATION = 1.0` (an operator-curated registry
+value, not a ladder guess — trusted at the ladder's own top tier).
+`fleet-science-center.toml` sets
+`config.default_location = "1875 El Prado, San Diego, CA 92101"`. Only
+Fleet's TOML gained the key; `sandiego-air-space.toml` (the only other
+`listing_html` source) is untouched and was verified via `grep` to
+still have no `default_location` key.
+
+**Live re-measurement** (`balboa-park` + all 7 individually-registered
+Balboa Park institutions, real adapters + `normalize.run()` directly,
+script not committed). Fleet's `Event.location` is now confirmed
+populated on all 10 raw events: `{'1875 El Prado, San Diego, CA
+92101'}` — the fallback fires exactly as designed, no longer the
+empty-string blocker sprint 014 measured. Full run: `balboa-park` 162,
+`fleet-science-center` 10, `sdnhm` 39, `comic-con-museum` 0 (its TEC
+endpoint timed out live during this run — transient, unrelated to this
+fix), `japanese-friendship-garden` 2, `sandiego-air-space` 10,
+`sdautomuseum` 17, `sdmrm` 1 events → 143 total Opportunities.
+
+**Result: still 0 cross-source collapses.** Recorded honestly, per the
+"record the result either way" convention. The specific "Educator Open
+House" 2026-09-24 case sprint 014 root-caused is still present as two
+separate records:
+
+- `balboa-park`: `location = "Fleet Science Center, 1875 El Prado, San
+  Diego, CA"`
+- `fleet-science-center`: `location = "1875 El Prado, San Diego, CA
+  92101"`
+
+**Root cause has shifted, not disappeared.** The empty-vs-populated gap
+this ticket targeted is closed — both sides now carry a real,
+non-empty venue string for the same physical location. But
+`dedup.cross_source_identity()`'s venue component is
+`normalize_title(event.location)`, which only lowercases, strips
+punctuation, and collapses whitespace (`model.normalize_title`,
+confirmed by reading it, not guessed) — it does no address-level
+canonicalization. `normalize_title("Fleet Science Center, 1875 El
+Prado, San Diego, CA")` = `"fleet science center 1875 el prado san
+diego ca"` versus `normalize_title("1875 El Prado, San Diego, CA
+92101")` = `"1875 el prado san diego ca 92101"` — different strings
+(one carries the org-name prefix and no ZIP, the other the reverse), so
+the identity tuple still differs on its third component even though
+the title (`"educator open house"`, both sides) and date
+(`2026-09-24`, both sides) now match exactly.
+
+**No scope creep into `normalize/` attempted**, per this ticket's own
+instruction. Two options were considered and rejected as out of this
+ticket's scope: (1) hand-tuning `default_location` to byte-match
+Balboa Park's specific TEC venue string — rejected as coupling one
+source's config to another source's arbitrary upstream formatting,
+fragile the moment either changes, and not a fix any *other*
+`listing_html` source with this same gap could reuse; (2) adding
+address-level fuzzy/canonical matching to
+`dedup.cross_source_identity()` — a real, more general fix, but a
+`normalize/` change explicitly out of this ticket's scope. Both are
+left for a future sprint if venue-string-format mismatches turn out to
+be material at scale — the existing `normalize/DESIGN.md` Open
+Questions entry is updated with this finding (see that file's Sprint
+015 addendum).
+
+**Full test suite**: 1511 passed (1508 baseline + 3 new fixture tests
+in this ticket). No regressions.
 
 ## Testing
 

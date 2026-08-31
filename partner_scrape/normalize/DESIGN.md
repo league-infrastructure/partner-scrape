@@ -245,7 +245,24 @@ title+date collision case.
   publish as two `Opportunity` records for one real event. This is accepted, not fixed, this
   sprint — no new dedup mechanism is introduced; a stronger cross-source identity (e.g.
   venue-plus-date-only, or a fuzzy title match) is deferred to a future sprint if the
-  duplication turns out to be material in practice.
+  duplication turns out to be material in practice. **(Sprint 015 ticket 004, re-measured.)**
+  Sprint 014 ticket 004 found a real title+date match this limitation predicted didn't
+  actually explain — Balboa Park's and Fleet's own "Educator Open House" (2026-09-24) both
+  matched on title *and* date but failed to merge only because `fleet-science-center.toml`'s
+  `listing_html` adapter left `Event.location` empty. `adapters/listing_html.py` gained a
+  `default_location` registry fallback (see that module's own Sprint 015 addendum) and Fleet
+  now carries a real, non-empty venue on every event. Re-measuring live against the same
+  8-source set still produced **0 cross-source collapses**, including for this exact
+  "Educator Open House" pair — but the mechanism has moved to precisely the
+  `normalized_venue` limitation this entry already names: `normalize_title()` only
+  lowercases/strips punctuation/collapses whitespace, so Balboa Park's TEC-supplied venue
+  string (`"Fleet Science Center, 1875 El Prado, San Diego, CA"`) and Fleet's configured
+  `default_location` (`"1875 El Prado, San Diego, CA 92101"`) normalize to two different
+  strings for the same physical address (org-name prefix vs. ZIP suffix, formatted
+  differently by each source). No `normalize/` code changed this sprint — an address-level
+  canonicalization or fuzzy-venue match is the same future-sprint deferral this entry
+  already anticipated, now with a concrete, reproducible example instead of a hypothetical
+  one. See sprint 015 ticket 004's Notes for the full measurement.
 - **(Sprint 014)** `partners.py`'s `find_partner` no-match behavior (keep the org name,
   leave `partner_id` unset — already the tested, non-fatal path) is now exercised by
   design, not just as an edge case: several of this sprint's ~20 newly-registered sources

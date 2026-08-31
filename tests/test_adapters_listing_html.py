@@ -22,7 +22,7 @@ import pytest
 
 from partner_scrape.adapters import ADAPTERS, get_adapter, run
 from partner_scrape.adapters.base import EventRef, RawResponse
-from partner_scrape.adapters.listing_html import ListingHtmlAdapter
+from partner_scrape.adapters.listing_html import CONFIDENCE_DEFAULT_LOCATION, ListingHtmlAdapter
 from partner_scrape.fetch import DEFAULT_RATE_LIMIT_SECONDS
 from partner_scrape.fetch.fetcher import FetchResponse
 from partner_scrape.model import Provenance
@@ -88,12 +88,12 @@ class FixtureFetcher:
         return self.responses[url]
 
 
-def _source(acquisition_policy: dict | None = None) -> SourceConfig:
+def _source(acquisition_policy: dict | None = None, config: dict | None = None) -> SourceConfig:
     return SourceConfig(
         source_id="fleet-science-center",
         org_name="Fleet Science Center",
         adapter_type="listing_html",
-        config={"site_url": SITE_URL, "listing_urls": ["/events"]},
+        config=config or {"site_url": SITE_URL, "listing_urls": ["/events"]},
         acquisition_policy=acquisition_policy or {},
     )
 
@@ -293,3 +293,90 @@ class TestExtractRobustness:
         )
 
         assert list(adapter.extract(raw, _source())) == []
+
+
+class TestDefaultLocationFallback:
+    """Sprint 015 ticket 004: ``source.config["default_location"]``
+    backstops ``Event.location`` only when the extraction ladder left it
+    empty -- see this ticket's Fix shape and ``adapters/DESIGN.md``'s
+    Sprint 015 addendum. Fleet's real detail pages carry no per-page
+    venue markup, so this closes the gap that blocked the Balboa Park
+    <-> Fleet cross-source dedup collapse measured in sprint 014 ticket
+    004's Notes.
+    """
+
+    def _source_with_default_location(self, default_location: str | None) -> SourceConfig:
+        config = {"site_url": SITE_URL, "listing_urls": ["/events"]}
+        if default_location is not None:
+            config["default_location"] = default_location
+        return _source(config=config)
+
+    def test_ladder_recovered_location_wins_over_default_location(self):
+        """A page whose JSON-LD carries a real ``location`` (the
+        json_ld_event.html fixture, reused as-is from
+        test_extract_ladder.py's own JSON-LD coverage) must keep that
+        value -- the fallback must never override a ladder-recovered
+        location, even when ``default_location`` is set to something
+        different.
+        """
+        adapter = ListingHtmlAdapter()
+        raw = RawResponse(
+            ref=EventRef(url=f"{SITE_URL}/events/tide-pools"),
+            status=200,
+            body=_read(HTML_FIXTURES_DIR / "json_ld_event.html"),
+        )
+        source = self._source_with_default_location("1875 El Prado, San Diego, CA 92101")
+
+        events = list(adapter.extract(raw, source))
+
+        assert len(events) == 1
+        event = events[0]
+        assert event.location != "1875 El Prado, San Diego, CA 92101"
+        assert "Cabrillo Tide Pools" in event.location
+        # Ladder provenance (JSON-LD, confidence 1.0) is preserved --
+        # the fallback branch never re-``set()``s an already-populated
+        # field.
+        assert event.field_provenance["location"].source == "listing_html"
+
+    def test_empty_ladder_location_falls_back_to_default_location(self):
+        """fleet_style_opengraph.html has no location signal anywhere
+        (matches Fleet's confirmed real page shape) -- with
+        ``default_location`` set, the adapter fills it in.
+        """
+        adapter = ListingHtmlAdapter()
+        raw = RawResponse(
+            ref=EventRef(url=f"{SITE_URL}/events/candlelight-concerts"),
+            status=200,
+            body=_read(HTML_FIXTURES_DIR / "fleet_style_opengraph.html"),
+        )
+        source = self._source_with_default_location("1875 El Prado, San Diego, CA 92101")
+
+        events = list(adapter.extract(raw, source))
+
+        assert len(events) == 1
+        event = events[0]
+        assert event.location == "1875 El Prado, San Diego, CA 92101"
+        assert event.field_provenance["location"] == Provenance(
+            source="listing_html", confidence=CONFIDENCE_DEFAULT_LOCATION
+        )
+
+    def test_no_default_location_configured_leaves_location_empty(self):
+        """A source with no ``default_location`` key (every listing_html
+        source but Fleet, this sprint) reproduces today's behavior
+        exactly: no ladder rung fired, no fallback configured, so
+        ``location`` stays empty with no field_provenance entry.
+        """
+        adapter = ListingHtmlAdapter()
+        raw = RawResponse(
+            ref=EventRef(url=f"{SITE_URL}/events/candlelight-concerts"),
+            status=200,
+            body=_read(HTML_FIXTURES_DIR / "fleet_style_opengraph.html"),
+        )
+        source = self._source_with_default_location(None)
+
+        events = list(adapter.extract(raw, source))
+
+        assert len(events) == 1
+        event = events[0]
+        assert event.location == ""
+        assert "location" not in event.field_provenance

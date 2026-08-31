@@ -118,6 +118,24 @@ body to `extract.extract_fields()`, and assemble an `Event` from the returned
 all the real URL-resolution logic in `discovery/` — this keeps the two HTML adapters
 differing only in their discovery strategy, which is the actual distinction between them.
 
+**`listing_html`'s `default_location` fallback convention. (Sprint 015 ticket 004)**
+`ListingHtmlAdapter.extract()` falls back to `source.config.get("default_location", "")`
+for `Event.location` only when the extraction ladder recovered no location at all —
+never overriding a ladder-recovered value. This exists because some `listing_html` sites
+(Fleet Science Center's Drupal `/events` listing, confirmed live) have a single fixed
+venue that is never printed per-page for the ladder to recover, so every raw `Event` from
+that source carried an empty `location` and could never cross-source-dedup against a
+calendar aggregator (e.g. Balboa Park's park-wide TEC feed) that does record the venue —
+sprint 014 ticket 004 measured this precisely (0 collapses; see that ticket's Notes).
+Deliberately a registry-generic adapter behavior, not Fleet-specific code: any current or
+future `listing_html` source with the same fixed-undocumented-venue shape gets the same
+fix as a one-line TOML edit (`registry/DESIGN.md`'s "onboarding is a data edit, not a
+code change" design point). A source with no `default_location` key reproduces
+pre-ticket-004 behavior exactly. The fallback value is recorded via `Event.set()` at
+`CONFIDENCE_DEFAULT_LOCATION = 1.0` — an operator-curated, known value from the registry
+TOML, not a guess extracted from ambiguous markup, so it is trusted at the ladder's own
+top tier rather than a lower one.
+
 **ATS adapters are a filtered family.** `greenhouse` and `lever` read public job-board
 JSON, then run `ats_filters.classify_posting()` to decide whether a posting is an
 internship, is STEM, and is San Diego-local. Postings that survive become

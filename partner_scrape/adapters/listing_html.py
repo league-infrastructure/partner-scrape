@@ -32,6 +32,15 @@ logger = logging.getLogger(__name__)
 #: Architecture > Generic HTML Extractor).
 SOURCE_NAME = "listing_html"
 
+#: Confidence recorded when ``Event.location`` is populated from
+#: ``source.config["default_location"]`` rather than the extraction
+#: ladder (sprint 015 ticket 004). This is an operator-curated, known
+#: value from the registry TOML -- not a guess extracted from ambiguous
+#: markup -- so it is recorded at the ladder's own top confidence
+#: (matching ``extract.ladder.CONFIDENCE_JSON_LD``) rather than
+#: invented as a new, lower tier.
+CONFIDENCE_DEFAULT_LOCATION = 1.0
+
 
 class ListingHtmlAdapter:
     """``Adapter`` for no-sitemap sites discoverable via a listing page
@@ -76,6 +85,15 @@ class ListingHtmlAdapter:
         title-fallback rungs are what fire here, not the top JSON-LD/
         ``<time>`` rungs -- the ladder's existing priority order already
         handles this gracefully; no new rung is needed.
+
+        Sprint 015 ticket 004: if no ladder rung recovered a ``location``
+        field, ``Event.location`` falls back to
+        ``source.config.get("default_location", "")`` -- a
+        registry-generic convention (see this module's Sprint 015
+        addendum in ``DESIGN.md``), not Fleet-specific code. A source
+        with no ``default_location`` key reproduces today's behavior
+        exactly (empty string, no field_provenance entry). A
+        ladder-recovered ``location`` is never overridden.
         """
         if raw.status != 200:
             logger.warning(
@@ -99,5 +117,15 @@ class ListingHtmlAdapter:
         event = Event(kind="event", source_id=source.source_id, url=raw.ref.url)
         for field_name, (value, confidence) in fields.items():
             event.set(field_name, value, source=SOURCE_NAME, confidence=confidence)
+
+        if not event.location:
+            default_location = source.config.get("default_location", "")
+            if default_location:
+                event.set(
+                    "location",
+                    default_location,
+                    source=SOURCE_NAME,
+                    confidence=CONFIDENCE_DEFAULT_LOCATION,
+                )
 
         return [event]
