@@ -1,7 +1,7 @@
 ---
 id: '003'
 title: Thread acquisition_policy into every fetch call site
-status: open
+status: in-progress
 use-cases:
 - SUC-004
 depends-on:
