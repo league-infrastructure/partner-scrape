@@ -1,7 +1,7 @@
 ---
 id: 018
 title: Partner Roster, Places, and Clubs
-status: executing
+status: done
 branch: sprint/018-partner-roster-places-and-clubs
 use-cases: []
 issues:
