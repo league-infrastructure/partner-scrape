@@ -24,6 +24,7 @@ from partner_scrape.registry.loader import DEFAULT_SOURCES_DIR, load_sources
 REPO_ROOT = Path(__file__).resolve().parent.parent
 PARTNERS_JSON = REPO_ROOT / "site" / "src" / "data" / "partners.json"
 PARTNERS_CSV = REPO_ROOT / "data" / "partners_viable.csv"
+LOGOS_DIR = REPO_ROOT / "site" / "public" / "images" / "logos"
 
 # site/src/pages/partners/index.astro's SD_BOUNDS -- the map silently drops
 # any pin outside this box.
@@ -340,3 +341,60 @@ class TestBatchBRegistryJoinIntegrity:
         expected_new_ids = set(range(765, 800))
         assert expected_new_ids <= ids, f"missing expected new ids: {expected_new_ids - ids}"
         assert len(partners) == 211, f"expected 176 (post-batch-A) + 35 (this ticket) = 211, got {len(partners)}"
+
+
+class TestLogoBackfillIntegrity:
+    """Sprint 018 ticket 005 (issue 32 logo backfill). Guards the whole
+    roster -- not just the 69 rows this ticket touched -- against a
+    `logo_src` value that points at a file that doesn't exist under
+    `site/public/images/logos/`. A broken `logo_src` degrades silently at
+    render time (`getLogoPath()` just resolves a path string; Astro has no
+    build-time check that the file is actually there), so this is the only
+    guard against that regression for the roster as a whole, not just this
+    ticket's 52 newly-backfilled rows."""
+
+    def test_every_json_logo_src_points_at_an_existing_file(self):
+        partners = _load_partners_json()
+
+        missing = [
+            (p["id"], p["name"], p["logo_src"])
+            for p in partners
+            if p.get("logo_src") and not (LOGOS_DIR / p["logo_src"]).exists()
+        ]
+        assert missing == [], f"logo_src points at a missing file: {missing}"
+
+    def test_every_csv_logo_src_points_at_an_existing_file(self):
+        # The pre-existing 142 rows' CSV `logo_src` column holds the
+        # legacy Drupal-era source path (e.g.
+        # "../../../sites/default/files/...") -- a historical record of
+        # where the image was originally scraped from, not a path this
+        # repo's site ever resolves. Only this ticket's newly-backfilled
+        # rows (ids 731-799) write the same bare local filename
+        # convention `partners.json` uses (see ticket 005 Notes), so only
+        # those rows are checked against `LOGOS_DIR` here.
+        rows = _load_partners_csv()
+
+        missing = [
+            (r["id"], r["name"], r["logo_src"])
+            for r in rows
+            if r.get("logo_src")
+            and 731 <= int(r["id"]) <= 799
+            and not (LOGOS_DIR / r["logo_src"]).exists()
+        ]
+        assert missing == [], f"logo_src points at a missing file: {missing}"
+
+    def test_backfilled_count_matches_ticket_005_notes(self):
+        # 52 of the 69 orgs tickets 003/004 registered with an empty
+        # logo_src (ids 731-799) gained a logo this ticket; 17 were left
+        # blank after a genuine best-effort check found nothing usable
+        # (unreachable site, or only a wrong/mismatched/too-tiny/blank
+        # candidate available -- see ticket 005 Notes for the per-org
+        # breakdown).
+        partners = _load_partners_json()
+        new_rows = [p for p in partners if 731 <= p["id"] <= 799]
+        assert len(new_rows) == 69
+
+        backfilled = [p for p in new_rows if p["logo_src"]]
+        still_empty = [p for p in new_rows if not p["logo_src"]]
+        assert len(backfilled) == 52, f"expected 52 backfilled, got {len(backfilled)}"
+        assert len(still_empty) == 17, f"expected 17 left empty, got {len(still_empty)}"
