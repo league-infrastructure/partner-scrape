@@ -1,7 +1,7 @@
 ---
 id: '002'
 title: Convert site/ to a build-time checkout of stem-ecosystem in pages.yml
-status: in-progress
+status: done
 use-cases:
 - SUC-001
 depends-on:

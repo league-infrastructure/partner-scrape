@@ -1,8 +1,9 @@
 ---
 id: '003'
 title: Archive legacy pre-partner_scrape scraper tooling and update README/justfile
-status: open
-use-cases: [SUC-002]
+status: in-progress
+use-cases:
+- SUC-002
 depends-on: []
 github-issue: ''
 issue: consolidate-partner-scrape-s-beta-site-into-stem-ecosystem-production.md
