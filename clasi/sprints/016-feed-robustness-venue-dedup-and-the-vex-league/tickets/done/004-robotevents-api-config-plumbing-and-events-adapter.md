@@ -1,7 +1,7 @@
 ---
 id: '004'
 title: RobotEvents API config plumbing and events adapter
-status: in-progress
+status: done
 use-cases:
 - SUC-006
 - SUC-008
