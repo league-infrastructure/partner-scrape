@@ -1,7 +1,7 @@
 ---
 id: '006'
 title: Extract the shared offline geocoding ladder from teams/geo.py
-status: open
+status: in-progress
 use-cases:
 - SUC-004
 - SUC-005
