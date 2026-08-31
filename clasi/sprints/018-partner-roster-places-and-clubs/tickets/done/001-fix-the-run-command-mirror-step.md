@@ -1,7 +1,7 @@
 ---
 id: '001'
 title: Fix the run-command mirror step
-status: in-progress
+status: done
 use-cases:
 - SUC-003
 depends-on: []
