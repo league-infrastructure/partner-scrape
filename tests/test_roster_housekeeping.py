@@ -278,4 +278,65 @@ class TestBatchARegistryJoinIntegrity:
         ids = {p["id"] for p in partners}
         expected_new_ids = set(range(731, 765))
         assert expected_new_ids <= ids, f"missing expected new ids: {expected_new_ids - ids}"
-        assert len(partners) == 176, f"expected 142 (post-002) + 34 (this ticket) = 176, got {len(partners)}"
+        # Total row count now reflects ticket 004 (batch B)'s subsequent
+        # additions too -- this class only pins that batch A's own 34 rows
+        # are still present, not the grand total. See
+        # TestBatchBRegistryJoinIntegrity for the post-ticket-004 total.
+        assert len(partners) == 211, (
+            f"expected 142 (post-002) + 34 (batch A) + 35 (batch B) = 211, got {len(partners)}"
+        )
+
+
+class TestBatchBRegistryJoinIntegrity:
+    """Sprint 018 ticket 004 (issue 32 batch B: youth orgs, competitions/clubs,
+    research/health, pipeline/adult). Every registry source this ticket's
+    Description named as "already registered as an event source" must now
+    resolve to a roster entry whose ``name`` matches the source's own
+    ``org_name`` literally -- not just the gap-analysis spelling. See
+    ticket 004's Notes for the exact org_name each source TOML uses."""
+
+    # source_id -> the source TOML's literal org_name (verified by reading
+    # the TOML directly, not assumed from the ticket/gap-analysis prose).
+    BATCH_B_ALREADY_REGISTERED_SOURCES = {
+        "shpesd": "SHPE San Diego",
+        "ucsd-jacobs-school": "UC San Diego Jacobs School of Engineering",
+        "ymcasd": "YMCA of San Diego County",
+    }
+
+    def test_every_batch_b_source_org_name_still_matches_its_toml(self):
+        sources_by_id = {s.source_id: s for s in load_sources(DEFAULT_SOURCES_DIR)}
+
+        missing = [
+            source_id
+            for source_id in self.BATCH_B_ALREADY_REGISTERED_SOURCES
+            if source_id not in sources_by_id
+        ]
+        assert missing == [], f"expected registry sources not found: {missing}"
+
+        mismatched = {
+            source_id: sources_by_id[source_id].org_name
+            for source_id, expected_org_name in self.BATCH_B_ALREADY_REGISTERED_SOURCES.items()
+            if sources_by_id[source_id].org_name != expected_org_name
+        }
+        assert mismatched == {}, f"source org_name drifted from this test's expectation: {mismatched}"
+
+    def test_every_batch_b_source_now_resolves_to_exactly_one_roster_entry(self):
+        partners_by_norm = load_partners(PARTNERS_JSON)
+
+        unresolved = []
+        for org_name in self.BATCH_B_ALREADY_REGISTERED_SOURCES.values():
+            if find_partner(org_name, partners_by_norm) is None:
+                unresolved.append(org_name)
+
+        assert unresolved == [], f"batch-B org(s) still do not resolve to a roster entry: {unresolved}"
+
+    def test_batch_b_new_rows_are_present_with_expected_ids(self):
+        # The 35 rows this ticket adds (ids 765-799): 9 youth orgs (4 of
+        # the county's Boys & Girls Clubs councils registered as distinct
+        # organizations, per the ticket's own instruction), 8
+        # competitions/clubs, 9 research/health, 9 pipeline/adult.
+        partners = _load_partners_json()
+        ids = {p["id"] for p in partners}
+        expected_new_ids = set(range(765, 800))
+        assert expected_new_ids <= ids, f"missing expected new ids: {expected_new_ids - ids}"
+        assert len(partners) == 211, f"expected 176 (post-batch-A) + 35 (this ticket) = 211, got {len(partners)}"
