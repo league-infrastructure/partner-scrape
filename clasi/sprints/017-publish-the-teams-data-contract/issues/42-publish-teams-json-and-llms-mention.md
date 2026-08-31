@@ -1,5 +1,9 @@
 ---
-status: pending
+status: in-progress
+sprint: '017'
+tickets:
+- 017-001
+- 017-002
 ---
 
 # Publish teams.json in the public data contract and mention it in llms.txt
