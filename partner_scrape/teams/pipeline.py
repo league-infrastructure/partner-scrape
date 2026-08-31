@@ -108,6 +108,14 @@ still needs this cross-team pass. Like `merge_teams()`/`geocode_teams()`
 above, it is not wrapped in its own try/except -- it never raises for
 any input it can receive here.
 
+Sprint 016 ticket 005 adds a fourth entry, `"robotevents"` (VEX
+Robotics Competition, CA Region 4 -- see `sources/robotevents.py`'s own
+module docstring). Like TBA, its `discover()` raises on any probe
+failure (missing/invalid `ROBOTEVENTS_KEY` included) rather than
+degrading gracefully, so this loop's existing per-source
+`try`/`except` isolates it identically -- no VEX-specific case needed
+here either.
+
 Sprint 012 adds a third entry, `"static_roster"` (the committed FLL
 roster -- see `sources/static_roster.py`'s own module docstring), plus
 one new pre-flight check: `_check_sunset_seasons()`, called once per
@@ -142,6 +150,7 @@ from partner_scrape.teams.model import Team
 from partner_scrape.teams.scrape import verify_team_websites
 from partner_scrape.teams.sources.base import TeamSource, run as run_team_source
 from partner_scrape.teams.sources.ftcscout import FTCScoutSource
+from partner_scrape.teams.sources.robotevents import VexTeamSource
 from partner_scrape.teams.sources.static_roster import StaticRosterSource
 from partner_scrape.teams.sources.tba import TBASource
 from partner_scrape.teams.sponsor_cache import SponsorCache
@@ -169,6 +178,7 @@ _TEAM_SOURCES: dict[str, TeamSource] = {
     "ftcscout": FTCScoutSource(),
     "tba": TBASource(),
     "static_roster": StaticRosterSource(),
+    "robotevents": VexTeamSource(),
 }
 
 

@@ -125,3 +125,50 @@ class TestTbaUrl:
     def test_override_via_environment(self, monkeypatch):
         monkeypatch.setenv("TBA_URL", "https://staging.example.org")
         assert config.get_tba_url() == "https://staging.example.org"
+
+
+class TestRobotEventsApiKey:
+    """Mirrors TestTbaApiKey exactly -- get_robotevents_api_key() is a
+    line-for-line copy of get_tba_api_key() (sprint 016 ticket 004)."""
+
+    def test_reads_configured_value(self, monkeypatch):
+        monkeypatch.setenv("ROBOTEVENTS_KEY", "abc123")
+        assert config.get_robotevents_api_key() == "abc123"
+
+    def test_strips_surrounding_single_quotes_and_whitespace(self, monkeypatch):
+        # The assembled .env carries the value quoted, e.g.
+        # ROBOTEVENTS_KEY='abc123' -- matching TBA_KEY's convention.
+        monkeypatch.setenv("ROBOTEVENTS_KEY", "  'abc123'  ")
+        assert config.get_robotevents_api_key() == "abc123"
+
+    def test_strips_surrounding_double_quotes(self, monkeypatch):
+        monkeypatch.setenv("ROBOTEVENTS_KEY", '"abc123"')
+        assert config.get_robotevents_api_key() == "abc123"
+
+    def test_raises_when_unset(self, monkeypatch):
+        monkeypatch.delenv("ROBOTEVENTS_KEY", raising=False)
+        with pytest.raises(RuntimeError):
+            config.get_robotevents_api_key()
+
+    def test_raises_when_empty_string(self, monkeypatch):
+        monkeypatch.setenv("ROBOTEVENTS_KEY", "")
+        with pytest.raises(RuntimeError):
+            config.get_robotevents_api_key()
+
+    def test_raises_when_only_quotes(self, monkeypatch):
+        monkeypatch.setenv("ROBOTEVENTS_KEY", "''")
+        with pytest.raises(RuntimeError):
+            config.get_robotevents_api_key()
+
+
+class TestRobotEventsUrl:
+    def test_default_url_when_unset(self, monkeypatch):
+        monkeypatch.delenv("ROBOTEVENTS_URL", raising=False)
+        assert config.get_robotevents_url() == config.DEFAULT_ROBOTEVENTS_URL
+
+    def test_default_matches_module_constant(self):
+        assert config.DEFAULT_ROBOTEVENTS_URL == "https://www.robotevents.com/api/v2"
+
+    def test_override_via_environment(self, monkeypatch):
+        monkeypatch.setenv("ROBOTEVENTS_URL", "https://staging.example.org")
+        assert config.get_robotevents_url() == "https://staging.example.org"

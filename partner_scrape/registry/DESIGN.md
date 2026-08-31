@@ -31,6 +31,35 @@ real by ticket 003's fetcher-threading fix; `county-parks` and
 `sd-astronomy-association` were dropped after live dry-run exposed pre-existing
 `ical.py` parsing bugs unrelated to robots policy (see the ticket's Notes).
 
+**(Sprint 016 ticket 002)** Both feeds sprint 015 ticket 005 withheld are now
+registered. Sprint 016 ticket 001's `ical.py` hardening (multi-RRULE
+first-rule salvage, widened per-VEVENT exception isolation) fully unblocks
+`sd-astronomy-association`, live-verified `found=795 dated=795 new=177` and
+committed. `county-parks` (Tockify) needed one more fix: ticket 001's
+`X-PUBLISHED-TTL` pre-parse strip was necessary but not sufficient — the same
+Tockify feed also emits a second, distinct non-standard duration property,
+`REFRESH-INTERVAL:P15M`, immediately after `X-PUBLISHED-TTL` in the
+`VCALENDAR` header, which `icalendar`'s strict parser rejects identically
+(`InvalidCalendar: Invalid iCalendar duration: P15M`). Per a team-lead ruling
+that this was a second live-evidenced case of the exact pattern ticket 001
+already fixed (not a new architectural boundary), ticket 002 widened
+`ical.py`'s pre-parse strip to a small evidenced-property list covering both
+properties (see `adapters/DESIGN.md`'s sprint-016 addendum). Re-verified live:
+`county-parks` now returns `found=553 dated=553 new=36`, all 553 raw VEVENTs
+parsing — this batch's single highest-yield feed. Both are committed with
+`acquisition_policy.respect_robots = false`, completing the 5-of-5 robots-gated
+batch from issue 38/40.
+
+**(Sprint 016 ticket 004)** `sources/robotevents-vex-sd.toml` (new) registers the
+first non-FIRST robotics league this project ingests — VEX Robotics Competition
+(V5RC/VIQRC) and the Aerial Drone Competition, CA Region 4, via the new
+`robotevents` adapter (`adapters/DESIGN.md`'s own sprint-016 addendum). Registered
+`enabled = true` with no live verification — no `ROBOTEVENTS_KEY` was provisioned
+during this ticket's execution — mirroring `frc-sd.toml`'s TBA precedent (§3's
+"malformed or missing-required-field file is logged and skipped" isolation
+covers a bad *file*; a missing *credential* is `pipeline.run()`'s existing
+per-source isolation instead, unaffected by this file being present).
+
 ## 2. Orientation
 
 Four data directories, three schema/loader pairs:

@@ -35,7 +35,12 @@ from pathlib import Path
 import pytest
 
 from partner_scrape.fetch.fetcher import FetchResponse
-from partner_scrape.teams.export import TEAMS_SCHEMA_FIELDS, export_teams, to_json_dict
+from partner_scrape.teams.export import (
+    TEAMS_SCHEMA_FIELDS,
+    _natural_number_key,
+    export_teams,
+    to_json_dict,
+)
 from partner_scrape.teams.model import Team
 from partner_scrape.teams.sources.base import run as run_source
 from partner_scrape.teams.sources.ftcscout import DEFAULT_API_BASE, DEFAULT_REGION, FTCScoutSource, _search_url
@@ -195,6 +200,75 @@ class TestSchemaFieldSet:
         assert set(result.keys()) == set(TEAMS_SCHEMA_FIELDS)
         assert "sources" not in result
         assert result["team_id"] == "ftc-1622"
+
+
+class TestNaturalSortKey:
+    """Sprint 016 ticket 005: `_natural_number_key` backs `export_teams()`'s
+    sort now that `Team.number` is `str` (VEX designations are
+    alphanumeric). See that function's own docstring for the tuple shape
+    (`(leading_digit_run_as_int, full_string)`)."""
+
+    def test_purely_numeric_strings_sort_numerically_not_lexicographically(self):
+        assert _natural_number_key("99") < _natural_number_key("100")
+
+    def test_alphanumeric_siblings_share_the_leading_digit_run(self):
+        a = _natural_number_key("90210A")
+        b = _natural_number_key("90210B")
+
+        assert a[0] == b[0] == 90210
+        assert a < b  # tiebreaker: full-string comparison
+
+    def test_empty_string_sorts_first(self):
+        assert _natural_number_key("") == (0, "")
+
+    def test_coerces_a_non_string_input(self):
+        # Team.number is a plain, untyped field (matching Team.league's
+        # convention) -- this key must not crash on a Team whose number
+        # happens to still be an int (see model.py's docstring on why
+        # ftcscout.py/tba.py/static_roster.py were not also touched by
+        # this ticket).
+        assert _natural_number_key(1622) == (1622, "1622")
+
+
+class TestExportSortOrder:
+    """Sprint 016 ticket 005's own regression requirement: a mixed
+    FTC/FRC/FLL fixture set (all-numeric `number` values) must sort
+    identically to its pre-widen order, and a VEX fixture's alphanumeric
+    siblings must sort adjacently."""
+
+    def test_mixed_ftc_frc_fll_numeric_numbers_sort_identically_to_pre_widen_order(
+        self, tmp_path
+    ):
+        site = _make_site(tmp_path)
+        teams = [
+            _make_team(team_id="ftc-100", league="FTC", number="100", name="Hundred"),
+            _make_team(team_id="ftc-99", league="FTC", number="99", name="Ninety-Nine"),
+            _make_team(team_id="ftc-9", league="FTC", number="9", name="Nine"),
+            _make_team(team_id="frc-2", league="FRC", number="2", name="Two"),
+            _make_team(team_id="frc-10", league="FRC", number="10", name="Ten"),
+            _make_team(team_id="fll-1", league="FLL", number="1", name="One"),
+        ]
+
+        payload = export_teams(teams, site_dir=site)
+        ordered_ids = [t["team_id"] for t in payload["teams"]]
+
+        # Grouped by league (FLL, FRC, FTC alphabetically), each group
+        # numerically ascending -- "9" before "99" before "100", not the
+        # lexicographic "100" before "9" a bare string sort would give.
+        assert ordered_ids == ["fll-1", "frc-2", "frc-10", "ftc-9", "ftc-99", "ftc-100"]
+
+    def test_vex_alphanumeric_siblings_sort_adjacently(self, tmp_path):
+        site = _make_site(tmp_path)
+        teams = [
+            _make_team(team_id="vex-90210C", league="VEX", number="90210C", name="C"),
+            _make_team(team_id="vex-90210A", league="VEX", number="90210A", name="A"),
+            _make_team(team_id="vex-90210B", league="VEX", number="90210B", name="B"),
+        ]
+
+        payload = export_teams(teams, site_dir=site)
+        ordered_ids = [t["team_id"] for t in payload["teams"]]
+
+        assert ordered_ids == ["vex-90210A", "vex-90210B", "vex-90210C"]
 
 
 class TestPayloadShape:

@@ -1,0 +1,36 @@
+{
+  "meta": {
+    "current_page": 2,
+    "first_page_url": "https://robotevents.example/api/v2/teams?page=1",
+    "from": 6,
+    "last_page": 2,
+    "last_page_url": "https://robotevents.example/api/v2/teams?page=2",
+    "next_page_url": null,
+    "path": "https://robotevents.example/api/v2/teams",
+    "per_page": 50,
+    "prev_page_url": "https://robotevents.example/api/v2/teams?page=1",
+    "to": 6,
+    "total": 6
+  },
+  "data": [
+    {
+      "id": 90006,
+      "number": "6789Y",
+      "team_name": "Chula Vista Bots",
+      "robot_name": "",
+      "organization": "Some Chula Vista School",
+      "location": {
+        "venue": "",
+        "address_1": "",
+        "address_2": "",
+        "city": "Chula Vista",
+        "region": "California",
+        "postcode": "91910",
+        "country": "USA"
+      },
+      "registered": true,
+      "program": {"id": 1, "name": "VEX Robotics Competition", "code": "VRC"},
+      "grade": "Middle School"
+    }
+  ]
+}

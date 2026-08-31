@@ -1,5 +1,8 @@
 ---
-status: pending
+status: done
+sprint: '016'
+tickets:
+- 016-003
 ---
 
 # Venue canonicalization so cross-source dedup actually collapses duplicates

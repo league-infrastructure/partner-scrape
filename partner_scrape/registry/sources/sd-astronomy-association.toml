@@ -1,0 +1,47 @@
+# San Diego Astronomy Association -- Google Calendar ICS subscription
+# feed (sdaa@sdaa.org). Live, high-yield, but withheld by sprint 015
+# ticket 005 for a genuine `ical.py` bug, not the robots-policy
+# question itself: at least one VEVENT carries more than one `RRULE`
+# property, which `icalendar` returns as a Python `list` rather than a
+# single `vRecur`; `_extract_component` called `.to_ical()` on it
+# unconditionally and crashed with `AttributeError`, and the
+# per-VEVENT isolation in `extract()` only caught
+# `(ValueError, TypeError, KeyError)`, so the one bad record aborted
+# the entire source. Sprint 016 ticket 001 fixed both: the
+# multi-RRULE VEVENT is now salvaged via its first rule, and the
+# per-VEVENT catch was widened to `Exception` so one malformed record
+# can never again take down a whole source. This ticket re-verifies
+# against the fixed adapter and commits.
+#
+# Sprint 015 issue 38 / ticket 005: Eric decided 2026-08-30 to treat
+# explicitly-published ICS subscription URLs as feed-client traffic --
+# poll politely, ignore robots.txt for this URL class (see issue 38's
+# "Stakeholder decision" section). `acquisition_policy.respect_robots
+# = false` below is real as of sprint 015 ticket 003's threading fix
+# (adapters.base.acquisition_kwargs -> PoliteFetcher.get()).
+#
+# Live-verified 2026-08-30 (sprint 016 ticket 002, re-confirming sprint
+# 014 ticket 004's and sprint 015 ticket 005's original count of 677):
+#
+#   GET https://calendar.google.com/calendar/ical/sdaa%40sdaa.org/public/basic.ics
+#
+# returns HTTP 200, content-type text/calendar, 677 raw VEVENTs.
+# `uv run partner-scrape --dry-run --no-enrich --source
+# sd-astronomy-association` through the real `ical` adapter (not just
+# a raw fetch) now confirms non-zero, dated output following sprint
+# 016 ticket 001's fix.
+#
+# No partners.json match -- candidate for issue 32's roster expansion
+# (per sprint 014 ticket 004's original list), not force-matched.
+
+org_name = "San Diego Astronomy Association"
+adapter_type = "ical"
+enabled = true
+
+[config]
+feed_url = "https://calendar.google.com/calendar/ical/sdaa%40sdaa.org/public/basic.ics"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = false
+discovered_via = "sprint 016 ticket 002 registration (issue 38 stakeholder decision 2026-08-30: published ICS subscription URLs are feed-client traffic; withheld by sprint 015 ticket 005 for the multi-RRULE parser bug sprint 016 ticket 001 fixed; re-verified via live dry-run)"

@@ -126,7 +126,7 @@ in its own directory.
 
 - [`partner_scrape/DESIGN.md`](../../partner_scrape/DESIGN.md) — **root overview**: the
   run end to end, the four top-level modules, and the shared conventions.
-- [`partner_scrape/adapters/DESIGN.md`](../../partner_scrape/adapters/DESIGN.md) — ten
+- [`partner_scrape/adapters/DESIGN.md`](../../partner_scrape/adapters/DESIGN.md) — eleven
   per-vendor `discover → fetch → extract` strategies behind a one-line dispatch table.
 - [`partner_scrape/discovery/DESIGN.md`](../../partner_scrape/discovery/DESIGN.md) —
   resolving sources into fetchable URLs; plus hub scanning for organization leads,

@@ -1,0 +1,38 @@
+{
+  "meta": {
+    "current_page": 2,
+    "first_page_url": "https://robotevents.example/api/v2/events?page=1",
+    "from": 3,
+    "last_page": 2,
+    "last_page_url": "https://robotevents.example/api/v2/events?page=2",
+    "next_page_url": null,
+    "path": "https://robotevents.example/api/v2/events",
+    "per_page": 50,
+    "prev_page_url": "https://robotevents.example/api/v2/events?page=1",
+    "to": 3,
+    "total": 3
+  },
+  "data": [
+    {
+      "id": 54323,
+      "sku": "RE-ADC-25-9012",
+      "name": "West Aerial Drone Competition Championship",
+      "start": "2026-04-04T08:00:00-08:00",
+      "end": "2026-04-05T17:00:00-08:00",
+      "season": {"id": 190, "name": "ADC 2025-2026", "code": "ADC-25-26"},
+      "program": {"id": 44, "name": "Aerial Drone Competition", "code": "ADC"},
+      "location": {
+        "venue": "Balboa Park Activity Center",
+        "address_1": "2145 Park Blvd",
+        "city": "San Diego",
+        "region": "CA",
+        "postcode": "92101",
+        "country": "USA"
+      },
+      "level": "Regional",
+      "ongoing": false,
+      "awards_finalized": false,
+      "event_type": "tournament"
+    }
+  ]
+}

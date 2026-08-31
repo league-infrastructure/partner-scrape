@@ -1,0 +1,61 @@
+{
+  "meta": {
+    "current_page": 1,
+    "first_page_url": "https://robotevents.example/api/v2/events?page=1",
+    "from": 1,
+    "last_page": 2,
+    "last_page_url": "https://robotevents.example/api/v2/events?page=2",
+    "next_page_url": "https://robotevents.example/api/v2/events?page=2",
+    "path": "https://robotevents.example/api/v2/events",
+    "per_page": 50,
+    "prev_page_url": null,
+    "to": 2,
+    "total": 3
+  },
+  "data": [
+    {
+      "id": 54321,
+      "sku": "RE-VRC-25-1234",
+      "name": "CA Region 4 V5RC Signature Event",
+      "start": "2026-02-27T08:00:00-08:00",
+      "end": "2026-03-01T17:00:00-08:00",
+      "season": {"id": 181, "name": "VRC 2025-2026", "code": "VRC-25-26"},
+      "program": {"id": 1, "name": "VEX Robotics Competition", "code": "VRC"},
+      "location": {
+        "venue": "Town and Country Resort",
+        "address_1": "500 Hotel Circle N",
+        "address_2": "",
+        "city": "San Diego",
+        "region": "CA",
+        "postcode": "92108",
+        "country": "USA"
+      },
+      "divisions": [{"id": 1, "name": "Division A", "order": 1}],
+      "level": "Signature",
+      "ongoing": false,
+      "awards_finalized": false,
+      "event_type": "tournament"
+    },
+    {
+      "id": 54322,
+      "sku": "RE-VIQRC-25-5678",
+      "name": "Sweetwater STEAM VIQRC Tournament",
+      "start": "2026-01-10T08:00:00-08:00",
+      "end": "2026-01-10T15:00:00-08:00",
+      "season": {"id": 182, "name": "VIQRC 2025-2026", "code": "VIQRC-25-26"},
+      "program": {"id": 41, "name": "VEX IQ Robotics Competition", "code": "VIQRC"},
+      "location": {
+        "venue": "Sweetwater High School",
+        "address_1": "2900 Highland Ave",
+        "city": "National City",
+        "region": "CA",
+        "postcode": "91950",
+        "country": "USA"
+      },
+      "level": "Other",
+      "ongoing": false,
+      "awards_finalized": true,
+      "event_type": "tournament"
+    }
+  ]
+}

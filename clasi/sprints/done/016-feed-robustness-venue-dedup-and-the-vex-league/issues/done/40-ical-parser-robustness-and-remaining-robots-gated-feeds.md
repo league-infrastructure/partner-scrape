@@ -1,5 +1,9 @@
 ---
-status: pending
+status: done
+sprint: '016'
+tickets:
+- 016-001
+- 016-002
 ---
 
 # ical.py parser robustness: unlock county-parks and sd-astronomy-association feeds

@@ -19,6 +19,7 @@ per-org source.
 
 from __future__ import annotations
 
+import re
 from collections import defaultdict
 from datetime import date
 from typing import Iterable
@@ -31,17 +32,60 @@ from partner_scrape.normalize.instance import Instance
 #: venue, computed across organizations").
 CrossSourceIdentity = tuple[str, date | None, str]
 
+#: A comma-delimited segment shaped like a street address: a leading
+#: street number followed by a street name (sprint 016 ticket 003 /
+#: sprint.md Architecture > Design Rationale). Deliberately narrow --
+#: matches only the "<number> <name>" shape, not a general address
+#: grammar.
+_STREET_SEGMENT_RE = re.compile(r"^\d+\s+\S")
+
+
+def normalize_venue(location: str) -> str:
+    """Address-aware venue canonicalization for cross-source venue comparison.
+
+    Splits ``location`` on commas and looks for a segment whose stripped
+    text matches a leading street number plus street name
+    (``^\\d+\\s+\\S``, e.g. "1875 El Prado"). If found, *that segment
+    alone* -- title-normalized via `model.normalize_title` -- becomes
+    the venue token, deliberately dropping any org-name prefix (e.g.
+    "Fleet Science Center,") and city/state/ZIP suffix segments, so
+    "Fleet Science Center, 1875 El Prado, San Diego, CA" and "1875 El
+    Prado, San Diego, CA 92101" both reduce to "1875 el prado" despite
+    differing org-name prefix and ZIP presence (sprint 016 ticket 003 /
+    issue 39's measured Balboa Park / Fleet pair).
+
+    Falls back to `normalize_title(location)` -- today's exact,
+    unchanged behavior -- whenever no comma-delimited segment matches
+    the street-address shape, which includes a location string with no
+    comma at all. A comma-less string is never treated as a single
+    street-address segment even if it starts with a digit: matching on
+    the whole comma-less string risks swallowing trailing city/state/ZIP
+    text into the "venue token," silently reintroducing the exact
+    ZIP-suffix mismatch this function exists to strip (see sprint.md
+    Architecture > Design Rationale for the full reasoning). This keeps
+    the rule a conservative token-match, not a general address parser --
+    it either finds a clear street-address token or it changes nothing.
+    """
+    if "," in location:
+        for segment in location.split(","):
+            stripped = segment.strip()
+            if _STREET_SEGMENT_RE.match(stripped):
+                return normalize_title(stripped)
+    return normalize_title(location)
+
 
 def cross_source_identity(event: Event) -> CrossSourceIdentity:
     """The cross-source dedup identity: normalized(title) + date + normalized(venue).
 
-    Reuses `model.normalize_title` for both title and venue text -- both
-    are "how do we recognize the same thing" normalization, exactly the
-    problem that function already solves (ticket's "reuse model helpers
-    rather than reinventing").
+    Reuses `model.normalize_title` for title text and `normalize_venue`
+    (sprint 016 ticket 003) for venue text -- both are "how do we
+    recognize the same thing" normalization, but venue additionally
+    needs address-level canonicalization so the same physical address
+    formatted differently by two sources (org-name prefix vs. ZIP
+    suffix) still matches; see `normalize_venue`'s docstring.
     """
     event_date = event.start.date() if event.start is not None else None
-    return (normalize_title(event.title), event_date, normalize_title(event.location))
+    return (normalize_title(event.title), event_date, normalize_venue(event.location))
 
 
 def score_event(event: Event) -> tuple[float, int]:

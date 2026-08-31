@@ -1,0 +1,69 @@
+# RobotEvents API v2 -- keyed source for San Diego County's VEX Robotics
+# Competition (V5RC) and VEX IQ Robotics Competition (VIQRC) teams (CA
+# Region 4: San Diego/Imperial). Loaded via registry.loader.load_active_sources
+# (reused verbatim, no new schema) against this directory
+# (partner_scrape/teams/registry/), NOT the main partner_scrape/registry/
+# sources/ directory -- teams sources are structurally disjoint from the
+# Opportunity registry (see teams/DESIGN.md's Constraints and Invariants).
+#
+# `adapter_type` is read by teams.pipeline to select the matching
+# TeamSource ("robotevents" -> teams.sources.robotevents.VexTeamSource),
+# not by adapters.base.ADAPTERS. This source is never registered there.
+#
+# Auth: Authorization: Bearer <token> -- config.get_robotevents_api_key()
+# reads the same ROBOTEVENTS_KEY sprint 016 ticket 004 already plumbed
+# for the Opportunity-pipeline adapters/robotevents.py. **Not yet
+# provisioned as of this ticket** -- no RobotEvents account/token exists
+# for this project yet (see ticket 004's own Notes; re-confirmed live
+# during this ticket's execution: absent from the shell environment,
+# .env, and every layer under config/). Per sprint.md's Migration
+# Concerns and this ticket's own instruction, this source is registered
+# regardless (matching frc-sd.toml's TBA precedent and
+# registry/sources/robotevents-vex-sd.toml's own identical precedent):
+# a missing/invalid ROBOTEVENTS_KEY is isolated per-source by
+# teams.pipeline.run_teams()'s existing mechanism (logged, skipped,
+# degrades to non-VEX-only output, never aborts the run) -- it is not a
+# reason to withhold registration.
+#
+# Provisioning steps for an operator to complete (identical to
+# registry/sources/robotevents-vex-sd.toml's -- one account, one token,
+# shared by both the events adapter and this team source):
+#   1. Create a free account at https://www.robotevents.com.
+#   2. Generate a personal access token (RobotEvents API v2 docs, gated
+#      behind login).
+#   3. Add it to config/prod/secrets.env (and config/dev/secrets.env)
+#      as ROBOTEVENTS_KEY via `sops -e` / the project's existing SOPS
+#      workflow, matching TBA_KEY's existing entry.
+#
+# Unlike /events, RobotEvents API v2's /teams endpoint has no
+# city/region query parameter at all (confirmed against its published
+# OpenAPI schema during this ticket -- only id[], number[], event[],
+# registered, program[], grade[], country[], myTeams). This is the same
+# "global roster, no region filter" situation TBA's /api/v3/teams/{page}
+# is in, not FTCScout's region-scoped search -- so
+# teams/sources/robotevents.py filters to San Diego County client-side
+# via its own SD_COUNTY_CITIES allowlist (duplicated from
+# sources/tba.py's, not imported -- see that module's own docstring).
+# `country` below is left unset, matching robotevents-vex-sd.toml's own
+# "no live-confirmed value" precedent for its `region` config -- an
+# operator can narrow the real query once a live token confirms
+# RobotEvents' actual `country[]` value format.
+
+org_name = "VEX Robotics Competition (V5RC/VIQRC) -- San Diego County"
+adapter_type = "robotevents"
+enabled = true
+
+[config]
+# api_base defaults to config.get_robotevents_url() (teams/sources/
+# robotevents.py) when omitted here -- no need to repeat the default in
+# this file. `country`/`per_page` are optional narrowing knobs (see
+# that module's own docstring), left unset since neither has been
+# live-confirmed against a real token yet.
+
+[acquisition_policy]
+# A keyed REST API, not a scraped HTML site -- no robots.txt to
+# respect, matching leaguesync.toml's/robotevents-vex-sd.toml's same
+# reasoning.
+respect_robots = false
+rate_limit_seconds = 1.0
+discovered_via = "clasi/sprints/016-feed-robustness-venue-dedup-and-the-vex-league/issues/26-robotevents-adapter-vex-and-drones.md -- registered without live verification (no ROBOTEVENTS_KEY provisioned this ticket), matching frc-sd.toml's TBA precedent for a registered-but-uncredentialed source"

@@ -38,8 +38,11 @@ from typing import Literal
 #: Short program code. Only ``"FTC"`` is produced by this ticket
 #: (``sources/ftcscout.py``); ``"FRC"`` arrives with ticket 011-003's
 #: ``sources/tba.py``, ``"FLL"`` only with the deferred follow-on
-#: sprint's static-roster import.
-League = Literal["FTC", "FRC", "FLL"]
+#: sprint's static-roster import. ``"VEX"`` arrives with sprint 016
+#: ticket 005's ``sources/robotevents.py`` -- see ``Team.number``'s
+#: docstring below for why that source is also what forced ``number``
+#: to widen from ``int`` to ``str``.
+League = Literal["FTC", "FRC", "FLL", "VEX"]
 
 #: Which rung of ``teams/geo.py``'s seven-rung offline ladder (ticket
 #: 011-004) produced this Team's coordinates. ``"none"`` is the
@@ -73,7 +76,21 @@ class Team:
     # to share a number.
     league: str = ""
     program: str = ""  # human-readable program name, e.g. "FIRST Tech Challenge"
-    number: int = 0
+    number: str = ""  # sprint 016 ticket 005: widened from int -- VEX team
+    # designations are alphanumeric (e.g. "90210A"), a numeric prefix plus a
+    # required letter suffix distinguishing sibling teams fielded by the same
+    # organization ("90210A"/"90210B"/"90210C" are three distinct real
+    # teams). Truncating to the numeric prefix would collide team_id for
+    # every multi-team organization, and an `int | str` union would push a
+    # type check onto every consumer for no benefit over one consistent
+    # type -- see clasi/sprints/016-.../sprint.md's Design Rationale. Kept
+    # a plain, untyped str (matching Team.league's existing convention)
+    # rather than re-deriving a Literal/regex-constrained type here.
+    # `teams/export.py`'s sort key and this repo's site/ Team-rendering
+    # files use a natural-sort key (leading digit run as int, full string
+    # as tiebreaker) instead of bare arithmetic comparison so existing
+    # FTC/FRC/FLL purely-numeric values still sort numerically ("99"
+    # before "100"), and VEX's alphanumeric siblings sort adjacently.
     name: str = ""
 
     # Organization

@@ -13,7 +13,13 @@ interface Props {
     team_id: string;
     league: string;
     program: string;
-    number: number;
+    // Sprint 016 ticket 005: widened from number -- VEX team designations
+    // are alphanumeric (e.g. "90210A"), which a JS number can't hold.
+    // Every existing display site already does bare string interpolation
+    // (${team.number}), which needs no change under this type; only
+    // teams/index.astro's sort comparator (arithmetic) needed a real code
+    // change -- see that file's own natural-sort comment.
+    number: string;
     name: string;
     organization: string;
     org_type: string;

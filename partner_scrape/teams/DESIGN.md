@@ -151,6 +151,42 @@ Constraints, Design, and Interfaces below for the full detail; see
 `clasi/sprints/013-team-website-surfacing-and-sponsor-extraction/
 sprint.md` for the sprint-level plan this section elaborates.
 
+**Sprint 016 ticket 005 adds the first non-FIRST league this subsystem
+has ever ingested: VEX Robotics Competition (V5RC/VIQRC), CA Region 4
+(San Diego/Imperial), via the same RobotEvents API v2 sprint 016 ticket
+004 already plumbed config access for on the Opportunity-pipeline
+side.** VEX team designations are alphanumeric (`90210A`, a numeric
+prefix plus a required letter suffix distinguishing sibling teams
+fielded by the same organization — `90210A`/`90210B`/`90210C` are three
+distinct real teams), which `Team.number: int` could not hold without
+either colliding `team_id`s (truncating to the numeric prefix) or
+adopting an `int | str` union every consumer would then need to check.
+This ticket widens `Team.number` to `str` uniformly instead — see
+`clasi/sprints/016-feed-robustness-venue-dedup-and-the-vex-league/
+sprint.md`'s Design Rationale for the full alternatives-considered
+writeup, not re-derived here — and repairs the two call sites that did
+bare numeric-arithmetic sorting on it (`export.py`'s sort key, this
+repo's own `site/src/pages/teams/index.astro` comparator) with a
+natural-sort key (leading digit run as int, full string as tiebreaker)
+so existing FTC/FRC/FLL purely-numeric values keep sorting numerically,
+unchanged. `teams.sources.robotevents.VexTeamSource` follows
+`sources/tba.py`'s structural precedent, not `sources/ftcscout.py`'s:
+RobotEvents' `/teams` endpoint has no city/region query parameter at
+all (confirmed against its published OpenAPI schema), the same
+"global roster, no region filter" situation TBA's own `/api/v3/
+teams/{page}` is in — so this source paginates the full result set and
+filters to San Diego County client-side via its own (independently
+duplicated, not imported) `SD_COUNTY_CITIES` allowlist, `discover()`
+raising on any probe failure rather than degrading gracefully, matching
+`sources/tba.py`'s exact isolation contract. Registered via
+`teams/registry/vex-sd.toml` (`adapter_type = "robotevents"`)
+unconditionally, matching `frc-sd.toml`'s TBA precedent — no live
+`ROBOTEVENTS_KEY` was available during this ticket's execution either
+(see ticket 004's own Notes), so `teams.pipeline.run_teams()`'s
+existing per-source isolation is what makes this source's absence
+degrade the pipeline to non-VEX-only output rather than aborting the
+run, exactly as it already does for a missing `TBA_KEY`.
+
 ```
 BUILT (ticket 011-001):
   registry.load_active_sources(teams/registry/)   reused verbatim
@@ -252,6 +288,25 @@ BUILT (sprint 013):
    auto-derives sponsor_provenance with no export.py change, same as every
    prior sprint's new Team field)
 ```
+
+BUILT (sprint 016 ticket 005):
+  teams.sources.robotevents.VexTeamSource   RobotEvents API v2 /teams,
+     ↓                                      paginated + SD_COUNTY_CITIES
+     ↓                                      client-side filter (no
+     ↓                                      server-side region param --
+     ↓                                      TBA's precedent, not
+     ↓                                      FTCScout's)
+  teams/registry/vex-sd.toml                adapter_type = "robotevents",
+     ↓                                      registered unconditionally
+  teams.pipeline._TEAM_SOURCES               gains one entry; discover()
+     ↓                                      raises on any probe failure
+     ↓                                      (matches sources/tba.py)
+  model.Team.number: int -> str              widened; export.py +
+                                              site/teams/index.astro gain
+                                              a natural-sort key
+  (feeds into merge_teams()/geocode_teams()/export_teams(), all
+   unchanged -- a fourth source needed zero change to any of the three,
+   exactly as sprint 012's static_roster addition already confirmed)
 
 A freshly-extracted `Team` from either source still has
 `location_precision == "none"` and no coordinates until
@@ -617,6 +672,42 @@ ticket 011-004's `geo.py` sets `Team.latitude`/`longitude`.
   Design, below, for the alternative (a restructured `sponsors:
   list[SponsorRecord]`) this rejected.
 
+- **(Sprint 016 ticket 005) `Team.number` is `str`, uniformly — never
+  checked with an `isinstance(..., int)` guard anywhere downstream.**
+  VEX designations are alphanumeric (`90210A`); `teams/export.py`'s sort
+  key and this repo's `site/src/pages/teams/index.astro` comparator both
+  use a natural-sort key (leading digit run as `int`, full string as
+  tiebreaker — `export.py`'s `_natural_number_key`) rather than bare
+  numeric comparison, so a purely-numeric FTC/FRC/FLL value still sorts
+  numerically (`"99"` before `"100"`) with no type-specific branch.
+  `tests/teams/test_export.py`'s natural-sort regression fixture and
+  `tests/teams/test_sources_robotevents.py`'s alphanumeric-sibling-pair
+  fixture (`90210A`/`90210B`, distinct `team_id`s) both enforce this
+  directly. This ticket did **not** also change `sources/ftcscout.py`'s,
+  `sources/tba.py`'s, or `sources/static_roster.py`'s own `number=`
+  construction (each still passes the source API's native `int`) — see
+  this ticket's own Notes for why that narrower scope was chosen and
+  what it means for `teams.json`'s per-team wire type in practice.
+- **(Sprint 016 ticket 005) `sources.robotevents.VexTeamSource` follows
+  `sources/tba.py`'s "no server-side region filter, raise on any probe
+  failure" precedent, not `sources/ftcscout.py`'s denylist-with-a-
+  region-scoped-search precedent.** RobotEvents API v2's `/teams`
+  endpoint has no city/region query parameter at all (confirmed against
+  its published OpenAPI schema) — the identical situation TBA's
+  `/api/v3/teams/{page}` is in, not FTCScout's `region=USCASD` search.
+  `VexTeamSource.discover()` therefore paginates the full result set and
+  `extract()` filters to San Diego County client-side via its own
+  `SD_COUNTY_CITIES` allowlist (duplicated from `sources/tba.py`'s, not
+  imported — matching the "no shared extraction code beyond the
+  `TeamSource` protocol shape" precedent below), and `discover()` raises
+  `RuntimeError` on any probe failure (missing/invalid
+  `ROBOTEVENTS_KEY`, non-200, unparseable body, invalid
+  `meta.last_page`) rather than degrading gracefully the way
+  `adapters/robotevents.py`'s own `/events` probe does — see this
+  ticket's own acceptance criteria ("matching `sources/tba.py`'s exact
+  isolation contract") and `sources/robotevents.py`'s own module
+  docstring for the full rationale.
+
 ## 4. Design
 
 **Why `Team` is a new, separate model, not a widened `Opportunity`/
@@ -690,7 +781,15 @@ model, deliberately not the type itself (see Constraints). Confirmed
 true in practice, not just anticipated: `sources/tba.py` (this ticket)
 shares zero helper functions with `sources/ftcscout.py` — only the
 `TeamSource` protocol and `SOURCE_NAME`/`LEAGUE`/`PROGRAM` naming
-convention.
+convention. Confirmed true a third time (sprint 016 ticket 005):
+`sources/robotevents.py` duplicates its own `_clean_city`/
+`SD_COUNTY_CITIES`/`_auth_headers` rather than importing any of
+`sources/tba.py`'s, even though the underlying San Diego County place
+list is identical real-world data — the two sources still change for
+unrelated reasons (a different upstream API, a different auth scheme),
+so the small duplication is the accepted cost, exactly as this
+paragraph's rationale already predicted for a not-yet-written third
+source.
 
 **Why `teams.pipeline._TEAM_SOURCES` is a private local dict, not a
 second `adapters.base.ADAPTERS`.** `sources.base.run()` deliberately
@@ -959,8 +1058,11 @@ after `geocode_teams()`), the same single-call-sequencing cost
 ## 5. Interfaces
 
 ### Exposes
-- **`model.Team`** — the record type: `team_id`, `league`, `program`,
-  `number`, `name`, `organization`, `org_type`, `city`, `postal_code`,
+- **`model.Team`** — the record type: `team_id`, `league`
+  (`"FTC"`/`"FRC"`/`"FLL"`/`"VEX"`, the last since sprint 016 ticket
+  005), `program`, `number` (`str`, widened from `int` by sprint 016
+  ticket 005 — see Constraints and Design), `name`, `organization`,
+  `org_type`, `city`, `postal_code`,
   `latitude`, `longitude`, `location_precision`, `in_region`,
   `matched_name`, `needs_review` (this ticket), `website`,
   `website_status`, `organization_website`, `rookie_year`, `active`,
@@ -1025,9 +1127,28 @@ after `geocode_teams()`), the same single-call-sequencing cost
   `location_precision` — like every other source, that is exclusively
   `teams.geo.geocode_teams()`'s job, run after this source the same way
   it runs after FTCScout/TBA.
+- **`sources.robotevents.VexTeamSource`** (sprint 016 ticket 005) — the
+  concrete `TeamSource` for RobotEvents API v2's keyed `/teams`
+  endpoint. `discover()` probes `page=1`/`per_page=1` for `meta.
+  last_page`, then returns one `TeamRef` per real page; raises
+  `RuntimeError` on any probe failure rather than degrading, matching
+  `sources.tba.TBASource`'s exact contract (Constraints — not
+  `adapters/robotevents.py`'s graceful-degrade one). `extract()` filters
+  each page to `city` in its own `SD_COUNTY_CITIES` (duplicated from
+  `sources/tba.py`'s, not imported) since `/teams` has no city/region
+  query parameter at all. `Team.league = "VEX"` for every record;
+  `Team.program` is set verbatim per record from RobotEvents' own
+  `program.name` field (distinguishing V5RC vs. VIQRC with no hardcoded
+  code-to-label mapping this source would otherwise have to guess at
+  without a live token). Config keys read from `SourceConfig.config`:
+  `api_base` (default `config.get_robotevents_url()`), `country`
+  (optional, unset by default), `per_page` (default 50). Auth via
+  `config.get_robotevents_api_key()`, read fresh per call
+  (`_auth_headers()`).
 - **`teams/registry/ftc-sd.toml`** / **`teams/registry/frc-sd.toml`** /
-  **`teams/registry/fll-sd.toml`** (the last, sprint 012) — the
-  FTCScout, TBA, and static-roster sources' `SourceConfig`s, loaded via
+  **`teams/registry/fll-sd.toml`** / **`teams/registry/vex-sd.toml`**
+  (the last, sprint 016 ticket 005) — the FTCScout, TBA, static-roster,
+  and RobotEvents sources' `SourceConfig`s, loaded via
   `registry.loader.load_active_sources` pointed at `teams/registry/`
   (not the main `partner_scrape/registry/sources/` directory — a
   separate, disjoint registry namespace). `fll-sd.toml`'s `config` dict
@@ -1175,8 +1296,9 @@ after `geocode_teams()`), the same single-call-sequencing cost
   loud-failure contract; `dry_run=True` computes and returns the
   payload without touching disk. **Never** writes or touches
   `opportunities.json`/`scrape-meta.json` (Constraints).
-- **`partner-scrape teams [--dry-run] [--source ftcscout|tba]
-  [--site-dir DIR] [--no-mirror] [-v]`** (`cli.py`) — the CLI entry
+- **`partner-scrape teams [--dry-run] [--source ftcscout|tba|
+  static_roster|robotevents] [--site-dir DIR] [--no-mirror] [-v]`**
+  (`cli.py`) — the CLI entry
   point. Constructs a real `PoliteFetcher()` and calls `run_teams()`;
   unless `--dry-run`/`--no-mirror`, also calls `export.mirror_site_data`
   (reused, unmodified) against `config.get_mirror_site_dirs()`. Never

@@ -57,6 +57,7 @@ fails loudly, matching `export_opportunities`'s contract exactly --
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import fields
 from datetime import datetime, timezone
 from pathlib import Path
@@ -75,6 +76,36 @@ from partner_scrape.teams.model import Team
 #: hand-listed so it can never drift from `Team` itself as later
 #: tickets (merge, geocoding) add fields.
 TEAMS_SCHEMA_FIELDS: tuple[str, ...] = tuple(f.name for f in fields(Team) if f.name != "sources")
+
+#: Matches the leading run of ASCII digits in a team number string, e.g.
+#: the ``"90210"`` in ``"90210A"`` or the whole of ``"1622"``.
+_LEADING_DIGITS_RE = re.compile(r"^(\d+)")
+
+
+def _natural_number_key(number: Any) -> tuple[int, str]:
+    """Sprint 016 ticket 005: a natural-sort key for `Team.number`, now
+    `str` (VEX designations are alphanumeric, e.g. `"90210A"`).
+
+    Returns `(leading_digit_run_as_int, full_string)` -- sorting by this
+    tuple orders purely-numeric values numerically, exactly as the old
+    bare-int comparison did (`"99"` sorts before `"100"`, not the
+    lexicographic `"100"` before `"99"` a naive string sort would
+    produce), while alphanumeric siblings sharing the same leading digit
+    run (`"90210A"`/`"90210B"`) sort adjacently, ordered by the full
+    string as a tiebreaker.
+
+    Accepts `Any`, not just `str`: `Team.number` is a plain, untyped
+    field (matching `Team.league`'s existing convention -- see
+    `model.py`'s docstring), and `str(number)` coerces safely whether a
+    caller's `Team` happens to carry a real `int` (unmigrated legacy
+    data) or the now-standard `str`. A value with no leading digit at
+    all (e.g. an empty string) sorts first (`0`), tie-broken by the
+    string itself.
+    """
+    text = str(number)
+    match = _LEADING_DIGITS_RE.match(text)
+    leading = int(match.group(1)) if match else 0
+    return (leading, text)
 
 
 def to_json_dict(team: Team) -> dict[str, Any]:
@@ -151,7 +182,12 @@ def export_teams(
     resolved_site_dir = Path(site_dir) if site_dir is not None else get_site_dir()
 
     team_list = list(teams)
-    team_list.sort(key=lambda t: (t.league, t.number))
+    # Sprint 016 ticket 005: t.number widened from int to str (VEX
+    # designations are alphanumeric) -- a bare (t.league, t.number)
+    # tuple would now sort lexicographically ("100" before "99") for
+    # every existing FTC/FRC/FLL number too, not just VEX's. See
+    # _natural_number_key's own docstring.
+    team_list.sort(key=lambda t: (t.league, *_natural_number_key(t.number)))
 
     payload: dict[str, Any] = {
         "meta": _build_meta(team_list),

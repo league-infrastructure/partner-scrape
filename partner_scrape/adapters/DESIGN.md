@@ -15,6 +15,25 @@ most, one new adapter class — never by editing the pipeline, the normalizer, o
 exporter. Nothing else in the system owns per-vendor protocol knowledge; if vendor
 quirks appear outside this directory, the boundary has leaked.
 
+**(Sprint 016 ticket 004)** `robotevents.py` (new) adds an eleventh adapter type,
+`robotevents` — VEX Robotics Competition (V5RC/VIQRC) and Aerial Drone Competition
+tournament events, via RobotEvents API v2 (`robotevents.com/api/v2`), the first robotics
+league besides FIRST this project ingests. Structurally it is `tec_rest`/`localist`'s
+exact shape (probe `page=1` at a cheap `per_page`, learn `meta.last_page`, enumerate the
+rest) with `leaguesync`'s auth convention (`Authorization: Bearer <token>`, via the new
+`config.get_robotevents_api_key()`/`get_robotevents_url()`, mirroring
+`get_tba_api_key()`/`get_tba_url()`). One documented deviation from `localist`'s
+probe-failure handling: a `401` probe response raises `RuntimeError` immediately (matching
+`teams/sources/tba.py`'s explicit-401-raise precedent) rather than degrading to "assume 1
+page" — an auth failure is not a transient probe hiccup, and raising here is what lets
+`pipeline.run()`'s existing per-source isolation catch it, rather than silently returning
+zero events for a broken credential. No `ROBOTEVENTS_KEY` was available during this
+ticket's execution (see `config.py`'s own docstring), so the exact `/events` request/
+response shape was confirmed against RobotEvents' own published OpenAPI schema (via the
+open-source `robotevents` npm client's generated types) rather than a live probe —
+documented in `robotevents.py`'s own module docstring, to be re-verified live the first
+time a token is provisioned.
+
 ## 2. Orientation
 
 The public contract is `base.py`'s `Adapter` Protocol: three methods, `discover` →
@@ -49,11 +68,11 @@ but previously never threaded anywhere — finally reach `PoliteFetcher.get()`. 
 `ADAPTERS` dispatch dict, instantiates it, materializes `discover()`'s output, truncates
 it to the source's `max_urls` cap, then loops fetch→extract accumulating events.
 
-Ten adapter types are registered today, in two families:
+Eleven adapter types are registered today, in two families:
 
 | Family | Types | Shape |
 |---|---|---|
-| Structured API | `tec_rest`, `wp_rest`, `ical`, `localist`, `bibliocommons`, `greenhouse`, `lever`, `leaguesync` | Known endpoint, JSON/iCal parsing, `CONFIDENCE = 1.0` |
+| Structured API | `tec_rest`, `wp_rest`, `ical`, `localist`, `bibliocommons`, `greenhouse`, `lever`, `leaguesync`, `robotevents` | Known endpoint, JSON/iCal parsing, `CONFIDENCE = 1.0` |
 | HTML | `generic_html`, `listing_html` | URL discovery via `discovery/`, field recovery via `extract/`'s ladder |
 
 `ats_filters.py` is a shared helper, not an adapter: the deterministic
@@ -136,6 +155,47 @@ pre-ticket-004 behavior exactly. The fallback value is recorded via `Event.set()
 TOML, not a guess extracted from ambiguous markup, so it is trusted at the ladder's own
 top tier rather than a lower one.
 
+**`ical.py` hardening against two live-measured parse failures. (Sprint 016
+ticket 001)** Sprint 015 ticket 005's live dry-run verification found the
+two highest-yield feeds in the robots-gated batch (`county-parks`, 553 raw
+VEVENTs; `sd-astronomy-association`, 677 raw VEVENTs) both returned zero
+events, from two distinct `ical.py` bugs unrelated to the robots-policy
+question that ticket resolved. Both fixes stay entirely inside `ical.py`:
+
+1. **Tockify's `X-PUBLISHED-TTL:P15M`, and (ticket 002) `REFRESH-
+   INTERVAL:P15M`.** Calendar-level properties whose value `icalendar`'s
+   duration parser can read as 15 *months* under ISO-8601 grammar rather
+   than the 15 *minutes* Tockify evidently intends, which can abort
+   `Calendar.from_ical()` before a single `VEVENT` is read. Ticket 001
+   shipped a targeted strip of `X-PUBLISHED-TTL:` alone; ticket 002's
+   live re-verification of the `county-parks` registration (the same
+   feed) found the fix necessary but not sufficient — the identical
+   `P15M` value also appears on `REFRESH-INTERVAL:`, immediately
+   adjacent in the same `VCALENDAR` header, still aborting the parse.
+   `extract()` now strips both known lines (via `_NONSTANDARD_DURATION_RE`,
+   built from the `_NONSTANDARD_DURATION_PROPERTIES` list) before the
+   body reaches `from_ical()` — properties this adapter never reads
+   anyway. Deliberately a targeted strip of the evidenced properties, not
+   a general X-property/custom-property sanitizer: a different malformed
+   property still fails loudly through the existing top-level
+   `except Exception` around `from_ical()`, until a third real case
+   justifies widening the list further.
+2. **A `VEVENT` with more than one `RRULE` property.** `icalendar`
+   returns a Python `list` for `component.get("rrule")` in this case;
+   `_extract_component` previously assumed a single `vRecur` and crashed
+   (`AttributeError: 'list' object has no attribute 'to_ical'`) — an
+   exception type outside `extract()`'s then-existing per-`VEVENT` catch
+   (`ValueError, TypeError, KeyError`), so it escaped the per-record loop
+   and aborted the whole source. `_extract_component` now detects a
+   list-valued `rrule_prop`, logs a warning naming how many additional
+   rules were discarded, and salvages via the first rule — matching RFC
+   5545's technical allowance for multiple `RRULE`s while keeping the
+   expansion itself unchanged. `extract()`'s per-`VEVENT` catch is also
+   widened from the three-exception tuple to `except Exception`,
+   matching this module's own top-level precedent above and the §3
+   per-record-isolation invariant directly — the narrower tuple was
+   itself the bug that let the `AttributeError` propagate.
+
 **ATS adapters are a filtered family.** `greenhouse` and `lever` read public job-board
 JSON, then run `ats_filters.classify_posting()` to decide whether a posting is an
 internship, is STEM, and is San Diego-local. Postings that survive become
@@ -184,6 +244,9 @@ three methods is a valid `Adapter`.
 - **`config.get_leaguesync_api_key` / `get_leaguesync_url` (from `config.py`)** — the
   `leaguesync` adapter's credentials, read through the one module allowed to touch
   `os.environ`.
+- **`config.get_robotevents_api_key` / `get_robotevents_url` (from `config.py`)**
+  — **(Sprint 016 ticket 004)** the `robotevents` adapter's credentials, same
+  `os.environ`-isolation convention as `leaguesync`'s pair above.
 
 ## 6. Open Questions / Known Limitations
 
