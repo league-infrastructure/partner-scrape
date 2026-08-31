@@ -56,23 +56,23 @@ beyond what ticket 001 already made (this ticket only *reads*
 
 ## Acceptance Criteria
 
-- [ ] `site/public/llms.txt` lists `teams.json` under `## Data` with the
+- [x] `site/public/llms.txt` lists `teams.json` under `## Data` with the
       absolute URL above and a one-line description matching issue 42's
       language.
-- [ ] `site/src/pages/data-access.astro` documents the `teams.json`
+- [x] `site/src/pages/data-access.astro` documents the `teams.json`
       envelope fields and every name in
       `partner_scrape.teams.export.TEAMS_SCHEMA_FIELDS`.
-- [ ] `site/src/pages/for-agents.astro`'s Data code block includes a
+- [x] `site/src/pages/for-agents.astro`'s Data code block includes a
       `teams.json` fetch step and does not repeat the full field list
       (still links to `/data-access` for it).
-- [ ] A new hermetic test, mirroring `tests/test_site_data_access_page.py`'s
+- [x] A new hermetic test, mirroring `tests/test_site_data_access_page.py`'s
       existing `SITE_SCHEMA_FIELDS` guard, asserts every
       `TEAMS_SCHEMA_FIELDS` name appears in `data-access.astro`'s source
       text.
-- [ ] Lightweight hermetic tests confirm `llms.txt` and `for-agents.astro`
+- [x] Lightweight hermetic tests confirm `llms.txt` and `for-agents.astro`
       each mention `teams.json` (substring-level; no new test
       infrastructure beyond the existing per-page precedent).
-- [ ] Full test suite green (`uv run pytest`).
+- [x] Full test suite green (`uv run pytest`).
 
 ## Testing
 

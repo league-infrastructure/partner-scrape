@@ -11,6 +11,12 @@ const base = import.meta.env.BASE_URL.replace(/\/+$/, ''); // "" or "/partner-sc
 // be kept in sync with `partner_scrape.export.writer.SITE_SCHEMA_FIELDS`
 // by hand; `tests/test_site_data_access_page.py` guards against the
 // field *names* drifting silently.
+//
+// Sprint 017, ticket 002 (issue 42): File 3 below documents the
+// separately-published `teams.json` contract (`teams/export.py`'s
+// second write target, ticket 001) the same way -- hand-authored,
+// kept in sync with `partner_scrape.teams.export.TEAMS_SCHEMA_FIELDS`
+// by the same drift-guard test file.
 ---
 
 <BaseLayout
@@ -166,6 +172,100 @@ const base = import.meta.env.BASE_URL.replace(/\/+$/, ''); // "" or "/partner-sc
           </tbody>
         </table>
       </div>
+    </section>
+
+    <section class="data-section">
+      <h2>File 3: the robot teams directory — <code>teams.json</code></h2>
+      <p>
+        Served at <code>/data/teams.json</code> (sprint 017). A single JSON object, independent
+        of Files 1–2 above: a self-describing <code>meta</code> envelope wrapping a
+        <code>teams</code> array — the FIRST/VEX robotics teams directory for San Diego County.
+        No other data source is needed to interpret it.
+      </p>
+      <div class="table-scroll">
+        <table class="schema-table">
+          <thead>
+            <tr><th>Field</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>meta.generated</code></td><td>ISO 8601 UTC timestamp of when this file was written.</td></tr>
+            <tr><td><code>meta.total</code></td><td>Number of records in the <code>teams</code> array below.</td></tr>
+            <tr><td><code>meta.by_league</code></td><td>Object mapping each league code (<code>"FTC"</code>, <code>"FRC"</code>, <code>"FLL"</code>, <code>"VEX"</code>) present this run to its team count.</td></tr>
+            <tr><td><code>meta.by_location_precision</code></td><td>Object mapping each <code>location_precision</code> value present this run to its team count.</td></tr>
+            <tr><td><code>meta.out_of_region</code></td><td>Number of teams with <code>in_region: false</code> — outside San Diego County, but never dropped.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Every element of <code>teams</code> carries exactly these fields (the site's canonical
+        team schema, <code>teams.export.TEAMS_SCHEMA_FIELDS</code>):
+      </p>
+      <div class="table-scroll">
+        <table class="schema-table">
+          <thead>
+            <tr><th>Field</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>team_id</code></td><td>string — Stable identifier, <code>{`{league}-{number}`}</code> (e.g. <code>"ftc-1622"</code>); league-prefixed so teams from different leagues sharing a number stay distinct.</td></tr>
+            <tr><td><code>league</code></td><td>string — Program code: <code>"FTC"</code>, <code>"FRC"</code>, <code>"FLL"</code>, or <code>"VEX"</code>.</td></tr>
+            <tr><td><code>program</code></td><td>string — Human-readable program name (e.g. <code>"FIRST Tech Challenge"</code>).</td></tr>
+            <tr><td><code>number</code></td><td>string — Team number/designation as issued by the league; alphanumeric for VEX (e.g. <code>"90210A"</code>).</td></tr>
+            <tr><td><code>name</code></td><td>string — Team's display name.</td></tr>
+            <tr><td><code>organization</code></td><td>string — Sponsoring school or organization name.</td></tr>
+            <tr><td><code>org_type</code></td><td>string — What <code>organization</code> names: <code>"school"</code>, <code>"family_community"</code>, or <code>"unknown"</code>.</td></tr>
+            <tr><td><code>city</code></td><td>string — City name, from acquisition-time source data.</td></tr>
+            <tr><td><code>postal_code</code></td><td>string — Postal/ZIP code, from acquisition-time source data.</td></tr>
+            <tr><td><code>latitude</code></td><td>number or null — Geocoded latitude, or <code>null</code> if not yet geocoded.</td></tr>
+            <tr><td><code>longitude</code></td><td>number or null — Geocoded longitude, or <code>null</code> if not yet geocoded.</td></tr>
+            <tr><td><code>location_precision</code></td><td>string — Which geocoding rung produced the coordinates: <code>"school"</code>, <code>"zip"</code>, <code>"city"</code>, or <code>"none"</code> if ungeocoded.</td></tr>
+            <tr><td><code>in_region</code></td><td>boolean — <code>false</code> for a team located outside San Diego County (still included, never dropped).</td></tr>
+            <tr><td><code>matched_name</code></td><td>string — The real-world place name the geocoder actually matched (e.g. <code>"St. Pius X School"</code>); empty when <code>location_precision</code> is <code>"none"</code>.</td></tr>
+            <tr><td><code>needs_review</code></td><td>boolean — <code>true</code> when a fuzzy school-name match scored below the confidence threshold and should be human-verified.</td></tr>
+            <tr><td><code>website</code></td><td>string — Team's own website, when known, or <code>""</code> if unknown.</td></tr>
+            <tr><td><code>website_status</code></td><td>string — Liveness-check result for <code>website</code>, or <code>""</code> if not checked.</td></tr>
+            <tr><td><code>organization_website</code></td><td>string — The matched school's own website (school-precision matches only); distinct from <code>website</code>, never presented as the team's own site.</td></tr>
+            <tr><td><code>social</code></td><td>array of strings — Team-declared social media URLs (Instagram, YouTube, etc.), raw with no platform label.</td></tr>
+            <tr><td><code>rookie_year</code></td><td>integer or null — First season the team competed.</td></tr>
+            <tr><td><code>active</code></td><td>boolean — Whether the team is currently active.</td></tr>
+            <tr><td><code>last_season</code></td><td>integer or null — Most recent season the team competed.</td></tr>
+            <tr><td><code>sponsors</code></td><td>array of strings — Sponsor organization names.</td></tr>
+            <tr><td><code>sponsor_provenance</code></td><td>object — Maps each <code>sponsors</code> entry to how it was found: <code>"structured"</code> (a source's own API) or <code>"scraped"</code> (extracted from a fetched page).</td></tr>
+            <tr><td><code>org_key</code></td><td>string — Cross-league identity key linking sibling teams fielded by the same organization.</td></tr>
+            <tr><td><code>sibling_team_ids</code></td><td>array of strings — <code>team_id</code>s of other teams sharing this team's <code>org_key</code>.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        A trimmed <code>teams.json</code> entry:
+      </p>
+      <pre class="code-block"><code>{`{
+  "team_id": "ftc-1622",
+  "league": "FTC",
+  "program": "FIRST Tech Challenge",
+  "number": "1622",
+  "name": "Example Robotics",
+  "organization": "Example High School",
+  "org_type": "school",
+  "city": "San Diego",
+  "postal_code": "92101",
+  "latitude": 32.7157,
+  "longitude": -117.1611,
+  "location_precision": "school",
+  "in_region": true,
+  "matched_name": "Example High School",
+  "needs_review": false,
+  "website": "",
+  "website_status": "",
+  "organization_website": "",
+  "social": [],
+  "rookie_year": 2015,
+  "active": true,
+  "last_season": 2025,
+  "sponsors": ["Example Robotics Boosters"],
+  "sponsor_provenance": {"Example Robotics Boosters": "structured"},
+  "org_key": "",
+  "sibling_team_ids": []
+}`}</code></pre>
     </section>
 
     <section class="data-section">

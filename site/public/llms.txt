@@ -9,6 +9,7 @@
 
 - [partners.json](https://league-infrastructure.github.io/partner-scrape/data/partners.json): Partner roster envelope (`generated_at`, `partner_count`, `partners[]`). Each partner entry has a `slug`, `events_url`, and `past_events_url` (both relative to `.../data/`).
 - Per-partner events, one pair per partner listed in `partners.json`: `https://league-infrastructure.github.io/partner-scrape/data/partners/<slug>/events.json` and `https://league-infrastructure.github.io/partner-scrape/data/partners/<slug>/past-events.json`. `current`/`past` is a true partition — undated records land in `past-events.json`, nothing is dropped.
+- [teams.json](https://league-infrastructure.github.io/partner-scrape/data/teams.json): FIRST/VEX robotics teams directory for San Diego County: id, league, grade band, organization, location w/ precision, status, sponsors. Self-describing `meta` envelope (`generated`, `total`, `by_league`, `by_location_precision`).
 
 ## Documentation
 
