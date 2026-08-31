@@ -11,6 +11,25 @@ import teamsData from '../../data/teams.json';
 
 const teams = teamsData.teams as any[];
 
+// Sprint 016 ticket 005: team.number widened to a string on the Python
+// side (VEX designations are alphanumeric, e.g. "90210A") -- a bare
+// `a.number - b.number` subtraction would now produce NaN for every VEX
+// pair and silently break the whole comparator (Array.sort treats NaN
+// as "equal", so the list would stop sorting predictably at all, not
+// just for VEX). This natural-sort key extracts the leading digit run
+// for numeric comparison (so existing FTC/FRC/FLL purely-numeric values
+// still sort "99" before "100", not the lexicographic "100" before "99"
+// a plain string sort would produce) and falls back to the full string
+// as a tiebreaker (so "90210A"/"90210B" sort adjacently). Coerces via
+// String(number) so it works whether a given team's number is still a
+// raw JSON number (unmigrated FTC/FRC/FLL data) or the new string.
+function naturalNumberKey(number: string | number): [number, string] {
+  const text = String(number);
+  const match = text.match(/^(\d+)/);
+  const leading = match ? parseInt(match[1], 10) : 0;
+  return [leading, text];
+}
+
 // Sort by organization (school/sponsor), falling back to the team's own
 // name for organization-less (Family/Community) teams, then by team
 // number -- groups siblings from the same school together, matching how
@@ -20,7 +39,10 @@ const sorted = [...teams].sort((a, b) => {
   const orgB = b.organization || b.name || '';
   const cmp = orgA.localeCompare(orgB);
   if (cmp !== 0) return cmp;
-  return a.number - b.number;
+  const [aLeading, aText] = naturalNumberKey(a.number);
+  const [bLeading, bText] = naturalNumberKey(b.number);
+  if (aLeading !== bLeading) return aLeading - bLeading;
+  return aText.localeCompare(bText);
 });
 ---
 

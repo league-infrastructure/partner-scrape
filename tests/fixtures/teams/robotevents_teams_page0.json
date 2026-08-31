@@ -1,0 +1,112 @@
+{
+  "meta": {
+    "current_page": 1,
+    "first_page_url": "https://robotevents.example/api/v2/teams?page=1",
+    "from": 1,
+    "last_page": 2,
+    "last_page_url": "https://robotevents.example/api/v2/teams?page=2",
+    "next_page_url": "https://robotevents.example/api/v2/teams?page=2",
+    "path": "https://robotevents.example/api/v2/teams",
+    "per_page": 50,
+    "prev_page_url": null,
+    "to": 5,
+    "total": 6
+  },
+  "data": [
+    {
+      "id": 90001,
+      "number": "90210A",
+      "team_name": "Aftershock A",
+      "robot_name": "Aftershock",
+      "organization": "Poway High School",
+      "location": {
+        "venue": "",
+        "address_1": "",
+        "address_2": "",
+        "city": "Poway",
+        "region": "California",
+        "postcode": "92064",
+        "country": "USA"
+      },
+      "registered": true,
+      "program": {"id": 1, "name": "VEX Robotics Competition", "code": "VRC"},
+      "grade": "High School"
+    },
+    {
+      "id": 90002,
+      "number": "90210B",
+      "team_name": "Aftershock B",
+      "robot_name": "Aftershock Prime",
+      "organization": "Poway High School",
+      "location": {
+        "venue": "",
+        "address_1": "",
+        "address_2": "",
+        "city": "Poway",
+        "region": "California",
+        "postcode": "92064",
+        "country": "USA"
+      },
+      "registered": true,
+      "program": {"id": 1, "name": "VEX Robotics Competition", "code": "VRC"},
+      "grade": "High School"
+    },
+    {
+      "id": 90003,
+      "number": "4321X",
+      "team_name": "IQ Innovators",
+      "robot_name": "",
+      "organization": "",
+      "location": {
+        "venue": "",
+        "address_1": "",
+        "address_2": "",
+        "city": "San Diego",
+        "region": "California",
+        "postcode": "92101",
+        "country": "USA"
+      },
+      "registered": true,
+      "program": {"id": 41, "name": "VEX IQ Robotics Competition", "code": "VIQRC"},
+      "grade": "Elementary School"
+    },
+    {
+      "id": 90004,
+      "number": "5555Z",
+      "team_name": "Out Of Town",
+      "robot_name": "",
+      "organization": "Some Los Angeles School",
+      "location": {
+        "venue": "",
+        "address_1": "",
+        "address_2": "",
+        "city": "Los Angeles",
+        "region": "California",
+        "postcode": "90001",
+        "country": "USA"
+      },
+      "registered": true,
+      "program": {"id": 1, "name": "VEX Robotics Competition", "code": "VRC"},
+      "grade": "High School"
+    },
+    {
+      "id": 90005,
+      "number": "8888Q",
+      "team_name": "Sweetwater Steel",
+      "robot_name": "",
+      "organization": "Sweetwater High School",
+      "location": {
+        "venue": "",
+        "address_1": "",
+        "address_2": "",
+        "city": "National City",
+        "region": "California",
+        "postcode": "91950",
+        "country": "USA"
+      },
+      "registered": true,
+      "program": {"id": 41, "name": "VEX IQ Robotics Competition", "code": "VIQRC"},
+      "grade": "Middle School"
+    }
+  ]
+}

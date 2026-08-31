@@ -47,6 +47,8 @@ from partner_scrape.teams.pipeline import (
 )
 from partner_scrape.teams.sources.base import RawTeamResponse, TeamRef
 from partner_scrape.teams.sources.ftcscout import DEFAULT_API_BASE, DEFAULT_REGION, _search_url
+from partner_scrape.teams.sources.robotevents import DEFAULT_PER_PAGE as ROBOTEVENTS_PER_PAGE
+from partner_scrape.teams.sources.robotevents import _teams_url as _robotevents_teams_url
 from partner_scrape.teams.sources.tba import _status_url, _teams_page_url
 from partner_scrape.teams.sponsor_cache import SponsorCache
 from partner_scrape.teams.sponsor_llm import FixtureSponsorLLMClient, SponsorExtractionResult
@@ -56,6 +58,14 @@ SEARCH_URL = _search_url(DEFAULT_API_BASE, DEFAULT_REGION)
 TBA_STATUS_URL = _status_url(config.DEFAULT_TBA_URL)
 TBA_PAGE0_URL = _teams_page_url(config.DEFAULT_TBA_URL, 0)
 TBA_PAGE1_URL = _teams_page_url(config.DEFAULT_TBA_URL, 1)
+# Sprint 016 ticket 005: vex-sd.toml's committed config sets neither
+# api_base nor country, so it resolves through config.get_robotevents_url()
+# (-> DEFAULT_ROBOTEVENTS_URL) and per_page's own module default, exactly
+# like every other test in this file trusts the real committed registry.
+ROBOTEVENTS_PROBE_URL = _robotevents_teams_url(config.DEFAULT_ROBOTEVENTS_URL, "", page=1, per_page=1)
+ROBOTEVENTS_PAGE1_URL = _robotevents_teams_url(
+    config.DEFAULT_ROBOTEVENTS_URL, "", page=1, per_page=ROBOTEVENTS_PER_PAGE
+)
 
 
 @dataclass
@@ -94,6 +104,37 @@ def _ftc_and_tba_fetcher() -> FixtureFetcher:
     responses = {
         SEARCH_URL: _fixture_response("ftcscout_search.json"),
         **_tba_responses(),
+    }
+    return FixtureFetcher(responses)
+
+
+def _robotevents_responses() -> dict[str, FetchResponse]:
+    # The probe (per_page=1) only needs a parseable meta.last_page --
+    # reusing the one committed page's body is fine, matching
+    # tests/teams/test_sources_robotevents.py's identical convention.
+    # vex-sd.toml's config carries no country/per_page override, so a
+    # single page (meta.last_page: 1) keeps this helper self-contained
+    # -- pagination itself is covered by test_sources_robotevents.py,
+    # not re-tested at this integration level.
+    body = json.dumps(
+        {
+            "meta": {"current_page": 1, "last_page": 1, "per_page": ROBOTEVENTS_PER_PAGE, "total": 5},
+            "data": json.loads((FIXTURES_DIR / "robotevents_teams_page0.json").read_text())["data"],
+        }
+    )
+    response = FetchResponse(url="", status=200, headers={}, body=body)
+    return {ROBOTEVENTS_PROBE_URL: response, ROBOTEVENTS_PAGE1_URL: response}
+
+
+def _ftc_tba_and_robotevents_fetcher() -> FixtureFetcher:
+    """All three keyed/structured sources' responses in one Fetcher --
+    the real Team Registry (ftc-sd.toml + frc-sd.toml + vex-sd.toml,
+    plus fll-sd.toml's always-on static roster) drives all of them
+    against it."""
+    responses = {
+        SEARCH_URL: _fixture_response("ftcscout_search.json"),
+        **_tba_responses(),
+        **_robotevents_responses(),
     }
     return FixtureFetcher(responses)
 
@@ -448,6 +489,90 @@ class TestTbaFailureIsolation:
         written = json.loads((site / "src" / "data" / "teams.json").read_text())
         assert written["meta"]["total"] == 200
         assert written["meta"]["by_league"] == {"FTC": 152, "FLL": 48}
+
+
+class TestRobotEventsFailureIsolation:
+    """Sprint 016 ticket 005's own AC: a simulated `ROBOTEVENTS_KEY`-
+    missing or RobotEvents-401 fixture run still publishes a
+    `teams.json` carrying every *other* source that succeeded --
+    per-source isolation, matching `TestTbaFailureIsolation`'s identical
+    contract one league over. FTCScout (152) + TBA (7, fixture) + FLL
+    (48, real, always-on) succeed here; RobotEvents is the only source
+    these tests make fail -- 207 total, no `"VEX"` key in `by_league`."""
+
+    def test_missing_robotevents_key_still_publishes_207_teams(self, monkeypatch, tmp_path):
+        monkeypatch.setenv("TBA_KEY", "fixture-test-key")
+        monkeypatch.delenv("ROBOTEVENTS_KEY", raising=False)
+        fetcher = _ftc_tba_and_robotevents_fetcher()
+
+        payload = run_teams(site_dir=tmp_path, fetcher=fetcher, dry_run=True)
+
+        assert payload["meta"]["total"] == 207
+        assert payload["meta"]["by_league"] == {"FTC": 152, "FRC": 7, "FLL": 48}
+        assert "VEX" not in payload["meta"]["by_league"]
+        # The RobotEvents probe was never even attempted -- the missing
+        # key is caught in _auth_headers() before any fetcher.get().
+        assert ROBOTEVENTS_PROBE_URL not in fetcher.calls
+
+    def test_robotevents_401_still_publishes_207_teams(self, monkeypatch, tmp_path):
+        monkeypatch.setenv("TBA_KEY", "fixture-test-key")
+        monkeypatch.setenv("ROBOTEVENTS_KEY", "fixture-test-key")
+        responses = {
+            SEARCH_URL: _fixture_response("ftcscout_search.json"),
+            **_tba_responses(),
+            ROBOTEVENTS_PROBE_URL: FetchResponse(url="", status=401, headers={}, body="{}"),
+        }
+        fetcher = FixtureFetcher(responses)
+
+        payload = run_teams(site_dir=tmp_path, fetcher=fetcher, dry_run=True)
+
+        assert payload["meta"]["total"] == 207
+        assert payload["meta"]["by_league"] == {"FTC": 152, "FRC": 7, "FLL": 48}
+
+    def test_missing_robotevents_key_writes_a_valid_teams_json_to_disk(self, monkeypatch, tmp_path):
+        monkeypatch.setenv("TBA_KEY", "fixture-test-key")
+        monkeypatch.delenv("ROBOTEVENTS_KEY", raising=False)
+        fetcher = _ftc_tba_and_robotevents_fetcher()
+        site = _make_site(tmp_path)
+
+        run_teams(site_dir=site, fetcher=fetcher, dry_run=False)
+
+        written = json.loads((site / "src" / "data" / "teams.json").read_text())
+        assert written["meta"]["total"] == 207
+        assert written["meta"]["by_league"] == {"FTC": 152, "FRC": 7, "FLL": 48}
+
+
+class TestRobotEventsIntegration:
+    """AC: `merge_teams()`, `geocode_teams()`, and `export_teams()`
+    require no code change to handle the new source -- confirmed, not
+    just assumed, by running the fixture suite through the full
+    `run_teams()` chain with a valid `ROBOTEVENTS_KEY` and the real
+    registered `vex-sd.toml`."""
+
+    def test_vex_teams_flow_through_the_full_pipeline_unchanged(self, monkeypatch, tmp_path):
+        monkeypatch.setenv("TBA_KEY", "fixture-test-key")
+        monkeypatch.setenv("ROBOTEVENTS_KEY", "fixture-test-key")
+        fetcher = _ftc_tba_and_robotevents_fetcher()
+
+        payload = run_teams(site_dir=tmp_path, fetcher=fetcher, dry_run=True)
+
+        assert payload["meta"]["by_league"]["VEX"] == 4  # page0's 4 in-county records
+        assert payload["meta"]["total"] == 211  # 207 + 4 VEX
+        by_id = {t["team_id"]: t for t in payload["teams"]}
+        assert "vex-90210A" in by_id
+        assert "vex-90210B" in by_id
+        assert by_id["vex-90210A"]["number"] == "90210A"
+        assert by_id["vex-90210A"]["league"] == "VEX"
+        # merge_teams()/geocode_teams()/export_teams() ran over VEX
+        # records with zero VEX-specific code in any of the three --
+        # every VEX team has the same fields any other league's does.
+        # organization is non-empty ("Poway High School"), so merge.py's
+        # own "empty organization -> never grouped" rule doesn't apply
+        # here -- org_key is set exactly like it is for any other
+        # non-empty-organization team.
+        assert by_id["vex-90210A"]["organization"] == "Poway High School"
+        assert by_id["vex-90210A"]["org_key"] != ""
+        assert "location_precision" in by_id["vex-90210A"]
 
 
 class TestGeocodingAggregateDistribution:

@@ -1,0 +1,42 @@
+{
+  "meta": {
+    "current_page": 1,
+    "last_page": 1,
+    "per_page": 50,
+    "to": 4,
+    "total": 4
+  },
+  "data": [
+    {
+      "id": 90001,
+      "number": "90210A",
+      "team_name": "Aftershock A",
+      "organization": "Poway High School",
+      "location": {"city": "Poway", "region": "California", "postcode": "92064", "country": "USA"},
+      "registered": true,
+      "program": {"id": 1, "name": "VEX Robotics Competition", "code": "VRC"},
+      "grade": "High School"
+    },
+    {
+      "id": 90099,
+      "number": "",
+      "team_name": "Ghost Team (no number)",
+      "organization": "",
+      "location": {"city": "San Diego", "region": "California", "postcode": "92101", "country": "USA"},
+      "registered": true,
+      "program": {"id": 1, "name": "VEX Robotics Competition", "code": "VRC"},
+      "grade": "High School"
+    },
+    {
+      "id": 90098,
+      "number": "9999Z",
+      "team_name": "",
+      "organization": "",
+      "location": {"city": "San Diego", "region": "California", "postcode": "92101", "country": "USA"},
+      "registered": true,
+      "program": {"id": 1, "name": "VEX Robotics Competition", "code": "VRC"},
+      "grade": "High School"
+    },
+    "not-a-dict-record"
+  ]
+}

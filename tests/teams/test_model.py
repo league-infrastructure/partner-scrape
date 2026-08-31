@@ -25,7 +25,9 @@ class TestTeamDefaults:
         assert team.team_id == ""
         assert team.league == ""
         assert team.program == ""
-        assert team.number == 0
+        # Sprint 016 ticket 005: widened from int to str -- VEX
+        # designations are alphanumeric (e.g. "90210A").
+        assert team.number == ""
         assert team.name == ""
         assert team.organization == ""
         assert team.org_type == ""
@@ -66,7 +68,7 @@ class TestTeamDefaults:
             team_id="ftc-1622",
             league="FTC",
             program="FIRST Tech Challenge",
-            number=1622,
+            number="1622",
             name="Team Spyder",
             organization="Poway High School",
             org_type="school",
@@ -94,7 +96,7 @@ class TestTeamDefaults:
         )
 
         assert team.team_id == "ftc-1622"
-        assert team.number == 1622
+        assert team.number == "1622"
         assert team.sponsors == ["BAE Systems", "PTC", "Qualcomm"]
         assert team.sponsor_provenance == {
             "BAE Systems": "structured",
