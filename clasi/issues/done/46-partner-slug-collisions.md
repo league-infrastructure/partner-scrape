@@ -1,5 +1,5 @@
 ---
-status: pending
+status: done
 ---
 
 # 9 duplicate-name slug collisions collapse 153 partners into 144 published directories

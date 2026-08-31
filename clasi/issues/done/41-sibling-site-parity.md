@@ -1,5 +1,5 @@
 ---
-status: pending
+status: done
 ---
 
 # Bring the production stem-ecosystem site to parity with the beta site/ checkout

@@ -47,8 +47,12 @@ validate_roster.py`-shaped module, called from wherever
 `normalize/partners.py` loads `partners.json` (or from `cli.py` right
 after `--site-dir` resolves), that raises loudly on: a bare-California
 centroid, an out-of-bounding-box (or malformed) coordinate, a known-
-hijacked domain, or (for the join-integrity check) an active registry
-source whose `org_name` resolves to zero roster entries. Regression
+hijacked domain, a non-unique slugified partner name (see issue 46 —
+the 2026-08-31 incident this guards against was two exact-duplicate
+rows under different ids, not near-duplicate names; fixed content-wise
+by the 211-row roster, but nothing stopped it recurring), or (for the
+join-integrity check) an active registry source whose `org_name`
+resolves to zero roster entries. Regression
 tests use small, hand-crafted fixture `partners.json` snippets (one bad
 row each) — exactly the kind of test that doesn't need a real checked-
 out site at all, and is stronger than the tests it replaces: it fails a
