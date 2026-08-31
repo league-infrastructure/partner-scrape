@@ -11,6 +11,17 @@ field -- like `export/writer.py`, its job is filter (nothing to filter
 here -- teams are undated, so there is no current/upcoming gate),
 serialize, write.
 
+Sprint 017 (ticket 001): this same call also writes the identical,
+already-built payload a second time, to `{site_dir}/public/data/teams.json`
+-- the statically-served, publicly fetchable data contract
+`export/publish.py` builds for partners/events. "One publish, two
+paths": both writes happen from the one payload this function already
+serializes once, inside this same function call, so the public copy is
+never stale relative to the build-time one. See the module's Design
+Rationale in `sprint.md` (sprint 017) for why this write lives here and
+not in `export/publish.py` -- `teams/` and `export/` share no import in
+either direction, and this keeps it that way.
+
 ## The `teams.json` data contract
 
 ```json
@@ -52,6 +63,20 @@ byte-identical before and after a `teams` run.
 A missing or unwritable `site_dir` (or its `src/data` subdirectory)
 fails loudly, matching `export_opportunities`'s contract exactly --
 "fail loudly, do not silently skip the export."
+
+## The two write targets are not symmetric
+
+`src/data/` must already exist (a missing `src/data` fails loudly, as
+above) -- it is created once, up front, by the checkout itself.
+`public/data/`, by contrast, is created if missing
+(`Path.mkdir(parents=True, exist_ok=True)`) before the second write --
+a fresh `site_dir` checkout is not guaranteed to have a `public/data/`
+directory yet (it's normally created by
+`export/publish.py::project()`, which may not have run there before a
+`teams` run does). Ordering: the `src/data` write happens first and
+its `RuntimeError` propagates immediately, before `public/data` is
+touched at all -- a `src/data` failure never leaves a stray
+`public/data/teams.json` behind.
 """
 
 from __future__ import annotations
@@ -156,7 +181,10 @@ def export_teams(
     *,
     dry_run: bool = False,
 ) -> dict[str, Any]:
-    """Serialize and write `teams` into `site_dir`'s `teams.json`.
+    """Serialize and write `teams` into `site_dir`'s `teams.json` --
+    twice: once to the build-time `src/data/teams.json` Astro input,
+    once to the publicly-served `public/data/teams.json` (sprint 017
+    ticket 001), both from the single payload built below.
 
     Args:
         teams: acquired `Team` records (`teams.pipeline.run_teams()`'s
@@ -169,15 +197,23 @@ def export_teams(
             should always pass an explicit `tmp_path` here, never rely
             on the default.
         dry_run: when `True`, compute and return the would-be-written
-            payload without touching disk.
+            payload without touching disk (neither location is
+            written).
 
     Returns:
         The `{"meta": ..., "teams": [...]}` payload that was (or, for
-        `dry_run`, would have been) written.
+        `dry_run`, would have been) written -- identical content at
+        both write targets.
 
     Raises:
         RuntimeError: `site_dir`'s `src/data` subdirectory does not
-            exist or is not writable. Never silently skips the write.
+            exist or is not writable, or `site_dir`'s `public/data`
+            target is not writable (e.g. occupied by a non-directory
+            file, or a read-only parent). Never silently skips either
+            write. The `src/data` write is attempted first and its
+            failure propagates before `public/data` is touched -- see
+            "The two write targets are not symmetric" in this module's
+            docstring.
     """
     resolved_site_dir = Path(site_dir) if site_dir is not None else get_site_dir()
 
@@ -197,16 +233,35 @@ def export_teams(
     if dry_run:
         return payload
 
+    serialized = json.dumps(payload, indent=1, ensure_ascii=False)
+
     data_dir = resolved_site_dir / "src" / "data"
     teams_path = data_dir / "teams.json"
 
     try:
-        teams_path.write_text(json.dumps(payload, indent=1, ensure_ascii=False), encoding="utf-8")
+        teams_path.write_text(serialized, encoding="utf-8")
     except OSError as exc:
         raise RuntimeError(
             f"Cannot write teams export to {data_dir}: {exc}. Check that "
             f"site_dir ({resolved_site_dir}) exists and its src/data "
             "subdirectory is writable."
+        ) from exc
+
+    # Sprint 017 ticket 001: the same payload, written a second time to
+    # the publicly-served data contract. Unlike src/data above,
+    # public/data is created if missing -- a fresh site_dir checkout is
+    # not guaranteed to have it yet (see module docstring).
+    public_data_dir = resolved_site_dir / "public" / "data"
+    public_teams_path = public_data_dir / "teams.json"
+
+    try:
+        public_data_dir.mkdir(parents=True, exist_ok=True)
+        public_teams_path.write_text(serialized, encoding="utf-8")
+    except OSError as exc:
+        raise RuntimeError(
+            f"Cannot write teams export to {public_data_dir}: {exc}. Check "
+            f"that site_dir ({resolved_site_dir})'s public/data path is "
+            "writable."
         ) from exc
 
     return payload
