@@ -1,7 +1,7 @@
 ---
 id: '001'
 title: Fix headless raw-resource fetch and sitemap namespace parsing
-status: open
+status: in-progress
 use-cases:
 - SUC-001
 - SUC-002
@@ -67,22 +67,69 @@ sources' TOML files), both currently blocking real yield:
 
 ## Acceptance Criteria
 
-- [ ] `PlaywrightFetcher.get()` returns the real raw body for a `.xml`
+- [x] `PlaywrightFetcher.get()` returns the real raw body for a `.xml`
       (or otherwise non-HTML) target, verified by a fixture `HeadlessPage`
       double that simulates both failure modes (wrapped-markup and
       aborted navigation) being avoided.
-- [ ] `PlaywrightFetcher.get()`'s behavior for an HTML target is
+- [x] `PlaywrightFetcher.get()`'s behavior for an HTML target is
       unchanged (existing fixture tests for the `wait_until="load"`
       path still pass unmodified).
-- [ ] `_parse_urlset()` returns correct `{loc: lastmod}` for
+- [x] `_parse_urlset()` returns correct `{loc: lastmod}` for
       0.9-namespaced, 0.84-namespaced, and unnamespaced `<urlset>`
       fixtures.
-- [ ] An existing 0.9-namespaced sitemap fixture test is unaffected
+- [x] An existing 0.9-namespaced sitemap fixture test is unaffected
       (fallback only fires when the qualified query returns zero).
-- [ ] No adapter, `PoliteFetcher`, `robots.py`, `throttle.py`, or
+- [x] No adapter, `PoliteFetcher`, `robots.py`, `throttle.py`, or
       discovery module outside `discovery/sitemap.py` changes.
-- [ ] Full test suite stays green; no new test touches a real network
+- [x] Full test suite stays green; no new test touches a real network
       or a real browser.
+
+## Deviations / Findings for Follow-up (2026-08-30)
+
+- **`_RAW_RESOURCE_EXTENSIONS` deliberately excludes `.txt`, discovered
+  during implementation, not planned up front.** The initial extension
+  set (`.xml`, `.json`, `.txt`, `.csv`, `.rss`, `.atom`) broke two
+  pre-existing, unmodified `TestPoliteFetcherWrapsPlaywrightFetcher`
+  tests: `fetch/robots.py` fetches `robots.txt` through this same
+  `PlaywrightFetcher.get()` for every source (headless or not), so
+  including `.txt` silently routed robots.txt fetches through the new
+  raw-request path too. Nothing in issue 37's live triage evidence
+  flagged robots.txt as broken — only `.xml` sitemaps were confirmed
+  failing (5 wrapped-markup, 4 `net::ERR_ABORTED`). Removed `.txt` from
+  the tuple rather than updating the robots.txt tests, per the ticket's
+  own "no `robots.py` changes" scope boundary read in spirit (an
+  unevidenced behavior change to robots.txt retrieval, even a plausibly
+  correct one, isn't this ticket's fix). Documented as a bullet in
+  `fetch/DESIGN.md`'s Open Questions and covered by a dedicated
+  regression test (`test_txt_target_still_navigates_not_raw_path`) so a
+  future extension-list edit doesn't reintroduce this silently. A
+  genuinely broken `.txt` (or other extension) fetch, if ever found
+  live, is a small follow-up: add the extension back with its own
+  evidence.
+- **Live smoke test (real Playwright/Chromium, not a fixture) against
+  `lajollalibrary.org`** — the exact site issue 37 cites for
+  `net::ERR_ABORTED` on `https://www.lajollalibrary.org/sitemap.xml`:
+  - `PlaywrightFetcher().get("https://www.lajollalibrary.org/sitemap.xml")`
+    now returns `status=200` and a real, parseable
+    `<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" ...>`
+    body (487 bytes, 3 child `<sitemap>` entries) — previously this
+    call raised `net::ERR_ABORTED`.
+  - A real child sitemap fetch
+    (`https://www.lajollalibrary.org/pages-sitemap.xml`, reached the
+    same way `_parse_sitemap_index()` reaches it) also returns
+    `status=200` with a real `<urlset>` body — confirms the fix holds
+    for sitemap-index recursion, not just the root document.
+  - End-to-end `discover_changed_urls()` against the real source
+    (via `PoliteFetcher(fetcher=PlaywrightFetcher())`) completed with
+    no exception and returned 0 refs: this site's sitemap has no
+    dedicated event child sitemap, and none of its actual pages
+    (`staff-picks`, `summer-reading-program`, `kids`, etc.) match
+    `EVENT_PATH_RE`'s path-segment patterns (`summer-reading-program`
+    is one hyphenated segment, not `/program(/|$)`). This is a real,
+    separate discovery-classification question for ticket 002's
+    re-probing pass, not a fetch failure — the fetch itself now
+    succeeds and returns real content, which is this ticket's whole
+    scope.
 
 ## Testing
 

@@ -11,12 +11,13 @@ from __future__ import annotations
 
 import json
 import logging
+import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
 from pathlib import Path
 
 import pytest
 
-from partner_scrape.discovery.sitemap import discover_changed_urls
+from partner_scrape.discovery.sitemap import _parse_urlset, discover_changed_urls
 from partner_scrape.fetch.fetcher import FetchResponse
 from partner_scrape.registry.schema import SourceConfig
 
@@ -399,3 +400,120 @@ class TestSitemapUrlOverride:
         # Probing was skipped entirely -- no conventional candidate was
         # ever fetched (fetcher.calls would raise KeyError if it had been).
         assert fetcher.calls == [override_url]
+
+
+class TestParseUrlsetNamespaceHandling:
+    """SUC-002 / issue 37 (sprint 015): ``_parse_urlset()`` tries its
+    namespace-qualified ``sm:url`` query first and falls back to a
+    namespace-agnostic, ``_local_name()``-based match only when that
+    query finds zero elements -- covers the 0.9 (qualified path), 0.84
+    (fallback path, sandiego.edu's real legacy schema), and unnamespaced
+    (fallback path) cases. White-box: exercises ``_parse_urlset``
+    directly against a parsed root, rather than the full
+    ``discover_changed_urls`` flow, since the fixture-file naming
+    (``0_9``/``0_84``/``unnamespaced``) is the point of these tests.
+    """
+
+    EXPECTED = {
+        "https://example.org/events/robotics-open-house/": "2026-07-01",
+        "https://example.org/events/summer-coding-camp/": "2026-07-15",
+    }
+
+    @pytest.mark.parametrize(
+        "fixture_name",
+        [
+            "urlset_namespace_0_9.xml",
+            "urlset_namespace_0_84.xml",
+            "urlset_unnamespaced.xml",
+        ],
+    )
+    def test_parse_urlset_yields_expected_urls_regardless_of_namespace(
+        self, fixture_name
+    ):
+        root = ET.fromstring(_read_fixture(fixture_name))
+
+        urls = _parse_urlset(root, path_filter=False)
+
+        assert urls == self.EXPECTED
+
+    def test_0_9_namespace_is_resolved_by_the_qualified_query_not_the_fallback(self):
+        # Regression guard for "an existing 0.9-namespaced fixture is
+        # unaffected": prove the qualified sm:url query itself already
+        # finds both <url> elements for this namespace, so the
+        # namespace-agnostic fallback is never what's doing the work
+        # for the schema every currently-registered sitemap uses.
+        root = ET.fromstring(_read_fixture("urlset_namespace_0_9.xml"))
+        qualified_matches = root.findall(
+            "sm:url", {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+        )
+
+        assert len(qualified_matches) == 2
+
+        urls = _parse_urlset(root, path_filter=False)
+
+        assert urls == self.EXPECTED
+
+    @pytest.mark.parametrize(
+        "fixture_name", ["urlset_namespace_0_84.xml", "urlset_unnamespaced.xml"]
+    )
+    def test_path_filter_still_applies_in_the_namespace_agnostic_fallback(
+        self, fixture_name
+    ):
+        # The fallback must still respect path_filter, not just find
+        # more elements than the qualified query -- neither fixture
+        # URL's path matches EVENT_PATH_RE's "camps?" alternative
+        # literally, but both match "/events?(/|$)" via their
+        # "/events/" segment, so path_filter=True keeps both here;
+        # path_filter=False (used above) is what proves the fallback
+        # match itself, independent of filtering.
+        root = ET.fromstring(_read_fixture(fixture_name))
+
+        urls = _parse_urlset(root, path_filter=True)
+
+        assert urls == self.EXPECTED
+
+    def test_empty_urlset_yields_empty_dict_via_either_path(self):
+        # A genuinely empty urlset (no <url> children at all) must not
+        # be mistaken for "the qualified query found nothing, fall
+        # back" turning into some other, incorrect result -- both
+        # passes legitimately find zero elements and the function
+        # returns {}.
+        root = ET.fromstring(
+            '<?xml version="1.0"?><urlset xmlns='
+            '"http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>'
+        )
+
+        assert _parse_urlset(root, path_filter=False) == {}
+
+
+class TestSitemapNamespaceIntegration:
+    """SUC-002 at the ``discover_changed_urls`` level -- sandiego.edu's
+    real 0.84-namespaced sitemap silently yielded zero URLs before this
+    fix (issue 37); ``sandiego`` was disabled with that exact reason.
+    """
+
+    def test_0_84_namespaced_root_urlset_yields_real_events_end_to_end(self):
+        override_url = f"{SITE_URL}/legacy-sitemap.xml"
+        source = _source_with_sitemap_url(override_url)
+        fetcher = FixtureFetcher(
+            {override_url: _response(_read_fixture("urlset_namespace_0_84.xml"))}
+        )
+
+        refs = discover_changed_urls(source, fetcher)
+
+        assert sorted(r.url for r in refs) == sorted(
+            TestParseUrlsetNamespaceHandling.EXPECTED
+        )
+
+    def test_unnamespaced_root_urlset_yields_real_events_end_to_end(self):
+        override_url = f"{SITE_URL}/legacy-sitemap.xml"
+        source = _source_with_sitemap_url(override_url)
+        fetcher = FixtureFetcher(
+            {override_url: _response(_read_fixture("urlset_unnamespaced.xml"))}
+        )
+
+        refs = discover_changed_urls(source, fetcher)
+
+        assert sorted(r.url for r in refs) == sorted(
+            TestParseUrlsetNamespaceHandling.EXPECTED
+        )

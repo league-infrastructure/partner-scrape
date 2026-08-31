@@ -1,6 +1,6 @@
 # Discovery
 
-**Owner:** Eric Busboom · **Last reviewed:** 2026-08-28 · **Status:** in-flux
+**Owner:** Eric Busboom · **Last reviewed:** 2026-08-30 · **Status:** in-flux
 
 ---
 
@@ -71,6 +71,13 @@ pipeline:
   `<urlset>` or `<sitemapindex>` root.** Several static-site generators serve a catch-all
   HTML page with status 200 for any path; accepting on status alone would treat that page
   as an empty sitemap and silently yield zero URLs for the source forever.
+- **(Sprint 015) `_parse_urlset()`'s namespace-agnostic fallback only fires when the
+  namespace-qualified query finds zero `<url>` elements — never based on the final,
+  filtered result being empty.** A urlset whose `<url>` elements all fail
+  `EVENT_PATH_RE`'s `path_filter` legitimately returns `{}` without the fallback
+  redoing the same (filtered-out) work under a different name; only a sitemap
+  declaring a namespace other than the hardcoded `_NS` (or none) should ever reach the
+  fallback branch.
 - **This subsystem imports `adapters.base.EventRef` directly, never the `adapters`
   package.** Importing the package would pull in the dispatch table and every concrete
   adapter, inverting the dependency direction (adapters call discovery, never the
@@ -96,6 +103,26 @@ catching WordPress/TEC conventions like `tribe_events`), and once over individua
 *paths* (`EVENT_PATH_RE`) for sites that have no dedicated event sitemap. The patterns
 were ported from the pre-existing `dev/` exploration scripts as a starting point; `dev/`
 is not a dependency.
+
+**(Sprint 015) `_parse_urlset()` falls back to namespace-agnostic matching, tried only
+after the qualified query.** *Context:* `_parse_urlset()` queried only
+`root.findall("sm:url", _NS)` against the hardcoded sitemaps.org 0.9 namespace, while
+root-tag acceptance (`_parse_sitemap_root()`) was already namespace-agnostic via
+`_local_name()` — so a sitemap validating in a *different* namespace (or none) parsed
+successfully but silently yielded zero `<url>` matches. Live-confirmed on
+`sandiego.edu`'s legacy `xmlns="http://www.google.com/schemas/sitemap/0.84"` sitemap
+(issue 37); `sandiego` was disabled with this exact reason. *Alternatives considered:*
+replace the qualified query with a namespace-agnostic one everywhere — rejected: the
+qualified query is marginally more precise for the 0.9 namespace every
+currently-registered sitemap already validates against, and a query-first,
+fallback-second design is additive by construction (see the invariant below) where a
+query-only-agnostic rewrite is a strict behavior change to every existing sitemap, not
+just the broken ones. *Why this choice:* if `root.findall("sm:url", _NS)` returns zero
+elements, `_parse_urlset()` retries by iterating `root`'s direct children and matching
+`_local_name(child.tag) == "url"`, then reads each child's `<loc>`/`<lastmod>` the same
+way (`_find_local_child_text`, new). *Consequences:* a real, well-formed sitemap in any
+namespace (or none) now contributes its URLs; no currently-working sitemap can regress,
+since the fallback only fires on today's silent zero-URL failure mode.
 
 **Why hub scanning lives here rather than in `registry/`.** It is discovery — the same
 "resolve a starting point into addresses" shape as the other two strategies — even

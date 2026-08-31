@@ -1,7 +1,7 @@
 ---
 id: '015'
 title: Unblock Headless Sources and Extend the Opportunity Schema
-status: ticketing
+status: executing
 branch: sprint/015-unblock-headless-sources-and-extend-the-opportunity-schema
 use-cases: []
 issues:

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.google.com/schemas/sitemap/0.84">
+  <url>
+    <loc>https://example.org/events/robotics-open-house/</loc>
+    <lastmod>2026-07-01</lastmod>
+  </url>
+  <url>
+    <loc>https://example.org/events/summer-coding-camp/</loc>
+    <lastmod>2026-07-15</lastmod>
+  </url>
+</urlset>

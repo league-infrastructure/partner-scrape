@@ -123,6 +123,24 @@ def _local_name(tag: str) -> str:
     return tag.split("}")[-1] if "}" in tag else tag
 
 
+def _find_local_child_text(parent: ET.Element, local_name: str) -> str:
+    """Return the stripped text of ``parent``'s first direct child
+    whose tag, once namespace-stripped (:func:`_local_name`), equals
+    ``local_name`` -- or ``""`` if there is no such child.
+
+    The namespace-agnostic counterpart to
+    ``parent.findtext("sm:child", "", _NS)``: used only once the
+    qualified query has already been tried and found nothing (see
+    :func:`_parse_urlset`), since a child in an unqualified or
+    differently-namespaced document cannot be found by a hardcoded
+    namespace URI either.
+    """
+    for child in parent:
+        if _local_name(child.tag) == local_name:
+            return (child.text or "").strip()
+    return ""
+
+
 def _parse_urlset(root: ET.Element, *, path_filter: bool) -> dict[str, str]:
     """Extract ``{loc: lastmod}`` from a ``<urlset>`` root.
 
@@ -131,15 +149,41 @@ def _parse_urlset(root: ET.Element, *, path_filter: bool) -> dict[str, str]:
     sitemap and needs URL-path filtering; skipped when the urlset is
     already known to be event-dedicated (a filename-matched child
     sitemap from a ``<sitemapindex>``), where every URL in it is kept.
+
+    **(Sprint 015)** Tries the namespace-qualified ``sm:url`` query
+    (:data:`_NS`, the sitemaps.org 0.9 schema every currently-registered
+    sitemap already validates against) first. Only if that query finds
+    zero ``<url>`` elements does this retry with a namespace-agnostic
+    match over ``root``'s direct children (:func:`_local_name`,
+    already used elsewhere in this module for root/child-tag
+    acceptance) -- a real sitemap declaring a different namespace (the
+    legacy 0.84 schema, confirmed live on sandiego.edu) or none at all
+    otherwise parses with a recognized root element but silently
+    yields zero URLs. See issue 37 and SUC-002 (sprint 015). Purely
+    additive: the fallback only fires when the qualified query already
+    found nothing, so a document that validates against :data:`_NS`
+    is entirely unaffected.
     """
+    url_els = root.findall("sm:url", _NS)
+    namespace_agnostic = False
+    if not url_els:
+        url_els = [child for child in root if _local_name(child.tag) == "url"]
+        namespace_agnostic = True
+
     urls: dict[str, str] = {}
-    for url_el in root.findall("sm:url", _NS):
-        loc = (url_el.findtext("sm:loc", "", _NS) or "").strip()
+    for url_el in url_els:
+        if namespace_agnostic:
+            loc = _find_local_child_text(url_el, "loc")
+        else:
+            loc = (url_el.findtext("sm:loc", "", _NS) or "").strip()
         if not loc:
             continue
         if path_filter and not EVENT_PATH_RE.search(loc):
             continue
-        lastmod = (url_el.findtext("sm:lastmod", "", _NS) or "").strip()
+        if namespace_agnostic:
+            lastmod = _find_local_child_text(url_el, "lastmod")
+        else:
+            lastmod = (url_el.findtext("sm:lastmod", "", _NS) or "").strip()
         urls[loc] = lastmod
     return urls
 

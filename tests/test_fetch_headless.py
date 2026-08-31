@@ -48,6 +48,46 @@ class _FixtureNavigationResponse:
 
 
 @dataclass
+class _FixtureRawResponse:
+    """Stand-in for a real Playwright ``APIResponse`` (what
+    ``page.request.get()`` returns) -- the raw-request counterpart to
+    ``_FixtureNavigationResponse``. ``status``/``headers`` are plain
+    attributes and ``text()`` is a method, matching the real
+    ``playwright.sync_api.APIResponse`` surface this module reads.
+    """
+
+    status: int
+    body: str
+    headers: dict[str, str] = field(default_factory=dict)
+
+    def text(self) -> str:
+        return self.body
+
+
+@dataclass
+class FixtureRequestContext:
+    """HeadlessRequestContext test double -- what
+    ``FixtureHeadlessPage.request`` returns. Returns a canned
+    ``_FixtureRawResponse`` per URL, no real browser process involved.
+
+    ``responses`` maps a URL to ``(status, body)``. ``errors`` maps a
+    URL to an exception ``get()`` should raise instead of returning
+    normally. Every call is recorded in ``calls``.
+    """
+
+    responses: dict[str, tuple[int, str]] = field(default_factory=dict)
+    errors: dict[str, Exception] = field(default_factory=dict)
+    calls: list[dict[str, object]] = field(default_factory=list)
+
+    def get(self, url: str, headers: dict[str, str] | None = None):
+        self.calls.append({"url": url, "headers": headers})
+        if url in self.errors:
+            raise self.errors[url]
+        status, body = self.responses[url]
+        return _FixtureRawResponse(status=status, body=body)
+
+
+@dataclass
 class FixtureHeadlessPage:
     """HeadlessPage test double -- returns canned rendered HTML and a
     canned navigation response per URL, no real browser process
@@ -59,12 +99,19 @@ class FixtureHeadlessPage:
     call to ``goto()`` is recorded in ``calls`` so tests can assert on
     the wait strategy (``wait_until``/``timeout``) PlaywrightFetcher
     applied.
+
+    ``request`` (a ``FixtureRequestContext``) stands in for the real
+    ``page.request`` (``APIRequestContext``) property -- the raw,
+    non-navigating retrieval path a non-HTML target
+    (``_looks_like_raw_resource``) is routed through instead of
+    ``goto``/``content`` (sprint 015, issue 37).
     """
 
     pages: dict[str, tuple[int, str]]
     errors: dict[str, Exception] = field(default_factory=dict)
     calls: list[dict[str, object]] = field(default_factory=list)
     extra_headers_calls: list[dict[str, str]] = field(default_factory=list)
+    request: FixtureRequestContext = field(default_factory=FixtureRequestContext)
     _current_url: str | None = field(default=None, repr=False)
 
     def goto(self, url: str, timeout: float | None = None, wait_until: str | None = None):
@@ -171,6 +218,169 @@ class TestPlaywrightFetcherGet:
         fetcher.get(url)
 
         assert page.extra_headers_calls == []
+
+
+class TestPlaywrightFetcherRawResourcePath:
+    """Sprint 015 / issue 37: ``PlaywrightFetcher.get()`` routes a
+    non-HTML target (``.xml`` and friends -- ``_looks_like_raw_resource``)
+    through ``page.request.get()`` instead of ``page.goto()`` +
+    ``page.content()``. Each test sets up ``page.goto()`` (via ``pages``/
+    ``errors``) to reproduce one of the two live failure modes ticket
+    003-014 recorded, then proves the real fix -- routing through
+    ``page.request`` instead -- returns the real raw body and never
+    calls ``goto()`` at all, so neither failure mode is even reachable.
+    """
+
+    def test_xml_target_avoids_the_html_wrapped_markup_failure_mode(self):
+        # Failure mode 1 (5 confirmed sites): if get() navigated to a
+        # raw .xml target, page.content() would return this
+        # Chromium-viewer-wrapped markup instead of the real sitemap
+        # body. Registering it under `pages` proves the fix doesn't
+        # merely avoid crashing -- it avoids this wrong-content path
+        # entirely, never touching goto()/content() for this URL.
+        url = "https://example.org/sitemap.xml"
+        real_xml = '<?xml version="1.0"?><urlset><url><loc>https://example.org/events/a/</loc></url></urlset>'
+        wrapped_markup = "<html><head></head><body>Chromium XML viewer wrapper</body></html>"
+        page = FixtureHeadlessPage(
+            pages={url: (200, wrapped_markup)},
+            request=FixtureRequestContext(responses={url: (200, real_xml)}),
+        )
+        fetcher = PlaywrightFetcher(page_factory=lambda: page)
+
+        response = fetcher.get(url)
+
+        assert response.body == real_xml
+        assert response.status == 200
+        assert page.calls == []  # goto() never called for this URL
+
+    def test_xml_target_avoids_the_aborted_navigation_failure_mode(self):
+        # Failure mode 2 (4 confirmed sites): if get() navigated to a
+        # raw .xml target, goto() would raise net::ERR_ABORTED.
+        # Registering that under `errors` proves the fix doesn't hit
+        # this path at all -- get() must not raise, because it never
+        # calls goto() for this URL in the first place.
+        url = "https://example.org/sitemap.xml"
+        real_xml = '<?xml version="1.0"?><urlset><url><loc>https://example.org/events/b/</loc></url></urlset>'
+        page = FixtureHeadlessPage(
+            pages={},
+            errors={url: Exception("net::ERR_ABORTED at " + url)},
+            request=FixtureRequestContext(responses={url: (200, real_xml)}),
+        )
+        fetcher = PlaywrightFetcher(page_factory=lambda: page)
+
+        response = fetcher.get(url)
+
+        assert response.body == real_xml
+        assert response.status == 200
+        assert page.calls == []  # goto() never called (never raised, either)
+
+    def test_status_for_the_raw_path_is_not_hardcoded_200(self):
+        url = "https://example.org/sitemap.xml"
+        page = FixtureHeadlessPage(
+            pages={},
+            request=FixtureRequestContext(responses={url: (404, "")}),
+        )
+        fetcher = PlaywrightFetcher(page_factory=lambda: page)
+
+        response = fetcher.get(url)
+
+        assert response.status == 404
+
+    def test_headers_are_forwarded_directly_to_the_raw_request(self):
+        url = "https://example.org/sitemap.xml"
+        page = FixtureHeadlessPage(
+            pages={},
+            request=FixtureRequestContext(responses={url: (200, "<urlset></urlset>")}),
+        )
+        fetcher = PlaywrightFetcher(page_factory=lambda: page)
+
+        fetcher.get(url, headers={"If-None-Match": '"abc123"'})
+
+        assert page.request.calls == [
+            {"url": url, "headers": {"If-None-Match": '"abc123"'}}
+        ]
+        # set_extra_http_headers is the navigation-path mechanism --
+        # the raw path forwards headers straight through get() instead.
+        assert page.extra_headers_calls == []
+
+    def test_response_headers_are_read_from_the_raw_response(self):
+        url = "https://example.org/sitemap.xml"
+
+        @dataclass
+        class _RawResponseWithHeaders:
+            status: int
+            _body: str
+            headers: dict[str, str]
+
+            def text(self) -> str:
+                return self._body
+
+        class _Request:
+            def get(self, url, headers=None):
+                return _RawResponseWithHeaders(
+                    status=200, _body="<urlset></urlset>", headers={"Content-Type": "text/xml"}
+                )
+
+        page = FixtureHeadlessPage(pages={}, request=_Request())
+        fetcher = PlaywrightFetcher(page_factory=lambda: page)
+
+        response = fetcher.get(url)
+
+        assert response.headers == {"Content-Type": "text/xml"}
+
+    @pytest.mark.parametrize(
+        "url",
+        [
+            "https://example.org/sitemap.xml",
+            "https://example.org/feed.json",
+            "https://example.org/data.csv",
+            "https://example.org/feed.rss",
+            "https://example.org/feed.atom",
+            "https://example.org/sitemap.xml?cachebust=1",
+        ],
+    )
+    def test_recognized_raw_extensions_all_route_through_the_raw_path(self, url):
+        page = FixtureHeadlessPage(
+            pages={}, request=FixtureRequestContext(responses={url: (200, "raw body")})
+        )
+        fetcher = PlaywrightFetcher(page_factory=lambda: page)
+
+        response = fetcher.get(url)
+
+        assert response.body == "raw body"
+        assert page.calls == []
+
+    def test_txt_target_still_navigates_not_raw_path(self):
+        # Deliberate exclusion: .txt is not in _RAW_RESOURCE_EXTENSIONS
+        # (see its docstring) because fetch/robots.py fetches
+        # robots.txt through this same get() for every source, and
+        # this ticket's evidenced bug is about .xml sitemaps, not
+        # robots.txt -- changing that path is an unrelated behavior
+        # change this ticket does not make.
+        url = "https://example.org/robots.txt"
+        body = "User-agent: *\nAllow: /"
+        page = FixtureHeadlessPage(pages={url: (200, body)})
+        fetcher = PlaywrightFetcher(page_factory=lambda: page)
+
+        response = fetcher.get(url)
+
+        assert response.body == body
+        assert len(page.calls) == 1
+        assert page.request.calls == []
+
+    def test_html_target_still_navigates_and_never_uses_the_raw_path(self):
+        # The existing navigate-and-render behavior for a normal HTML
+        # page is unaffected: no request-path call is made for it.
+        url = "https://example.org/events"
+        html = "<html><body>Rendered via headless browser</body></html>"
+        page = FixtureHeadlessPage(pages={url: (200, html)})
+        fetcher = PlaywrightFetcher(page_factory=lambda: page)
+
+        response = fetcher.get(url)
+
+        assert response.body == html
+        assert len(page.calls) == 1
+        assert page.request.calls == []
 
 
 class TestNoRealPlaywrightImport:
