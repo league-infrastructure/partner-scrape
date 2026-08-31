@@ -9,6 +9,66 @@ depends-on:
 github-issue: ''
 issue: consolidate-partner-scrape-s-beta-site-into-stem-ecosystem-production.md
 completes_issue: true
+exception:
+  thrown_by: programmer
+  thrown_at: '2026-08-31T22:15:41.617815+00:00'
+  attempted: 'Implemented all four non-verification steps of ticket 002 in full: (1)
+    git rm -r --cached site/ (1257 files) plus working-tree removal via git clean
+    -fd/-fdx, and .gitignore updated to a single whole-directory site/ entry; (2)
+    pages.yml''s build job given a second actions/checkout@v4 step (repository: league-infrastructure/stem-ecosystem,
+    ref: master, path: site) positioned between the self-checkout and Setup Node.js,
+    no secret/token; (3) trigger changed to workflow_dispatch + push.paths:[''.github/workflows/pages.yml'']
+    only, site/** removed; (4) pages.yml''s header comment and justfile''s header/site-var
+    comments rewritten to describe the build-time-checkout relationship, plus a mechanical
+    fix to justfile''s pub recipe (it inferred ''push triggered the deploy'' from
+    an origin/master SHA diff, which is now false under the new trigger, so it now
+    dispatches explicitly every time). Verified without pushing: YAML parses; actionlint
+    (installed locally, v1.7.12) passes clean on pages.yml and all workflow files;
+    gh api confirmed stem-ecosystem is public, master default, and its repo root layout
+    (package.json, astro.config.mjs, public/, src/ at top level) matches what working-directory:
+    site + path: site already assume; manually traced actions/checkout@v4''s documented
+    repository/ref/path semantics against that confirmed layout. Then ran this ticket''s
+    own regression-guard command, uv run pytest -q (baseline was 1846 passing), and
+    got 1800 passed / 46 failed -- confirmed stable across two full-suite runs and
+    per-file isolated runs, all FileNotFoundError on hardcoded site/... path reads
+    across tests/test_site_teams_pages.py (22), tests/test_roster_housekeeping.py
+    (16), tests/test_site_data_access_page.py (6), and tests/directory/test_dataset_validity.py
+    (2). Confirmed by inspection that none of these 4 files were touched by ticket
+    001 (they never reference MIRROR_SITE_DIRS) and none are named in sprint.md''s
+    Test Strategy or Migration Concerns sections for any ticket. Did not delete or
+    modify any of the 46 tests, and left the four completed steps staged but uncommitted
+    in the working tree (git status/git diff show the full diff) rather than either
+    committing over a known test-suite regression or unilaterally resolving it.'
+  conflict: 'Ticket 002''s own text states "This is CI/config work, not something
+    uv run pytest exercises" and its AC requires "Full uv run pytest -q remains green
+    ... no Python source is touched by this ticket." Both are contradicted by AC 1
+    of the same ticket, "site/ is untracked from git" (unconditional -- "the working-tree
+    files can go too, since a fresh checkout is what CI now expects"): once site/
+    has no physical files, 46 existing tests across 4 files that hardcode reads against
+    site/... paths (schema-drift guards for the Astro site''s hand-authored docs/components
+    in test_site_teams_pages.py and test_site_data_access_page.py; roster/Place data-integrity
+    guards in test_roster_housekeeping.py and test_dataset_validity.py, including
+    a guard documented as protecting against a real historical domain-hijacking incident)
+    necessarily fail with FileNotFoundError. sprint.md''s Test Strategy section explicitly
+    enumerates ticket 001''s affected test files by name (test_export_mirror.py, test_cli.py,
+    test_cli_teams.py, test_cli_directory.py, plus a note that test_config.py was
+    inspected and found unaffected) but for ticket 002 states only "not unit-testable
+    in the pytest sense" with zero test files listed -- these 4 files and their 46
+    tests are not anticipated anywhere in the sprint''s Architecture, Test Strategy,
+    or Migration Concerns sections. Resolving this requires an architecture-level
+    decision this ticket does not make and I should not make unilaterally: delete
+    the 46 tests outright (parallel to how ticket 001 deleted the mirror mechanism''s
+    own tests, but here the underlying data/content concern -- roster data integrity,
+    site schema-drift -- has not itself gone away, only its physical location has);
+    relocate the coverage into stem-ecosystem''s own test suite (a repo/decision sprint.md''s
+    own Out of Scope section places outside this sprint -- "Any change inside the
+    stem-ecosystem repo... owned by the parallel stem-ecosystem-8d session"); or preserve
+    them here by repointing at config.get_site_dir() (../stem-ecosystem, the pipeline''s
+    actual sibling-checkout write target) with some form of graceful skip when that
+    sibling checkout is absent, which would need a decision about whether/how any
+    CI job that runs pytest gets that sibling checkout (none currently exists -- there
+    is no pytest-running GitHub Actions workflow in this repo at all today).'
+  surface: internal
 ---
 <!-- CLASI: Before changing code or making plans, review the SE process in CLAUDE.md -->
 
@@ -101,25 +161,33 @@ would otherwise need a second, conflicting edit here) and adds the
 
 ## Acceptance Criteria
 
-- [ ] `site/` is untracked from git; `.gitignore` ignores `site/` as a
+- [x] `site/` is untracked from git; `.gitignore` ignores `site/` as a
       whole directory (the three narrower `site/node_modules|dist|.astro`
       entries are removed or subsumed).
-- [ ] `pages.yml`'s `build` job includes a second `actions/checkout` step
+- [x] `pages.yml`'s `build` job includes a second `actions/checkout` step
       for `league-infrastructure/stem-ecosystem` (`ref: master`,
       `path: site`), positioned before `npm ci`, with no secret/token
       reference.
-- [ ] `pages.yml`'s `push.paths` no longer includes `site/**`; a push
+- [x] `pages.yml`'s `push.paths` no longer includes `site/**`; a push
       trigger scoped to `.github/workflows/pages.yml` is present
       alongside the retained `workflow_dispatch`.
-- [ ] `pages.yml`'s header comment and the `justfile`'s relevant comments
+- [x] `pages.yml`'s header comment and the `justfile`'s relevant comments
       describe the build-time-checkout relationship, not a tracked local
       copy; no absolute `/fonts/` path appears anywhere touched.
 - [ ] A real `gh workflow run` (or `just pub`) against the new
       `pages.yml` succeeds end-to-end; `github.io/partner-scrape`
       renders correctly with current stem-ecosystem content — evidence
       (run URL/output) recorded in this ticket.
+      **Not performed.** Per explicit team-lead instruction, no commit/push
+      to origin this session (stakeholder push freeze). Verified instead by
+      reasoning + read-only checks — see Notes.
 - [ ] Full `uv run pytest -q` remains green (no Python source is touched
       by this ticket; this is a regression guard, not new coverage).
+      **False as written — see Notes and thrown exception.** Untracking
+      `site/` (this ticket's own AC 1, non-negotiable) makes 46 existing
+      tests across 4 files fail with `FileNotFoundError`; they read
+      `site/...` paths directly and were never anticipated by this
+      ticket's or the sprint's Test Strategy.
 
 ## Testing
 
@@ -132,3 +200,159 @@ would otherwise need a second, conflicting edit here) and adds the
   league-infrastructure/partner-scrape` (or `just pub`), followed by
   `gh run watch <run-id> --exit-status`; then `uv run pytest -q` as the
   regression guard.
+
+## Notes
+
+**Status: implementation complete for steps 1-4, verified as far as
+possible without pushing; blocked on step 5's pytest AC by a thrown
+exception. Changes are staged in the working tree, deliberately left
+uncommitted — see "Why uncommitted" below.**
+
+### What was implemented
+
+1. `git rm -r --cached site/` (1257 files) untracked the directory; the
+   working-tree copy was then removed with `git clean -fd site/` +
+   `git clean -fdx site/` (the latter for the three previously-gitignored
+   build-artifact subtrees: `node_modules/`, `dist/`, `.astro/`). `site/`
+   no longer exists anywhere in this checkout.
+2. `.gitignore`: the three narrow entries (`site/node_modules/`,
+   `site/dist/`, `site/.astro/`) replaced with a single whole-directory
+   `site/` entry, per the ticket's instruction.
+3. `.github/workflows/pages.yml`: added
+   `Checkout stem-ecosystem (site source)` (`actions/checkout@v4`,
+   `repository: league-infrastructure/stem-ecosystem`, `ref: master`,
+   `path: site`) between the existing self-checkout and `Setup Node.js`;
+   no token/secret added (public repo, read-only). Trigger changed to
+   `workflow_dispatch` + `push.paths: ['.github/workflows/pages.yml']`
+   only (`site/**` removed). Header comment rewritten to describe the
+   build-time-checkout relationship instead of a tracked local copy.
+4. `justfile`: header comment and the `site :=` comment rewritten to
+   describe the build-time-checkout / personal-gitignored-clone
+   relationship. `dev`/`build`/`preview` recipe *commands* unchanged, per
+   the ticket. One deviation beyond the ticket's literal text: `pub`'s
+   push/dispatch logic previously inferred "the push triggered the
+   deploy" from whether `origin/master`'s SHA changed after `git push`.
+   That inference is now wrong under the new trigger (an ordinary push no
+   longer fires a build unless it touches `pages.yml` itself), so `pub`
+   would silently report success while watching a stale, already-finished
+   run. Fixed by having `pub` always dispatch explicitly via
+   `gh workflow run` after pushing, rather than conditionally. This is a
+   direct, mechanical consequence of this ticket's own trigger change
+   (sprint.md's Design Rationale), not a new decision — flagged here per
+   "annotate anything reasoned-through" rather than silently folded in.
+
+### Verification performed (no push)
+
+- **YAML validity**: `python3 -c "import yaml; yaml.safe_load(...)"` —
+  parses cleanly.
+- **actionlint** (`/opt/homebrew/bin/actionlint`, v1.7.12, installed
+  locally): `actionlint .github/workflows/pages.yml` and
+  `actionlint .github/workflows/*.yml` both exit 0, zero findings. This
+  validates action input schemas, expression syntax, and permissions —
+  well beyond bare YAML parsing.
+- **`gh api` read-only checks against the real `stem-ecosystem` repo**
+  (public, no auth beyond the session's existing `gh` login, nothing
+  pushed): confirmed `league-infrastructure/stem-ecosystem` is public
+  with default branch `master`; confirmed its repo root contains
+  `package.json`, `astro.config.mjs`, `public/`, `src/`, `tsconfig.json`
+  directly at the top level (i.e., checking it out with `path: site`
+  reproduces exactly the layout `pages.yml`'s existing
+  `working-directory: site` steps already assume — `npm ci` finds
+  `package.json`, the Astro build finds `astro.config.mjs`, output lands
+  at `site/dist`). Also confirmed both `src/fonts/` (Camphor, Vite-
+  processed) and `public/fonts/` (Font Awesome icon fonts, static) exist
+  in stem-ecosystem today — neither comment I wrote references fonts at
+  all, so the ticket's "no absolute `/fonts/` path" constraint is
+  satisfied by omission, not by reasoning about which font path is
+  correct.
+- **Manual trace of `actions/checkout@v4` step ordering/paths**: step 1
+  (self-checkout, no `path:`) populates `$GITHUB_WORKSPACE` with
+  partner-scrape's own tree, which no longer contains a `site/` entry at
+  all post this ticket (unlike before, where a second checkout with
+  `path: site` would have overwritten an already-tracked `site/` --
+  still correct either way, but now there is no pre-existing directory
+  for the second checkout to even be ambiguous against). Step 2
+  (`path: site`) creates `$GITHUB_WORKSPACE/site/` fresh and populates it
+  with stem-ecosystem's `master` tree. The job's
+  `defaults.run.working-directory: site` applies only to `run:`-type
+  steps (not `uses:` steps, i.e. not the checkout actions themselves), so
+  `npm ci`/`npm run build` execute with cwd =
+  `$GITHUB_WORKSPACE/site` = stem-ecosystem's checked-out root -- this
+  resolves unambiguously per GitHub's documented `actions/checkout@v4`
+  `repository`/`ref`/`path` semantics, cross-checked against the
+  root-layout confirmation above.
+- **`gh workflow view pages.yml --repo league-infrastructure/partner-scrape`**:
+  confirms the workflow is currently registered, enabled, with 11 prior
+  successful runs on the existing (pre-this-ticket) definition -- context
+  only, does not exercise the new definition since nothing was pushed.
+
+### What could NOT be verified (residual risk)
+
+- **No real `gh workflow run` or `just pub` was executed.** Both would
+  require a push to `origin` (either to update the workflow definition
+  GitHub Actions would run, or `just pub` pushing `master` directly), and
+  the team-lead's explicit instruction this session was not to push --
+  stakeholder push freeze in effect tonight. This means: the second
+  checkout step's actual runtime behavior (auth, network reachability of
+  a public cross-repo checkout under the default `GITHUB_TOKEN`, `npm ci`
+  against stem-ecosystem's real `package-lock.json`, the Astro build
+  itself, and the final rendered output at
+  `github.io/partner-scrape`) is **reasoned through and cross-checked
+  against documented behavior and the real stem-ecosystem repo's actual
+  file layout, but not empirically observed.** This is the ticket's own
+  step 5 AC and is explicitly left unchecked above rather than assumed.
+  Residual risk: something about the live runner environment (npm
+  registry access, a `package-lock.json`/Node-version mismatch, an Astro
+  build error specific to stem-ecosystem's current `master` that wasn't
+  present in partner-scrape's frozen `site/` copy) could still surface
+  only on a real run. Recommend the next session with push access run
+  `gh workflow run pages.yml --repo league-infrastructure/partner-scrape --ref
+  sprint/019-consolidate-beta-site-onto-stem-ecosystem-production` (after
+  a push) or `just pub` as the very next action once the freeze lifts.
+
+### Blocking issue: 46 pytest failures (exception thrown)
+
+Running this ticket's own regression-guard command, `uv run pytest -q`,
+after step 1 (untracking `site/`) surfaces 46 failures across 4 files,
+all rooted in `FileNotFoundError` from hardcoded `site/...` path reads
+(e.g. `Path(__file__).resolve().parent.parent / "site" / "src" / "data" /
+"partners.json"`):
+
+| File | Failures | What it reads from `site/` |
+|---|---|---|
+| `tests/test_site_teams_pages.py` | 22 | `site/src/components/*.astro`, `site/src/pages/teams/*.astro` (structural guards -- anchor nesting, base-URL usage, map-script behavior) |
+| `tests/test_roster_housekeeping.py` | 16 | `site/src/data/partners.json`, `site/public/images/logos/` (data-integrity guards -- dedup, join-integrity, a documented domain-hijacking-incident guard, logo-backfill counts) |
+| `tests/test_site_data_access_page.py` | 6 | `site/src/pages/data-access.astro`, `for-agents.astro`, `site/public/llms.txt` (schema-drift guards vs. `SITE_SCHEMA_FIELDS`/`TEAMS_SCHEMA_FIELDS`) |
+| `tests/directory/test_dataset_validity.py` | 2 | `site/src/data/partners.json` (Place-website join-integrity guards) |
+
+Confirmed stable (not test-order flakiness) by running the full suite
+twice and the affected files individually. Confirmed via inspection that
+none of these 4 files were in scope for ticket 001 (no reference to
+`MIRROR_SITE_DIRS` at all -- they hardcode the `site/` path directly) and
+none are named anywhere in sprint.md's Test Strategy or Migration
+Concerns sections, which for ticket 002 state only "not unit-testable in
+the pytest sense" and list zero affected test files (contrast with
+ticket 001's Test Strategy, which enumerates every affected file by
+name).
+
+**This is exactly the ticket's own step 1, unconditionally required**
+("the working-tree files can go too, since a fresh checkout is what CI
+now expects") -- there is no way to satisfy AC 1 (`site/` untracked) and
+also leave these 46 tests passing, because their precondition (real files
+physically present at `partner-scrape/site/...`) is precisely what AC 1
+removes. Full detail, evidence, and the resulting exception are recorded
+via `throw_ticket_exception` (frontmatter `exception_*` fields) rather
+than re-stated here.
+
+### Why uncommitted
+
+The repo's own `.claude/rules/git-commits.md` gate requires tests passing
+before a commit. Committing steps 1-4 now would either (a) violate that
+gate honestly, or (b) require silently deciding the fate of 46
+regression-guard tests (some encoding real historical incident knowledge,
+e.g. the domain-hijacking guard) without the sprint-architecture-level
+sign-off that decision needs -- exactly what the Exception Protocol
+exists to route to a human/architect rather than a ticket programmer.
+The full, verified implementation (steps 1-4) is left staged/modified in
+the working tree, uncommitted, so no work is lost and the state is fully
+inspectable via `git status`/`git diff` while the exception is pending.
