@@ -1,7 +1,7 @@
 ---
 id: '016'
 title: Feed Robustness, Venue Dedup, and the VEX League
-status: executing
+status: done
 branch: sprint/016-feed-robustness-venue-dedup-and-the-vex-league
 use-cases: []
 issues:
