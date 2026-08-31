@@ -666,6 +666,42 @@ class TestInternshipDateAndAvailability:
         assert opportunity.availability == "Rolling — apply anytime"
 
 
+class TestDeadlineFirstAvailabilityGeneralization:
+    """`DEADLINE_FIRST_TYPES` (sprint 015 ticket 007) generalizes
+    `_internship_availability`'s "Apply by <date>" / "Rolling -- apply
+    anytime" text to any `opportunity_type in DEADLINE_FIRST_TYPES`, not
+    only `kind == "internship"` -- mirrors
+    `TestInternshipDateAndAvailability`'s two cases exactly for a
+    non-internship, LLM-set `opportunity_type="Competitions"` event."""
+
+    def test_competitions_known_deadline_sets_iso_date_end_and_apply_by_text(self):
+        event = _event(
+            title="Regional Robotics Championship",
+            start=datetime(2026, 3, 1, 9, 0),
+            end=datetime(2026, 9, 15, 0, 0),
+        )
+        event.set("opportunity_type", "Competitions", source="llm_enrichment", confidence=0.9)
+
+        [opportunity] = run([event], PARTNERS_PATH)
+
+        assert opportunity.opportunity_type == "Competitions"
+        assert opportunity.date_end.startswith("2026-09-15")
+        assert opportunity.availability == "Apply by 2026-09-15"
+
+    def test_competitions_no_deadline_leaves_date_end_blank_and_reads_rolling(self):
+        event = _event(
+            title="Regional Robotics Championship",
+            start=datetime(2026, 3, 1, 9, 0),
+        )
+        event.set("opportunity_type", "Competitions", source="llm_enrichment", confidence=0.9)
+
+        [opportunity] = run([event], PARTNERS_PATH)
+
+        assert opportunity.opportunity_type == "Competitions"
+        assert opportunity.date_end == ""
+        assert opportunity.availability == "Rolling — apply anytime"
+
+
 class TestInternshipCostRange:
     def test_cost_range_stays_blank_when_event_never_set_cost(self):
         """This ticket must not introduce a forced 'Free' (or any other)

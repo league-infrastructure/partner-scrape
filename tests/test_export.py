@@ -270,6 +270,112 @@ class TestInternshipCurrentUpcomingFilter:
         assert payload == []
 
 
+class TestDeadlineFirstCurrentUpcomingFilterGeneralization:
+    """`DEADLINE_FIRST_TYPES` (sprint 015 ticket 007) generalizes the
+    Work-based Learning currency rule to every member of the set, not
+    only `WORK_BASED_LEARNING_TYPE` -- these mirror
+    `TestInternshipCurrentUpcomingFilter`'s three cases exactly, for
+    `opportunity_type="Competitions"`, to prove the rule is genuinely
+    shared rather than re-hardcoded for a second string."""
+
+    def test_competitions_no_deadline_with_past_start_is_included(self, tmp_path):
+        """Would be wrongly excluded under the ordinary
+        `date_end or date_start >= today` rule."""
+        site_dir = _site_dir(tmp_path)
+        opp = _opportunity(
+            date_start="2026-06-19T09:00:00-07:00",  # 30 days before `today` below
+            date_end="",
+            opportunity_type="Competitions",
+        )
+
+        payload = export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+
+        assert len(payload) == 1
+
+    def test_competitions_future_deadline_with_past_start_is_included(self, tmp_path):
+        site_dir = _site_dir(tmp_path)
+        opp = _opportunity(
+            date_start="2026-06-19T09:00:00-07:00",
+            date_end="2026-08-01T09:00:00-07:00",
+            opportunity_type="Competitions",
+        )
+
+        payload = export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+
+        assert len(payload) == 1
+
+    def test_competitions_past_deadline_is_excluded(self, tmp_path):
+        site_dir = _site_dir(tmp_path)
+        opp = _opportunity(
+            date_start="2026-06-19T09:00:00-07:00",
+            date_end="2026-07-01T09:00:00-07:00",
+            opportunity_type="Competitions",
+        )
+
+        payload = export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+
+        assert payload == []
+
+
+class TestExportSortOrder:
+    """`export_opportunities`'s sort key (sprint 015 ticket 007): a
+    `DEADLINE_FIRST_TYPES` record sorts by `date_end` (its deadline), not
+    the possibly-stale `date_start`; every other record keeps sorting by
+    `date_start`, unchanged."""
+
+    def test_deadline_first_record_sorts_by_date_end_not_stale_date_start(self, tmp_path):
+        """A winter-posted internship with a later summer deadline must
+        sort near other near-term deadlines by that deadline, not get
+        pinned to the top of the list by its earlier, stale date_start
+        (issue 27's "Dec-Mar deadlines for Jun-Aug programs in winter"
+        scenario)."""
+        site_dir = _site_dir(tmp_path)
+        deadline_first = _opportunity(
+            slug="winter_posted_internship",
+            title="Winter-Posted Internship",
+            date_start="2026-01-01T09:00:00-08:00",
+            date_end="2026-06-01T09:00:00-07:00",
+            opportunity_type=WORK_BASED_LEARNING_TYPE,
+        )
+        ordinary = _opportunity(
+            slug="spring_event_20260315",
+            title="Spring Event",
+            date_start="2026-03-15T09:00:00-07:00",
+            date_end="",
+            opportunity_type="Out-of-school Programs",
+        )
+
+        payload = export_opportunities(
+            [deadline_first, ordinary], site_dir=site_dir, today=date(2026, 1, 2)
+        )
+
+        # `ordinary` sorts by its date_start (March); `deadline_first`
+        # sorts by its later date_end (June) rather than its earlier,
+        # stale date_start (January) -- so `ordinary` comes first.
+        assert [o["title"] for o in payload] == ["Spring Event", "Winter-Posted Internship"]
+
+    def test_non_deadline_first_records_still_sort_by_date_start(self, tmp_path):
+        site_dir = _site_dir(tmp_path)
+        earlier = _opportunity(
+            slug="earlier_event_20260201",
+            title="Earlier Event",
+            date_start="2026-02-01T09:00:00-08:00",
+            date_end="",
+        )
+        later = _opportunity(
+            slug="later_event_20260301",
+            title="Later Event",
+            date_start="2026-03-01T09:00:00-08:00",
+            date_end="",
+        )
+
+        payload = export_opportunities(
+            [later, earlier], site_dir=site_dir, today=date(2026, 1, 2)
+        )
+
+        assert [o["title"] for o in payload] == ["Earlier Event", "Later Event"]
+
+
 class TestSlugDedup:
     def test_colliding_slugs_get_disambiguating_suffix_neither_dropped(self, tmp_path):
         site_dir = _site_dir(tmp_path)

@@ -148,6 +148,28 @@ posting-observed date — routinely in the past for a still-open role — so the
 "ends today or later" rule would expire it immediately. `export/writer.py` implements the
 matching filter exception.
 
+**(Sprint 015, ticket 007, issue 27 item 2)** `DEADLINE_FIRST_TYPES` generalizes the
+internship-only special case above to a set: `{WORK_BASED_LEARNING_TYPE, "Competitions"}`.
+Both `export/writer.py`'s currency check (`is_current_or_upcoming`) and its export sort
+key (`_export_sort_key`) now branch on `opportunity_type in DEADLINE_FIRST_TYPES` instead
+of `== WORK_BASED_LEARNING_TYPE`, and `_to_opportunity`'s availability-text derivation
+does the same — `_internship_availability` (kept its name; its "Apply by <date>"/"Rolling
+— apply anytime" text is not internship-specific in behavior, only in the historical
+name) now applies whenever `is_internship or opportunity_type in DEADLINE_FIRST_TYPES`,
+computed *after* `opportunity_type` is resolved so the check can see the final,
+LLM-or-fallback-classified value. The `is_internship`/`kind` bypass used elsewhere
+(collapse, dedup, forced `opportunity_type`) is untouched — this generalization is
+availability-text derivation only, one of three call sites (with the currency check and
+sort key) reusing one constant instead of three independently hardcoded checks.
+
+Rejected alternative: a new `application_deadline` field, distinct from `date_end`. No
+adapter and no LLM-prompt field currently distinguishes a registration/application
+deadline from an event's own end date/time for any non-internship record — a new field
+would have no real producer this sprint, making it speculative generality. Reusing `end`
+is not speculative in the same way: it extends sprint 006's already-shipped
+`WORK_BASED_LEARNING_TYPE` convention to one more already-shipped `opportunity_type`
+value (`"Competitions"`, added ticket 006 this sprint), not a new mechanism.
+
 **Taxonomy is keyword rules, not ML.** `taxonomy.py` ports the pre-existing script's
 `AREA_KEYWORDS` / `AGE_KEYWORDS` / cost / time-of-day rules into pure functions.
 `derive_time_of_day` is the one deliberate reimplementation: it reads `Event.start`'s

@@ -104,11 +104,24 @@ flowchart LR
 - **Undated records are excluded.** An `Opportunity` with neither `date_start` nor
   `date_end` can never be judged "today or later" and does not ship. This is a filter,
   not an error.
-- **`opportunity_type == "Work-based Learning"` uses a different currency rule.** An
+- **`opportunity_type in DEADLINE_FIRST_TYPES` uses a different currency rule.** An
   internship's `date_start` is the posting-observed date, routinely in the past; the
   ordinary rule would expire every still-open role. Such a record is current if
-  `date_end` (the application deadline) is unset or still in the future. Every other type
-  keeps the ordinary rule unchanged.
+  `date_end` (the application/registration deadline) is unset or still in the future.
+  Every other type keeps the ordinary rule unchanged. **(Sprint 015, ticket 007, issue
+  27.)** Originally special-cased on `opportunity_type == WORK_BASED_LEARNING_TYPE`
+  alone; generalized to `normalize.run.DEADLINE_FIRST_TYPES` (`{WORK_BASED_LEARNING_TYPE,
+  "Competitions"}`) so a Competitions record with a future registration deadline is kept
+  the same way, and the export sort key (`_export_sort_key`) uses the same set to sort
+  such a record by `date_end` instead of its possibly-stale `date_start` — a
+  winter-observed posting with a spring/summer deadline now sorts near other near-term
+  deadlines rather than by when it was first seen. Rejected alternative: a new
+  `application_deadline` field. No adapter or the LLM prompt currently distinguishes a
+  registration deadline from an event's own end date/time for any non-internship record,
+  so a new field would have no real producer yet; reusing `end` is not speculative — it
+  extends an already-shipped convention (sprint 006) to one more already-shipped type
+  value rather than inventing a second one. See `normalize/DESIGN.md`'s matching sprint
+  015 addendum.
 - **`export/` re-derives nothing.** No field mapping, no taxonomy, no dedup. Its inputs
   arrive finished from `normalize/`. Adding a derivation here would apply it after
   deduplication chose a winner, silently diverging from what the rest of the pipeline
@@ -330,7 +343,8 @@ from under a page it's still serving.
   `publish.py`) — the curated partner roster, read-only, reused rather than
   reimplemented. This is a new, explicit dependency edge (`export/` → the specific
   `normalize.partners` module) alongside the pre-existing `export/` → `normalize/`
-  dependency on `Opportunity`/`WORK_BASED_LEARNING_TYPE`.
+  dependency on `Opportunity`/`DEADLINE_FIRST_TYPES` (sprint 015 ticket 007; previously
+  `WORK_BASED_LEARNING_TYPE` alone).
 - **`model.slugify`** (sprint 009, `partner_log.py`) — the shared text-to-slug primitive,
   for partner slugs. See the root `partner_scrape/DESIGN.md` and `normalize/DESIGN.md`
   (which uses the same function for event slugs).
