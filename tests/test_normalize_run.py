@@ -72,7 +72,8 @@ class TestFieldMapping:
             "availability", "date_start", "date_end", "age_grade_level", "cost_range",
             "time_of_day", "opportunity_type", "areas_of_interest", "specific_attention",
             "financial_support", "ngss_aligned", "location", "latitude", "longitude",
-            "contact_name", "contact_email", "contact_phone", "logo_src", "image_src",
+            "contact_name", "contact_email", "contact_phone", "logo_src", "eligibility",
+            "image_src",
         ):
             assert hasattr(opportunity, f), f"missing field {f!r}"
 
@@ -879,3 +880,79 @@ class TestEventImageResolution:
 
         assert calls == []
         assert opportunity.image_src == ""
+
+
+class TestEligibilityTaxonomyDefaults:
+    """Sprint 015 ticket 008, issue 27 item 3: `Opportunity.eligibility`,
+    sourced from `SourceConfig.taxonomy_defaults.eligibility` via the new
+    `source_taxonomy_defaults` parameter -- the identical shape and
+    threading mechanism `source_org_names` already established, keyed by
+    the same `source_id`."""
+
+    def test_taxonomy_defaults_eligibility_reaches_opportunity_unchanged(self):
+        event = _event(source_id="northrop_hip", start=datetime(2026, 8, 1, 9, 0))
+
+        [opportunity] = run(
+            [event],
+            PARTNERS_PATH,
+            source_taxonomy_defaults={
+                "northrop_hip": {"eligibility": "Open only to Northrop HIP partner high schools"}
+            },
+        )
+
+        assert opportunity.eligibility == "Open only to Northrop HIP partner high schools"
+
+    def test_taxonomy_defaults_keyed_by_source_id_not_org_name(self):
+        """A `source_taxonomy_defaults` entry under a *different*
+        `source_id` than the event's own must not leak through -- proves
+        the lookup is genuinely keyed by `source_id`, not accidentally
+        matching on org name or falling through to the first entry."""
+        event = _event(source_id="scripps_reach", start=datetime(2026, 8, 1, 9, 0))
+
+        [opportunity] = run(
+            [event],
+            PARTNERS_PATH,
+            source_taxonomy_defaults={
+                "some_other_source": {"eligibility": "Should never be seen"}
+            },
+        )
+
+        assert opportunity.eligibility == ""
+
+    def test_no_eligibility_key_in_taxonomy_defaults_produces_empty_string(self):
+        """A source with a `taxonomy_defaults` entry that sets other keys
+        but not `eligibility` still gets `eligibility == ""` -- absence of
+        the specific key, not absence of the whole map."""
+        event = _event(source_id="some_source", start=datetime(2026, 8, 1, 9, 0))
+
+        [opportunity] = run(
+            [event],
+            PARTNERS_PATH,
+            source_taxonomy_defaults={"some_source": {"some_other_key": "value"}},
+        )
+
+        assert opportunity.eligibility == ""
+
+    def test_source_taxonomy_defaults_omitted_entirely_produces_empty_string(self):
+        """`run()` called without `source_taxonomy_defaults` at all (as
+        every pre-ticket-008 caller does, and as ~120 of today's sources
+        still will) -- no regression, `eligibility` stays `""`."""
+        event = _event(start=datetime(2026, 8, 1, 9, 0))
+
+        [opportunity] = run([event], PARTNERS_PATH)
+
+        assert opportunity.eligibility == ""
+
+    def test_source_taxonomy_defaults_missing_source_id_entry_produces_empty_string(self):
+        """`source_taxonomy_defaults` is passed but has no entry at all
+        for this event's `source_id` -- the same "map given, key absent"
+        fallback `source_org_names` already exercises."""
+        event = _event(source_id="unmapped_source", start=datetime(2026, 8, 1, 9, 0))
+
+        [opportunity] = run(
+            [event],
+            PARTNERS_PATH,
+            source_taxonomy_defaults={"a_different_source": {"eligibility": "Irrelevant"}},
+        )
+
+        assert opportunity.eligibility == ""

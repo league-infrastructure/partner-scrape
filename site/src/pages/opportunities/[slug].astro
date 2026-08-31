@@ -141,6 +141,13 @@ const descriptionHtml = renderDescriptionHtml(opp.description);
               <dd>{opp.location}</dd>
             </>
           )}
+
+          {opp.eligibility && (
+            <>
+              <dt>Eligibility</dt>
+              <dd>{opp.eligibility}</dd>
+            </>
+          )}
         </dl>
 
         {hasLocation && (

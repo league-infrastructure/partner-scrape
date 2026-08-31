@@ -161,7 +161,8 @@ _SITE_SCHEMA_FIELDS = {
     "availability", "date_start", "date_end", "age_grade_level", "cost_range",
     "time_of_day", "opportunity_type", "areas_of_interest", "specific_attention",
     "financial_support", "ngss_aligned", "location", "latitude", "longitude",
-    "contact_name", "contact_email", "contact_phone", "logo_src", "image_src",
+    "contact_name", "contact_email", "contact_phone", "logo_src", "eligibility",
+    "image_src",
 }
 
 
@@ -271,6 +272,27 @@ class TestWalkingSkeletonEndToEnd:
         [story_time] = [r for r in payload if r["title"] == "Weekly Story Time"]
         assert story_time["partner_name"] == "The Living Coast Discovery Center"
         assert story_time["partner_id"] == 102
+
+    def test_taxonomy_defaults_eligibility_reaches_the_exported_payload(self, tmp_path):
+        """Sprint 015 ticket 008: `pipeline.py` builds and threads
+        `source_taxonomy_defaults` identically to `source_org_names` --
+        `coastalrootsfarm.toml`'s `[taxonomy_defaults]` block reaches
+        `Opportunity.eligibility` end-to-end through the real Registry ->
+        normalize.run() -> export chain, while a source with no
+        `taxonomy_defaults` block (`thelivingcoast.toml`) still exports
+        `eligibility == ""` -- no regression alongside the new wiring."""
+        site_dir = _site_dir(tmp_path)
+        fetcher = _fixture_fetcher()
+
+        payload = run(
+            registry_dir=E2E_REGISTRY_DIR, site_dir=site_dir, fetcher=fetcher, today=TODAY
+        )
+
+        [tide_pool] = [r for r in payload if r["title"] == "Tide Pool Exploration"]
+        assert tide_pool["eligibility"] == "Fixture-only eligibility note for pipeline threading test"
+
+        [story_time] = [r for r in payload if r["title"] == "Weekly Story Time"]
+        assert story_time["eligibility"] == ""
 
 
 class TestPerSourceErrorIsolation:

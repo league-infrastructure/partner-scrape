@@ -29,7 +29,8 @@ _EXPECTED_SITE_FIELDS = {
     "availability", "date_start", "date_end", "age_grade_level", "cost_range",
     "time_of_day", "opportunity_type", "areas_of_interest", "specific_attention",
     "financial_support", "ngss_aligned", "location", "latitude", "longitude",
-    "contact_name", "contact_email", "contact_phone", "logo_src", "image_src",
+    "contact_name", "contact_email", "contact_phone", "logo_src", "eligibility",
+    "image_src",
 }
 
 
@@ -505,6 +506,31 @@ class TestSiteSchemaShape:
         payload = export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
 
         assert payload[0]["image_src"] == "a1b2c3d4e5f6a7b8.jpg"
+
+    def test_eligibility_is_exported_like_financial_support_and_ngss_aligned(self, tmp_path):
+        """`eligibility` (sprint 015 ticket 008, issue 27 item 3) is
+        exported automatically -- same mechanism as `image_src` above,
+        proving no `writer.py` code change was needed, only this
+        test-coverage extension, for `SITE_SCHEMA_FIELDS`/`to_json_dict`
+        to pick up the new `Opportunity` field."""
+        site_dir = _site_dir(tmp_path)
+        opp = _opportunity(eligibility="Open only to nine named partner schools")
+
+        payload = export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+
+        assert payload[0]["eligibility"] == "Open only to nine named partner schools"
+
+    def test_eligibility_defaults_to_empty_string_when_unset(self, tmp_path):
+        """No regression for the ~120 sources that never set
+        `taxonomy_defaults.eligibility` -- `Opportunity.eligibility`'s
+        own dataclass default (`""`) round-trips through the export
+        unchanged."""
+        site_dir = _site_dir(tmp_path)
+        opp = _opportunity()
+
+        payload = export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+
+        assert payload[0]["eligibility"] == ""
 
 
 class TestScrapeMeta:

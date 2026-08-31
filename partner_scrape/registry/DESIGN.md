@@ -135,7 +135,13 @@ Otherwise nothing: `registry/` sits near the bottom of the dependency graph, con
 
 `taxonomy_defaults` supplies `Opportunity` fields that cannot be derived from event text
 (contact details, `financial_support`, `ngss_aligned`, and similar), applied during
-`normalize/`'s mapping stage.
+`normalize/`'s mapping stage. **(Sprint 015 ticket 008)** `eligibility` is now the one key
+actually consumed — threaded through `normalize.run()`'s `source_taxonomy_defaults`
+parameter into `Opportunity.eligibility`; the other conventional keys named above remain
+unread hardcoded stubs in `normalize/run.py`, an explicit Out of Scope decision (see
+`normalize/DESIGN.md`'s own sprint 015 addendum). §6's "no schema validation for the
+contents of `config`" limitation applies identically to `taxonomy_defaults`: a typo'd key
+(e.g. `elegibility`) is silently ignored, not an error.
 
 ## 6. Open Questions / Known Limitations
 

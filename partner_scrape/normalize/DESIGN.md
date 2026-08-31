@@ -26,8 +26,9 @@ path in `partners.py`, now hit by roughly 20 newly-registered sources, several w
 
 ## 2. Orientation
 
-One entry point: `run.run(events, partners_path, source_org_names=None, today=None,
-image_resolver=None) -> list[Opportunity]`. It executes in a fixed order:
+One entry point: `run.run(events, partners_path, source_org_names=None,
+source_taxonomy_defaults=None, today=None, image_resolver=None) -> list[Opportunity]`. It
+executes in a fixed order:
 
 1. **Coerce datetimes.** Any timezone-aware `start`/`end` is made naive, in one place.
 2. **Split internships out.** `kind="internship"` events bypass both dedup stages.
@@ -203,6 +204,38 @@ OpportunityFilters.astro`'s hardcoded facet list (updated by this ticket in this
 the sibling `../stem-ecosystem` repo's identical copy is out of this ticket's write
 scope).
 
+**(Sprint 015, ticket 008, issue 27 item 3)** `Opportunity` gains `eligibility: str = ""`,
+sourced from `SourceConfig.taxonomy_defaults.eligibility` via a new optional
+`source_taxonomy_defaults: dict[str, dict] | None` parameter on `run()` — the identical
+shape and construction site as `source_org_names` (`pipeline.py` builds
+`{source.source_id: source.taxonomy_defaults for source in sources}` alongside it).
+`_to_opportunity()` resolves `taxonomy_defaults = source_taxonomy_defaults.get(
+event.source_id, {})` — the same lookup key `org_name` already uses — and sets
+`eligibility=taxonomy_defaults.get("eligibility", "")`. This is a correction as much as an
+addition: §6's Known Limitations previously stated that `specific_attention`,
+`financial_support`, `ngss_aligned`, and the contact fields "are populated only from
+`taxonomy_defaults` in the registry, if at all" — that was aspirational, not actual;
+before this ticket, nothing in the codebase read `taxonomy_defaults` at all, and those
+four fields (plus the three contact fields) remain hardcoded stubs in `_to_opportunity`
+(`[]`/`"No"`/`"No"`/`""`) unchanged by this ticket. `eligibility` is the *only* key this
+ticket wires — an explicit, narrow scope decision (see sprint 015's `sprint.md` Design
+Rationale), not an oversight. Eligibility was deliberately not routed through the LLM
+enrichment layer: a closed-enrollment restriction is an institutional fact about the
+partner organization, not something inferable from one scraped event's text, and codifying
+it as a controlled LLM-classified value would duplicate yet another concept into
+`enrich/llm_client.py` for what is really registry-level metadata "configuration is data"
+already covers. Of the five named-program candidates issue 27 cites (Northrop HIP, Scripps
+REACH, SBP Preuss, Illumina/SD2, Zoo free field trips), registry data was edited for none:
+four have no corresponding `registry/sources/*.toml` entry at all, and the fifth
+(`sandiegozoowildlifealliance.toml`) covers the organization's whole site generically, not
+the one named program, so setting a blanket `eligibility` there would misrepresent every
+other event that source might publish — see that TOML's own sprint 015 comment. This
+mechanism is exercised today only by test fixtures (`tests/test_normalize_run.py`'s
+`TestEligibilityTaxonomyDefaults`, `tests/test_pipeline_e2e.py`'s
+`test_taxonomy_defaults_eligibility_reaches_the_exported_payload`); it will not surface a
+real eligibility note in production until a source whose TOML corresponds 1:1 to a genuinely
+restricted program sets `taxonomy_defaults.eligibility`.
+
 **The DST-transition fold convention (sprint 012).** `zoneinfo`-based
 localization is unambiguous everywhere except the two hours a year the
 local clock itself is ambiguous or nonexistent: the repeated 1am-2am
@@ -247,11 +280,13 @@ title+date collision case.
 ## 5. Interfaces
 
 ### Exposes
-- **`run(events, partners_path, source_org_names=None, today=None, image_resolver=None)
-  -> list[Opportunity]`** — the subsystem's single entry point. Mutates input `Event`s'
-  `start`/`end` in place (tz coercion). Never raises for an unmatched partner or an
-  undated record. `image_resolver=None` leaves `image_src` empty with zero network
-  access.
+- **`run(events, partners_path, source_org_names=None, source_taxonomy_defaults=None,
+  today=None, image_resolver=None) -> list[Opportunity]`** — the subsystem's single entry
+  point. Mutates input `Event`s' `start`/`end` in place (tz coercion). Never raises for an
+  unmatched partner or an undated record. `image_resolver=None` leaves `image_src` empty
+  with zero network access. **(Sprint 015 ticket 008)** `source_taxonomy_defaults=None`
+  leaves `Opportunity.eligibility` at its `""` default for every record — see Design,
+  below.
 - **`Opportunity`** — the boundary dataclass between scraper and site. `sources` is
   internal bookkeeping and is not part of the site schema.
 - **`taxonomy.derive_areas_of_interest`, `classify_opportunity_type`,
@@ -339,4 +374,11 @@ title+date collision case.
   cross-partner legacy export.
 - Several `Opportunity` fields the site schema defines (`specific_attention`,
   `financial_support`, `ngss_aligned`, the contact fields) are populated only from
-  `taxonomy_defaults` in the registry, if at all. Nothing derives them.
+  `taxonomy_defaults` in the registry, if at all. Nothing derives them. **(Sprint 015
+  ticket 008)** This was inaccurate even before this sprint — before ticket 008, nothing
+  in the codebase read `taxonomy_defaults` for *any* key; these fields were, and (except
+  for `eligibility`) still are, hardcoded stubs in `_to_opportunity` regardless of what a
+  source's TOML sets. `eligibility` is now the one exception: it is genuinely sourced from
+  `taxonomy_defaults.eligibility` via `source_taxonomy_defaults` (see Design, above). The
+  other four fields' stub status is unchanged and is now an explicit, documented Out of
+  Scope decision for this ticket, not an open question.
