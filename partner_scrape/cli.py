@@ -61,6 +61,8 @@ from partner_scrape.discovery.candidate_pipeline import discover_candidates
 from partner_scrape.registry.hub_schema import load_hubs
 from partner_scrape.teams.pipeline import run_teams
 
+logger = logging.getLogger(__name__)
+
 
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
@@ -464,16 +466,47 @@ def main(argv: list[str] | None = None) -> int:
     # skipped under --dry-run for the same reason mirroring is: it
     # writes nothing anywhere. Sequenced before mirroring so a mirrored
     # checkout always receives an already-projected, complete tree.
+    #
+    # Sprint 018 ticket 001 (issue 43): publish.project() reads every
+    # partner's *entire* accumulated .jsonl history, including lines
+    # written before a field (e.g. `eligibility`, sprint 015) existed on
+    # `Opportunity` -- a KeyError there is a real, standing failure mode
+    # (confirmed via a live production run's traceback, not
+    # hypothetical), and it used to be fatal to the whole process: an
+    # uncaught exception here crashed `main()` before the mirror step
+    # below ever ran, which is why that step "did not fire" on
+    # 2026-08-31 despite every one of its own preconditions being met --
+    # it was never reached at all. publish.project() failing must never
+    # again take mirroring down with it: this run's own opportunities.json/
+    # teams.json/etc. were already written straight to --site-dir by
+    # run() above, independently of publish.project(), so every other
+    # checkout still deserves them even when the public/data/ projection
+    # itself is broken. Matches this codebase's per-source error-
+    # isolation convention (pipeline._run_one_source): logged loudly via
+    # logger.exception, never a bare silent pass -- surfaced to the
+    # caller as a non-zero exit code below instead.
+    publish_failed = False
     if not args.dry_run:
         publish_site_dir = args.site_dir if args.site_dir is not None else get_site_dir()
-        publish.project(
-            site_dir=publish_site_dir,
-            partners_path=publish_site_dir / "src" / "data" / "partners.json",
-        )
+        try:
+            publish.project(
+                site_dir=publish_site_dir,
+                partners_path=publish_site_dir / "src" / "data" / "partners.json",
+            )
+        except Exception:
+            publish_failed = True
+            logger.exception(
+                "publish.project() failed; public/data/ was not refreshed "
+                "this run. Continuing to the mirror step below so "
+                "src/data/ exports still reach every checkout -- "
+                "investigate and re-run to refresh public/data/."
+            )
 
     # Keep every other checkout of the site in step with the export
     # that was just written. Skipped under --dry-run, which promises to
-    # write nothing anywhere.
+    # write nothing anywhere. Runs even when publish.project() failed
+    # above (see that block's comment) -- only --dry-run/--no-mirror
+    # skip this step.
     if not args.dry_run and not args.no_mirror:
         targets = (
             args.mirror_site_dirs
@@ -499,7 +532,13 @@ def main(argv: list[str] | None = None) -> int:
             assert yield_history_path is not None  # set above whenever yield_reporter is
             save_snapshot(yield_history_path, report)
 
-    return 0
+    # A publish.project() failure above is real (public/data/ is stale
+    # until re-run) even though the rest of this run succeeded -- signal
+    # it via a non-zero exit rather than the unconditional 0 this
+    # function returned before sprint 018 ticket 001, so the failure is
+    # visible to a caller/CI job checking the exit code, not just to
+    # whoever happens to read the log.
+    return 1 if publish_failed else 0
 
 
 if __name__ == "__main__":
