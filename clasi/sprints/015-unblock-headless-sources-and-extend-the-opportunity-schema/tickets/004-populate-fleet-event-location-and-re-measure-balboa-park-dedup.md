@@ -1,7 +1,7 @@
 ---
 id: '004'
 title: Populate Fleet Event.location and re-measure Balboa Park dedup
-status: open
+status: in-progress
 use-cases:
 - SUC-005
 depends-on: []
