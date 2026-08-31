@@ -181,13 +181,16 @@ would otherwise need a second, conflicting edit here) and adds the
       **Not performed.** Per explicit team-lead instruction, no commit/push
       to origin this session (stakeholder push freeze). Verified instead by
       reasoning + read-only checks — see Notes.
-- [ ] Full `uv run pytest -q` remains green (no Python source is touched
+- [x] Full `uv run pytest -q` remains green (no Python source is touched
       by this ticket; this is a regression guard, not new coverage).
-      **False as written — see Notes and thrown exception.** Untracking
-      `site/` (this ticket's own AC 1, non-negotiable) makes 46 existing
-      tests across 4 files fail with `FileNotFoundError`; they read
-      `site/...` paths directly and were never anticipated by this
-      ticket's or the sprint's Test Strategy.
+      **Resolved — see "Exception resolution" in Notes.** Team-lead
+      decided all 46 originally-failing tests should be deleted (their
+      `site/` precondition is permanently gone); 24 of them carried real
+      regression value and are tracked for pipeline-level recovery in
+      issue 48, not silently dropped. `uv run pytest -q` now passes:
+      1798 passed, 0 failed (1846 baseline − 48 removed: the 46 plus 2
+      vacuous sanity-check tests that only guarded the deleted
+      assertions against vacuous pass).
 
 ## Testing
 
@@ -344,15 +347,85 @@ removes. Full detail, evidence, and the resulting exception are recorded
 via `throw_ticket_exception` (frontmatter `exception_*` fields) rather
 than re-stated here.
 
-### Why uncommitted
+### Why left uncommitted at exception time
 
 The repo's own `.claude/rules/git-commits.md` gate requires tests passing
-before a commit. Committing steps 1-4 now would either (a) violate that
-gate honestly, or (b) require silently deciding the fate of 46
-regression-guard tests (some encoding real historical incident knowledge,
-e.g. the domain-hijacking guard) without the sprint-architecture-level
-sign-off that decision needs -- exactly what the Exception Protocol
-exists to route to a human/architect rather than a ticket programmer.
-The full, verified implementation (steps 1-4) is left staged/modified in
-the working tree, uncommitted, so no work is lost and the state is fully
-inspectable via `git status`/`git diff` while the exception is pending.
+before a commit. Committing steps 1-4 at that point would either (a)
+violate that gate honestly, or (b) require silently deciding the fate of
+46 regression-guard tests (some encoding real historical incident
+knowledge, e.g. the domain-hijacking guard) without the
+sprint-architecture-level sign-off that decision needs -- exactly what
+the Exception Protocol exists to route to a human/architect rather than
+a ticket programmer. The full, verified implementation (steps 1-4) was
+left staged/modified in the working tree, uncommitted, so no work was
+lost and the state was fully inspectable via `git status`/`git diff`
+while the exception was pending. (Note: the site/-untracking half of
+this -- the `git rm --cached site/` staged deletion -- ended up captured
+in the exception-resolution commit alongside the new issue 48 and this
+ticket file's own exception-frontmatter update; the `pages.yml`/
+`.gitignore`/`justfile`/test changes were not staged at that point and
+are committed separately below, after the resolution.)
+
+### Exception resolution (team-lead)
+
+Team-lead resolved the exception with an architecture decision, reasoned
+through by splitting the 46 failing tests into two categories:
+
+1. `tests/test_site_teams_pages.py` (22) and
+   `tests/test_site_data_access_page.py` (6) test Astro page/schema-drift
+   content that now lives exclusively in `stem-ecosystem` -- genuinely
+   not partner-scrape's concern anymore. **Deleted outright** (both
+   files in full, including two tests in
+   `test_site_data_access_page.py` that technically still passed --
+   `test_at_least_one_field_present_sanity_check` and
+   `test_at_least_one_teams_field_present_sanity_check` -- but whose sole
+   documented purpose was guarding the deleted schema-drift assertions
+   against a vacuous pass; orphaned once those assertions are gone).
+2. `tests/test_roster_housekeeping.py` (16) and
+   `tests/directory/test_dataset_validity.py` (2) carry real regression
+   value (bare-California-centroid, in-bounding-box-or-empty coordinate,
+   hijacked-domain, and registry/roster join-integrity guards). **Also
+   deleted** -- `site/` is gone, nothing left to read, and re-copying
+   `partners.json` back into partner-scrape as a fixture was explicitly
+   rejected (recreates the two-copies problem this migration exists to
+   kill). Recovery is tracked as
+   `clasi/issues/48-pipeline-level-roster-data-quality-validation.md`:
+   move this validation into the pipeline itself (fixture-testable
+   against small hand-crafted bad-row snippets, runs on every real run)
+   rather than as tests reading a live checkout -- explicitly follow-up
+   work, not this ticket's job.
+
+Implementation: `tests/test_site_teams_pages.py` and
+`tests/test_site_data_access_page.py` deleted in full (all 22 and all 8
+of their tests respectively -- both files' entire premise was the now-
+gone `site/` Astro content). `tests/test_roster_housekeeping.py` and
+`tests/directory/test_dataset_validity.py` were **not** deleted in
+full: each mixed `site/`-dependent tests with independent ones (CSV-only
+checks against `data/partners_viable.csv`, registry-TOML-only checks,
+and one pure-function test with no file I/O at all) that were already
+passing and have nothing to do with `site/`. Only the specific
+`site/`-dependent tests were removed (verified individually against the
+original 16-failed/6-passed and file-content split), preserving the 6
+independent tests in `test_roster_housekeeping.py` (renamed
+`TestRegistryJoinIntegrity` → `TestRegistrySourceNameStability`,
+`TestBatchARegistryJoinIntegrity` → `TestBatchARegistrySourceNames`,
+`TestBatchBRegistryJoinIntegrity` → `TestBatchBRegistrySourceNames`
+since only their non-join, source-name-vs-TOML assertions remain; the
+now-empty `TestJsonCsvSync` and `TestLogoBackfillIntegrity` classes were
+removed entirely) and all of `test_dataset_validity.py`'s classes except
+`TestRelatedPartnerIdJoinIntegrity` (removed in full -- both its tests
+read `partners.json`). Both files' module docstrings and unused
+imports/constants (`PARTNERS_JSON`, `LOGOS_DIR`, `_load_partners_json`,
+`find_partner`, `load_partners`, `PARTNERS_JSON_PATH`,
+`_real_partner_ids`, `import json`) were updated/removed accordingly and
+now note the issue-48 recovery path. `uv run pytest -q`: 1798 passed, 0
+failed.
+
+### Committed
+
+All of steps 1-4 plus the test deletions/edits above are now committed
+together (see commit log), on this sprint branch, still not pushed to
+origin. Step 5 (live workflow run) and its AC remain unchecked -- same
+push-freeze constraint as at exception time, unchanged by the exception
+resolution. See "What could NOT be verified (residual risk)" above,
+which still applies in full.

@@ -1,8 +1,12 @@
-# Publishes the BETA STEM Ecosystem site (this repo's own copy, in ./site)
-# to https://league-infrastructure.github.io/partner-scrape/.
+# Publishes the BETA STEM Ecosystem site to
+# https://league-infrastructure.github.io/partner-scrape/.
 #
-# partner-scrape is the beta: the site + scraped data are iterated here.
-# stem-ecosystem is production (its own repo/Pages), promoted to when ready.
+# site/ is not tracked in this repo: the build job checks out
+# league-infrastructure/stem-ecosystem (the canonical site codebase) at
+# build time into ./site, so the beta preview always builds from
+# stem-ecosystem's actual current master rather than a snapshot that can
+# drift. stem-ecosystem is also production (its own repo/Pages, deployed
+# separately via that repo's own workflow).
 name: Deploy beta site to GitHub Pages
 
 on:
@@ -10,7 +14,6 @@ on:
   push:
     branches: ['master']
     paths:
-      - 'site/**'
       - '.github/workflows/pages.yml'
 
 concurrency:
@@ -32,6 +35,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Checkout stem-ecosystem (site source)
+        uses: actions/checkout@v4
+        with:
+          repository: league-infrastructure/stem-ecosystem
+          ref: master
+          path: site
 
       - name: Setup Node.js
         uses: actions/setup-node@v4

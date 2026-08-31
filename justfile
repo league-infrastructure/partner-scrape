@@ -1,9 +1,17 @@
-# Justfile for the STEM Ecosystem beta site (partner-scrape/site).
+# Justfile for the STEM Ecosystem beta preview (league-infrastructure/pages.yml
+# checks out league-infrastructure/stem-ecosystem into site/ at build time —
+# it is not tracked in this repo).
 #   just dev   → run the local Astro dev server (hot reload)
 #   just pub   → publish master to GitHub Pages and watch the deploy
 # Requires: just, node/npm, gh (GitHub CLI, authenticated).
+#
+# `dev`/`build`/`preview` below expect a `site/` directory to exist locally.
+# CI gets one via pages.yml's build-time checkout; for local use, clone
+# stem-ecosystem yourself into site/ (gitignored, not managed by this repo),
+# or point `site :=` below at wherever your own clone lives.
 
-# The Astro site lives in this subdirectory.
+# The Astro site lives in this subdirectory (a local, gitignored clone of
+# stem-ecosystem -- see note above).
 site := "site"
 # GitHub Pages deploy workflow + public URL (see .github/workflows/pages.yml).
 pages_url := "https://league-infrastructure.github.io/partner-scrape/"
@@ -24,19 +32,17 @@ build:
 preview: build
     cd {{site}} && npm run preview -- --base /partner-scrape
 
-# Publish to GitHub Pages: push master and watch the deploy (dispatches manually if nothing new).
+# Publish to GitHub Pages: push master, then dispatch the deploy and watch it.
+# (pages.yml's push trigger only fires on changes to the workflow file itself
+# -- site/ is a build-time checkout, not tracked here -- so an ordinary push
+# no longer reliably triggers a build; this recipe dispatches explicitly
+# every time rather than assuming the push did.)
 pub:
     #!/usr/bin/env bash
     set -euo pipefail
-    before="$(git rev-parse origin/master 2>/dev/null || echo none)"
     git push origin master
-    after="$(git rev-parse origin/master)"
-    if [ "$before" = "$after" ]; then
-      echo "→ No new commits to push; dispatching a manual Pages deploy…"
-      gh workflow run pages.yml --ref master
-    else
-      echo "→ Pushed ${before:0:7}..${after:0:7}; the push triggered the Pages deploy."
-    fi
+    echo "→ Dispatching a Pages deploy…"
+    gh workflow run pages.yml --ref master
     sleep 8
     run_id="$(gh run list --workflow=pages.yml --branch master --limit 1 --json databaseId --jq '.[0].databaseId')"
     echo "→ Watching Pages deploy run ${run_id}…"
