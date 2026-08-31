@@ -1,7 +1,7 @@
 ---
 id: 008
 title: Add eligibility field end-to-end
-status: in-progress
+status: done
 use-cases:
 - SUC-009
 depends-on:
