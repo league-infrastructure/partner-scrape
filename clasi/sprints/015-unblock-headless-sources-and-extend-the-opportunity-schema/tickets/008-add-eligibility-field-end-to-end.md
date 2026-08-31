@@ -1,7 +1,7 @@
 ---
-id: '008'
+id: 008
 title: Add eligibility field end-to-end
-status: open
+status: in-progress
 use-cases:
 - SUC-009
 depends-on:

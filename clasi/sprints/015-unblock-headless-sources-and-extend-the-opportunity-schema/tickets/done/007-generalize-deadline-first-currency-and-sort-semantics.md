@@ -1,7 +1,7 @@
 ---
 id: '007'
 title: Generalize deadline-first currency and sort semantics
-status: in-progress
+status: done
 use-cases:
 - SUC-008
 depends-on:
