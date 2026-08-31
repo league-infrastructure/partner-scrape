@@ -1,7 +1,7 @@
 ---
 id: '003'
 title: 'Register roster batch A: parks, nature, astronomy, museums, libraries'
-status: open
+status: in-progress
 use-cases:
 - SUC-002
 depends-on:

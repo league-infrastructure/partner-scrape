@@ -1,7 +1,7 @@
 ---
 id: '002'
 title: Partner roster housekeeping
-status: in-progress
+status: done
 use-cases:
 - SUC-001
 depends-on: []
