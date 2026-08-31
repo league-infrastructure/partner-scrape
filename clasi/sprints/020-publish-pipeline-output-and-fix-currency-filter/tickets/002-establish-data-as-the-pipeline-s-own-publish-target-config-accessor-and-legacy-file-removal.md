@@ -1,8 +1,10 @@
 ---
 id: '002'
-title: "Establish data/ as the pipeline's own publish target: config accessor and legacy file removal"
-status: open
-use-cases: [SUC-019]
+title: 'Establish data/ as the pipeline''s own publish target: config accessor and
+  legacy file removal'
+status: in-progress
+use-cases:
+- SUC-019
 depends-on: []
 github-issue: ''
 issue: 60-publish-pipeline-output-in-well-known-data-directory.md

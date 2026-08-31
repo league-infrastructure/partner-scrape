@@ -2,7 +2,7 @@
 id: '001'
 title: 'Fix currency filter: bound the deadline-first undated-deadline rule to a recency
   window'
-status: in-progress
+status: done
 use-cases:
 - SUC-020
 depends-on: []
