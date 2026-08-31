@@ -45,25 +45,25 @@ changed nothing observable about `teams/`'s existing behavior. Tickets
 
 ## Acceptance Criteria
 
-- [ ] A new shared module exists, exposing the general-purpose rungs
+- [x] A new shared module exists, exposing the general-purpose rungs
       (zip-centroid, city-centroid, "never guess" rung-7 honesty rule)
       as functions callable independent of `Team`.
-- [ ] `teams/geo.py`'s public API (`geocode_teams()` or equivalent) is
+- [x] `teams/geo.py`'s public API (`geocode_teams()` or equivalent) is
       unchanged in signature and behavior — every existing caller
       (`teams/pipeline.py`) works with zero changes.
-- [ ] Every existing `teams/` test passes unmodified against the
+- [x] Every existing `teams/` test passes unmodified against the
       refactored `teams/geo.py`.
-- [ ] A new regression test proves **byte-identical** `Team` geocoding
+- [x] A new regression test proves **byte-identical** `Team` geocoding
       output (latitude, longitude, `location_precision`,
       `matched_name`, `needs_review`, `organization_website`) for a
       representative fixture set, comparing pre-refactor and
       post-refactor runs — not just "still passes," but demonstrably
       unchanged.
-- [ ] The shared module has no import of anything under `teams/` (the
+- [x] The shared module has no import of anything under `teams/` (the
       dependency direction is `teams/geo.py → shared module`, never
       the reverse, and `directory/` will depend on the same shared
       module without touching `teams/` at all).
-- [ ] Full test suite stays green (this ticket's own regression test
+- [x] Full test suite stays green (this ticket's own regression test
       plus the full 1652-test baseline).
 
 ## Testing
