@@ -358,3 +358,30 @@ class TestSchemaAndPromptVersionAreCheckedIndependently:
         written.write_text(json.dumps(entry))
 
         assert cache.lookup(event) is None
+
+
+# ---------------------------------------------------------------------
+# Sprint 015 (ticket 006, issue 27): PROMPT_VERSION bumped 1 -> 2 for
+# the Camps/Competitions vocabulary widening. Every real cache entry
+# written before this ticket carries prompt_version=1 literally -- this
+# pins that concrete migration case, not just "some stale version" in
+# the abstract (TestCachePromptVersion above already covers the
+# abstract property via PROMPT_VERSION - 1).
+# ---------------------------------------------------------------------
+
+
+class TestPromptVersion1To2Migration:
+    def test_a_literal_prompt_version_1_entry_is_a_miss_under_the_current_prompt_version(
+        self, tmp_path
+    ):
+        assert PROMPT_VERSION == 2, "this test pins the literal pre-ticket-006 cache shape"
+        cache = EnrichmentCache(cache_dir=tmp_path)
+        event = _sample_event()
+        cache.store(event, _sample_result())
+
+        [written] = list((tmp_path / "enrichment_cache").glob("*.json"))
+        entry = json.loads(written.read_text())
+        entry["prompt_version"] = 1
+        written.write_text(json.dumps(entry))
+
+        assert cache.lookup(event) is None

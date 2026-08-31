@@ -27,6 +27,7 @@ from partner_scrape.enrich.llm_client import (
     EnrichmentResult,
     FixtureLLMClient,
     LLMEnrichmentError,
+    _OPPORTUNITY_TYPE_VALUES,
     _SYSTEM_PROMPT,
 )
 from partner_scrape.model import Event
@@ -194,6 +195,46 @@ class TestPromptVersion:
     def test_prompt_version_is_a_positive_integer_constant(self):
         assert isinstance(PROMPT_VERSION, int)
         assert PROMPT_VERSION >= 1
+
+
+# ---------------------------------------------------------------------
+# Camps/Competitions vocabulary widening (sprint 015, ticket 006,
+# issue 27): additive-only -- the prior seven _OPPORTUNITY_TYPE_VALUES
+# are unchanged, PROMPT_VERSION bumps 1 -> 2 because the classification
+# criteria the model applies changed.
+# ---------------------------------------------------------------------
+
+
+class TestCampsAndCompetitionsVocabulary:
+    def test_opportunity_type_values_gain_camps_and_competitions(self):
+        assert "Camps" in _OPPORTUNITY_TYPE_VALUES
+        assert "Competitions" in _OPPORTUNITY_TYPE_VALUES
+
+    def test_prior_seven_opportunity_type_values_are_unchanged(self):
+        """Additive only -- every value that existed before this ticket
+        is still present, in its original relative order."""
+        original_seven = [
+            "Out-of-school Programs",
+            "Online",
+            "Professional Development / Conferences",
+            "School Programs",
+            "Career Connections",
+            "Volunteering",
+            "Funding Opportunities",
+        ]
+        positions = [_OPPORTUNITY_TYPE_VALUES.index(v) for v in original_seven]
+        assert positions == sorted(positions)
+
+    def test_prompt_version_bumped_to_2_for_this_widening(self):
+        assert PROMPT_VERSION == 2
+
+    def test_system_prompt_describes_when_camps_applies(self):
+        assert '"Camps"' in _SYSTEM_PROMPT
+        assert "camp" in _SYSTEM_PROMPT.lower()
+
+    def test_system_prompt_describes_when_competitions_applies(self):
+        assert '"Competitions"' in _SYSTEM_PROMPT
+        assert "tournament" in _SYSTEM_PROMPT.lower() or "competit" in _SYSTEM_PROMPT.lower()
 
 
 # ---------------------------------------------------------------------

@@ -160,6 +160,27 @@ existing, deliberate false-positive rationale documented on
 fallback keeps defaulting ambiguous titles to `"Out-of-school Programs"`, which is the
 safer failure mode during an LLM outage.
 
+**(Sprint 015, ticket 006, issue 27)** `OPPORTUNITY_TYPE_KEYWORDS` gains one new rule,
+`\bcamps?\b` → `"Camps"` — word-bounded so it cannot fire inside "campus"/"campaign"/
+"campfire"/"campground"/"encampment", spot-checked against this project's own fixture
+titles (`"Ocean Explorers Camp"`, `"Summer Camp Registration Is Open!"`, `"Farm Camp"`,
+`"Camp-o-Saurus"`). `"Competitions"` deliberately gets **no** keyword rule, extending
+the same false-positive rationale that already excludes `"Funding Opportunities"`: the
+obvious candidate, `competit*` (competition/competitive), matches a real,
+already-fixtured title — `test_adapters_leaguesync.py`'s `"Competitive Robotics Summer
+Warm Up"` is an ordinary registration-based League *class*, not a competition. Other
+candidates considered (`tournament`, `hackathon`) don't appear anywhere in this
+codebase's fixtures/adapters to spot-check against, and a bare `fair` is already too
+ambiguous — county/health/book fairs, plus `career fair`/`job fair`/`college fair`
+already claimed by the Career Connections rule, all share the word. `"Competitions"` is
+LLM-only (`enrich/llm_client.py`'s `_OPPORTUNITY_TYPE_VALUES`); the keyword fallback
+keeps defaulting ambiguous titles to `DEFAULT_OPPORTUNITY_TYPE`, the safer failure mode
+during an LLM outage. See `enrich/DESIGN.md`'s own sprint 015 addendum for the
+`PROMPT_VERSION` 1 → 2 bump this pairs with, and `site/src/components/
+OpportunityFilters.astro`'s hardcoded facet list (updated by this ticket in this repo;
+the sibling `../stem-ecosystem` repo's identical copy is out of this ticket's write
+scope).
+
 **The DST-transition fold convention (sprint 012).** `zoneinfo`-based
 localization is unambiguous everywhere except the two hours a year the
 local clock itself is ambiguous or nonexistent: the repeated 1am-2am

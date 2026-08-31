@@ -168,3 +168,55 @@ class TestClassifyOpportunityType:
         for title in ["Bird Walk at Grant Park", "Anza-Borrego Grant Ranch Hike"]:
             assert classify_opportunity_type(title) != "Funding Opportunities", title
             assert classify_opportunity_type(title) == "Out-of-school Programs", title
+
+    def test_camps_signals(self):
+        """Sprint 015 (ticket 006, issue 27): representative real camp
+        titles from this project's own fixtures (test_adapters_wordpress,
+        test_adapters_localist, test_model, test_normalize_run) all
+        classify as "Camps"."""
+        for title in [
+            "Summer Camp Registration Is Open!",
+            "Ocean Explorers Camp",
+            "Farm Camp",
+            "Camp-o-Saurus",
+            "Day Camp for Explorers",
+            "Summer Camps@SFA",
+        ]:
+            assert classify_opportunity_type(title) == "Camps", title
+
+    def test_camps_keyword_is_word_bounded_and_does_not_false_positive(self):
+        """"camp" is word-bounded so it never fires inside "campus",
+        "campaign", "campfire", "campground", or "encampment" -- none of
+        those has a word boundary immediately before/after the substring
+        "camp"."""
+        for title in [
+            "New Campus Tour",
+            "Membership Campaign Kickoff",
+            "Campfire Stories Under the Stars",
+            "Campground Reservations Now Open",
+            "Winter Encampment History Talk",
+        ]:
+            assert classify_opportunity_type(title) != "Camps", title
+
+    def test_camps_does_not_false_positive_against_non_camp_fixture_titles(self):
+        """Spot-check against a representative sample of non-camp titles
+        already exercised elsewhere in this module's fixtures."""
+        for text in ["Beach Cleanup at Mission Bay", "Habitat Restoration volunteer day",
+                     "Creek to Bay Clean-up", "Trail work and stewardship"]:
+            assert classify_opportunity_type(text) != "Camps", text
+        assert classify_opportunity_type("Virtual webinar on native bees") != "Camps"
+        assert classify_opportunity_type("Field trip for schools") != "Camps"
+        assert classify_opportunity_type("Preschool story time") != "Camps"
+        assert classify_opportunity_type("Tide Pool Exploration") != "Camps"
+
+    def test_no_competitions_keyword_rule_declined_per_funding_opportunities_precedent(self):
+        """Sprint 015 (ticket 006, issue 27) decision, recorded here and
+        in OPPORTUNITY_TYPE_KEYWORDS's own comment: no "Competitions"
+        keyword rule is added. The obvious candidate, `competit*`, would
+        false-positive on a real, already-fixtured title --
+        "Competitive Robotics Summer Warm Up" (test_adapters_leaguesync.py)
+        is a League *class*, not a competition. Only the LLM
+        classification path (enrich/llm_client.py) can ever produce
+        "Competitions"."""
+        for title in ["Competitive Robotics Summer Warm Up", "STEM Fair: Grades 6-8 (Free!)"]:
+            assert classify_opportunity_type(title) != "Competitions", title

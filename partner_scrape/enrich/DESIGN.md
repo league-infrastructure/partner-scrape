@@ -22,6 +22,23 @@ nav pages) is unchanged. See §2's cache-versioning addition and §6's Open
 Questions for how ~9,700 pre-existing cache entries, written under the old
 K-12-only framing, get exactly one forced re-evaluation each.
 
+**(Sprint 015, ticket 006, issue 27)** `_OPPORTUNITY_TYPE_VALUES` gains two
+values, `"Camps"` and `"Competitions"` — additive only, the prior seven values
+are unchanged — because 96% of records were landing in the generic
+`"Out-of-school Programs"` bucket for lack of a more specific classification.
+This is the same "prompt semantics changed" shape sprint 014 established:
+`PROMPT_VERSION` bumps 1 → 2, forcing exactly one re-evaluation per
+previously-cached `Event` via `cache.py`'s independent `prompt_version` check
+(§3, §6). `normalize/taxonomy.py`'s keyword fallback gains a conservative
+`"Camps"` rule but deliberately no `"Competitions"` rule — see that module's
+own DESIGN.md addendum for the false-positive finding that decision rests on.
+The site's `OpportunityFilters.astro` facet list (a hardcoded literal, not
+derived from `opportunities.json`) needs the same two values added by hand;
+done in this repo's `site/` checkout by this ticket. The sibling
+`../stem-ecosystem` repo carries an identical hardcoded facet list in its own
+copy of that component and needs the same one-line edit on its own schedule —
+out of this ticket's write scope (a different repository).
+
 ## 2. Orientation
 
 Three modules, layered:
@@ -247,6 +264,11 @@ through `config.py` — the SDK, not this package, is reading the environment.
   mechanism; it is not covered by (and does not resolve) the pre-existing "no cost
   accounting or per-run call budget" limitation immediately below, which is about
   *ongoing*, unbounded growth, not this one-time, bounded, known-size event.
+- **(Sprint 015, ticket 006)** The `"Camps"`/`"Competitions"` vocabulary widening's
+  `PROMPT_VERSION` 1 → 2 bump is the same shape as sprint 014's 0 → 1 bump immediately
+  above: one forced re-evaluation per previously-cached `Event`, real one-time Anthropic
+  spend, accepted per that sprint's precedent. Unlike sprint 014's bump this one is not
+  tied to a specific measured corpus size at time of writing.
 - The fail-open policy means an API outage produces a full run of `taxonomy_fallback`
   classifications at confidence 0.3, exported with no visible marker on the site. The
   yield report shows counts, not classification quality.

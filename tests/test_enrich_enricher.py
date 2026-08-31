@@ -336,6 +336,110 @@ class TestPromptVersionBumpForcesExactlyOneAdditionalCall:
 
 
 # ---------------------------------------------------------------------
+# AC (sprint 015, ticket 006, issue 27): PROMPT_VERSION bumped 1 -> 2
+# for the Camps/Competitions vocabulary widening. Every real cache
+# entry written before this ticket has prompt_version=1 literally (not
+# just "some stale version" in the abstract) -- this is the concrete
+# regression case, proven through the full LLMEnricher.enrich() path,
+# mirroring sprint 014's TestPromptVersionBumpForcesExactlyOneAdditionalCall
+# shape above but pinned to the literal 1 -> 2 migration.
+# ---------------------------------------------------------------------
+
+
+class TestPromptVersion1To2RegressionForcesExactlyOneCall:
+    def test_literal_v1_entry_forces_exactly_one_more_call_under_the_new_prompt_version(
+        self, tmp_path
+    ):
+        assert PROMPT_VERSION == 2, "this test pins the literal pre-ticket-006 cache shape"
+        cache = EnrichmentCache(cache_dir=tmp_path)
+        warm_up_client = FixtureLLMClient(responses={"Robotics Night": EnrichmentResult(relevant=True)})
+        LLMEnricher(warm_up_client, cache).enrich([_event()])
+        assert len(warm_up_client.calls) == 1
+
+        _rewrite_cache_entry_prompt_version(tmp_path, 1)  # literal pre-ticket-006 entry
+
+        fresh_client = FixtureLLMClient(responses={"Robotics Night": EnrichmentResult(relevant=True)})
+        LLMEnricher(fresh_client, cache).enrich([_event()])
+
+        assert len(fresh_client.calls) == 1  # exactly one more call, content unchanged
+
+    def test_re_stored_entry_after_the_v1_miss_is_a_hit_on_the_next_lookup(self, tmp_path):
+        cache = EnrichmentCache(cache_dir=tmp_path)
+        warm_up_client = FixtureLLMClient(responses={"Robotics Night": EnrichmentResult(relevant=True)})
+        LLMEnricher(warm_up_client, cache).enrich([_event()])
+
+        _rewrite_cache_entry_prompt_version(tmp_path, 1)
+
+        fresh_client = FixtureLLMClient(responses={"Robotics Night": EnrichmentResult(relevant=True)})
+        LLMEnricher(fresh_client, cache).enrich([_event()])  # forces the one-time miss
+
+        should_not_be_called = FixtureLLMClient(responses={})
+        LLMEnricher(should_not_be_called, cache).enrich([_event()])
+
+        assert should_not_be_called.calls == []
+
+
+# ---------------------------------------------------------------------
+# AC (sprint 015, ticket 006, issue 27): FixtureLLMClient test cases
+# cover both new opportunity_type values ("Camps", "Competitions")
+# end-to-end through LLMEnricher.enrich().
+# ---------------------------------------------------------------------
+
+
+class TestCampsAndCompetitionsOpportunityTypes:
+    def test_camps_opportunity_type_flows_through_enrich(self, tmp_path):
+        event = _event(title="Ocean Explorers Camp")
+        result = EnrichmentResult(
+            opportunity_type="Camps",
+            relevant=True,
+            relevance_reason="Week-long summer marine science camp for kids.",
+        )
+        llm_client = FixtureLLMClient(responses={"Ocean Explorers Camp": result})
+        enricher = LLMEnricher(llm_client, EnrichmentCache(cache_dir=tmp_path))
+
+        [enriched] = enricher.enrich([event])
+
+        assert enriched.opportunity_type == "Camps"
+        assert enriched.field_provenance["opportunity_type"].source == LLM_SOURCE
+
+    def test_competitions_opportunity_type_flows_through_enrich(self, tmp_path):
+        event = _event(title="Regional Robotics Tournament")
+        result = EnrichmentResult(
+            opportunity_type="Competitions",
+            relevant=True,
+            relevance_reason="A regional FIRST robotics tournament open to teams.",
+        )
+        llm_client = FixtureLLMClient(responses={"Regional Robotics Tournament": result})
+        enricher = LLMEnricher(llm_client, EnrichmentCache(cache_dir=tmp_path))
+
+        [enriched] = enricher.enrich([event])
+
+        assert enriched.opportunity_type == "Competitions"
+        assert enriched.field_provenance["opportunity_type"].source == LLM_SOURCE
+
+    def test_camps_and_competitions_survive_the_relevance_gate_alongside_each_other(
+        self, tmp_path
+    ):
+        camp_event = _event(title="Ocean Explorers Camp")
+        competition_event = _event(title="Regional Robotics Tournament")
+        llm_client = FixtureLLMClient(
+            responses={
+                "Ocean Explorers Camp": EnrichmentResult(
+                    opportunity_type="Camps", relevant=True
+                ),
+                "Regional Robotics Tournament": EnrichmentResult(
+                    opportunity_type="Competitions", relevant=True
+                ),
+            }
+        )
+        enricher = LLMEnricher(llm_client, EnrichmentCache(cache_dir=tmp_path))
+
+        survivors = enricher.enrich([camp_event, competition_event])
+
+        assert [e.opportunity_type for e in survivors] == ["Camps", "Competitions"]
+
+
+# ---------------------------------------------------------------------
 # AC: fail-open on LLM failure
 # ---------------------------------------------------------------------
 
