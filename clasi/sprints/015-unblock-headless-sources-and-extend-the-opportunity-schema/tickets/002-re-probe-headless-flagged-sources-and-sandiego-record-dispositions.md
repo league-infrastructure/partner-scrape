@@ -1,7 +1,7 @@
 ---
 id: '002'
 title: Re-probe headless-flagged sources and sandiego; record dispositions
-status: open
+status: in-progress
 use-cases:
 - SUC-003
 depends-on:

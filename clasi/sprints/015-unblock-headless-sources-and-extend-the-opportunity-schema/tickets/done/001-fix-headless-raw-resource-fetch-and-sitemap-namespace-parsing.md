@@ -1,7 +1,7 @@
 ---
 id: '001'
 title: Fix headless raw-resource fetch and sitemap namespace parsing
-status: in-progress
+status: done
 use-cases:
 - SUC-001
 - SUC-002
