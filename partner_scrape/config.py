@@ -111,22 +111,12 @@ _PACKAGE_DIR = Path(__file__).resolve().parent
 # The repo root, e.g. .../partner-scrape
 _REPO_ROOT = _PACKAGE_DIR.parent
 
-#: Environment variable listing extra site checkouts to copy each
-#: export into, ``os.pathsep``-separated. Set it to the empty string to
-#: mirror nowhere.
-MIRROR_SITE_DIRS_ENV_VAR = "MIRROR_SITE_DIRS"
-
-#: Default location of the sibling ``stem-ecosystem`` site repo,
-#: matching the layout ``dev/export_site.py`` already assumes: a
-#: checkout of ``stem-ecosystem`` next to this repo (``../stem-ecosystem``
-#: relative to the repo root). Overridable via ``SITE_DIR``.
+#: Default location of the sibling ``stem-ecosystem`` site repo -- the
+#: real production site codebase, checked out next to this repo
+#: (``../stem-ecosystem`` relative to the repo root) for local
+#: interactive runs, and used by default in CI. Overridable via
+#: ``SITE_DIR``.
 DEFAULT_SITE_DIR = _REPO_ROOT.parent / "stem-ecosystem"
-
-#: This repo's own Astro checkout -- the beta site ``just dev`` serves
-#: and ``.github/workflows/pages.yml`` publishes. Mirrored into by
-#: default so a scrape refreshes the site the team actually develops
-#: against, not only the production sibling.
-DEFAULT_MIRROR_SITE_DIR = _REPO_ROOT / "site"
 
 
 def get_scrape_cache_dir() -> Path:
@@ -161,25 +151,6 @@ def get_site_dir() -> Path:
     if value:
         return Path(value)
     return DEFAULT_SITE_DIR
-
-
-def get_mirror_site_dirs() -> list[Path]:
-    """Return extra site checkouts each export should be copied into.
-
-    Defaults to this repo's own ``site/`` -- the beta checkout the team
-    runs ``just dev`` against. The pipeline exports to a single
-    ``SITE_DIR`` (``../stem-ecosystem``, which the scheduled workflow
-    publishes from), so without this the beta site silently keeps
-    serving whatever snapshot it was last handed.
-
-    Reads ``MIRROR_SITE_DIRS`` if set, splitting on ``os.pathsep``; an
-    explicitly empty value means "mirror nowhere" and returns ``[]``,
-    which is how a caller opts out via configuration rather than a flag.
-    """
-    value = os.environ.get(MIRROR_SITE_DIRS_ENV_VAR)
-    if value is None:
-        return [DEFAULT_MIRROR_SITE_DIR]
-    return [Path(part) for part in value.split(os.pathsep) if part.strip()]
 
 
 def get_leaguesync_api_key() -> str:

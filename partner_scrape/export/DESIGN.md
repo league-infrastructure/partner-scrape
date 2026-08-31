@@ -24,7 +24,7 @@ write, not a new responsibility for the subsystem.
 
 ## 2. Orientation
 
-Six independent modules, each owning one output (four pre-existing, two new in sprint 009):
+Five independent modules, each owning one output (three pre-existing, two new in sprint 009):
 
 - `writer.py` · `export_opportunities(opportunities, site_dir=None, *, today=None,
   dry_run=False)` — the main contract. Filters to current+upcoming, runs a defensive
@@ -61,24 +61,12 @@ Six independent modules, each owning one output (four pre-existing, two new in s
   `{site_dir}/public/data/partners.json` (every curated partner, including ones with no
   accumulated events) plus each partner's `public/data/partners/<slug>/events.json` and
   `.../past-events.json`. Deliberately *not* called from inside `pipeline.run()` — see
-  Design below — but from `cli.py`, after `run()` returns, the same way `mirror_site_data`
-  already is.
-- `mirror.py` · `mirror_site_data(primary_site_dir, target_site_dirs, *, dry_run=False)`
-  — copies a *finished* export's output files (`opportunities.json`, `scrape-meta.json`,
-  `ads.json`, plus the opportunity images) into additional site checkouts. Sprint 009:
-  also recursively copies the new `public/data/` tree, same additive-only,
-  byte-identical-skip semantics as the existing image mirror. **Sprint 011:**
-  `MIRRORED_DATA_FILES` gains `"teams.json"` — a one-line allowlist addition. The file
-  itself is written by `partner_scrape/teams/export.py`, a module in the new, structurally
-  separate `teams/` subsystem (see `teams/DESIGN.md`), not by this subsystem's own
-  `writer.py`/`ads.py`; `mirror.py` copies it purely by filename, the same way it already
-  copies `opportunities.json`/`ads.json` without caring which module produced them.
+  Design below — but from `cli.py`, after `run()` returns.
 
 `pipeline.run()` calls `export_opportunities`, `export_ads`, and (sprint 009)
 `partner_log.record`, and constructs the `EventImageDownloader` it passes into
 `normalize.run()`. `cli.py`, after `run()` returns, calls (sprint 009) `publish.project`
-and then `mirror_site_data` — neither is part of `pipeline.run()`, both are skipped under
-`--dry-run`.
+— not part of `pipeline.run()`, skipped under `--dry-run`.
 
 ```mermaid
 flowchart LR
@@ -91,16 +79,22 @@ flowchart LR
     PARTJ -->|"partner records"| PUB
     STORE -->|"reads every partner's log"| PUB["publish.py (NEW)<br/>project()"]
     PUB -->|"writes"| PUBLIC["site_dir/public/data/<br/>partners.json + partners/&lt;slug&gt;/events.json + past-events.json"]
-    PUBLIC -->|"copies"| MIRROR["mirror.py (extended)<br/>mirror_site_data()"]
-    MIRROR -->|"copies"| TARGET["extra site checkouts"]
 ```
+
+**Sprint 019.** `mirror.py` (and its `MIRRORED_DATA_FILES` allowlist) was removed
+outright, along with `config.get_mirror_site_dirs()` and the `--mirror-site-dir`/
+`--no-mirror` CLI flags. `partner-scrape` no longer tracks a second, independently
+mirrored-into site checkout — `site/` becomes a build-time-only CI checkout of
+`stem-ecosystem` (sprint 019 ticket 002) — so the "keep N checkouts in step" mechanism
+has no second checkout left to copy into. `export_opportunities`/`export_ads`/
+`publish.project` now write to exactly one resolved `SITE_DIR`, full stop.
 
 ## 3. Constraints and Invariants
 
 - **A missing or unwritable `site_dir` fails loudly.** Both `export_opportunities` and
   `export_ads` raise rather than skipping. A silently-skipped export leaves the site
   serving stale data with no signal — the exact failure that went unnoticed for five weeks
-  and motivated `mirror.py`.
+  and originally motivated the (sprint 019-removed) `mirror.py` mechanism.
 - **Undated records are excluded.** An `Opportunity` with neither `date_start` nor
   `date_end` can never be judged "today or later" and does not ship. This is a filter,
   not an error.
@@ -128,28 +122,13 @@ flowchart LR
   computed.
 - **`Opportunity.sources` is dropped on serialization.** It is `normalize/`'s
   cross-source bookkeeping, not part of the site's Opportunities table.
-- **`mirror.py` copies output; it never re-runs the pipeline.** A second run would
-  re-fetch, re-enrich (paying for the LLM again), and — because `today` and every source's
-  live content move between runs — could produce a *different* opportunity set per
-  checkout. One export copied N times is the only way the checkouts are guaranteed to
-  agree.
-- **`mirror.py` copies only generated artifacts.** `partners.json` is an *input* curated
-  per checkout; overwriting it would clobber one site's roster with another's.
-  `yield-history.json` is per-run operational state belonging to the run that produced it.
-  `MIRRORED_DATA_FILES` is the explicit allowlist.
-- **(Sprint 011) `teams.json` is a flat, standalone file added to `MIRRORED_DATA_FILES`,
-  never a new responsibility for `writer.py`/`ads.py`.** `export/` did not gain a new
-  writer this sprint — `teams/export.py` (a different subsystem) writes the file;
-  `mirror.py` only extends its existing allowlist to include it. This subsystem's writers
-  (`writer.py`, `ads.py`) are unmodified.
 - **`images.py` never interprets downloaded bytes as anything but a static asset,** and
   refuses any URL that is not `http(s)://` before performing any I/O — `file://`, `data:`,
   and everything else are rejected without a fetch.
 - **`.download()` never raises.** A missing, unreachable, or rejected image returns `""`
   and the record exports normally with an empty `image_src`.
 - **`dry_run` means no disk writes anywhere,** including image downloads. `pipeline.run()`
-  does not even construct an `EventImageDownloader` under `dry_run`, and `cli.py` skips
-  mirroring.
+  does not even construct an `EventImageDownloader` under `dry_run`.
 - **Deliberate non-goal — no UI, placement, or rotation decisions for ads.** `ads.json`
   is a flat, advertiser-agnostic array; how the site renders it is the site repo's own
   work.
@@ -215,15 +194,6 @@ ImageMagick shell-out was added. `MAX_IMAGE_BYTES` provides comparable size disc
 The one-off partner-logo sourcing script does downscale, but it is explicitly not part of
 the recurring pipeline.
 
-**Why `mirror.py` exists, and why it is called from `cli.py`.** `export_opportunities`
-writes to exactly one `site_dir`, and the pipeline resolves exactly one — the sibling
-`stem-ecosystem` checkout the scheduled workflow publishes from. This repo's own `site/`
-is a second, independent checkout of the same site, and nothing kept it in step: a scrape
-refreshed production while the beta site the team develops against kept serving whatever
-snapshot it was last handed (it sat at a five-week-old export). Mirroring is a
-post-export copy, sequenced by the CLI after `run()` returns, so `pipeline.run()`'s
-contract — "produce one export" — is unchanged.
-
 **Image fetching uses its own `ImageFetcher` Protocol,** not `fetch.Fetcher`, because
 images are `bytes` and `FetchResponse.body` is `str`. `UrllibImageFetcher` is the default;
 tests inject a fixture.
@@ -264,12 +234,8 @@ answer to "which of several sources owns this persisted copy."
 `partner_log.record` (which only needs *this run's* Opportunities), `publish.project`
 needs *every* partner's accumulated history to produce a correct current/past split — an
 invocation scoped to one source (`--source`) or a `--limit`-truncated run must not
-regenerate the published tree from a partial view of the data. This mirrors exactly why
-`mirror_site_data` is already CLI-sequenced rather than pipeline-internal: both are
-"operate on the finished, accumulated state," not "part of processing this run's
-records." Sequencing `publish.project` before `mirror_site_data` (both after `run()`
-returns) means a mirrored checkout always receives an already-projected, complete
-`public/data/` tree.
+regenerate the published tree from a partial view of the data: "operate on the finished,
+accumulated state," not "part of processing this run's records."
 
 **`publish.py` depends on `partner_log.py` for the on-disk layout, never the reverse.**
 `publish.py` needs to know exactly one thing about `partner_log.py`'s convention — the
@@ -280,16 +246,7 @@ duplicate `partner_log.py`'s slug-computation logic to *enumerate* partners — 
 whatever partner-slug subdirectories already exist under `log_dir` — but it does reuse
 `model.slugify` directly (the same shared primitive, not a call into `partner_log.py`) to
 compute each *curated* partner's slug when deciding whether that partner already has an
-accumulated log. `partner_log.py` never imports `publish.py` — the dependency is one-way,
-matching this subsystem's existing internal convention that `mirror.py` depends on the
-files `writer.py`/`ads.py` produce and not vice versa.
-
-**Why `mirror.py`'s directory copy is additive/skip-unchanged, matching its existing
-image-mirroring behavior**, rather than a mirror-then-delete-extras sync. The existing
-image mirror already established this precedent (`_mirror_images`'s docstring: "images are
-additive on purpose"); the new `public/data/` tree keeps the same policy for the same
-reason — a target checkout that hasn't rebuilt yet should never have a file pulled out
-from under a page it's still serving.
+accumulated log. `partner_log.py` never imports `publish.py` — the dependency is one-way.
 
 ## 5. Interfaces
 
@@ -305,12 +262,7 @@ from under a page it's still serving.
 - **`EventImageDownloader(dest_dir, ...)` / `.download(image_url) -> str`** — returns the
   stored local filename, or `""` for anything rejected. Never raises. Instance-scoped
   content-hash dedup.
-- **`mirror_site_data(primary_site_dir, target_site_dirs, *, dry_run=False)`** — copies
-  `MIRRORED_DATA_FILES` (sprint 011: `opportunities.json`, `scrape-meta.json`, `ads.json`,
-  `teams.json`), `public/images/opportunities/`, and (sprint 009) `public/data/`
-  (recursively) into each target.
-- **`AdConfig`, `ImageFetcher`, `UrllibImageFetcher`, `ImageFetchResponse`,
-  `MIRRORED_DATA_FILES`.**
+- **`AdConfig`, `ImageFetcher`, `UrllibImageFetcher`, `ImageFetchResponse`.**
 - **`is_current_or_upcoming(opportunity, today) -> bool`, `SITE_SCHEMA_FIELDS`,
   `to_json_dict(opportunity) -> dict`** (sprint 009, `writer.py`, promoted from
   `_is_current_or_upcoming`/`_SITE_SCHEMA_FIELDS`/`_to_json_dict`) — the current/upcoming
@@ -353,8 +305,6 @@ from under a page it's still serving.
 
 ## 6. Open Questions / Known Limitations
 
-- Mirroring is a file copy with no verification that the target is actually a site
-  checkout. Pointing `--mirror-site-dir` at the wrong directory writes JSON into it.
 - The image store has no garbage collection: files for opportunities that have since
   expired are never removed from `public/images/opportunities/`.
 - Image dedup is per `EventImageDownloader` instance, so it holds within a run but not
@@ -363,7 +313,6 @@ from under a page it's still serving.
   documented anywhere in this repo.
 - There is no schema validation against the site's expectations. A field rename on the
   site side surfaces as missing data on the rendered page, not as an export failure.
-- `mirror.py` is recent and has not yet run through a full scheduled production cycle.
 - **(Sprint 009)** `past-events.json`'s retention window is unbounded for now: the
   `.jsonl` log never prunes, so every past event ever seen is published, forever. The
   store starts empty this sprint, so this is not an immediate problem, but there is no

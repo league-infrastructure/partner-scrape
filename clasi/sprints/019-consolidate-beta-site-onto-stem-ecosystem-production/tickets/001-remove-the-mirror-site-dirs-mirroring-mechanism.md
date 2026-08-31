@@ -122,27 +122,27 @@ mechanism with anything.
 
 ## Acceptance Criteria
 
-- [ ] `export/mirror.py` no longer exists.
-- [ ] `config.MIRROR_SITE_DIRS_ENV_VAR`, `config.DEFAULT_MIRROR_SITE_DIR`,
+- [x] `export/mirror.py` no longer exists.
+- [x] `config.MIRROR_SITE_DIRS_ENV_VAR`, `config.DEFAULT_MIRROR_SITE_DIR`,
       and `config.get_mirror_site_dirs()` no longer exist;
       `config.DEFAULT_SITE_DIR`'s value is unchanged
       (`../stem-ecosystem`), only its docstring is rewritten.
-- [ ] `cli.py` has no `--mirror-site-dir` or `--no-mirror` flag on any
+- [x] `cli.py` has no `--mirror-site-dir` or `--no-mirror` flag on any
       subcommand, and no import of `partner_scrape.export.mirror` or
       `get_mirror_site_dirs`.
-- [ ] `tests/test_export_mirror.py` is deleted.
-- [ ] No test in `test_cli.py`/`test_cli_teams.py`/`test_cli_directory.py`
+- [x] `tests/test_export_mirror.py` is deleted.
+- [x] No test in `test_cli.py`/`test_cli_teams.py`/`test_cli_directory.py`
       references `mirror_site_data`, `get_mirror_site_dirs`,
       `--mirror-site-dir`, or `--no-mirror`; the write-path coverage in
       the two "real run ... and mirrors" tests is preserved (trimmed,
       not deleted).
-- [ ] `export/DESIGN.md`, `partner_scrape/DESIGN.md`, and
+- [x] `export/DESIGN.md`, `partner_scrape/DESIGN.md`, and
       `teams/DESIGN.md` no longer describe the mirror mechanism as live;
       each notes it was removed in sprint 019.
-- [ ] `git grep -n MIRROR_SITE_DIRS` and `git grep -n mirror_site_data`
+- [x] `git grep -n MIRROR_SITE_DIRS` and `git grep -n mirror_site_data`
       return nothing outside `clasi/` (sprint/issue history) and the
       three `DESIGN.md` "removed in sprint 019" notes.
-- [ ] Full `uv run pytest -q` is green.
+- [x] Full `uv run pytest -q` is green.
 
 ## Testing
 

@@ -31,16 +31,16 @@ registry.load_active_sources()
 ```
 
 `cli.py` then, after `run()` returns, calls `export.publish.project(...)` (collapses the
-accumulated per-partner logs into the published `public/data/` tree — sprint 009) and
-`export.mirror_site_data(...)` (now also mirrors that tree), and prints the yield report
-from `observability/`. The whole run touches the network only through `fetch/`.
+accumulated per-partner logs into the published `public/data/` tree — sprint 009), and
+prints the yield report from `observability/`. The whole run touches the network only
+through `fetch/`.
 
 **Sprint 009 addition.** `export.partner_log.record(...)` is a new call inside
 `pipeline.run()`, alongside the existing `export_opportunities`/`export_ads` calls: it
 persists this run's `Opportunity`s into a durable, per-partner, append-only log (never
 overwritten, unlike the flat `opportunities.json`). `export.publish.project(...)` is a new,
-separate, CLI-sequenced step (mirroring how `mirror_site_data` is already sequenced after
-`run()` returns, not inside it) that reads *all* accumulated per-partner logs — not only
+separate, CLI-sequenced step (called after `run()` returns, not inside it, since it needs
+the finished, accumulated state) that reads *all* accumulated per-partner logs — not only
 this run's — and projects them into the published `public/data/` contract. See
 `export/DESIGN.md` for both.
 
@@ -76,15 +76,15 @@ every one of them if it were routed through `Opportunity`. See
 - **`cli.py`** — the `partner-scrape` console script. `argparse` wrapper over
   `pipeline.run()`, plus the `discover-candidates` subcommand for the lead-generation
   flow. Constructs the default concrete implementations (`LLMEnricher` with
-  `AnthropicLLMClient`, `YieldReporter`) and owns the mirror step and console output. No
-  business decisions live here. **Sprint 011:** gains a `teams` subcommand
-  (`partner-scrape teams [--dry-run] [--source ftcscout|tba] [--site-dir DIR]
-  [--no-mirror] [-v]`), calling `teams.pipeline.run_teams()` and, unless `--no-mirror`,
-  `export.mirror_site_data`. The existing `run`/`discover-candidates` subcommands are
-  unchanged.
+  `AnthropicLLMClient`, `YieldReporter`) and owns console output. No business decisions
+  live here. **Sprint 011:** gains a `teams` subcommand (`partner-scrape teams [--dry-run]
+  [--source ftcscout|tba] [--site-dir DIR] [-v]`), calling `teams.pipeline.run_teams()`.
+  The existing `run`/`discover-candidates` subcommands are unchanged. **(Sprint 019)** the
+  `--mirror-site-dir`/`--no-mirror` flags and the mirror step this bullet used to describe
+  were removed outright — see `export/DESIGN.md`'s sprint 019 note.
 - **`config.py`** — the only module in the package that reads `os.environ`. Accessors for
-  `SCRAPE_CACHE_DIR` (required, no default), `SITE_DIR`, `MIRROR_SITE_DIRS`,
-  `LEAGUESYNC_API_KEY`, and `LEAGUESYNC_URL`. Values are assembled by dotconfig into
+  `SCRAPE_CACHE_DIR` (required, no default), `SITE_DIR`, `LEAGUESYNC_API_KEY`, and
+  `LEAGUESYNC_URL`. Values are assembled by dotconfig into
   layered `.env` files before the process starts; this module only reads what landed.
   **Sprint 011:** gains `get_tba_api_key()`/`get_tba_url()` (reading `TBA_KEY`/`TBA_URL`),
   mirroring `get_leaguesync_api_key()`/`get_leaguesync_url()` exactly, including the
@@ -111,7 +111,7 @@ Each has its own `DESIGN.md` in its own directory.
 | [`adapters/`](adapters/DESIGN.md) | Ten per-vendor strategies implementing `discover → fetch → extract`, dispatched by `adapter_type` through a one-line registration table. |
 | [`discovery/`](discovery/DESIGN.md) | Resolving a source into fetchable URLs (sitemap diff, listing crawl) — plus hub scanning, which generates *organization* leads and is structurally forbidden from producing Events. |
 | [`enrich/`](enrich/DESIGN.md) | The LLM layer: field recovery, controlled-vocabulary classification, and the relevance gate, behind a content-hash cache and a fail-open policy. |
-| [`export/`](export/DESIGN.md) | Every write across the repo boundary into the site: `opportunities.json`, `ads.json`, self-hosted images, mirroring into additional checkouts, and (sprint 009) a persistent per-partner accumulation log plus the published `public/data/` partners-and-events contract projected from it. |
+| [`export/`](export/DESIGN.md) | Every write across the repo boundary into the site: `opportunities.json`, `ads.json`, self-hosted images, and (sprint 009) a persistent per-partner accumulation log plus the published `public/data/` partners-and-events contract projected from it. |
 | [`extract/`](extract/DESIGN.md) | The confidence-ranked extraction ladder: one HTML page in, `{field: (value, confidence)}` out. Pure, no I/O. |
 | [`fetch/`](fetch/DESIGN.md) | The only network access in the system: the `Fetcher` seam, robots.txt, per-domain throttling, on-disk conditional-GET cache, and the optional headless browser. |
 | [`normalize/`](normalize/DESIGN.md) | Recurrence collapse, cross-source dedup, taxonomy derivation, partner join — `Event`s in, site-shaped `Opportunity` records out. |
@@ -195,29 +195,29 @@ saved HTML/JSON fixtures under `tests/fixtures/`, no network, no API key require
 
 ### Exposes
 - **`partner-scrape`** — the console script (`partner_scrape.cli:main`). Flags include
-  `--registry-dir`, `--site-dir`, `--mirror-site-dir` / `--no-mirror`, `--source`,
-  `--limit`, `--dry-run`, `--no-enrich`, `--no-report`, `--yield-history`, `--verbose`;
-  plus the `discover-candidates` subcommand.
+  `--registry-dir`, `--site-dir`, `--source`, `--limit`, `--dry-run`, `--no-enrich`,
+  `--no-report`, `--yield-history`, `--verbose`; plus the `discover-candidates`
+  subcommand.
 - **`pipeline.run(...) -> list[dict]`** — the programmatic entry point; returns the
   exported opportunity payload.
 - **`model.Event`, `Provenance`, `Kind`, `identity_key`, `normalize_title`,
   `same_record`** — the shared record vocabulary every subsystem speaks.
 - **The site data contract** — `src/data/opportunities.json`, `src/data/scrape-meta.json`,
   `src/data/ads.json`, and `public/images/opportunities/*` written into the
-  `stem-ecosystem` checkout(s); plus, since sprint 009, the additive public data contract
+  `stem-ecosystem` checkout; plus, since sprint 009, the additive public data contract
   `public/data/partners.json` and each partner's `public/data/partners/<slug>/events.json`
   / `past-events.json`, projected from the new persistent per-partner accumulation store
   (not written into `src/data/`, since `src/` is Astro's own build input and this is meant
   to be fetchable at runtime as a public API — see `export/DESIGN.md`).
 - **(Sprint 011) `partner-scrape teams`** — the new subcommand; and **`src/data/teams.json`**
-  — a wholly separate, standalone data contract (San Diego FTC/FRC robotics teams), mirrored
-  into extra checkouts the same way `opportunities.json` is. See `teams/DESIGN.md`.
+  — a wholly separate, standalone data contract (San Diego FTC/FRC robotics teams). See
+  `teams/DESIGN.md`.
 
 ### Consumes
 - **`stem-ecosystem`'s `src/data/partners.json`** — read-only, for the partner join.
 - **Environment** (via `config.py` only): `SCRAPE_CACHE_DIR` (required), `SITE_DIR`,
-  `MIRROR_SITE_DIRS`, `LEAGUESYNC_API_KEY`, `LEAGUESYNC_URL`, and (sprint 011) `TBA_KEY`/
-  `TBA_URL`; and `ANTHROPIC_API_KEY`, resolved by the `anthropic` SDK itself.
+  `LEAGUESYNC_API_KEY`, `LEAGUESYNC_URL`, and (sprint 011) `TBA_KEY`/`TBA_URL`; and
+  `ANTHROPIC_API_KEY`, resolved by the `anthropic` SDK itself.
 - **~100 partner websites and APIs**, reached only through `fetch/`.
 - **(Sprint 011) FTCScout and The Blue Alliance REST APIs**, reached only through
   `fetch.PoliteFetcher`, from `teams/sources/`.
