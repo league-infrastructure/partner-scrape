@@ -2,7 +2,7 @@
 id: '004'
 title: 'Register roster batch B: youth orgs, competitions/clubs, research/health,
   pipeline/adult'
-status: open
+status: in-progress
 use-cases:
 - SUC-002
 depends-on:
