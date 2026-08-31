@@ -23,6 +23,7 @@ from partner_scrape.adapters.ical import (
     ICalAdapter,
     _expand_rrule,
 )
+from partner_scrape.fetch import DEFAULT_RATE_LIMIT_SECONDS
 from partner_scrape.fetch.fetcher import FetchResponse
 from partner_scrape.model import Provenance
 from partner_scrape.registry.schema import SourceConfig
@@ -50,18 +51,31 @@ class FixtureFetcher:
 
     responses: dict[str, FetchResponse]
     calls: list[str] = field(default_factory=list)
+    #: Every call's rate_limit_seconds/respect_robots, keyed by URL --
+    #: sprint 015 ticket 003's acquisition_kwargs() threading, recorded
+    #: separately from ``calls`` so existing ``calls == [...]``-style
+    #: assertions elsewhere in this file are unaffected.
+    policy_calls: dict[str, tuple[float, bool]] = field(default_factory=dict)
 
-    def get(self, url: str, headers: dict[str, str] | None = None) -> FetchResponse:
+    def get(
+        self,
+        url: str,
+        headers: dict[str, str] | None = None,
+        rate_limit_seconds: float = 1.0,
+        respect_robots: bool = True,
+    ) -> FetchResponse:
         self.calls.append(url)
+        self.policy_calls[url] = (rate_limit_seconds, respect_robots)
         return self.responses[url]
 
 
-def _source() -> SourceConfig:
+def _source(acquisition_policy: dict | None = None) -> SourceConfig:
     return SourceConfig(
         source_id="fixture_org",
         org_name="Fixture Org",
         adapter_type="ical",
         config={"feed_url": FEED_URL},
+        acquisition_policy=acquisition_policy or {},
     )
 
 
@@ -148,6 +162,23 @@ class TestRecurringExpansion:
         occurrences = _expand_rrule(dtstart, "FREQ=DAILY")
 
         assert len(occurrences) == MAX_RRULE_INSTANCES
+
+
+class TestAcquisitionPolicyThreading:
+    def test_sources_acquisition_policy_reaches_fetcher_get(self):
+        fetcher = _feed_fetcher(_read_fixture("simple.ics"))
+        source = _source(acquisition_policy={"rate_limit_seconds": 0.5, "respect_robots": False})
+
+        run(source, fetcher)
+
+        assert fetcher.policy_calls[FEED_URL] == (0.5, False)
+
+    def test_source_with_no_acquisition_policy_still_gets_polite_fetcher_defaults(self):
+        fetcher = _feed_fetcher(_read_fixture("simple.ics"))
+
+        run(_source(), fetcher)
+
+        assert fetcher.policy_calls[FEED_URL] == (DEFAULT_RATE_LIMIT_SECONDS, True)
 
 
 class TestMalformedRecordIsolation:

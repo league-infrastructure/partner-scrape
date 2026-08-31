@@ -30,6 +30,7 @@ from pathlib import Path
 from partner_scrape.adapters import run
 from partner_scrape.adapters.base import EventRef, RawResponse
 from partner_scrape.adapters.greenhouse import DEFAULT_API_BASE, GreenhouseAdapter
+from partner_scrape.fetch import DEFAULT_RATE_LIMIT_SECONDS
 from partner_scrape.fetch.fetcher import FetchResponse
 from partner_scrape.model import Provenance
 from partner_scrape.registry.schema import SourceConfig
@@ -58,13 +59,29 @@ class FixtureFetcher:
 
     responses: dict[str, FetchResponse]
     calls: list[str] = field(default_factory=list)
+    #: Every call's rate_limit_seconds/respect_robots, keyed by URL --
+    #: sprint 015 ticket 003's acquisition_kwargs() threading, recorded
+    #: separately from ``calls`` so existing ``calls == [...]``-style
+    #: assertions elsewhere in this file are unaffected.
+    policy_calls: dict[str, tuple[float, bool]] = field(default_factory=dict)
 
-    def get(self, url: str, headers: dict[str, str] | None = None) -> FetchResponse:
+    def get(
+        self,
+        url: str,
+        headers: dict[str, str] | None = None,
+        rate_limit_seconds: float = 1.0,
+        respect_robots: bool = True,
+    ) -> FetchResponse:
         self.calls.append(url)
+        self.policy_calls[url] = (rate_limit_seconds, respect_robots)
         return self.responses[url]
 
 
-def _source(board_token: str = BOARD_TOKEN, location_keywords: list[str] | None = None) -> SourceConfig:
+def _source(
+    board_token: str = BOARD_TOKEN,
+    location_keywords: list[str] | None = None,
+    acquisition_policy: dict | None = None,
+) -> SourceConfig:
     config: dict = {"board_token": board_token}
     if location_keywords is not None:
         config["location_keywords"] = location_keywords
@@ -73,6 +90,7 @@ def _source(board_token: str = BOARD_TOKEN, location_keywords: list[str] | None 
         org_name="Fixture Co",
         adapter_type="greenhouse",
         config=config,
+        acquisition_policy=acquisition_policy or {},
     )
 
 
@@ -190,6 +208,23 @@ class TestLocationKeywordsOverride:
     def test_bioinformatics_intern_dropped_by_default_keywords(self):
         events = run(_source(), _fetcher())
         assert "Bioinformatics Intern" not in {e.title for e in events}
+
+
+class TestAcquisitionPolicyThreading:
+    def test_sources_acquisition_policy_reaches_fetcher_get(self):
+        fetcher = _fetcher()
+        source = _source(acquisition_policy={"rate_limit_seconds": 4.0, "respect_robots": False})
+
+        run(source, fetcher)
+
+        assert fetcher.policy_calls[BOARD_URL] == (4.0, False)
+
+    def test_source_with_no_acquisition_policy_still_gets_polite_fetcher_defaults(self):
+        fetcher = _fetcher()
+
+        run(_source(), fetcher)
+
+        assert fetcher.policy_calls[BOARD_URL] == (DEFAULT_RATE_LIMIT_SECONDS, True)
 
 
 class TestMalformedRecordIsolation:

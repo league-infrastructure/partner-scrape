@@ -38,6 +38,19 @@ own XML-viewer-wrapped markup instead of the real body, or aborts navigation out
 unawareness that headless fetching exists, are both unchanged. See §4's Design
 Rationale for the fuller account and §6 for why `.txt` is deliberately excluded.
 
+**(Sprint 015 ticket 003)** `PoliteFetcher.get()`'s `rate_limit_seconds`/
+`respect_robots` parameters are unchanged — both this method's signature and its
+defaults — but every caller now actually supplies them. Before this ticket, every
+`adapters/*.py` and `discovery/sitemap.py`/`discovery/listing.py` call site invoked
+`fetcher.get(url)` with no override, so a source's `acquisition_policy` (parsed by
+`registry/schema.py`) never reached this method despite this class's own docstring
+describing exactly that design since before it was implemented (`leaguesync.toml`'s
+`respect_robots = false` had no effect until this ticket). `adapters/base.py`'s new
+`acquisition_kwargs(source)` helper is what each caller now spreads into this call
+— see `adapters/DESIGN.md`. This package itself is unchanged: it still has no
+dependency on the Registry, and still accepts these two values as plain per-call
+parameters rather than reading a `SourceConfig` here.
+
 ## 2. Orientation
 
 The contract is `fetcher.py`'s `Fetcher` Protocol — one method,

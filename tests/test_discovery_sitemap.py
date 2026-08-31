@@ -18,6 +18,7 @@ from pathlib import Path
 import pytest
 
 from partner_scrape.discovery.sitemap import _parse_urlset, discover_changed_urls
+from partner_scrape.fetch import DEFAULT_RATE_LIMIT_SECONDS
 from partner_scrape.fetch.fetcher import FetchResponse
 from partner_scrape.registry.schema import SourceConfig
 
@@ -61,27 +62,43 @@ class FixtureFetcher:
 
     responses: dict[str, FetchResponse]
     calls: list[str] = field(default_factory=list)
+    #: Every call's rate_limit_seconds/respect_robots, keyed by URL --
+    #: sprint 015 ticket 003's acquisition_kwargs() threading, recorded
+    #: separately from ``calls`` so existing ``calls == [...]``-style
+    #: assertions elsewhere in this file are unaffected.
+    policy_calls: dict[str, tuple[float, bool]] = field(default_factory=dict)
 
-    def get(self, url: str, headers: dict[str, str] | None = None) -> FetchResponse:
+    def get(
+        self,
+        url: str,
+        headers: dict[str, str] | None = None,
+        rate_limit_seconds: float = 1.0,
+        respect_robots: bool = True,
+    ) -> FetchResponse:
         self.calls.append(url)
+        self.policy_calls[url] = (rate_limit_seconds, respect_robots)
         return self.responses[url]
 
 
-def _source() -> SourceConfig:
+def _source(acquisition_policy: dict | None = None) -> SourceConfig:
     return SourceConfig(
         source_id="fixture_org",
         org_name="Fixture Org",
         adapter_type="generic_html",
         config={"site_url": SITE_URL},
+        acquisition_policy=acquisition_policy or {},
     )
 
 
-def _source_with_sitemap_url(sitemap_url: str) -> SourceConfig:
+def _source_with_sitemap_url(
+    sitemap_url: str, acquisition_policy: dict | None = None
+) -> SourceConfig:
     return SourceConfig(
         source_id="fixture_org",
         org_name="Fixture Org",
         adapter_type="generic_html",
         config={"site_url": SITE_URL, "sitemap_url": sitemap_url},
+        acquisition_policy=acquisition_policy or {},
     )
 
 
@@ -168,6 +185,58 @@ class TestSitemapIndexRecursion:
 
         assert sorted(r.url for r in refs) == sorted(EVENT_URLS)
         assert "https://example.org/page-sitemap.xml" not in fetcher.calls
+
+
+class TestAcquisitionPolicyThreading:
+    """Sprint 015 ticket 003: all three ``fetcher.get()`` call sites in
+    this module -- the root-sitemap probe, the ``sitemap_url`` override
+    fetch, and a sitemap-index child fetch -- must receive the source's
+    ``acquisition_kwargs()``.
+    """
+
+    def test_root_sitemap_probe_receives_the_sources_acquisition_policy(self):
+        fetcher = FixtureFetcher(
+            {ROOT_SITEMAP_URL: _response(_read_fixture("events_sitemap.xml"))}
+        )
+        source = _source(acquisition_policy={"rate_limit_seconds": 9.0, "respect_robots": False})
+
+        discover_changed_urls(source, fetcher)
+
+        assert fetcher.policy_calls[ROOT_SITEMAP_URL] == (9.0, False)
+
+    def test_sitemap_url_override_fetch_receives_the_sources_acquisition_policy(self):
+        override_url = f"{SITE_URL}/feeds/real-sitemap.xml"
+        source = _source_with_sitemap_url(
+            override_url, acquisition_policy={"rate_limit_seconds": 9.0, "respect_robots": False}
+        )
+        fetcher = FixtureFetcher({override_url: _response(_read_fixture("events_sitemap.xml"))})
+
+        discover_changed_urls(source, fetcher)
+
+        assert fetcher.policy_calls[override_url] == (9.0, False)
+
+    def test_sitemap_index_child_fetch_receives_the_sources_acquisition_policy(self):
+        child_url = "https://example.org/events-sitemap.xml"
+        fetcher = FixtureFetcher(
+            {
+                ROOT_SITEMAP_URL: _response(_read_fixture("sitemap_index.xml")),
+                child_url: _response(_read_fixture("events_sitemap.xml")),
+            }
+        )
+        source = _source(acquisition_policy={"rate_limit_seconds": 9.0, "respect_robots": False})
+
+        discover_changed_urls(source, fetcher)
+
+        assert fetcher.policy_calls[child_url] == (9.0, False)
+
+    def test_source_with_no_acquisition_policy_still_gets_polite_fetcher_defaults(self):
+        fetcher = FixtureFetcher(
+            {ROOT_SITEMAP_URL: _response(_read_fixture("events_sitemap.xml"))}
+        )
+
+        discover_changed_urls(_source(), fetcher)
+
+        assert fetcher.policy_calls[ROOT_SITEMAP_URL] == (DEFAULT_RATE_LIMIT_SECONDS, True)
 
 
 class TestMalformedSitemap:

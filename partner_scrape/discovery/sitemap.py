@@ -42,7 +42,7 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 from partner_scrape import config
-from partner_scrape.adapters.base import EventRef
+from partner_scrape.adapters.base import EventRef, acquisition_kwargs
 from partner_scrape.fetch import Fetcher
 from partner_scrape.registry.schema import SourceConfig
 
@@ -196,7 +196,7 @@ def _is_event_related_filename(loc: str) -> bool:
     return bool(EVENT_PATTERNS.search(filename) or PROGRAM_PATTERNS.search(filename))
 
 
-def _parse_sitemap_index(root: ET.Element, fetcher: Fetcher) -> dict[str, str]:
+def _parse_sitemap_index(root: ET.Element, fetcher: Fetcher, source: SourceConfig) -> dict[str, str]:
     """Resolve a ``<sitemapindex>`` root into ``{loc: lastmod}`` across
     its children.
 
@@ -226,7 +226,7 @@ def _parse_sitemap_index(root: ET.Element, fetcher: Fetcher) -> dict[str, str]:
 
     urls: dict[str, str] = {}
     for child_url in candidates:
-        response = fetcher.get(child_url)
+        response = fetcher.get(child_url, **acquisition_kwargs(source))
         if response.status != 200:
             logger.warning(
                 "Child sitemap %s returned status %s; skipping", child_url, response.status
@@ -270,7 +270,7 @@ def _parse_sitemap_root(body: str) -> ET.Element | None:
 
 
 def _fetch_root_sitemap(
-    site_url: str, fetcher: Fetcher, sitemap_url: str | None = None
+    site_url: str, fetcher: Fetcher, source: SourceConfig, sitemap_url: str | None = None
 ) -> tuple[str, ET.Element] | None:
     """Resolve the root sitemap URL and its already-parsed root element
     to hand to :func:`_resolve_event_urls`.
@@ -295,7 +295,7 @@ def _fetch_root_sitemap(
     parses with a recognized sitemap root element.
     """
     if sitemap_url is not None:
-        response = fetcher.get(sitemap_url)
+        response = fetcher.get(sitemap_url, **acquisition_kwargs(source))
         root = _parse_sitemap_root(response.body) if response.status == 200 else None
         if root is not None:
             return sitemap_url, root
@@ -309,7 +309,7 @@ def _fetch_root_sitemap(
 
     for filename in _ROOT_SITEMAP_FILENAMES:
         url = f"{site_url}/{filename}"
-        response = fetcher.get(url)
+        response = fetcher.get(url, **acquisition_kwargs(source))
         if response.status != 200:
             logger.info("Sitemap probe %s returned status %s", url, response.status)
             continue
@@ -346,7 +346,7 @@ def _resolve_event_urls(source: SourceConfig, fetcher: Fetcher) -> dict[str, str
     site_url = source.config["site_url"].rstrip("/")
     sitemap_url = source.config.get("sitemap_url")
 
-    fetched = _fetch_root_sitemap(site_url, fetcher, sitemap_url=sitemap_url)
+    fetched = _fetch_root_sitemap(site_url, fetcher, source, sitemap_url=sitemap_url)
     if fetched is None:
         if sitemap_url is not None:
             logger.warning(
@@ -367,7 +367,7 @@ def _resolve_event_urls(source: SourceConfig, fetcher: Fetcher) -> dict[str, str
 
     tag = _local_name(root.tag)
     if tag == "sitemapindex":
-        return _parse_sitemap_index(root, fetcher)
+        return _parse_sitemap_index(root, fetcher, source)
     return _parse_urlset(root, path_filter=True)
 
 

@@ -50,6 +50,7 @@ from partner_scrape.adapters.bibliocommons import (
     BiblioCommonsAdapter,
     is_youth_family_audience,
 )
+from partner_scrape.fetch import DEFAULT_RATE_LIMIT_SECONDS
 from partner_scrape.fetch.fetcher import FetchResponse
 from partner_scrape.model import Provenance
 from partner_scrape.registry.schema import SourceConfig
@@ -85,19 +86,32 @@ class FixtureFetcher:
 
     responses: dict[str, FetchResponse]
     calls: list[str] = field(default_factory=list)
+    #: Every call's rate_limit_seconds/respect_robots, keyed by URL --
+    #: sprint 015 ticket 003's acquisition_kwargs() threading, recorded
+    #: separately from ``calls`` so existing ``calls == [...]``-style
+    #: assertions elsewhere in this file are unaffected.
+    policy_calls: dict[str, tuple[float, bool]] = field(default_factory=dict)
 
-    def get(self, url: str, headers: dict[str, str] | None = None) -> FetchResponse:
+    def get(
+        self,
+        url: str,
+        headers: dict[str, str] | None = None,
+        rate_limit_seconds: float = 1.0,
+        respect_robots: bool = True,
+    ) -> FetchResponse:
         self.calls.append(url)
+        self.policy_calls[url] = (rate_limit_seconds, respect_robots)
         return self.responses[url]
 
 
-def _source(**config_overrides) -> SourceConfig:
+def _source(acquisition_policy: dict | None = None, **config_overrides) -> SourceConfig:
     config = {"subdomain": SUBDOMAIN, **config_overrides}
     return SourceConfig(
         source_id="fixture_org",
         org_name="Fixture Library",
         adapter_type="bibliocommons",
         config=config,
+        acquisition_policy=acquisition_policy or {},
     )
 
 
@@ -261,6 +275,28 @@ class TestPagination:
             "Tai Chi Exercise Class",
             "Tide Pool STEAM Lab",
         ]
+
+
+class TestAcquisitionPolicyThreading:
+    """Both fetcher.get() call sites -- discover()'s probe and fetch()'s
+    per-page GET -- must receive the source's acquisition_kwargs().
+    """
+
+    def test_sources_acquisition_policy_reaches_both_probe_and_page_fetch(self):
+        fetcher = _two_page_fetcher()
+        source = _source(acquisition_policy={"rate_limit_seconds": 2.0, "respect_robots": False})
+
+        run(source, fetcher)
+
+        assert fetcher.policy_calls[PROBE_URL] == (2.0, False)
+        assert fetcher.policy_calls[PAGE2_URL] == (2.0, False)
+
+    def test_source_with_no_acquisition_policy_still_gets_polite_fetcher_defaults(self):
+        fetcher = _two_page_fetcher()
+
+        run(_source(), fetcher)
+
+        assert fetcher.policy_calls[PAGE2_URL] == (DEFAULT_RATE_LIMIT_SECONDS, True)
 
 
 class TestMalformedRecordIsolation:

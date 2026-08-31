@@ -66,11 +66,11 @@ alongside it).
 
 ## Acceptance Criteria
 
-- [ ] `adapters/base.py` gains `acquisition_kwargs(source) -> dict`,
+- [x] `adapters/base.py` gains `acquisition_kwargs(source) -> dict`,
       unit-tested directly for the default case (no
       `acquisition_policy` keys set), an explicit-override case, and
       the `leaguesync.toml`-shaped case (`respect_robots = false`).
-- [ ] Every one of these call sites uses
+- [x] Every one of these call sites uses
       `**acquisition_kwargs(source)`: `adapters/generic_html.py`,
       `adapters/ical.py`, `adapters/greenhouse.py`,
       `adapters/bibliocommons.py` (both call sites), `adapters/lever.py`,
@@ -78,18 +78,18 @@ alongside it).
       `adapters/leaguesync.py`, `adapters/tec.py` (both call sites),
       `adapters/listing_html.py`, `discovery/listing.py`,
       `discovery/sitemap.py` (all three call sites).
-- [ ] A fixture `Fetcher` double proves at least one representative
+- [x] A fixture `Fetcher` double proves at least one representative
       call site per adapter/module above receives the actual
       `rate_limit_seconds`/`respect_robots` values from its source's
       `acquisition_policy`.
-- [ ] A regression test proves `leaguesync.toml`'s `respect_robots =
+- [x] A regression test proves `leaguesync.toml`'s `respect_robots =
       false` now reaches `PoliteFetcher.get()` as `False`.
-- [ ] `leaguesync.py`'s existing `headers=_auth_headers()` behavior is
+- [x] `leaguesync.py`'s existing `headers=_auth_headers()` behavior is
       unchanged (both kwargs coexist on the same call).
-- [ ] `PoliteFetcher.get()`'s own signature and default values are
+- [x] `PoliteFetcher.get()`'s own signature and default values are
       unchanged — this ticket is entirely about callers, not the
       fetch layer itself.
-- [ ] Full test suite stays green.
+- [x] Full test suite stays green.
 
 ## Testing
 
@@ -122,3 +122,47 @@ repeated 13 times, no other logic change per file.
 noting the new helper and that acquisition-policy threading is now
 real (fetch/DESIGN.md's own docstring precedent for this design is
 finally implemented, not changed).
+
+## Notes
+
+**One necessary deviation from the Fix shape's literal text.** The
+plan's "every call site becomes `fetcher.get(url,
+**acquisition_kwargs(source))`" implicitly assumed `source` was
+already a local variable at all 13+4 call sites. It is not: the
+`Adapter` Protocol's `fetch(self, ref, fetcher) -> RawResponse` method
+(distinct from `discover(source, fetcher)` and `extract(raw, source)`,
+which both already receive `source`) is where 10 of the 13
+`adapters/*.py` call sites live, and `run()` only ever called
+`adapter.fetch(ref, fetcher)` — no `source`. Widened `Adapter.fetch()`
+to `fetch(self, ref, fetcher, source)` in `adapters/base.py`
+(Protocol + `run()`'s call site), and updated all 10 concrete
+`fetch()` implementations plus the two test doubles in
+`tests/test_adapters_base.py` and the one direct `.fetch()` call in
+`tests/test_adapters_leaguesync.py`. Judged in-architecture rather
+than exception-worthy: it makes `fetch()` consistent with
+`discover()`/`extract()` (which already take `source`) rather than
+introducing a new pattern, adds no new inter-subsystem edge (every
+adapter file already imports `SourceConfig` for `extract()`), and
+`adapters/DESIGN.md`'s own Constraints section has no invariant
+pinning `fetch()`'s exact signature. `discovery/sitemap.py`'s two
+private helpers (`_parse_sitemap_index`, `_fetch_root_sitemap`)
+needed the same treatment — an added `source` parameter, threaded
+from `_resolve_event_urls` — but that's a same-module, non-public
+signature change, not a protocol widening.
+
+**Test coverage beyond the ticket's literal ask.** Every
+`FixtureFetcher` test double across the 10 adapter test files + 2
+discovery test files gained a `policy_calls: dict[str, tuple[float,
+bool]]` field (additive, alongside the existing `calls` list so no
+pre-existing `calls == [...]` assertion changed shape) and a
+`TestAcquisitionPolicyThreading` class with a positive
+(custom-policy-reaches-fetcher) and negative (no-policy-still-gets-
+PoliteFetcher-defaults) test per adapter/module — one per
+representative call site named in the AC, both call sites where an
+adapter has two. `tests/test_adapters_leaguesync.py` additionally
+loads the real `registry/sources/leaguesync.toml` via
+`load_active_sources()` for the regression test, proving the actual
+shipped TOML (not a hand-built stand-in) now reaches
+`PoliteFetcher.get()` with `respect_robots=False`.
+
+Full suite: 1508 passed (1476 baseline + 32 new). `uv run pytest -q`.

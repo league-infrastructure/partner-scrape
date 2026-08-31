@@ -21,6 +21,7 @@ import pytest
 from partner_scrape.adapters import ADAPTERS, get_adapter, run
 from partner_scrape.adapters.base import EventRef, RawResponse
 from partner_scrape.adapters.generic_html import GenericHtmlAdapter
+from partner_scrape.fetch import DEFAULT_RATE_LIMIT_SECONDS
 from partner_scrape.fetch.fetcher import FetchResponse
 from partner_scrape.model import Provenance
 from partner_scrape.registry.schema import SourceConfig
@@ -59,18 +60,31 @@ class FixtureFetcher:
 
     responses: dict[str, FetchResponse]
     calls: list[str] = field(default_factory=list)
+    #: Every call's rate_limit_seconds/respect_robots, keyed by URL --
+    #: sprint 015 ticket 003's acquisition_kwargs() threading, recorded
+    #: separately from ``calls`` so existing ``calls == [...]``-style
+    #: assertions elsewhere in this file are unaffected.
+    policy_calls: dict[str, tuple[float, bool]] = field(default_factory=dict)
 
-    def get(self, url: str, headers: dict[str, str] | None = None) -> FetchResponse:
+    def get(
+        self,
+        url: str,
+        headers: dict[str, str] | None = None,
+        rate_limit_seconds: float = 1.0,
+        respect_robots: bool = True,
+    ) -> FetchResponse:
         self.calls.append(url)
+        self.policy_calls[url] = (rate_limit_seconds, respect_robots)
         return self.responses[url]
 
 
-def _source() -> SourceConfig:
+def _source(acquisition_policy: dict | None = None) -> SourceConfig:
     return SourceConfig(
         source_id="fixture_org",
         org_name="Fixture Org",
         adapter_type="generic_html",
         config={"site_url": SITE_URL},
+        acquisition_policy=acquisition_policy or {},
     )
 
 
@@ -126,6 +140,50 @@ class TestEndToEndDiscoverFetchExtract:
         star_party = next(e for e in events if e.title == "Star Party Night")
         assert star_party.start is None
         assert "start" not in star_party.field_provenance
+
+
+class TestAcquisitionPolicyThreading:
+    """Sprint 015 ticket 003: ``fetch()``'s ``fetcher.get()`` call passes
+    ``**acquisition_kwargs(source)`` -- proven here through a full
+    ``run()`` so the same source's policy also reaches
+    ``discovery.sitemap``'s own fetch calls, not just this adapter's.
+    """
+
+    def test_sources_acquisition_policy_reaches_every_fetcher_get_call(self):
+        fetcher = FixtureFetcher(
+            {
+                ROOT_SITEMAP_URL: _response(
+                    _read(SITEMAP_FIXTURES_DIR / "events_sitemap.xml")
+                ),
+                EVENT_URLS[0]: _response(_read(HTML_FIXTURES_DIR / "json_ld_event.html")),
+                EVENT_URLS[1]: _response(_read(HTML_FIXTURES_DIR / "time_tag_only.html")),
+                EVENT_URLS[2]: _response(_read(HTML_FIXTURES_DIR / "opengraph_only.html")),
+            }
+        )
+        source = _source(acquisition_policy={"rate_limit_seconds": 2.5, "respect_robots": False})
+
+        run(source, fetcher)
+
+        assert fetcher.policy_calls[ROOT_SITEMAP_URL] == (2.5, False)
+        assert fetcher.policy_calls[EVENT_URLS[0]] == (2.5, False)
+        assert fetcher.policy_calls[EVENT_URLS[1]] == (2.5, False)
+        assert fetcher.policy_calls[EVENT_URLS[2]] == (2.5, False)
+
+    def test_source_with_no_acquisition_policy_still_gets_polite_fetcher_defaults(self):
+        fetcher = FixtureFetcher(
+            {
+                ROOT_SITEMAP_URL: _response(
+                    _read(SITEMAP_FIXTURES_DIR / "events_sitemap.xml")
+                ),
+                EVENT_URLS[0]: _response(_read(HTML_FIXTURES_DIR / "json_ld_event.html")),
+                EVENT_URLS[1]: _response(_read(HTML_FIXTURES_DIR / "time_tag_only.html")),
+                EVENT_URLS[2]: _response(_read(HTML_FIXTURES_DIR / "opengraph_only.html")),
+            }
+        )
+
+        run(_source(), fetcher)
+
+        assert fetcher.policy_calls[EVENT_URLS[0]] == (DEFAULT_RATE_LIMIT_SECONDS, True)
 
 
 class TestNoTitlePerRecordIsolation:

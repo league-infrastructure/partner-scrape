@@ -33,7 +33,7 @@ from urllib.parse import urljoin
 
 from lxml import html as lxml_html
 
-from partner_scrape.adapters.base import EventRef
+from partner_scrape.adapters.base import EventRef, acquisition_kwargs
 from partner_scrape.discovery.sitemap import EVENT_PATH_RE
 from partner_scrape.fetch import Fetcher
 from partner_scrape.registry.schema import SourceConfig
@@ -110,7 +110,7 @@ def discover_via_listing(source: SourceConfig, fetcher: Fetcher) -> list[EventRe
     refs: list[EventRef] = []
     for listing_url in listing_urls:
         resolved_url = _resolve_listing_url(site_url, listing_url)
-        response = fetcher.get(resolved_url)
+        response = fetcher.get(resolved_url, **acquisition_kwargs(source))
         if response.status != 200:
             logger.warning(
                 "Listing page %s for source %r returned status %s; skipping",

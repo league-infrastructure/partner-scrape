@@ -74,7 +74,13 @@ class FixtureFetcher:
     responses: dict[str, FetchResponse]
     calls: list[str] = field(default_factory=list)
 
-    def get(self, url: str, headers: dict[str, str] | None = None) -> FetchResponse:
+    def get(
+        self,
+        url: str,
+        headers: dict[str, str] | None = None,
+        rate_limit_seconds: float = 1.0,
+        respect_robots: bool = True,
+    ) -> FetchResponse:
         self.calls.append(url)
         return self.responses[url]
 

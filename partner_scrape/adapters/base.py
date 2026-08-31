@@ -21,7 +21,7 @@ import logging
 from dataclasses import dataclass, field
 from typing import Any, Iterable, Protocol
 
-from partner_scrape.fetch import Fetcher
+from partner_scrape.fetch import DEFAULT_RATE_LIMIT_SECONDS, Fetcher
 from partner_scrape.model import Event
 from partner_scrape.registry.schema import DEFAULT_MAX_URLS_PER_SOURCE, SourceConfig
 
@@ -75,8 +75,16 @@ class Adapter(Protocol):
         """
         ...
 
-    def fetch(self, ref: EventRef, fetcher: Fetcher) -> RawResponse:
-        """Retrieve one ``EventRef``'s raw content via the injected ``fetcher``."""
+    def fetch(self, ref: EventRef, fetcher: Fetcher, source: SourceConfig) -> RawResponse:
+        """Retrieve one ``EventRef``'s raw content via the injected ``fetcher``.
+
+        ``source`` is threaded through (sprint 015 ticket 003) so every
+        implementation can pass ``**acquisition_kwargs(source)`` to its
+        own ``fetcher.get()`` call(s) -- ``discover()`` and ``extract()``
+        already receive ``source`` directly; ``fetch()`` previously did
+        not, which is exactly why no adapter ever threaded
+        ``acquisition_policy`` into its fetch call before this ticket.
+        """
         ...
 
     def extract(self, raw: RawResponse, source: SourceConfig) -> Iterable[Event]:
@@ -99,6 +107,37 @@ class UnknownAdapterType(Exception):
 #: (kept out of this module to avoid a circular import between this base
 #: module and each concrete adapter, which imports from it).
 ADAPTERS: dict[str, type[Adapter]] = {}
+
+
+def acquisition_kwargs(source: SourceConfig) -> dict[str, Any]:
+    """``rate_limit_seconds``/``respect_robots`` kwargs for ``fetcher.get()``,
+    read from ``source.acquisition_policy`` with ``PoliteFetcher.get()``'s
+    own defaults as fallback.
+
+    Every ``fetcher.get()`` call site in this package's adapters and the
+    two ``discovery/`` modules that call it directly is expected to
+    spread this dict in: ``fetcher.get(url, **acquisition_kwargs(source))``.
+    Centralizing the pair here (rather than repeating
+    ``source.acquisition_policy.get(...)`` at each of the ~13 call sites)
+    is a single-source-of-truth for what "unset" means, matching the
+    ``max_urls`` fallback pattern in :func:`run` below and
+    ``fetch/cache.py``'s ``PoliteFetcher.get()`` signature, whose own
+    docstring has described this exact design since before it was
+    implemented.
+
+    A ``SourceConfig`` built directly (e.g. in a test) with no
+    ``acquisition_policy`` at all resolves to the same defaults
+    ``PoliteFetcher.get()`` already applies when no override is passed,
+    so omitting ``**acquisition_kwargs(source)`` entirely and calling it
+    are behaviorally identical for such a source -- this ticket changes
+    what a source *with* an ``acquisition_policy`` gets, not the
+    baseline.
+    """
+    policy = source.acquisition_policy
+    return {
+        "rate_limit_seconds": policy.get("rate_limit_seconds", DEFAULT_RATE_LIMIT_SECONDS),
+        "respect_robots": policy.get("respect_robots", True),
+    }
 
 
 def get_adapter(adapter_type: str) -> Adapter:
@@ -165,6 +204,6 @@ def run(source: SourceConfig, fetcher: Fetcher) -> list[Event]:
 
     events: list[Event] = []
     for ref in refs:
-        raw = adapter.fetch(ref, fetcher)
+        raw = adapter.fetch(ref, fetcher, source)
         events.extend(adapter.extract(raw, source))
     return events

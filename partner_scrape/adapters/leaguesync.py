@@ -63,7 +63,7 @@ from datetime import datetime
 from typing import Any, Iterable
 
 from partner_scrape import config
-from partner_scrape.adapters.base import EventRef, RawResponse
+from partner_scrape.adapters.base import EventRef, RawResponse, acquisition_kwargs
 from partner_scrape.fetch import Fetcher
 from partner_scrape.model import Event
 from partner_scrape.registry.schema import SourceConfig
@@ -373,8 +373,8 @@ class LeagueSyncAdapter:
             ),
         ]
 
-    def fetch(self, ref: EventRef, fetcher: Fetcher) -> RawResponse:
-        response = fetcher.get(ref.url, headers=_auth_headers())
+    def fetch(self, ref: EventRef, fetcher: Fetcher, source: SourceConfig) -> RawResponse:
+        response = fetcher.get(ref.url, headers=_auth_headers(), **acquisition_kwargs(source))
         return RawResponse(ref=ref, status=response.status, body=response.body)
 
     def extract(self, raw: RawResponse, source: SourceConfig) -> Iterable[Event]:

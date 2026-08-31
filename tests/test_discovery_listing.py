@@ -19,6 +19,7 @@ from pathlib import Path
 import pytest
 
 from partner_scrape.discovery.listing import discover_via_listing
+from partner_scrape.fetch import DEFAULT_RATE_LIMIT_SECONDS
 from partner_scrape.fetch.fetcher import FetchResponse
 from partner_scrape.registry.schema import SourceConfig
 
@@ -63,13 +64,27 @@ class FixtureFetcher:
 
     responses: dict[str, FetchResponse]
     calls: list[str] = field(default_factory=list)
+    #: Every call's rate_limit_seconds/respect_robots, keyed by URL --
+    #: sprint 015 ticket 003's acquisition_kwargs() threading, recorded
+    #: separately from ``calls`` so existing ``calls == [...]``-style
+    #: assertions elsewhere in this file are unaffected.
+    policy_calls: dict[str, tuple[float, bool]] = field(default_factory=dict)
 
-    def get(self, url: str, headers: dict[str, str] | None = None) -> FetchResponse:
+    def get(
+        self,
+        url: str,
+        headers: dict[str, str] | None = None,
+        rate_limit_seconds: float = 1.0,
+        respect_robots: bool = True,
+    ) -> FetchResponse:
         self.calls.append(url)
+        self.policy_calls[url] = (rate_limit_seconds, respect_robots)
         return self.responses[url]
 
 
-def _source(listing_urls: list[str] | None = None) -> SourceConfig:
+def _source(
+    listing_urls: list[str] | None = None, acquisition_policy: dict | None = None
+) -> SourceConfig:
     return SourceConfig(
         source_id="fleet-science-center",
         org_name="Fleet Science Center",
@@ -78,6 +93,7 @@ def _source(listing_urls: list[str] | None = None) -> SourceConfig:
             "site_url": SITE_URL,
             "listing_urls": listing_urls if listing_urls is not None else ["/events"],
         },
+        acquisition_policy=acquisition_policy or {},
     )
 
 
@@ -123,6 +139,27 @@ class TestMatchingLinks:
 
         urls = [r.url for r in refs]
         assert len(urls) == len(set(urls)) == 10
+
+
+class TestAcquisitionPolicyThreading:
+    def test_sources_acquisition_policy_reaches_fetcher_get(self):
+        fetcher = FixtureFetcher(
+            {LISTING_URL: _response(_read_fixture("fleet_events_listing.html"))}
+        )
+        source = _source(acquisition_policy={"rate_limit_seconds": 8.0, "respect_robots": False})
+
+        discover_via_listing(source, fetcher)
+
+        assert fetcher.policy_calls[LISTING_URL] == (8.0, False)
+
+    def test_source_with_no_acquisition_policy_still_gets_polite_fetcher_defaults(self):
+        fetcher = FixtureFetcher(
+            {LISTING_URL: _response(_read_fixture("fleet_events_listing.html"))}
+        )
+
+        discover_via_listing(_source(), fetcher)
+
+        assert fetcher.policy_calls[LISTING_URL] == (DEFAULT_RATE_LIMIT_SECONDS, True)
 
 
 class TestNonMatchingLinks:

@@ -24,9 +24,26 @@ The public contract is `base.py`'s `Adapter` Protocol: three methods, `discover`
   set of fetchable units. For a structured API that is usually "enumerate the pages",
   sometimes after a cheap probe call; for the HTML adapters it delegates to the
   `discovery/` subsystem.
-- `fetch(ref, fetcher) -> RawResponse` retrieves one unit through the injected
-  `Fetcher`. Adapters never open sockets themselves.
+- `fetch(ref, fetcher, source) -> RawResponse` retrieves one unit through the injected
+  `Fetcher`. Adapters never open sockets themselves. **(Sprint 015 ticket 003)** gained
+  the `source` parameter, matching `discover()`/`extract()`, which already received it
+  — see below.
 - `extract(raw, source) -> Iterable[Event]` maps one raw body into zero or more `Event`s.
+
+**(Sprint 015 ticket 003)** `fetch()`'s `source` parameter exists so every
+implementation can call the new `acquisition_kwargs(source) -> dict[str, Any]` helper
+(also in `base.py`) and spread its result into its own `fetcher.get()` call(s):
+`fetcher.get(url, **acquisition_kwargs(source))`. `acquisition_kwargs()` reads
+`source.acquisition_policy["rate_limit_seconds"]`/`["respect_robots"]`, falling back to
+`PoliteFetcher.get()`'s own defaults when a source sets neither — the same
+default-merge pattern `run()`'s own `max_urls` handling already uses. Before this
+ticket, `fetch()` took only `(ref, fetcher)`, so no adapter's fetch call could reach a
+source's acquisition policy at all; every `fetcher.get()` call site in this package's
+adapters and in `discovery/sitemap.py`/`discovery/listing.py` (which import
+`acquisition_kwargs` from here the same way they already import `EventRef`) now passes
+it through. This is what makes `leaguesync.toml`'s `respect_robots = false` — parsed
+but previously never threaded anywhere — finally reach `PoliteFetcher.get()`. See
+`fetch/DESIGN.md`'s own Sprint 015 addendum for the receiving side.
 
 `run()` is the only chaining logic and is adapter-agnostic: it looks the class up in the
 `ADAPTERS` dispatch dict, instantiates it, materializes `discover()`'s output, truncates
@@ -130,6 +147,11 @@ three methods is a valid `Adapter`.
   `UnknownAdapterType` with the known-type list rather than a bare `KeyError`.
 - **`ats_filters.classify_posting(...) -> PostingVerdict`** — shared internship/STEM/
   locality classification for the ATS adapters.
+- **`acquisition_kwargs(source: SourceConfig) -> dict[str, Any]`** — **(Sprint 015
+  ticket 003)** the `rate_limit_seconds`/`respect_robots` kwargs for `fetcher.get()`,
+  read from `source.acquisition_policy`. Consumed by every `fetch()` implementation in
+  this package and by `discovery/sitemap.py`/`discovery/listing.py`, which import it
+  from here the same way they already import `EventRef` — see §2.
 
 ### Consumes
 - **`Fetcher` (from `fetch/`)** — every remote read. Injected per call; see `fetch/DESIGN.md`.

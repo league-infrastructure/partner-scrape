@@ -19,9 +19,11 @@ from partner_scrape.adapters.base import (
     EventRef,
     RawResponse,
     UnknownAdapterType,
+    acquisition_kwargs,
     get_adapter,
     run,
 )
+from partner_scrape.fetch import DEFAULT_RATE_LIMIT_SECONDS
 from partner_scrape.fetch.fetcher import FetchResponse
 from partner_scrape.model import Event
 from partner_scrape.registry.schema import SourceConfig
@@ -71,7 +73,7 @@ class _StaticFakeAdapter:
     def discover(self, source, fetcher):
         return self._REFS
 
-    def fetch(self, ref, fetcher):
+    def fetch(self, ref, fetcher, source):
         return RawResponse(ref=ref, status=200, body="")
 
     def extract(self, raw, source):
@@ -142,7 +144,7 @@ class _ConfigurableRefsFakeAdapter:
     def discover(self, source, fetcher):
         return [EventRef(url=f"https://example.org/page/{i}") for i in range(self.REF_COUNT)]
 
-    def fetch(self, ref, fetcher):
+    def fetch(self, ref, fetcher, source):
         return RawResponse(ref=ref, status=200, body="")
 
     def extract(self, raw, source):
@@ -238,3 +240,84 @@ class TestMaxUrlsCap:
         events = run(source, _NullFetcher())
 
         assert len(events) == DEFAULT_MAX_URLS_PER_SOURCE + 10
+
+
+class TestAcquisitionKwargs:
+    """``acquisition_kwargs(source)`` -- sprint 015 ticket 003's helper
+    that reads ``source.acquisition_policy`` into the two kwargs every
+    ``fetcher.get()`` call site now spreads in. See this ticket for the
+    ``PoliteFetcher.get()`` docstring precedent this helper finally
+    implements.
+    """
+
+    def test_source_with_no_acquisition_policy_keys_resolves_to_polite_fetcher_defaults(self):
+        # A directly-constructed SourceConfig (no from_toml merge) with
+        # acquisition_policy={} -- the exact shape DEFAULT_MAX_URLS_PER_
+        # SOURCE's own docstring calls out as this module's defensive
+        # fallback case.
+        source = _source_with_acquisition_policy({})
+
+        kwargs = acquisition_kwargs(source)
+
+        assert kwargs == {
+            "rate_limit_seconds": DEFAULT_RATE_LIMIT_SECONDS,
+            "respect_robots": True,
+        }
+
+    def test_explicit_override_of_both_keys_is_returned_verbatim(self):
+        source = _source_with_acquisition_policy(
+            {"rate_limit_seconds": 5.0, "respect_robots": False}
+        )
+
+        kwargs = acquisition_kwargs(source)
+
+        assert kwargs == {"rate_limit_seconds": 5.0, "respect_robots": False}
+
+    def test_leaguesync_toml_shaped_policy_yields_respect_robots_false(self):
+        # Mirrors registry/sources/leaguesync.toml's real
+        # [acquisition_policy] section verbatim -- this is the exact
+        # shape that was previously dead config (see this ticket's
+        # Description).
+        source = _source_with_acquisition_policy(
+            {
+                "respect_robots": False,
+                "rate_limit_seconds": 1.0,
+                "discovered_via": "OOP build, 2026-07-20",
+            }
+        )
+
+        kwargs = acquisition_kwargs(source)
+
+        assert kwargs["respect_robots"] is False
+        assert kwargs["rate_limit_seconds"] == 1.0
+
+
+class TestRunThreadsSourceIntoFetch:
+    """``run()`` passes ``source`` as ``fetch()``'s third positional
+    argument (this ticket widened the ``Adapter.fetch()`` Protocol to
+    match ``discover()``/``extract()``, which already received
+    ``source`` -- see ``adapters/base.py``'s ``Adapter.fetch()``
+    docstring) -- proven directly rather than only implied by every
+    concrete adapter's own tests passing.
+    """
+
+    def test_fetch_receives_the_same_source_instance_run_was_called_with(self):
+        received: list[SourceConfig] = []
+
+        class _RecordingAdapter:
+            def discover(self, source, fetcher):
+                return [EventRef(url="https://example.org/only")]
+
+            def fetch(self, ref, fetcher, source):
+                received.append(source)
+                return RawResponse(ref=ref, status=200, body="")
+
+            def extract(self, raw, source):
+                return []
+
+        ADAPTERS["fake_test_type"] = _RecordingAdapter
+        source = _source("fake_test_type")
+
+        run(source, _NullFetcher())
+
+        assert received == [source]

@@ -43,8 +43,10 @@ from partner_scrape.adapters.leaguesync import (
     LeagueSyncAdapter,
     _query_url,
 )
+from partner_scrape.fetch import DEFAULT_RATE_LIMIT_SECONDS
 from partner_scrape.fetch.fetcher import FetchResponse
 from partner_scrape.model import Provenance
+from partner_scrape.registry.loader import load_active_sources
 from partner_scrape.registry.schema import SourceConfig
 
 FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures" / "leaguesync"
@@ -75,18 +77,31 @@ class FixtureFetcher:
 
     responses: dict[str, FetchResponse]
     calls: list[tuple[str, dict[str, str] | None]] = field(default_factory=list)
+    #: Every call's rate_limit_seconds/respect_robots, keyed by URL --
+    #: sprint 015 ticket 003's acquisition_kwargs() threading, recorded
+    #: separately from ``calls`` so existing ``calls == [...]``-style
+    #: assertions elsewhere in this file are unaffected.
+    policy_calls: dict[str, tuple[float, bool]] = field(default_factory=dict)
 
-    def get(self, url: str, headers: dict[str, str] | None = None) -> FetchResponse:
+    def get(
+        self,
+        url: str,
+        headers: dict[str, str] | None = None,
+        rate_limit_seconds: float = 1.0,
+        respect_robots: bool = True,
+    ) -> FetchResponse:
         self.calls.append((url, headers))
+        self.policy_calls[url] = (rate_limit_seconds, respect_robots)
         return self.responses[url]
 
 
-def _source(api_base: str = API_BASE) -> SourceConfig:
+def _source(api_base: str = API_BASE, acquisition_policy: dict | None = None) -> SourceConfig:
     return SourceConfig(
         source_id="leaguesync",
         org_name="The LEAGUE of Amazing Programmers",
         adapter_type="leaguesync",
         config={"api_base": api_base},
+        acquisition_policy=acquisition_policy or {},
     )
 
 
@@ -163,7 +178,7 @@ class TestAuthHeader:
         adapter = LeagueSyncAdapter()
         fetcher = _real_fetcher()
 
-        adapter.fetch(EventRef(url=CLASSES_URL, context={"kind": KIND_CLASSES}), fetcher)
+        adapter.fetch(EventRef(url=CLASSES_URL, context={"kind": KIND_CLASSES}), fetcher, _source())
 
         assert fetcher.calls == [(CLASSES_URL, {"Authorization": f"Bearer {TOKEN}"})]
 
@@ -175,6 +190,70 @@ class TestAuthHeader:
         called_urls_and_headers = dict(fetcher.calls)
         assert called_urls_and_headers[CLASSES_URL] == {"Authorization": f"Bearer {TOKEN}"}
         assert called_urls_and_headers[TECH_CLUBS_URL] == {"Authorization": f"Bearer {TOKEN}"}
+
+
+class TestAcquisitionPolicyThreading:
+    """Sprint 015 ticket 003: ``fetch()``'s ``fetcher.get()`` call now
+    passes ``**acquisition_kwargs(source)`` alongside the existing
+    ``headers=_auth_headers()`` -- both kwargs must coexist on the same
+    call (this ticket's Acceptance Criteria).
+    """
+
+    def test_fetch_passes_the_sources_acquisition_policy_alongside_headers(self):
+        adapter = LeagueSyncAdapter()
+        fetcher = _real_fetcher()
+        source = _source(acquisition_policy={"rate_limit_seconds": 3.5, "respect_robots": False})
+
+        adapter.fetch(EventRef(url=CLASSES_URL, context={"kind": KIND_CLASSES}), fetcher, source)
+
+        assert fetcher.policy_calls[CLASSES_URL] == (3.5, False)
+        # headers= is unaffected by acquisition_kwargs being added.
+        assert fetcher.calls == [(CLASSES_URL, {"Authorization": f"Bearer {TOKEN}"})]
+
+    def test_source_with_no_acquisition_policy_still_reaches_fetcher_defaults(self):
+        adapter = LeagueSyncAdapter()
+        fetcher = _real_fetcher()
+
+        adapter.fetch(EventRef(url=CLASSES_URL, context={"kind": KIND_CLASSES}), fetcher, _source())
+
+        assert fetcher.policy_calls[CLASSES_URL] == (DEFAULT_RATE_LIMIT_SECONDS, True)
+
+    def test_real_leaguesync_toml_respect_robots_false_reaches_fetcher_get(self):
+        # Regression test for this ticket's Description: leaguesync.toml's
+        # respect_robots = false was parsed into SourceConfig.
+        # acquisition_policy but never threaded into fetcher.get() before
+        # this ticket -- every call site hardcoded no override, so
+        # PoliteFetcher's respect_robots=True default always applied
+        # regardless of this TOML setting. No TOML change was needed to
+        # fix this; only the adapter's fetch() call site.
+        sources = {s.source_id: s for s in load_active_sources()}
+        real_source = sources["leaguesync"]
+        assert real_source.acquisition_policy["respect_robots"] is False
+
+        adapter = LeagueSyncAdapter()
+        fetcher = _real_fetcher()
+
+        adapter.fetch(
+            EventRef(url=CLASSES_URL, context={"kind": KIND_CLASSES}), fetcher, real_source
+        )
+
+        rate_limit_seconds, respect_robots = fetcher.policy_calls[CLASSES_URL]
+        assert respect_robots is False
+        assert rate_limit_seconds == 1.0
+
+    def test_real_leaguesync_toml_end_to_end_via_run(self):
+        # End-to-end variant of the regression above, through run()
+        # rather than calling fetch() directly -- proves the real
+        # registry source, dispatched the normal way, actually reaches
+        # PoliteFetcher.get() with respect_robots=False on every fetch.
+        sources = {s.source_id: s for s in load_active_sources()}
+        real_source = sources["leaguesync"]
+        fetcher = _real_fetcher()
+
+        run(real_source, fetcher)
+
+        assert fetcher.policy_calls[CLASSES_URL] == (1.0, False)
+        assert fetcher.policy_calls[TECH_CLUBS_URL] == (1.0, False)
 
 
 class TestFieldMappingClasses:
