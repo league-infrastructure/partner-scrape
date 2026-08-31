@@ -1,7 +1,7 @@
 ---
 id: '006'
 title: Add Camps and Competitions opportunity types end-to-end
-status: in-progress
+status: done
 use-cases:
 - SUC-007
 depends-on: []
