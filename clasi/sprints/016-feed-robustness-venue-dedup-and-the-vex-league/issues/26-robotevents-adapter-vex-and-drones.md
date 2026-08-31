@@ -1,5 +1,9 @@
 ---
-status: pending
+status: in-progress
+sprint: '016'
+tickets:
+- 016-004
+- 016-005
 ---
 
 # RobotEvents API adapter: VEX Region 4 events and teams, plus drone competitions
