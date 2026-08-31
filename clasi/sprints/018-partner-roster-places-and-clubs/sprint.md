@@ -8,6 +8,7 @@ issues:
 - 32-partner-roster-expansion-and-housekeeping.md
 - 35-standing-entities-clubs-and-places.md
 - 43-run-command-mirror-step-did-not-fire.md
+- 45-publish-legacy-jsonl-tolerance.md
 ---
 <!-- CLASI: Before changing code or making plans, review the SE process in CLAUDE.md -->
 
@@ -557,5 +558,8 @@ Before tickets can be created, all of the following must be true:
 | 007 | Places directory: model, static-roster source, curated dataset, and directory/ scaffolding | 006 |
 | 008 | Clubs data model and Hack Club chapters proof of concept | 006, 007 |
 | 009 | Site directory pages for places and clubs | 007, 008 |
+| 010 | Tolerate legacy partner-log lines in publish.project() | — |
 
-Tickets execute serially in the order listed.
+Tickets execute serially in the order listed. Ticket 010 was added
+mid-flight (issue 45, linked after sprint start) and has no dependency
+on 002-009 — it can execute at any point in the existing sequence.

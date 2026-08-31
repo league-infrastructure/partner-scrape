@@ -1,5 +1,8 @@
 ---
-status: pending
+status: in-progress
+sprint: 018
+tickets:
+- 018-010
 ---
 
 # publish.project() must tolerate legacy partner-log lines missing newer Opportunity fields
