@@ -1,9 +1,12 @@
 ---
 id: '003'
 title: Publish opportunities.json/scrape-meta.json into data/ from export_opportunities()
-status: open
-use-cases: [SUC-019]
-depends-on: ['001', '002']
+status: in-progress
+use-cases:
+- SUC-019
+depends-on:
+- '001'
+- '002'
 github-issue: ''
 issue: 60-publish-pipeline-output-in-well-known-data-directory.md
 completes_issue: true

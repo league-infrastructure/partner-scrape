@@ -2,7 +2,7 @@
 id: '002'
 title: 'Establish data/ as the pipeline''s own publish target: config accessor and
   legacy file removal'
-status: in-progress
+status: done
 use-cases:
 - SUC-019
 depends-on: []
