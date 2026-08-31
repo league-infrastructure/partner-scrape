@@ -118,6 +118,12 @@ _REPO_ROOT = _PACKAGE_DIR.parent
 #: ``SITE_DIR``.
 DEFAULT_SITE_DIR = _REPO_ROOT.parent / "stem-ecosystem"
 
+#: Default location of this repo's own pipeline-output publish target
+#: (``data/`` at the repo root). Not overridable via environment
+#: variable -- the location is fixed by design (see sprint 020's
+#: Design Rationale and Open Questions).
+DEFAULT_OWN_DATA_DIR = _REPO_ROOT / "data"
+
 
 def get_scrape_cache_dir() -> Path:
     """Return the configured scrape cache directory.
@@ -151,6 +157,16 @@ def get_site_dir() -> Path:
     if value:
         return Path(value)
     return DEFAULT_SITE_DIR
+
+
+def get_own_data_dir() -> Path:
+    """Return the path to this repo's own pipeline-output publish target.
+
+    Always returns ``DEFAULT_OWN_DATA_DIR`` (``<repo_root>/data``) --
+    unlike ``get_site_dir()``, this has no environment variable override;
+    the location is fixed by design.
+    """
+    return DEFAULT_OWN_DATA_DIR
 
 
 def get_leaguesync_api_key() -> str:
