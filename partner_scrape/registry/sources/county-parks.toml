@@ -1,0 +1,50 @@
+# San Diego County Parks and Recreation -- Tockify ICS subscription
+# feed (sdparkscalendar), the countywide ranger-program calendar. Live,
+# the single highest-yield feed in the sprint 015 issue 38 batch, but
+# withheld by sprint 015 ticket 005 for a genuine `ical.py` bug, not
+# the robots-policy question itself: Tockify emits a non-standard
+# `X-PUBLISHED-TTL:P15M` property that `icalendar`'s strict duration
+# parser rejected outright, aborting the whole feed before a single
+# VEVENT was read. Sprint 016 ticket 001 fixed that with a targeted
+# pre-parse strip -- but the same feed also carries a second,
+# adjacent, equally non-standard `REFRESH-INTERVAL:P15M` property with
+# the identical invalid value, which ticket 001's narrower strip did
+# not cover; sprint 016 ticket 002's live re-verification of this exact
+# registration found the feed still returned zero, root-caused the
+# second property, and widened the pre-parse strip
+# (`_NONSTANDARD_DURATION_PROPERTIES` in `adapters/ical.py`) to cover
+# both live-evidenced properties. This TOML re-verifies against that
+# widened fix and commits.
+#
+# Sprint 015 issue 38 / ticket 005: Eric decided 2026-08-30 to treat
+# explicitly-published ICS subscription URLs as feed-client traffic --
+# poll politely, ignore robots.txt for this URL class (see issue 38's
+# "Stakeholder decision" section). `acquisition_policy.respect_robots
+# = false` below is real as of sprint 015 ticket 003's threading fix
+# (adapters.base.acquisition_kwargs -> PoliteFetcher.get()).
+#
+# Live-verified 2026-08-31 (sprint 016 ticket 002, re-confirming sprint
+# 014 ticket 004's and sprint 015 ticket 005's original count of 553):
+#
+#   GET https://tockify.com/api/feeds/ics/sdparkscalendar
+#
+# returns HTTP 200, content-type text/calendar, 553 raw VEVENTs.
+# `uv run partner-scrape --dry-run --no-enrich --source county-parks`
+# through the real `ical` adapter (not just a raw fetch) confirms
+# non-zero, dated output following sprint 016 ticket 002's widened fix
+# -- see this ticket's Notes for the exact found/dated/new counts.
+#
+# No partners.json match -- candidate for issue 32's roster expansion
+# (per sprint 014 ticket 004's original list), not force-matched.
+
+org_name = "San Diego County Parks and Recreation"
+adapter_type = "ical"
+enabled = true
+
+[config]
+feed_url = "https://tockify.com/api/feeds/ics/sdparkscalendar"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = false
+discovered_via = "sprint 016 ticket 002 registration (issue 38 stakeholder decision 2026-08-30: published ICS subscription URLs are feed-client traffic; withheld by sprint 015 ticket 005 for the X-PUBLISHED-TTL parser bug, then still blocked by an adjacent REFRESH-INTERVAL duration property until this same ticket widened the pre-parse strip; re-verified via live dry-run)"

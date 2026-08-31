@@ -230,11 +230,18 @@ class TestIcalIsRegistered:
 
 
 class TestTockifyTTLTolerance:
-    """(Sprint 016 ticket 001) county-parks (Tockify) emits
-    ``X-PUBLISHED-TTL:P15M`` at the calendar level -- a non-standard
-    duration value ``icalendar``'s strict parser can reject. The fixture
-    body below is built from the real value sprint 015 ticket 005 measured
-    live against ``county-parks``.
+    """(Sprint 016 ticket 001, widened by ticket 002) county-parks
+    (Tockify) emits ``X-PUBLISHED-TTL:P15M`` at the calendar level -- a
+    non-standard duration value ``icalendar``'s strict parser can reject.
+    The fixture body below is built from the real value sprint 015
+    ticket 005 measured live against ``county-parks``.
+
+    Ticket 002's live re-verification of the actual ``county-parks``
+    registration found ticket 001's strip alone insufficient: the same
+    feed also carries ``REFRESH-INTERVAL:P15M``, immediately adjacent to
+    ``X-PUBLISHED-TTL`` in the real ``VCALENDAR`` header, which
+    ``icalendar`` rejects identically. ``TestBothNonstandardDurationProperties``
+    below covers that combined, live-evidenced case.
     """
 
     def test_ttl_body_parses_and_yields_fixture_vevents(self):
@@ -257,6 +264,31 @@ class TestTockifyTTLTolerance:
         tide_pool = next(e for e in events if e.title == "Tide Pool Exploration")
         assert tide_pool.start == datetime(2026, 8, 15, 9, 0, 0)
         assert tide_pool.location == "Cabrillo Tide Pools, San Diego, CA"
+
+
+class TestBothNonstandardDurationProperties:
+    """(Sprint 016 ticket 002) The real ``county-parks`` feed carries
+    BOTH ``X-PUBLISHED-TTL:P15M`` and ``REFRESH-INTERVAL:P15M`` in its
+    ``VCALENDAR`` header -- live-verified 2026-08-31 via
+    ``partner-scrape --dry-run --no-enrich --source county-parks``.
+    Ticket 001's strip alone still left ``REFRESH-INTERVAL`` unparsed,
+    aborting ``Calendar.from_ical()`` with the identical
+    ``InvalidCalendar: Invalid iCalendar duration: P15M`` before this
+    ticket widened ``_NONSTANDARD_DURATION_PROPERTIES``. This fixture is
+    ``tockify_ttl.ics`` plus one added ``REFRESH-INTERVAL:P15M`` line.
+    """
+
+    def test_feed_with_both_properties_parses_and_yields_fixture_vevents(self):
+        events = run(
+            _source(), _feed_fetcher(_read_fixture("tockify_ttl_and_refresh_interval.ics"))
+        )
+
+        titles = {e.title for e in events}
+        assert titles == {"Ranger Talk: Tide Pool Ecology", "Guided Trail Hike"}
+
+        ranger_talk = next(e for e in events if e.title == "Ranger Talk: Tide Pool Ecology")
+        assert ranger_talk.start == datetime(2026, 8, 15, 9, 0, 0)
+        assert ranger_talk.location == "Cabrillo National Monument, San Diego, CA"
 
 
 class TestMultiRruleSalvage:

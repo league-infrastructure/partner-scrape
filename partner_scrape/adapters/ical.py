@@ -52,16 +52,24 @@ MAX_RRULE_WINDOW_DAYS = 180
 #: See :data:`MAX_RRULE_WINDOW_DAYS`.
 MAX_RRULE_INSTANCES = 52
 
-#: **(Sprint 016 ticket 001)** Tockify's non-standard ``X-PUBLISHED-TTL``
-#: property (observed value ``P15M`` -- presumably intended as ``PT15M``,
-#: 15 minutes, not the 15-month reading the ISO-8601 duration grammar would
-#: give it) is a property this adapter never reads. A targeted pre-parse
-#: strip removes the whole line before the body reaches
-#: ``icalendar.Calendar.from_ical()`` -- a narrow, evidenced fix (one real
-#: feed, one property), not a general X-property sanitizer. See
-#: ``adapters/DESIGN.md``'s sprint-016 addendum for the alternatives
-#: considered.
-_X_PUBLISHED_TTL_RE = re.compile(r"(?im)^X-PUBLISHED-TTL:[^\r\n]*\r?\n?")
+#: **(Sprint 016 tickets 001 and 002)** Tockify emits non-standard
+#: calendar-level duration properties this adapter never reads, both
+#: observed with the same invalid value ``P15M`` on the live
+#: ``county-parks`` feed -- presumably intended as ``PT15M``, 15 minutes,
+#: not the 15-month reading the ISO-8601 duration grammar would give it.
+#: ``X-PUBLISHED-TTL`` (ticket 001) and ``REFRESH-INTERVAL`` (ticket 002,
+#: found immediately adjacent to it in the same feed once ticket 001's
+#: strip alone still left the feed unparseable) are the two
+#: live-evidenced properties; this list is extensible if a third
+#: evidenced case appears, but deliberately stays a targeted list of
+#: real, measured properties rather than a blanket X-property/custom-
+#: property sanitizer -- a different malformed property still fails
+#: loudly through the existing top-level ``except Exception`` around
+#: ``from_ical()``. See ``adapters/DESIGN.md``'s sprint-016 addendum.
+_NONSTANDARD_DURATION_PROPERTIES = ("X-PUBLISHED-TTL", "REFRESH-INTERVAL")
+_NONSTANDARD_DURATION_RE = re.compile(
+    r"(?im)^(?:" + "|".join(_NONSTANDARD_DURATION_PROPERTIES) + r"):[^\r\n]*\r?\n?"
+)
 
 
 def _as_datetime(value: date | datetime) -> tuple[datetime, bool]:
@@ -127,10 +135,11 @@ class ICalAdapter:
             logger.warning("iCal feed %s returned an empty body; skipping", raw.ref.url)
             return []
 
-        # (Sprint 016 ticket 001) Strip the one non-standard X- property
-        # known to break icalendar's parser before from_ical() ever sees
-        # it -- see _X_PUBLISHED_TTL_RE's docstring.
-        body = _X_PUBLISHED_TTL_RE.sub("", raw.body)
+        # (Sprint 016 tickets 001, 002) Strip the known non-standard
+        # duration properties that break icalendar's parser before
+        # from_ical() ever sees them -- see
+        # _NONSTANDARD_DURATION_PROPERTIES' docstring.
+        body = _NONSTANDARD_DURATION_RE.sub("", raw.body)
 
         try:
             calendar = icalendar.Calendar.from_ical(body)

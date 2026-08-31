@@ -31,21 +31,24 @@ real by ticket 003's fetcher-threading fix; `county-parks` and
 `sd-astronomy-association` were dropped after live dry-run exposed pre-existing
 `ical.py` parsing bugs unrelated to robots policy (see the ticket's Notes).
 
-**(Sprint 016 ticket 002)** Of the two feeds sprint 015 ticket 005 withheld,
-sprint 016 ticket 001's `ical.py` hardening (multi-RRULE first-rule salvage,
-widened per-VEVENT exception isolation) fully unblocks
+**(Sprint 016 ticket 002)** Both feeds sprint 015 ticket 005 withheld are now
+registered. Sprint 016 ticket 001's `ical.py` hardening (multi-RRULE
+first-rule salvage, widened per-VEVENT exception isolation) fully unblocks
 `sd-astronomy-association`, live-verified `found=795 dated=795 new=177` and
-committed. `county-parks` (Tockify) is **still not registered**: ticket 001's
+committed. `county-parks` (Tockify) needed one more fix: ticket 001's
 `X-PUBLISHED-TTL` pre-parse strip was necessary but not sufficient — the same
 Tockify feed also emits a second, distinct non-standard duration property,
 `REFRESH-INTERVAL:P15M`, immediately after `X-PUBLISHED-TTL` in the
 `VCALENDAR` header, which `icalendar`'s strict parser rejects identically
-(`InvalidCalendar: Invalid iCalendar duration: P15M`), so the feed as a whole
-still yields zero at dry-run time. Confirmed by diagnostic-only stripping of
-both properties (not shipped as a code change — out of this data-only
-ticket's scope): the feed then parses cleanly, all 553 VEVENTs readable. This
-is a genuine adapter-code gap for a follow-up ticket, not a robots-policy or
-registration issue — see sprint 016 ticket 002's Notes.
+(`InvalidCalendar: Invalid iCalendar duration: P15M`). Per a team-lead ruling
+that this was a second live-evidenced case of the exact pattern ticket 001
+already fixed (not a new architectural boundary), ticket 002 widened
+`ical.py`'s pre-parse strip to a small evidenced-property list covering both
+properties (see `adapters/DESIGN.md`'s sprint-016 addendum). Re-verified live:
+`county-parks` now returns `found=553 dated=553 new=36`, all 553 raw VEVENTs
+parsing — this batch's single highest-yield feed. Both are committed with
+`acquisition_policy.respect_robots = false`, completing the 5-of-5 robots-gated
+batch from issue 38/40.
 
 ## 2. Orientation
 

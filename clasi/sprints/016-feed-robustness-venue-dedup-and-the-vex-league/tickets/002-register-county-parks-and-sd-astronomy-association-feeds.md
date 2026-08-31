@@ -28,25 +28,25 @@ re-verifies against the fixed adapter and commits.
 - [x] `county-parks.toml` and `sd-astronomy-association.toml` are
       committed with `acquisition_policy.respect_robots = false`,
       matching the already-registered `mission-trails`/`surfrider-sd`/
-      `swe-san-diego` TOMLs' shape from sprint 015 ticket 005.
-      **Partially met — see Notes.** `sd-astronomy-association.toml`
-      committed in this shape. `county-parks.toml` was authored in
-      this shape, live-verified to still return zero, and per the AC
-      below was **not** committed (removed from disk, not just left
-      unstaged, since the registry loader globs every `*.toml` file
-      in `sources/` regardless of git tracking status).
+      `swe-san-diego` TOMLs' shape from sprint 015 ticket 005. **Fully
+      met.** Both committed, both in this shape — see Notes for the
+      team-lead ruling that widening ticket 001's pre-parse strip
+      (rather than leaving `county-parks` withheld) was in scope for
+      this ticket after all.
 - [x] Each is live-verified via `partner-scrape --dry-run --no-enrich
       --source <id>` through the real `ical` adapter to return
-      non-zero, dated output before commit. Both were run; see Notes
-      for the per-source result (one passed, one still fails).
+      non-zero, dated output before commit. Both confirmed non-zero,
+      dated — see Notes for the per-source found/dated/new counts.
 - [x] If either still returns zero at dry-run time (ticket 001's fix
       did not fully resolve it), that TOML is **not** committed and
       this ticket records why in its Notes, per sprint 015 ticket
       005's own withholding convention — this ticket does not close
       as fully done in that case; it is left `open` with the finding
-      recorded, matching that same precedent. **Applies to
-      `county-parks`** — see Notes for the precise, newly-identified
-      root cause (distinct from the one ticket 001 fixed).
+      recorded, matching that same precedent. **N/A as shipped** — the
+      team-lead ruled the newly-identified `REFRESH-INTERVAL` root
+      cause was in-scope to fix directly (a second live-evidenced case
+      of the exact pattern ticket 001 already established), so it was
+      fixed rather than withheld; see Notes for the full sequence.
 - [x] `org_name` is checked against `site/src/data/partners.json`;
       neither is expected to match (both remain issue 32
       roster-expansion candidates per sprint 014 ticket 004's original
@@ -55,16 +55,20 @@ re-verifies against the fixed adapter and commits.
       "San Diego Astronomy Association" appears in `partners.json`.
 - [x] Full test suite stays green (registry loader tests already cover
       generic `ical` TOML parsing; no new hermetic tests expected
-      purely from adding data-only TOML files). 1546 passed, matching
-      the ticket-001 baseline exactly (one new TOML committed, zero
-      new hermetic tests, per this ticket's own Testing plan).
+      purely from adding data-only TOML files). 1547 passed (1546 +
+      1 new fixture regression test for the combined
+      `X-PUBLISHED-TTL`/`REFRESH-INTERVAL` case — see Notes for why
+      this ticket did add one hermetic test, departing from its own
+      original Testing plan once adapter code changed).
 
 ## Notes (ticket 002, 2026-08-30/31)
 
-**Registered (1 of 2): `sd-astronomy-association`.** Ticket 001's fix
-(multi-RRULE first-rule salvage in `_extract_component`, plus widening
-`extract()`'s per-VEVENT catch from `(ValueError, TypeError, KeyError)`
-to `Exception`) fully resolves the bug sprint 015 ticket 005 hit. Live
+**Registered (2 of 2): `sd-astronomy-association` and `county-parks`.**
+
+**`sd-astronomy-association`.** Ticket 001's fix (multi-RRULE
+first-rule salvage in `_extract_component`, plus widening `extract()`'s
+per-VEVENT catch from `(ValueError, TypeError, KeyError)` to
+`Exception`) fully resolves the bug sprint 015 ticket 005 hit. Live
 dry-run confirms:
 
 ```
@@ -85,9 +89,10 @@ RRULE properties; using the first and discarding 1" salvage warning —
 direct, live confirmation of ticket 001's fix operating on real data,
 not just its fixture tests. Committed as `sd-astronomy-association.toml`.
 
-**Not registered: `county-parks`.** Ticket 001's `X-PUBLISHED-TTL`
-pre-parse strip was necessary but **not sufficient** for this feed.
-Live dry-run still returns zero:
+**`county-parks` — initially withheld, then unblocked within this same
+ticket per a team-lead ruling.** First pass: ticket 001's
+`X-PUBLISHED-TTL` pre-parse strip was necessary but **not sufficient**
+for this feed. Live dry-run still returned zero:
 
 ```
 GET https://tockify.com/api/feeds/ics/sdparkscalendar
@@ -107,26 +112,55 @@ X-PUBLISHED-TTL:P15M
 REFRESH-INTERVAL:P15M
 ```
 
-— and ticket 001's `_X_PUBLISHED_TTL_RE` strip only targets the first.
-`icalendar.Calendar.from_ical()` still raises `InvalidCalendar: Invalid
-iCalendar duration: P15M` on `REFRESH-INTERVAL`, which this adapter
-also never reads, aborting the whole feed exactly as `X-PUBLISHED-TTL`
-did before ticket 001. Confirmed diagnostically (not shipped — no
-adapter code was touched by this ticket, per its dispatch instruction
-not to patch adapters on a ticket-001-uncovered parser issue): stripping
-both `X-PUBLISHED-TTL:...` and `REFRESH-INTERVAL:...` lines before
-`from_ical()` lets the calendar parse cleanly, all 553 VEVENTs
-readable. `county-parks.toml` was authored (same shape as the
-committed sources) but is **not committed** — removed from disk rather
-than left unstaged, since `registry/loader.py` globs every `*.toml`
-under `sources/` regardless of git tracking status, and a
-zero-yield/`[ERROR]`-logging file left on disk would be picked up by
-every subsequent pipeline run and test collection. Flagging for a
-follow-up ticket: a small generalization of ticket 001's fix (strip
-both known non-standard `X-`/`REFRESH-INTERVAL` duration properties,
-or a more general tolerant-duration pre-parse) would unlock this feed,
-the single highest-yield source in the sprint 015 issue 38 batch (553
-raw VEVENTs, the countywide ranger-program calendar).
+— and ticket 001's `_X_PUBLISHED_TTL_RE` strip only targeted the
+first. `icalendar.Calendar.from_ical()` still raised `InvalidCalendar:
+Invalid iCalendar duration: P15M` on `REFRESH-INTERVAL`, which this
+adapter also never reads, aborting the whole feed exactly as
+`X-PUBLISHED-TTL` did before ticket 001.
+
+Per this ticket's original dispatch instructions this was first
+treated as out of scope ("do NOT patch adapters yourself... leave that
+source uncommitted, and report"), and reported to the team-lead with
+`county-parks.toml` removed from disk (not left unstaged — the
+registry loader globs every `*.toml` under `sources/` regardless of
+git tracking status, so a zero-yield file left on disk would be picked
+up by every subsequent pipeline run and test collection).
+
+**Team-lead ruling (mid-ticket course correction):** the
+"don't patch adapters" instruction was a dispatch guardrail, not an
+architecture boundary — `REFRESH-INTERVAL` is exactly the second
+live-evidenced case of the same non-standard-Tockify-duration-property
+pattern ticket 001 already fixed once, so widening that fix in place
+was ruled in scope for this ticket. Implemented as:
+
+- `partner_scrape/adapters/ical.py`: `_X_PUBLISHED_TTL_RE` replaced by
+  `_NONSTANDARD_DURATION_PROPERTIES = ("X-PUBLISHED-TTL",
+  "REFRESH-INTERVAL")` and a regex built from that list
+  (`_NONSTANDARD_DURATION_RE`) — a targeted, extensible list of
+  live-evidenced properties, deliberately **not** a blanket
+  X-property/custom-property sanitizer (an unrelated malformed
+  property still fails loudly through the existing top-level
+  `except Exception` around `from_ical()`).
+- `tests/fixtures/ical/tockify_ttl_and_refresh_interval.ics` (new): the
+  existing `tockify_ttl.ics` fixture plus one added
+  `REFRESH-INTERVAL:P15M` line.
+- `tests/test_adapters_ical.py`: new `TestBothNonstandardDurationProperties`
+  class (one test) proving the combined case parses and yields both
+  fixture VEVENTs; `TestTockifyTTLTolerance`'s docstring updated to
+  point at it.
+- `partner_scrape/adapters/DESIGN.md`'s sprint-016 addendum item 1
+  rewritten to describe both properties and both tickets.
+
+Re-verified live after the fix:
+
+```
+uv run partner-scrape --dry-run --no-enrich --source county-parks
+-> found=553 dated=553 new=36 dropped=0
+```
+
+All 553 raw VEVENTs now parse and yield dated output — the single
+highest-yield feed in the sprint 015 issue 38 batch. Committed as
+`county-parks.toml`.
 
 **`partners.json` check.** Neither "San Diego County Parks and
 Recreation" nor "San Diego Astronomy Association" appears in
@@ -134,21 +168,29 @@ Recreation" nor "San Diego Astronomy Association" appears in
 candidates, per sprint 014 ticket 004's original list. Not
 force-matched.
 
-**Test suite.** `uv run pytest` — 1546 passed, matching the ticket-001
-baseline exactly (one new data-only TOML committed; no new hermetic
-tests needed, per this ticket's own Testing plan — the registry loader
-tests already generically cover `ical`-adapter TOML parsing).
+**Test suite.** `uv run pytest` — 1547 passed (1546-baseline + 1 new
+fixture regression test for the combined `X-PUBLISHED-TTL`/
+`REFRESH-INTERVAL` case). This departs from the ticket's own original
+Testing plan ("no new tests expected purely from adding data-only TOML
+files") because, per the team-lead's course correction, this ticket
+ended up shipping a real adapter-code change, not just data-only TOML
+registration — a fixture regression test for that change follows this
+project's own established convention (ticket 001 itself added five
+such tests for its two fixes).
 
 **Documentation.** `partner_scrape/registry/DESIGN.md` §1 Purpose gets
-a sprint-016-ticket-002 paragraph recording the 1-of-2 registration and
-the `county-parks` `REFRESH-INTERVAL` root cause.
+a sprint-016-ticket-002 paragraph recording the full 2-of-2
+registration and the `county-parks` `REFRESH-INTERVAL` finding/fix
+sequence. `partner_scrape/adapters/DESIGN.md`'s sprint-016 addendum
+item 1 is rewritten (not just appended to) to describe the widened,
+two-property fix as the current state of `ical.py`'s duration-property
+tolerance.
 
 **Status left `in-progress`, not moved to `done`**, per this ticket's
-own AC #3 precedent (sprint 015 ticket 005's "leave open, not done, on
-a partial result" convention) and this ticket's dispatch instructions
-— the `county-parks` finding warrants team-lead review/routing before
-closing (issue 40 was framed as unlocking both feeds; only one is
-unlocked).
+explicit dispatch instructions ("Leave frontmatter in-progress") —
+both feeds are now registered and live-verified, so this is a
+process-convention hold for team-lead sign-off, not an unresolved
+finding.
 
 ## Testing
 

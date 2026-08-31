@@ -143,18 +143,24 @@ VEVENTs; `sd-astronomy-association`, 677 raw VEVENTs) both returned zero
 events, from two distinct `ical.py` bugs unrelated to the robots-policy
 question that ticket resolved. Both fixes stay entirely inside `ical.py`:
 
-1. **Tockify's `X-PUBLISHED-TTL:P15M`.** A calendar-level `X-` property
-   whose value `icalendar`'s duration parser can read as 15 *months*
-   under ISO-8601 grammar rather than the 15 *minutes* Tockify evidently
-   intends, which can abort `Calendar.from_ical()` before a single
-   `VEVENT` is read. `extract()` now strips the exact `X-PUBLISHED-TTL:`
-   line (via `_X_PUBLISHED_TTL_RE`, a small pre-parse regex) before the
-   body reaches `from_ical()` — a property this adapter never reads
-   anyway. Deliberately a targeted strip of the one evidenced property,
-   not a general X-property sanitizer: a different malformed `X-`
+1. **Tockify's `X-PUBLISHED-TTL:P15M`, and (ticket 002) `REFRESH-
+   INTERVAL:P15M`.** Calendar-level properties whose value `icalendar`'s
+   duration parser can read as 15 *months* under ISO-8601 grammar rather
+   than the 15 *minutes* Tockify evidently intends, which can abort
+   `Calendar.from_ical()` before a single `VEVENT` is read. Ticket 001
+   shipped a targeted strip of `X-PUBLISHED-TTL:` alone; ticket 002's
+   live re-verification of the `county-parks` registration (the same
+   feed) found the fix necessary but not sufficient — the identical
+   `P15M` value also appears on `REFRESH-INTERVAL:`, immediately
+   adjacent in the same `VCALENDAR` header, still aborting the parse.
+   `extract()` now strips both known lines (via `_NONSTANDARD_DURATION_RE`,
+   built from the `_NONSTANDARD_DURATION_PROPERTIES` list) before the
+   body reaches `from_ical()` — properties this adapter never reads
+   anyway. Deliberately a targeted strip of the evidenced properties, not
+   a general X-property/custom-property sanitizer: a different malformed
    property still fails loudly through the existing top-level
-   `except Exception` around `from_ical()`, until a second real case
-   justifies widening the pre-parse.
+   `except Exception` around `from_ical()`, until a third real case
+   justifies widening the list further.
 2. **A `VEVENT` with more than one `RRULE` property.** `icalendar`
    returns a Python `list` for `component.get("rrule")` in this case;
    `_extract_component` previously assumed a single `vRecur` and crashed
