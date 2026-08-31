@@ -76,26 +76,26 @@ grep before removing anything):
 
 ## Acceptance Criteria
 
-- [ ] `git grep` for `scrapy.cfg`, `run_mirrors`, `scraper.settings`,
+- [x] `git grep` for `scrapy.cfg`, `run_mirrors`, `scraper.settings`,
       `Dockerfile`, `docker-compose.yml`, and `requirements.txt`
       (excluding `clasi/` history) turns up nothing live under
       `partner_scrape/`, `tests/`, or `.github/workflows/` before
       removal — confirmed and noted in this ticket's implementation, not
       just assumed.
-- [ ] `dev/`, `scraper/`, `run_mirrors.py`, `scrapy.cfg`, `Dockerfile`,
+- [x] `dev/`, `scraper/`, `run_mirrors.py`, `scrapy.cfg`, `Dockerfile`,
       `docker-compose.yml`, and `requirements.txt` no longer exist in
       the working tree.
-- [ ] `README.md`'s legacy Overview/Quick Start/Project
+- [x] `README.md`'s legacy Overview/Quick Start/Project
       Layout/CLI Reference/Data Structure/Scrapy Settings/Future Work
       sections are removed; the live "Running the engine" section
       remains and gains a short note that `site/` is now a build-time
       checkout of `stem-ecosystem`, not tracked content.
-- [ ] `justfile` has no reference to the archived tooling or to the
+- [x] `justfile` has no reference to the archived tooling or to the
       removed `--mirror-site-dir`/`--no-mirror` flags.
-- [ ] Full `uv run pytest -q` is green (the archived code was never
+- [x] Full `uv run pytest -q` is green (the archived code was never
       imported by `partner_scrape/`, so this is a regression guard, not
       an expected-failure fix).
-- [ ] `git grep -l 'scrapy.cfg\|run_mirrors\|MIRROR_SITE_DIRS'` outside
+- [x] `git grep -l 'scrapy.cfg\|run_mirrors\|MIRROR_SITE_DIRS'` outside
       `clasi/` returns nothing — this is the sprint's own final
       Success-Criteria check, and this ticket is what actually
       satisfies the `scrapy.cfg`/`run_mirrors` half of it (ticket 001
@@ -111,3 +111,30 @@ grep before removing anything):
 - **Verification command**: `uv run pytest -q`, plus
   `git grep -rn "scrapy.cfg\|run_mirrors\|scraper\.settings"` to confirm
   the removal is clean.
+
+## Implementation Notes
+
+- **Deviation, reasonable-call:** step 2's `dev/` archival target turned
+  out not to be entirely legacy. `dev/refresh_school_directories.py`
+  (added in sprint 011, ticket 011-004 — not part of the pre-
+  `partner_scrape/` mock-up at all) is a live, standalone, hand-run
+  maintenance script for the `teams`/`directory` subsystems' offline
+  geocoding data files, documented and cross-referenced throughout
+  `partner_scrape/teams/DESIGN.md`, `partner_scrape/directory/DESIGN.md`,
+  `partner_scrape/teams/geo.py`, `partner_scrape/geo_ladder.py`, and two
+  test modules. It is self-contained (stdlib-only, does not import
+  `dev/lib/` or anything else archived here), so it was kept in place at
+  its documented path and excluded from archival; everything else under
+  `dev/` (the actual Jul-2026-era pre-`partner_scrape/` mock-up:
+  `SCRAPER_GUIDELINES.md`, `build_demo.py`, `classify_sites.py`,
+  `export_site.py`, `extract_events.py`, `fetch_tec_api.py`,
+  `inventory_sitemaps.py`, `lib/`, `merge_events.py`, `output/`,
+  `sample_event_pages.py`) was removed as planned. README.md's new
+  historical note and `partner_scrape/__init__.py`'s docstring (a small,
+  in-spirit edit outside this ticket's stated file list, needed to
+  satisfy this ticket's own final `git grep` AC) both call this out
+  explicitly. Not thrown as an exception: this corrects a stale premise
+  about one file's contents rather than overriding an architecture
+  decision, and deleting it would have been a silent, test-suite-invisible
+  regression (the script is never imported, so `pytest` would not have
+  caught its removal).
