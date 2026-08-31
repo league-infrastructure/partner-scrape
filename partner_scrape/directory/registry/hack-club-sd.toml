@@ -1,0 +1,33 @@
+# Hack Club chapters static roster -- a committed, hand-curated
+# roster, not a live acquisition source (issue 35's explicit
+# instruction: "Do NOT design live scrapers for either directory"; the
+# same "no unattended web search" discipline ticket 018-008 applied to
+# the FLL roster's own precedent). Loaded via
+# registry.loader.load_active_sources (reused verbatim, no new schema)
+# against partner_scrape/directory/registry/ -- the same shared
+# Directory Registry ticket 007's places-sd.toml already lives in, NOT
+# the main partner_scrape/registry/sources/ directory and NOT
+# teams/registry/ (see directory/DESIGN.md's Constraints).
+#
+# `adapter_type` is read by directory.pipeline to select the matching
+# ClubSource ("hack_club_static_roster" ->
+# directory.sources.hack_club_static_roster.HackClubStaticRosterSource),
+# not by adapters.base.ADAPTERS. This source is never registered
+# there, and it never calls the injected Fetcher -- see
+# sources/hack_club_static_roster.py's own module docstring.
+#
+# No [acquisition_policy] section: HackClubStaticRosterSource reads
+# config.roster_path straight off disk, so a rate limit / robots-respect
+# policy has no meaning here -- matching places-sd.toml's own
+# precedent exactly. The registry loader's own defaults
+# (registry/schema.py's _ACQUISITION_POLICY_DEFAULTS) fill in harmlessly
+# unused values when the section is omitted.
+
+org_name = "Hack Club San Diego chapters (curated static roster)"
+adapter_type = "hack_club_static_roster"
+enabled = true
+
+[config]
+# Resolved relative to directory/data/ when not already an absolute
+# path (sources/hack_club_static_roster.py's discover()).
+roster_path = "hack-club-sd.tsv"

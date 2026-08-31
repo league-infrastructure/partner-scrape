@@ -26,12 +26,14 @@ Ticket 007 (sprint 018) adds the `directory` subcommand, dispatching to
 `directory.pipeline.run_directory()` -- structurally separate from (and
 never calling into) `run`'s or `teams`'s own paths, for the same
 "disjoint standing-data pipeline" reasoning as `teams` above. One
-subcommand covers both Places (this ticket) and the future Clubs
-(ticket 018-008), per sprint.md's Open Questions recommendation ("one
-directory command ... mirrors teams"), rather than a second
-subcommand -- `directory.pipeline.run_directory()` itself is where a
-future Clubs dispatch would be added, not a new CLI subcommand. Also
-purely additive.
+subcommand covers both Places (ticket 007) and Clubs (ticket 018-008,
+the sprint's Hack Club chapters proof of concept), per sprint.md's Open
+Questions recommendation ("one directory command ... mirrors teams"),
+rather than a second subcommand -- `directory.pipeline.run_directory()`
+itself is where ticket 018-008 added its Club dispatch, not a new CLI
+subcommand or CLI flag. Also purely additive: this subcommand's own
+flags, defaults, and printed output shape are unchanged by ticket
+018-008 beyond reporting a clubs count alongside the places count.
 """
 
 from __future__ import annotations
@@ -328,13 +330,14 @@ def _add_teams_subcommand(subparsers: argparse._SubParsersAction) -> None:
 def _add_directory_subcommand(subparsers: argparse._SubParsersAction) -> None:
     parser = subparsers.add_parser(
         "directory",
-        help="Publish the curated Places (and, from ticket 018-008, Clubs) directory as places.json.",
+        help="Publish the curated Places and Clubs directories as places.json and clubs.json.",
         description=(
-            "Run the Directory pipeline: load this subsystem's own Place "
+            "Run the Directory pipeline: load this subsystem's own "
             "Registry (partner_scrape/directory/registry/, disjoint from "
             "the Opportunity Source Registry and from teams/registry/), "
-            "acquire each active place source, and publish "
-            "{site_dir}/src/data/places.json. Never runs the normal "
+            "acquire each active place/club source, and publish "
+            "{site_dir}/src/data/places.json and "
+            "{site_dir}/src/data/clubs.json. Never runs the normal "
             "scrape/export or the teams pipeline -- opportunities.json, "
             "scrape-meta.json, and teams.json are never touched by this "
             "command."
@@ -343,7 +346,7 @@ def _add_directory_subcommand(subparsers: argparse._SubParsersAction) -> None:
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Compute the places.json payload without writing anything to --site-dir.",
+        help="Compute the places.json/clubs.json payloads without writing anything to --site-dir.",
     )
     parser.add_argument(
         "--source",
@@ -352,8 +355,9 @@ def _add_directory_subcommand(subparsers: argparse._SubParsersAction) -> None:
         metavar="SOURCE",
         help=(
             "Only run this single acquisition source, by adapter_type "
-            "(e.g. 'static_roster') -- not a Place Registry file's stem. "
-            "Omitted, every active place source runs."
+            "(e.g. 'static_roster' or 'hack_club_static_roster') -- not "
+            "a Registry file's stem. Omitted, every active place/club "
+            "source runs."
         ),
     )
     parser.add_argument(
@@ -361,17 +365,18 @@ def _add_directory_subcommand(subparsers: argparse._SubParsersAction) -> None:
         type=Path,
         default=None,
         help=(
-            "Sibling stem-ecosystem checkout to write places.json into "
-            "(default: ../stem-ecosystem, or $SITE_DIR) -- same default "
-            "and override as the `run`/`teams` commands' --site-dir."
+            "Sibling stem-ecosystem checkout to write places.json and "
+            "clubs.json into (default: ../stem-ecosystem, or $SITE_DIR) "
+            "-- same default and override as the `run`/`teams` "
+            "commands' --site-dir."
         ),
     )
     parser.add_argument(
         "--no-mirror",
         action="store_true",
         help=(
-            "Do not copy places.json into any additional site checkout -- "
-            "write only to --site-dir."
+            "Do not copy places.json/clubs.json into any additional site "
+            "checkout -- write only to --site-dir."
         ),
     )
     parser.add_argument(
@@ -404,6 +409,13 @@ def _run_directory(args: argparse.Namespace) -> int:
         dry_run=args.dry_run,
     )
     places = payload["places"]
+    # `.get(..., [])`, not `payload["clubs"]`: the real `run_directory()`
+    # always populates "clubs" (a list, possibly empty), but existing
+    # ticket-007 wiring tests monkeypatch `cli.run_directory` with a
+    # places-only fake payload -- this stays backward compatible with
+    # those doubles rather than requiring every one of them to grow a
+    # "clubs" key it has no reason to know about.
+    clubs = payload.get("clubs", [])
 
     # Keep every other checkout of the site in step, same convention as
     # the `run`/`teams` commands' own mirroring step -- skipped under
@@ -415,9 +427,13 @@ def _run_directory(args: argparse.Namespace) -> int:
             primary = args.site_dir if args.site_dir is not None else get_site_dir()
             mirror_site_data(primary, targets)
 
+    clubs_noun = "club" if len(clubs) == 1 else "clubs"
     noun = "place" if len(places) == 1 else "places"
     suffix = " (dry run -- nothing written)" if args.dry_run else ""
-    print(f"partner-scrape directory: wrote {len(places)} {noun}{suffix}.")
+    print(
+        f"partner-scrape directory: wrote {len(places)} {noun} and "
+        f"{len(clubs)} {clubs_noun}{suffix}."
+    )
     return 0
 
 

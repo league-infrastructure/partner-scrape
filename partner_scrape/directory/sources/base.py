@@ -1,26 +1,40 @@
-"""The pluggable ``PlaceSource`` contract -- parallel to, and
-structurally disjoint from, ``teams.sources.base.TeamSource`` and
-``adapters.base.Adapter``.
+"""The pluggable ``PlaceSource`` and ``ClubSource`` contracts --
+parallel to, and structurally disjoint from,
+``teams.sources.base.TeamSource`` and ``adapters.base.Adapter``.
 
-``sources/static_roster.py`` (this ticket) implements
+``sources/static_roster.py`` (ticket 018-007) and
+``sources/hack_club_static_roster.py`` (ticket 018-008) each implement
 ``discover -> fetch -> extract``, the same three-method shape
 ``TeamSource``/``Adapter`` use -- reusing that mental model is
 deliberate (see ``teams/sources/base.py``'s own docstring, which this
-module's rationale mirrors exactly for ``Place`` in place of ``Team``).
+module's rationale mirrors exactly for ``Place``/``Club`` in place of
+``Team``).
+
+**``PlaceSource`` and ``ClubSource`` are two separate ``Protocol``s,
+not one shared source contract.** ``Place.extract()`` and
+``Club.extract()`` return different record types, so a single
+``Protocol`` typed generically over "either" would either lose real
+type-checking or need a level of generic machinery this module's small
+scope does not justify -- kept as two clearly-typed, near-identical
+protocols instead, the same "field-name duplication accepted, no
+shared base" tradeoff sprint 018's Design Rationale makes for the
+``Place``/``Club`` record types themselves (``directory/model.py``'s
+own docstring), extended here to the two record-specific source
+contracts for the identical reason.
 
 What is **not** reused is ``adapters.base`` or ``teams.sources.base``
 themselves. This module (and every module in ``directory/sources/``)
 must never import anything from ``partner_scrape.adapters.base`` or
 ``partner_scrape.teams.sources.base`` -- a structural safety guarantee,
-not a style preference: a place source reachable from
+not a style preference: a place or club source reachable from
 ``adapters.base.ADAPTERS`` would become reachable from
-``pipeline.run()``, which would hand a ``Place`` object to
+``pipeline.run()``, which would hand a ``Place``/``Club`` object to
 ``normalize.run()`` -- a type it does not expect -- and crash.
-``PlaceSource`` is its own ``Protocol`` with no import relationship to
-either, so that failure mode cannot occur even by accident.
-``tests/directory/test_sources_base.py`` asserts this boundary
-directly, following ``tests/teams/test_sources_base.py``'s own
-forbidden-import-scan precedent.
+``PlaceSource``/``ClubSource`` are their own ``Protocol``s with no
+import relationship to either, so that failure mode cannot occur even
+by accident. ``tests/directory/test_sources_base.py`` asserts this
+boundary directly, following ``tests/teams/test_sources_base.py``'s
+own forbidden-import-scan precedent.
 """
 
 from __future__ import annotations
@@ -28,7 +42,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Iterable, Protocol
 
-from partner_scrape.directory.model import Place
+from partner_scrape.directory.model import Club, Place
 from partner_scrape.fetch import Fetcher
 from partner_scrape.registry.schema import SourceConfig
 
@@ -105,3 +119,77 @@ def run(source: SourceConfig, place_source: PlaceSource, fetcher: Fetcher) -> li
         raw = place_source.fetch(ref, fetcher)
         places.extend(place_source.extract(raw, source))
     return places
+
+
+@dataclass
+class ClubRef:
+    """A reference to one fetchable unit of source content, for a
+    ``ClubSource``.
+
+    Parallel to :class:`PlaceRef` above (and to
+    ``teams.sources.base.TeamRef``). This ticket's
+    ``sources/hack_club_static_roster.py`` returns exactly one
+    ``ClubRef`` (the committed roster file).
+    """
+
+    url: str
+    context: dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class RawClubResponse:
+    """One fetched, not-yet-interpreted unit of raw source content, for
+    a ``ClubSource``.
+
+    Parallel to :class:`RawPlaceResponse` above. Carries the ``ref`` it
+    came from so ``extract()`` can log which request a malformed body
+    belonged to.
+    """
+
+    ref: ClubRef
+    status: int
+    body: str
+
+
+class ClubSource(Protocol):
+    """Injectable per-source strategy for ``Club`` acquisition:
+    discover -> fetch -> extract. See :class:`PlaceSource` above and
+    this module's own docstring for why this is a second, separately
+    typed ``Protocol`` rather than a shared one.
+    """
+
+    def discover(self, source: SourceConfig, fetcher: Fetcher) -> Iterable[ClubRef]:
+        """Resolve ``source`` into the set of fetchable ``ClubRef``s."""
+        ...
+
+    def fetch(self, ref: ClubRef, fetcher: Fetcher) -> RawClubResponse:
+        """Retrieve one ``ClubRef``'s raw content via the injected ``fetcher``."""
+        ...
+
+    def extract(self, raw: RawClubResponse, source: SourceConfig) -> Iterable[Club]:
+        """Map one raw response into zero or more ``Club`` records.
+
+        Implementations must isolate per-record failures: one malformed
+        record in an otherwise good response is logged and skipped, not
+        raised -- matching every other ``*Source.extract()``'s
+        convention in this codebase.
+        """
+        ...
+
+
+def run_club_source(source: SourceConfig, club_source: ClubSource, fetcher: Fetcher) -> list[Club]:
+    """Chain discover -> fetch -> extract for one ``ClubSource``.
+
+    Parallel to ``run()`` above, but for ``Club`` instead of ``Place``
+    -- kept a separate, distinctly-named and distinctly-typed function
+    rather than a generic one reused across both record types, so a
+    caller (and a type checker) can never confuse "list of Place" with
+    "list of Club" through this chaining helper.
+    """
+    refs = list(club_source.discover(source, fetcher))
+
+    clubs: list[Club] = []
+    for ref in refs:
+        raw = club_source.fetch(ref, fetcher)
+        clubs.extend(club_source.extract(raw, source))
+    return clubs

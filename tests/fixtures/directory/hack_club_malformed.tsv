@@ -1,0 +1,7 @@
+club_id	name	club_type	host_school	city	postal_code	website	meeting_note	status	status_note
+	Missing Club Id	hack-club	Some High School	San Diego	92101			active
+hack-club-no-name		hack-club	Some High School	San Diego	92101			active
+hack-club-bad-type	Bad Type	robotics-club	Some High School	San Diego	92101			active
+hack-club-bad-status	Bad Status	hack-club	Some High School	San Diego	92101			retired
+hack-club-inactive-no-note	Inactive No Note	hack-club	Some High School	San Diego	92101			inactive
+hack-club-good-club	Good Club	hack-club	Some High School	San Diego	92101			active

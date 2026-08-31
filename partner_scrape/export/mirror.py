@@ -61,14 +61,18 @@ logger = logging.getLogger(__name__)
 #: `directory/export.py`, a third structurally separate module (see
 #: `directory/DESIGN.md`) -- same additive extension, same reused
 #: mechanism, no change to `mirror_site_data`'s own copy logic.
-#: `"clubs.json"` is not added yet; ticket 018-008 adds it once
-#: `directory/export.py` actually writes that file.
+#:
+#: Sprint 018 (ticket 008): `"clubs.json"` joins too, written by the
+#: same `directory/export.py` (now that the `Club` model and its Hack
+#: Club chapters source exist) -- same additive extension, same reused
+#: mechanism, no change to `mirror_site_data`'s own copy logic.
 MIRRORED_DATA_FILES = (
     "opportunities.json",
     "scrape-meta.json",
     "ads.json",
     "teams.json",
     "places.json",
+    "clubs.json",
 )
 
 #: Event images referenced by the mirrored `opportunities.json`. Without

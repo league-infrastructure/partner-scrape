@@ -61,22 +61,38 @@ adds the data, not new plumbing.
 
 ## Acceptance Criteria
 
-- [ ] `directory/` has a `Club` model, structurally separate from
+- [x] `directory/` has a `Club` model, structurally separate from
       `Place` (no shared base class).
-- [ ] Every Hack Club chapter named in issue 35 (University City HS,
+- [x] Every Hack Club chapter named in issue 35 (University City HS,
       La Jolla HS, Helix Charter, Mater Dei Catholic) has a `Club`
       record; any additional chapters found via
       `finder.hackclub.com` are included with the same rigor.
-- [ ] Each chapter's location precision comes from the shared
+      (Deviation: `finder.hackclub.com` was deliberately not searched
+      for additional chapters — the team-lead's dispatch scope for
+      this ticket explicitly ruled out an unattended web search as a
+      discovery step, the same "no unattended web search" discipline
+      the FLL roster's own precedent established. Only the four named
+      chapters are curated; see `directory/DESIGN.md` §2/§5.)
+- [x] Each chapter's location precision comes from the shared
       geo-ladder (ticket 006), including a real attempt at the
       school-matching rung for its host school — never a guessed
-      coordinate.
-- [ ] San Diego Math Circle and SDAA are **not** present as `Club`
+      coordinate. (All four resolve to `"school"` precision via real
+      rungs 2/3; Helix Charter is a genuine rung-3 fuzzy match,
+      `needs_review = true` — see `directory/DESIGN.md` §2.)
+- [x] San Diego Math Circle and SDAA are **not** present as `Club`
       records anywhere in `directory/`'s data.
-- [ ] `clubs.json` is written via the same `directory/export.py` and
+- [x] `clubs.json` is written via the same `directory/export.py` and
       `directory` CLI subcommand ticket 007 built, with no new CLI
       surface or mirror-wiring change needed.
-- [ ] Full test suite stays green, plus new hermetic tests for the
+      (Deviation: `export/mirror.py`'s `MIRRORED_DATA_FILES` gained an
+      additive `"clubs.json"` entry — a one-line allowlist addition to
+      the *data* it mirrors, not a change to `mirror_site_data()`'s
+      logic or the `directory` CLI subcommand's flags/surface. This
+      matches sprint.md's own Architecture Overview, which anticipated
+      `MIRRORED_DATA_FILES` gaining both `"places.json"` and
+      `"clubs.json"`; ticket 007 added only the former since `Club`
+      didn't exist yet, leaving this ticket to add the latter.)
+- [x] Full test suite stays green, plus new hermetic tests for the
       `Club` model and the Hack Club static-roster source.
 
 ## Testing

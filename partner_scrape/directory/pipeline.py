@@ -1,29 +1,44 @@
-"""Directory pipeline orchestration: `Place Registry -> PlaceSource(s) ->
-geo fallback -> export`.
+"""Directory pipeline orchestration: `Registry -> PlaceSource(s)/
+ClubSource(s) -> geo fallback/geocoding -> export`.
 
 Structurally parallel to `teams.pipeline.run_teams()` -- this module's
 whole job is sequencing, not business logic (see that module's own
 docstring for the same self-check): enumerate this subsystem's own
-Place Registry (`directory/registry/`, not `partner_scrape/registry/
+Registry (`directory/registry/`, not `partner_scrape/registry/
 sources/` and not `teams/registry/`), dispatch each active source to
-its `PlaceSource` implementation via `directory.sources.base.run()`,
-resolve any place the source left uncoordinated through the shared
-offline geocoding ladder (`geo_ladder.GeoLadder`, ticket 018-006), and
-hand the accumulated `Place[]` to `directory.export.export_directory()`.
-It never imports `partner_scrape.pipeline`, `partner_scrape.adapters`,
-or `partner_scrape.teams` -- see `directory/sources/base.py`'s module
+its `PlaceSource` or `ClubSource` implementation via
+`directory.sources.base.run()`/`run_club_source()`, resolve location
+for both record types through the shared offline geocoding ladder
+(`geo_ladder.GeoLadder`, ticket 018-006), and hand the accumulated
+`Place[]`/`Club[]` to `directory.export.export_directory()`. It never
+imports `partner_scrape.pipeline`, `partner_scrape.adapters`, or
+`partner_scrape.teams` -- see `directory/sources/base.py`'s module
 docstring for why the `teams`-avoidance boundary in particular is
 structural (sprint.md's Design Rationale: importing `teams/` from
 `directory/` would be "a semantically backwards dependency").
 
-**This ticket (018-007) wires Places only.** `_PLACE_SOURCES` and
-`run_directory()`'s acquisition loop are Place-specific; ticket 018-008
-(Clubs) is expected to add its own analogous `Club`-side dispatch --
-following this module's shape, not by importing from it -- when the
-`Club` model exists. `directory.export.export_directory()` is called
-with no `clubs` argument at all this ticket; see that module's own
-docstring for why `clubs.json` is simply not written yet, rather than
-written as an empty placeholder.
+**Ticket 018-007 wired Places only; ticket 018-008 (this ticket) adds
+the analogous `Club`-side dispatch.** `_PLACE_SOURCES`/
+`_apply_geo_fallback()` are unchanged from ticket 007. `_CLUB_SOURCES`
+and `_apply_club_geocoding()` are this ticket's additions, following
+that module's shape rather than importing from it (there is nothing to
+import -- `Place` and `Club` are separate flat dataclasses, per
+sprint.md's Design Rationale).
+
+**One combined dispatch loop, not two separate ones, despite
+`directory/DESIGN.md`'s forward-looking note describing "a new
+`_CLUB_SOURCES` table and acquisition loop."** A literal second `for`
+loop over the same `sources` list would make the *existing* Place loop
+log a spurious "no PlaceSource registered" warning for every real Club
+registry entry (its `adapter_type` is never in `_PLACE_SOURCES`) --
+implementation judgment ticket 007's own DESIGN.md explicitly left
+open ("ticket 007/008's implementation judgment"). One loop that
+checks `_PLACE_SOURCES` then `_CLUB_SOURCES` per `source_config`
+dispatches each registry entry to exactly the one table it actually
+belongs to, and only warns when an `adapter_type` is in neither.
+`directory.export.export_directory()` is now called with a real
+`clubs` argument; see that module's own docstring for how `clubs.json`
+is written alongside `places.json`.
 """
 
 from __future__ import annotations
@@ -33,8 +48,14 @@ from pathlib import Path
 from typing import Any
 
 from partner_scrape.directory.export import export_directory
-from partner_scrape.directory.model import Place
-from partner_scrape.directory.sources.base import PlaceSource, run as run_place_source
+from partner_scrape.directory.model import Club, Place
+from partner_scrape.directory.sources.base import (
+    ClubSource,
+    PlaceSource,
+    run as run_place_source,
+    run_club_source,
+)
+from partner_scrape.directory.sources.hack_club_static_roster import HackClubStaticRosterSource
 from partner_scrape.directory.sources.static_roster import StaticRosterSource
 from partner_scrape.fetch import Fetcher, PoliteFetcher
 from partner_scrape.geo_ladder import GeoLadder
@@ -42,18 +63,32 @@ from partner_scrape.registry.loader import load_active_sources
 
 logger = logging.getLogger(__name__)
 
-#: This subsystem's own Place Registry directory --
-#: `directory/registry/`, disjoint from `partner_scrape/registry/
-#: sources/` and from `teams/registry/` (see `directory/DESIGN.md`'s
-#: Constraints).
+#: This subsystem's own Registry directory -- `directory/registry/`,
+#: disjoint from `partner_scrape/registry/sources/` and from
+#: `teams/registry/` (see `directory/DESIGN.md`'s Constraints). Holds
+#: both Place Registry entries (`places-sd.toml`) and, from this
+#: ticket, Club Registry entries (`hack-club-sd.toml`) -- one shared
+#: registry directory for the whole `directory/` subsystem, per
+#: sprint.md's Open Questions recommendation ("one directory command
+#: ... mirrors teams"). Named `DEFAULT_PLACES_REGISTRY_DIR` for
+#: backward compatibility with ticket 007's existing public name and
+#: its tests' imports -- not renamed, to avoid an unrelated diff to a
+#: name several tests already import.
 DEFAULT_PLACES_REGISTRY_DIR = Path(__file__).resolve().parent / "registry"
 
 #: This module's own offline geocoding data directory --
 #: `directory/data/` -- a committed duplicate of `teams/data/`'s
-#: ZIP/city-centroid tables plus genuinely-empty school-directory
-#: files, never `teams/data/` itself (see `directory/data/
-#: zip-centroids.toml`'s own header for the full "why duplicated, not
-#: imported across the teams/directory boundary" rationale).
+#: ZIP/city-centroid tables, never `teams/data/` itself (see
+#: `directory/data/zip-centroids.toml`'s own header for the full "why
+#: duplicated, not imported across the teams/directory boundary"
+#: rationale). Ticket 007 left `sd-schools-public.tsv`/
+#: `sd-schools-private.tsv`/`school-overrides.toml` genuinely empty
+#: (Places never route through the ladder's school-matching rungs);
+#: this ticket (018-008) is the first real consumer of those files and
+#: populates them with a byte-identical copy of `teams/data/`'s own CDE
+#: public and NCES private school directories -- Hack Club chapters are
+#: school-hosted, so `_apply_club_geocoding()` below needs the real
+#: data, not the empty placeholder ticket 007 shipped.
 DEFAULT_GEO_DATA_DIR = Path(__file__).resolve().parent / "data"
 
 #: `adapter_type` (a Place Registry TOML file's own field, e.g.
@@ -64,6 +99,15 @@ DEFAULT_GEO_DATA_DIR = Path(__file__).resolve().parent / "data"
 #: rationale (see that module's own docstring).
 _PLACE_SOURCES: dict[str, PlaceSource] = {
     "static_roster": StaticRosterSource(),
+}
+
+#: `adapter_type` (a Club Registry TOML file's own field, e.g.
+#: `hack-club-sd.toml`'s `adapter_type = "hack_club_static_roster"`) ->
+#: the `ClubSource` instance that handles it. Same "plain lookup, not a
+#: public extension point" rationale as `_PLACE_SOURCES` above --
+#: ticket 018-008's own addition.
+_CLUB_SOURCES: dict[str, ClubSource] = {
+    "hack_club_static_roster": HackClubStaticRosterSource(),
 }
 
 
@@ -116,6 +160,57 @@ def _apply_geo_fallback(places: list[Place], *, data_dir: str | Path | None) -> 
     return places
 
 
+def _apply_club_geocoding(clubs: list[Club], *, data_dir: str | Path | None) -> list[Club]:
+    """Resolve every `Club`'s location through the shared
+    `geo_ladder.GeoLadder`'s *full* seven-rung ladder
+    (`GeoLadder.locate()`), keyed on `Club.host_school`/`Club.city`/
+    `Club.postal_code` -- unlike `_apply_geo_fallback()`'s Place-only
+    ZIP/city-centroid-only shortcut, a `Club` genuinely has a
+    sponsoring organization (its host school) to run through the
+    ladder's school-matching rungs 1-4, mirroring
+    `teams.geo.SchoolIndex.resolve(team)`'s exact stamping convention:
+    `latitude`/`longitude`/`location_precision`/`matched_name`/
+    `needs_review` are always stamped, and `host_school_website` is
+    stamped too, but only on a `location_precision == "school"` match
+    that itself carries a website (public schools only -- NCES's
+    private-school data has no website column) -- never onto
+    `Club.website`, which is the chapter's own site (see
+    `directory/model.py`'s `Club` docstring for why those two fields
+    are kept separate). Mutates and returns the same list, matching
+    `teams.geo.geocode_teams()`'s "operate on the combined list, once"
+    shape.
+
+    Constructs a `GeoLadder` only when `clubs` is non-empty -- mirrors
+    `_apply_geo_fallback()`'s own "don't pay the load cost for nothing
+    to do" guard. Unlike Places (where only one real entry ever needs
+    the ladder), every real curated `Club` in this ticket's dataset
+    needs this pass -- no `Club` ever carries a hand-curated coordinate
+    -- so this guard mainly protects the `--source places-sd`-filtered
+    case where `clubs` is legitimately empty.
+
+    A `Club` that exhausts every rung keeps `location_precision ==
+    "none"` and no coordinates -- the same "never guess" honesty rule
+    `geo_ladder.py` documents, never fabricated here either.
+    """
+    if not clubs:
+        return clubs
+
+    resolved_data_dir = Path(data_dir) if data_dir is not None else DEFAULT_GEO_DATA_DIR
+    ladder = GeoLadder(resolved_data_dir)
+
+    for club in clubs:
+        match = ladder.locate(club.host_school, club.city, club.postal_code)
+        club.latitude = match.latitude
+        club.longitude = match.longitude
+        club.location_precision = match.location_precision
+        club.matched_name = match.matched_name
+        club.needs_review = match.needs_review
+        if match.location_precision == "school" and match.website:
+            club.host_school_website = match.website
+
+    return clubs
+
+
 def run_directory(
     *,
     registry_dir: str | Path | None = None,
@@ -125,38 +220,43 @@ def run_directory(
     dry_run: bool = False,
     geo_data_dir: str | Path | None = None,
 ) -> dict[str, Any]:
-    """Run the Directory pipeline end-to-end: Place Registry ->
-    `PlaceSource`(s) -> `_apply_geo_fallback()` -> `export_directory()`.
+    """Run the Directory pipeline end-to-end: Registry -> `PlaceSource`(s)/
+    `ClubSource`(s) -> `_apply_geo_fallback()`/`_apply_club_geocoding()`
+    -> `export_directory()`.
 
     Args:
-        registry_dir: Place Registry directory to load sources from.
-            Defaults to :data:`DEFAULT_PLACES_REGISTRY_DIR` (the real
-            seed registry, `partner_scrape/directory/registry/`) when
-            omitted.
+        registry_dir: Registry directory to load sources from (both
+            Place Registry and Club Registry entries live side by
+            side). Defaults to :data:`DEFAULT_PLACES_REGISTRY_DIR` (the
+            real seed registry, `partner_scrape/directory/registry/`)
+            when omitted.
         source: when given, restricts the run to the single acquisition
             source whose `adapter_type` matches (e.g.
-            `"static_roster"`) -- mirrors `teams.pipeline.run_teams()`'s
-            own `source` parameter.
+            `"static_roster"` or `"hack_club_static_roster"`) -- mirrors
+            `teams.pipeline.run_teams()`'s own `source` parameter.
         site_dir: sibling `stem-ecosystem` checkout to write
-            `places.json` into. Defaults to `Config.get_site_dir()` when
-            omitted (via `export_directory`).
+            `places.json`/`clubs.json` into. Defaults to
+            `Config.get_site_dir()` when omitted (via
+            `export_directory`).
         fetcher: the `Fetcher` every active source retrieves raw
             content through. Defaults to a real `PoliteFetcher()` when
-            omitted -- the production path, even though this ticket's
-            one source (`static_roster`) never calls it. Tests inject a
+            omitted -- the production path, even though every source
+            this subsystem has as of this ticket (`static_roster`,
+            `hack_club_static_roster`) never calls it. Tests inject a
             fixture `Fetcher` here so the whole run touches no sockets.
         dry_run: when `True`, compute and return the would-be-written
             export payload without touching disk.
         geo_data_dir: the offline geocoding data directory
-            `_apply_geo_fallback()` reads. Defaults to
-            :data:`DEFAULT_GEO_DATA_DIR` (the real committed
-            `directory/data/`) when omitted. Tests that need to control
-            fallback outcomes precisely should pass an explicit fixture
-            directory here.
+            `_apply_geo_fallback()`/`_apply_club_geocoding()` read.
+            Defaults to :data:`DEFAULT_GEO_DATA_DIR` (the real
+            committed `directory/data/`) when omitted. Tests that need
+            to control fallback/geocoding outcomes precisely should
+            pass an explicit fixture directory here.
 
     Returns:
-        `export_directory()`'s `{"meta": ..., "places": [...]}`
-        payload, passed through unchanged.
+        `export_directory()`'s `{"meta": ..., "places": [...],
+        "clubs_meta": ..., "clubs": [...]}` payload, passed through
+        unchanged.
     """
     sources = load_active_sources(
         Path(registry_dir) if registry_dir is not None else DEFAULT_PLACES_REGISTRY_DIR
@@ -168,37 +268,71 @@ def run_directory(
     active_fetcher = fetcher if fetcher is not None else PoliteFetcher()
 
     places: list[Place] = []
+    clubs: list[Club] = []
     for source_config in sources:
+        # One combined dispatch per registry entry -- checks
+        # _PLACE_SOURCES, then _CLUB_SOURCES -- rather than two
+        # separate loops over the same `sources` list. See this
+        # module's own docstring for why: a second, Place-shaped loop
+        # would make the *first* loop's "no PlaceSource registered"
+        # warning fire spuriously for every real Club registry entry.
         place_source = _PLACE_SOURCES.get(source_config.adapter_type)
-        if place_source is None:
+        club_source = _CLUB_SOURCES.get(source_config.adapter_type)
+
+        if place_source is not None:
+            try:
+                source_places = run_place_source(source_config, place_source, active_fetcher)
+            except Exception:
+                # Per-source error isolation, matching
+                # teams.pipeline.run_teams()'s own convention: one
+                # broken source is logged and skipped, never fatal to
+                # the rest of the run.
+                logger.exception(
+                    "Place source %r (adapter_type=%r) failed; skipping it, "
+                    "run continues with the remaining sources",
+                    source_config.source_id,
+                    source_config.adapter_type,
+                )
+                continue
+
+            logger.info(
+                "Place source %r yielded %d place(s)",
+                source_config.source_id,
+                len(source_places),
+            )
+            places.extend(source_places)
+
+        elif club_source is not None:
+            try:
+                source_clubs = run_club_source(source_config, club_source, active_fetcher)
+            except Exception:
+                # Same per-source error isolation as the Place branch
+                # above.
+                logger.exception(
+                    "Club source %r (adapter_type=%r) failed; skipping it, "
+                    "run continues with the remaining sources",
+                    source_config.source_id,
+                    source_config.adapter_type,
+                )
+                continue
+
+            logger.info(
+                "Club source %r yielded %d club(s)",
+                source_config.source_id,
+                len(source_clubs),
+            )
+            clubs.extend(source_clubs)
+
+        else:
             logger.warning(
-                "No PlaceSource registered for adapter_type %r "
+                "No PlaceSource or ClubSource registered for adapter_type %r "
                 "(source_id=%r); skipping",
                 source_config.adapter_type,
                 source_config.source_id,
             )
             continue
 
-        try:
-            source_places = run_place_source(source_config, place_source, active_fetcher)
-        except Exception:
-            # Per-source error isolation, matching
-            # teams.pipeline.run_teams()'s own convention: one broken
-            # source is logged and skipped, never fatal to the rest of
-            # the run.
-            logger.exception(
-                "Place source %r (adapter_type=%r) failed; skipping it, "
-                "run continues with the remaining sources",
-                source_config.source_id,
-                source_config.adapter_type,
-            )
-            continue
-
-        logger.info(
-            "Place source %r yielded %d place(s)", source_config.source_id, len(source_places)
-        )
-        places.extend(source_places)
-
     places = _apply_geo_fallback(places, data_dir=geo_data_dir)
+    clubs = _apply_club_geocoding(clubs, data_dir=geo_data_dir)
 
-    return export_directory(places, site_dir=site_dir, dry_run=dry_run)
+    return export_directory(places, clubs=clubs, site_dir=site_dir, dry_run=dry_run)
