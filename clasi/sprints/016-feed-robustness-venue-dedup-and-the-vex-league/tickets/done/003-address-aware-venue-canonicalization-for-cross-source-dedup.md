@@ -1,7 +1,7 @@
 ---
 id: '003'
 title: Address-aware venue canonicalization for cross-source dedup
-status: in-progress
+status: done
 use-cases:
 - SUC-004
 - SUC-005
