@@ -2,7 +2,7 @@
 id: '007'
 title: 'Places directory: model, static-roster source, curated dataset, and directory/
   scaffolding'
-status: open
+status: in-progress
 use-cases:
 - SUC-004
 depends-on:
