@@ -1,7 +1,7 @@
 ---
 id: '010'
 title: Tolerate legacy partner-log lines in publish.project()
-status: in-progress
+status: done
 use-cases: []
 depends-on: []
 github-issue: ''
