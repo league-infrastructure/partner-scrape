@@ -1,8 +1,9 @@
 ---
 id: '001'
 title: Publish teams.json into the public data contract
-status: open
-use-cases: [SUC-001]
+status: done
+use-cases:
+- SUC-001
 depends-on: []
 github-issue: ''
 issue: 42-publish-teams-json-and-llms-mention.md
@@ -43,30 +44,30 @@ only once both tickets are done.
 
 ## Acceptance Criteria
 
-- [ ] `export_teams()` writes the same payload to both
+- [x] `export_teams()` writes the same payload to both
       `{site_dir}/src/data/teams.json` and
       `{site_dir}/public/data/teams.json` on a normal (non-`dry_run`)
       call — byte-identical content, one JSON serialization, two writes.
-- [ ] `public/data/` is created (`mkdir(parents=True, exist_ok=True)`)
+- [x] `public/data/` is created (`mkdir(parents=True, exist_ok=True)`)
       if it does not already exist under `site_dir`; `src/data/`'s
       existing "must already exist" contract is unchanged.
-- [ ] `dry_run=True` writes neither file (matching the existing
+- [x] `dry_run=True` writes neither file (matching the existing
       `src/data/teams.json` contract, extended to the new path).
-- [ ] An unwritable `public/data` target (e.g. occupied by a file, or a
+- [x] An unwritable `public/data` target (e.g. occupied by a file, or a
       read-only parent) raises `RuntimeError` with a message identifying
       the path — matching `export_teams()`'s existing fail-loud contract
       for `src/data`. Confirm the existing `src/data` failure path is
       unaffected by this change (i.e. a `src/data` failure still raises
       before or independently of any `public/data` write attempt — pick
       one explicit ordering and document it in the docstring).
-- [ ] The two existing hard-invariant regression tests in
+- [x] The two existing hard-invariant regression tests in
       `tests/teams/test_export.py` (byte-identical `opportunities.json`/
       `scrape-meta.json` before/after a `teams` run) still pass unchanged
       — this ticket must never touch those files.
-- [ ] `export_teams()`'s module/function docstring is updated to describe
+- [x] `export_teams()`'s module/function docstring is updated to describe
       the second write target and the directory-creation asymmetry
       between `src/data` and `public/data`.
-- [ ] Full test suite green (`uv run pytest`).
+- [x] Full test suite green (`uv run pytest`).
 
 ## Testing
 

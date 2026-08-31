@@ -326,6 +326,7 @@ class TestDryRun:
 
         assert payload["meta"]["total"] == 1
         assert not (site / "src" / "data" / "teams.json").exists()
+        assert not (site / "public" / "data" / "teams.json").exists()
 
     def test_dry_run_never_touches_a_nonexistent_site_dir(self, tmp_path):
         absent = tmp_path / "not-checked-out"
@@ -343,6 +344,77 @@ class TestUnwritableSiteDirFailsLoudly:
 
         with pytest.raises(RuntimeError, match="Cannot write teams export"):
             export_teams([_make_team()], site_dir=site)
+
+
+class TestPublicDataPublish:
+    """Sprint 017 ticket 001: `export_teams()`'s second write target,
+    `{site_dir}/public/data/teams.json` -- the same already-built
+    payload as `src/data/teams.json`, written in the same call. See
+    the module docstring's "The two write targets are not symmetric"
+    section for the `mkdir`/ordering contract these tests pin down."""
+
+    def test_public_data_teams_json_is_byte_identical_to_src_data(self, tmp_path):
+        site = _make_site(tmp_path)
+
+        export_teams(_real_fixture_teams(), site_dir=site)
+
+        src_text = (site / "src" / "data" / "teams.json").read_text()
+        public_text = (site / "public" / "data" / "teams.json").read_text()
+        assert public_text == src_text
+
+        # Parsed-content check too, per the ticket's own wording --
+        # belt-and-suspenders alongside the byte-identical assertion
+        # above (a byte-identical file is trivially content-identical,
+        # but this pins the parsed shape independently).
+        assert json.loads(public_text) == json.loads(src_text)
+
+    def test_public_data_directory_is_created_when_absent(self, tmp_path):
+        site = _make_site(tmp_path)
+        assert not (site / "public").exists()
+
+        export_teams([_make_team()], site_dir=site)
+
+        public_teams_path = site / "public" / "data" / "teams.json"
+        assert public_teams_path.exists()
+        assert json.loads(public_teams_path.read_text())["teams"][0]["team_id"] == "ftc-1622"
+
+    def test_public_data_directory_is_reused_when_already_present(self, tmp_path):
+        site = _make_site(tmp_path)
+        existing_public_data = site / "public" / "data"
+        existing_public_data.mkdir(parents=True)
+        (existing_public_data / "partners.json").write_text("[]")
+
+        export_teams([_make_team()], site_dir=site)
+
+        # The existing sibling file (from export/publish.py's contract)
+        # is left alone -- this write only ever adds teams.json.
+        assert (existing_public_data / "partners.json").read_text() == "[]"
+        assert (existing_public_data / "teams.json").exists()
+
+    def test_unwritable_public_data_path_raises_runtime_error(self, tmp_path):
+        site = _make_site(tmp_path)
+        public_dir = site / "public"
+        public_dir.mkdir()
+        # A file occupies the exact path public/data must become a
+        # directory at -- mkdir(parents=True, exist_ok=True) cannot
+        # succeed, so the write must fail loudly, not silently skip.
+        (public_dir / "data").write_text("not a directory")
+
+        with pytest.raises(RuntimeError, match="Cannot write teams export"):
+            export_teams([_make_team()], site_dir=site)
+
+    def test_src_data_failure_is_raised_before_public_data_is_touched(self, tmp_path):
+        # src/data missing entirely (TestUnwritableSiteDirFailsLoudly's
+        # scenario) -- confirm no public/data/teams.json is left behind
+        # by a failed run, i.e. the src/data write really does happen,
+        # and fail, before public/data is ever attempted.
+        site = tmp_path / "no-data-dir"
+        site.mkdir()
+
+        with pytest.raises(RuntimeError, match="Cannot write teams export"):
+            export_teams([_make_team()], site_dir=site)
+
+        assert not (site / "public").exists()
 
 
 class TestHardInvariants:

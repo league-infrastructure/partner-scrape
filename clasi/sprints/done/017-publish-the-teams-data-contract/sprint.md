@@ -1,7 +1,7 @@
 ---
 id: '017'
 title: Publish the Teams Data Contract
-status: ticketing
+status: done
 branch: sprint/017-publish-the-teams-data-contract
 use-cases: []
 issues:

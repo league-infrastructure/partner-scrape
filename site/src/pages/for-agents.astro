@@ -41,6 +41,14 @@ const base = import.meta.env.BASE_URL.replace(/\/+$/, ''); // "" or "/partner-sc
 // sprint.md's Migration Concerns note that the pipeline hasn't
 // published to this checkout's `public/data/` yet; the origin choice
 // is independent of that operational gap.
+//
+// Sprint 017, ticket 002 (issue 42): step 3 below adds `teams.json` --
+// a structurally independent dataset from the partners/events pair
+// above (own self-describing `meta` envelope, no reconstruction
+// relationship to steps 1-2). Per this page's own Design Rationale D2
+// ("never duplicate the field table"), the full `Team` field list
+// stays on `/data-access` only; this page states just the fetch URL
+// and one-line envelope shape, same as it already does for steps 1-2.
 const DATA_ORIGIN = 'https://league-infrastructure.github.io/partner-scrape';
 ---
 
@@ -78,10 +86,16 @@ const DATA_ORIGIN = 'https://league-infrastructure.github.io/partner-scrape';
    ${DATA_ORIGIN}/data/partners/<slug>/past-events.json
    -> { generated_at, partner_slug, kind, event_count, events: [...] }
    "current"/"past" is a true partition -- undated records land in
-   past-events.json, nothing is dropped.`}</code></pre>
+   past-events.json, nothing is dropped.
+
+3. GET ${DATA_ORIGIN}/data/teams.json
+   -> { meta: { generated, total, by_league, by_location_precision,
+   out_of_region }, teams: [...] }
+   Independent of steps 1-2 -- the FIRST/VEX robotics teams directory
+   for San Diego County, self-describing via its own meta envelope.`}</code></pre>
       <p>
         That's the full URL surface — no other endpoint exists. Field-by-field definitions for
-        every partner and event property, plus a worked example of both file shapes, are on
+        every partner, event, and team property, plus a worked example of each file shape, are on
         <a href={`${base}/data-access`}>How to Consume Our Data</a>; this page does not repeat
         them.
       </p>
