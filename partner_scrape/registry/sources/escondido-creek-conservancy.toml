@@ -36,6 +36,16 @@
 # place; it remains a valid, correctly-diagnosed cause of this site's
 # original zero-yield (a real Wix JS-rendering gap), even though this
 # separate sitemap-fetch bug is what's actually blocking recovery now.
+#
+# 2026-08-30 re-probe (sprint 015 ticket 002 / issue 37): with ticket
+# 001's PlaywrightFetcher raw-resource fetch fix live, a fresh
+# `--dry-run --no-enrich` re-probe finds 7 real event URLs (6 with
+# recovered dates), e.g. event-details/a-hike-to-learn-how-to-help-save-
+# franks-peak and four recurring "bill-the-bug-guy" sessions -- the
+# net::ERR_ABORTED crash is gone and real events flow end-to-end. Best
+# confirming evidence yet that this source's only blocker was the
+# fetch bug, not the Wix JS-rendering gap alone. enabled = true kept
+# (unchanged from before this ticket).
 
 org_name = "Escondido Creek Conservancy"
 adapter_type = "generic_html"

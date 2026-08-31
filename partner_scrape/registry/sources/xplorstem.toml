@@ -16,6 +16,22 @@
 # ticket. fetch_strategy = "headless" is left in place as a correct
 # disposition of this site's original (Wix JS-rendering) zero-yield
 # cause.
+#
+# 2026-08-30 re-probe (sprint 015 ticket 002 / issue 37): with ticket
+# 001's PlaywrightFetcher raw-resource fetch fix live, a fresh
+# `--dry-run --no-enrich` re-probe finds 1 real URL
+# (blog/categories/events) -- the net::ERR_ABORTED crash is gone.
+# Modest yield: this is a blog category index, not an individual event
+# page, so the extraction ladder recovers no clean date (dated=0), an
+# extraction-quality question out of this ticket's scope. Separately
+# (unrelated to the fetch bug): the root sitemap's other child,
+# store-products-sitemap.xml, fetches fine (200, real content) but
+# fails XML parsing with "undefined entity" -- confirmed via a direct
+# raw fetch this is a genuine site-side malformed-XML issue (an
+# unescaped `&` in a product listing), not a fetch/discovery bug;
+# discovery/sitemap.py's existing per-child ParseError handling
+# already skips it gracefully. enabled = true kept (unchanged from
+# before this ticket).
 
 org_name = "XplorStem LLC"
 adapter_type = "generic_html"

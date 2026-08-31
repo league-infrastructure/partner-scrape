@@ -31,3 +31,11 @@ discovered_via = "partners_viable.csv tier-2 bulk registration (2026-07-20)"
 # declared scope to fix; flagged for a follow-up ticket.
 # fetch_strategy = "headless" is left in place as a correct disposition
 # of this site's original (Wix JS-rendering) zero-yield cause.
+#
+# 2026-08-30 re-probe (sprint 015 ticket 002 / issue 37): with ticket
+# 001's PlaywrightFetcher raw-resource fetch fix live, a fresh
+# `--dry-run --no-enrich` re-probe finds 3 real URLs (calendar,
+# slb/workshops, students/workshops), 2 with recovered dates --
+# "did not parse" is gone, sitemap.xml now returns real XML through
+# the headless path. enabled = true kept (unchanged from before this
+# ticket).

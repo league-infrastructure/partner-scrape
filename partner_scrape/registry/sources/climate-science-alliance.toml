@@ -50,3 +50,20 @@ discovered_via = "partners_viable.csv batch (real scrape exercise 2026-07-19)"
 # a valid, correctly-diagnosed cause of this site's original zero-yield
 # (a real Wix JS-rendering gap), even though this separate sitemap-fetch
 # bug is what's actually blocking recovery now.
+#
+# 2026-08-30 re-probe (sprint 015 ticket 002 / issue 37): with ticket
+# 001's PlaywrightFetcher raw-resource fetch fix live, a fresh
+# `--dry-run --no-enrich` re-probe now finds 1 real URL
+# (stewardship-pathways/events, sitemap lastmod 2026-08-24) --
+# confirms the fetch bug is fixed (sitemap.xml now returns real,
+# parseable XML through the headless path). Modest yield: this is the
+# site's events *index* page, not individual event pages, so the
+# extraction ladder recovers no clean per-event date (dated=0) --
+# an extraction-quality question, not a discovery/fetch failure, out
+# of this ticket's scope. First live attempt this session hit a
+# transient failure identical in shape to the pre-fix bug (Chromium
+# XML-viewer-wrapped body cached from a flaky first request); a
+# second, independent live fetch (plus a clean-cache re-probe)
+# reproduced the real 1-URL yield twice, so the fix is confirmed
+# working -- see this ticket's Deviations for the flake writeup.
+# enabled = true kept (unchanged from before this ticket).
