@@ -1,5 +1,10 @@
 ---
-status: pending
+status: in-progress
+sprint: '015'
+tickets:
+- 015-006
+- 015-007
+- 015-008
 ---
 
 # Schema: Camps and Competitions types, deadline-first dates, eligibility flag

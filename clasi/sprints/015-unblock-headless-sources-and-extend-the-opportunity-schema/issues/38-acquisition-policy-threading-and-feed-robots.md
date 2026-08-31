@@ -1,5 +1,10 @@
 ---
-status: pending
+status: in-progress
+sprint: '015'
+tickets:
+- 015-003
+- 015-004
+- 015-005
 ---
 
 # Thread acquisition_policy into the fetcher; decide robots policy for feed endpoints; populate Fleet event location

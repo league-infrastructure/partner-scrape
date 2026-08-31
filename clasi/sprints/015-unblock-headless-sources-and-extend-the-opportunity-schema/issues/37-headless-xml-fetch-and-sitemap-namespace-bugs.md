@@ -1,5 +1,9 @@
 ---
-status: pending
+status: in-progress
+sprint: '015'
+tickets:
+- 015-001
+- 015-002
 ---
 
 # Fix headless raw-XML fetching and sitemap namespace parsing (unblocks the 9 headless sources)

@@ -1,0 +1,119 @@
+---
+id: '001'
+title: Fix headless raw-resource fetch and sitemap namespace parsing
+status: open
+use-cases:
+- SUC-001
+- SUC-002
+depends-on: []
+github-issue: ''
+issue: 37-headless-xml-fetch-and-sitemap-namespace-bugs.md
+completes_issue: true
+---
+<!-- CLASI: Before changing code or making plans, review the SE process in CLAUDE.md -->
+
+# Fix headless raw-resource fetch and sitemap namespace parsing
+
+## Description
+
+Two root-caused bugs from sprint 014 ticket 003's live triage
+(documented, not fixed there — see that ticket's "Deviations /
+Findings for Follow-up" and the dated addenda on the 9 affected
+sources' TOML files), both currently blocking real yield:
+
+1. **`fetch/headless.py`'s `PlaywrightFetcher.get()` cannot retrieve a
+   raw, non-HTML resource.** It always navigates (`page.goto()`) and
+   reads the rendered document (`page.content()`) — correct for an
+   HTML page, but for a bare `.xml` sitemap this either returns
+   Chromium's own XML-viewer-wrapped markup (5 confirmed sites:
+   `gsdsef`, `xplorstem`, `sdrvc`, `titanbot`, `lajollalibrary`) or
+   aborts navigation outright with `net::ERR_ABORTED` (4 confirmed
+   sites: `climate-science-alliance`, `escondido-creek-conservancy`,
+   `techadventurecamp`, `sandiego-cv-aopsacademy`). All 9 of ticket
+   002's headless-flagged sources remain zero-yield at the discovery
+   step because of this, even though their HTML pages already render
+   correctly (sprint 014 ticket 002's `wait_until="load"` fix).
+2. **`discovery/sitemap.py`'s `_parse_urlset()` is namespace-strict
+   while root-tag acceptance is namespace-agnostic.** It queries only
+   `root.findall("sm:url", _NS)` against the hardcoded
+   `_NS = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}`, so a
+   sitemap declaring any other namespace parses successfully (its root
+   tag is recognized by `_local_name()`, which already strips
+   namespaces) but silently yields zero `<url>` matches even when real
+   event pages exist in it. Confirmed live: `sandiego.edu`'s legacy
+   `xmlns="http://www.google.com/schemas/sitemap/0.84"` sitemap.
+   `sandiego` is currently disabled with this exact reason.
+
+## Fix shape
+
+1. **`fetch/headless.py`**: give `PlaywrightFetcher.get()` a
+   content-type/extension heuristic that routes a non-HTML target
+   through a raw request (Playwright's `page.request`/
+   `APIRequestContext` surface) instead of `page.goto()` +
+   `page.content()`. Keep the method's external contract identical
+   (`Fetcher.get(url, headers=None) -> FetchResponse`, same class,
+   same Protocol) — no adapter, `PoliteFetcher`, or discovery module
+   should need to change or learn headless fetching exists. Extend the
+   `HeadlessPage`/fixture-double surface only as needed to support the
+   raw-request path in tests without a real browser.
+2. **`discovery/sitemap.py`**: in `_parse_urlset()`, if the existing
+   namespace-qualified `sm:url` query returns zero elements, retry
+   with a namespace-agnostic match (iterate children by
+   `_local_name(child.tag) == "url"`/`"loc"`/`"lastmod"`, reusing the
+   `_local_name()` helper already used elsewhere in this module for
+   root/child-tag acceptance). Try the qualified query first — every
+   currently-registered sitemap already validates against it — so this
+   is purely additive.
+
+## Acceptance Criteria
+
+- [ ] `PlaywrightFetcher.get()` returns the real raw body for a `.xml`
+      (or otherwise non-HTML) target, verified by a fixture `HeadlessPage`
+      double that simulates both failure modes (wrapped-markup and
+      aborted navigation) being avoided.
+- [ ] `PlaywrightFetcher.get()`'s behavior for an HTML target is
+      unchanged (existing fixture tests for the `wait_until="load"`
+      path still pass unmodified).
+- [ ] `_parse_urlset()` returns correct `{loc: lastmod}` for
+      0.9-namespaced, 0.84-namespaced, and unnamespaced `<urlset>`
+      fixtures.
+- [ ] An existing 0.9-namespaced sitemap fixture test is unaffected
+      (fallback only fires when the qualified query returns zero).
+- [ ] No adapter, `PoliteFetcher`, `robots.py`, `throttle.py`, or
+      discovery module outside `discovery/sitemap.py` changes.
+- [ ] Full test suite stays green; no new test touches a real network
+      or a real browser.
+
+## Testing
+
+- **Existing tests to run**: full suite (`uv run pytest`), especially
+  `tests/test_fetch_headless.py` and the sitemap discovery test file.
+- **New tests to write**: `PlaywrightFetcher.get()` cases for a
+  non-HTML target (both simulated failure modes); `_parse_urlset()`
+  cases for 0.84-namespaced and unnamespaced `<urlset>` documents.
+- **Verification command**: `uv run pytest`.
+
+## Implementation Plan
+
+**Approach**: Fix both bugs entirely inside their owning modules — no
+cross-module signature changes. For `fetch/headless.py`, branch inside
+`get()` on a URL-suffix/content-type heuristic before deciding whether
+to navigate or issue a raw request. For `discovery/sitemap.py`, add
+the namespace-agnostic fallback as a second pass inside
+`_parse_urlset()`, only when the first pass is empty.
+
+**Files to modify**:
+- `partner_scrape/fetch/headless.py` — `PlaywrightFetcher.get()`,
+  `HeadlessPage` Protocol (if the raw-request seam needs a new
+  method).
+- `partner_scrape/discovery/sitemap.py` — `_parse_urlset()`.
+- `tests/test_fetch_headless.py`, the sitemap discovery test file —
+  new fixture cases per Acceptance Criteria.
+
+**Testing plan**: see Testing above.
+
+**Documentation updates**: `partner_scrape/fetch/DESIGN.md` and
+`partner_scrape/discovery/DESIGN.md` each get a short sprint-015
+addendum describing the fix (matching this repo's existing per-sprint
+DESIGN.md addendum convention) — not a rewrite of either document's
+existing content.
