@@ -1,7 +1,7 @@
 ---
 id: 019
 title: Consolidate Beta Site Onto Stem-Ecosystem Production
-status: executing
+status: done
 branch: sprint/019-consolidate-beta-site-onto-stem-ecosystem-production
 use-cases:
 - SUC-001
