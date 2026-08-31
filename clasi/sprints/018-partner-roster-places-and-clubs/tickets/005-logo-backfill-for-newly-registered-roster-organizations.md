@@ -1,7 +1,7 @@
 ---
 id: '005'
 title: Logo backfill for newly-registered roster organizations
-status: open
+status: in-progress
 use-cases:
 - SUC-002
 depends-on:
