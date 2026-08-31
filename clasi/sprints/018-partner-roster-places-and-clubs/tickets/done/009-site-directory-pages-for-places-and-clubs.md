@@ -1,7 +1,7 @@
 ---
 id: 009
 title: Site directory pages for places and clubs
-status: in-progress
+status: done
 use-cases:
 - SUC-004
 - SUC-005

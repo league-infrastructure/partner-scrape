@@ -1,5 +1,5 @@
 ---
-status: in-progress
+status: done
 sprint: 018
 split_into:
 - 35b-standing-entities-remaining-club-rosters.md
