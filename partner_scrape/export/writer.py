@@ -29,7 +29,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import fields
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -50,6 +50,23 @@ SITE_SCHEMA_FIELDS: tuple[str, ...] = tuple(
     f.name for f in fields(Opportunity) if f.name != "sources"
 )
 
+#: Sprint 020 ticket 001 (issue 61): bounds the `DEADLINE_FIRST_TYPES`
+#: "no `date_end` still counts as open" rule (below) to records whose
+#: `date_start` is no older than this many days before `today`. Without
+#: this bound, a genuinely one-time past event that happens to lack a
+#: recorded deadline -- the reported case, "2nd Innovation in Women's
+#: Health Pitch Competition" (`opportunity_type="Competitions"`,
+#: `date_start` 2024-12-01, no `date_end`, ~638 days stale) -- exports as
+#: perpetually current. 365 days is comfortably above the existing
+#: 30-day-old regression cases
+#: (`test_competitions_no_deadline_with_past_start_is_included`,
+#: `test_no_deadline_internship_with_past_start_is_included`) that this
+#: rule must keep protecting, and comfortably below the ~638-day-old
+#: reported outlier; it is not tightly calibrated beyond that one case
+#: (sprint 020 sprint.md Open Questions) and may need revisiting if more
+#: stale-but-undated records surface in production.
+_DEADLINE_FIRST_STALE_POSTING_DAYS = 365
+
 
 def is_current_or_upcoming(opportunity: Opportunity, today: date) -> bool:
     """True if `opportunity`'s end date, or start date if no end date, is
@@ -65,8 +82,12 @@ def is_current_or_upcoming(opportunity: Opportunity, today: date) -> bool:
     is routinely in the past for a still-open, no-deadline record -- the
     ordinary `date_end or date_start >= today` rule would wrongly expire
     it. Such a record is current if `date_end` (the application/
-    registration deadline) is unset or still in the future; every other
-    `opportunity_type` keeps the exact rule above, unchanged.
+    registration deadline) is unset and `date_start` is within
+    `_DEADLINE_FIRST_STALE_POSTING_DAYS` of `today` (sprint 020 ticket
+    001, SUC-020, issue 61) -- older than that, the posting is presumed
+    stale/closed rather than perpetually open -- or `date_end` is set and
+    still in the future; every other `opportunity_type` keeps the exact
+    rule above, unchanged.
 
     Sprint 009: promoted from `_is_current_or_upcoming` (non-underscore,
     no behavior change) so `export/publish.py` reuses this exact
@@ -74,7 +95,11 @@ def is_current_or_upcoming(opportunity: Opportunity, today: date) -> bool:
     """
     if opportunity.opportunity_type in DEADLINE_FIRST_TYPES:
         if not opportunity.date_end:
-            return True
+            if not opportunity.date_start:
+                return False
+            start = date.fromisoformat(opportunity.date_start[:10])
+            stale_cutoff = today - timedelta(days=_DEADLINE_FIRST_STALE_POSTING_DAYS)
+            return start >= stale_cutoff
         return date.fromisoformat(opportunity.date_end[:10]) >= today
 
     date_str = opportunity.date_end or opportunity.date_start

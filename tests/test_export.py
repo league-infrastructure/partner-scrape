@@ -317,6 +317,59 @@ class TestDeadlineFirstCurrentUpcomingFilterGeneralization:
 
         assert payload == []
 
+    def test_competitions_no_deadline_with_far_past_start_is_excluded(self, tmp_path):
+        """Regression for issue 61 / sprint 020 ticket 001: reproduces the
+        exact reported record shape -- "2nd Innovation in Women's Health
+        Pitch Competition" (`opportunity_type="Competitions"`, `date_start`
+        2024-12-01, no `date_end`), ~595 days before this test's `today`,
+        comfortably past `_DEADLINE_FIRST_STALE_POSTING_DAYS` (365). Before
+        this ticket's fix, the no-deadline-still-open rule had no upper
+        bound and this record exported as perpetually current."""
+        site_dir = _site_dir(tmp_path)
+        opp = _opportunity(
+            title="2nd Innovation in Women's Health Pitch Competition",
+            date_start="2024-12-01T09:00:00-08:00",
+            date_end="",
+            opportunity_type="Competitions",
+        )
+
+        payload = export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+
+        assert payload == []
+
+    def test_competitions_no_deadline_start_exactly_at_staleness_boundary_is_included(
+        self, tmp_path
+    ):
+        """`date_start` exactly `_DEADLINE_FIRST_STALE_POSTING_DAYS` (365)
+        days before `today` is still within the window (`>=` cutoff, not
+        `>`)."""
+        site_dir = _site_dir(tmp_path)
+        opp = _opportunity(
+            date_start="2025-07-19T09:00:00-07:00",  # exactly 365 days before today below
+            date_end="",
+            opportunity_type="Competitions",
+        )
+
+        payload = export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+
+        assert len(payload) == 1
+
+    def test_competitions_no_deadline_start_one_day_past_staleness_boundary_is_excluded(
+        self, tmp_path
+    ):
+        """`date_start` one day older than the 365-day window falls
+        outside it."""
+        site_dir = _site_dir(tmp_path)
+        opp = _opportunity(
+            date_start="2025-07-18T09:00:00-07:00",  # 366 days before today below
+            date_end="",
+            opportunity_type="Competitions",
+        )
+
+        payload = export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+
+        assert payload == []
+
 
 class TestExportSortOrder:
     """`export_opportunities`'s sort key (sprint 015 ticket 007): a

@@ -55,27 +55,27 @@ tightly calibrated.
 
 ## Acceptance Criteria
 
-- [ ] `is_current_or_upcoming()`'s `DEADLINE_FIRST_TYPES` branch, when
+- [x] `is_current_or_upcoming()`'s `DEADLINE_FIRST_TYPES` branch, when
       `date_end` is unset, excludes a record whose `date_start` is older
       than the new named staleness-window constant, and still includes
       one within it.
-- [ ] A new regression fixture, shaped exactly like the reported case
+- [x] A new regression fixture, shaped exactly like the reported case
       (`opportunity_type="Competitions"`, `date_start` far enough in the
       past to exceed the window, no `date_end`), asserts exclusion via
       `export_opportunities()` (matching this file's existing
       `tmp_path`/explicit-`today` test convention).
-- [ ] Every existing test in `TestDeadlineFirstCurrentUpcomingFilterGeneralization`
+- [x] Every existing test in `TestDeadlineFirstCurrentUpcomingFilterGeneralization`
       and `TestInternshipCurrentUpcomingFilter` continues to pass
       unmodified — in particular
       `test_competitions_no_deadline_with_past_start_is_included` and
       `test_no_deadline_internship_with_past_start_is_included` (both
       30-day-old postings) still assert inclusion.
-- [ ] A record with a set `date_end` (either `DEADLINE_FIRST_TYPES` or
+- [x] A record with a set `date_end` (either `DEADLINE_FIRST_TYPES` or
       ordinary) is unaffected — no behavior change on that path.
-- [ ] Ordinary (non-`DEADLINE_FIRST_TYPES`) records are unaffected —
+- [x] Ordinary (non-`DEADLINE_FIRST_TYPES`) records are unaffected —
       `TestCurrentUpcomingFilter` and `TestDSTBoundaryPartitioning`
       continue to pass unmodified.
-- [ ] `_span()` / `normalize/collapse.py` and `tests/test_normalize_collapse.py`
+- [x] `_span()` / `normalize/collapse.py` and `tests/test_normalize_collapse.py`
       are untouched by this ticket.
 
 ## Implementation Plan
