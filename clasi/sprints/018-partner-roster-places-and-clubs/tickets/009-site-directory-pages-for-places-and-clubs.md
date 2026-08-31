@@ -1,13 +1,13 @@
 ---
 id: 009
 title: Site directory pages for places and clubs
-status: open
+status: in-progress
 use-cases:
 - SUC-004
 - SUC-005
 depends-on:
 - '007'
-- '008'
+- 008
 github-issue: ''
 issue: 35-standing-entities-clubs-and-places.md
 completes_issue: true
