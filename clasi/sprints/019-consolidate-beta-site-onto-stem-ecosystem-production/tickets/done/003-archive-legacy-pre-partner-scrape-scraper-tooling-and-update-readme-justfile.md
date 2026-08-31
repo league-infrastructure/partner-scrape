@@ -1,7 +1,7 @@
 ---
 id: '003'
 title: Archive legacy pre-partner_scrape scraper tooling and update README/justfile
-status: in-progress
+status: done
 use-cases:
 - SUC-002
 depends-on: []
