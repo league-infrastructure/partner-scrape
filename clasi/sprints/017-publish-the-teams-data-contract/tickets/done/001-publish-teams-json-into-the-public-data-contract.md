@@ -1,7 +1,7 @@
 ---
 id: '001'
 title: Publish teams.json into the public data contract
-status: in-progress
+status: done
 use-cases:
 - SUC-001
 depends-on: []

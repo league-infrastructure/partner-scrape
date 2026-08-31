@@ -1,9 +1,11 @@
 ---
 id: '002'
 title: Document teams.json across the discovery surfaces
-status: open
-use-cases: [SUC-001]
-depends-on: ['001']
+status: in-progress
+use-cases:
+- SUC-001
+depends-on:
+- '001'
 github-issue: ''
 issue: 42-publish-teams-json-and-llms-mention.md
 completes_issue: true
