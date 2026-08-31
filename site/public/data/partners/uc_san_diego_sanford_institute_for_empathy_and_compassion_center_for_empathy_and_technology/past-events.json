@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-08-31T00:40:44Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "uc_san_diego_sanford_institute_for_empathy_and_compassion_center_for_empathy_and_technology",
  "kind": "past",
  "event_count": 1,
@@ -33,6 +33,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "uc_san_diego_sanford.png",
+   "eligibility": "",
    "image_src": ""
   }
  ]

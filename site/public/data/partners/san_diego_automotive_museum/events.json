@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-08-31T00:40:44Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "san_diego_automotive_museum",
  "kind": "current",
  "event_count": 3,
@@ -20,22 +20,26 @@
     "Grades 9-12"
    ],
    "cost_range": "",
-   "time_of_day": [],
-   "opportunity_type": "Out-of-school Programs",
+   "time_of_day": [
+    "All Day"
+   ],
+   "opportunity_type": "Camps",
    "areas_of_interest": [
-    "Engineering"
+    "Engineering",
+    "Physical Science"
    ],
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "San Diego Automotive Museum",
+   "location": "San Diego Automotive Museum, San Diego, CA",
    "latitude": "36.778261",
    "longitude": "-119.4179324",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_automotive_museum.png",
-   "image_src": ""
+   "eligibility": "",
+   "image_src": "bbb695fb2c7b92e6.jpg"
   },
   {
    "slug": "https_sdautomuseum_org_education_school_programs_camps_veterans_day_camp",
@@ -55,7 +59,7 @@
     "Morning",
     "Afternoon"
    ],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Camps",
    "areas_of_interest": [
     "Engineering"
    ],
@@ -69,7 +73,8 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_automotive_museum.png",
-   "image_src": ""
+   "eligibility": "",
+   "image_src": "bbb695fb2c7b92e6.jpg"
   },
   {
    "slug": "https_sdautomuseum_org_education_school_programs_camps_thanksgiving_break_camp",
@@ -91,9 +96,10 @@
     "Morning",
     "Afternoon"
    ],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Camps",
    "areas_of_interest": [
-    "Engineering"
+    "Engineering",
+    "Physical Science"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -105,7 +111,8 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_automotive_museum.png",
-   "image_src": ""
+   "eligibility": "",
+   "image_src": "d3fc88560b6203f7.jpg"
   }
  ]
 }

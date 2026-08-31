@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-08-31T00:40:44Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "san_dieguito_river_park",
  "kind": "current",
  "event_count": 1,
@@ -28,13 +28,14 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "Piedras Pintadas, Rancho Bernardo, San Diego, CA",
+   "location": "Piedras Pintadas, Rancho Bernardo",
    "latitude": "33.042441",
    "longitude": "-117.0405829",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_dieguito_river_park.jpg",
+   "eligibility": "",
    "image_src": "8b211aa0ff54d0f1.jpg"
   }
  ]

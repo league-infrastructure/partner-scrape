@@ -270,7 +270,7 @@
   "description": "As part of the Blue Star Museums program, the San Diego Archaeological Center offers free admission to active-duty military personnel and their families from Armed Forces Day through Labor Day. The free admission program is available for those currently serving in the United States Military–Army, Navy, Air Force, Marine Corps, Space Force, Coast Guard–including Reservists, National Guardsman (regardless of status), U.S. Public Health Commissioned Corps, NOAA Commissioned Corps, and up to five family members. The military ID holder can be either active duty service member or other dependent family member with the appropriate ID card. The active duty member does not have to be present for family members to use the program. Just bring your DD Form 1173 ID Card, or DD Form 1173-1 ID Card, for active duty military family members. About Blue Star Museums: Blue Star Museums is a collaboration among the National Endowment for the Arts, Blue Star Families, the Department of War, and museums across America to offer free admission to the nation’s active duty military personnel including National Guard and Reserve and their families each summer. The program begins on Armed Forces Day in mid-May and ends on Labor Day at the beginning of September. For more information, including a full list of participating museums, visit the Blue Star Families website .",
   "link": "https://sandiegoarchaeology.org/event/blue-star-museums/2026-09-02/",
   "availability": "Repeats 3 times through 2026-09-06",
-  "date_start": "2026-08-30T00:00:00-07:00",
+  "date_start": "2026-08-31T00:00:00-07:00",
   "date_end": "2026-09-06T16:00:00-07:00",
   "age_grade_level": [
    "Family",
@@ -305,7 +305,7 @@
   "description": "Bring your young children to explore, learn, and play at the Crest branch in the children's area free play space. We provide a variety of sensory and educational toys and activities.",
   "link": "https://sdcl.bibliocommons.com/events/6a6e589224cc9f017dda3d6e",
   "availability": "",
-  "date_start": "2026-08-30T00:00:00-07:00",
+  "date_start": "2026-08-31T00:00:00-07:00",
   "date_end": "2026-08-31T23:59:59-07:00",
   "age_grade_level": [
    "Family",
@@ -340,7 +340,7 @@
   "description": "Enjoy a special themed scavenger hunt in the children's area! August's theme will be kids trivia. Complete the scavenger hunt to win a small prize. For children ages 4-12. While supplies last; one prize per day.",
   "link": "https://sdcl.bibliocommons.com/events/69fbb0a8703c33630025eb58",
   "availability": "",
-  "date_start": "2026-08-30T00:00:00-07:00",
+  "date_start": "2026-08-31T00:00:00-07:00",
   "date_end": "2026-08-31T23:59:59-07:00",
   "age_grade_level": [
    "Family",
@@ -367,183 +367,6 @@
   "logo_src": "",
   "eligibility": "",
   "image_src": "6a79a10497a5d22b.png"
- },
- {
-  "slug": "https_qi_ucsd_edu_events_showcase_qi",
-  "title": "Showcase QI",
-  "partner_name": "Qualcomm Institute",
-  "partner_id": null,
-  "description": "You are cordially invited to visit Showcase QI on the first floor of Atkinson Hall (around the corner from Gallery QI and across from Spatial Computing) at the Qualcomm Institute to experience a self-guided tour of stations representing a slice of the Qualcomm Institute at UC San Diego. The show includes video, audio and other material about some of the research, education and shared facilities at the institute.\n\nShowcase QI is open from 10 a.m. to 5 p.m., Monday through Friday. We may also have extended hours for special events, such as IDEAS performances and Gallery QI receptions.\n\nPlease drop by to learn more about the breadth of interdisciplinary activities at QI. For more information, please email qi-communications@ucsd.edu or visit qi.ucsd.edu.",
-  "link": "https://qi.ucsd.edu/events/showcase-qi/",
-  "availability": "Repeats 2 times through 2026-12-31",
-  "date_start": "2026-08-30T00:00:00-07:00",
-  "date_end": "2026-12-31T00:00:00-08:00",
-  "age_grade_level": [
-   "Family",
-   "Adult"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Morning",
-   "Afternoon"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Coding/Computer Science/Cyber Security",
-   "Engineering",
-   "General Science"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Atkinson Hall, First Floor, Qualcomm Institute, UC San Diego",
-  "latitude": "",
-  "longitude": "",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "",
-  "eligibility": "",
-  "image_src": "2077ee046c758af0.jpg"
- },
- {
-  "slug": "ranger_led_night_walk_20260830",
-  "title": "Ranger-led Night Walk",
-  "partner_name": "Mission Trails Regional Park Foundation",
-  "partner_id": null,
-  "description": "Join MTRP Park Ranger Brandon Botticelli for a two-hour night walk from the Bushy Hill parking lot.  Enjoy the park after dark while looking for creatures of the night, such as, owls, scorpions, spiders, snakes, and more.\n\nThis program is free with no reservations required.  Meet at the kiosk in the dirt parking lot at the corner of Father Junipero Serra Trail and Bushy Hill Dr. across from the campground.",
-  "link": "",
-  "availability": "Repeats 2 times through 2026-08-30",
-  "date_start": "2026-08-30T02:15:00-07:00",
-  "date_end": "2026-08-30T04:15:00-07:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Evening"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Biology / LifeSciences",
-   "Earth Science/Ecology"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Bushy Hill Parking Lot, Father Junipero Serra Trail and Bushy Hill Dr.",
-  "latitude": "",
-  "longitude": "",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "",
-  "eligibility": "",
-  "image_src": ""
- },
- {
-  "slug": "ranger_led_night_hike_20260830",
-  "title": "Ranger-led Night Hike",
-  "partner_name": "San Diego County Parks and Recreation",
-  "partner_id": null,
-  "description": "Join Rangers on a guided evening hike, avoiding the summer heat and learning about the native plants and nocturnal wildlife of this 2,272-acre preserve on the 2.5-mile loop incorporating upper Martha’s Grove trail. Bringing your own headlamp with a red-light setting is highly recommended.\n\nThis activity meets at the Goodan Staging Area located at 16281 Sycamore Canyon Road in Poway:\nGoodan Staging Area, 16281 Sycamore Canyon Road, Poway, CA, 92064\n\nInclement weather will cancel; call ahead. Park phone number: (858) 513-4737",
-  "link": "",
-  "availability": "Repeats 2 times through 2026-09-27",
-  "date_start": "2026-08-30T02:30:00-07:00",
-  "date_end": "2026-09-27T03:30:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Adult"
-  ],
-  "cost_range": "",
-  "time_of_day": [
-   "Evening"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Biology / LifeSciences",
-   "Earth Science/Ecology"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Sycamore Canyon/Goodan Ranch, 16281 Sycamore Canyon Rd, Poway, CA 92064, USA",
-  "latitude": "",
-  "longitude": "",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "",
-  "eligibility": "",
-  "image_src": ""
- },
- {
-  "slug": "https_aquarium_ucsd_edu_events_birch_after_hours",
-  "title": "Birch Aquarium is Open Late Sundays",
-  "partner_name": "Birch Aquarium at Scripps",
-  "partner_id": null,
-  "description": "Looking for the perfect way to wind down after the weekend? Birch Aquarium is open late every Sunday evening this summer from 5 – 7 p.m. Enjoy an all-ages experience featuring discounted tickets and a fun, relaxing vibe!",
-  "link": "https://aquarium.ucsd.edu/events/birch-after-hours",
-  "availability": "",
-  "date_start": "2026-08-30T17:00:00-07:00",
-  "date_end": "2026-09-06T19:00:00-07:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "Less than $50",
-  "time_of_day": [
-   "Evening"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Biology / LifeSciences"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Birch Aquarium",
-  "latitude": "",
-  "longitude": "",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "",
-  "eligibility": "",
-  "image_src": "90ecec8040c1bc8c.jpg"
- },
- {
-  "slug": "ranch_house_tours_20260830",
-  "title": "Ranch House Tours",
-  "partner_name": "San Diego County Parks and Recreation",
-  "partner_id": null,
-  "description": "Visit a living piece of local history. This docent-led tour will take you back in time through a 200-year-old ranch house. Weddings and special events will cancel.\n\nFree. All ages.\n\nInclement weather may cancel; call ahead.\n\nPhone: (858) 484-7504",
-  "link": "",
-  "availability": "Repeats 51 times through 2027-11-27",
-  "date_start": "2026-08-30T20:00:00-07:00",
-  "date_end": "2027-11-27T20:00:00-08:00",
-  "age_grade_level": [
-   "Family"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Evening"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Earth Science/Ecology"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Los Penasquitos Ranch House, Canyonside Park Dr, San Diego, CA 92129, USA",
-  "latitude": "",
-  "longitude": "",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "",
-  "eligibility": "",
-  "image_src": ""
  },
  {
   "slug": "https_indico_cern_ch_event_1654479_overview",
@@ -578,101 +401,35 @@
   "image_src": "a3044290fe4aa2a2.jpg"
  },
  {
-  "slug": "https_sdcl_bibliocommons_com_events_6a8338bba821f90037ee6abc",
-  "title": "Toddler Storytime",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Get ready for toddler storytime with songs, movement, and engaging picture books, followed by hands-on learning and crafting. For ages 18 months to 3 years.",
-  "link": "https://sdcl.bibliocommons.com/events/6a8338bba821f90037ee6abc",
-  "availability": "Repeats 10 times through 2027-03-11",
-  "date_start": "2026-08-31T10:30:00-07:00",
-  "date_end": "2027-03-11T11:00:00-08:00",
-  "age_grade_level": [
-   "Family",
-   "Pre-K"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "General Science"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "Rancho Santa Fe",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "",
-  "eligibility": "",
-  "image_src": "081dcdbe2de096b4.png"
- },
- {
-  "slug": "https_sdcl_bibliocommons_com_events_69fcd2918e677a28001a83f1",
-  "title": "Family Free Play",
-  "partner_name": "San Diego County Library",
-  "partner_id": 251,
-  "description": "Storytime is on break during August. During the break, join us for Family Free Play! Kids and caregivers are invited to play with educational and creative play items while socializing with other attendees. All Ages Storytime returns on Thursday, September 3. Baby Storytime returns on Monday, September 7.",
-  "link": "https://sdcl.bibliocommons.com/events/69fcd2918e677a28001a83f1",
-  "availability": "",
-  "date_start": "2026-08-31T10:30:00-07:00",
-  "date_end": "2026-08-31T12:00:00-07:00",
-  "age_grade_level": [
-   "Family",
-   "Pre-K"
-  ],
-  "cost_range": "Free",
-  "time_of_day": [
-   "Morning"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "General Science"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "La Mesa, Kids area",
-  "latitude": "32.834727",
-  "longitude": "-117.1306115",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "",
-  "eligibility": "",
-  "image_src": "db9f4bacede39a3b.jpg"
- },
- {
-  "slug": "baby_storytime_20260831",
-  "title": "Baby Storytime",
-  "partner_name": "Coronado Public Library",
+  "slug": "https_qi_ucsd_edu_events_showcase_qi",
+  "title": "Showcase QI",
+  "partner_name": "Qualcomm Institute",
   "partner_id": null,
-  "description": "Join the Library for Baby Storytime followed by baby play time! Baby Storytime is for babies and their caregivers to develop early literacy skills through songs, rhymes and repetition. Mondays @ 11am in person either in the Children's Area or the Winn Room. Perfect for ages infants-2 but all children and adults are welcome.",
-  "link": "",
-  "availability": "Repeats 151 times through 2029-07-30",
-  "date_start": "2026-08-31T11:00:00-07:00",
-  "date_end": "2029-07-30T11:45:00-07:00",
+  "description": "You are cordially invited to visit Showcase QI on the first floor of Atkinson Hall (around the corner from Gallery QI and across from Spatial Computing) at the Qualcomm Institute to experience a self-guided tour of stations representing a slice of the Qualcomm Institute at UC San Diego. The show includes video, audio and other material about some of the research, education and shared facilities at the institute.\n\nShowcase QI is open from 10 a.m. to 5 p.m., Monday through Friday. We may also have extended hours for special events, such as IDEAS performances and Gallery QI receptions.\n\nPlease drop by to learn more about the breadth of interdisciplinary activities at QI. For more information, please email qi-communications@ucsd.edu or visit qi.ucsd.edu.",
+  "link": "https://qi.ucsd.edu/events/showcase-qi/",
+  "availability": "Repeats 2 times through 2026-12-31",
+  "date_start": "2026-08-31T00:00:00-07:00",
+  "date_end": "2026-12-31T00:00:00-08:00",
   "age_grade_level": [
    "Family",
-   "Pre-K"
+   "Adult"
   ],
   "cost_range": "Free",
   "time_of_day": [
-   "Morning"
+   "Morning",
+   "Afternoon"
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
-   "General Science"
+   "Engineering",
+   "Coding/Computer Science/Cyber Security",
+   "Physics",
+   "Physical Science"
   ],
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "640 Orange Ave., Coronado, CA, 92118, US",
+  "location": "Atkinson Hall, First Floor",
   "latitude": "",
   "longitude": "",
   "contact_name": "",
@@ -680,7 +437,7 @@
   "contact_phone": "",
   "logo_src": "",
   "eligibility": "",
-  "image_src": ""
+  "image_src": "2077ee046c758af0.jpg"
  },
  {
   "slug": "https_sdcl_bibliocommons_com_events_6a7b6e42f68ff70029b6fd11",
@@ -689,7 +446,7 @@
   "partner_id": 251,
   "description": "Come join LEGO Club every 1st and 3rd Thursday!",
   "link": "https://sdcl.bibliocommons.com/events/6a7b6e42f68ff70029b6fd11",
-  "availability": "Repeats 110 times through 2027-12-27",
+  "availability": "Repeats 111 times through 2027-12-27",
   "date_start": "2026-08-31T14:30:00-07:00",
   "date_end": "2027-12-27T16:00:00-08:00",
   "age_grade_level": [
@@ -750,40 +507,6 @@
   "logo_src": "",
   "eligibility": "",
   "image_src": "11f1b15c3ee56d29.png"
- },
- {
-  "slug": "computer_basics_20260831",
-  "title": "Computer Basics",
-  "partner_name": "Oceanside Public Library",
-  "partner_id": null,
-  "description": "Basic computer skills. Class is drop-in and is designed to help users get more comfortable with technology.",
-  "link": "",
-  "availability": "Repeats 11 times through 2026-12-28",
-  "date_start": "2026-08-31T16:00:00-07:00",
-  "date_end": "2026-12-28T20:00:00-08:00",
-  "age_grade_level": [
-   "Adult"
-  ],
-  "cost_range": "",
-  "time_of_day": [
-   "Evening"
-  ],
-  "opportunity_type": "Out-of-school Programs",
-  "areas_of_interest": [
-   "Coding/Computer Science/Cyber Security"
-  ],
-  "specific_attention": [],
-  "financial_support": "No",
-  "ngss_aligned": "No",
-  "location": "3861 Mission Ave, Oceanside, CA, 92058, US",
-  "latitude": "",
-  "longitude": "",
-  "contact_name": "",
-  "contact_email": "",
-  "contact_phone": "",
-  "logo_src": "",
-  "eligibility": "",
-  "image_src": ""
  },
  {
   "slug": "https_sdcl_bibliocommons_com_events_69fa69cecaf93436005a05e8",
@@ -1356,18 +1079,17 @@
   "image_src": "5185a44578894b1d.jpg"
  },
  {
-  "slug": "https_sdcl_bibliocommons_com_events_6a8629dd29a7dd0d67452cfb",
+  "slug": "https_sdcl_bibliocommons_com_events_6a8629dd29a7dd0d67452cf9",
   "title": "Library Learners",
   "partner_name": "San Diego County Library",
   "partner_id": 251,
   "description": "Children in grades K-5 are invited to join us at the library every Tuesday for a different activity! Supplies are guaranteed for the first 30 participants. 1st Tuesday: Lego challenge 2nd Tuesday: Art 3rd Tuesday: STEAM 4th Tuesday: Bookclub (geared towards grades 2-5) 5th Tuesday: Librarian's Choice",
-  "link": "https://sdcl.bibliocommons.com/events/6a8629dd29a7dd0d67452cfb",
-  "availability": "Repeats 14 times through 2026-12-15",
+  "link": "https://sdcl.bibliocommons.com/events/6a8629dd29a7dd0d67452cf9",
+  "availability": "Repeats 15 times through 2026-12-15",
   "date_start": "2026-09-01T15:00:00-07:00",
   "date_end": "2026-12-15T16:00:00-08:00",
   "age_grade_level": [
-   "Grades 6-8",
-   "Family"
+   "Grades 6-8"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -1963,13 +1685,13 @@
   "image_src": ""
  },
  {
-  "slug": "https_www_aquillius_com_event_she_talks_empower_lab_9",
+  "slug": "https_www_aquillius_com_event_she_talks_empower_lab",
   "title": "She Talks Empower Lab",
   "partner_name": "Aquillius Corporation",
   "partner_id": 631,
   "description": "Details on Aquillius's upcoming workshops, symposiums, and networking events for San Diego's biotech and startup community.",
-  "link": "https://www.aquillius.com/event/she-talks-empower-lab-9",
-  "availability": "Repeats 2 times through 2026-09-02",
+  "link": "https://www.aquillius.com/event/she-talks-empower-lab",
+  "availability": "Repeats 16 times through 2026-09-02",
   "date_start": "2026-09-02T00:00:00-07:00",
   "date_end": "",
   "age_grade_level": [
@@ -1999,22 +1721,20 @@
   "image_src": ""
  },
  {
-  "slug": "https_www_aquillius_com_event_sheconnects_empowering_women_through_community_22",
+  "slug": "https_www_aquillius_com_event_sheconnects_empowering_women_through_community",
   "title": "SheConnects: Empowering Women Through Community",
   "partner_name": "Aquillius Corporation",
   "partner_id": 631,
   "description": "Details on Aquillius's upcoming workshops, symposiums, and networking events for San Diego's biotech and startup community.",
-  "link": "https://www.aquillius.com/event/sheconnects-empowering-women-through-community-22",
-  "availability": "Repeats 24 times through 2026-09-02",
+  "link": "https://www.aquillius.com/event/sheconnects-empowering-women-through-community",
+  "availability": "Repeats 27 times through 2026-09-02",
   "date_start": "2026-09-02T00:00:00-07:00",
   "date_end": "",
   "age_grade_level": [
    "Adult"
   ],
   "cost_range": "",
-  "time_of_day": [
-   "All Day"
-  ],
+  "time_of_day": [],
   "opportunity_type": "Professional Development / Conferences",
   "areas_of_interest": [
    "Biology / LifeSciences",
@@ -2035,13 +1755,13 @@
   "image_src": ""
  },
  {
-  "slug": "https_www_aquillius_com_event_simbiosyx_matching_startups_with_verified_experts_to_fuel_innovation_33",
+  "slug": "https_www_aquillius_com_event_simbiosyx_matching_startups_with_verified_experts_to_fuel_innovation_22",
   "title": "SIMBIOSYX: Matching Startups with Verified Experts to Fuel Innovation",
   "partner_name": "Aquillius Corporation",
   "partner_id": 631,
   "description": "Details on Aquillius's upcoming workshops, symposiums, and networking events for San Diego's biotech and startup community.",
-  "link": "https://www.aquillius.com/event/simbiosyx-matching-startups-with-verified-experts-to-fuel-innovation-33",
-  "availability": "Repeats 13 times through 2026-09-02",
+  "link": "https://www.aquillius.com/event/simbiosyx-matching-startups-with-verified-experts-to-fuel-innovation-22",
+  "availability": "Repeats 7 times through 2026-09-02",
   "date_start": "2026-09-02T00:00:00-07:00",
   "date_end": "",
   "age_grade_level": [
@@ -3851,11 +3571,45 @@
   "image_src": "6bde7e253e911e08.jpg"
  },
  {
+  "slug": "ranch_house_tours_20260905",
+  "title": "Ranch House Tours",
+  "partner_name": "San Diego County Parks and Recreation",
+  "partner_id": null,
+  "description": "Visit a living piece of local history. This docent-led tour will take you back in time through a 200-year-old ranch house. Weddings and special events will cancel.\n\nFree. All ages.\n\nInclement weather may cancel; call ahead.\n\nPhone: (858) 484-7504",
+  "link": "",
+  "availability": "Repeats 51 times through 2027-11-27",
+  "date_start": "2026-09-05T18:00:00-07:00",
+  "date_end": "2027-11-27T20:00:00-08:00",
+  "age_grade_level": [
+   "Family"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Evening"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Earth Science/Ecology"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Los Penasquitos Ranch House, Canyonside Park Dr, San Diego, CA 92129, USA",
+  "latitude": "",
+  "longitude": "",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "",
+  "eligibility": "",
+  "image_src": ""
+ },
+ {
   "slug": "tds_public_night_20260905",
   "title": "TDS Public Night",
   "partner_name": "San Diego Astronomy Association",
   "partner_id": null,
-  "description": "<span><span><span><span><span><span><span><span><span>Regular public observing sessions--\"star parties\"--are held at our ten-acre site in the east county, and the Club's 22-inch telescope, along with other club telescopes, are available for everyone to use. Members experienced in their use and in the night sky host the club telescopes, and the hosts are always willing to take on the throngs of curious public, school groups, and other civic organizations that visit our site.<br><br>**NOTE: All public viewing sessions are weather dependent and can be cancelled without notice.<br><br><span>**Note: Plan to find your way to our remote site before dark to minimize light intrusion.</span><br></span><br></span></span><span><span><span><span><span><span><span><span>Sunset - </span></span></span></span></span></span></span></span></span></span></span><span><span><span><font>            7:37 PM</font></span></span></span><span><br><span><span><span><span><span><span><span><span><span><span>Astro Twilight - </span></span></span></span></span></span></span></span></span></span></span><span><span><span><font> 9:07 PM</font></span></span></span><br><span><span><span><span><span><span><span><span><span><span><span>Moonrise - </span></span></span></span></span></span></span></span></span></span></span>        <span><span><span><font>2:19 AM</font></span></span></span><span><span><span><span><br></span></span></span></span><span><span><span><span><span><span><span><span><span><span><span>Closing - </span></span></span></span></span></span></span></span></span></span></span>           <span><span><span><font>12:00 AM</font></span></span></span><span><span><span><span><span><span><span><span><span><span><span> </span></span></span></span></span></span></span></span></span></span></span><br></span></span></span>",
+  "description": "<span><span><span><span><span><span><span><span><span>Regular public observing sessions--\"star parties\"--are held at our ten-acre site in the east county, and the Club's 22-inch telescope, along with other club telescopes, are available for everyone to use. Members experienced in their use and in the night sky host the club telescopes, and the hosts are always willing to take on the throngs of curious public, school groups, and other civic organizations that visit our site.<br><br>**NOTE: All public viewing sessions are weather dependent and can be cancelled without notice.<br><br><span>**Note: Plan to find your way to our remote site before dark to minimize light intrusion.</span><br></span><br></span></span><span><span><span><span><span><span><span><span>Sunset - </span></span></span></span></span></span></span></span></span></span></span><span><span><span><font>            6:27PM</font></span></span></span><span><br><span><span><span><span><span><span><span><span><span><span>Astro Twilight - </span></span></span></span></span></span></span></span></span></span></span><span><span><span><font> 7:48 PM</font></span></span></span><br><span><span><span><span><span><span><span><span><span><span><span>Moonrise - </span></span></span></span></span></span></span></span></span></span></span>        <span><span><span><font>12:17 AM</font></span></span></span><span><span><span><span><br></span></span></span></span><span><span><span><span><span><span><span><span><span><span><span>Closing - </span></span></span></span></span></span></span></span></span></span></span>           <span><span><span><font>11:00 PM</font></span></span></span><span><span><span><span><span><span><span><span><span><span><span> </span></span></span></span></span></span></span></span></span></span></span><br></span></span></span>",
   "link": "",
   "availability": "Repeats 10 times through 2026-12-12",
   "date_start": "2026-09-05T19:04:00-07:00",
@@ -3872,8 +3626,8 @@
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
-   "Physics",
-   "Earth Science/Ecology"
+   "Earth Science/Ecology",
+   "Physics"
   ],
   "specific_attention": [],
   "financial_support": "No",
@@ -4133,7 +3887,7 @@
   "title": "Guided Nature Walk from the Visitor Center",
   "partner_name": "Mission Trails Regional Park Foundation",
   "partner_id": null,
-  "description": "Join an MTRP Trail Guide on a special Martin Luther King Day nature walk and learn about the plants, animals, geology, history, and ecology of the park on one of these scenic trails:\n\n  *   The Oak Grove Loop showcasing majestic coast live oaks and rare Engelmann’s oaks.\n  *   The Visitor Center Loop highlighting coastal sage scrub, chaparral, and riparian woodland habitats.\n  *   The Riverside Grinding Rocks featuring one of the archaeological sites in the park.\n\nThese interpretive nature walks are offered to enhance your appreciation of the unique beauty of San Diego’s natural environment.  The park is constantly changing, so see and learn new things on walks throughout the year.\nWalks start from the Visitor Center every Saturday, Sunday, and Wednesday at 9:30 a.m.  Walks are free and open to the public, with no reservations required.\nThe trails used are easy, but have uneven surfaces and some involve steps, so be sure to wear sturdy, closed-toe shoes and bring along water.  A hat and sunscreen are also recommended.  Walks are canceled if raining.",
+  "description": "Join an MTRP Trail Guide on a special Presidents Day nature walk and learn about the plants, animals, geology, history, and ecology of the park on one of these scenic trails:\n\n  *   The Oak Grove Loop showcasing majestic coast live oaks and rare Engelmann’s oaks.\n  *   The Visitor Center Loop highlighting coastal sage scrub, chaparral, and riparian woodland habitats.\n  *   The Riverside Grinding Rocks featuring one of the archaeological sites in the park.\n\nThese interpretive nature walks are offered to enhance your appreciation of the unique beauty of San Diego’s natural environment.  The park is constantly changing, so see and learn new things on walks throughout the year.\nWalks start from the Visitor Center every Saturday, Sunday, and Wednesday at 9:30 a.m.  Walks are free and open to the public, with no reservations required.\nThe trails used are easy, but have uneven surfaces and some involve steps, so be sure to wear sturdy, closed-toe shoes and bring along water.  A hat and sunscreen are also recommended.  Walks are canceled if raining.",
   "link": "",
   "availability": "Repeats 11 times through 2026-09-19",
   "date_start": "2026-09-07T09:30:00-07:00",
@@ -4514,15 +4268,15 @@
   "image_src": ""
  },
  {
-  "slug": "https_sdcl_bibliocommons_com_events_69d819ea4dacf581ff87b7fd",
+  "slug": "https_sdcl_bibliocommons_com_events_69d819ea4dacf581ff87b803",
   "title": "Free Play",
   "partner_name": "San Diego County Library",
   "partner_id": 251,
   "description": "Come and enjoy a variety of activity stations.",
-  "link": "https://sdcl.bibliocommons.com/events/69d819ea4dacf581ff87b7fd",
-  "availability": "",
+  "link": "https://sdcl.bibliocommons.com/events/69d819ea4dacf581ff87b803",
+  "availability": "Repeats 2 times through 2026-12-02",
   "date_start": "2026-09-09T10:30:00-07:00",
-  "date_end": "2026-09-09T11:30:00-07:00",
+  "date_end": "2026-12-02T11:30:00-08:00",
   "age_grade_level": [
    "Pre-K",
    "Family"
@@ -5239,7 +4993,7 @@
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "San Diego, CA",
+  "location": "San Diego",
   "latitude": "",
   "longitude": "",
   "contact_name": "",
@@ -5247,7 +5001,7 @@
   "contact_phone": "",
   "logo_src": "",
   "eligibility": "",
-  "image_src": "98a998471c5d97ec.png"
+  "image_src": "622decdf7d366b3d.png"
  },
  {
   "slug": "latino_conservation_week_20260912",
@@ -5325,7 +5079,7 @@
   "title": "San Diego River Gorge Overlook Hike",
   "partner_name": "The San Diego River Park Foundation",
   "partner_id": 323,
-  "description": "In celebration of CA Biodiversity week, Please join San Diego River Park Foundation Preserve Steward Bill Martin for this 6 mile out and back hike. This hike follows portions of the old U.S. mail route through the scenic Oak Woodlands and Chaparral where views open to the stunning San Diego River Gorge and Mildred Falls Overlook. LOCATION INFORMATION: The location is on Eagle Peak Road. There is no address. It is a USFS parking area on Eagle Peak Road past mile marker 6.0. Overflow parking is parallel parking on the road. https://www.google.com/maps/place/33%C2%B001'27.9%22N+116%C2%B041'26.5%22W/@33.0244281,-116.6932556,911m/data=!3m2!1e3!4b1!4m4!3m3!8m2!3d33.0244281!4d-116.6906807!18m1!1e1?entry=ttu&#038;g_ep=EgoyMDI2MDgxMi4wIKXMDSoASAFQAw%3D%3D var gform;gform||(document.addEventListener(\"gform_main_scripts_loaded\",function(){gform.scriptsLoaded=!0}),document.addEventListener(\"gform/theme/scripts_loaded\",function(){gform.themeScriptsLoaded=!0}),window.addEventListener(\"DOMContentLoaded\",function(){gform.domLoaded=!0}),gform={domLoaded:!1,scriptsLoaded:!1,themeScriptsLoaded:!1,isFormEditor:()=>\"function\"==typeof InitializeEditor,callIfLoaded:function(o){return!(!gform.domLoaded||!gform.scriptsLoaded||!gform.themeScriptsLoaded&&!gform.isFormEditor()||(gform.isFormEditor()&&console.warn(\"The use of gform.initializeOnLoaded() is deprecated in the form editor context and will be removed in Gravity Forms 3.1.\"),o(),0))},initializeOnLoaded:function(o){gform.callIfLoaded(o)||(document.addEventListener(\"gform_main_scripts_loaded\",()=>{gform.scriptsLoaded=!0,gform.callIfLoaded(o)}),document.addEventListener(\"gform/theme/scripts_loaded\",()=>{gform.themeScriptsLoaded=!0,gform.callIfLoaded(o)}),window.addEventListener(\"DOMContentLoaded\",()=>{gform.domLoaded=!0,gform.callIfLoaded(o)}))},hooks:{action:{},filter:{}},addAction:function(o,r,e,t){gform.addHook(\"action\",o,r,e,t)},addFilter:function(o,r,e,t){gform.addHook(\"filter\",o,r,e,t)},doAction:function(o){gform.doHook(\"action\",o,arguments)},applyFilters:function(o){return gform.doHook(\"filter\",o,arguments)},removeAction:function(o,r){gform.removeHook(\"action\",o,r)},removeFilter:function(o,r,e){gform.removeHook(\"filter\",o,r,e)},addHook:function(o,r,e,t,n){null==gform.hooks[o][r]&&(gform.hooks[o][r]=[]);var d=gform.hooks[o][r];null==n&&(n=r+\"_\"+d.length),gform.hooks[o][r].push({tag:n,callable:e,priority:t=null==t?10:t})},doHook:function(r,o,e){var t;if(e=Array.prototype.slice.call(e,1),null!=gform.hooks[r][o]&&((o=gform.hooks[r][o]).sort(function(o,r){return o.priority-r.priority}),o.forEach(function(o){\"function\"!=typeof(t=o.callable)&&(t=window[t]),\"action\"==r?t.apply(null,e):e[0]=t.apply(null,e)})),\"filter\"==r)return e[0]},removeHook:function(o,r,t,n){var e;null!=gform.hooks[o][r]&&(e=(e=gform.hooks[o][r]).filter(function(o,r,e){return!!(null!=n&&n!=o.tag||null!=t&&t!=o.priority)}),gform.hooks[o][r]=e)}}); EVENT WAIVER OF LIABILITY - San Diego River Park Foundation LinkedIn This field is for validation purposes and should be left unchanged. Date of Event (this is the date the event will occur) MM slash DD slash YYYY Name (Required) First Last Cell Phone (in case of emergency) (Required) Address (Required) Street Address Address Line 2 City State / Province / Region ZIP / Postal Code Country Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island Brazil British Indian Ocean Territory Brunei Darussalam Bulgaria Burkina Faso Burundi Cabo Verde Cambodia Cameroon Canada Cayman Islands Central African Republic Chad Chile China Christmas Island Cocos Islands Colombia Comoros Congo Congo, Democratic Republic of the Cook Islands Costa Rica Croatia Cuba Curaçao Cyprus Czechia Côte d&#039;Ivoire Denmark Djibouti Dominica Dominican Republic Ecuador Egypt El Salvador Equatorial Guinea Eritrea Estonia Eswatini Ethiopia Falkland Islands Faroe Islands Fiji Finland France French Guiana French Polynesia French Southern Territories Gabon Gambia Georgia Germany Ghana Gibraltar Greece Greenland Grenada Guadeloupe Guam Guatemala Guernsey Guinea Guinea-Bissau Guyana Haiti Heard Island and McDonald Islands Holy See Honduras Hong Kong Hungary Iceland India Indonesia Iran Iraq Ireland Isle of Man Israel Italy Jamaica Japan Jersey Jordan Kazakhstan Kenya Kiribati Korea, Democratic People&#039;s Republic of Korea, Republic of Kuwait Kyrgyzstan Lao People&#039;s Democratic Republic Latvia Lebanon Lesotho Liberia Libya Liechtenstein Lithuania Luxembourg Macao Madagascar Malawi Malaysia Maldives Mali Malta Marshall Islands Martinique Mauritania Mauritius Mayotte Mexico Micronesia Moldova Monaco Mongolia Montenegro Montserrat Morocco Mozambique Myanmar Namibia Nauru Nepal Netherlands New Caledonia New Zealand Nicaragua Niger Nigeria Niue Norfolk Island North Macedonia Northern Mariana Islands Norway Oman Pakistan Palau Palestine, State of Panama Papua New Guinea Paraguay Peru Philippines Pitcairn Poland Portugal Puerto Rico Qatar Romania Russian Federation Rwanda Réunion Saint Barthélemy Saint Helena, Ascension and Tristan da Cunha Saint Kitts and Nevis Saint Lucia Saint Martin Saint Pierre and Miquelon Saint Vincent and the Grenadines Samoa San Marino Sao Tome and Principe Saudi Arabia Senegal Serbia Seychelles Sierra Leone Singapore Sint Maarten Slovakia Slovenia Solomon Islands Somalia South Africa South Georgia and the South Sandwich Islands South Sudan Spain Sri Lanka Sudan Suriname Svalbard and Jan Mayen Sweden Switzerland Syria Arab Republic Taiwan Tajikistan Tanzania, the United Republic of Thailand Timor-Leste Togo Tokelau Tonga Trinidad and Tobago Tunisia Turkmenistan Turks and Caicos Islands Tuvalu Türkiye US Minor Outlying Islands Uganda Ukraine United Arab Emirates United Kingdom United States Uruguay Uzbekistan Vanuatu Venezuela Viet Nam Virgin Islands, British Virgin Islands, U.S. Wallis and Futuna Western Sahara Yemen Zambia Zimbabwe Åland Islands WAIVER OF LIABILITY (Required) I hereby waive any right or cause of action arising as a result of my participation in The San Diego River Park Foundation's event, including transportation if provided, from which any liability may or could accrue against The San Diego River Park Foundation or the directors, volunteers and staff, collectively or individually as well as project sponsors or other partnering entities. Without limiting the generality of the foregoing, I agree that this waiver shall include any rights or causes of action resulting from personal injury to me or damage to my property sustained in connection with my participation during the event. I also hereby authorize and consent that The San Diego River Park Foundation has the right to copyright, publish, use, sell or assign any and all photographic pictures, videos, and/or sound recordings taken or made of me or the youth mentioned below or in which I or the youth mentioned below may be included in whole or part during the projects. I grant permission to The San Diego River Park Foundation to allow these images and/or recordings, which have been taken by or at the direction of the San Diego River Park Foundation to be put to legitimate use at their discretion. I relinquish all rights, title, or interest to any furnished products, reproductions, or facsimiles. I confirm that I have read and agree to the terms outlined above. Email I would like to receive free updates by email. Check all that apply. (SDRPF will not sell or share your information with others.) Sign up for our newsletter, updates, and event information. We will not sell your information. Youth / Family Education Programs Volunteer Opportunities Becoming a member Something else Signature (Required) gform.initializeOnLoaded( function() {gformInitSpinner( 7, 'https://sandiegoriver.org/wp-content/plugins/gravityforms/images/spinner.svg', true );jQuery('#gform_ajax_frame_7').on('load',function(){var contents = jQuery(this).contents().find('*').html();var is_postback = contents.indexOf('GF_AJAX_POSTBACK') >= 0;if(!is_postback){return;}var form_content = jQuery(this).contents().find('#gform_wrapper_7');var is_confirmation = jQuery(this).contents().find('#gform_confirmation_wrapper_7').length > 0;var is_redirect = contents.indexOf('gformRedirect(){') >= 0;var is_form = form_content.length > 0 && ! is_redirect && ! is_confirmation;var mt = parseInt(jQuery('html').css('margin-top'), 10) + parseInt(jQuery('body').css('margin-top'), 10) + 100;if(is_form){jQuery('#gform_wrapper_7').html(form_content.html());if(form_content.hasClass('gform_validation_error')){jQuery('#gform_wrapper_7').addClass('gform_validation_error');} else {jQuery('#gform_wrapper_7').removeClass('gform_validation_error');}setTimeout( function() { /* delay the scroll by 50 milliseconds to fix a bug in chrome */ }, 50 );if(window['gformInitDatepicker']) {gformInitDatepicker();}if(window['gformInitPriceFields']) {gformInitPriceFields();}var current_page = jQuery('#gform_source_page_number_7').val();gformInitSpinner( 7, 'https://sandiegoriver.org/wp-content/plugins/gravityforms/images/spinner.svg', true );jQuery(document).trigger('gform_page_loaded', [7, current_page]);window['gf_submitting_7'] = false;}else if(!is_redirect){var confirmation_content = jQuery(this).contents().find('.GF_AJAX_POSTBACK').html();if(!confirmation_content){confirmation_content = contents;}jQuery('#gform_wrapper_7').replaceWith(confirmation_content);jQuery(document).trigger('gform_confirmation_loaded', [7]);window['gf_submitting_7'] = false;wp.a11y.speak(jQuery('#gform_confirmation_message_7').text());}else{jQuery('#gform_7').append(contents);if(window['gformRedirect']) {gformRedirect();}}jQuery(document).trigger(\"gform_pre_post_render\", [{ formId: \"7\", currentPage: \"current_page\", abort: function() { this.preventDefault(); } }]); if (event && event.defaultPrevented) { return; } const gformWrapperDiv = document.getElementById( \"gform_wrapper_7\" ); if ( gformWrapperDiv ) { const visibilitySpan = document.createElement( \"span\" ); visibilitySpan.id = \"gform_visibility_test_7\"; gformWrapperDiv.insertAdjacentElement( \"afterend\", visibilitySpan ); } const visibilityTestDiv = document.getElementById( \"gform_visibility_test_7\" ); let postRenderFired = false; function triggerPostRender() { if ( postRenderFired ) { return; } postRenderFired = true; gform.core.triggerPostRenderEvents( 7, current_page ); if ( visibilityTestDiv ) { visibilityTestDiv.parentNode.removeChild( visibilityTestDiv ); } } function debounce( func, wait, immediate ) { var timeout; return function() { var context = this, args = arguments; var later = function() { timeout = null; if ( !immediate ) func.apply( context, args ); }; var callNow = immediate && !timeout; clearTimeout( timeout ); timeout = setTimeout( later, wait ); if ( callNow ) func.apply( context, args ); }; } const debouncedTriggerPostRender = debounce( function() { triggerPostRender(); }, 200 ); if ( visibilityTestDiv && visibilityTestDiv.offsetParent === null ) { const observer = new MutationObserver( ( mutations ) => { mutations.forEach( ( mutation ) => { if ( mutation.type === 'attributes' && visibilityTestDiv.offsetParent !== null ) { debouncedTriggerPostRender(); observer.disconnect(); } }); }); observer.observe( document.body, { attributes: true, childList: false, subtree: true, attributeFilter: [ 'style', 'class' ], }); } else { triggerPostRender(); } } );} );",
+  "description": "In celebration of CA Biodiversity week, Please join San Diego River Park Foundation Preserve Steward Bill Martin for this 6 mile out and back hike. This hike follows portions of the old U.S. mail route through the scenic Oak Woodlands and Chaparral where views open to the stunning San Diego River Gorge and Mildred Falls Overlook. LOCATION INFORMATION: The location is on Eagle Peak Road. There is no address. It is a USFS parking area on Eagle Peak Road past mile marker 6.0. Overflow parking is parallel parking on the road. https://www.google.com/maps/place/33%C2%B001'27.9%22N+116%C2%B041'26.5%22W/@33.0244281,-116.6932556,911m/data=!3m2!1e3!4b1!4m4!3m3!8m2!3d33.0244281!4d-116.6906807!18m1!1e1?entry=ttu&#038;g_ep=EgoyMDI2MDgxMi4wIKXMDSoASAFQAw%3D%3D var gform;gform||(document.addEventListener(\"gform_main_scripts_loaded\",function(){gform.scriptsLoaded=!0}),document.addEventListener(\"gform/theme/scripts_loaded\",function(){gform.themeScriptsLoaded=!0}),window.addEventListener(\"DOMContentLoaded\",function(){gform.domLoaded=!0}),gform={domLoaded:!1,scriptsLoaded:!1,themeScriptsLoaded:!1,isFormEditor:()=>\"function\"==typeof InitializeEditor,callIfLoaded:function(o){return!(!gform.domLoaded||!gform.scriptsLoaded||!gform.themeScriptsLoaded&&!gform.isFormEditor()||(gform.isFormEditor()&&console.warn(\"The use of gform.initializeOnLoaded() is deprecated in the form editor context and will be removed in Gravity Forms 3.1.\"),o(),0))},initializeOnLoaded:function(o){gform.callIfLoaded(o)||(document.addEventListener(\"gform_main_scripts_loaded\",()=>{gform.scriptsLoaded=!0,gform.callIfLoaded(o)}),document.addEventListener(\"gform/theme/scripts_loaded\",()=>{gform.themeScriptsLoaded=!0,gform.callIfLoaded(o)}),window.addEventListener(\"DOMContentLoaded\",()=>{gform.domLoaded=!0,gform.callIfLoaded(o)}))},hooks:{action:{},filter:{}},addAction:function(o,r,e,t){gform.addHook(\"action\",o,r,e,t)},addFilter:function(o,r,e,t){gform.addHook(\"filter\",o,r,e,t)},doAction:function(o){gform.doHook(\"action\",o,arguments)},applyFilters:function(o){return gform.doHook(\"filter\",o,arguments)},removeAction:function(o,r){gform.removeHook(\"action\",o,r)},removeFilter:function(o,r,e){gform.removeHook(\"filter\",o,r,e)},addHook:function(o,r,e,t,n){null==gform.hooks[o][r]&&(gform.hooks[o][r]=[]);var d=gform.hooks[o][r];null==n&&(n=r+\"_\"+d.length),gform.hooks[o][r].push({tag:n,callable:e,priority:t=null==t?10:t})},doHook:function(r,o,e){var t;if(e=Array.prototype.slice.call(e,1),null!=gform.hooks[r][o]&&((o=gform.hooks[r][o]).sort(function(o,r){return o.priority-r.priority}),o.forEach(function(o){\"function\"!=typeof(t=o.callable)&&(t=window[t]),\"action\"==r?t.apply(null,e):e[0]=t.apply(null,e)})),\"filter\"==r)return e[0]},removeHook:function(o,r,t,n){var e;null!=gform.hooks[o][r]&&(e=(e=gform.hooks[o][r]).filter(function(o,r,e){return!!(null!=n&&n!=o.tag||null!=t&&t!=o.priority)}),gform.hooks[o][r]=e)}}); EVENT WAIVER OF LIABILITY - San Diego River Park Foundation Name This field is for validation purposes and should be left unchanged. Date of Event (this is the date the event will occur) MM slash DD slash YYYY Name (Required) First Last Cell Phone (in case of emergency) (Required) Address (Required) Street Address Address Line 2 City State / Province / Region ZIP / Postal Code Country Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island Brazil British Indian Ocean Territory Brunei Darussalam Bulgaria Burkina Faso Burundi Cabo Verde Cambodia Cameroon Canada Cayman Islands Central African Republic Chad Chile China Christmas Island Cocos Islands Colombia Comoros Congo Congo, Democratic Republic of the Cook Islands Costa Rica Croatia Cuba Curaçao Cyprus Czechia Côte d&#039;Ivoire Denmark Djibouti Dominica Dominican Republic Ecuador Egypt El Salvador Equatorial Guinea Eritrea Estonia Eswatini Ethiopia Falkland Islands Faroe Islands Fiji Finland France French Guiana French Polynesia French Southern Territories Gabon Gambia Georgia Germany Ghana Gibraltar Greece Greenland Grenada Guadeloupe Guam Guatemala Guernsey Guinea Guinea-Bissau Guyana Haiti Heard Island and McDonald Islands Holy See Honduras Hong Kong Hungary Iceland India Indonesia Iran Iraq Ireland Isle of Man Israel Italy Jamaica Japan Jersey Jordan Kazakhstan Kenya Kiribati Korea, Democratic People&#039;s Republic of Korea, Republic of Kuwait Kyrgyzstan Lao People&#039;s Democratic Republic Latvia Lebanon Lesotho Liberia Libya Liechtenstein Lithuania Luxembourg Macao Madagascar Malawi Malaysia Maldives Mali Malta Marshall Islands Martinique Mauritania Mauritius Mayotte Mexico Micronesia Moldova Monaco Mongolia Montenegro Montserrat Morocco Mozambique Myanmar Namibia Nauru Nepal Netherlands New Caledonia New Zealand Nicaragua Niger Nigeria Niue Norfolk Island North Macedonia Northern Mariana Islands Norway Oman Pakistan Palau Palestine, State of Panama Papua New Guinea Paraguay Peru Philippines Pitcairn Poland Portugal Puerto Rico Qatar Romania Russian Federation Rwanda Réunion Saint Barthélemy Saint Helena, Ascension and Tristan da Cunha Saint Kitts and Nevis Saint Lucia Saint Martin Saint Pierre and Miquelon Saint Vincent and the Grenadines Samoa San Marino Sao Tome and Principe Saudi Arabia Senegal Serbia Seychelles Sierra Leone Singapore Sint Maarten Slovakia Slovenia Solomon Islands Somalia South Africa South Georgia and the South Sandwich Islands South Sudan Spain Sri Lanka Sudan Suriname Svalbard and Jan Mayen Sweden Switzerland Syria Arab Republic Taiwan Tajikistan Tanzania, the United Republic of Thailand Timor-Leste Togo Tokelau Tonga Trinidad and Tobago Tunisia Turkmenistan Turks and Caicos Islands Tuvalu Türkiye US Minor Outlying Islands Uganda Ukraine United Arab Emirates United Kingdom United States Uruguay Uzbekistan Vanuatu Venezuela Viet Nam Virgin Islands, British Virgin Islands, U.S. Wallis and Futuna Western Sahara Yemen Zambia Zimbabwe Åland Islands WAIVER OF LIABILITY (Required) I hereby waive any right or cause of action arising as a result of my participation in The San Diego River Park Foundation's event, including transportation if provided, from which any liability may or could accrue against The San Diego River Park Foundation or the directors, volunteers and staff, collectively or individually as well as project sponsors or other partnering entities. Without limiting the generality of the foregoing, I agree that this waiver shall include any rights or causes of action resulting from personal injury to me or damage to my property sustained in connection with my participation during the event. I also hereby authorize and consent that The San Diego River Park Foundation has the right to copyright, publish, use, sell or assign any and all photographic pictures, videos, and/or sound recordings taken or made of me or the youth mentioned below or in which I or the youth mentioned below may be included in whole or part during the projects. I grant permission to The San Diego River Park Foundation to allow these images and/or recordings, which have been taken by or at the direction of the San Diego River Park Foundation to be put to legitimate use at their discretion. I relinquish all rights, title, or interest to any furnished products, reproductions, or facsimiles. I confirm that I have read and agree to the terms outlined above. Email I would like to receive free updates by email. Check all that apply. (SDRPF will not sell or share your information with others.) Sign up for our newsletter, updates, and event information. We will not sell your information. Youth / Family Education Programs Volunteer Opportunities Becoming a member Something else Signature (Required) gform.initializeOnLoaded( function() {gformInitSpinner( 7, 'https://sandiegoriver.org/wp-content/plugins/gravityforms/images/spinner.svg', true );jQuery('#gform_ajax_frame_7').on('load',function(){var contents = jQuery(this).contents().find('*').html();var is_postback = contents.indexOf('GF_AJAX_POSTBACK') >= 0;if(!is_postback){return;}var form_content = jQuery(this).contents().find('#gform_wrapper_7');var is_confirmation = jQuery(this).contents().find('#gform_confirmation_wrapper_7').length > 0;var is_redirect = contents.indexOf('gformRedirect(){') >= 0;var is_form = form_content.length > 0 && ! is_redirect && ! is_confirmation;var mt = parseInt(jQuery('html').css('margin-top'), 10) + parseInt(jQuery('body').css('margin-top'), 10) + 100;if(is_form){jQuery('#gform_wrapper_7').html(form_content.html());if(form_content.hasClass('gform_validation_error')){jQuery('#gform_wrapper_7').addClass('gform_validation_error');} else {jQuery('#gform_wrapper_7').removeClass('gform_validation_error');}setTimeout( function() { /* delay the scroll by 50 milliseconds to fix a bug in chrome */ }, 50 );if(window['gformInitDatepicker']) {gformInitDatepicker();}if(window['gformInitPriceFields']) {gformInitPriceFields();}var current_page = jQuery('#gform_source_page_number_7').val();gformInitSpinner( 7, 'https://sandiegoriver.org/wp-content/plugins/gravityforms/images/spinner.svg', true );jQuery(document).trigger('gform_page_loaded', [7, current_page]);window['gf_submitting_7'] = false;}else if(!is_redirect){var confirmation_content = jQuery(this).contents().find('.GF_AJAX_POSTBACK').html();if(!confirmation_content){confirmation_content = contents;}jQuery('#gform_wrapper_7').replaceWith(confirmation_content);jQuery(document).trigger('gform_confirmation_loaded', [7]);window['gf_submitting_7'] = false;wp.a11y.speak(jQuery('#gform_confirmation_message_7').text());}else{jQuery('#gform_7').append(contents);if(window['gformRedirect']) {gformRedirect();}}jQuery(document).trigger(\"gform_pre_post_render\", [{ formId: \"7\", currentPage: \"current_page\", abort: function() { this.preventDefault(); } }]); if (event && event.defaultPrevented) { return; } const gformWrapperDiv = document.getElementById( \"gform_wrapper_7\" ); if ( gformWrapperDiv ) { const visibilitySpan = document.createElement( \"span\" ); visibilitySpan.id = \"gform_visibility_test_7\"; gformWrapperDiv.insertAdjacentElement( \"afterend\", visibilitySpan ); } const visibilityTestDiv = document.getElementById( \"gform_visibility_test_7\" ); let postRenderFired = false; function triggerPostRender() { if ( postRenderFired ) { return; } postRenderFired = true; gform.core.triggerPostRenderEvents( 7, current_page ); if ( visibilityTestDiv ) { visibilityTestDiv.parentNode.removeChild( visibilityTestDiv ); } } function debounce( func, wait, immediate ) { var timeout; return function() { var context = this, args = arguments; var later = function() { timeout = null; if ( !immediate ) func.apply( context, args ); }; var callNow = immediate && !timeout; clearTimeout( timeout ); timeout = setTimeout( later, wait ); if ( callNow ) func.apply( context, args ); }; } const debouncedTriggerPostRender = debounce( function() { triggerPostRender(); }, 200 ); if ( visibilityTestDiv && visibilityTestDiv.offsetParent === null ) { const observer = new MutationObserver( ( mutations ) => { mutations.forEach( ( mutation ) => { if ( mutation.type === 'attributes' && visibilityTestDiv.offsetParent !== null ) { debouncedTriggerPostRender(); observer.disconnect(); } }); }); observer.observe( document.body, { attributes: true, childList: false, subtree: true, attributeFilter: [ 'style', 'class' ], }); } else { triggerPostRender(); } } );} );",
   "link": "https://sandiegoriver.org/event/san-diego-river-gorge-overlook-hike/",
   "availability": "",
   "date_start": "2026-09-12T08:00:00-07:00",
@@ -5346,7 +5100,7 @@
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "Eagle Peak Road USFS parking area (past mile marker 6.0), San Diego, CA",
+  "location": "USFS parking area on Eagle Peak Road past mile marker 6.0",
   "latitude": "32.7639275",
   "longitude": "-117.2033498",
   "contact_name": "",
@@ -5450,7 +5204,7 @@
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "Kendall Frost Marsh, Crown Point Entrance, 2055 Pacific Beach Drive, San Diego, CA 92109",
+  "location": "Kendall Frost Marsh (Crown Point Entrance), Crown Point Dr, San Diego, CA 92109",
   "latitude": "",
   "longitude": "",
   "contact_name": "",
@@ -5471,7 +5225,6 @@
   "date_start": "2026-09-12T09:00:00-07:00",
   "date_end": "2026-09-12T12:00:00-07:00",
   "age_grade_level": [
-   "Family",
    "Adult"
   ],
   "cost_range": "Free",
@@ -5480,8 +5233,7 @@
   ],
   "opportunity_type": "Volunteering",
   "areas_of_interest": [
-   "Earth Science/Ecology",
-   "Biology / LifeSciences"
+   "Earth Science/Ecology"
   ],
   "specific_attention": [],
   "financial_support": "No",
@@ -5494,7 +5246,7 @@
   "contact_phone": "",
   "logo_src": "",
   "eligibility": "",
-  "image_src": "b5e8219df57904e0.jpg"
+  "image_src": "8799c69f2311fcec.jpg"
  },
  {
   "slug": "discovery_table_plant_parts_20260912",
@@ -5779,18 +5531,54 @@
   "image_src": ""
  },
  {
+  "slug": "reading_with_a_ranger_20260912",
+  "title": "Reading with a Ranger",
+  "partner_name": "Mission Trails Regional Park Foundation",
+  "partner_id": null,
+  "description": "Celebrate Latino Conservation Week at Mission Trails with a special Reading with a Ranger program presented in both English and Spanish.\n\nCity of San Diego Park Ranger Elizabeth Delgado will lead a family-friendly read-aloud designed to help young visitors connect with nature, wildlife and the park through storytelling. It’s a fun opportunity for children and families to spend time together, meet a park ranger and learn more about the natural world around them.\n\nThis program is free.",
+  "link": "",
+  "availability": "",
+  "date_start": "2026-09-12T18:00:00-07:00",
+  "date_end": "2026-09-12T19:00:00-07:00",
+  "age_grade_level": [
+   "Family",
+   "Pre-K",
+   "Grades 6-8"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Evening"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Earth Science/Ecology",
+   "General Science"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Mission Trails Regional Park Visitor Center (1 Father Junipero Serra Trl, San Diego, CA  92119)",
+  "latitude": "",
+  "longitude": "",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "",
+  "eligibility": "",
+  "image_src": ""
+ },
+ {
   "slug": "https_sandiegoriver_org_event_nature_nights_bat_walk_and_moths_3",
   "title": "Nature Nights: Bat Walk and Moths 9/12/26",
   "partner_name": "The San Diego River Park Foundation",
   "partner_id": 323,
-  "description": "Join us for a fun evening adventure to learn about the San Diego watershed’s many bat species and their habitats with Dan Taylor. A bat researcher and scientist with Bat Conservation International Dan has more than 30 years of experience working on a wide range of wildlife and conservation issues in the U.S., Central America, and Africa. Dan has been with Bat Conservation Iternational for over 23 years and currently specializes in habitat protection and restoration. After our presentation we will stroll along the river, eavesdropping on the bats we see using our bioacoustics to identify them based on their calls. As the night concludes we will view the moths that have been attracted to our UV light station for up-close observation with Hector Valtierra. An avid moth enthusiast, when Hector isn't out looking for moths and other insects, he works as a microbiology and general biology professor at San Diego community colleges. He is also an avid iNaturalist user and wildlife photographer. All ages are welcome! Be sure to sign up early—space is limited, and our Nature Nights events fill up quickly. Please bring a flashlight or headlamp, a camp chair for the mothing portion, and wear long pants and closed-toe shoes. Consider donating to support our bat conservation program! Follow this link to learn more—every bit of support helps us protect more bats ! SUBMITTING THE WAIVER OF LIABILITY DOES NOT REGISTER YOU FOR THE EVENT. Registration for tickets is below the event waiver. EVENT WAIVER OF LIABILITY - San Diego River Park Foundation Facebook This field is for validation purposes and should be left unchanged. Date of Event (this is the date the event will occur) MM slash DD slash YYYY Name (Required) First Last Cell Phone (in case of emergency) (Required) Address (Required) Street Address Address Line 2 City State / Province / Region ZIP / Postal Code Country Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island Brazil British Indian Ocean Territory Brunei Darussalam Bulgaria Burkina Faso Burundi Cabo Verde Cambodia Cameroon Canada Cayman Islands Central African Republic Chad Chile China Christmas Island Cocos Islands Colombia Comoros Congo Congo, Democratic Republic of the Cook Islands Costa Rica Croatia Cuba Curaçao Cyprus Czechia Côte d&#039;Ivoire Denmark Djibouti Dominica Dominican Republic Ecuador Egypt El Salvador Equatorial Guinea Eritrea Estonia Eswatini Ethiopia Falkland Islands Faroe Islands Fiji Finland France French Guiana French Polynesia French Southern Territories Gabon Gambia Georgia Germany Ghana Gibraltar Greece Greenland Grenada Guadeloupe Guam Guatemala Guernsey Guinea Guinea-Bissau Guyana Haiti Heard Island and McDonald Islands Holy See Honduras Hong Kong Hungary Iceland India Indonesia Iran Iraq Ireland Isle of Man Israel Italy Jamaica Japan Jersey Jordan Kazakhstan Kenya Kiribati Korea, Democratic People&#039;s Republic of Korea, Republic of Kuwait Kyrgyzstan Lao People&#039;s Democratic Republic Latvia Lebanon Lesotho Liberia Libya Liechtenstein Lithuania Luxembourg Macao Madagascar Malawi Malaysia Maldives Mali Malta Marshall Islands Martinique Mauritania Mauritius Mayotte Mexico Micronesia Moldova Monaco Mongolia Montenegro Montserrat Morocco Mozambique Myanmar Namibia Nauru Nepal Netherlands New Caledonia New Zealand Nicaragua Niger Nigeria Niue Norfolk Island North Macedonia Northern Mariana Islands Norway Oman Pakistan Palau Palestine, State of Panama Papua New Guinea Paraguay Peru Philippines Pitcairn Poland Portugal Puerto Rico Qatar Romania Russian Federation Rwanda Réunion Saint Barthélemy Saint Helena, Ascension and Tristan da Cunha Saint Kitts and Nevis Saint Lucia Saint Martin Saint Pierre and Miquelon Saint Vincent and the Grenadines Samoa San Marino Sao Tome and Principe Saudi Arabia Senegal Serbia Seychelles Sierra Leone Singapore Sint Maarten Slovakia Slovenia Solomon Islands Somalia South Africa South Georgia and the South Sandwich Islands South Sudan Spain Sri Lanka Sudan Suriname Svalbard and Jan Mayen Sweden Switzerland Syria Arab Republic Taiwan Tajikistan Tanzania, the United Republic of Thailand Timor-Leste Togo Tokelau Tonga Trinidad and Tobago Tunisia Turkmenistan Turks and Caicos Islands Tuvalu Türkiye US Minor Outlying Islands Uganda Ukraine United Arab Emirates United Kingdom United States Uruguay Uzbekistan Vanuatu Venezuela Viet Nam Virgin Islands, British Virgin Islands, U.S. Wallis and Futuna Western Sahara Yemen Zambia Zimbabwe Åland Islands WAIVER OF LIABILITY (Required) I hereby waive any right or cause of action arising as a result of my participation in The San Diego River Park Foundation's event, including transportation if provided, from which any liability may or could accrue against The San Diego River Park Foundation or the directors, volunteers and staff, collectively or individually as well as project sponsors or other partnering entities. Without limiting the generality of the foregoing, I agree that this waiver shall include any rights or causes of action resulting from personal injury to me or damage to my property sustained in connection with my participation during the event. I also hereby authorize and consent that The San Diego River Park Foundation has the right to copyright, publish, use, sell or assign any and all photographic pictures, videos, and/or sound recordings taken or made of me or the youth mentioned below or in which I or the youth mentioned below may be included in whole or part during the projects. I grant permission to The San Diego River Park Foundation to allow these images and/or recordings, which have been taken by or at the direction of the San Diego River Park Foundation to be put to legitimate use at their discretion. I relinquish all rights, title, or interest to any furnished products, reproductions, or facsimiles. I confirm that I have read and agree to the terms outlined above. Email I would like to receive free updates by email. Check all that apply. (SDRPF will not sell or share your information with others.) Sign up for our newsletter, updates, and event information. We will not sell your information. Youth / Family Education Programs Volunteer Opportunities Becoming a member Something else Signature (Required) gform.initializeOnLoaded( function() {gformInitSpinner( 7, 'https://sandiegoriver.org/wp-content/plugins/gravityforms/images/spinner.svg', true );jQuery('#gform_ajax_frame_7').on('load',function(){var contents = jQuery(this).contents().find('*').html();var is_postback = contents.indexOf('GF_AJAX_POSTBACK') >= 0;if(!is_postback){return;}var form_content = jQuery(this).contents().find('#gform_wrapper_7');var is_confirmation = jQuery(this).contents().find('#gform_confirmation_wrapper_7').length > 0;var is_redirect = contents.indexOf('gformRedirect(){') >= 0;var is_form = form_content.length > 0 && ! is_redirect && ! is_confirmation;var mt = parseInt(jQuery('html').css('margin-top'), 10) + parseInt(jQuery('body').css('margin-top'), 10) + 100;if(is_form){jQuery('#gform_wrapper_7').html(form_content.html());if(form_content.hasClass('gform_validation_error')){jQuery('#gform_wrapper_7').addClass('gform_validation_error');} else {jQuery('#gform_wrapper_7').removeClass('gform_validation_error');}setTimeout( function() { /* delay the scroll by 50 milliseconds to fix a bug in chrome */ }, 50 );if(window['gformInitDatepicker']) {gformInitDatepicker();}if(window['gformInitPriceFields']) {gformInitPriceFields();}var current_page = jQuery('#gform_source_page_number_7').val();gformInitSpinner( 7, 'https://sandiegoriver.org/wp-content/plugins/gravityforms/images/spinner.svg', true );jQuery(document).trigger('gform_page_loaded', [7, current_page]);window['gf_submitting_7'] = false;}else if(!is_redirect){var confirmation_content = jQuery(this).contents().find('.GF_AJAX_POSTBACK').html();if(!confirmation_content){confirmation_content = contents;}jQuery('#gform_wrapper_7').replaceWith(confirmation_content);jQuery(document).trigger('gform_confirmation_loaded', [7]);window['gf_submitting_7'] = false;wp.a11y.speak(jQuery('#gform_confirmation_message_7').text());}else{jQuery('#gform_7').append(contents);if(window['gformRedirect']) {gformRedirect();}}jQuery(document).trigger(\"gform_pre_post_render\", [{ formId: \"7\", currentPage: \"current_page\", abort: function() { this.preventDefault(); } }]); if (event && event.defaultPrevented) { return; } const gformWrapperDiv = document.getElementById( \"gform_wrapper_7\" ); if ( gformWrapperDiv ) { const visibilitySpan = document.createElement( \"span\" ); visibilitySpan.id = \"gform_visibility_test_7\"; gformWrapperDiv.insertAdjacentElement( \"afterend\", visibilitySpan ); } const visibilityTestDiv = document.getElementById( \"gform_visibility_test_7\" ); let postRenderFired = false; function triggerPostRender() { if ( postRenderFired ) { return; } postRenderFired = true; gform.core.triggerPostRenderEvents( 7, current_page ); if ( visibilityTestDiv ) { visibilityTestDiv.parentNode.removeChild( visibilityTestDiv ); } } function debounce( func, wait, immediate ) { var timeout; return function() { var context = this, args = arguments; var later = function() { timeout = null; if ( !immediate ) func.apply( context, args ); }; var callNow = immediate && !timeout; clearTimeout( timeout ); timeout = setTimeout( later, wait ); if ( callNow ) func.apply( context, args ); }; } const debouncedTriggerPostRender = debounce( function() { triggerPostRender(); }, 200 ); if ( visibilityTestDiv && visibilityTestDiv.offsetParent === null ) { const observer = new MutationObserver( ( mutations ) => { mutations.forEach( ( mutation ) => { if ( mutation.type === 'attributes' && visibilityTestDiv.offsetParent !== null ) { debouncedTriggerPostRender(); observer.disconnect(); } }); }); observer.observe( document.body, { attributes: true, childList: false, subtree: true, attributeFilter: [ 'style', 'class' ], }); } else { triggerPostRender(); } } );} );",
+  "description": "Join us for a fun evening adventure to learn about the San Diego watershed’s many bat species and their habitats with Dan Taylor. A bat researcher and scientist with Bat Conservation International Dan has more than 30 years of experience working on a wide range of wildlife and conservation issues in the U.S., Central America, and Africa. Dan has been with Bat Conservation Iternational for over 23 years and currently specializes in habitat protection and restoration. After our presentation we will stroll along the river, eavesdropping on the bats we see using our bioacoustics to identify them based on their calls. As the night concludes we will view the moths that have been attracted to our UV light station for up-close observation with Hector Valtierra. An avid moth enthusiast, when Hector isn't out looking for moths and other insects, he works as a microbiology and general biology professor at San Diego community colleges. He is also an avid iNaturalist user and wildlife photographer. All ages are welcome! Be sure to sign up early—space is limited, and our Nature Nights events fill up quickly. Please bring a flashlight or headlamp, a camp chair for the mothing portion, and wear long pants and closed-toe shoes. Consider donating to support our bat conservation program! Follow this link to learn more—every bit of support helps us protect more bats ! SUBMITTING THE WAIVER OF LIABILITY DOES NOT REGISTER YOU FOR THE EVENT. Registration for tickets is below the event waiver. EVENT WAIVER OF LIABILITY - San Diego River Park Foundation Email This field is for validation purposes and should be left unchanged. Date of Event (this is the date the event will occur) MM slash DD slash YYYY Name (Required) First Last Cell Phone (in case of emergency) (Required) Address (Required) Street Address Address Line 2 City State / Province / Region ZIP / Postal Code Country Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island Brazil British Indian Ocean Territory Brunei Darussalam Bulgaria Burkina Faso Burundi Cabo Verde Cambodia Cameroon Canada Cayman Islands Central African Republic Chad Chile China Christmas Island Cocos Islands Colombia Comoros Congo Congo, Democratic Republic of the Cook Islands Costa Rica Croatia Cuba Curaçao Cyprus Czechia Côte d&#039;Ivoire Denmark Djibouti Dominica Dominican Republic Ecuador Egypt El Salvador Equatorial Guinea Eritrea Estonia Eswatini Ethiopia Falkland Islands Faroe Islands Fiji Finland France French Guiana French Polynesia French Southern Territories Gabon Gambia Georgia Germany Ghana Gibraltar Greece Greenland Grenada Guadeloupe Guam Guatemala Guernsey Guinea Guinea-Bissau Guyana Haiti Heard Island and McDonald Islands Holy See Honduras Hong Kong Hungary Iceland India Indonesia Iran Iraq Ireland Isle of Man Israel Italy Jamaica Japan Jersey Jordan Kazakhstan Kenya Kiribati Korea, Democratic People&#039;s Republic of Korea, Republic of Kuwait Kyrgyzstan Lao People&#039;s Democratic Republic Latvia Lebanon Lesotho Liberia Libya Liechtenstein Lithuania Luxembourg Macao Madagascar Malawi Malaysia Maldives Mali Malta Marshall Islands Martinique Mauritania Mauritius Mayotte Mexico Micronesia Moldova Monaco Mongolia Montenegro Montserrat Morocco Mozambique Myanmar Namibia Nauru Nepal Netherlands New Caledonia New Zealand Nicaragua Niger Nigeria Niue Norfolk Island North Macedonia Northern Mariana Islands Norway Oman Pakistan Palau Palestine, State of Panama Papua New Guinea Paraguay Peru Philippines Pitcairn Poland Portugal Puerto Rico Qatar Romania Russian Federation Rwanda Réunion Saint Barthélemy Saint Helena, Ascension and Tristan da Cunha Saint Kitts and Nevis Saint Lucia Saint Martin Saint Pierre and Miquelon Saint Vincent and the Grenadines Samoa San Marino Sao Tome and Principe Saudi Arabia Senegal Serbia Seychelles Sierra Leone Singapore Sint Maarten Slovakia Slovenia Solomon Islands Somalia South Africa South Georgia and the South Sandwich Islands South Sudan Spain Sri Lanka Sudan Suriname Svalbard and Jan Mayen Sweden Switzerland Syria Arab Republic Taiwan Tajikistan Tanzania, the United Republic of Thailand Timor-Leste Togo Tokelau Tonga Trinidad and Tobago Tunisia Turkmenistan Turks and Caicos Islands Tuvalu Türkiye US Minor Outlying Islands Uganda Ukraine United Arab Emirates United Kingdom United States Uruguay Uzbekistan Vanuatu Venezuela Viet Nam Virgin Islands, British Virgin Islands, U.S. Wallis and Futuna Western Sahara Yemen Zambia Zimbabwe Åland Islands WAIVER OF LIABILITY (Required) I hereby waive any right or cause of action arising as a result of my participation in The San Diego River Park Foundation's event, including transportation if provided, from which any liability may or could accrue against The San Diego River Park Foundation or the directors, volunteers and staff, collectively or individually as well as project sponsors or other partnering entities. Without limiting the generality of the foregoing, I agree that this waiver shall include any rights or causes of action resulting from personal injury to me or damage to my property sustained in connection with my participation during the event. I also hereby authorize and consent that The San Diego River Park Foundation has the right to copyright, publish, use, sell or assign any and all photographic pictures, videos, and/or sound recordings taken or made of me or the youth mentioned below or in which I or the youth mentioned below may be included in whole or part during the projects. I grant permission to The San Diego River Park Foundation to allow these images and/or recordings, which have been taken by or at the direction of the San Diego River Park Foundation to be put to legitimate use at their discretion. I relinquish all rights, title, or interest to any furnished products, reproductions, or facsimiles. I confirm that I have read and agree to the terms outlined above. Email I would like to receive free updates by email. Check all that apply. (SDRPF will not sell or share your information with others.) Sign up for our newsletter, updates, and event information. We will not sell your information. Youth / Family Education Programs Volunteer Opportunities Becoming a member Something else Signature (Required) gform.initializeOnLoaded( function() {gformInitSpinner( 7, 'https://sandiegoriver.org/wp-content/plugins/gravityforms/images/spinner.svg', true );jQuery('#gform_ajax_frame_7').on('load',function(){var contents = jQuery(this).contents().find('*').html();var is_postback = contents.indexOf('GF_AJAX_POSTBACK') >= 0;if(!is_postback){return;}var form_content = jQuery(this).contents().find('#gform_wrapper_7');var is_confirmation = jQuery(this).contents().find('#gform_confirmation_wrapper_7').length > 0;var is_redirect = contents.indexOf('gformRedirect(){') >= 0;var is_form = form_content.length > 0 && ! is_redirect && ! is_confirmation;var mt = parseInt(jQuery('html').css('margin-top'), 10) + parseInt(jQuery('body').css('margin-top'), 10) + 100;if(is_form){jQuery('#gform_wrapper_7').html(form_content.html());if(form_content.hasClass('gform_validation_error')){jQuery('#gform_wrapper_7').addClass('gform_validation_error');} else {jQuery('#gform_wrapper_7').removeClass('gform_validation_error');}setTimeout( function() { /* delay the scroll by 50 milliseconds to fix a bug in chrome */ }, 50 );if(window['gformInitDatepicker']) {gformInitDatepicker();}if(window['gformInitPriceFields']) {gformInitPriceFields();}var current_page = jQuery('#gform_source_page_number_7').val();gformInitSpinner( 7, 'https://sandiegoriver.org/wp-content/plugins/gravityforms/images/spinner.svg', true );jQuery(document).trigger('gform_page_loaded', [7, current_page]);window['gf_submitting_7'] = false;}else if(!is_redirect){var confirmation_content = jQuery(this).contents().find('.GF_AJAX_POSTBACK').html();if(!confirmation_content){confirmation_content = contents;}jQuery('#gform_wrapper_7').replaceWith(confirmation_content);jQuery(document).trigger('gform_confirmation_loaded', [7]);window['gf_submitting_7'] = false;wp.a11y.speak(jQuery('#gform_confirmation_message_7').text());}else{jQuery('#gform_7').append(contents);if(window['gformRedirect']) {gformRedirect();}}jQuery(document).trigger(\"gform_pre_post_render\", [{ formId: \"7\", currentPage: \"current_page\", abort: function() { this.preventDefault(); } }]); if (event && event.defaultPrevented) { return; } const gformWrapperDiv = document.getElementById( \"gform_wrapper_7\" ); if ( gformWrapperDiv ) { const visibilitySpan = document.createElement( \"span\" ); visibilitySpan.id = \"gform_visibility_test_7\"; gformWrapperDiv.insertAdjacentElement( \"afterend\", visibilitySpan ); } const visibilityTestDiv = document.getElementById( \"gform_visibility_test_7\" ); let postRenderFired = false; function triggerPostRender() { if ( postRenderFired ) { return; } postRenderFired = true; gform.core.triggerPostRenderEvents( 7, current_page ); if ( visibilityTestDiv ) { visibilityTestDiv.parentNode.removeChild( visibilityTestDiv ); } } function debounce( func, wait, immediate ) { var timeout; return function() { var context = this, args = arguments; var later = function() { timeout = null; if ( !immediate ) func.apply( context, args ); }; var callNow = immediate && !timeout; clearTimeout( timeout ); timeout = setTimeout( later, wait ); if ( callNow ) func.apply( context, args ); }; } const debouncedTriggerPostRender = debounce( function() { triggerPostRender(); }, 200 ); if ( visibilityTestDiv && visibilityTestDiv.offsetParent === null ) { const observer = new MutationObserver( ( mutations ) => { mutations.forEach( ( mutation ) => { if ( mutation.type === 'attributes' && visibilityTestDiv.offsetParent !== null ) { debouncedTriggerPostRender(); observer.disconnect(); } }); }); observer.observe( document.body, { attributes: true, childList: false, subtree: true, attributeFilter: [ 'style', 'class' ], }); } else { triggerPostRender(); } } );} );",
   "link": "https://sandiegoriver.org/event/nature-nights-bat-walk-and-moths-3/",
   "availability": "",
   "date_start": "2026-09-12T18:00:00-07:00",
   "date_end": "2026-09-12T20:00:00-07:00",
   "age_grade_level": [
-   "Family",
-   "Adult"
+   "Family"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -5885,7 +5673,7 @@
   "contact_phone": "",
   "logo_src": "anzaborrego_foundation.jpeg",
   "eligibility": "",
-  "image_src": "df8ea4e2176c417a.png"
+  "image_src": ""
  },
  {
   "slug": "stargazing_and_night_hike_with_women_in_the_wild_20260913",
@@ -5997,7 +5785,7 @@
   "contact_phone": "",
   "logo_src": "",
   "eligibility": "",
-  "image_src": "e85f0f5e07ec9c42.png"
+  "image_src": "a3aae7a4d432b958.png"
  },
  {
   "slug": "https_balboapark_org_event_a_space_for_all_of_us_2_2026_09_13",
@@ -6148,7 +5936,8 @@
   "date_start": "2026-09-13T19:30:00-07:00",
   "date_end": "2026-09-13T20:30:00-07:00",
   "age_grade_level": [
-   "Family"
+   "Family",
+   "Adult"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -6208,27 +5997,26 @@
   "image_src": "c9a525840492bcfe.jpg"
  },
  {
-  "slug": "https_www_sdcoastkeeper_org_event_watershed_watch_mission_bay_water_quality_monitoring_program_weekday_9",
+  "slug": "https_sdcoastkeeper_galaxydigital_com",
   "title": "Watershed Watch- Mission Bay Water Quality Monitoring Program (Weekday)",
   "partner_name": "San Diego Coastkeeper",
   "partner_id": null,
   "description": "👇 Español abajo Join our Mission Bay Water Quality Monitoring Program , where volunteers like you will participate in monthly field days to collect water samples at ten sites in Mission Bay. Program participants are also invited to engage in community events, meetings, and advocacy efforts. The sampling event will be held on Monday, September 14, from 10:30 a.m. to 1:30 p.m. Sign up here. This event is limited to the first five (5) people who sign up. *You must sign up through the volunteer platform.* The first two (2) people who register and attend this sampling event will qualify to receive a stipend in the form of a $60 virtual Visa gift card. If signups don’t appear for the sampling date, either the form hasn’t gone live, or all slots have been filled. Please check for signups 2 weeks before the event date. Note: You must attend or watch a virtual training session before participating in a sampling field day. By signing up at https://sdcoastkeeper.galaxydigital.com/ , you will have access to the required training video and a post-training quiz to qualify as a trained volunteer. You can then register for Water Quality Sampling events and will automatically receive monthly email updates from our Volunteer and Outreach Manager. Program volunteers will join us in this exciting opportunity to be part of a team of passionate individuals interested in protecting and restoring our waters and wilds. Learn more about the Mission Bay Water Quality Monitoring Program. Únase a nuestro Programa de Monitoreo de Calidad de Agua en Mission Bay , donde voluntarios como tú participarán en días de campo mensuales para recolectar muestras de agua en diez sitios alrededor de Mission Bay. Los participantes del programa también están invitados a participar en eventos comunitarios, reuniones y esfuerzos de abogacía. El evento de muestreo para voluntarios se llevará a cabo el lunes, 14 de septiembre, de 10:30 a.m a 1:30 p.m. Regístrate aquí . La forma está abierta a las primeras cinco (5) personas. Nota: Debe asistir a una sesión de entrenamiento antes de poder participar en un día de campo de muestreo. Al registrarse en este sitio: https://sdcoastkeeper.galaxydigital.com/ podrá ver una grabación de capacitación virtual para poder inscribirse en oportunidades de voluntariado. Únete a esta emocionante oportunidad de ser parte de un equipo de personas apasionadas interesadas en proteger y restaurar nuestras aguas y áreas silvestres. Aprende más sobre el Programa de Monitoreo de Calidad de Agua en Mission Bay.",
-  "link": "https://www.sdcoastkeeper.org/event/watershed-watch-mission-bay-water-quality-monitoring-program-weekday-9/",
+  "link": "https://sdcoastkeeper.galaxydigital.com/",
   "availability": "Repeats 2 times through 2026-09-14",
   "date_start": "2026-09-14T10:30:00-07:00",
   "date_end": "2026-09-14T13:30:00-07:00",
   "age_grade_level": [
-   "Adult",
-   "Grades 9-12"
+   "Adult"
   ],
   "cost_range": "Free",
   "time_of_day": [
-   "Morning"
+   "Morning",
+   "Afternoon"
   ],
   "opportunity_type": "Volunteering",
   "areas_of_interest": [
-   "Earth Science/Ecology",
-   "Biology / LifeSciences"
+   "Earth Science/Ecology"
   ],
   "specific_attention": [],
   "financial_support": "No",
@@ -6241,16 +6029,51 @@
   "contact_phone": "",
   "logo_src": "",
   "eligibility": "",
-  "image_src": "9343d9cd64f4e301.jpg"
+  "image_src": "15c90b0071c78a07.jpg"
  },
  {
-  "slug": "https_us02web_zoom_us_j_82822923893",
+  "slug": "baby_storytime_20260914",
+  "title": "Baby Storytime",
+  "partner_name": "Coronado Public Library",
+  "partner_id": null,
+  "description": "Join the Library for Baby Storytime followed by baby play time! Baby Storytime is for babies and their caregivers to develop early literacy skills through songs, rhymes and repetition. Mondays @ 11am in person either in the Children's Area or the Winn Room. Perfect for ages infants-2 but all children and adults are welcome.",
+  "link": "",
+  "availability": "Repeats 150 times through 2029-07-30",
+  "date_start": "2026-09-14T11:00:00-07:00",
+  "date_end": "2029-07-30T11:45:00-07:00",
+  "age_grade_level": [
+   "Family",
+   "Pre-K"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "General Science"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "640 Orange Ave., Coronado, CA, 92118, US",
+  "latitude": "",
+  "longitude": "",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "",
+  "eligibility": "",
+  "image_src": ""
+ },
+ {
+  "slug": "https_us02web_zoom_us_j_82432734779",
   "title": "Clean Border Water Now Meeting",
   "partner_name": "Surfrider Foundation San Diego County Chapter",
   "partner_id": null,
-  "description": "Please email <a href=\"mailto:CBWN@surfridersd.org\">CBWN@surfridersd.org</a> with any questions! <br><br>Surfrider Foundation SD County is inviting you to a scheduled Zoom meeting.<br><br>Topic: Clean Border Water Now&nbsp;<br>Time: Nov 12, 2020 06:30 PM Pacific Time (US and Canada)<br><br>Join Zoom Meeting<br>https://us02web.zoom.us/j/82822923893<br><br>Meeting ID: 828 2292 3893<br>One tap mobile<br>+16699009128,,82822923893# US (San Jose)<br>+13462487799,,82822923893# US (Houston)<br><br>Dial by your location<br>&nbsp; &nbsp; &nbsp; &nbsp; +1 669 900 9128 US (San Jose)<br>&nbsp; &nbsp; &nbsp; &nbsp; +1 346 248 7799 US (Houston)<br>&nbsp; &nbsp; &nbsp; &nbsp; +1 253 215 8782 US (Tacoma)<br>&nbsp; &nbsp; &nbsp; &nbsp; +1 312 626 6799 US (Chicago)<br>&nbsp; &nbsp; &nbsp; &nbsp; +1 646 558 8656 US (New York)<br>&nbsp; &nbsp; &nbsp; &nbsp; +1 301 715 8592 US (Germantown)<br>Meeting ID: 828 2292 3893<br>Find your local number: https://us02web.zoom.us/u/kdCV56tgwV",
-  "link": "https://us02web.zoom.us/j/82822923893",
-  "availability": "Repeats 19 times through 2026-11-09",
+  "description": "Surfrider Foundation SD County is inviting you to a scheduled Zoom meeting.<br><br>Topic: Clean Border Water Now&nbsp;<br>Time: Dec 10, 2020 06:30 PM Pacific Time (US and Canada)<br><br>Join Zoom Meeting<br>https://us02web.zoom.us/j/82432734779<br><br>Meeting ID: 824 3273 4779<br>One tap mobile<br>+16699009128,,82432734779# US (San Jose)<br>+13462487799,,82432734779# US (Houston)<br><br>Dial by your location<br>&nbsp; &nbsp; &nbsp; &nbsp; +1 669 900 9128 US (San Jose)<br>&nbsp; &nbsp; &nbsp; &nbsp; +1 346 248 7799 US (Houston)<br>&nbsp; &nbsp; &nbsp; &nbsp; +1 253 215 8782 US (Tacoma)<br>&nbsp; &nbsp; &nbsp; &nbsp; +1 312 626 6799 US (Chicago)<br>&nbsp; &nbsp; &nbsp; &nbsp; +1 646 558 8656 US (New York)<br>&nbsp; &nbsp; &nbsp; &nbsp; +1 301 715 8592 US (Washington D.C)<br>Meeting ID: 824 3273 4779<br>Find your local number: https://us02web.zoom.us/u/ktUEVrJ08<br><br><br><br>Please email <a href=\"mailto:CBWN@surfridersd.org\">CBWN@surfridersd.org</a> with any questions!\n\nJoin with Google Meet: https://meet.google.com/kse-rrts-xzp\nOr dial: (US) +1 929-287-3360 PIN: 709844476#\nMore phone numbers: https://tel.meet/kse-rrts-xzp?pin=1111139239161&hs=7\n\nLearn more about Meet at: https://support.google.com/a/users/answer/9282720",
+  "link": "https://us02web.zoom.us/j/82432734779",
+  "availability": "Repeats 18 times through 2026-11-09",
   "date_start": "2026-09-14T18:00:00-07:00",
   "date_end": "2026-11-09T19:00:00-08:00",
   "age_grade_level": [
@@ -6267,7 +6090,7 @@
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "https://us02web.zoom.us/j/82822923893",
+  "location": "Online (Zoom)",
   "latitude": "",
   "longitude": "",
   "contact_name": "",
@@ -6444,7 +6267,7 @@
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "",
+  "location": "San Diego, CA",
   "latitude": "",
   "longitude": "",
   "contact_name": "",
@@ -6487,6 +6310,41 @@
   "logo_src": "",
   "eligibility": "",
   "image_src": ""
+ },
+ {
+  "slug": "https_sdcl_bibliocommons_com_events_6a8338bba821f90037ee6abc",
+  "title": "Toddler Storytime",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Get ready for toddler storytime with songs, movement, and engaging picture books, followed by hands-on learning and crafting. For ages 18 months to 3 years.",
+  "link": "https://sdcl.bibliocommons.com/events/6a8338bba821f90037ee6abc",
+  "availability": "Repeats 9 times through 2027-03-11",
+  "date_start": "2026-09-17T10:30:00-07:00",
+  "date_end": "2027-03-11T11:00:00-08:00",
+  "age_grade_level": [
+   "Family",
+   "Pre-K"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "General Science"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Rancho Santa Fe",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "",
+  "eligibility": "",
+  "image_src": "081dcdbe2de096b4.png"
  },
  {
   "slug": "https_sdcl_bibliocommons_com_events_6a56c29682c03c5c17d8056b",
@@ -6807,7 +6665,10 @@
   "date_start": "2026-09-19T09:00:00-07:00",
   "date_end": "2026-09-19T11:00:00-07:00",
   "age_grade_level": [
-   "Family"
+   "Family",
+   "Grades 9-12",
+   "Grades 6-8",
+   "Adult"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -6820,7 +6681,7 @@
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "Otay Valley Regional Park, San Diego, CA",
+  "location": "Otay Valley Regional Park",
   "latitude": "",
   "longitude": "",
   "contact_name": "",
@@ -6828,7 +6689,7 @@
   "contact_phone": "",
   "logo_src": "",
   "eligibility": "",
-  "image_src": "5c322c88ee965973.jpg"
+  "image_src": "c557f9d6b534332f.jpg"
  },
  {
   "slug": "https_www_sdcoastkeeper_org_event_community_science_plastic_pellet_nurdle_cleanup_9_19_26",
@@ -6841,10 +6702,7 @@
   "date_start": "2026-09-19T09:00:00-07:00",
   "date_end": "2026-09-19T10:00:00-07:00",
   "age_grade_level": [
-   "Family",
-   "Grades 6-8",
-   "Grades 9-12",
-   "Adult"
+   "Family"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -6975,6 +6833,41 @@
   "image_src": ""
  },
  {
+  "slug": "https_sdcl_bibliocommons_com_events_6a85e2542dac6e00372023da",
+  "title": "Project Patho: Genetics Workshop",
+  "partner_name": "San Diego County Library",
+  "partner_id": 251,
+  "description": "Join us in a FREE event to learn more about genetics! For kids ages 7-12 Learn about DNA and heredity! Fun activity in the end!",
+  "link": "https://sdcl.bibliocommons.com/events/6a85e2542dac6e00372023da",
+  "availability": "",
+  "date_start": "2026-09-19T14:00:00-07:00",
+  "date_end": "2026-09-19T15:00:00-07:00",
+  "age_grade_level": [
+   "Grades 6-8",
+   "Family"
+  ],
+  "cost_range": "Free",
+  "time_of_day": [
+   "Afternoon"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Biology / LifeSciences"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "4S Ranch",
+  "latitude": "32.834727",
+  "longitude": "-117.1306115",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "",
+  "eligibility": "",
+  "image_src": "94f3a12fdfbc9307.jpg"
+ },
+ {
   "slug": "ranger_led_interpretive_hike_20260919",
   "title": "Ranger-led Interpretive Hike",
   "partner_name": "San Diego County Parks and Recreation",
@@ -7051,7 +6944,7 @@
   "title": "Discovery Table - Kumeyaay Children's Games and Toys",
   "partner_name": "Mission Trails Regional Park Foundation",
   "partner_id": null,
-  "description": "Stop by the Discovery Table in the lobby of the Visitor Center anytime between 10 a.m. and 1 p.m. and learn about different Kumeyaay games from MTRP Trail Guides.  Kids can make and take home their very own stick dice game!\n\nDiscovery tables are set up on the second Saturday of every month and some holidays at the Visitor Center and on selected Saturdays during the summer at Kumeyaay Lake Campground.  Tables feature hands-on activities and take-home materials for kids and adults.  Topics vary month-to-month.\n\nUpcoming Topics:\n\n  *\nDecember 12 – Animal Tracks",
+  "description": "Stop by the special Discovery Table at the Kumeyaay Lake Campground shade structure anytime between 4:15 p.m. and 6:15 p.m. and learn about different Kumeyaay games from MTRP Trail Guides.  Kids can make and take home their very own stick dice game!\n\nDiscovery tables are set up on the second Saturday of every month and some holidays at the Visitor Center and on selected Saturdays during the summer at Kumeyaay Lake Campground.  Tables feature hands-on activities and take-home materials for kids and adults.  Topics vary month-to-month.\n\nUpcoming Topics:\n\n  *   October 10 – Owl Pellets\n  *   October 31 – Spiders\n  *   October 31 – Bats",
   "link": "",
   "availability": "Repeats 4 times through 2026-11-14",
   "date_start": "2026-09-19T23:15:00-07:00",
@@ -7062,18 +6955,17 @@
   ],
   "cost_range": "Free",
   "time_of_day": [
-   "Morning",
-   "Afternoon"
+   "Evening"
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
    "General Science",
-   "Biology / LifeSciences"
+   "Earth Science/Ecology"
   ],
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "Mission Trails Regional Park Visitor Center (1 Father Junipero Serra Trl, San Diego, CA 92119, United States)",
+  "location": "Kumeyaay Lake Campground (2 Father Junipero Serra Trail, San Diego, CA 92119, United States)",
   "latitude": "",
   "longitude": "",
   "contact_name": "",
@@ -7088,7 +6980,7 @@
   "title": "Bird Walk at Grant Park",
   "partner_name": "The San Diego River Park Foundation",
   "partner_id": 323,
-  "description": "Embark on a fun-filled walk with bird experts Cindy Pencek and Ian Swirka to observe and count the amazing biodiversity of birds that call this section of the river home! You'll not only experience the joy and relaxation of connecting with nature, but will also contribute to conservation efforts through reporting observations on iNaturalist! You’ll also have the opportunity to explore our River Studio at Grant Park—our exciting new nature education center and eco-park featuring beautiful native plant gardens, serving over 5,000 students each year and empowering the next generation of environmental stewards. We hope you can join us! Kids are welcome, with adult supervision. Parking: Please park in the Grant Park parking lot. Access is via the intersection with the stoplight across from iFly Indoor Skydiving. EVENT WAIVER OF LIABILITY - San Diego River Park Foundation URL This field is for validation purposes and should be left unchanged. Date of Event (this is the date the event will occur) MM slash DD slash YYYY Name (Required) First Last Cell Phone (in case of emergency) (Required) Address (Required) Street Address Address Line 2 City State / Province / Region ZIP / Postal Code Country Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island Brazil British Indian Ocean Territory Brunei Darussalam Bulgaria Burkina Faso Burundi Cabo Verde Cambodia Cameroon Canada Cayman Islands Central African Republic Chad Chile China Christmas Island Cocos Islands Colombia Comoros Congo Congo, Democratic Republic of the Cook Islands Costa Rica Croatia Cuba Curaçao Cyprus Czechia Côte d&#039;Ivoire Denmark Djibouti Dominica Dominican Republic Ecuador Egypt El Salvador Equatorial Guinea Eritrea Estonia Eswatini Ethiopia Falkland Islands Faroe Islands Fiji Finland France French Guiana French Polynesia French Southern Territories Gabon Gambia Georgia Germany Ghana Gibraltar Greece Greenland Grenada Guadeloupe Guam Guatemala Guernsey Guinea Guinea-Bissau Guyana Haiti Heard Island and McDonald Islands Holy See Honduras Hong Kong Hungary Iceland India Indonesia Iran Iraq Ireland Isle of Man Israel Italy Jamaica Japan Jersey Jordan Kazakhstan Kenya Kiribati Korea, Democratic People&#039;s Republic of Korea, Republic of Kuwait Kyrgyzstan Lao People&#039;s Democratic Republic Latvia Lebanon Lesotho Liberia Libya Liechtenstein Lithuania Luxembourg Macao Madagascar Malawi Malaysia Maldives Mali Malta Marshall Islands Martinique Mauritania Mauritius Mayotte Mexico Micronesia Moldova Monaco Mongolia Montenegro Montserrat Morocco Mozambique Myanmar Namibia Nauru Nepal Netherlands New Caledonia New Zealand Nicaragua Niger Nigeria Niue Norfolk Island North Macedonia Northern Mariana Islands Norway Oman Pakistan Palau Palestine, State of Panama Papua New Guinea Paraguay Peru Philippines Pitcairn Poland Portugal Puerto Rico Qatar Romania Russian Federation Rwanda Réunion Saint Barthélemy Saint Helena, Ascension and Tristan da Cunha Saint Kitts and Nevis Saint Lucia Saint Martin Saint Pierre and Miquelon Saint Vincent and the Grenadines Samoa San Marino Sao Tome and Principe Saudi Arabia Senegal Serbia Seychelles Sierra Leone Singapore Sint Maarten Slovakia Slovenia Solomon Islands Somalia South Africa South Georgia and the South Sandwich Islands South Sudan Spain Sri Lanka Sudan Suriname Svalbard and Jan Mayen Sweden Switzerland Syria Arab Republic Taiwan Tajikistan Tanzania, the United Republic of Thailand Timor-Leste Togo Tokelau Tonga Trinidad and Tobago Tunisia Turkmenistan Turks and Caicos Islands Tuvalu Türkiye US Minor Outlying Islands Uganda Ukraine United Arab Emirates United Kingdom United States Uruguay Uzbekistan Vanuatu Venezuela Viet Nam Virgin Islands, British Virgin Islands, U.S. Wallis and Futuna Western Sahara Yemen Zambia Zimbabwe Åland Islands WAIVER OF LIABILITY (Required) I hereby waive any right or cause of action arising as a result of my participation in The San Diego River Park Foundation's event, including transportation if provided, from which any liability may or could accrue against The San Diego River Park Foundation or the directors, volunteers and staff, collectively or individually as well as project sponsors or other partnering entities. Without limiting the generality of the foregoing, I agree that this waiver shall include any rights or causes of action resulting from personal injury to me or damage to my property sustained in connection with my participation during the event. I also hereby authorize and consent that The San Diego River Park Foundation has the right to copyright, publish, use, sell or assign any and all photographic pictures, videos, and/or sound recordings taken or made of me or the youth mentioned below or in which I or the youth mentioned below may be included in whole or part during the projects. I grant permission to The San Diego River Park Foundation to allow these images and/or recordings, which have been taken by or at the direction of the San Diego River Park Foundation to be put to legitimate use at their discretion. I relinquish all rights, title, or interest to any furnished products, reproductions, or facsimiles. I confirm that I have read and agree to the terms outlined above. Email I would like to receive free updates by email. Check all that apply. (SDRPF will not sell or share your information with others.) Sign up for our newsletter, updates, and event information. We will not sell your information. Youth / Family Education Programs Volunteer Opportunities Becoming a member Something else Signature (Required) gform.initializeOnLoaded( function() {gformInitSpinner( 7, 'https://sandiegoriver.org/wp-content/plugins/gravityforms/images/spinner.svg', true );jQuery('#gform_ajax_frame_7').on('load',function(){var contents = jQuery(this).contents().find('*').html();var is_postback = contents.indexOf('GF_AJAX_POSTBACK') >= 0;if(!is_postback){return;}var form_content = jQuery(this).contents().find('#gform_wrapper_7');var is_confirmation = jQuery(this).contents().find('#gform_confirmation_wrapper_7').length > 0;var is_redirect = contents.indexOf('gformRedirect(){') >= 0;var is_form = form_content.length > 0 && ! is_redirect && ! is_confirmation;var mt = parseInt(jQuery('html').css('margin-top'), 10) + parseInt(jQuery('body').css('margin-top'), 10) + 100;if(is_form){jQuery('#gform_wrapper_7').html(form_content.html());if(form_content.hasClass('gform_validation_error')){jQuery('#gform_wrapper_7').addClass('gform_validation_error');} else {jQuery('#gform_wrapper_7').removeClass('gform_validation_error');}setTimeout( function() { /* delay the scroll by 50 milliseconds to fix a bug in chrome */ }, 50 );if(window['gformInitDatepicker']) {gformInitDatepicker();}if(window['gformInitPriceFields']) {gformInitPriceFields();}var current_page = jQuery('#gform_source_page_number_7').val();gformInitSpinner( 7, 'https://sandiegoriver.org/wp-content/plugins/gravityforms/images/spinner.svg', true );jQuery(document).trigger('gform_page_loaded', [7, current_page]);window['gf_submitting_7'] = false;}else if(!is_redirect){var confirmation_content = jQuery(this).contents().find('.GF_AJAX_POSTBACK').html();if(!confirmation_content){confirmation_content = contents;}jQuery('#gform_wrapper_7').replaceWith(confirmation_content);jQuery(document).trigger('gform_confirmation_loaded', [7]);window['gf_submitting_7'] = false;wp.a11y.speak(jQuery('#gform_confirmation_message_7').text());}else{jQuery('#gform_7').append(contents);if(window['gformRedirect']) {gformRedirect();}}jQuery(document).trigger(\"gform_pre_post_render\", [{ formId: \"7\", currentPage: \"current_page\", abort: function() { this.preventDefault(); } }]); if (event && event.defaultPrevented) { return; } const gformWrapperDiv = document.getElementById( \"gform_wrapper_7\" ); if ( gformWrapperDiv ) { const visibilitySpan = document.createElement( \"span\" ); visibilitySpan.id = \"gform_visibility_test_7\"; gformWrapperDiv.insertAdjacentElement( \"afterend\", visibilitySpan ); } const visibilityTestDiv = document.getElementById( \"gform_visibility_test_7\" ); let postRenderFired = false; function triggerPostRender() { if ( postRenderFired ) { return; } postRenderFired = true; gform.core.triggerPostRenderEvents( 7, current_page ); if ( visibilityTestDiv ) { visibilityTestDiv.parentNode.removeChild( visibilityTestDiv ); } } function debounce( func, wait, immediate ) { var timeout; return function() { var context = this, args = arguments; var later = function() { timeout = null; if ( !immediate ) func.apply( context, args ); }; var callNow = immediate && !timeout; clearTimeout( timeout ); timeout = setTimeout( later, wait ); if ( callNow ) func.apply( context, args ); }; } const debouncedTriggerPostRender = debounce( function() { triggerPostRender(); }, 200 ); if ( visibilityTestDiv && visibilityTestDiv.offsetParent === null ) { const observer = new MutationObserver( ( mutations ) => { mutations.forEach( ( mutation ) => { if ( mutation.type === 'attributes' && visibilityTestDiv.offsetParent !== null ) { debouncedTriggerPostRender(); observer.disconnect(); } }); }); observer.observe( document.body, { attributes: true, childList: false, subtree: true, attributeFilter: [ 'style', 'class' ], }); } else { triggerPostRender(); } } );} );",
+  "description": "Embark on a fun-filled walk with bird experts Cindy Pencek and Ian Swirka to observe and count the amazing biodiversity of birds that call this section of the river home! You'll not only experience the joy and relaxation of connecting with nature, but will also contribute to conservation efforts through reporting observations on iNaturalist! You’ll also have the opportunity to explore our River Studio at Grant Park—our exciting new nature education center and eco-park featuring beautiful native plant gardens, serving over 5,000 students each year and empowering the next generation of environmental stewards. We hope you can join us! Kids are welcome, with adult supervision. Parking: Please park in the Grant Park parking lot. Access is via the intersection with the stoplight across from iFly Indoor Skydiving. EVENT WAIVER OF LIABILITY - San Diego River Park Foundation Name This field is for validation purposes and should be left unchanged. Date of Event (this is the date the event will occur) MM slash DD slash YYYY Name (Required) First Last Cell Phone (in case of emergency) (Required) Address (Required) Street Address Address Line 2 City State / Province / Region ZIP / Postal Code Country Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island Brazil British Indian Ocean Territory Brunei Darussalam Bulgaria Burkina Faso Burundi Cabo Verde Cambodia Cameroon Canada Cayman Islands Central African Republic Chad Chile China Christmas Island Cocos Islands Colombia Comoros Congo Congo, Democratic Republic of the Cook Islands Costa Rica Croatia Cuba Curaçao Cyprus Czechia Côte d&#039;Ivoire Denmark Djibouti Dominica Dominican Republic Ecuador Egypt El Salvador Equatorial Guinea Eritrea Estonia Eswatini Ethiopia Falkland Islands Faroe Islands Fiji Finland France French Guiana French Polynesia French Southern Territories Gabon Gambia Georgia Germany Ghana Gibraltar Greece Greenland Grenada Guadeloupe Guam Guatemala Guernsey Guinea Guinea-Bissau Guyana Haiti Heard Island and McDonald Islands Holy See Honduras Hong Kong Hungary Iceland India Indonesia Iran Iraq Ireland Isle of Man Israel Italy Jamaica Japan Jersey Jordan Kazakhstan Kenya Kiribati Korea, Democratic People&#039;s Republic of Korea, Republic of Kuwait Kyrgyzstan Lao People&#039;s Democratic Republic Latvia Lebanon Lesotho Liberia Libya Liechtenstein Lithuania Luxembourg Macao Madagascar Malawi Malaysia Maldives Mali Malta Marshall Islands Martinique Mauritania Mauritius Mayotte Mexico Micronesia Moldova Monaco Mongolia Montenegro Montserrat Morocco Mozambique Myanmar Namibia Nauru Nepal Netherlands New Caledonia New Zealand Nicaragua Niger Nigeria Niue Norfolk Island North Macedonia Northern Mariana Islands Norway Oman Pakistan Palau Palestine, State of Panama Papua New Guinea Paraguay Peru Philippines Pitcairn Poland Portugal Puerto Rico Qatar Romania Russian Federation Rwanda Réunion Saint Barthélemy Saint Helena, Ascension and Tristan da Cunha Saint Kitts and Nevis Saint Lucia Saint Martin Saint Pierre and Miquelon Saint Vincent and the Grenadines Samoa San Marino Sao Tome and Principe Saudi Arabia Senegal Serbia Seychelles Sierra Leone Singapore Sint Maarten Slovakia Slovenia Solomon Islands Somalia South Africa South Georgia and the South Sandwich Islands South Sudan Spain Sri Lanka Sudan Suriname Svalbard and Jan Mayen Sweden Switzerland Syria Arab Republic Taiwan Tajikistan Tanzania, the United Republic of Thailand Timor-Leste Togo Tokelau Tonga Trinidad and Tobago Tunisia Turkmenistan Turks and Caicos Islands Tuvalu Türkiye US Minor Outlying Islands Uganda Ukraine United Arab Emirates United Kingdom United States Uruguay Uzbekistan Vanuatu Venezuela Viet Nam Virgin Islands, British Virgin Islands, U.S. Wallis and Futuna Western Sahara Yemen Zambia Zimbabwe Åland Islands WAIVER OF LIABILITY (Required) I hereby waive any right or cause of action arising as a result of my participation in The San Diego River Park Foundation's event, including transportation if provided, from which any liability may or could accrue against The San Diego River Park Foundation or the directors, volunteers and staff, collectively or individually as well as project sponsors or other partnering entities. Without limiting the generality of the foregoing, I agree that this waiver shall include any rights or causes of action resulting from personal injury to me or damage to my property sustained in connection with my participation during the event. I also hereby authorize and consent that The San Diego River Park Foundation has the right to copyright, publish, use, sell or assign any and all photographic pictures, videos, and/or sound recordings taken or made of me or the youth mentioned below or in which I or the youth mentioned below may be included in whole or part during the projects. I grant permission to The San Diego River Park Foundation to allow these images and/or recordings, which have been taken by or at the direction of the San Diego River Park Foundation to be put to legitimate use at their discretion. I relinquish all rights, title, or interest to any furnished products, reproductions, or facsimiles. I confirm that I have read and agree to the terms outlined above. Email I would like to receive free updates by email. Check all that apply. (SDRPF will not sell or share your information with others.) Sign up for our newsletter, updates, and event information. We will not sell your information. Youth / Family Education Programs Volunteer Opportunities Becoming a member Something else Signature (Required) gform.initializeOnLoaded( function() {gformInitSpinner( 7, 'https://sandiegoriver.org/wp-content/plugins/gravityforms/images/spinner.svg', true );jQuery('#gform_ajax_frame_7').on('load',function(){var contents = jQuery(this).contents().find('*').html();var is_postback = contents.indexOf('GF_AJAX_POSTBACK') >= 0;if(!is_postback){return;}var form_content = jQuery(this).contents().find('#gform_wrapper_7');var is_confirmation = jQuery(this).contents().find('#gform_confirmation_wrapper_7').length > 0;var is_redirect = contents.indexOf('gformRedirect(){') >= 0;var is_form = form_content.length > 0 && ! is_redirect && ! is_confirmation;var mt = parseInt(jQuery('html').css('margin-top'), 10) + parseInt(jQuery('body').css('margin-top'), 10) + 100;if(is_form){jQuery('#gform_wrapper_7').html(form_content.html());if(form_content.hasClass('gform_validation_error')){jQuery('#gform_wrapper_7').addClass('gform_validation_error');} else {jQuery('#gform_wrapper_7').removeClass('gform_validation_error');}setTimeout( function() { /* delay the scroll by 50 milliseconds to fix a bug in chrome */ }, 50 );if(window['gformInitDatepicker']) {gformInitDatepicker();}if(window['gformInitPriceFields']) {gformInitPriceFields();}var current_page = jQuery('#gform_source_page_number_7').val();gformInitSpinner( 7, 'https://sandiegoriver.org/wp-content/plugins/gravityforms/images/spinner.svg', true );jQuery(document).trigger('gform_page_loaded', [7, current_page]);window['gf_submitting_7'] = false;}else if(!is_redirect){var confirmation_content = jQuery(this).contents().find('.GF_AJAX_POSTBACK').html();if(!confirmation_content){confirmation_content = contents;}jQuery('#gform_wrapper_7').replaceWith(confirmation_content);jQuery(document).trigger('gform_confirmation_loaded', [7]);window['gf_submitting_7'] = false;wp.a11y.speak(jQuery('#gform_confirmation_message_7').text());}else{jQuery('#gform_7').append(contents);if(window['gformRedirect']) {gformRedirect();}}jQuery(document).trigger(\"gform_pre_post_render\", [{ formId: \"7\", currentPage: \"current_page\", abort: function() { this.preventDefault(); } }]); if (event && event.defaultPrevented) { return; } const gformWrapperDiv = document.getElementById( \"gform_wrapper_7\" ); if ( gformWrapperDiv ) { const visibilitySpan = document.createElement( \"span\" ); visibilitySpan.id = \"gform_visibility_test_7\"; gformWrapperDiv.insertAdjacentElement( \"afterend\", visibilitySpan ); } const visibilityTestDiv = document.getElementById( \"gform_visibility_test_7\" ); let postRenderFired = false; function triggerPostRender() { if ( postRenderFired ) { return; } postRenderFired = true; gform.core.triggerPostRenderEvents( 7, current_page ); if ( visibilityTestDiv ) { visibilityTestDiv.parentNode.removeChild( visibilityTestDiv ); } } function debounce( func, wait, immediate ) { var timeout; return function() { var context = this, args = arguments; var later = function() { timeout = null; if ( !immediate ) func.apply( context, args ); }; var callNow = immediate && !timeout; clearTimeout( timeout ); timeout = setTimeout( later, wait ); if ( callNow ) func.apply( context, args ); }; } const debouncedTriggerPostRender = debounce( function() { triggerPostRender(); }, 200 ); if ( visibilityTestDiv && visibilityTestDiv.offsetParent === null ) { const observer = new MutationObserver( ( mutations ) => { mutations.forEach( ( mutation ) => { if ( mutation.type === 'attributes' && visibilityTestDiv.offsetParent !== null ) { debouncedTriggerPostRender(); observer.disconnect(); } }); }); observer.observe( document.body, { attributes: true, childList: false, subtree: true, attributeFilter: [ 'style', 'class' ], }); } else { triggerPostRender(); } } );} );",
   "link": "https://sandiegoriver.org/event/bird-walk-at-grant-park-7/",
   "availability": "Repeats 4 times through 2026-12-20",
   "date_start": "2026-09-20T08:00:00-07:00",
@@ -7108,7 +7000,7 @@
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "Grant Park",
+  "location": "Grant Park, San Diego",
   "latitude": "32.7639275",
   "longitude": "-117.2033498",
   "contact_name": "",
@@ -8190,7 +8082,7 @@
   "contact_phone": "",
   "logo_src": "anzaborrego_foundation.jpeg",
   "eligibility": "",
-  "image_src": "03e30a79a9b3bfc8.png"
+  "image_src": ""
  },
  {
   "slug": "saturday_sculpting_sculpt_a_pi_ata_20260926",
@@ -8218,6 +8110,42 @@
   "financial_support": "No",
   "ngss_aligned": "No",
   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+  "latitude": "",
+  "longitude": "",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "",
+  "eligibility": "",
+  "image_src": ""
+ },
+ {
+  "slug": "ranger_led_night_hike_20260927",
+  "title": "Ranger-led Night Hike",
+  "partner_name": "San Diego County Parks and Recreation",
+  "partner_id": null,
+  "description": "Join Rangers on a guided evening hike, avoiding the summer heat and learning about the native plants and nocturnal wildlife of this 2,272-acre preserve on the 2.5-mile loop incorporating upper Martha’s Grove trail. Bringing your own headlamp with a red-light setting is highly recommended.\n\nThis activity meets at the Goodan Staging Area located at 16281 Sycamore Canyon Road in Poway:\nGoodan Staging Area, 16281 Sycamore Canyon Road, Poway, CA, 92064\n\nInclement weather will cancel; call ahead. Park phone number: (858) 513-4737",
+  "link": "",
+  "availability": "Repeats 2 times through 2026-09-27",
+  "date_start": "2026-09-27T01:30:00-07:00",
+  "date_end": "2026-09-27T03:30:00-07:00",
+  "age_grade_level": [
+   "Family",
+   "Adult"
+  ],
+  "cost_range": "",
+  "time_of_day": [
+   "Evening"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Biology / LifeSciences",
+   "Earth Science/Ecology"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "Sycamore Canyon/Goodan Ranch, 16281 Sycamore Canyon Rd, Poway, CA 92064, USA",
   "latitude": "",
   "longitude": "",
   "contact_name": "",
@@ -8593,6 +8521,7 @@
   ],
   "cost_range": "Less than $25",
   "time_of_day": [
+   "Afternoon",
    "Evening"
   ],
   "opportunity_type": "Out-of-school Programs",
@@ -8688,16 +8617,13 @@
   "title": "Halloween Edition Nature Nights: Bat Walk and Moths 10/3/26",
   "partner_name": "The San Diego River Park Foundation",
   "partner_id": 323,
-  "description": "Are you in a Halloween mood? Join us for a fun evening Halloween adventure! Stroll along the river as we listen and look for bats and moths and explore the wonders of the nighttime world. We’ll eavesdrop on eerie echolocation calls using bioacoustics and attract moths to our UV light station for up-close observation. All ages are welcome to this slightly spooky Nature Night! Be sure to sign up early—space is limited, and our Nature Nights events fill up quickly. Please bring a flashlight or headlamp, a camp chair for the mothing portion, and wear long pants and closed-toe shoes. Check out this news article by KPBS: Bat Season has begun in San Diego , where Natalie Borchardt and Don Endicott talk about the importance of bats in San Diego County. Consider donating to support our bat conservation program! Follow this link to learn more—every bit of support helps us protect more bats !\" THIS SPECIAL HALLOWEEN EVENT HAS A REGISTRATION FEE OF $20 EVENT WAIVER OF LIABILITY - San Diego River Park Foundation X/Twitter This field is for validation purposes and should be left unchanged. Date of Event (this is the date the event will occur) MM slash DD slash YYYY Name (Required) First Last Cell Phone (in case of emergency) (Required) Address (Required) Street Address Address Line 2 City State / Province / Region ZIP / Postal Code Country Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island Brazil British Indian Ocean Territory Brunei Darussalam Bulgaria Burkina Faso Burundi Cabo Verde Cambodia Cameroon Canada Cayman Islands Central African Republic Chad Chile China Christmas Island Cocos Islands Colombia Comoros Congo Congo, Democratic Republic of the Cook Islands Costa Rica Croatia Cuba Curaçao Cyprus Czechia Côte d&#039;Ivoire Denmark Djibouti Dominica Dominican Republic Ecuador Egypt El Salvador Equatorial Guinea Eritrea Estonia Eswatini Ethiopia Falkland Islands Faroe Islands Fiji Finland France French Guiana French Polynesia French Southern Territories Gabon Gambia Georgia Germany Ghana Gibraltar Greece Greenland Grenada Guadeloupe Guam Guatemala Guernsey Guinea Guinea-Bissau Guyana Haiti Heard Island and McDonald Islands Holy See Honduras Hong Kong Hungary Iceland India Indonesia Iran Iraq Ireland Isle of Man Israel Italy Jamaica Japan Jersey Jordan Kazakhstan Kenya Kiribati Korea, Democratic People&#039;s Republic of Korea, Republic of Kuwait Kyrgyzstan Lao People&#039;s Democratic Republic Latvia Lebanon Lesotho Liberia Libya Liechtenstein Lithuania Luxembourg Macao Madagascar Malawi Malaysia Maldives Mali Malta Marshall Islands Martinique Mauritania Mauritius Mayotte Mexico Micronesia Moldova Monaco Mongolia Montenegro Montserrat Morocco Mozambique Myanmar Namibia Nauru Nepal Netherlands New Caledonia New Zealand Nicaragua Niger Nigeria Niue Norfolk Island North Macedonia Northern Mariana Islands Norway Oman Pakistan Palau Palestine, State of Panama Papua New Guinea Paraguay Peru Philippines Pitcairn Poland Portugal Puerto Rico Qatar Romania Russian Federation Rwanda Réunion Saint Barthélemy Saint Helena, Ascension and Tristan da Cunha Saint Kitts and Nevis Saint Lucia Saint Martin Saint Pierre and Miquelon Saint Vincent and the Grenadines Samoa San Marino Sao Tome and Principe Saudi Arabia Senegal Serbia Seychelles Sierra Leone Singapore Sint Maarten Slovakia Slovenia Solomon Islands Somalia South Africa South Georgia and the South Sandwich Islands South Sudan Spain Sri Lanka Sudan Suriname Svalbard and Jan Mayen Sweden Switzerland Syria Arab Republic Taiwan Tajikistan Tanzania, the United Republic of Thailand Timor-Leste Togo Tokelau Tonga Trinidad and Tobago Tunisia Turkmenistan Turks and Caicos Islands Tuvalu Türkiye US Minor Outlying Islands Uganda Ukraine United Arab Emirates United Kingdom United States Uruguay Uzbekistan Vanuatu Venezuela Viet Nam Virgin Islands, British Virgin Islands, U.S. Wallis and Futuna Western Sahara Yemen Zambia Zimbabwe Åland Islands WAIVER OF LIABILITY (Required) I hereby waive any right or cause of action arising as a result of my participation in The San Diego River Park Foundation's event, including transportation if provided, from which any liability may or could accrue against The San Diego River Park Foundation or the directors, volunteers and staff, collectively or individually as well as project sponsors or other partnering entities. Without limiting the generality of the foregoing, I agree that this waiver shall include any rights or causes of action resulting from personal injury to me or damage to my property sustained in connection with my participation during the event. I also hereby authorize and consent that The San Diego River Park Foundation has the right to copyright, publish, use, sell or assign any and all photographic pictures, videos, and/or sound recordings taken or made of me or the youth mentioned below or in which I or the youth mentioned below may be included in whole or part during the projects. I grant permission to The San Diego River Park Foundation to allow these images and/or recordings, which have been taken by or at the direction of the San Diego River Park Foundation to be put to legitimate use at their discretion. I relinquish all rights, title, or interest to any furnished products, reproductions, or facsimiles. I confirm that I have read and agree to the terms outlined above. Email I would like to receive free updates by email. Check all that apply. (SDRPF will not sell or share your information with others.) Sign up for our newsletter, updates, and event information. We will not sell your information. Youth / Family Education Programs Volunteer Opportunities Becoming a member Something else Signature (Required) gform.initializeOnLoaded( function() {gformInitSpinner( 7, 'https://sandiegoriver.org/wp-content/plugins/gravityforms/images/spinner.svg', true );jQuery('#gform_ajax_frame_7').on('load',function(){var contents = jQuery(this).contents().find('*').html();var is_postback = contents.indexOf('GF_AJAX_POSTBACK') >= 0;if(!is_postback){return;}var form_content = jQuery(this).contents().find('#gform_wrapper_7');var is_confirmation = jQuery(this).contents().find('#gform_confirmation_wrapper_7').length > 0;var is_redirect = contents.indexOf('gformRedirect(){') >= 0;var is_form = form_content.length > 0 && ! is_redirect && ! is_confirmation;var mt = parseInt(jQuery('html').css('margin-top'), 10) + parseInt(jQuery('body').css('margin-top'), 10) + 100;if(is_form){jQuery('#gform_wrapper_7').html(form_content.html());if(form_content.hasClass('gform_validation_error')){jQuery('#gform_wrapper_7').addClass('gform_validation_error');} else {jQuery('#gform_wrapper_7').removeClass('gform_validation_error');}setTimeout( function() { /* delay the scroll by 50 milliseconds to fix a bug in chrome */ }, 50 );if(window['gformInitDatepicker']) {gformInitDatepicker();}if(window['gformInitPriceFields']) {gformInitPriceFields();}var current_page = jQuery('#gform_source_page_number_7').val();gformInitSpinner( 7, 'https://sandiegoriver.org/wp-content/plugins/gravityforms/images/spinner.svg', true );jQuery(document).trigger('gform_page_loaded', [7, current_page]);window['gf_submitting_7'] = false;}else if(!is_redirect){var confirmation_content = jQuery(this).contents().find('.GF_AJAX_POSTBACK').html();if(!confirmation_content){confirmation_content = contents;}jQuery('#gform_wrapper_7').replaceWith(confirmation_content);jQuery(document).trigger('gform_confirmation_loaded', [7]);window['gf_submitting_7'] = false;wp.a11y.speak(jQuery('#gform_confirmation_message_7').text());}else{jQuery('#gform_7').append(contents);if(window['gformRedirect']) {gformRedirect();}}jQuery(document).trigger(\"gform_pre_post_render\", [{ formId: \"7\", currentPage: \"current_page\", abort: function() { this.preventDefault(); } }]); if (event && event.defaultPrevented) { return; } const gformWrapperDiv = document.getElementById( \"gform_wrapper_7\" ); if ( gformWrapperDiv ) { const visibilitySpan = document.createElement( \"span\" ); visibilitySpan.id = \"gform_visibility_test_7\"; gformWrapperDiv.insertAdjacentElement( \"afterend\", visibilitySpan ); } const visibilityTestDiv = document.getElementById( \"gform_visibility_test_7\" ); let postRenderFired = false; function triggerPostRender() { if ( postRenderFired ) { return; } postRenderFired = true; gform.core.triggerPostRenderEvents( 7, current_page ); if ( visibilityTestDiv ) { visibilityTestDiv.parentNode.removeChild( visibilityTestDiv ); } } function debounce( func, wait, immediate ) { var timeout; return function() { var context = this, args = arguments; var later = function() { timeout = null; if ( !immediate ) func.apply( context, args ); }; var callNow = immediate && !timeout; clearTimeout( timeout ); timeout = setTimeout( later, wait ); if ( callNow ) func.apply( context, args ); }; } const debouncedTriggerPostRender = debounce( function() { triggerPostRender(); }, 200 ); if ( visibilityTestDiv && visibilityTestDiv.offsetParent === null ) { const observer = new MutationObserver( ( mutations ) => { mutations.forEach( ( mutation ) => { if ( mutation.type === 'attributes' && visibilityTestDiv.offsetParent !== null ) { debouncedTriggerPostRender(); observer.disconnect(); } }); }); observer.observe( document.body, { attributes: true, childList: false, subtree: true, attributeFilter: [ 'style', 'class' ], }); } else { triggerPostRender(); } } );} );",
+  "description": "Are you in a Halloween mood? Join us for a fun evening Halloween adventure! Stroll along the river as we listen and look for bats and moths and explore the wonders of the nighttime world. We’ll eavesdrop on eerie echolocation calls using bioacoustics and attract moths to our UV light station for up-close observation. All ages are welcome to this slightly spooky Nature Night! Be sure to sign up early—space is limited, and our Nature Nights events fill up quickly. Please bring a flashlight or headlamp, a camp chair for the mothing portion, and wear long pants and closed-toe shoes. Check out this news article by KPBS: Bat Season has begun in San Diego , where Natalie Borchardt and Don Endicott talk about the importance of bats in San Diego County. Consider donating to support our bat conservation program! Follow this link to learn more—every bit of support helps us protect more bats !\" THIS SPECIAL HALLOWEEN EVENT HAS A REGISTRATION FEE OF $20 EVENT WAIVER OF LIABILITY - San Diego River Park Foundation Email This field is for validation purposes and should be left unchanged. Date of Event (this is the date the event will occur) MM slash DD slash YYYY Name (Required) First Last Cell Phone (in case of emergency) (Required) Address (Required) Street Address Address Line 2 City State / Province / Region ZIP / Postal Code Country Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island Brazil British Indian Ocean Territory Brunei Darussalam Bulgaria Burkina Faso Burundi Cabo Verde Cambodia Cameroon Canada Cayman Islands Central African Republic Chad Chile China Christmas Island Cocos Islands Colombia Comoros Congo Congo, Democratic Republic of the Cook Islands Costa Rica Croatia Cuba Curaçao Cyprus Czechia Côte d&#039;Ivoire Denmark Djibouti Dominica Dominican Republic Ecuador Egypt El Salvador Equatorial Guinea Eritrea Estonia Eswatini Ethiopia Falkland Islands Faroe Islands Fiji Finland France French Guiana French Polynesia French Southern Territories Gabon Gambia Georgia Germany Ghana Gibraltar Greece Greenland Grenada Guadeloupe Guam Guatemala Guernsey Guinea Guinea-Bissau Guyana Haiti Heard Island and McDonald Islands Holy See Honduras Hong Kong Hungary Iceland India Indonesia Iran Iraq Ireland Isle of Man Israel Italy Jamaica Japan Jersey Jordan Kazakhstan Kenya Kiribati Korea, Democratic People&#039;s Republic of Korea, Republic of Kuwait Kyrgyzstan Lao People&#039;s Democratic Republic Latvia Lebanon Lesotho Liberia Libya Liechtenstein Lithuania Luxembourg Macao Madagascar Malawi Malaysia Maldives Mali Malta Marshall Islands Martinique Mauritania Mauritius Mayotte Mexico Micronesia Moldova Monaco Mongolia Montenegro Montserrat Morocco Mozambique Myanmar Namibia Nauru Nepal Netherlands New Caledonia New Zealand Nicaragua Niger Nigeria Niue Norfolk Island North Macedonia Northern Mariana Islands Norway Oman Pakistan Palau Palestine, State of Panama Papua New Guinea Paraguay Peru Philippines Pitcairn Poland Portugal Puerto Rico Qatar Romania Russian Federation Rwanda Réunion Saint Barthélemy Saint Helena, Ascension and Tristan da Cunha Saint Kitts and Nevis Saint Lucia Saint Martin Saint Pierre and Miquelon Saint Vincent and the Grenadines Samoa San Marino Sao Tome and Principe Saudi Arabia Senegal Serbia Seychelles Sierra Leone Singapore Sint Maarten Slovakia Slovenia Solomon Islands Somalia South Africa South Georgia and the South Sandwich Islands South Sudan Spain Sri Lanka Sudan Suriname Svalbard and Jan Mayen Sweden Switzerland Syria Arab Republic Taiwan Tajikistan Tanzania, the United Republic of Thailand Timor-Leste Togo Tokelau Tonga Trinidad and Tobago Tunisia Turkmenistan Turks and Caicos Islands Tuvalu Türkiye US Minor Outlying Islands Uganda Ukraine United Arab Emirates United Kingdom United States Uruguay Uzbekistan Vanuatu Venezuela Viet Nam Virgin Islands, British Virgin Islands, U.S. Wallis and Futuna Western Sahara Yemen Zambia Zimbabwe Åland Islands WAIVER OF LIABILITY (Required) I hereby waive any right or cause of action arising as a result of my participation in The San Diego River Park Foundation's event, including transportation if provided, from which any liability may or could accrue against The San Diego River Park Foundation or the directors, volunteers and staff, collectively or individually as well as project sponsors or other partnering entities. Without limiting the generality of the foregoing, I agree that this waiver shall include any rights or causes of action resulting from personal injury to me or damage to my property sustained in connection with my participation during the event. I also hereby authorize and consent that The San Diego River Park Foundation has the right to copyright, publish, use, sell or assign any and all photographic pictures, videos, and/or sound recordings taken or made of me or the youth mentioned below or in which I or the youth mentioned below may be included in whole or part during the projects. I grant permission to The San Diego River Park Foundation to allow these images and/or recordings, which have been taken by or at the direction of the San Diego River Park Foundation to be put to legitimate use at their discretion. I relinquish all rights, title, or interest to any furnished products, reproductions, or facsimiles. I confirm that I have read and agree to the terms outlined above. Email I would like to receive free updates by email. Check all that apply. (SDRPF will not sell or share your information with others.) Sign up for our newsletter, updates, and event information. We will not sell your information. Youth / Family Education Programs Volunteer Opportunities Becoming a member Something else Signature (Required) gform.initializeOnLoaded( function() {gformInitSpinner( 7, 'https://sandiegoriver.org/wp-content/plugins/gravityforms/images/spinner.svg', true );jQuery('#gform_ajax_frame_7').on('load',function(){var contents = jQuery(this).contents().find('*').html();var is_postback = contents.indexOf('GF_AJAX_POSTBACK') >= 0;if(!is_postback){return;}var form_content = jQuery(this).contents().find('#gform_wrapper_7');var is_confirmation = jQuery(this).contents().find('#gform_confirmation_wrapper_7').length > 0;var is_redirect = contents.indexOf('gformRedirect(){') >= 0;var is_form = form_content.length > 0 && ! is_redirect && ! is_confirmation;var mt = parseInt(jQuery('html').css('margin-top'), 10) + parseInt(jQuery('body').css('margin-top'), 10) + 100;if(is_form){jQuery('#gform_wrapper_7').html(form_content.html());if(form_content.hasClass('gform_validation_error')){jQuery('#gform_wrapper_7').addClass('gform_validation_error');} else {jQuery('#gform_wrapper_7').removeClass('gform_validation_error');}setTimeout( function() { /* delay the scroll by 50 milliseconds to fix a bug in chrome */ }, 50 );if(window['gformInitDatepicker']) {gformInitDatepicker();}if(window['gformInitPriceFields']) {gformInitPriceFields();}var current_page = jQuery('#gform_source_page_number_7').val();gformInitSpinner( 7, 'https://sandiegoriver.org/wp-content/plugins/gravityforms/images/spinner.svg', true );jQuery(document).trigger('gform_page_loaded', [7, current_page]);window['gf_submitting_7'] = false;}else if(!is_redirect){var confirmation_content = jQuery(this).contents().find('.GF_AJAX_POSTBACK').html();if(!confirmation_content){confirmation_content = contents;}jQuery('#gform_wrapper_7').replaceWith(confirmation_content);jQuery(document).trigger('gform_confirmation_loaded', [7]);window['gf_submitting_7'] = false;wp.a11y.speak(jQuery('#gform_confirmation_message_7').text());}else{jQuery('#gform_7').append(contents);if(window['gformRedirect']) {gformRedirect();}}jQuery(document).trigger(\"gform_pre_post_render\", [{ formId: \"7\", currentPage: \"current_page\", abort: function() { this.preventDefault(); } }]); if (event && event.defaultPrevented) { return; } const gformWrapperDiv = document.getElementById( \"gform_wrapper_7\" ); if ( gformWrapperDiv ) { const visibilitySpan = document.createElement( \"span\" ); visibilitySpan.id = \"gform_visibility_test_7\"; gformWrapperDiv.insertAdjacentElement( \"afterend\", visibilitySpan ); } const visibilityTestDiv = document.getElementById( \"gform_visibility_test_7\" ); let postRenderFired = false; function triggerPostRender() { if ( postRenderFired ) { return; } postRenderFired = true; gform.core.triggerPostRenderEvents( 7, current_page ); if ( visibilityTestDiv ) { visibilityTestDiv.parentNode.removeChild( visibilityTestDiv ); } } function debounce( func, wait, immediate ) { var timeout; return function() { var context = this, args = arguments; var later = function() { timeout = null; if ( !immediate ) func.apply( context, args ); }; var callNow = immediate && !timeout; clearTimeout( timeout ); timeout = setTimeout( later, wait ); if ( callNow ) func.apply( context, args ); }; } const debouncedTriggerPostRender = debounce( function() { triggerPostRender(); }, 200 ); if ( visibilityTestDiv && visibilityTestDiv.offsetParent === null ) { const observer = new MutationObserver( ( mutations ) => { mutations.forEach( ( mutation ) => { if ( mutation.type === 'attributes' && visibilityTestDiv.offsetParent !== null ) { debouncedTriggerPostRender(); observer.disconnect(); } }); }); observer.observe( document.body, { attributes: true, childList: false, subtree: true, attributeFilter: [ 'style', 'class' ], }); } else { triggerPostRender(); } } );} );",
   "link": "https://sandiegoriver.org/event/halloween-edition-nature-nights-bat-walk-and-moths/",
   "availability": "",
   "date_start": "2026-10-03T18:00:00-07:00",
   "date_end": "2026-10-03T20:00:00-07:00",
   "age_grade_level": [
-   "Family",
-   "Grades 6-8",
-   "Grades 9-12",
-   "Adult"
+   "Family"
   ],
   "cost_range": "Less than $25",
   "time_of_day": [
@@ -8705,8 +8631,7 @@
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
-   "Biology / LifeSciences",
-   "Earth Science/Ecology"
+   "Biology / LifeSciences"
   ],
   "specific_attention": [],
   "financial_support": "No",
@@ -8755,7 +8680,7 @@
   "contact_phone": "",
   "logo_src": "anzaborrego_foundation.jpeg",
   "eligibility": "",
-  "image_src": "3764ec194c0e1f32.png"
+  "image_src": ""
  },
  {
   "slug": "https_www_solanacenter_org_events_find_us_in_your_community_july_2026",
@@ -9214,20 +9139,18 @@
   "title": "Discovery Table - Owl Pellets",
   "partner_name": "Mission Trails Regional Park Foundation",
   "partner_id": null,
-  "description": "Stop by the Discovery Table in the lobby of the Visitor Center anytime between 10 a.m. and 1 p.m. and learn about Owl Pellets from MTRP Trail Guides. You will get a chance to dissect one and take home some of its contents!\n\nDiscovery tables are set up on the second Saturday of every month and some holidays at the Visitor Center and on selected Saturdays during the summer at Kumeyaay Lake Campground.  Tables feature hands-on activities and take-home materials for kids and adults.  Topics vary month-to-month.\n\nUpcoming Topics:\n\n  *   October 31 – Spiders\n  *\nOctober 31 – Bats\n  *\nNovember 7 – Mountain Lions\n  *   November 11 – Kumeyaay Games",
+  "description": "Stop by the Discovery Table in the lobby of the Visitor Center anytime between 10 a.m. and 1 p.m. to learn all about Owl Pellets from MTRP Trail Guides. You will even get a chance to dissect one and take home some of its contents!\n\nDiscovery tables are set up on the second Saturday of every month and some holidays.  Tables feature hands-on activities and take-home materials for kids and adults.  Topics vary month-to-month.\n\nUpcoming Topics:\n\n  *   September 13 – Creatures in Camouflage\n  *   October 11 – Plant Parts\n  *   October 25 – Spiders\n  *   November 8 – Mountain Lions\n  *   November 10 – Kumeyaay Children’s Games and Toys",
   "link": "",
   "availability": "Repeats 3 times through 2026-10-10",
   "date_start": "2026-10-10T10:00:00-07:00",
   "date_end": "2026-10-10T13:00:00-07:00",
   "age_grade_level": [
    "Family",
-   "Grades 6-8",
-   "Adult"
+   "Grades 6-8"
   ],
   "cost_range": "Free",
   "time_of_day": [
-   "Morning",
-   "Afternoon"
+   "Morning"
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
@@ -9237,7 +9160,7 @@
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "Mission Trails Regional Park Visitor Center (1 Father Junipero Serra Trl, San Diego, CA 92119, United States)",
+  "location": "Mount Torrey Ranch Park Visitor Center",
   "latitude": "",
   "longitude": "",
   "contact_name": "",
@@ -9252,7 +9175,7 @@
   "title": "Discovery Table - Bats",
   "partner_name": "Mission Trails Regional Park Foundation",
   "partner_id": null,
-  "description": "Stop by the Discovery Table in the lobby of the Visitor Center anytime between 10 a.m. and 1 p.m. and learn about the amazing world of bats from MTRP Trail Guides. Learn how bats fly with their hands and find food with sound.\n\nDiscovery tables are set up on the second Saturday of every month and some holidays at the Visitor Center and on selected Saturdays during the summer at Kumeyaay Lake Campground.  Tables feature hands-on activities and take-home materials for kids and adults.  Topics vary month-to-month.\n\nUpcoming Topics:\n\n  *\nNovember 7 – Mountain Lions\n  *\nNovember 11 – Kumeyaay Games",
+  "description": "Stop by the Discovery Table in the lobby of the Visitor Center anytime between 10 a.m. and 1 p.m. and learn about the amazing world of bats from MTRP Trail Guides. Learn how bats fly with their hands and find food with sound.\n\nDiscovery tables are set up on the second Saturday of every month and some holidays at the Visitor Center and on selected Saturdays during the summer at Kumeyaay Lake Campground.  Tables feature hands-on activities and take-home materials for kids and adults.  Topics vary month-to-month.\n\nUpcoming Topics:\n\n  *   June 13 – Mountain Lions\n  *   June 20 – Leave No Trace (at Kumeyaay Lake Campground)",
   "link": "",
   "availability": "Repeats 2 times through 2026-10-10",
   "date_start": "2026-10-10T10:00:00-07:00",
@@ -9262,13 +9185,11 @@
   ],
   "cost_range": "Free",
   "time_of_day": [
-   "Morning",
-   "Afternoon"
+   "Morning"
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
-   "Biology / LifeSciences",
-   "Earth Science/Ecology"
+   "Biology / LifeSciences"
   ],
   "specific_attention": [],
   "financial_support": "No",
@@ -9604,6 +9525,41 @@
   "logo_src": "",
   "eligibility": "",
   "image_src": "081dcdbe2de096b4.png"
+ },
+ {
+  "slug": "https_balboapark_org_event_meteorites_as_artistic_matter",
+  "title": "Meteorites as Artistic Matter",
+  "partner_name": "Balboa Park",
+  "partner_id": null,
+  "description": "Speakers: Ulrike Arnold , Artist; Gerard van Belle, PhD , Former Director of Science at Lowell Observatory; and Rachel Jans, PhD , Curator of Modern and Contemporary Art at The San Diego Museum of Art MOPA@SDMA Joan and Irwin Jacobs Theater   Meteorites as Artistic Matter brings together internationally acclaimed artist Ulrike Arnold, astronomer Gerard van Belle, and the Museum’s Curator of Modern and Contemporary Art Rachel Jans, PhD, for a fascinating interdisciplinary conversation exploring the intersection of art, science, and the cosmos. Known for incorporating meteorite dust and pigments gathered from some of the world’s most remote landscapes into her paintings, Arnold will discuss how celestial and earthly materials become powerful artistic media. Joined by van Belle’s astronomical perspective and Jans’s expertise on the work of Sigmar Polke, a German artist also known for incorporating unconventional materials into his work, and contemporary artistic practice, this engaging guest lecture offers a rare opportunity to discover how meteorites inspire creativity, expand our understanding of materiality, and connect artistic expression with the vast universe beyond our planet. Following the lecture, guests are invited to enjoy a guided tour led by our docent team.   Please note, this lecture is in-person only and held at the MOPA@SDMA Joan and Irwin Jacobs Theater in Balboa Park. $15 members and students | $20 seniors and military | $30 nonmembers This lecture is presented as a part of the Guest Lecture Series , which offers a platform for renowned scholars and experts from the art world to share their insights and knowledge on topics related to art history, art theory, and the museum’s collections.",
+  "link": "https://balboapark.org/event/meteorites-as-artistic-matter/",
+  "availability": "",
+  "date_start": "2026-10-16T10:00:00-07:00",
+  "date_end": "2026-10-16T11:00:00-07:00",
+  "age_grade_level": [
+   "Adult"
+  ],
+  "cost_range": "Less than $50",
+  "time_of_day": [
+   "Morning"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Earth Science/Ecology",
+   "Physics"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "San Diego Museum of Art, 1450 El Prado, San Diego, CA",
+  "latitude": "",
+  "longitude": "",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "",
+  "eligibility": "",
+  "image_src": "08d16bcba1e2cf76.webp"
  },
  {
   "slug": "guided_bird_walk_kumeyaay_lake_20261016",
@@ -10174,7 +10130,7 @@
   "title": "Halloween Edition Nature Nights: Bat Walk and Moths Haunted Trail at Peutz Creek! 10/24/26",
   "partner_name": "The San Diego River Park Foundation",
   "partner_id": 323,
-  "description": "Are you in a Halloween mood? Join us for a fun evening Halloween adventure! Stroll along Peutz Creek as we listen and look for bats and moths and explore the wonders of the nighttime world. We’ll eavesdrop on eerie echolocation calls using bioacoustics and attract moths to our UV light station for up-close observation. All ages are welcome to this slightly spooky Nature Night! Be sure to sign up early—space is limited, and our Nature Nights events fill up quickly. Here are a few tips to help you prepare for the event: Check-In: 6:45 PM, meet at the open parking area near the fruit trees Attire: Long pants and closed-toe shoes are strongly recommended Other Items to Bring: Reusable water bottle, light clothing layer Weather: Light rain will not cancel the event For safety reasons, no pets are allowed at this event There are no restroom facilities at this location Family friendly! Please note: You will lose cell service once you leave I-8 freeway onto Peutz Valley Road. The address to meet and park is a residence: 966 Peutz Valley Road. Check out this news article by KPBS: Bat Season has begun in San Diego , where Natalie Borchardt and Don Endicott talk about the importance of bats in San Diego County. Consider donating to support our bat conservation program! Follow this link to learn more—every bit of support helps us protect more bats !\" THIS SPECIAL HALLOWEEN EVENT HAS A REGISTRATION FEE OF $20 EVENT WAIVER OF LIABILITY - San Diego River Park Foundation LinkedIn This field is for validation purposes and should be left unchanged. Date of Event (this is the date the event will occur) MM slash DD slash YYYY Name (Required) First Last Cell Phone (in case of emergency) (Required) Address (Required) Street Address Address Line 2 City State / Province / Region ZIP / Postal Code Country Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island Brazil British Indian Ocean Territory Brunei Darussalam Bulgaria Burkina Faso Burundi Cabo Verde Cambodia Cameroon Canada Cayman Islands Central African Republic Chad Chile China Christmas Island Cocos Islands Colombia Comoros Congo Congo, Democratic Republic of the Cook Islands Costa Rica Croatia Cuba Curaçao Cyprus Czechia Côte d&#039;Ivoire Denmark Djibouti Dominica Dominican Republic Ecuador Egypt El Salvador Equatorial Guinea Eritrea Estonia Eswatini Ethiopia Falkland Islands Faroe Islands Fiji Finland France French Guiana French Polynesia French Southern Territories Gabon Gambia Georgia Germany Ghana Gibraltar Greece Greenland Grenada Guadeloupe Guam Guatemala Guernsey Guinea Guinea-Bissau Guyana Haiti Heard Island and McDonald Islands Holy See Honduras Hong Kong Hungary Iceland India Indonesia Iran Iraq Ireland Isle of Man Israel Italy Jamaica Japan Jersey Jordan Kazakhstan Kenya Kiribati Korea, Democratic People&#039;s Republic of Korea, Republic of Kuwait Kyrgyzstan Lao People&#039;s Democratic Republic Latvia Lebanon Lesotho Liberia Libya Liechtenstein Lithuania Luxembourg Macao Madagascar Malawi Malaysia Maldives Mali Malta Marshall Islands Martinique Mauritania Mauritius Mayotte Mexico Micronesia Moldova Monaco Mongolia Montenegro Montserrat Morocco Mozambique Myanmar Namibia Nauru Nepal Netherlands New Caledonia New Zealand Nicaragua Niger Nigeria Niue Norfolk Island North Macedonia Northern Mariana Islands Norway Oman Pakistan Palau Palestine, State of Panama Papua New Guinea Paraguay Peru Philippines Pitcairn Poland Portugal Puerto Rico Qatar Romania Russian Federation Rwanda Réunion Saint Barthélemy Saint Helena, Ascension and Tristan da Cunha Saint Kitts and Nevis Saint Lucia Saint Martin Saint Pierre and Miquelon Saint Vincent and the Grenadines Samoa San Marino Sao Tome and Principe Saudi Arabia Senegal Serbia Seychelles Sierra Leone Singapore Sint Maarten Slovakia Slovenia Solomon Islands Somalia South Africa South Georgia and the South Sandwich Islands South Sudan Spain Sri Lanka Sudan Suriname Svalbard and Jan Mayen Sweden Switzerland Syria Arab Republic Taiwan Tajikistan Tanzania, the United Republic of Thailand Timor-Leste Togo Tokelau Tonga Trinidad and Tobago Tunisia Turkmenistan Turks and Caicos Islands Tuvalu Türkiye US Minor Outlying Islands Uganda Ukraine United Arab Emirates United Kingdom United States Uruguay Uzbekistan Vanuatu Venezuela Viet Nam Virgin Islands, British Virgin Islands, U.S. Wallis and Futuna Western Sahara Yemen Zambia Zimbabwe Åland Islands WAIVER OF LIABILITY (Required) I hereby waive any right or cause of action arising as a result of my participation in The San Diego River Park Foundation's event, including transportation if provided, from which any liability may or could accrue against The San Diego River Park Foundation or the directors, volunteers and staff, collectively or individually as well as project sponsors or other partnering entities. Without limiting the generality of the foregoing, I agree that this waiver shall include any rights or causes of action resulting from personal injury to me or damage to my property sustained in connection with my participation during the event. I also hereby authorize and consent that The San Diego River Park Foundation has the right to copyright, publish, use, sell or assign any and all photographic pictures, videos, and/or sound recordings taken or made of me or the youth mentioned below or in which I or the youth mentioned below may be included in whole or part during the projects. I grant permission to The San Diego River Park Foundation to allow these images and/or recordings, which have been taken by or at the direction of the San Diego River Park Foundation to be put to legitimate use at their discretion. I relinquish all rights, title, or interest to any furnished products, reproductions, or facsimiles. I confirm that I have read and agree to the terms outlined above. Email I would like to receive free updates by email. Check all that apply. (SDRPF will not sell or share your information with others.) Sign up for our newsletter, updates, and event information. We will not sell your information. Youth / Family Education Programs Volunteer Opportunities Becoming a member Something else Signature (Required) gform.initializeOnLoaded( function() {gformInitSpinner( 7, 'https://sandiegoriver.org/wp-content/plugins/gravityforms/images/spinner.svg', true );jQuery('#gform_ajax_frame_7').on('load',function(){var contents = jQuery(this).contents().find('*').html();var is_postback = contents.indexOf('GF_AJAX_POSTBACK') >= 0;if(!is_postback){return;}var form_content = jQuery(this).contents().find('#gform_wrapper_7');var is_confirmation = jQuery(this).contents().find('#gform_confirmation_wrapper_7').length > 0;var is_redirect = contents.indexOf('gformRedirect(){') >= 0;var is_form = form_content.length > 0 && ! is_redirect && ! is_confirmation;var mt = parseInt(jQuery('html').css('margin-top'), 10) + parseInt(jQuery('body').css('margin-top'), 10) + 100;if(is_form){jQuery('#gform_wrapper_7').html(form_content.html());if(form_content.hasClass('gform_validation_error')){jQuery('#gform_wrapper_7').addClass('gform_validation_error');} else {jQuery('#gform_wrapper_7').removeClass('gform_validation_error');}setTimeout( function() { /* delay the scroll by 50 milliseconds to fix a bug in chrome */ }, 50 );if(window['gformInitDatepicker']) {gformInitDatepicker();}if(window['gformInitPriceFields']) {gformInitPriceFields();}var current_page = jQuery('#gform_source_page_number_7').val();gformInitSpinner( 7, 'https://sandiegoriver.org/wp-content/plugins/gravityforms/images/spinner.svg', true );jQuery(document).trigger('gform_page_loaded', [7, current_page]);window['gf_submitting_7'] = false;}else if(!is_redirect){var confirmation_content = jQuery(this).contents().find('.GF_AJAX_POSTBACK').html();if(!confirmation_content){confirmation_content = contents;}jQuery('#gform_wrapper_7').replaceWith(confirmation_content);jQuery(document).trigger('gform_confirmation_loaded', [7]);window['gf_submitting_7'] = false;wp.a11y.speak(jQuery('#gform_confirmation_message_7').text());}else{jQuery('#gform_7').append(contents);if(window['gformRedirect']) {gformRedirect();}}jQuery(document).trigger(\"gform_pre_post_render\", [{ formId: \"7\", currentPage: \"current_page\", abort: function() { this.preventDefault(); } }]); if (event && event.defaultPrevented) { return; } const gformWrapperDiv = document.getElementById( \"gform_wrapper_7\" ); if ( gformWrapperDiv ) { const visibilitySpan = document.createElement( \"span\" ); visibilitySpan.id = \"gform_visibility_test_7\"; gformWrapperDiv.insertAdjacentElement( \"afterend\", visibilitySpan ); } const visibilityTestDiv = document.getElementById( \"gform_visibility_test_7\" ); let postRenderFired = false; function triggerPostRender() { if ( postRenderFired ) { return; } postRenderFired = true; gform.core.triggerPostRenderEvents( 7, current_page ); if ( visibilityTestDiv ) { visibilityTestDiv.parentNode.removeChild( visibilityTestDiv ); } } function debounce( func, wait, immediate ) { var timeout; return function() { var context = this, args = arguments; var later = function() { timeout = null; if ( !immediate ) func.apply( context, args ); }; var callNow = immediate && !timeout; clearTimeout( timeout ); timeout = setTimeout( later, wait ); if ( callNow ) func.apply( context, args ); }; } const debouncedTriggerPostRender = debounce( function() { triggerPostRender(); }, 200 ); if ( visibilityTestDiv && visibilityTestDiv.offsetParent === null ) { const observer = new MutationObserver( ( mutations ) => { mutations.forEach( ( mutation ) => { if ( mutation.type === 'attributes' && visibilityTestDiv.offsetParent !== null ) { debouncedTriggerPostRender(); observer.disconnect(); } }); }); observer.observe( document.body, { attributes: true, childList: false, subtree: true, attributeFilter: [ 'style', 'class' ], }); } else { triggerPostRender(); } } );} );",
+  "description": "Are you in a Halloween mood? Join us for a fun evening Halloween adventure! Stroll along Peutz Creek as we listen and look for bats and moths and explore the wonders of the nighttime world. We’ll eavesdrop on eerie echolocation calls using bioacoustics and attract moths to our UV light station for up-close observation. All ages are welcome to this slightly spooky Nature Night! Be sure to sign up early—space is limited, and our Nature Nights events fill up quickly. Here are a few tips to help you prepare for the event: Check-In: 6:45 PM, meet at the open parking area near the fruit trees Attire: Long pants and closed-toe shoes are strongly recommended Other Items to Bring: Reusable water bottle, light clothing layer Weather: Light rain will not cancel the event For safety reasons, no pets are allowed at this event There are no restroom facilities at this location Family friendly! Please note: You will lose cell service once you leave I-8 freeway onto Peutz Valley Road. The address to meet and park is a residence: 966 Peutz Valley Road. Check out this news article by KPBS: Bat Season has begun in San Diego , where Natalie Borchardt and Don Endicott talk about the importance of bats in San Diego County. Consider donating to support our bat conservation program! Follow this link to learn more—every bit of support helps us protect more bats !\" THIS SPECIAL HALLOWEEN EVENT HAS A REGISTRATION FEE OF $20 EVENT WAIVER OF LIABILITY - San Diego River Park Foundation Instagram This field is for validation purposes and should be left unchanged. Date of Event (this is the date the event will occur) MM slash DD slash YYYY Name (Required) First Last Cell Phone (in case of emergency) (Required) Address (Required) Street Address Address Line 2 City State / Province / Region ZIP / Postal Code Country Afghanistan Albania Algeria American Samoa Andorra Angola Anguilla Antarctica Antigua and Barbuda Argentina Armenia Aruba Australia Austria Azerbaijan Bahamas Bahrain Bangladesh Barbados Belarus Belgium Belize Benin Bermuda Bhutan Bolivia Bonaire, Sint Eustatius and Saba Bosnia and Herzegovina Botswana Bouvet Island Brazil British Indian Ocean Territory Brunei Darussalam Bulgaria Burkina Faso Burundi Cabo Verde Cambodia Cameroon Canada Cayman Islands Central African Republic Chad Chile China Christmas Island Cocos Islands Colombia Comoros Congo Congo, Democratic Republic of the Cook Islands Costa Rica Croatia Cuba Curaçao Cyprus Czechia Côte d&#039;Ivoire Denmark Djibouti Dominica Dominican Republic Ecuador Egypt El Salvador Equatorial Guinea Eritrea Estonia Eswatini Ethiopia Falkland Islands Faroe Islands Fiji Finland France French Guiana French Polynesia French Southern Territories Gabon Gambia Georgia Germany Ghana Gibraltar Greece Greenland Grenada Guadeloupe Guam Guatemala Guernsey Guinea Guinea-Bissau Guyana Haiti Heard Island and McDonald Islands Holy See Honduras Hong Kong Hungary Iceland India Indonesia Iran Iraq Ireland Isle of Man Israel Italy Jamaica Japan Jersey Jordan Kazakhstan Kenya Kiribati Korea, Democratic People&#039;s Republic of Korea, Republic of Kuwait Kyrgyzstan Lao People&#039;s Democratic Republic Latvia Lebanon Lesotho Liberia Libya Liechtenstein Lithuania Luxembourg Macao Madagascar Malawi Malaysia Maldives Mali Malta Marshall Islands Martinique Mauritania Mauritius Mayotte Mexico Micronesia Moldova Monaco Mongolia Montenegro Montserrat Morocco Mozambique Myanmar Namibia Nauru Nepal Netherlands New Caledonia New Zealand Nicaragua Niger Nigeria Niue Norfolk Island North Macedonia Northern Mariana Islands Norway Oman Pakistan Palau Palestine, State of Panama Papua New Guinea Paraguay Peru Philippines Pitcairn Poland Portugal Puerto Rico Qatar Romania Russian Federation Rwanda Réunion Saint Barthélemy Saint Helena, Ascension and Tristan da Cunha Saint Kitts and Nevis Saint Lucia Saint Martin Saint Pierre and Miquelon Saint Vincent and the Grenadines Samoa San Marino Sao Tome and Principe Saudi Arabia Senegal Serbia Seychelles Sierra Leone Singapore Sint Maarten Slovakia Slovenia Solomon Islands Somalia South Africa South Georgia and the South Sandwich Islands South Sudan Spain Sri Lanka Sudan Suriname Svalbard and Jan Mayen Sweden Switzerland Syria Arab Republic Taiwan Tajikistan Tanzania, the United Republic of Thailand Timor-Leste Togo Tokelau Tonga Trinidad and Tobago Tunisia Turkmenistan Turks and Caicos Islands Tuvalu Türkiye US Minor Outlying Islands Uganda Ukraine United Arab Emirates United Kingdom United States Uruguay Uzbekistan Vanuatu Venezuela Viet Nam Virgin Islands, British Virgin Islands, U.S. Wallis and Futuna Western Sahara Yemen Zambia Zimbabwe Åland Islands WAIVER OF LIABILITY (Required) I hereby waive any right or cause of action arising as a result of my participation in The San Diego River Park Foundation's event, including transportation if provided, from which any liability may or could accrue against The San Diego River Park Foundation or the directors, volunteers and staff, collectively or individually as well as project sponsors or other partnering entities. Without limiting the generality of the foregoing, I agree that this waiver shall include any rights or causes of action resulting from personal injury to me or damage to my property sustained in connection with my participation during the event. I also hereby authorize and consent that The San Diego River Park Foundation has the right to copyright, publish, use, sell or assign any and all photographic pictures, videos, and/or sound recordings taken or made of me or the youth mentioned below or in which I or the youth mentioned below may be included in whole or part during the projects. I grant permission to The San Diego River Park Foundation to allow these images and/or recordings, which have been taken by or at the direction of the San Diego River Park Foundation to be put to legitimate use at their discretion. I relinquish all rights, title, or interest to any furnished products, reproductions, or facsimiles. I confirm that I have read and agree to the terms outlined above. Email I would like to receive free updates by email. Check all that apply. (SDRPF will not sell or share your information with others.) Sign up for our newsletter, updates, and event information. We will not sell your information. Youth / Family Education Programs Volunteer Opportunities Becoming a member Something else Signature (Required) gform.initializeOnLoaded( function() {gformInitSpinner( 7, 'https://sandiegoriver.org/wp-content/plugins/gravityforms/images/spinner.svg', true );jQuery('#gform_ajax_frame_7').on('load',function(){var contents = jQuery(this).contents().find('*').html();var is_postback = contents.indexOf('GF_AJAX_POSTBACK') >= 0;if(!is_postback){return;}var form_content = jQuery(this).contents().find('#gform_wrapper_7');var is_confirmation = jQuery(this).contents().find('#gform_confirmation_wrapper_7').length > 0;var is_redirect = contents.indexOf('gformRedirect(){') >= 0;var is_form = form_content.length > 0 && ! is_redirect && ! is_confirmation;var mt = parseInt(jQuery('html').css('margin-top'), 10) + parseInt(jQuery('body').css('margin-top'), 10) + 100;if(is_form){jQuery('#gform_wrapper_7').html(form_content.html());if(form_content.hasClass('gform_validation_error')){jQuery('#gform_wrapper_7').addClass('gform_validation_error');} else {jQuery('#gform_wrapper_7').removeClass('gform_validation_error');}setTimeout( function() { /* delay the scroll by 50 milliseconds to fix a bug in chrome */ }, 50 );if(window['gformInitDatepicker']) {gformInitDatepicker();}if(window['gformInitPriceFields']) {gformInitPriceFields();}var current_page = jQuery('#gform_source_page_number_7').val();gformInitSpinner( 7, 'https://sandiegoriver.org/wp-content/plugins/gravityforms/images/spinner.svg', true );jQuery(document).trigger('gform_page_loaded', [7, current_page]);window['gf_submitting_7'] = false;}else if(!is_redirect){var confirmation_content = jQuery(this).contents().find('.GF_AJAX_POSTBACK').html();if(!confirmation_content){confirmation_content = contents;}jQuery('#gform_wrapper_7').replaceWith(confirmation_content);jQuery(document).trigger('gform_confirmation_loaded', [7]);window['gf_submitting_7'] = false;wp.a11y.speak(jQuery('#gform_confirmation_message_7').text());}else{jQuery('#gform_7').append(contents);if(window['gformRedirect']) {gformRedirect();}}jQuery(document).trigger(\"gform_pre_post_render\", [{ formId: \"7\", currentPage: \"current_page\", abort: function() { this.preventDefault(); } }]); if (event && event.defaultPrevented) { return; } const gformWrapperDiv = document.getElementById( \"gform_wrapper_7\" ); if ( gformWrapperDiv ) { const visibilitySpan = document.createElement( \"span\" ); visibilitySpan.id = \"gform_visibility_test_7\"; gformWrapperDiv.insertAdjacentElement( \"afterend\", visibilitySpan ); } const visibilityTestDiv = document.getElementById( \"gform_visibility_test_7\" ); let postRenderFired = false; function triggerPostRender() { if ( postRenderFired ) { return; } postRenderFired = true; gform.core.triggerPostRenderEvents( 7, current_page ); if ( visibilityTestDiv ) { visibilityTestDiv.parentNode.removeChild( visibilityTestDiv ); } } function debounce( func, wait, immediate ) { var timeout; return function() { var context = this, args = arguments; var later = function() { timeout = null; if ( !immediate ) func.apply( context, args ); }; var callNow = immediate && !timeout; clearTimeout( timeout ); timeout = setTimeout( later, wait ); if ( callNow ) func.apply( context, args ); }; } const debouncedTriggerPostRender = debounce( function() { triggerPostRender(); }, 200 ); if ( visibilityTestDiv && visibilityTestDiv.offsetParent === null ) { const observer = new MutationObserver( ( mutations ) => { mutations.forEach( ( mutation ) => { if ( mutation.type === 'attributes' && visibilityTestDiv.offsetParent !== null ) { debouncedTriggerPostRender(); observer.disconnect(); } }); }); observer.observe( document.body, { attributes: true, childList: false, subtree: true, attributeFilter: [ 'style', 'class' ], }); } else { triggerPostRender(); } } );} );",
   "link": "https://sandiegoriver.org/event/halloween-edition-nature-nights-bat-walk-and-moths-2/",
   "availability": "",
   "date_start": "2026-10-24T18:45:00-07:00",
@@ -10238,6 +10194,40 @@
   "logo_src": "",
   "eligibility": "",
   "image_src": "16aad03ea15eeb43.webp"
+ },
+ {
+  "slug": "computer_basics_20261026",
+  "title": "Computer Basics",
+  "partner_name": "Oceanside Public Library",
+  "partner_id": null,
+  "description": "Basic computer skills. Class is drop-in and is designed to help users get more comfortable with technology.",
+  "link": "",
+  "availability": "Repeats 10 times through 2026-12-28",
+  "date_start": "2026-10-26T16:00:00-07:00",
+  "date_end": "2026-12-28T20:00:00-08:00",
+  "age_grade_level": [
+   "Adult"
+  ],
+  "cost_range": "",
+  "time_of_day": [
+   "Evening"
+  ],
+  "opportunity_type": "Out-of-school Programs",
+  "areas_of_interest": [
+   "Coding/Computer Science/Cyber Security"
+  ],
+  "specific_attention": [],
+  "financial_support": "No",
+  "ngss_aligned": "No",
+  "location": "3861 Mission Ave, Oceanside, CA, 92058, US",
+  "latitude": "",
+  "longitude": "",
+  "contact_name": "",
+  "contact_email": "",
+  "contact_phone": "",
+  "logo_src": "",
+  "eligibility": "",
+  "image_src": ""
  },
  {
   "slug": "toddler_storytime_happy_halloween_20261027",
@@ -10560,14 +10550,13 @@
   "title": "Discovery Table - Mountain Lions",
   "partner_name": "Mission Trails Regional Park Foundation",
   "partner_id": null,
-  "description": "Stop by the Discovery Table in the lobby of the Visitor Center anytime between 10 a.m. and 1 p.m. and learn about mountain lions' size, range, lifestyle, and place in the food chain from MTRP Trail Guides.  See if you can correctly answer questions about their behavior.  Learn about sightings in MTRP and create your own full-size mountain lion track stamp to take home.\n\nDiscovery tables are set up on the second Saturday of every month and some holidays at the Visitor Center and on selected Saturdays during the summer at Kumeyaay Lake Campground.  Tables feature hands-on activities and take-home materials for kids and adults.  Topics vary month-to-month.\n\nUpcoming Topics:\n\n  *\nNovember 11 – Kumeyaay Games\n  *\nDecember 12 – Animal Tracks",
+  "description": "Stop by the Discovery Table in the lobby of the Visitor Center anytime between 10 a.m. and 1 p.m. and learn about mountain lions' size, range, lifestyle, and place in the food chain from MTRP Trail Guides.  See if you can correctly answer questions about their behavior.  Learn about sightings in MTRP and create your own full-size mountain lion track stamp to take home.\n\nDiscovery tables are set up on the second Saturday of every month and some holidays at the Visitor Center and on selected Saturdays during the summer at Kumeyaay Lake Campground.  Tables feature hands-on activities and take-home materials for kids and adults.  Topics vary month-to-month.\n\nUpcoming Topics:\n\n  *   August 8 – Creatures in Camouflage\n  *   August 15 – Spiders (at Kumeyaay Lake Campground)\n  *   September 12 – Animal Skulls\n  *   September 19 – Kumeyaay Games (at Kumeyaay Lake Campground)",
   "link": "",
   "availability": "Repeats 5 times through 2026-11-08",
   "date_start": "2026-11-08T10:00:00-08:00",
   "date_end": "2026-11-08T13:00:00-08:00",
   "age_grade_level": [
-   "Family",
-   "Grades 6-8"
+   "Family"
   ],
   "cost_range": "Free",
   "time_of_day": [
@@ -10696,7 +10685,7 @@
   "contact_phone": "",
   "logo_src": "san_diego_automotive_museum.png",
   "eligibility": "",
-  "image_src": "bbb695fb2c7b92e6.jpg"
+  "image_src": ""
  },
  {
   "slug": "https_sdautomuseum_org_education_school_programs_camps_veterans_day_camp",
@@ -10731,7 +10720,7 @@
   "contact_phone": "",
   "logo_src": "san_diego_automotive_museum.png",
   "eligibility": "",
-  "image_src": "bbb695fb2c7b92e6.jpg"
+  "image_src": ""
  },
  {
   "slug": "pickle_lab_fast_and_easy_quick_pickles_20261112",
@@ -10838,7 +10827,7 @@
   "contact_phone": "",
   "logo_src": "anzaborrego_foundation.jpeg",
   "eligibility": "",
-  "image_src": "bc1c9d886241c88f.png"
+  "image_src": ""
  },
  {
   "slug": "https_balboapark_org_event_nat_talk_screening_why_dinosaurs",
@@ -10918,7 +10907,7 @@
   "title": "Guided Bird Walk - Oak Grove Loop",
   "partner_name": "Mission Trails Regional Park Foundation",
   "partner_id": null,
-  "description": "Join MTRP bird walk leaders for a guided bird walk on the Oak Grove Loop Trail.  A variety of habitats gives us the opportunity to see resident and migratory birds. We’ll stay alert for hawks that like to frequent this area.\n\nMeet in front of the Visitor Center.\n\nBring binoculars if you have them.  Wear sturdy, closed-toe shoes, and bring along water.  A hat and sunscreen are also recommended.  Walks are canceled if raining.\n\nUpcoming Bird Walks:\n\n  *   November 15 – Gate 9 and Kwaay Paay East.  Meet in the Kumeyaay Lake Campground day use parking lot.\n  *   December 19 – Lake Murray, Northwest Side. Meet on the northwest side of the lake. After entering at Murray Park Dr. and Belle Glade Ave., proceed along the driveway past a set of ballfields on your right and turn into the paved parking lot on your right.\n  *\nDecember 20 – Lake Murray, Northwest Side. Meet on the northwest side of the lake. After entering at Murray Park Dr. and Belle Glade Ave., proceed along the driveway past a set of ballfields on your right and turn into the paved parking lot on your right.",
+  "description": "Join MTRP bird walk leaders for a guided bird walk on the Oak Grove Loop Trail.  A variety of habitats gives us the opportunity to see resident and migratory birds. We’ll stay alert for hawks that like to frequent this area.\nMeet in front of the Visitor Center.\nBring binoculars if you have them.  Wear sturdy, closed-toe shoes, and bring along water.  A hat and sunscreen are also recommended.  Walks are canceled if raining.\nUpcoming Bird Walks:\n\n  *   November 21 – Oak Grove Loop. Meet in front of the Visitor Center.\n  *   December 18 – Lake Murray, Northwest Side. Meet on the northwest side of the lake. After entering at Murray Park Dr. and Belle Glade Ave., proceed along the driveway past a set of ballfields on your right and turn into the paved parking lot on your right.\n  *   December 19 – Lake Murray, Northwest Side. Meet on the northwest side of the lake. After entering at Murray Park Dr. and Belle Glade Ave., proceed along the driveway past a set of ballfields on your right and turn into the paved parking lot on your right.",
   "link": "",
   "availability": "Repeats 3 times through 2026-11-21",
   "date_start": "2026-11-21T08:00:00-08:00",
@@ -10929,7 +10918,7 @@
   ],
   "cost_range": "Free",
   "time_of_day": [
-   "Afternoon"
+   "Morning"
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
@@ -10939,7 +10928,7 @@
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "Oak Grove Loop Trail, Mt. Tamalpais Regional Park",
+  "location": "Mission Trails Regional Park, Oak Grove Loop Trail, San Diego, CA",
   "latitude": "",
   "longitude": "",
   "contact_name": "",
@@ -11059,7 +11048,7 @@
   "contact_phone": "",
   "logo_src": "san_diego_automotive_museum.png",
   "eligibility": "",
-  "image_src": "d3fc88560b6203f7.jpg"
+  "image_src": ""
  },
  {
   "slug": "https_visitcmod_org_events_fall_camp_3",
@@ -11447,7 +11436,7 @@
   "contact_phone": "",
   "logo_src": "anzaborrego_foundation.jpeg",
   "eligibility": "",
-  "image_src": "55216c4fe464823b.png"
+  "image_src": ""
  },
  {
   "slug": "discovery_table_animal_tracks_20261212",
@@ -11597,7 +11586,7 @@
   "title": "Guided Bird Walk - Lake Murray, Northwest Side",
   "partner_name": "Mission Trails Regional Park Foundation",
   "partner_id": null,
-  "description": "Join MTRP bird walk leaders for a guided bird walk along the scenic shore of Lake Murray.  In winter, Lake Murray reliably provides an abundance of waterfowl as well as land birds. We’ll look for Tri-colored Blackbirds that are found year-round only in California.\nMeet on the northwest side of the lake. After entering at Murray Park Drive and Belle Glade Avenue, proceed along the driveway past a set of ballfields on your right and turn into the paved parking lot on your right.\nBring binoculars if you have them.  Wear sturdy, closed-toe shoes, and bring along water.  A hat and sunscreen are also recommended.  Walks are canceled if raining.\nUpcoming Bird Walks:\n\n  *   December 19 – Lake Murray, Northwest Side. Meet on the northwest side of the lake. After entering at Murray Park Dr. and Belle Glade Ave., proceed along the driveway past a set of ballfields on your right and turn into the paved parking lot on your right.\n  *   January 15 – Grasslands & Spring Canyon.  Meet in front of the Ranger Field Station in the East Fortuna Staging Area off Hwy. 52 and Mast Blvd. in Santee.\n  *\nJanuary 16 – Grasslands & Spring Canyon.  Meet in front of the Ranger Field Station in the East Fortuna Staging Area off Hwy. 52 and Mast Blvd. in Santee.",
+  "description": "Join MTRP bird walk leaders for a guided bird walk along the scenic shore of Lake Murray.  In winter, Lake Murray reliably provides an abundance of waterfowl as well as land birds. We’ll look for Tri-colored Blackbirds that are found year-round only in California.\n\nMeet on the northwest side of the lake. After entering at Murray Park Drive and Belle Glade Avenue, proceed along the driveway past a set of ballfields on your right and turn into the paved parking lot on your right.\n\nBring binoculars if you have them.  Wear sturdy, closed-toe shoes, and bring along water.  A hat and sunscreen are also recommended.  Walks are canceled if raining.\n\nUpcoming Bird Walks:\n\n  *   December 20 – Lake Murray, Northwest Side. Meet on the northwest side of the lake. After entering at Murray Park Dr. and Belle Glade Ave., proceed along the driveway past a set of ballfields on your right and turn into the paved parking lot on your right.\n  *   January 16 – Grasslands & Spring Canyon.  Meet in front of the Ranger Field Station in the East Fortuna Staging Area off Hwy. 52 and Mast Blvd. in Santee.\n  *   January 17 – Grasslands & Spring Canyon.  Meet in front of the Ranger Field Station in the East Fortuna Staging Area off Hwy. 52 and Mast Blvd. in Santee.",
   "link": "",
   "availability": "Repeats 4 times through 2026-12-19",
   "date_start": "2026-12-19T08:00:00-08:00",
@@ -11618,7 +11607,7 @@
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "Lake Murray, Northwest Side, San Diego, CA",
+  "location": "Lake Murray, Northwest Side - Murray Park Drive and Belle Glade Avenue, San Diego, CA",
   "latitude": "",
   "longitude": "",
   "contact_name": "",
@@ -11640,12 +11629,11 @@
   "date_end": "2026-12-19T22:30:00-08:00",
   "age_grade_level": [
    "Family",
-   "Grades 6-8",
-   "Pre-K"
+   "Grades 6-8"
   ],
   "cost_range": "Free",
   "time_of_day": [
-   "Morning"
+   "Evening"
   ],
   "opportunity_type": "Out-of-school Programs",
   "areas_of_interest": [
@@ -11655,7 +11643,7 @@
   "specific_attention": [],
   "financial_support": "No",
   "ngss_aligned": "No",
-  "location": "Kumeyaay Lake Campground shade structure (near the east restrooms), Mission Trails Regional Park",
+  "location": "Kumeyaay Lake Campground (2 Father Junipero Serra Trail, San Diego, CA 92119, United States)",
   "latitude": "",
   "longitude": "",
   "contact_name": "",

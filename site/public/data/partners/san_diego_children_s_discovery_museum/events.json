@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-08-31T00:56:16Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "san_diego_children_s_discovery_museum",
  "kind": "current",
- "event_count": 20,
+ "event_count": 22,
  "events": [
   {
    "slug": "https_visitcmod_org_events_sensory_friendly_mornings_2_2026_08_30",
@@ -33,6 +33,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_childrens_discovery.jpg",
+   "eligibility": "",
    "image_src": "7e7e6101544f656f.jpg"
   },
   {
@@ -68,6 +69,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_childrens_discovery.jpg",
+   "eligibility": "",
    "image_src": "4652a13647c02df2.jpg"
   },
   {
@@ -104,6 +106,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_childrens_discovery.jpg",
+   "eligibility": "",
    "image_src": "6616b4e6fd821e6e.png"
   },
   {
@@ -138,6 +141,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_childrens_discovery.jpg",
+   "eligibility": "",
    "image_src": "6e25b096cb73babc.jpg"
   },
   {
@@ -172,6 +176,41 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_childrens_discovery.jpg",
+   "eligibility": "",
+   "image_src": "c2e5ebf81acbd9b5.jpg"
+  },
+  {
+   "slug": "https_visitcmod_org_events_members_only_hours_2_2026_09_01",
+   "title": "Member’s Only Hours",
+   "partner_name": "San Diego Children's Discovery Museum",
+   "partner_id": 16,
+   "description": "Join us every Tuesday from 8:30 a.m. - 9:30 a.m. for our Member's Only Hours.",
+   "link": "https://visitcmod.org/events/members-only-hours-2/2026-09-01/",
+   "availability": "Repeats 15 times through 2026-12-29",
+   "date_start": "2026-09-01T08:30:00-07:00",
+   "date_end": "2026-12-29T09:30:00-08:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Children's Museum of Discovery, 320 North Broadway, Escondido, CA",
+   "latitude": "33.124517",
+   "longitude": "-117.082351",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_diego_childrens_discovery.jpg",
+   "eligibility": "",
    "image_src": "c2e5ebf81acbd9b5.jpg"
   },
   {
@@ -185,7 +224,9 @@
    "date_start": "2026-09-01T10:00:00-07:00",
    "date_end": "2026-10-31T10:30:00-07:00",
    "age_grade_level": [
-    "Family"
+    "Family",
+    "Pre-K",
+    "Grades 6-8"
    ],
    "cost_range": "",
    "time_of_day": [
@@ -205,6 +246,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_childrens_discovery.jpg",
+   "eligibility": "",
    "image_src": "4652a13647c02df2.jpg"
   },
   {
@@ -228,7 +270,41 @@
    ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
-    "Earth Science/Ecology",
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Children's Museum of Discovery, 320 North Broadway, Escondido, CA",
+   "latitude": "33.124517",
+   "longitude": "-117.082351",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_diego_childrens_discovery.jpg",
+   "eligibility": "",
+   "image_src": "6616b4e6fd821e6e.png"
+  },
+  {
+   "slug": "https_visitcmod_org_events_family_workshop_112_2026_09_01",
+   "title": "Family Workshop",
+   "partner_name": "San Diego Children's Discovery Museum",
+   "partner_id": 16,
+   "description": "Let's make a \"Carnival of the Animals\" character crown. We will listen to the music of the Symphony \"The Carnival of the Animals\" by Camille Saint-Saëns, then make an animal character crown to inspire dancing to the music.",
+   "link": "https://visitcmod.org/events/family-workshop-112/2026-09-01/",
+   "availability": "Repeats 27 times through 2026-09-27",
+   "date_start": "2026-09-01T12:00:00-07:00",
+   "date_end": "2026-09-27T16:00:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
     "General Science"
    ],
    "specific_attention": [],
@@ -241,7 +317,8 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_childrens_discovery.jpg",
-   "image_src": "6616b4e6fd821e6e.png"
+   "eligibility": "",
+   "image_src": "518e0237d759d639.jpg"
   },
   {
    "slug": "https_visitcmod_org_events_family_workshop_113_2026_09_01",
@@ -274,6 +351,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_childrens_discovery.jpg",
+   "eligibility": "",
    "image_src": "518e0237d759d639.jpg"
   },
   {
@@ -307,6 +385,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_childrens_discovery.jpg",
+   "eligibility": "",
    "image_src": "4652a13647c02df2.jpg"
   },
   {
@@ -330,8 +409,8 @@
    ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
-    "Earth Science/Ecology",
-    "Biology / LifeSciences"
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -343,6 +422,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_childrens_discovery.jpg",
+   "eligibility": "",
    "image_src": "6616b4e6fd821e6e.png"
   },
   {
@@ -376,6 +456,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_childrens_discovery.jpg",
+   "eligibility": "",
    "image_src": "518e0237d759d639.jpg"
   },
   {
@@ -385,9 +466,9 @@
    "partner_id": 16,
    "description": "Join us every Sunday from 9:00 a.m. - 10:30 a.m. for early mornings geared for families with children on the spectrum or with sensory sensitivities: Join a welcoming, comfortable environment Enjoy the Museum in a quiet and accepting setting Make connections and share resources with other families Free with Museum admission.",
    "link": "https://visitcmod.org/events/sensory-friendly-mornings-2/2026-09-06/",
-   "availability": "Repeats 9 times through 2026-12-20",
+   "availability": "Repeats 4 times through 2026-12-06",
    "date_start": "2026-09-06T09:00:00-07:00",
-   "date_end": "2026-12-20T10:30:00-08:00",
+   "date_end": "2026-12-06T10:30:00-08:00",
    "age_grade_level": [
     "Family"
    ],
@@ -407,6 +488,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_childrens_discovery.jpg",
+   "eligibility": "",
    "image_src": "7e7e6101544f656f.jpg"
   },
   {
@@ -440,6 +522,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_childrens_discovery.jpg",
+   "eligibility": "",
    "image_src": "41f0a4458a17e96d.png"
   },
   {
@@ -454,41 +537,8 @@
    "date_end": "2026-09-11T12:00:00-07:00",
    "age_grade_level": [
     "Family",
-    "Pre-K"
-   ],
-   "cost_range": "Free",
-   "time_of_day": [
-    "Morning"
-   ],
-   "opportunity_type": "Out-of-school Programs",
-   "areas_of_interest": [
-    "General Science",
-    "Earth Science/Ecology"
-   ],
-   "specific_attention": [],
-   "financial_support": "No",
-   "ngss_aligned": "No",
-   "location": "Children's Museum of Discovery, 320 North Broadway, Escondido, CA",
-   "latitude": "33.124517",
-   "longitude": "-117.082351",
-   "contact_name": "",
-   "contact_email": "",
-   "contact_phone": "",
-   "logo_src": "san_diego_childrens_discovery.jpg",
-   "image_src": "1e1a847a1538aedd.png"
-  },
-  {
-   "slug": "https_visitcmod_org_events_fun_animal_friday_foxes_2",
-   "title": "Fun Animal Friday: Foxes",
-   "partner_name": "San Diego Children's Discovery Museum",
-   "partner_id": 16,
-   "description": "Meet foxes with JAB Canid Education and Conservation Center on Friday, September 25, from 10:00 a.m. to 11:30 a.m. The event will include a live presentation, meet & greet*, storytime, and a special craft! Pre-registration is not required. Free with Museum admission. Opportunities to meet the animals are limited, and timed tickets will be provided upon check-in. *Meet and greet is entirely contingent upon the animals’ well-being. We recommend arriving at the Museum early to maximize your chances of meeting the animals. A Hold Harmless form is required to be filled out for all guests who want to meet the animals.",
-   "link": "https://visitcmod.org/events/fun-animal-friday-foxes-2/",
-   "availability": "",
-   "date_start": "2026-09-25T10:00:00-07:00",
-   "date_end": "2026-09-25T11:30:00-07:00",
-   "age_grade_level": [
-    "Family"
+    "Pre-K",
+    "Grades 6-8"
    ],
    "cost_range": "Free",
    "time_of_day": [
@@ -508,6 +558,43 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_childrens_discovery.jpg",
+   "eligibility": "",
+   "image_src": "1e1a847a1538aedd.png"
+  },
+  {
+   "slug": "https_visitcmod_org_events_fun_animal_friday_foxes_2",
+   "title": "Fun Animal Friday: Foxes",
+   "partner_name": "San Diego Children's Discovery Museum",
+   "partner_id": 16,
+   "description": "Meet foxes with JAB Canid Education and Conservation Center on Friday, September 25, from 10:00 a.m. to 11:30 a.m. The event will include a live presentation, meet & greet*, storytime, and a special craft! Pre-registration is not required. Free with Museum admission. Opportunities to meet the animals are limited, and timed tickets will be provided upon check-in. *Meet and greet is entirely contingent upon the animals’ well-being. We recommend arriving at the Museum early to maximize your chances of meeting the animals. A Hold Harmless form is required to be filled out for all guests who want to meet the animals.",
+   "link": "https://visitcmod.org/events/fun-animal-friday-foxes-2/",
+   "availability": "",
+   "date_start": "2026-09-25T10:00:00-07:00",
+   "date_end": "2026-09-25T11:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K",
+    "Grades 6-8"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Children's Museum of Discovery, 320 North Broadway, Escondido, CA",
+   "latitude": "33.124517",
+   "longitude": "-117.082351",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_diego_childrens_discovery.jpg",
+   "eligibility": "",
    "image_src": "b37dc320930c3a65.jpg"
   },
   {
@@ -531,8 +618,7 @@
    ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
-    "Earth Science/Ecology",
-    "General Science"
+    "Earth Science/Ecology"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -544,6 +630,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_childrens_discovery.jpg",
+   "eligibility": "",
    "image_src": "249f9df5c81b647e.jpg"
   },
   {
@@ -579,6 +666,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_childrens_discovery.jpg",
+   "eligibility": "",
    "image_src": "f7e17e9dff9eed55.png"
   },
   {
@@ -612,6 +700,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_childrens_discovery.jpg",
+   "eligibility": "",
    "image_src": "0e73c523b310d73b.jpg"
   },
   {
@@ -626,15 +715,14 @@
    "date_end": "2026-11-25T14:30:00-08:00",
    "age_grade_level": [
     "Family",
-    "Pre-K",
-    "Grades 6-8"
+    "Pre-K"
    ],
    "cost_range": "",
    "time_of_day": [
     "Morning",
     "Afternoon"
    ],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Camps",
    "areas_of_interest": [
     "Biology / LifeSciences",
     "Earth Science/Ecology"
@@ -649,6 +737,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_childrens_discovery.jpg",
+   "eligibility": "",
    "image_src": "d1f3227e86de5821.png"
   },
   {
@@ -670,10 +759,10 @@
     "Morning",
     "Afternoon"
    ],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Camps",
    "areas_of_interest": [
-    "Earth Science/Ecology",
-    "General Science"
+    "General Science",
+    "Earth Science/Ecology"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -685,6 +774,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_childrens_discovery.jpg",
+   "eligibility": "",
    "image_src": "b9e78b61f127c6e8.png"
   }
  ]

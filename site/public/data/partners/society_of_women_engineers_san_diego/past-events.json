@@ -1,7 +1,3526 @@
 {
- "generated_at": "2026-08-31T00:40:44Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "society_of_women_engineers_san_diego",
  "kind": "past",
- "event_count": 0,
- "events": []
+ "event_count": 98,
+ "events": [
+  {
+   "slug": "https_us04web_zoom_us_j_71466020980_pwd_twlv5dhz7xqi4rsu2baba6hd35q_og_1",
+   "title": "SWE-SD Membership Engagement Chair Discussion",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "<u></u>Hi!<u></u><br><u></u><br><u></u><br><u></u>I have scheduled our meeting for this Wednesday at 4:30 PM, please let me know if this time does not work for either of you! Looking forward to chatting with you both and meeting you, Paula! <u></u><br><u></u><br><u></u><br><u></u>-------------------------------------------------------------------------------------------------------------------------------------------------------------<u></u><br><u></u><br><u></u><br><u></u>Ally Hardy is inviting you to a scheduled Zoom meeting.<br><br>Join Zoom Meeting<br><a href=\"https://www.google.com/url?q=https://us04web.zoom.us/j/71466020980?pwd%3DtWLv5dhz7Xqi4RsU2baba6hd35Q_OG.1&amp;sa=D&amp;source=calendar&amp;ust=1666311144604119&amp;usg=AOvVaw13P8udNzD90vZ5gbCtA7Gi\" target=\"_blank\">https://us04web.zoom.us/j/71466020980?pwd=tWLv5dhz7Xqi4RsU2baba6hd35Q_OG.1</a><br><br>Meeting ID: 714 6602 0980<br>Passcode: 8FYXqh<br><br><u></u>\n\nJoin with Google Meet: https://meet.google.com/dvv-uoec-dyr\nOr dial: (US) +1 530-395-0645 PIN: 324516873#\nMore phone numbers: https://tel.meet/dvv-uoec-dyr?pin=9043326118160&hs=7\n\nLearn more about Meet at: https://support.google.com/a/users/answer/9282720",
+   "link": "https://us04web.zoom.us/j/71466020980?pwd=tWLv5dhz7Xqi4RsU2baba6hd35Q_OG.1",
+   "availability": "",
+   "date_start": "2022-07-27T23:30:00-07:00",
+   "date_end": "2022-07-28T00:00:00-07:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Coding/Computer Science/Cyber Security",
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Online",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_www_eventbrite_com_e_swe_san_diego_open_house_fy23_tickets_398691445847_aff_ebdsoporgprofile",
+   "title": "SWE San Diego Open House FY23",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "<a href=\"https://www.google.com/url?q=https://www.eventbrite.com/e/swe-san-diego-open-house-fy23-tickets-398691445847?aff%3Debdsoporgprofile&amp;sa=D&amp;source=calendar&amp;ust=1666311144604119&amp;usg=AOvVaw0K7eQvYLA1xU7LP37Jq9vP\" target=\"_blank\">https://www.eventbrite.com/e/swe-san-diego-open-house-fy23-tickets-398691445847?aff=ebdsoporgprofile</a>\n\nJoin with Google Meet: https://meet.google.com/evr-wwbg-rxd\nOr dial: (US) +1 620-869-1664 PIN: 593482624#\nMore phone numbers: https://tel.meet/evr-wwbg-rxd?pin=1043752847022&hs=7\n\nLearn more about Meet at: https://support.google.com/a/users/answer/9282720",
+   "link": "https://www.eventbrite.com/e/swe-san-diego-open-house-fy23-tickets-398691445847?aff=ebdsoporgprofile",
+   "availability": "",
+   "date_start": "2022-08-31T00:30:00-07:00",
+   "date_end": "2022-08-31T02:00:00-07:00",
+   "age_grade_level": [
+    "Adult",
+    "Grades 9-12"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "General Atomics, 3550 General Atomics Ct, San Diego, CA 92121, USA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_us02web_zoom_us_j_7036520011_pwd_l0o2s01lbjrtqzn3bw82q0tvb0tyqt09",
+   "title": "FY23 Outreach Committee Monthly Meeting",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "<span><p>Please join our monthly SWE-San Diego Outreach Meeting! Thank you for your participation and looking forward to seeing you all! <br></p><p><br></p><p>Join Zoom Meeting<br><a href=\"https://www.google.com/url?q=https://us02web.zoom.us/j/7036520011?pwd%3DL0o2S01LbjRTQzN3bW82Q0tVb0tYQT09&amp;sa=D&amp;source=calendar&amp;ust=1666311144604119&amp;usg=AOvVaw2_X3e-9zVMWYDUh26Jx9og\" target=\"_blank\">https://us02web.zoom.us/j/<u></u>7036520011?pwd=<u></u>L0o2S01LbjRTQzN3bW82Q0tVb0tYQT<u></u>09</a><br><br>Meeting ID: 703 652 0011<br>Passcode: SWESD<br>One tap mobile<br>+16699009128,,7036520011#,,,,*<u></u>571190# US (San Jose)<br>+13462487799,,7036520011#,,,,*<u></u>571190# US (Houston)<br><br>Meeting ID: 703 652 0011<br>Passcode: 571190<br>Find your local number: <a href=\"https://www.google.com/url?q=https://us02web.zoom.us/u/kNyUHsVVS&amp;sa=D&amp;source=calendar&amp;ust=1666311144604119&amp;usg=AOvVaw3k0xLPXFl3r7i6rQH7Jaac\" target=\"_blank\">https://us02web.zoom.us/u/<u></u>kNyUHsVVS</a></p></span>\n\nJoin with Google Meet: https://meet.google.com/rpp-tpzj-hqn\nOr dial: (US) +1 401-830-3487 PIN: 720800188#\nMore phone numbers: https://tel.meet/rpp-tpzj-hqn?pin=6970241826133&hs=7\n\nLearn more about Meet at: https://support.google.com/a/users/answer/9282720",
+   "link": "https://us02web.zoom.us/j/7036520011?pwd=L0o2S01LbjRTQzN3bW82Q0tVb0tYQT09",
+   "availability": "",
+   "date_start": "2022-09-13T00:30:00-07:00",
+   "date_end": "2022-09-13T01:30:00-07:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Virtual Zoom",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "canyon_view_elementary_school_science_fair_20220917",
+   "title": "Canyon View Elementary School Science Fair",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "<table><tbody><tr><td><br><time></time><time></time>Saturday Sep 17, 2022 ⋅ 10am – 1pm (Pacific Time - Los Angeles)</td></tr><tr><td><br>SWE San Diego Outreach Booth - Lead: Drs. Mary Isaac and Tracy Nguyen<br>SWENexters: La Jolla High school, Angelina and The Bishop's School, Paulina and Bianca<br>Del Norte High school Team Optix<p>700 participants<br>gave out 150 kits<br>Circuit hands on activity</p></td></tr><tr><td><br><table><tbody><tr><td><h2><b>Location</b></h2></td></tr></tbody></table>Canyon View Elementary School, 9225 Adolphia St, San Diego, CA 92129, USA<br><a href=\"https://www.google.com/maps/search/Canyon+View+Elementary+School,+9225+Adolphia+St,+San+Diego,+CA+92129,+USA?hl=en\"><b>View map</b></a></td></tr><tr><td><br><table><tbody><tr><td><h2><b>Organizer</b></h2></td></tr></tbody></table><br><a href=\"mailto:outreach@swesandiego.org\">outreach@swesandiego.org</a></td></tr><tr><td><br><table><tbody><tr><td><h2><b>Guests</b></h2></td></tr></tbody></table></td></tr></tbody></table>",
+   "link": "",
+   "availability": "",
+   "date_start": "2022-09-17T10:00:00-07:00",
+   "date_end": "2022-09-17T13:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8",
+    "Grades 9-12"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Canyon View Elementary School, 9225 Adolphia St, San Diego, CA 92129, USA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "swe_sd_technical_tour_general_atomics_diii_d_national_fusion_facility_20220922",
+   "title": "SWE-SD Technical Tour: General Atomics DIII-D National Fusion Facility",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "SWE-SD Technical Tour: General Atomics DIII-D National Fusion Facility\nGeneral Atomics - Torrey Pines Campus, San Diego, California, United States, 92121\n\nConfirmation number: 4429493289",
+   "link": "",
+   "availability": "",
+   "date_start": "2022-09-22T00:30:00-07:00",
+   "date_end": "2022-09-22T02:30:00-07:00",
+   "age_grade_level": [
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Early Morning"
+   ],
+   "opportunity_type": "Career Connections",
+   "areas_of_interest": [
+    "Physics",
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "General Atomics - Torrey Pines Campus, San Diego, California, United States, 92121",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "junior_scientist_days_at_cabrillo_national_monument_20220924",
+   "title": "Junior Scientist Days at Cabrillo National Monument",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "<table><tbody><tr><td><br>Lead: Mirella<br>Samdrea SWE Collegiate and SWENexter : Angelina (La Jolla High School)<p>9 am set-up at Cabrillo National Monument<br>exhibit: 10-1pm</p><p>Marshmallow and spaghetti tower activity</p><p>Mirella purchased materials</p></td></tr><tr><td><br><table><tbody><tr><td><h2><b>Location</b></h2></td></tr></tbody></table>Cabrillo National Monument, 1800 Cabrillo Memorial Dr, San Diego, CA 92106, USA<br><a href=\"https://www.google.com/maps/search/Cabrillo+National+Monument,+1800+Cabrillo+Memorial+Dr,+San+Diego,+CA+92106,+USA?hl=en\"><b>View map</b></a></td></tr><tr><td><br><table><tbody><tr><td><h2><b>Guests</b></h2></td></tr></tbody></table><br><br><a href=\"mailto:outreach@swesandiego.org\">outreach@swesandiego.org</a>&nbsp;- organizer<br><a href=\"mailto:mirellacruz84@gmail.com\">mirellacruz84@gmail.com</a><br><a href=\"mailto:samtin21015@gmail.com\">samtin21015@gmail.com</a><br><a href=\"mailto:kwanangelinam@gmail.com\">kwanangelinam@gmail.com</a></td></tr></tbody></table>",
+   "link": "",
+   "availability": "",
+   "date_start": "2022-09-24T10:00:00-07:00",
+   "date_end": "2022-09-24T13:00:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Cabrillo National Monument, 1800 Cabrillo Memorial Dr, San Diego, CA 92106, USA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "la_jolla_art_and_wine_festival_2022_20221008",
+   "title": "La Jolla Art and Wine Festival 2022",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "<u></u><b>Last minute outreach with La Jolla Youth Robotics  at LJAWF</b><u></u><br><u></u><b>Meet at Booth #F14 on Wall St. Refer to flyer</b><u></u><br><u></u><b>Mary to bring Tech Trek robot</b><u></u><br><b>Tracy: bring Banner &amp; table cloth</b><br><u></u><b><br></b><u></u><br><u></u><b><br></b><u></u><br><u></u><b><br></b><u></u>\n\nJoin with Google Meet: https://meet.google.com/ivg-qajg-vsj\nOr dial: (US) +1 662-767-4147 PIN: 606198379#\nMore phone numbers: https://tel.meet/ivg-qajg-vsj?pin=3823082858200&hs=7\n\nLearn more about Meet at: https://support.google.com/a/users/answer/9282720",
+   "link": "",
+   "availability": "",
+   "date_start": "2022-10-08T16:30:00-07:00",
+   "date_end": "2022-10-08T20:00:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "La Jolla, Wall St. (Booth #F14)",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "a_celebration_of_women_in_stem_women_in_stem_career_panel_discussion_for_young_women_20221011",
+   "title": "A Celebration of Women in STEM Women in STEM Career Panel & Discussion for Young Women",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "<table><tbody><tr><td><br></td></tr><tr><td><br><time></time><time></time>Tuesday Oct 11, 2022 ⋅ 5pm – 6:30pm (Pacific Time - Los Angeles)</td></tr><tr><td><br><u></u>Celebration of International Day of the Girl<u></u><br><u></u>October 11, 2022<u></u><br><u></u><u></u>Fleet Science Center&nbsp;<u></u><br><br><u></u>5:00pm set-up<br>5:30-6:30pm exhibit: we will have a robot demo with Green.Griffins Club; no hands- on activity. we'll talk and share our QR code for interest.<u></u><br><u></u>6:45pm clean up<u></u><br><u></u><br><u></u>I will bring the table cloth and banner.&nbsp; Green.Griffins will bring the robot.<u></u><u></u></td></tr><tr><td><br><table><tbody><tr><td><h2><b>Guests</b></h2></td></tr></tbody></table><br><br><a href=\"mailto:outreach@swesandiego.org\">outreach@swesandiego.org</a>&nbsp;- organizer<br><a href=\"mailto:justina.sanchez@tuvsud.com\">justina.sanchez@tuvsud.com</a><br><a href=\"mailto:mirellacruz84@gmail.com\">mirellacruz84@gmail.com</a><br><a href=\"mailto:samtin21015@gmail.com\">samtin21015@gmail.com</a><br><a href=\"mailto:sganzer@outlook.com\">sganzer@outlook.com</a><br><a href=\"mailto:drmimibonkisaac@gmail.com\">drmimibonkisaac@gmail.com</a><br><a href=\"mailto:lgmeldrum@gmail.com\">lgmeldrum@gmail.com</a></td></tr></tbody></table>",
+   "link": "",
+   "availability": "",
+   "date_start": "2022-10-11T22:00:00-07:00",
+   "date_end": "2022-10-12T01:30:00-07:00",
+   "age_grade_level": [
+    "Grades 9-12"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Fleet Science Center",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "swenext_meet_up_at_battle_at_the_border_frc_off_season_event_20221015",
+   "title": "SWENext Meet-up at Battle at the Border (FRC off-season event)",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "<br><time></time><time></time>Saturday Oct 15, 2022 ⋅ 12pm – 1pm (Pacific Time - Los Angeles)<br>Lead: Aileen<p>Collaborating with FRC WARLords to engage SWENexters at the competition.<br>SWENexters will meet before lunch for a photo-op and cookies.</p><br><table><tbody><tr><td><h2><b>Organizer</b></h2></td></tr></tbody></table><br><a href=\"mailto:outreach@swesandiego.org\">outreach@swesandiego.org</a><br><table><tbody><tr><td><h2><b>Guests</b></h2></td></tr></tbody></table>",
+   "link": "",
+   "availability": "Repeats 2 times through 2022-10-15",
+   "date_start": "2022-10-15T12:00:00-07:00",
+   "date_end": "2022-10-15T18:45:00-07:00",
+   "age_grade_level": [
+    "Grades 6-8",
+    "Grades 9-12"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Battle at the Border (FRC off-season event)",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_meet_google_com_dsj_pqcq_oqy",
+   "title": "Wilson Middle School FIRST Lego League Scrimmage",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "Scrimmage for FLL teams at Wilson Middle School \nProvide feedback for project presentation, robot design, core values, and robot play.\nPrepare for qualifying Tournament \n\nJoin with Google Meet: https://meet.google.com/dsj-pqcq-oqy\nOr dial: (US) +1 585-491-8778 PIN: 365677335#\nMore phone numbers: https://tel.meet/dsj-pqcq-oqy?pin=2650579523460&hs=7\n\nLearn more about Meet at: https://support.google.com/a/users/answer/9282720",
+   "link": "https://meet.google.com/dsj-pqcq-oqy",
+   "availability": "Apply by 2022-10-22",
+   "date_start": "2022-10-22T15:00:00-07:00",
+   "date_end": "2022-10-22T21:00:00-07:00",
+   "age_grade_level": [
+    "Grades 6-8"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon",
+    "Evening"
+   ],
+   "opportunity_type": "Competitions",
+   "areas_of_interest": [
+    "Engineering",
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Wilson Middle School",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_www_eventbrite_com_e_swe_sd_technical_tour_asml_san_diego_factory_tickets_456509110037",
+   "title": "SWE-SD Technical Tour: ASML San Diego Factory",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "<span style=\"background-color: var(--textfield-surface); color: var(--on-surface);\">SWE San Diego invites you to join us for a guided tour of the ASML San Diego Factory. ASML is one of the world’s leading manufacturers of chip-making equipment. The company manufactures complex lithography systems critical to the production of microchips that are used in many electronic devices including smartphones, laptops, and much more. The tour includes a short overview of ASML's history, products, and customers, an in-person tour of the EUV cleanroom, and a networking mixer with the option of visiting the ASML experience center.</span><br><br>Tentative Agenda:<br>• 5:30pm – Check-in to security &amp; meet in SD6 Gathering Room<br>• 5:45pm – ASML Overview presentation<br>• 6:00pm – Walk to EUV cleanroom &amp; gown-up<br>• 6:10pm – Tour<br>• 7:10pm – Networking mixer &amp; ASML experience center<br><br>Space is limited to&nbsp;20 SWE-SD members&nbsp;and the&nbsp;deadline to RSVP is Monday, November 14.<br>&nbsp;<br>Eventbrite registration:&nbsp;<a href=\"https://swesandiego.us1.list-manage.com/track/click?u=315a4a79f1cba9939d20e00ab&amp;id=930031dcf4&amp;e=650c5b0745\"><u>https://www.<wbr>eventbrite.com/e/swe-sd-<wbr>technical-tour-asml-san-diego-<wbr>factory-tickets-456509110037</u></a>",
+   "link": "https://www.eventbrite.com/e/swe-sd-technical-tour-asml-san-diego-factory-tickets-456509110037",
+   "availability": "",
+   "date_start": "2022-11-17T01:30:00-08:00",
+   "date_end": "2022-11-17T04:00:00-08:00",
+   "age_grade_level": [
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Career Connections",
+   "areas_of_interest": [
+    "Engineering",
+    "Physical Science",
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "ASML San Diego, 17082 Thornmint Ct, San Diego, CA 92127, USA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "2023_southeast_san_diego_science_art_expo_20230812",
+   "title": "2023 Southeast San Diego Science & Art Expo",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "<p><b>Lunch will be provided for those volunteering for the duration of the expo -9:30-2:15-(9:30 set up 2:00 clean up)</b></p><p><b>When</b>: Saturday, August 12th, 2023, 10 am – 2 pm. (set-up 9:30)<br><br><b>Where</b>: Valencia Park/Malcolm X Branch Library (5148 Market St, San Diego, CA 92114, USA).<br><b><br></b>Parking: free access to the new parking structure at the Southeastern Live Well Center<b><br></b>Official set-up is 7-9am<br>Titanbots please come by 9AM<br><b>Volunteer set-up 9:30AM (Please be prompt; imagine 1200 attendees; the parking lot will be packed by 9:45am.)</b><br><b><br>SWE Professionals</b><br><b>If you no longer can volunteer, please text Outreach Chair:  Mirella 619-763-9482 </b><br><b><br></b><br><b>Please text Mirella for any questions on the day of event. Please DO NOT email on day of event!!<br><br></b><br><b>Outreach Event Lead: Mirella Cruz </b><b>619-763-9482 </b><b><br></b>1. Tracy Nguyen<br>2. Stacy Ganzer<br>3. Joan Fisher (tentative)<br>4.Cassidy, Thornbury<br>5. Laura Meldrum <br>6. Kathleen Parker<br>7. Ally Hardy<br>8. Aileen Fahme<br>9. Maria Rios<br>10. Laura Cunningham<br>11. Chunmei<br><b>SWE Collegiate</b><br>1. Madalyn Nguyen WPI<br>2. Zyanya UCSD<br>3. Lidia Vasqest<br><br>SWENexters:<br>1. Reed Ganzer<br>2. Lily Bertrand<br>3. Alana<br>4. Maya<br>5. CMKung<br>6. Allysa<br>7. Ava<br>Robotic teams:<br>1.Titanbot<br>-Emi Wong<br>-Ally Wong<br>2.<br><br><b>Activity: </b><br>Spaghetti and Marshmallow Tower<br>Supplies (Mirella will obtain supplies): Spaghetti and marshmallows<br>Tutorial: <a href=\"https://www.google.com/url?q=https://makefuncreating.com/crafts/how-to-build-a-tall-spaghetti-and-marshmallow-tower/&amp;sa=D&amp;source=calendar&amp;ust=1693886743556386&amp;usg=AOvVaw1RiVLclIjtsjFYJ5ZZVF0A\" target=\"_blank\"><u>https://makefuncreating.com/crafts/how-to-build-a-tall-spaghetti-and-marshmallow-tower/</u></a><br><br><b>Information about the 2023 Southeast San Diego Science &amp; Art Expo</b><br><b><br></b></p><p><b>Summary of event details:</b></p><p><b>What</b>: Southeast San Diego Science &amp; Art Expo</p><p><b>W</b><b>hen</b>: Saturday, August 12th - 10:00 am to 2:00 p.m.</p><p><b>Where: </b>Valencia Park/Malcolm X Branch Library (5148 Market St, San Diego, CA 92114)</p><p><br></p><p><b>Upon Arrival: (MIrella or Dr. Nguyen will check in- PLease do not check in if you arrive ahead of us)</b></p><p>Please check-in at the CREATE booth upon arrival on the day of the event, so you can be provided your booth assignment and lunch vouchers/tickets. </p><p><br></p><p><b>Booth details: We will have a 2 tables with electricity reserved.</b></p><p><b>SWE-SD will have a tablecloth for the SWE table.</b></p><p><b>Titanbot: please bring a table cloth for the robotics table; please bring extension and zip ties. bring extra pop up chairs if you want.</b></p><p>Each participant organization will be allotted 1 booth space (10 ft x10 ft space, unless special arrangements were previously made) to set up your experiments, demonstrations, and/or tech. Each booth will be provided the following:</p><p><br></p><ul><li><p>one table + tablecloth </p></li><li><p>Two chairs (additional chairs should be available) </p></li><li><p>Canopy </p></li></ul><p><br></p><p><br>Although we will make our best effort to accommodate everyone’s requests for tables, we will be limited by supply and are encouraging groups requiring more than one table to please bring any additional tables they may require. Additionally, although most booths will be provided with canopies, we also encourage exhibitors to bring their own if they have one they would like to use. </p><p><br></p><p><b>Power:</b> (for those who indicated)</p><p>If electrical power has been requested, you will have access to electrical outlets at your allocated booth. However, please plan to bring (25-50ft) extension cords (and power strips) as some of the power boxes might be at a distance from your exact location (we will not have any to loan out). </p><p><br></p><p><b>Lunch &amp; Snacks:</b></p><p>All exhibitors will be provided with lunch, please let us know the number of people in your group when you check-in. There will also be a shaded area with water and snacks for exhibitors and volunteers. </p><p><br><br></p><p><b>As a reminder…</b></p><p>Once again, due to supply limitations, please bring any additional tables (if needing more than one) you may need, your own canopies / tablecloths if you have branded ones that you prefer to use, and 25-50ft extension cords &amp; power strips (if you requested power).</p><p><br></p><p><b>Parking</b></p><p>Free parking for exhibitors and guests will be available at the</p><p><br></p><p><b>Unloading &amp; Loading</b> </p><p>There will be unloading areas at both sides of the event.</p><p><br></p><p><b>Load-in/Set Up:</b></p><p><b>7:00 am to 9:00 am</b></p><p><b>Note</b>: There will be a lot of moving parts in the morning, including power, stage and venue set-up as well as buses/trailers pulling in on-site. Make sure to come with extra time to set up. Please be aware that opening remarks will be made promptly at 10:00 am. </p><p><br></p><p><b>Take Down:</b></p><p><b>2:00 pm - 3:00 pm</b></p><p><b>Note</b>: Booths can begin tearing down as early as participants deem appropriate. Keep in mind students and their families will be circulating consistently up until 2:00 pm.</p><p><br></p><p><b>Event Agenda:</b></p><p><br></p><p>Emcee: Roosevelt Williams III - Young, Black &amp; in Business</p><p><br></p><p><b><u><a href=\"https://www.google.com/url?q=https://www.southeastsdsteamexpo.com/program&amp;sa=D&amp;source=calendar&amp;ust=1693886743556386&amp;usg=AOvVaw2Eydp0IJtANpQKQFdfsrLi\" target=\"_blank\">Agenda for the day can be seen here</a></u></b></p><p><br></p><br>The 2023 Southeast San Diego Science &amp; Art Expo will incorporate interactive science shows and demonstrations provided by UC San Diego, the Southeast San Diego STEM Ecosystem, and other local partners (hopefully you too!), as well as live musical performances, and art stations.<br><br>Some examples of demonstrations confirmed include exploration of engineering/physics behind low-riders and various exhibits that bring together science, art, and culture! <br><br>We invite you to get creative, come out, and help highlight the science behind some of the interactions we experience and see daily in our San Diego communities! Thank you for your interest in joining us and sharing some of your excitement, knowledge, and passion for science by hosting an interactive station or presenting a brief lesson explain landmarks or phenomena.<br><br>We welcome all activities that can be used to educate our community in any field of science, technology, engineering, math, and art.<br><br>This event is designed to inspire and engage the community in STEAM.  Activities and booths should be interactive and provide the opportunity for hands-on learning, ranging from pre-K to adults.<br><br><b>When</b>: Saturday, August 12th, 2023, 10 am – 2 pm.<br><br><b>Where</b>: Valencia Park/Malcolm X Branch Library (5148 Market St, San Diego, CA 92114, USA).<br><br><b>What</b>: Southeast San Diego Science &amp; Art Expo. A free, family-friendly science &amp; art event for the general San Diego community.<br><br><b>Who</b>: UC San Diego’s Center for Research on Educational Equity, Assessment &amp; Teaching Excellence (CREATE), Malcolm X Library, SESD STEM Ecosystem, DoD STEM, Jacobs Center for Neighborhood Innovation, Elementary Institute of Science, and various (education, industry &amp; business) community partners.\n\nJoin with Google Meet: https://meet.google.com/tqr-vppy-utj\nOr dial: (US) +1 414-909-4446 PIN: 477578589#\nMore phone numbers: https://tel.meet/tqr-vppy-utj?pin=3622193035466&hs=7\n\nLearn more about Meet at: https://support.google.com/a/users/answer/9282720",
+   "link": "",
+   "availability": "",
+   "date_start": "2023-08-12T10:00:00-07:00",
+   "date_end": "2023-08-12T14:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K",
+    "Grades 6-8",
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning",
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Valencia Park/Malcolm X Branch Library (5148 Market St, San Diego, CA 92114, USA)",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "swe_stem_leaders_and_innovators_series_20230914",
+   "title": "SWE STEM Leaders and Innovators Series",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "",
+   "link": "",
+   "availability": "",
+   "date_start": "2023-09-14T00:30:00-07:00",
+   "date_end": "2023-09-14T01:30:00-07:00",
+   "age_grade_level": [],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego, California, 92168",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_meet_google_com_vvk_xmhp_ivu",
+   "title": "Junior Scientist Day at Cabrillo National Monument",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "Please contact outreach@swesandiego.org if interested in learning more about this outreach.\n\nJoin with Google Meet: https://meet.google.com/vvk-xmhp-ivu\nOr dial: (US) +1 419-746-5090 PIN: 882764752#\nMore phone numbers: https://tel.meet/vvk-xmhp-ivu?pin=3125613938456&hs=7\n\nLearn more about Meet at: https://support.google.com/a/users/answer/9282720",
+   "link": "https://meet.google.com/vvk-xmhp-ivu",
+   "availability": "Repeats 2 times through 2024-09-28",
+   "date_start": "2023-09-23T11:00:00-07:00",
+   "date_end": "2024-09-28T23:00:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Cabrillo National Monument, 1800 Cabrillo Memorial Dr, San Diego, CA 92106, USA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_www_paperlesspost_com_go_m6wb3ekfn6gxeqfmpqmrd",
+   "title": "Join Us: Swiss Tech-Engineering Company to Announce US Operations in SD",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "<p>This Thursday, September 28, Swiss tech company Enclustra will officially announce our US operations in San Diego.<br><br>Members of the Society of Women Engineers, San Diego County are invited to join us for a fun evening event 'getting to know' Enclustra and their passion for embedding chips to help drive the future of aerospace and defense, medical, and wireless communications. And, of course, tasty Oktoberfest fare during sunset at the beach.</p><p> </p><p>Enclustra plans to bring jobs and business to San Diego over the next 12-18 months with a focus on engineering, R&amp;D and localized sourcing. This is a great opportunity to learn about their company and meet their leaders, including the CEO.</p><p> </p><p>The event is from 5-7pm. More details can be found on the invite and RSVP, which is here: </p><p><a href=\"https://www.paperlesspost.com/go/M6wB3eKFN6GXeQfmpqMRd\">https://www.paperlesspost.com/<wbr />go/M6wB3eKFN6GXeQfmpqMRd</a></p>",
+   "link": "https://www.paperlesspost.com/go/M6wB3eKFN6GXeQfmpqMRd",
+   "availability": "",
+   "date_start": "2023-09-28T17:00:00-07:00",
+   "date_end": "2023-09-28T19:00:00-07:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Career Connections",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Beach in San Diego",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_meet_google_com_zad_gjpb_fym",
+   "title": "8th Annual East County Manufacturing Career Fair & EXPO- Exhibitors ONLY",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "8th Annual East County Manufacturing Career Fair &amp; EXPO- Exhibitors ONLY<br>Grossmont College, 8800 Grossmont College Dr, El Cajon, CA 92020<br><br>Confirmation number: 7716966019<br><br>Information: <span>The East County Economic Development Council invites you to attend our 8th Annual East County Manufacturing Expo.</span><p>T﻿his year's theme- \"Explore, Learn, Innovate- What Does A Future In Manufacturing Look Like?\"</p><p>This year's event will allow attendees to:</p><ul><li>M﻿eet local manufacturers</li><li>Learn about products being created in their backyard</li><li>Explore career opportunities</li><li>E﻿ngage in hands-on activities</li><li>Resume Resources for job seekers</li><li>C﻿onnect with work-based learning opportunities and resources</li><li>M﻿eet our local education and training providers</li></ul><p>DAY OF TIMELINE:</p><p>Expo and Career Fair: 11am - 2pm</p><p>RSVP now to make sure you receive all the information needed prior to the event.</p>\n\nJoin with Google Meet: https://meet.google.com/zad-gjpb-fym\nOr dial: (US) +1 516-495-3162 PIN: 903263341#\nMore phone numbers: https://tel.meet/zad-gjpb-fym?pin=8205513745941&hs=7\n\nLearn more about Meet at: https://support.google.com/a/users/answer/9282720",
+   "link": "https://meet.google.com/zad-gjpb-fym",
+   "availability": "",
+   "date_start": "2023-10-03T11:00:00-07:00",
+   "date_end": "2023-10-03T14:00:00-07:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Late Morning",
+    "Afternoon"
+   ],
+   "opportunity_type": "Career Connections",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Grossmont College, 8800 Grossmont College Dr, El Cajon, CA 92020",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "outreach_wilson_middle_school_fll_scrimmage_20231007",
+   "title": "Outreach: Wilson Middle School FLL Scrimmage",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "SWE-SD, FRC Titanbot/Eastlake SWENext, &amp; FTC Roboctopi<br>FIRST Lego League Scrimmage<br>Pizza Lunch sponsored by SiSTEM<br>Meet-up with Engineers during lunch<br><br><b><i>Requesting Snack donations: email if you are interested in bringing some snacks.</i></b><br><b><i><br></i>Thank you Ms. Stacy Ganzer for spearheading this passion project!</b><br><br><b>Goal: </b>To give Wilson Robotics members a chance to experience an unofficial QT since not all students will be selected to compete in the official FLL qualifying tournament.<br><br><i><b><u>Background:</u></b> Wilson Middle School is a Title 1 school located in the low socioeconomic community of City Heights; the majority of students are on free/reduced lunch; families of refugees or immigrants. In 2018,  Madalyn Nguyen ( FIRST Dean&#39;s List Winner 2020) and Dr. Nguyen introduced FIRST Lego League to Wilson Middle School.  Since then, Wilson Robotics is thriving in its 6th year with their very dedicated STEM teacher and coach, Ms. Phet Pease. </i><br><br>Due to limitations of coach and funding, <span>Wilson Robotics teams are competing in the scrimmage to represent their school at the official competition.  Out of 50 Wilson members, only a limited # will compete in the official QT. Let&#39;s give these students an experience like an official QT!</span><br><span><br></span><br><span>Thank you FRC Titanbots for creating 9 trophies for the winning teams.</span><br><br><b>Thank you Ms. Stacy Ganzer for spearheading this passion project!</b><br><br>Need 2  SWE professional to share their engineering journey during lunch (10 mins talk)<br>SWE professional for Meet-up with Engineers lunch<br>1. Mirella Cruz (Wilson Middle School Alumna)<br>2. ?<br><br>Volunteers for scrimmage: Judge, refs, runner, emcee, etc...<br>1. Stacy Ganzer<br>2. Kelly Hon<br>3.<br>4.<br>5.<br>6.<br>7.<br>8.<br>9.<br>10.<br>11. <br>12.<br>13.<br>14.<br>15.<br><br>Robotics Demo:<br>1.<br><br>Volunteer Set-up: 7:30 a.m.<br>Wilson Students Check-in 8:30 a.m. <br>Scrimmage Kick-off 9:00 a.m.<br>Group Photo<br>lunch approx 12:30pm to 1pm<br>Award ceremony immediately following lunch<br><br> Wilson Middle School<br><a href=\"https://www.google.com/url?q=https://www.bing.com/maps?%26mepi%3D127~~Unknown~Address_Link%26ty%3D18%26q%3DWilson%2520Middle%2520School%26ss%3Dypid.YN95x1316121%26ppois%3D32.754581451416016_-117.11122131347656_Wilson%2520Middle%2520School_YN95x1316121~%26cp%3D32.754581~-117.111221%26v%3D2%26sV%3D1&amp;sa=D&amp;source=calendar&amp;ust=1696949372441324&amp;usg=AOvVaw1nClKqV4JbJP9T-xGf96PZ\" target=\"_blank\"><u>3838 Orange Ave, San Diego, CA 92105</u></a> ·<br><br><b><u>Attention:  Parking is on El Cajon Blvd</u></b><br>The entrance of the parking structure is located on the south side of El Cajon Blvd near 39th street. If you&#39;re coming from the 15 freeway, you must make a U Turn after you pass 39th street in order to enter the parking structure. If you are coming from the 805, the parking structure is on the right before 39th street.  Park at the second level to access facility.<br>Plenty of free &amp; safe parking available in the structure.\n\nJoin with Google Meet: https://meet.google.com/ycm-rpwt-ejx\nOr dial: (US) +1 636-287-0081 PIN: 154561396#\nMore phone numbers: https://tel.meet/ycm-rpwt-ejx?pin=6827268590828&hs=7\n\nLearn more about Meet at: https://support.google.com/a/users/answer/9282720",
+   "link": "",
+   "availability": "Apply by 2023-10-07",
+   "date_start": "2023-10-07T07:30:00-07:00",
+   "date_end": "2023-10-07T13:00:00-07:00",
+   "age_grade_level": [
+    "Grades 6-8"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning",
+    "Afternoon"
+   ],
+   "opportunity_type": "Competitions",
+   "areas_of_interest": [
+    "Engineering",
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Wilson Middle School, 3838 Orange Ave, San Diego, CA 92105, USA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "outreach_frc_battle_at_the_border_heforswe_promotion_20231014",
+   "title": "Outreach: FRC Battle at the Border #HeForSWE promotion",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "<b><span>For the past twelve years, Battle at the Border has served as Southern California&#39;s largest off-season FIRST Robotics competition, and has been co-run by Teams 1538, 2485, and 5025. Currently held annually on the campus of Cathedral Catholic High School, the competition is an opportunity for offseason fun and allows new team members to experience some of the thrill of an FRC competition. </span><br></b><p><b>Battle at the Border is an off-season<em> <a href=\"https://www.google.com/url?q=https://www.firstinspires.org/robotics/frc&amp;sa=D&amp;source=calendar&amp;ust=1696908421302959&amp;usg=AOvVaw2LaNM9TrWfx_puJoOhNO24\" target=\"_blank\">FIRST</a></em><a href=\"https://www.google.com/url?q=https://www.firstinspires.org/robotics/frc&amp;sa=D&amp;source=calendar&amp;ust=1696908421302959&amp;usg=AOvVaw2LaNM9TrWfx_puJoOhNO24\" target=\"_blank\"> Robotics Competition </a>hosted by Teams <a href=\"https://www.google.com/url?q=https://team1538.com/site/&amp;sa=D&amp;source=calendar&amp;ust=1696908421302959&amp;usg=AOvVaw3Z4xhWU5GzdKFPSqGLLqyV\" target=\"_blank\">1538 – The Holy Cows</a> , <a href=\"https://www.google.com/url?q=https://www.team2485.org/&amp;sa=D&amp;source=calendar&amp;ust=1696908421302959&amp;usg=AOvVaw3hnzTrGAPF9mRrOg4NY40L\" target=\"_blank\">2485 – W.A.R. Lords</a> and <a href=\"https://www.google.com/url?q=https://www.team5025.com/&amp;sa=D&amp;source=calendar&amp;ust=1696908421302959&amp;usg=AOvVaw0nahufACnimWs5NisHycIT\" target=\"_blank\">Pacific Steel 5025</a>.</b></p><p><b>Off-season competitions are a great way for teams to get extra playing time with their robots as well as train new members. In addition, pre-rookie teams can use off-season competitions to see what FRC is all about.</b></p><b><br></b><h2>Event Details</h2><p><b>When:<br>October 14-15, 2023 – competition<br>October 13, 2023 – load in</b></p><p><b>Where:<br>Cathedral Catholic High School<br><em>5555 Del Mar Heights Rd, San Diego, CA 92130</em></b></p><p><b>Cost:<br>$350 Per Robot<br><em>$200 For Add’l Team Robot Pulled From The Waitlist</em></b></p><p><b><em><br></em></b></p><p><b><em><br></em></b></p><p><b><u>SWE Table on Saturday 10/14/2023 9am-12pm To promote #HeForSWE</u></b></p><b>Lead: Tracy Nguyen</b><br><br>Set up 8:45 am<br>Volunteers:<br>1. Dr. Mary Isaac<br>2. Mirella Cruz<br>3. Kathleen Parker<br>4.<br>5.<br><br>SWENexters:<br>1. Allie Wong<br>2.<br>3.<br>4. <br>5.<br><br>Robotics Team<br>1. Emi Wong -Titanbot\n\nJoin with Google Meet: https://meet.google.com/oxy-nqsm-dep\nOr dial: (US) +1 541-972-3646 PIN: 752559879#\nMore phone numbers: https://tel.meet/oxy-nqsm-dep?pin=9838199480425&hs=7\n\nLearn more about Meet at: https://support.google.com/a/users/answer/9282720",
+   "link": "",
+   "availability": "Apply by 2023-10-15",
+   "date_start": "2023-10-14T09:00:00-07:00",
+   "date_end": "2023-10-15T23:59:59-07:00",
+   "age_grade_level": [
+    "Grades 9-12",
+    "Family"
+   ],
+   "cost_range": "Less than $500",
+   "time_of_day": [
+    "Morning",
+    "Afternoon"
+   ],
+   "opportunity_type": "Competitions",
+   "areas_of_interest": [
+    "Engineering",
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Cathedral Catholic High School, 5555 Del Mar Heights Rd, San Diego, CA 92130",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "we23_collegiate_prep_session_20231024",
+   "title": "WE23 Collegiate Prep Session",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "",
+   "link": "",
+   "availability": "",
+   "date_start": "2023-10-24T00:30:00-07:00",
+   "date_end": "2023-10-24T02:30:00-07:00",
+   "age_grade_level": [
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Engineering",
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Becton, Dickinson & Co, 3750 Torrey View Ct, San Diego, CA 92130, USA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "swe_ucsd_swenext_summit_20231104",
+   "title": "SWE UCSD-SWENext Summit",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "Contact outreach@swesandiego.org for more information",
+   "link": "",
+   "availability": "",
+   "date_start": "2023-11-04T19:30:00-07:00",
+   "date_end": "2023-11-04T21:30:00-07:00",
+   "age_grade_level": [
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering",
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego, California, 92168",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "latina_geeks_women_in_tech_festival_20231104",
+   "title": "Latina Geeks Women in Tech Festival",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "",
+   "link": "",
+   "availability": "",
+   "date_start": "2023-11-04T23:00:00-07:00",
+   "date_end": "2023-11-05T01:00:00-07:00",
+   "age_grade_level": [
+    "Adult",
+    "Grades 9-12"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego, California, 92168",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "cuyamaca_college_stem_resource_fair_20231108",
+   "title": "Cuyamaca College STEM Resource Fair",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "LocationCuyamaca College900 Rancho San Diego ParkwayEl Cajon, CA 92019Please note the STEM Fair will take place in the foyer of the H Building. However, we are asking exhibitors to arrive at the Career Center first to grab lunch and then one of our student ambassadors will escort you to the STEM fair location.Arrival and Parking·       Click here&lt;<a href=\"https://www.cuyamaca.edu/maps-and-directions/index.php\"><u>https://www.cuyamaca.edu/maps-and-directions/index.php</u></a>&gt; for directions from local freeways and campus map attached·       Please park in student lot 1 or lot 4.o   Feel free to call if you need any help with bringing your tabling materials to the fair area. We have a wagon and can meet you in the parking lot if you need assistance.",
+   "link": "",
+   "availability": "",
+   "date_start": "2023-11-08T19:00:00-08:00",
+   "date_end": "2023-11-09T10:00:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening",
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science",
+    "Engineering",
+    "Biology / LifeSciences",
+    "Physical Science",
+    "Chemistry",
+    "Physics",
+    "Mathematics"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Cuyamaca College, 900 Rancho San Diego Parkway, El Cajon, CA 92019",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "swe_san_diego_happy_hour_20231201",
+   "title": "SWE San Diego Happy Hour",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "<p><strong><b><strong><b>SWE San Diego Happy Hour (November 2023)</b></strong></b></strong></p><p>Join us for a fun-filled evening at <strong><b><strong><b>New English Brewing</b></strong></b></strong>! 🍻🎉</p><p>Get ready to unwind, socialize, and network with fellow SWE members and professionals in a relaxed atmosphere. This in-person event will take place at the <strong><b><strong><b>Sorrento Valley Road</b></strong></b></strong> location in <strong><b><strong><b>San Diego, CA, USA</b></strong></b></strong>.</p><p>Don't miss out on this opportunity to connect with like-minded individuals, exchange ideas, and enjoy some refreshing drinks. Whether you're a seasoned professional or just starting your engineering journey, this happy hour is for you! Collegiates are welcome and encouraged.</p><p>Mark your calendars and join us for an evening of laughter, camaraderie, and good vibes. We can't wait to see you there!</p>",
+   "link": "",
+   "availability": "",
+   "date_start": "2023-12-01T02:00:00-08:00",
+   "date_end": "2023-12-01T03:00:00-08:00",
+   "age_grade_level": [
+    "Adult",
+    "Grades 9-12"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "New English Brewing - San Diego Brewery, 11545 Sorrento Valley Rd #305, San Diego, CA 92121, USA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_www_eventbrite_com_e_swe_san_diego_ai_panel_event_tickets_794983345587_aff_oddtdtcreator",
+   "title": "Artificial Intelligence Panel Event (Professional Development Committee)",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "Join us for the first Professional Development Committee event featuring industry leaders in the field of Artificial Intelligence (AI) representing both industry and academia. This in-person event will include time for networking along with appetizers followed by a presentation and panel discussion. <br><br>For additional details and event registration visit: <a href=\"https://www.eventbrite.com/e/swe-san-diego-ai-panel-event-tickets-794983345587?aff=oddtdtcreator\">SWE San Diego AI Panel Event Tickets, Wed, Jan 24, 2024 at 5:30 PM | Eventbrite</a>",
+   "link": "https://www.eventbrite.com/e/swe-san-diego-ai-panel-event-tickets-794983345587?aff=oddtdtcreator",
+   "availability": "",
+   "date_start": "2024-01-25T01:30:00-08:00",
+   "date_end": "2024-01-25T04:00:00-08:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego, CA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "canyon_view_steam_fair_20240127",
+   "title": "Canyon View STEAM Fair",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "Power Up/ Light it Up Activity <br>Learn more about it here: <a href=\"https://makercamp.com/project-paths/light-it-up/\">https://makercamp.com/<u></u>project-paths/light-it-up/</a><br><br>The 2nd annual Canyon View Elementary School STEAM Festival is a free, family-friendly event that will feature hands-on activities, interactive challenges and experiments to inspire kids (and kids at heart!) to engage in all things science, technology, engineering, art, and math (STEAM). There will be hands-on STEAM activities, make and take projects, demonstrations, food trucks, and performances. With over 700 attendees in our inaugural year, we look forward to another amazing event! We invite schools, organizations and businesses to participate in our STEAM festival to open the world of all aspects of STEAM to our TK-5th Graders and local community.<br><br>To volunteer:  email outreach@swesandiego.org",
+   "link": "",
+   "availability": "",
+   "date_start": "2024-01-27T17:30:00-08:00",
+   "date_end": "2024-01-27T21:00:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K",
+    "Grades 6-8"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science",
+    "Engineering",
+    "Mathematics",
+    "Physics",
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Canyon View Elementary School, 9225 Adolphia St, San Diego, CA 92129, USA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_utm_io_ugurg",
+   "title": "Women in STEM Panel Discussion at IME WEST",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "SWE-SD Outreach Co-Chair Aileen Fahme will be a panelist for the SWE @ IME-West Women in STEM Panel.<br><br>****************************************************************<br><br>Join SWE at Informa Markets - Engineering IME-West Conference for a special presentation \"Women in STEM: A Panel Discussion hosted by the Society of Women Engineers\", starting at 3:15pm in the 3rd floor Ballroom, followed by an exclusive SWE San Diego, Orange County, and Los Angeles section networking event. This panel connects women in the industry of different specialties to discuss their career journey in the STEM field. These exceptional women share the influence of female innovators in the field, the challenges faced, and the career opportunities women can find in this area.<br><br>Panelist Speakers Include:<br>⭐ Aileen Fahme, Manager, Shipping and Logistics, Solar Turbines | SWE San Diego, Outreach Co-Chair<br>⭐ Courtney Fernandez, Senior Automation Engineer, United Robotics Group, Americas Inc. Group<br>⭐ Yue Ning, Senior Solutions Architect, Amazon Web Services (AWS)<br>⭐ Sireesha Muppala, PhD, Sr. Manager, Solutions Architecture, Amazon Web Services (AWS)<br>Moderators Include:<br>⭐ Rosario Maltbia (APM PMQ), Facility Engineer, Trading &amp; Supply Operations, Shell | SWE Orange County, President<br>⭐ Natalie White, Principal Enterprise Solutions Architect, Amazon Web Services (AWS) | SWE Orange County, Treasurer<br><br>Agenda:<br>⏰1:30 – 2:30 pm – Expo Floor Tour – Meet at the Welcome Desk in the main lobby<br>⏰3:15 – 4:00 pm – SWE Women in STEM Panel presentation<br>⏰4:00 – 4:45 pm – SWE Networking Session<br>⏰5:00 – 6:00 pm - Beer Garden Party<br><br>Complimentary Expo Registrations for SWE Collegiate &amp; Professionals:<br><br><a href=\"https://utm.io/uguRg\">https://utm.io/uguRg</a><br><br>Collegiate:<br>There will be over 1,700 exhibitors from 70 countries across the globe, this international B2B advanced manufacturing event serves as a meeting ground for companies spanning the medtech, automation, packaging, design &amp; manufacturing, and plastics sectors. It'll be an excellent opportunity to network with industry prior to the panel discussion!<br><br>All are welcome to attend!",
+   "link": "https://utm.io/uguRg",
+   "availability": "",
+   "date_start": "2024-02-07T21:30:00-08:00",
+   "date_end": "2024-02-08T02:00:00-08:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon",
+    "Evening"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Engineering",
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "IME WEST Conference, 3rd Floor Ballroom",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "cte_showcase_imperial_valley_regional_occupational_program_20240208",
+   "title": "CTE Showcase - Imperial Valley Regional Occupational Program",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "",
+   "link": "",
+   "availability": "",
+   "date_start": "2024-02-08T23:30:00-08:00",
+   "date_end": "2024-02-09T02:30:00-08:00",
+   "age_grade_level": [
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Career Connections",
+   "areas_of_interest": [
+    "Engineering",
+    "Coding/Computer Science/Cyber Security",
+    "Physics",
+    "Chemistry"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Imperial County, CA, USA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_lnkd_in_gifzvex7",
+   "title": "GUSHD Women in STEM Webinar",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "SWE San Diego Vice President Dr. Tracy Nguyen will be a panelist during the upcoming Women in STEM event presented by Grossmont Union High School District College &amp; Career Readiness on February 15th. This is a free webinar for students and families to learn about the many awesome career opportunities available for women in science, technology, engineering, and mathematics.<br><br>Women have been responsible for some of the most significant advances in science, engineering, mathematics, and computing, and yet, only 28% of STEM professionals are women. It’s time to make a change and make a difference! Learn about how women in Science, Technology, Engineering, and Mathematics (STEM) are having an impact and how you can prepare for a successful career in one of these in demand, high paying industry sectors. This webinar will feature keynote speaker Ruishan Chow, Business Development Manager (North America) at Sinocompound, followed by a panel of female STEM professionals who will answer questions and discuss how they are changing the world through STEM.<br><br>The webinar will take place on February 15, 2024 from 5:00-6:30PM. Register today at the following link: <a href=\"https://lnkd.in/gifZVEx7\">https://lnkd.in/gifZVEx7</a>",
+   "link": "https://lnkd.in/gifZVEx7",
+   "availability": "",
+   "date_start": "2024-02-15T17:00:00-08:00",
+   "date_end": "2024-02-15T18:30:00-08:00",
+   "age_grade_level": [
+    "Grades 9-12",
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Online",
+   "areas_of_interest": [
+    "Physics",
+    "Engineering",
+    "Chemistry",
+    "Biology / LifeSciences",
+    "Mathematics",
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Online",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "san_diego_engineers_week_awards_20240220",
+   "title": "San Diego Engineers Week Awards",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "",
+   "link": "",
+   "availability": "Apply by 2024-02-20",
+   "date_start": "2024-02-20T01:00:00-08:00",
+   "date_end": "2024-02-20T04:30:00-08:00",
+   "age_grade_level": [
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Competitions",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Jacobs Center For Neighborhood: Jacobs Valerie, 404 Euclid Ave, San Diego, CA 92114, USA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "adobe_bluffs_stem_night_20240309",
+   "title": "Adobe Bluffs STEM Night",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "Contact outreach@swesandiego.org for details to volunteer",
+   "link": "",
+   "availability": "",
+   "date_start": "2024-03-09T02:00:00-08:00",
+   "date_end": "2024-03-09T04:00:00-08:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "School Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Adobe Bluffs Elementary School, 8707 Adobe Bluffs Dr, San Diego, CA 92129, USA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "mailto_swe_sandiego_swesandiego_org",
+   "title": "Science Fair",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "SWE needs a few more Science Fair Judges for the 2024 Greater San Diego Science and Engineering Fair on Wednesday, March 13. The fair is held at the Balboa Park Activity Center on the corner of Park Blvd and Inspiration Point Way. Kids from 7th through 12th grades will be there and we try to talk to as many girls as we can. If you would like to be part of our judging crew and talk to kids about their science projects; if you would like to help us pick out the SWE-SD award winners; and if you can take a few hours off in the middle of the day (around 10am to 2pm (Note that the time is different this year.)) on judging day Wednesday March 13, 2024 please contact SWE San Diego at <a href=\"mailto:swe.sandiego@swesandiego.org\">sciencefair@swesandiego.org</a> by March 6.<br>I’m hoping that you will have access to the GSDSEF website and that I can give you a list of projects to review during the week before the fair. You can review these projects on your own time. Then on March 13th we will meet the girls and make our final decisions.",
+   "link": "mailto:swe.sandiego@swesandiego.org",
+   "availability": "",
+   "date_start": "2024-03-13T10:00:00-07:00",
+   "date_end": "2024-03-13T14:00:00-07:00",
+   "age_grade_level": [
+    "Grades 6-8",
+    "Grades 9-12"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning",
+    "Afternoon"
+   ],
+   "opportunity_type": "Volunteering",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Balboa Park Activity Center, corner of Park Blvd and Inspiration Point Way, San Diego, CA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_docs_google_com_forms_d_e_1faipqlscsqe_kbsrkylp9d6ph6expafzo_o_zkbctaep2posind0yzq_viewform",
+   "title": "SWE CCC Affiliate Creation Info Session",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "Join us in discovering how to build a strong support network at your community college! We’re teaming up with two affiliates to host a session on the benefits and steps to kickstart a SWE (Society of Women Engineers) Affiliate at your college. Learn why creating this empowering community can enhance your college experience and career opportunities, and gain insights into how you can get started.<br><br>A SWE (Society of Women Engineers) Affiliate at your community college is a student-led organization focused on supporting and empowering women in engineering and related fields. It provides a network where students can connect, learn, and grow together through various activities such as workshops, networking events, mentorship programs, and community outreach initiatives. The SWE Affiliate aims to create a supportive environment for women pursuing careers in engineering, offering resources and opportunities to help them succeed academically and professionally.<br><br><br>March 13, 2024<br>Wednesday<br>6:00-7:00p.m. PDT<br><br>Must be over 13 y/o or have your parent sign up<br>Zoom access will be provided by Webinar day<br>Please check your email; for security, please DO NOT share the link.<br>The webinar will be recorded &amp; photo-documented for future sharing.<br>For privacy concerns, the collection of information will not be distributed.<br>Deadline to sign up is March 11, 11:59pm<br><br>Register here: <a href=\"https://docs.google.com/forms/d/e/1FAIpQLScSqe-kbSrkylp9d6ph6eXpAfZo-o_zKBCTAep2pOsIND0yzQ/viewform\">https://docs.google.com/forms/d/e/1FAIpQLScSqe-kbSrkylp9d6ph6eXpAfZo-o_zKBCTAep2pOsIND0yzQ/viewform</a>",
+   "link": "https://docs.google.com/forms/d/e/1FAIpQLScSqe-kbSrkylp9d6ph6eXpAfZo-o_zKBCTAep2pOsIND0yzQ/viewform",
+   "availability": "",
+   "date_start": "2024-03-13T18:00:00-07:00",
+   "date_end": "2024-03-13T19:00:00-07:00",
+   "age_grade_level": [
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Online (Zoom)",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_docs_google_com_forms_d_e_1faipqlsequilzzsfknaywmbxqnw5aunusg_v7jpr9vmylfjn9layqxa_viewform",
+   "title": "Westview HS Women in STEAM Panel",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "Westview High School is organizing this Women in STEAM Panel<br><br>Outreach team members Sahana, Mirella (Chair), and Dr. Tracy Nguyen (VP) <span>will be on stage as panelists for the WiSTEAM panel</span><br><span><br></span><br><span>This event is free and open to the public. Middle through high school students encouraged!</span><br><span><br></span><br><span>Please RSVP using the link to reserve a space. Event location and details can be found when visiting this registration link. Any questions? Please send them through the form: </span><a href=\"https://docs.google.com/forms/d/e/1FAIpQLSeqUIlZzsFkNAywMBxqNW5AunUSG-V7JPr9VMyLfJN9LaYqXA/viewform\">https://docs.google.com/forms/<wbr />d/e/<wbr />1FAIpQLSeqUIlZzsFkNAywMBxqNW5A<wbr />unUSG-V7JPr9VMyLfJN9LaYqXA/<wbr />viewform</a>",
+   "link": "https://docs.google.com/forms/d/e/1FAIpQLSeqUIlZzsFkNAywMBxqNW5AunUSG-V7JPr9VMyLfJN9LaYqXA/viewform",
+   "availability": "",
+   "date_start": "2024-03-21T00:30:00-07:00",
+   "date_end": "2024-03-21T02:00:00-07:00",
+   "age_grade_level": [
+    "Grades 6-8",
+    "Grades 9-12"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego, California, 92168",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_cafirst_org_frc_sandiego_volunteer_link",
+   "title": "San Diego Regional FIRST Robotics Competition",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "SWE San Diego is looking for volunteers to help represent SWE San Diego at the table during the FIRST Robotics Competition (1:15-2:30PM). If interested please email outreach@swesandiego.org.<br><br><br>FIRST is also seeking volunteers for the event - see details below:<br><b><br></b><br><b>Volunteers wanted - Calling all Women in STEM!</b> We know that seeing someone who looks like them gives girls the courage to chase their STEM dreams.<br><br>Will you help us inspire students to be our next generation of innovators, scientists, and technicians by enabling them to experience the excitement of math, science, and engineering through an intense robotics competition?<br><br><b>Volunteer!</b><br><br>Volunteer at the<a href=\"https://cafirst.org/frc/sandiego/\"> <u>San Diego Regional</u></a> <i>FIRST</i> Robotics Competition <br><i>March 23-26, 2023 at the LionTree Arena at UCSD</i><br><br>Volunteering with <i>FIRST</i> is an amazing opportunity for you to be energized, feel fulfilled, and have FUN.<br><br>Our competition events are volunteer driven, and take nearly 100 volunteers to make it happen for our students. With a variety of technical and non-technical roles, we have volunteer roles to fit all levels of experience and skills! Watch what it’s like to volunteer at a <i>FIRST</i> Robotics competition <a href=\"https://www.youtube.com/watch?v=Yy-mjiIj8GY&t=1s\"><u>here</u></a>.<br><br>Apply or learn more<a href=\"https://cafirst.org/frc/sandiego/#volunteer-link\"> <u>here</u></a>. For any questions, please feel free to contact our Volunteer Coordinator, Carol Olewine, at <u><a href=\"mailto:carol.olewine@gmail.com\">carol.olewine@gmail.com</a></u><br><br><br>Event Flyer: <a href=\"https://cafirst.org/wp-content/uploads/2023/10/Volunteer-FIRST-San-Diego.pdf\">https://cafirst.org/wp-content/uploads/2023/10/Volunteer-FIRST-San-Diego.pdf</a>",
+   "link": "https://cafirst.org/frc/sandiego/#volunteer-link",
+   "availability": "",
+   "date_start": "2024-03-23T20:15:00-07:00",
+   "date_end": "2024-03-26T23:59:59-07:00",
+   "age_grade_level": [
+    "Grades 6-8",
+    "Grades 9-12",
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon",
+    "All Day"
+   ],
+   "opportunity_type": "Volunteering",
+   "areas_of_interest": [
+    "Engineering",
+    "Coding/Computer Science/Cyber Security",
+    "Physics",
+    "Mathematics"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "LionTree Arena, UCSD, San Diego, CA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_www_eventbrite_com_e_swe_sd_imagine_your_next_chapter_using_design_thinking_tickets_830811939877_utm_campaign_social_utm_content_attendeeshare_utm_medium_discovery_utm_term_listing_utm_source_cp_aff_ebdsshcopyurl",
+   "title": "Imagine Your Next Chapter: Using Design Thinking Workshop",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "Register on our Eventbrite link here: <a href=\"https://www.eventbrite.com/e/swe-sd-imagine-your-next-chapter-using-design-thinking-tickets-830811939877?utm-campaign=social&amp;utm-content=attendeeshare&amp;utm-medium=discovery&amp;utm-term=listing&amp;utm-source=cp&amp;aff=ebdsshcopyurl\">SWE-SD Imagine Your Next Chapter: Using Design Thinking</a><br><br><b><u>Imagine Your Next Chapter: Using Design Thinking</u></b><br>Hosted by Aliza Carpio,<b> </b>Director, Tech Evangelist at Autodesk and a passionate community builder.<p>What if you can visualize or imagine your next career chapter by leveraging design thinking methodology?</p><p>This workshop aims to guide participants, through self-reflection and group activities, in their journey to identify what’s next for them and bring to life their next chapter.</p><p><span>Brought to you by the Society of Women Engineers San Diego in partnership with LPL Financial.</span></p><p><b>Schedule:</b><br></p><ul><li>5:00 PM - 5:30 PM: Start of Event. Eat, Network, Check In</li><li>5:30 PM - 6:00 PM: LPL Opens Up and Talks about LPL</li><li>6:00 PM - 8:00 PM: Aliza's Workshop begins</li><li>8:00 PM - 8:30 PM: Networking</li></ul><p></p><br><br><b>In-Person at:</b><br>LPL Financial<br>4707 Executive Drive, San Diego, CA 92127<br>Learning Center A-D<br>Parking at LPL Structure",
+   "link": "https://www.eventbrite.com/e/swe-sd-imagine-your-next-chapter-using-design-thinking-tickets-830811939877?utm-campaign=social&utm-content=attendeeshare&utm-medium=discovery&utm-term=listing&utm-source=cp&aff=ebdsshcopyurl",
+   "availability": "",
+   "date_start": "2024-04-04T17:00:00-07:00",
+   "date_end": "2024-04-04T20:30:00-07:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "4707 Executive Drive, San Diego, CA 92127, Learning Center A-D",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "swe_sd_awards_committee_meeting_20240412",
+   "title": "SWE SD Awards Committee Meeting",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "We welcome more volunteers - please reach out to swe.sandiego@swesandiego.org if you'd like to join us!",
+   "link": "",
+   "availability": "",
+   "date_start": "2024-04-12T00:30:00-07:00",
+   "date_end": "2024-04-12T01:00:00-07:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [],
+   "opportunity_type": "Volunteering",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego, California, 92168",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "san_ysidro_stem_fair_20240419",
+   "title": "San Ysidro STEM Fair",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "Please contact outreach@swesandiego.org for details.",
+   "link": "",
+   "availability": "",
+   "date_start": "2024-04-19T20:00:00-07:00",
+   "date_end": "2024-04-20T00:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8",
+    "Grades 9-12"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego, California, 92168",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "3rd_annual_steam_fair_valley_elementary_school_20240427",
+   "title": "3rd Annual STEAM Fair @ Valley Elementary School",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "Please contact outreach@swesandiego.org to volunteer.",
+   "link": "",
+   "availability": "",
+   "date_start": "2024-04-27T16:00:00-07:00",
+   "date_end": "2024-04-27T20:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8",
+    "Grades 9-12",
+    "Pre-K"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Volunteering",
+   "areas_of_interest": [
+    "General Science",
+    "Engineering",
+    "Mathematics",
+    "Physics",
+    "Chemistry",
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Valley Elementary School",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "2024_fancy_teen_girls_expo_20240427",
+   "title": "2024 FANCY Teen Girls Expo",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "Please contact outreach@swesandiego.org to volunteer.",
+   "link": "",
+   "availability": "",
+   "date_start": "2024-04-27T16:00:00-07:00",
+   "date_end": "2024-04-27T20:00:00-07:00",
+   "age_grade_level": [
+    "Grades 6-8",
+    "Grades 9-12"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego, California, 92168",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_www_eventbrite_com_e_swe_san_diegos_fy24_celebration_and_awards_banquet_tickets_894117929797",
+   "title": "SWE San Diego Annual Banquet",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "Register here: <a href=\"https://www.eventbrite.com/e/swe-san-diegos-fy24-celebration-and-awards-banquet-tickets-894117929797\">https://www.eventbrite.com/e/swe-san-diegos-fy24-celebration-and-awards-banquet-tickets-894117929797</a><br><br>Full details can be found in the Eventbrite link above",
+   "link": "https://www.eventbrite.com/e/swe-san-diegos-fy24-celebration-and-awards-banquet-tickets-894117929797",
+   "availability": "",
+   "date_start": "2024-06-09T18:30:00-07:00",
+   "date_end": "2024-06-09T21:30:00-07:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Admiral Baker Club House, 2400 Admiral Baker Rd, San Diego, CA 92124, USA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_meet_google_com_gdw_zard_smh",
+   "title": "EcoLogik Summer Experience: Women-in-STEM Fair",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "Join with Google Meet: https://meet.google.com/gdw-zard-smh\nOr dial: (US) +1 314-666-1674 PIN: 412681166#\nMore phone numbers: https://tel.meet/gdw-zard-smh?pin=3231905050737&hs=7\n\nLearn more about Meet at: https://support.google.com/a/users/answer/9282720",
+   "link": "https://meet.google.com/gdw-zard-smh",
+   "availability": "Repeats 2 times through 2024-07-19",
+   "date_start": "2024-06-28T17:00:00-07:00",
+   "date_end": "2024-07-19T21:00:00-07:00",
+   "age_grade_level": [
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Engineering",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Virtual (Google Meet)",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "mailto_secretary_swesandiego_org",
+   "title": "Professional Development Committee Kick Off",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "Please reach out to secretary@swesandiego.org if you would like to join us! This meeting will be held virtually and call-in information will be shared to those who are interested.",
+   "link": "mailto:secretary@swesandiego.org",
+   "availability": "",
+   "date_start": "2024-09-12T03:30:00-07:00",
+   "date_end": "2024-09-12T04:15:00-07:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Virtual",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_meet_google_com_vzb_mnej_ymi",
+   "title": "East County Manufacturing Expo 2024",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "SWE-SD booth at the expo.\nIf interested in volunteering, please email outreach@swesandiego.org\n\nJoin with Google Meet: https://meet.google.com/vzb-mnej-ymi\nOr dial: (US) +1 971-232-0044 PIN: 918947569#\nMore phone numbers: https://tel.meet/vzb-mnej-ymi?pin=9031150470374&hs=7\n\nLearn more about Meet at: https://support.google.com/a/users/answer/9282720",
+   "link": "https://meet.google.com/vzb-mnej-ymi",
+   "availability": "",
+   "date_start": "2024-10-01T18:00:00-07:00",
+   "date_end": "2024-10-01T21:00:00-07:00",
+   "age_grade_level": [
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Career Connections",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Cuyamaca College, 900 Rancho San Diego Pkwy, El Cajon, CA 92019, USA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_meet_google_com_jdp_upkg_srk",
+   "title": "Outreach - FRC Battle at the Border",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "Email <b>outreach@swesandiego.org</b> for more information on how to volunteer for this event. Thank you!\n\nJoin with Google Meet: https://meet.google.com/jdp-upkg-srk\nOr dial: (US) +1 650-817-8324 PIN: 955727371#\nMore phone numbers: https://tel.meet/jdp-upkg-srk?pin=2311143639045&hs=7\n\nLearn more about Meet at: https://support.google.com/a/users/answer/9282720",
+   "link": "https://meet.google.com/jdp-upkg-srk",
+   "availability": "",
+   "date_start": "2024-10-12T16:45:00-07:00",
+   "date_end": "2024-10-12T19:45:00-07:00",
+   "age_grade_level": [
+    "Grades 6-8",
+    "Grades 9-12"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Volunteering",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Virtual",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_forms_gle_g3uled8t3m6qt7hq8",
+   "title": "SWE x SHPE Hispanic Heritage & Halloween Social",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "<br>RSVP <br><a href=\"https://forms.gle/g3uLeD8T3M6QT7Hq8\" target=\"_blank\">https://forms.gle/<u></u>g3uLeD8T3M6QT7Hq8</a><br><br>For more info contact Dr. Tracy Nguyen<br>Vicepresident@swesandiego.org",
+   "link": "https://forms.gle/g3uLeD8T3M6QT7Hq8",
+   "availability": "",
+   "date_start": "2024-10-13T23:30:00-07:00",
+   "date_end": "2024-10-14T02:30:00-07:00",
+   "age_grade_level": [
+    "Adult",
+    "Grades 9-12"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Engineering",
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Civita Rec Center, 2684 Community Ln, San Diego, CA 92108, USA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "eastlake_educational_foundation_eef_community_steam_fair_20241014",
+   "title": "Eastlake Educational Foundation (EEF) Community STEAM Fair",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "<p><b>Description: </b></p><p>The Eastlake Educational Foundation's STEAM Fair will be held at <b>Eastlake Middle School</b> in the <b>Multipurpose Room </b>and adjacent<b> covered basketball courts </b>on <b>Monday, October 14th, from 6-8pm</b>.  The target audience is Eastlake and surrounding area <b>4th-11th graders.</b>  </p><p><br></p><p>To volunteer, contact Outreach@swesandiego.org</p>",
+   "link": "",
+   "availability": "",
+   "date_start": "2024-10-14T18:00:00-07:00",
+   "date_end": "2024-10-14T20:00:00-07:00",
+   "age_grade_level": [
+    "Grades 6-8",
+    "Grades 9-12",
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology",
+    "Coding/Computer Science/Cyber Security",
+    "Engineering",
+    "Physical Science",
+    "Mathematics",
+    "Chemistry",
+    "Physics",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Eastlake Middle School, 900 Duncan Ranch Rd, Chula Vista, CA 91914, USA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_forms_gle_4l5eqs21rgcksssw9",
+   "title": "WE24 SWE SD Meetup 12:30",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "Meet up with your fellow San Diego SWEsters at the once in a life time WE24 annual conference.  We will be taking a group photo Friday at 12:30 pm Chicago Time (central)!  <br><br>We will meet at the conference registration / lobby main entrance area with the typical giant SWE corporate sponsor banner to take our Group Photo:<br><br>Afterwards, who knows. <br> <br>For updates to this schedule and details, please add your email contact information to the <a href=\"https://forms.gle/4L5EqS21rgckssSw9\" target=\"_blank\">WE24 SWE SD meetup form</a>.  <br> <br>If you have a suggestion for lunch, bring them to the meetup.\n\nJoin with Google Meet: https://meet.google.com/hwq-dxnf-sxt\nOr dial: (US) +1 513-202-4343 PIN: 966222379#\nMore phone numbers: https://tel.meet/hwq-dxnf-sxt?pin=8134096945085&hs=7\n\nLearn more about Meet at: https://support.google.com/a/users/answer/9282720",
+   "link": "https://forms.gle/4L5EqS21rgckssSw9",
+   "availability": "",
+   "date_start": "2024-10-25T17:30:00-07:00",
+   "date_end": "2024-10-25T18:00:00-07:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "WE24 conference registration / lobby main entrance area",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "swenext_summit_ucsd_20241102",
+   "title": "SWENext Summit @UCSD",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "To volunteer, contact outreach@swesandiego.org",
+   "link": "",
+   "availability": "",
+   "date_start": "2024-11-02T19:30:00-07:00",
+   "date_end": "2024-11-02T22:00:00-07:00",
+   "age_grade_level": [
+    "Grades 9-12",
+    "Grades 6-8"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Engineering",
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "UCSD Qualcomm Room",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "westwood_pta_steam_night_20241116",
+   "title": "Westwood PTA STEAM Night",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "For more info and to volunteer, Please contact the Outreach Committee at outreach@swesandiego.org",
+   "link": "",
+   "availability": "",
+   "date_start": "2024-11-16T02:00:00-08:00",
+   "date_end": "2024-11-16T04:00:00-08:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "School Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Westwood Elementary School, 17449 Matinal Rd, San Diego, CA 92127, USA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_meet_google_com_oht_xfhj_dhd",
+   "title": "Volunteer w Outreach - SDSU CIVE Design Day at Cal Trans",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "Please email outreach@swesandiego.org for more information.\n\nJoin with Google Meet: https://meet.google.com/oht-xfhj-dhd\nOr dial: (US) +1 470-485-9962 PIN: 850958141#\nMore phone numbers: https://tel.meet/oht-xfhj-dhd?pin=5869429978751&hs=7\n\nLearn more about Meet at: https://support.google.com/a/users/answer/9282720",
+   "link": "https://meet.google.com/oht-xfhj-dhd",
+   "availability": "",
+   "date_start": "2024-12-06T21:30:00-08:00",
+   "date_end": "2024-12-06T23:30:00-08:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Volunteering",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego, California, 92168",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "volunteer_outreach_night_out_girl_scouts_gingerbread_engineering_outreach_committee_december_night_outing_20241207",
+   "title": "Volunteer & Outreach Night Out - Girl Scouts Gingerbread Engineering & Outreach Committee December Night Outing",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "Volunteer with Outreach - Girl Scouts Gingerbread Engineering\nand Outreach Committee December Night Outing\n \nContact outreach@swesandiego.org if interested in volunteering.",
+   "link": "",
+   "availability": "",
+   "date_start": "2024-12-07T01:00:00-08:00",
+   "date_end": "2024-12-07T03:00:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8",
+    "Grades 9-12"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Volunteering",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Girl Scouts of San Diego Balboa Service Center, 1231 Upas St, San Diego, CA 92103, USA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "2025_canyon_view_steam_fest_20250125",
+   "title": "2025 Canyon View STEAM FEST",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "Please contact<b> </b><u>outreach@swesandiego.org </u>if you are interested in volunteering. Thank you!",
+   "link": "",
+   "availability": "",
+   "date_start": "2025-01-25T01:00:00-08:00",
+   "date_end": "2025-01-25T03:30:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8",
+    "Grades 9-12"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Morning",
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology",
+    "Coding/Computer Science/Cyber Security",
+    "Engineering",
+    "Physical Science",
+    "Mathematics",
+    "Chemistry",
+    "Physics",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "9225 Adolphia Ct, San Diego, CA 92129, USA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_ucsdenvision_wixsite_com_envision",
+   "title": "ENVISION CONFERENCE with SWE UCSD (for HS Girls)",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "SWE at UC San Diego invites high school girls (grades 9 - 12) to attend the ENVISION Conference.  <a href=\"https://ucsdenvision.wixsite.com/envision\">https://ucsdenvision.wixsite.com/envision</a><br> <br>ENVISION is a full day conference designed to introduce girls to career possibilities in engineering, science, and technology.   <br><br>You won't want to miss out. Make sure to RSVP early and tell your friends!",
+   "link": "https://ucsdenvision.wixsite.com/envision",
+   "availability": "",
+   "date_start": "2025-02-08T16:00:00-08:00",
+   "date_end": "2025-02-09T00:30:00-08:00",
+   "age_grade_level": [
+    "Grades 9-12"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening",
+    "All Day"
+   ],
+   "opportunity_type": "Career Connections",
+   "areas_of_interest": [
+    "Engineering",
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "UC San Diego",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_www_sandiegoengineers_org_banquet",
+   "title": "Engineers Week Banquet",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "SWE San Diego is a proud sponsor of the Feb 18, 2025 San Diego Engineers Week Awards Banquet. Join us as we listen to long time SWE San Diego member, Dr. Kathleen Kramer, deliver the opening keynote \"Design Your Future\". Make sure to purchase your tickets (early bird ticket deadline is Feb 13)\nhttps://www.sandiegoengineers.org/banquet",
+   "link": "https://www.sandiegoengineers.org/banquet",
+   "availability": "",
+   "date_start": "2025-02-18T19:00:00-08:00",
+   "date_end": "2025-02-19T04:30:00-08:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego, California, 92168",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_lnkd_in_gdgvkp7s",
+   "title": "SWE SD General Body Meeting",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "<span>Join SWE SD for an engaging in-person General Body Meeting where we’ll come together to connect, empower, and uplift our community. Network with like-minded professionals, share experiences, and build meaningful relationships. We will have a Women in STEM Panel with inspiring women from Rick Engineering, sharing their journeys, challenges, and successes in the industry. The panel will be moderated by @Tina Contreras Searcy, President of Latinas in Tech San Diego. </span><br><span> </span><br><span>DATE: Feb 20 <br></span><br><span>RSVP:<a href=\"https://lnkd.in/gdgvkp7S\" target=\"_blank\">https://lnkd.in/gdgvkp7S</a></span><br><span>(RSVP by Feb 18) <br></span>",
+   "link": "https://lnkd.in/gdgvkp7S",
+   "availability": "",
+   "date_start": "2025-02-20T02:00:00-08:00",
+   "date_end": "2025-02-21T04:00:00-08:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Engineering",
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Rick Engineering Co, 5620 Friars Rd, San Diego, CA 92110, USA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "sd_group_photo_1_45_welocal_san_jose_20250228",
+   "title": "SD Group Photo 1:45 @ WELocal San Jose",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "Join the SWE San Diego team with a group photo at the WE Local San Jose Networking Lunch on Friday, Feb 28th.  \n\nWant more info? Contact TazmiSalcido@gmail.com",
+   "link": "",
+   "availability": "",
+   "date_start": "2025-02-28T21:00:00-08:00",
+   "date_end": "2025-02-28T22:00:00-08:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Jose",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "adobe_bluff_steam_fair_20250322",
+   "title": "Adobe Bluff STEAM Fair",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "To volunteer, please email outreach@swesandiego.org",
+   "link": "",
+   "availability": "",
+   "date_start": "2025-03-22T00:00:00-07:00",
+   "date_end": "2025-03-22T02:00:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning",
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology",
+    "Coding/Computer Science/Cyber Security",
+    "Engineering",
+    "Physical Science",
+    "Mathematics",
+    "Chemistry",
+    "Physics",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Adobe Bluffs Elementary School, 8707 Adobe Bluffs Dr, San Diego, CA 92129, USA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_www_swesandiego_org_scholarships",
+   "title": "Scholarship App due TODAY",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "<span><span><span>The SWE San Diego Section Scholarship Application Deadline has been extended to Tuesday, April 1, 2025. For more information, visit <a href=\"https://www.swesandiego.org/scholarships\" target=\"_blank\">https://www.swesandiego.org/scholarships</a>. The scholarship is open to earning a degree in engineering, computer science, or engineering technology for:<br><ul><li>Freshman - Graduating San Diego high school students attending a US university<br></li><li>Continuing - Those attending a San Diego university</li></ul></span></span></span>",
+   "link": "https://www.swesandiego.org/scholarships",
+   "availability": "",
+   "date_start": "2025-04-01T00:00:00-07:00",
+   "date_end": "2025-04-02T00:00:00-07:00",
+   "age_grade_level": [
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "All Day"
+   ],
+   "opportunity_type": "Funding Opportunities",
+   "areas_of_interest": [
+    "Engineering",
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego, California, 92168",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "barrio_logan_science_art_expo_20250412",
+   "title": "Barrio Logan Science & Art Expo",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "<p>Please contact Outreach@swesandiego.org if interested in volunteering.</p><p><br></p><p>The<b> Barrio Logan Science &amp; Art Expo</b> (<b>BLSAE</b>) provides a family-friendly environment where curiosity and exploration will intersect creativity and culture. Our 2024 expo hosted over 60 interactive booths and demonstrations in science, technology, engineering &amp; math with over 1,500 attendees from throughout the San Diego region.  </p><p> </p><p>For information about past events, please check out the following media coverage:</p><ul><li><p><a href=\"https://urldefense.com/v3/__https://youtu.be/_PVgmQwIm6E?si=V4TrmQgooUXTrmTH__;!!Mih3wA!B8RaZOHMIbWQUrcS9q-Xwqkot3VcXp2dQaqp9MMVt-nHbR001yVqPqPEl-OwjDRSiflmLyVnwjbBBIry2w$\" target=\"_blank\"><u><u>The Barrio Logan Science And Art Expo</u></u></a> (FOX 5 San Diego)</p></li><li><p><a href=\"https://urldefense.com/v3/__https://youtu.be/T70ZibJ0oFI?si=dtxIHTbz7m1ekTKJ__;!!Mih3wA!B8RaZOHMIbWQUrcS9q-Xwqkot3VcXp2dQaqp9MMVt-nHbR001yVqPqPEl-OwjDRSiflmLyVnwjZRzB3MTw$\" target=\"_blank\"><u><u>Barrio Logan Science and Art Expo returns Saturday</u></u></a> (CBS8)</p></li><li><p><a href=\"https://drive.google.com/file/d/18agP2ygUglsgOYjDs6ibWL1D4vEJMlfo/view\" target=\"_blank\" class=\"pastedDriveLink-0\"><u><u>Exposición de Ciencia y Arte</u></u></a> (Univision) </p></li></ul>",
+   "link": "",
+   "availability": "",
+   "date_start": "2025-04-12T17:00:00-07:00",
+   "date_end": "2025-04-12T21:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 9-12",
+    "Grades 6-8"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science",
+    "Engineering",
+    "Mathematics",
+    "Physics",
+    "Chemistry"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Barrio Logan, San Diego",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_meet_google_com_zuc_oxoo_phd",
+   "title": "SWC STEM Industry Conference- Professionals Table",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "<p>Please contact <b>outreach@swesandiego.org </b>if you are interested in volunteering.</p>\n\nJoin with Google Meet: https://meet.google.com/zuc-oxoo-phd\nOr dial: (US) +1 254-946-1205 PIN: 678331118#\nMore phone numbers: https://tel.meet/zuc-oxoo-phd?pin=5441880474171&hs=7\n\nLearn more about Meet at: https://support.google.com/a/users/answer/9282720",
+   "link": "https://meet.google.com/zuc-oxoo-phd",
+   "availability": "",
+   "date_start": "2025-04-18T17:00:00-07:00",
+   "date_end": "2025-04-18T20:00:00-07:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Virtual - Google Meet",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_meet_google_com_vjq_vwgx_xyh",
+   "title": "2025 San Ysidro STEM Fair",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "Please contact <b>outreach@swesandiego.org</b> if you are interested in volunteering.\n\nJoin with Google Meet: https://meet.google.com/vjq-vwgx-xyh\nOr dial: (US) +1 314-896-2287 PIN: 128270238#\nMore phone numbers: https://tel.meet/vjq-vwgx-xyh?pin=1850294483896&hs=7\n\nLearn more about Meet at: https://support.google.com/a/users/answer/9282720",
+   "link": "https://meet.google.com/vjq-vwgx-xyh",
+   "availability": "Apply by 2025-04-18",
+   "date_start": "2025-04-18T20:30:00-07:00",
+   "date_end": "2025-04-18T23:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8",
+    "Grades 9-12"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Competitions",
+   "areas_of_interest": [
+    "General Science",
+    "Engineering",
+    "Physics",
+    "Chemistry",
+    "Biology / LifeSciences",
+    "Mathematics"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Ysidro",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_meet_google_com_smw_bbct_hpu",
+   "title": "ASCE Earth & Engineering Day Event",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "Please contact <b>outreach@swesandiego.org</b> if you are interested in volunteering.\n\nJoin with Google Meet: https://meet.google.com/smw-bbct-hpu\nOr dial: (US) +1 347-467-1795 PIN: 255733181#\nMore phone numbers: https://tel.meet/smw-bbct-hpu?pin=9775590190084&hs=7\n\nLearn more about Meet at: https://support.google.com/a/users/answer/9282720",
+   "link": "https://meet.google.com/smw-bbct-hpu",
+   "availability": "",
+   "date_start": "2025-04-19T17:00:00-07:00",
+   "date_end": "2025-04-20T00:00:00-07:00",
+   "age_grade_level": [],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Online (Google Meet)",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "deer_canyon_stem_fair_20250426",
+   "title": "Deer Canyon STEM Fair",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "",
+   "link": "",
+   "availability": "Apply by 2025-04-26",
+   "date_start": "2025-04-26T00:00:00-07:00",
+   "date_end": "2025-04-26T02:00:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Competitions",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego, California, 92168",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_meet_google_com_vim_awrw_snn",
+   "title": "2025 FANCY Teen Girls Expo",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "Please contact <b><a href=\"mailto:outreach@swesandiego.org\" target=\"_blank\"><u>outreach@swesandiego.org</u></a></b> if you are interested in volunteering.\n\nJoin with Google Meet: https://meet.google.com/vim-awrw-snn\nOr dial: (US) +1 320-412-3281 PIN: 201562970#\nMore phone numbers: https://tel.meet/vim-awrw-snn?pin=4711595431718&hs=7\n\nLearn more about Meet at: https://support.google.com/a/users/answer/9282720",
+   "link": "https://meet.google.com/vim-awrw-snn",
+   "availability": "",
+   "date_start": "2025-04-26T17:00:00-07:00",
+   "date_end": "2025-04-26T21:00:00-07:00",
+   "age_grade_level": [
+    "Grades 9-12"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Virtual",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_meet_google_com_dcs_asnq_rgv",
+   "title": "National Science Foundation's 75th Anniversary at the Fleet Science Center -Celebration of Science",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "Please contact outreach@swesandiego.org for more information.\n\nJoin with Google Meet: https://meet.google.com/dcs-asnq-rgv\nOr dial: (US) +1 929-324-9303 PIN: 966760161#\nMore phone numbers: https://tel.meet/dcs-asnq-rgv?pin=9295611244941&hs=7\n\nLearn more about Meet at: https://support.google.com/a/users/answer/9282720",
+   "link": "https://meet.google.com/dcs-asnq-rgv",
+   "availability": "",
+   "date_start": "2025-05-10T17:00:00-07:00",
+   "date_end": "2025-05-11T00:00:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Fleet Science Center",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_collaboration_event_eventbrite_com",
+   "title": "Getting Real about Collaboration: A Hands-On Professional Development Workshop for Women in STEM",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "Join SWE San Diego for a Professional Development Event with Clea Shannon. You will learn about team dynamics, communication tools, and peer support circles.  This is a hybrid event. For more details, Register here <a href=\"https://collaboration-event.eventbrite.com/\" target=\"_blank\"><u>https://collaboration-event.eventbrite.com/</u></a><br><br>Agenda:<ul><li>5:30PM Check-In &amp; Networking</li><li>6:30 Programming begins</li></ul>",
+   "link": "https://collaboration-event.eventbrite.com/",
+   "availability": "",
+   "date_start": "2025-05-22T17:30:00-07:00",
+   "date_end": "2025-05-22T19:30:00-07:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego, California, 92168",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_summer_potluck_eventbrite_com",
+   "title": "SWE-SD Member Engagement Picnic Potluck",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "Join us for SWE-SD’s final Member Engagement event of FY25 with a relaxing picnic potluck at Sea Grove Park in Del Mar on Saturday, May 24th at 1:00 PM.  <a href=\"https://summer-potluck.eventbrite.com\" target=\"_blank\">RSVP HERE</a><br> <br> <br>We’re inviting our community to bring a dish to share, enjoy meaningful conversations, and soak in the coastal views together. Don’t forget to bring a picnic blanket so you can get comfortable and enjoy the afternoon! To sweeten the day, each attendee will also receive a free gourmet donut as a thank-you for being part of our SWE-SD journey this year. Come celebrate with us!",
+   "link": "https://summer-potluck.eventbrite.com",
+   "availability": "",
+   "date_start": "2025-05-24T13:00:00-07:00",
+   "date_end": "2025-05-24T22:00:00-07:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "15th Street & Coast Boulevard, 15th St & Coast Blvd, Del Mar, CA 92014, USA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "mailto_outreach_swesandiego_org",
+   "title": "2025 Tech Trek Professional Evening",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "Please contact <b><i>outreach@swesandiego.org</i></b> if you are interested in participating.",
+   "link": "mailto:outreach@swesandiego.org",
+   "availability": "",
+   "date_start": "2025-07-27T02:30:00-07:00",
+   "date_end": "2025-07-27T04:30:00-07:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Coding/Computer Science/Cyber Security",
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego, California, 92168",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "fy26_swe_sd_open_house_20250822",
+   "title": "FY26 SWE-SD Open House",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "",
+   "link": "",
+   "availability": "",
+   "date_start": "2025-08-22T00:30:00-07:00",
+   "date_end": "2025-08-22T03:00:00-07:00",
+   "age_grade_level": [
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Early Morning"
+   ],
+   "opportunity_type": "Career Connections",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "WestPac® Wealth Partners (San Diego), 5280 Carroll Canyon Rd Suite 300, San Diego, CA 92121, USA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "10th_annual_east_county_manufacturing_expo_20250930",
+   "title": "10th Annual East County Manufacturing Expo",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "",
+   "link": "",
+   "availability": "Apply by 2025-09-30",
+   "date_start": "2025-09-30T18:00:00-07:00",
+   "date_end": "2025-09-30T21:00:00-07:00",
+   "age_grade_level": [
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Competitions",
+   "areas_of_interest": [
+    "Engineering",
+    "Physical Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Cuyamaca College, 900 Rancho San Diego Pkwy, El Cajon, CA 92019, USA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "latinageek_hispanic_heritage_remix_20251016",
+   "title": "#LatinaGeek Hispanic Heritage REmix",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "",
+   "link": "",
+   "availability": "",
+   "date_start": "2025-10-16T00:00:00-07:00",
+   "date_end": "2025-10-16T03:00:00-07:00",
+   "age_grade_level": [
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego, California, 92168",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "shpe_sd_gbm_at_asml_20251017",
+   "title": "SHPE SD GBM at ASML",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "",
+   "link": "",
+   "availability": "",
+   "date_start": "2025-10-17T00:00:00-07:00",
+   "date_end": "2025-10-17T04:00:00-07:00",
+   "age_grade_level": [],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "ASML",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "shpe_sdsu_resume_workshop_20251022",
+   "title": "SHPE SDSU Resume Workshop",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "",
+   "link": "",
+   "availability": "",
+   "date_start": "2025-10-22T01:00:00-07:00",
+   "date_end": "2025-10-22T04:00:00-07:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego, California, 92168",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "swe_table_at_lincoln_high_school_frc_off_season_event_stay_classy_classic_20251025",
+   "title": "SWE table at Lincoln High School -FRC off season event Stay Classy Classic",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "To volunteer contact\noutreach@swesandiego.org",
+   "link": "",
+   "availability": "",
+   "date_start": "2025-10-25T17:00:00-07:00",
+   "date_end": "2025-10-25T20:15:00-07:00",
+   "age_grade_level": [
+    "Grades 9-12"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Volunteering",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Lincoln Senior High School, 4777 Imperial Ave, San Diego, CA 92113, USA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "adobe_bluffs_elementary_stem_night_20251108",
+   "title": "Adobe Bluffs Elementary STEM Night",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "To volunteer, contact Outreach@swesandiego.org",
+   "link": "",
+   "availability": "",
+   "date_start": "2025-11-08T01:00:00-08:00",
+   "date_end": "2025-11-08T03:00:00-08:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "School Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Adobe Bluffs Elementary",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "swe_sd_outreach_member_engagement_december_nights_20251206",
+   "title": "SWE-SD Outreach & Member Engagement @ December Nights",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "Join us for a festive stroll to December Nights after the GSSD Gingerbread Engineering Outreach at Girl Scouts! We’ll park in the GS lot and walk together to the Prado at approx 7:15pm\n\nEmail ME@swesandiego.org for more info.",
+   "link": "",
+   "availability": "",
+   "date_start": "2025-12-06T19:15:00-08:00",
+   "date_end": "2025-12-06T05:15:00-08:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "The Prado, Balboa Park, San Diego, CA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "4th_annual_canyon_view_steam_fest_20260131",
+   "title": "4th Annual Canyon View STEAM Fest",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "<p> To volunteer, contact <a href=\"mailto:Outreach@swesandiego.org\" target=\"_blank\"><u>Outreach@swesandiego.org</u></a></p>",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-01-31T18:00:00-08:00",
+   "date_end": "2026-01-31T21:30:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science",
+    "Engineering",
+    "Mathematics"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Canyon View Elementary School, 9225 Adolphia St, San Diego, CA 92129, USA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "lunar_celebration_20260207",
+   "title": "Lunar Celebration",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-02-07T23:30:00-08:00",
+   "date_end": "2026-02-08T03:00:00-08:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening",
+    "All Day"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego, California, 92168",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "envision_2025_swe_ucsd_keynote_speaker_dr_tracy_nguyen_20260221",
+   "title": "Envision 2025 SWE UCSD Keynote Speaker : Dr. Tracy Nguyen",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "Email president@swesandiego.org for more details.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-02-21T16:30:00-08:00",
+   "date_end": "2026-02-21T17:30:00-08:00",
+   "age_grade_level": [
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego, California, 92168",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "swe_sd_table_at_vex_robotics_championship_20260301",
+   "title": "SWE SD Table at Vex Robotics Championship",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "Please contact outreach@swesandiego for more info or volunteer.",
+   "link": "",
+   "availability": "Apply by 2026-03-01",
+   "date_start": "2026-03-01T01:30:00-08:00",
+   "date_end": "2026-03-01T02:30:00-08:00",
+   "age_grade_level": [
+    "Grades 6-8",
+    "Grades 9-12"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Early Morning"
+   ],
+   "opportunity_type": "Competitions",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Town and Country Resort, 500 Hotel Cir N, San Diego, CA 92108, USA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "mailto_president_swesandiego_org",
+   "title": "Fay Elementary Literacy Night Volunteer - Reading Showcase",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "<br><b>looking for volunteers</b><br><b>Support Fay Elementary at 3:30pm for set-up to 6:30pm clean up</b><br><b>Please email President@swesandiego.org<br></b><br><br>Hello Dr. Nguyen,<br>My name is Simone Patton, I am a teacher at Fay Elementary in the City Heights neighborhood in the San Diego Unified School District. Our school community faces significant challenges, with 57% of our families being English Learners, 12% experiencing homelessness or doubling up, 20% being refugee students, and 96% of our students classified as socioeconomically disadvantaged. Your support would make a meaningful difference in their learning experiences. This year we are having a Reading Showcase on<b> March 4<sup>th</sup> from 5:00pm-6:30pm, </b>to encourage reading and literacy in our students. Students participating in this event will be creating a project about their favorite book. This project will not only provide students with a creative outlet through academic means, but it's also a way for students and families to see that reading and writing can be fun!<br><br>Mnything!",
+   "link": "mailto:President@swesandiego.org",
+   "availability": "",
+   "date_start": "2026-03-04T17:00:00-08:00",
+   "date_end": "2026-03-04T18:30:00-08:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Volunteering",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Fay Elementary, City Heights, San Diego",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_meet_google_com_ugo_uykc_drk",
+   "title": "San Diego History Center WiSTEM",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "Ladies! thank you for volunteering!!\n5:00pm mic check\n\nJoin with Google Meet: https://meet.google.com/ugo-uykc-drk\nOr dial: (US) +1 304-916-7160 PIN: 713806908#\nMore phone numbers: https://tel.meet/ugo-uykc-drk?pin=1670439049307&hs=7\n\nLearn more about Meet at: https://support.google.com/a/users/answer/9282720",
+   "link": "https://meet.google.com/ugo-uykc-drk",
+   "availability": "",
+   "date_start": "2026-03-06T17:00:00-08:00",
+   "date_end": "2026-03-06T21:00:00-08:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Online",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Online",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "petco_stem_expo_with_eis_booth_20260307",
+   "title": "Petco STEM Expo with EIS booth",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-03-07T00:00:00-08:00",
+   "date_end": "2026-03-08T00:00:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K",
+    "Grades 6-8",
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "All Day"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science",
+    "Engineering",
+    "Coding/Computer Science/Cyber Security",
+    "Biology / LifeSciences",
+    "Chemistry",
+    "Physics",
+    "Mathematics",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego, California, 92168",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "san_ysidro_intergenerational_stem_night_workshop_20260311",
+   "title": "San Ysidro Intergenerational STEM Night Workshop",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "<br><b>Workshop Details:</b><br>📌 <b>Location:</b> Community Room, San Ysidro Library (4235 Beyer Blvd, San Ysidro, CA 92173)<br>🚀 <b>Workshop Description:</b><br><i>In this workshop the students will design and build their very own paper rocket using simple materials like paper, tape, and straws. After they create the rocket, they will test it out to see how far and how high it can fly. We will experiment with different shapes and designs to discover what makes a rocket travel fast or high.<br>The big takeaway is that engineering is all about trying ideas, testing them, and improving them. That’s what real scientists and engineers do every day. By building paper rockets, they are learning how STEM helps solve problems, be creative, and understand how things move in our world.</i><br>👨‍👩‍👧‍👦 <b>Group Size:</b> ~20 attendees (students + families)<br>🌐 <b>Language:</b> Monica Rosas - Spanish Speaker<br><br>Lead: Aileen Fahme<br>Volunteeers:<br>1. Monica Rosas Spanish speaker<br>2.<br>3<br>4.<br>5.<br><br>SWENexters:<br>1.<br>2.<br>3.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-03-11T23:00:00-07:00",
+   "date_end": "2026-03-12T00:30:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering",
+    "Physical Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego Public Library - San Ysidro, 4235 Beyer Blvd, San Diego, CA 92173, USA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "mailto_sciencefair_swesandiego_org",
+   "title": "Science Fair Judging",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "To volunteer, contact sciencefair@swesandiego.org",
+   "link": "mailto:sciencefair@swesandiego.org",
+   "availability": "",
+   "date_start": "2026-03-18T00:00:00-07:00",
+   "date_end": "2026-03-19T00:00:00-07:00",
+   "age_grade_level": [],
+   "cost_range": "Free",
+   "time_of_day": [
+    "All Day"
+   ],
+   "opportunity_type": "Volunteering",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego, California, 92168",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "frc_san_diego_regional_20260322",
+   "title": "FRC San Diego Regional",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "Tabling at the lobby of the gym to promote SWE &amp; SWENext\n\nLast chance to promote for scholarships.\nSet-up 10am",
+   "link": "",
+   "availability": "Apply by 2026-03-22",
+   "date_start": "2026-03-22T17:00:00-07:00",
+   "date_end": "2026-03-22T20:00:00-07:00",
+   "age_grade_level": [
+    "Grades 9-12",
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Competitions",
+   "areas_of_interest": [
+    "Engineering",
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Francis Parker School, 6501 Linda Vista Rd, San Diego, CA 92111, USA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "5th_annual_wistem_forum_20260324",
+   "title": "5th Annual WiSTEM Forum",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "<p>Zoom link will be added by 3/20/2026</p><p><br></p><p>Join us for the <strong>5th Annual Virtual WiSTEM Forum</strong> hosted by the Society of Women Engineers San Diego 💜</p><p>📅 <strong>Tuesday, March 24</strong><br>⏰ <strong>6:00 – 7:30 PM</strong></p><p><b>Speakers mic check 5:30pm</b></p><p><b>Kick off 6:00pm</b></p><p>We are honored to have <strong>Inaas Darrat</strong>, SWE President, kick off the evening as we celebrate five years of WiSTEM Forum in our community.</p><p>This year, our SWENext Clubs and partner organizations will take the stage to share how they are <em>STEMMing</em> in their schools and communities. From robotics and coding to outreach, research, and advocacy, you will hear directly from students and leaders who are creating meaningful change.</p><p>✨ What to expect:<br>• Welcome remarks from SWE leadership<br>• Presentations from local SWENext Clubs and organizations<br>• Inspiring stories of innovation and impact<br>• Networking with students, professionals, and community partners</p><p>WiSTEM is more than an event. It is a space where we uplift young women and allies, strengthen mentorship, and build a STEM community where everyone belongs.</p><p>Come support our students. Come build connections. Come celebrate how we are STEMMing together.</p><p>We look forward to seeing you there 💜</p>",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-03-24T18:00:00-07:00",
+   "date_end": "2026-03-24T19:30:00-07:00",
+   "age_grade_level": [
+    "Grades 9-12",
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Coding/Computer Science/Cyber Security",
+    "Engineering",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Virtual/Zoom",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "deer_canyon_steam_night_save_the_date_20260327",
+   "title": "Deer Canyon STEAM Night Save the Date",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "Must RSVP by 2/20/2026",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-03-27T23:00:00-07:00",
+   "date_end": "2026-03-28T01:00:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "School Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego, California, 92168",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "san_ysidro_stem_fair_2026_20260417",
+   "title": "San Ysidro STEM Fair 2026",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "<p><strong>This will be SWE SD 4th year support SY STEM Fair:</strong></p><p><strong>Lead: Aileen Fahme</strong></p><p><strong>SWE Professionals<br>1. Tracy Nguyen (will be late coming from SWC STEM Conference)</strong></p><p><strong>2.</strong></p><p><strong>3.</strong></p><p><strong><br></strong></p><p><strong><br></strong></p><p><strong>Location:</strong><br>San Ysidro, California<br></p><p><strong>Contact for Questions:</strong><br>Sandy Valdivia<br>Youth Engagement Manager<br>Email/Phone: (619) 238-1233 x808 | (619) 630-5848</p><p><strong>Description:</strong><br>The San Ysidro STEM Fair brings together educators, students, families, and community partners for a day of hands-on STEM exploration, creativity, and innovation. Exhibitors will showcase interactive activities designed to spark curiosity and inspire learners of all ages. Join us for a celebration of science, technology, engineering, and math that strengthens community connections and promotes experiential learning. Registration link coming soon!  </p>",
+   "link": "",
+   "availability": "Apply by 2026-04-18",
+   "date_start": "2026-04-17T00:00:00-07:00",
+   "date_end": "2026-04-18T00:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K",
+    "Grades 9-12",
+    "Grades 6-8",
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "All Day"
+   ],
+   "opportunity_type": "Competitions",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology",
+    "Coding/Computer Science/Cyber Security",
+    "Engineering",
+    "Physical Science",
+    "Mathematics",
+    "Chemistry",
+    "Physics",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Ysidro, California",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "swc_stem_conference_20260417",
+   "title": "SWC STEM Conference",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "Aileen: I will be attending this.\nWill meet you at San Ysidro afterward like last year.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-04-17T17:00:00-07:00",
+   "date_end": "2026-04-17T19:00:00-07:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego, California, 92168",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "earth_engineering_day_2026_20260418",
+   "title": "Earth & Engineering Day 2026",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "<p> Earth &amp; Engineering Day 2026<br> April 18, 2026<br>10:00 AM – 5:00 PM<br>Mission Valley Mall – Nordstrom Rack Court</p><p>Get ready to build, explore, and be inspired! </p><p>Earth &amp; Engineering Day 2026 is a FREE outdoor community event designed to spark curiosity and excitement about STEM in young minds. Hosted by the American Society of Civil Engineers – ASCE San Diego Younger Member Forum, this annual celebration brings together local engineering and STEM organizations to make learning hands-on and fun.</p><p>SWE – San Diego is proud to participate by hosting an interactive booth filled with engaging engineering activities and creative challenges. Kids and families will have the opportunity to explore real-world engineering concepts through exciting, hands-on experiences designed to build confidence, curiosity, and problem-solving skills.</p><p>From designing and building to experimenting and discovering, every activity is meant to inspire the next generation of innovators and leaders in STEM.</p><p>Join us for a day of engineering, exploration, and community fun!</p>\n\nJoin with Google Meet: https://meet.google.com/obw-pftp-weh\nOr dial: (US) +1 631-623-8196 PIN: 752006365#\nMore phone numbers: https://tel.meet/obw-pftp-weh?pin=4150141835376&hs=7\n\nLearn more about Meet at: https://support.google.com/a/users/answer/9282720",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-04-18T10:00:00-07:00",
+   "date_end": "2026-04-18T17:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8",
+    "Grades 9-12"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning",
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering",
+    "Earth Science/Ecology",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Mission Valley Mall – Nordstrom Rack Court, San Diego, CA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "el_chisme_on_stem_careers_20260422",
+   "title": "\"El Chisme on STEM Careers\"",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "<p><strong>SWE SD Representatives:</strong></p><p><strong>Dr. Tracy Nguyen (SWE SD President), Emerald Trejo (SWE SD Secretary), Amanda Tijerina (SWE SD Member)</strong></p><p><strong>\"El Chisme on STEM Careers\"</strong> (Bio and Computer Science Emphasis)<u></u><u></u></p><p>📍 <strong>Location:</strong> Miramar College, K1-107<u></u><u></u></p><p>📅 <strong>Date:</strong> Wednesday, April 22nd<u></u><u></u></p><p>🕙 <strong>Time:</strong> 10:30 - 12:00PM<u></u></p><p><u></u> <strong>DESCRIPTION:</strong></p><p><u>Career Chisme Series: Unveiling Career Pathways with a Cultural Twist</u><u></u><u></u></p><p><u></u> <u></u></p><p>The Career Chisme series is here to break down barriers and demystify diverse career paths in a way that resonates with our LatinX community. <em>Chisme</em> becomes a tool for empowerment as professionals share their stories and insights with the warmth and authenticity of a trusted <em>tia</em> or <em>amiga</em>.<u></u><u></u></p><p><u></u> Join us as we work to empower our <em>comunidad</em>, creating equitable access to career insights for first-gen, LatinX, and low-income students. This is more than a panel—it’s a collective mission to build connections and open doors to <em>oportunidad</em>.</p>",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-04-22T10:30:00-07:00",
+   "date_end": "2026-04-22T12:00:00-07:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Career Connections",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Miramar College, K1-107",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "5th_annual_gis_2026_20260425",
+   "title": "5th Annual GIS 2026",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-04-25T16:00:00-07:00",
+   "date_end": "2026-04-25T21:00:00-07:00",
+   "age_grade_level": [],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego, California, 92168",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_forms_office_com_pages_designpagev2_aspx_subpage_design_formid_mwambls6nuizdj2ilvtmarvwl8427_pbnmw_eusg5ixunei1rlrmnfnnqllvwec1skvhmta0r0k5si4u_token_ac6433d14a18404c99bdf45c7a7f2116",
+   "title": "2026 SDCCD Districtwide Career Fair",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "<b><i><u>GOAL: Start an SWE affiliate by recruiting an active member at the fair</u></i></b><br><br><p>We’re excited to invite you to participate in the 2026 SDCCD Districtwide Career Fair, hosted by San Diego City College in partnership with the Career Education &amp; Workforce Development Department at the SDCCD District Office.</p><p>📍<b>Event Information</b></p><p><b>Date:</b> Wednesday, April 29, 2026<br><b>Time:</b> 10:00 AM – 2:00 PM<br><b>Employer Check-In:</b> Begins at 9:00 AM<br><b>Location:</b> San Diego City College<u></u><u></u></p><p>Students from <b>City College, Mesa College, Miramar College, and the College of Continuing Education</b> will be attending and are eager to connect with employers about part-time jobs, full-time roles, internships, and work-based learning opportunities.<u></u><u></u></p><p><b>What Will Be Provided<u></u><u></u></b></p><p>In addition to snacks and a lunch, each registered employer will receive:<u></u><u></u></p><p>• 1 table<br>• 2 chairs<br>• 1 canopy or large shade covering a part of the location<u></u><u></u></p><p>Please note that <b>electrical outlets will not be available</b>, so we encourage employers to plan accordingly if you intend to bring displays, screens, or other equipment.<u></u><u></u></p><p><b>Employer Information Form (Required)<u></u><u></u></b></p><p>To help us prepare for the event and <b>promote your organization to students ahead of the fair</b>, please complete the employer information form by <b>March 28th</b>.<u></u><u></u></p><p>The information you provide will allow us to highlight your company and the types of opportunities you are recruiting for so students can come prepared and seek out employers that match their interests.<u></u><u></u></p><p>Employer Form: <a href=\"https://forms.office.com/Pages/DesignPageV2.aspx?subpage=design&amp;FormId=MWAMBLs6NUizDJ2IlVtMaRVwL8427-pBnMw_EuSG5ixUNEI1RlRMNFNNQllVWEc1SkVHMTA0R0k5Si4u&amp;Token=ac6433d14a18404c99bdf45c7a7f2116\" target=\"_blank\">Spring 2026 Districtwide Career Fair @ City College</a><u></u><u></u></p><p><b>Optional Scholarship Donation<u></u><u></u></b></p><p>Thanks to the generous support of our district, there is <b>no cost for employers to participate</b> in this event. If your organization would like to support our students further, we invite you to consider making a voluntary donation to the <b>City College Scholarship Foundation</b>.<u></u><u></u></p><p>These donations help expand opportunities for our students as they transition into the workforce.<u></u><u></u></p><p>Donation Link: <a href=\"https://www.paypal.com/donate/?hosted_button_id=CAD3RBMV3JK92\" target=\"_blank\">San Diego City Foundation Scholarship Link</a></p><p>✅ Showcase part-time, full-time, and internship opportunities<br>✅ Network with students from a wide range of academic and technical programs<br>✅ Support workforce development and equity across our region</p><p>For this year only, we are waiving the registration fee in recognition of the current job market climate and to encourage broader employer participation across industries. Although there is no cost to attend, we invite you to consider making an optional donation to the San Diego City College Foundation Scholarship Fund to support student scholarships and career development opportunities. <br></p><p>Make a Donation Here: <a href=\"https://email.notifications.joinhandshake.com/c/eJx8j8tu2zAUBb-G2hQQKFImzQUXQVXFgOM-jLpIuxGuxCuZsUQqfNhNv75Im3W2c4CDGaOZUUIWqCsplKT1RtLirNXGmJox1gtBZbXdcFnXvRmEhF70W94XVjPKBK2YqgQXVJUjU-NoKjlQYFz2ktTU-WRHO0Cy3sXyyVt3BmfiGS5YDn4pZn1OaY2E3xHWEtbebrdyhZcV5teZsNZ4BwkJb5O_oCO8Uc9Pm93xxd3t5k9bKuOD-naC4wFze80_WLc_iK8_u3k57r6cQI2HtpHH37--Pz8-fG62rsL7xz_9_RTCqd7vczyYijCR09JFn8OAhDf_jTG88QWNzQvhDS5g5zc4wLKCnV51IjrTBZxsTOFfZQfrGvwVTbEGb_KQuj4PF0z6IwTE8GEEG2IR9BowWoMukZrGG0ZwxuLkSx-mIul3bq-a_Q0AAP__r-GSjA\" target=\"_blank\">https://www.paypal.com/donate?<u></u>token=<u></u>9qj5HRynAHlE807sL9QUaRMeuFvuV2<u></u>_KM6PY_<u></u>lmRHOUa9fMFD7RxZTqXLND8n1eG...</a></p><p>(Please note “Career Fair” in the donation memo or comments section.)</p><br>Every Employer will have 1 table, 2 chairs, and a canopy provided. If you need technical support, or want to use your own canopy, please reach out to <a href=\"mailto:jsanchez003@sdccd.edu\" target=\"_blank\">jsanchez003@sdccd.edu</a>.<hr /><p>Please contact the career fair host for any questions:</p><p><strong>Name:</strong> Roger Sanchez</p><p><strong>Email Address:</strong> <a href=\"mailto:jsanchez003@sdccd.edu\" target=\"_blank\">jsanchez003@sdccd.edu</a></p>",
+   "link": "https://forms.office.com/Pages/DesignPageV2.aspx?subpage=design&FormId=MWAMBLs6NUizDJ2IlVtMaRVwL8427-pBnMw_EuSG5ixUNEI1RlRMNFNNQllVWEc1SkVHMTA0R0k5Si4u&Token=ac6433d14a18404c99bdf45c7a7f2116",
+   "availability": "",
+   "date_start": "2026-04-29T10:00:00-07:00",
+   "date_end": "2026-04-29T14:00:00-07:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning",
+    "Afternoon"
+   ],
+   "opportunity_type": "Career Connections",
+   "areas_of_interest": [],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego City College, Curran Plaza, 1400 B St, San Diego, CA 92101, USA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "ocean_beach_elementary_school_science_fair_20260430",
+   "title": "Ocean Beach Elementary School Science Fair",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "<p>Lead: Dr. Tracy Nguyen</p><p>SWE Professional</p><p>1</p><p>2</p><p>3.</p><p>Collegiate</p><p>1.</p><p>2.</p><p>3.</p><p>SWENexter</p><p>1.</p><p>2</p><p>3</p><p>Robotics Team</p><p>1.</p><p>2.</p><p><br></p><p>=========================================</p><p>Hello Dr. Nguyen,</p><p>Thank you for the quick response and the additional questions!</p><p>-Yes, Ocean Beach Elementary School would love to have SWE host a table at our science fair. <u></u><u></u></p><p>-The more interactive/hands on booth would be a good direction for our students. </p><p>Some additional information:<u></u><u></u></p><p>Date: April 30, 2026<u></u><u></u></p><p>Time of Event: 5-7 pm<u></u><u></u></p><p>Location: Ocean Beach Elementary School Auditorium<u></u><u></u></p><p>Address: 4741 Santa Monica Avenue, San Diego Ca 92107<u></u><u></u></p><p><u></u> In addition to different organizations from the science community our future scientists will also be presenting their own science project.</p><p>Thank you again for considering and we hope to see you there.<u></u><u></u></p><p><u></u> Ellen</p>",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-04-30T17:00:00-07:00",
+   "date_end": "2026-04-30T19:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science",
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Ocean Beach Elementary School Auditorium, 4741 Santa Monica Avenue, San Diego, CA 92107",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_surveys_qualcomm_com_survey_e3eb93d22875521aea6699408077c4ed",
+   "title": "Qualcomm Kids Day Event",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "<table><tbody><tr><td><table><tbody><tr><td><p>Outreach Lead:</p><p>Dr. Tracy Nguyen</p><p>SET UP: 9:15-9:30</p><p><br></p><p>Professionals</p><p>1. Dr. Mary </p><p>2.</p><p>3.</p><p><br></p><p>Collegiate</p><p>1.</p><p>2.</p><p>3.</p><p><br></p><p>SWENexters</p><p>1. Cammie Westview</p><p>2. Shaari Westview</p><p>3. Kristen Yu Bishop</p><p>FTC Robogenesis</p><p><br></p><p>Robotics Teams/SWENext ClubDear Qualcomm Community Partners, <u></u><u></u></p><p>I am reaching out to you regarding our upcoming Qualcomm Kids event. This is Qualcomm’s version of the national Bring Your Kids to Work Day with an event focused on exposing youth to careers in science, technology, engineering, art, and math (S.T.E.A.M.) and bringing excitement to their parent’s profession.<br><br>We’re currently looking for vendors who can provide an engaging craft or activity for our Qualcomm Kids Day. This year, Qualcomm Kids Day will be a 4-hour in-person event on <b>Friday, July 24 from 10 a.m. – 2 p.m on our Pacific Center Campus.</b><u></u><u></u></p><p><br>Apply to be part of our event by completing this <a href=\"https://surveys.qualcomm.com/#/survey/e3eb93d22875521aea6699408077c4ed\" target=\"_blank\"><b>form</b></a>. The deadline to apply is <b>Monday, June 5.</b> <u></u><u></u></p><p>Applications must meet the following guidelines:  <u></u><u></u></p><ul><li>Booth with demonstration or hands-on S.T.E.A.M. activity for ages 7-12 <u></u><u></u></li><li>Kid-centric learning resources <u></u><u></u></li></ul><p><br>For questions, please reach out to <a href=\"mailto:nkinsler@qualcomm.com\" target=\"_blank\">Noreen Kinsler</a> and <a href=\"mailto:Francisco%20Hernandez%20(Consultant)%20%3cfrahern@qualcomm.com%3e\" target=\"_blank\">Francisco Hernandez</a>.<br><br>Thank you again for your time. We look forward to seeing you all in the future at a Qualcomm event! <u></u><u></u></p><p><u></u> <u></u></p></td></tr><tr><td><p><u></u> <u></u></p></td></tr></tbody></table></td></tr></tbody></table>",
+   "link": "https://surveys.qualcomm.com/#/survey/e3eb93d22875521aea6699408077c4ed",
+   "availability": "",
+   "date_start": "2026-07-24T10:00:00-07:00",
+   "date_end": "2026-07-24T14:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning",
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Qualcomm Pacific Center Campus",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "2026_southeast_san_diego_science_art_expo_20260822",
+   "title": "2026 Southeast San Diego Science & Art Expo",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "2026 Southeast San Diego Science & Art Expo – Outreach Event\n\nJoin us for the 2026 Southeast San Diego Science & Art Expo, a free, family-friendly community event designed to inspire curiosity and engagement in STEAM (Science, Technology, Engineering, Arts, and Mathematics).\n\nThe event will feature interactive science demonstrations, hands-on activities, live musical performances, and art stations presented by UC San Diego, the Southeast San Diego STEM Ecosystem, industry partners, and community organizations.\n\nAttendees of all ages, from pre-K through adults, will have the opportunity to explore science, engineering, technology, art, and culture through engaging exhibits and educational activities.\n\nDate: Saturday, August 22, 2026\nTime: 10:00 AM – 2:00 PM\nLocation: Elementary Institute of Science (EIS)\n608 51st Street, San Diego, CA 92114\n\nHosted by UC San Diego’s Center for Research on Education, Assessment & Teaching Excellence (CREATE), the Elementary Institute of Science (EIS), and community partners throughout San Diego.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-08-22T10:00:00-07:00",
+   "date_end": "2026-08-22T14:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K",
+    "Grades 6-8",
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning",
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology",
+    "Coding/Computer Science/Cyber Security",
+    "Engineering",
+    "Physical Science",
+    "Mathematics",
+    "Chemistry",
+    "Physics",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "608 51st Street, San Diego, CA 92114",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_www_eventbrite_com_e_fy27_swe_san_diego_open_house_tickets_1997429623774_aff_oddtdtcreator_keep_tld_true",
+   "title": "FY27 SWE SD Open House",
+   "partner_name": "Society of Women Engineers - San Diego",
+   "partner_id": 48,
+   "description": "<p dir=\"ltr\">Join SWE San Diego for our FY27 Open House on August 27, 2026! Meet the Executive Council, learn about our committees, programs, and volunteer opportunities, and connect with fellow engineers, students, and STEM advocates.</p><p dir=\"ltr\"><b></b><b><u>Location:  </u></b><b>WestPac Wealth Partners </b></p><p dir=\"ltr\"><a href=\"https://www.eventbrite.com/e/fy27-swe-san-diego-open-house-tickets-1997429623774?aff=oddtdtcreator&amp;keep_tld=true\" target=\"_blank\"><b><u>Register Here!</u></b></a></p><p dir=\"ltr\">Come connect, get involved, and help us build a stronger community of women engineers. We look forward to meeting you!</p>",
+   "link": "https://www.eventbrite.com/e/fy27-swe-san-diego-open-house-tickets-1997429623774?aff=oddtdtcreator&keep_tld=true",
+   "availability": "",
+   "date_start": "2026-08-28T01:00:00-07:00",
+   "date_end": "2026-08-28T03:30:00-07:00",
+   "age_grade_level": [
+    "Adult",
+    "Grades 9-12"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "5280 Carroll Canyon Rd, San Diego, CA 92121, USA",
+   "latitude": "32.7830113",
+   "longitude": "-117.1707951",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "society_of_women_engineers.png",
+   "eligibility": "",
+   "image_src": ""
+  }
+ ]
 }

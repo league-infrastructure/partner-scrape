@@ -1,9 +1,43 @@
 {
- "generated_at": "2026-08-31T00:40:44Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "women_s_construction_coalition",
  "kind": "past",
- "event_count": 33,
+ "event_count": 36,
  "events": [
+  {
+   "slug": "https_www_wccsd_org_events_meet_the_buyers",
+   "title": "Meet the Buyers : Sponsored by SBDC — Women's Construction Coalition",
+   "partner_name": "Women's Construction Coalition",
+   "partner_id": 39,
+   "description": "",
+   "link": "https://www.wccsd.org/events/meet-the-buyers",
+   "availability": "",
+   "date_start": "2020-02-13T08:30:00-08:00",
+   "date_end": "2020-02-13T12:30:00-08:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Career Connections",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "City of Escondido, 201 N Broadway\nEscondido, Ca 92025\nUnited States",
+   "latitude": "32.8307902",
+   "longitude": "-117.1315766",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
+   "image_src": ""
+  },
   {
    "slug": "https_www_wccsd_org_events_leadership_series_1",
    "title": "Leadership Series #1 — Women's Construction Coalition",
@@ -35,6 +69,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -68,6 +103,41 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_www_aiasandiego_org",
+   "title": "The 4th EPIC Mixer: hosted by AIA, ASHRAE & SEAOSD Emerging  Professionals — Women's Construction Coalition",
+   "partner_name": "Women's Construction Coalition",
+   "partner_id": 39,
+   "description": "Raffle for the benefit of the Julia Morgan Society and the Women’s Construction Coalition  Visit the  aiasandiego.org / seaosd.org  to register.",
+   "link": "https://www.aiasandiego.org",
+   "availability": "",
+   "date_start": "2020-03-05T16:00:00-08:00",
+   "date_end": "2020-03-05T21:00:00-08:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Ballast Point, Little Italy, 2215 India Street\nSan Diego, CA, 92101\nUnited States",
+   "latitude": "32.8307902",
+   "longitude": "-117.1315766",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -101,6 +171,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -134,6 +205,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -149,7 +221,7 @@
    "age_grade_level": [
     "Adult"
    ],
-   "cost_range": "",
+   "cost_range": "Free",
    "time_of_day": [
     "Morning"
    ],
@@ -160,13 +232,14 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "9187 Clairemont Mesa Blvd., Suite 6-740, San Diego, California, 92123",
+   "location": "Online",
    "latitude": "32.8307902",
    "longitude": "-117.1315766",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -200,6 +273,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -233,6 +307,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -266,6 +341,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -299,6 +375,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
    "image_src": "adb55524c6ebb9b5.png"
   },
   {
@@ -318,7 +395,7 @@
    "time_of_day": [
     "Afternoon"
    ],
-   "opportunity_type": "Career Connections",
+   "opportunity_type": "Professional Development / Conferences",
    "areas_of_interest": [
     "Engineering"
    ],
@@ -332,6 +409,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -366,6 +444,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
    "image_src": "263f0c572c816e2c.jpg"
   },
   {
@@ -379,28 +458,28 @@
    "date_start": "2022-04-14T11:30:00-07:00",
    "date_end": "2022-04-14T13:00:00-07:00",
    "age_grade_level": [
-    "Grades 9-12",
-    "Adult"
+    "Grades 6-8",
+    "Grades 9-12"
    ],
    "cost_range": "",
    "time_of_day": [
-    "Late Morning",
-    "Afternoon"
+    "Late Morning"
    ],
-   "opportunity_type": "Career Connections",
+   "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
     "Engineering"
    ],
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "Women's Construction Coalition, 9187 Clairemont Mesa Blvd., Suite 6-740\nSan Diego, CA 92123",
+   "location": "Women's Construction Coalition, 9187 Clairemont Mesa Blvd., Suite 6-740, San Diego, CA 92123",
    "latitude": "32.8307902",
    "longitude": "-117.1315766",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -435,6 +514,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
    "image_src": "9d633ed126ecb6da.png"
   },
   {
@@ -468,6 +548,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
    "image_src": "75a520d02e6fcb5d.jpg"
   },
   {
@@ -480,13 +561,10 @@
    "availability": "",
    "date_start": "2023-05-04T15:30:00-07:00",
    "date_end": "2023-05-04T18:00:00-07:00",
-   "age_grade_level": [
-    "Adult"
-   ],
+   "age_grade_level": [],
    "cost_range": "",
    "time_of_day": [
-    "Afternoon",
-    "Evening"
+    "Afternoon"
    ],
    "opportunity_type": "Career Connections",
    "areas_of_interest": [
@@ -495,13 +573,14 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "Helix Electric, 6795 Flanders Drive, San Diego, CA 92121",
+   "location": "Helix Electric, 6795 Flanders Drive\nSan Diego, CA, 92121\nUnited States",
    "latitude": "32.8307902",
    "longitude": "-117.1315766",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
    "image_src": "d81421f403a7ecce.png"
   },
   {
@@ -535,6 +614,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
    "image_src": "a6710f94a39aa8e9.jpg"
   },
   {
@@ -549,7 +629,8 @@
    "date_end": "2023-07-12T13:00:00-07:00",
    "age_grade_level": [
     "Grades 6-8",
-    "Grades 9-12"
+    "Grades 9-12",
+    "Family"
    ],
    "cost_range": "Free",
    "time_of_day": [
@@ -570,6 +651,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
    "image_src": "8682df43dd9eade0.jpg"
   },
   {
@@ -586,7 +668,7 @@
     "Grades 9-12",
     "Adult"
    ],
-   "cost_range": "Free",
+   "cost_range": "",
    "time_of_day": [
     "Afternoon"
    ],
@@ -604,6 +686,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
    "image_src": "50333de86658541d.jpg"
   },
   {
@@ -637,6 +720,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
    "image_src": "3b377fd8268199c0.png"
   },
   {
@@ -670,6 +754,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
    "image_src": "f458ce810afcbe24.png"
   },
   {
@@ -703,6 +788,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
    "image_src": "ad00febbcf4dac96.png"
   },
   {
@@ -736,6 +822,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
    "image_src": "2545f2da1dd0e6e5.png"
   },
   {
@@ -755,7 +842,7 @@
    "time_of_day": [
     "Morning"
    ],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Career Connections",
    "areas_of_interest": [
     "Engineering"
    ],
@@ -769,6 +856,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
    "image_src": "273a9022b8a305bd.png"
   },
   {
@@ -788,7 +876,7 @@
    "time_of_day": [
     "Morning"
    ],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Career Connections",
    "areas_of_interest": [
     "Engineering"
    ],
@@ -802,6 +890,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
    "image_src": "df081081f410258e.png"
   },
   {
@@ -835,6 +924,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
    "image_src": "d9f32efbf3814b3d.png"
   },
   {
@@ -848,13 +938,15 @@
    "date_start": "2025-11-12T10:00:00-08:00",
    "date_end": "2025-11-12T12:00:00-08:00",
    "age_grade_level": [
-    "Family"
+    "Grades 6-8",
+    "Grades 9-12",
+    "Adult"
    ],
    "cost_range": "Free",
    "time_of_day": [
     "Morning"
    ],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Career Connections",
    "areas_of_interest": [
     "Engineering"
    ],
@@ -868,6 +960,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
    "image_src": "eea3380f3ba01d6e.png"
   },
   {
@@ -894,13 +987,14 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "Coronado Ferry Landing, San Diego, CA 92118, United States",
+   "location": "Coronado Ferry Landing, San Diego, CA 92118",
    "latitude": "32.8307902",
    "longitude": "-117.1315766",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
    "image_src": "cfc1c504f3924e37.png"
   },
   {
@@ -934,6 +1028,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
    "image_src": "7521ae552574a386.png"
   },
   {
@@ -967,6 +1062,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
    "image_src": "303436b393e0a7c6.png"
   },
   {
@@ -980,7 +1076,8 @@
    "date_start": "2026-05-20T10:00:00-07:00",
    "date_end": "2026-05-20T12:00:00-07:00",
    "age_grade_level": [
-    "Adult"
+    "Adult",
+    "Grades 9-12"
    ],
    "cost_range": "",
    "time_of_day": [
@@ -1000,6 +1097,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
    "image_src": "65f7bb3f4f02c5ec.png"
   },
   {
@@ -1012,16 +1110,13 @@
    "availability": "",
    "date_start": "2026-05-28T11:00:00-07:00",
    "date_end": "2026-05-28T14:00:00-07:00",
-   "age_grade_level": [
-    "Grades 9-12",
-    "Adult"
-   ],
+   "age_grade_level": [],
    "cost_range": "",
    "time_of_day": [
     "Morning",
     "Afternoon"
    ],
-   "opportunity_type": "Career Connections",
+   "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
     "Engineering"
    ],
@@ -1035,7 +1130,42 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
    "image_src": "1f2861b2829939d6.png"
+  },
+  {
+   "slug": "https_www_wccsd_org_events_whiskey_boots",
+   "title": "Whiskey & Boots — Women's Construction Coalition",
+   "partner_name": "Women's Construction Coalition",
+   "partner_id": 39,
+   "description": "WCC &amp; ASA Presents   Whiskey &amp; Boots \n  Grab Your Hard Hats &amp; Dust Off Those Boots!",
+   "link": "https://www.wccsd.org/events/whiskey-boots",
+   "availability": "",
+   "date_start": "2026-06-17T16:00:00-07:00",
+   "date_end": "2026-06-17T20:00:00-07:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "BNS Brewing, 10960 Wheatlands Avenue, Santee, California, 92071",
+   "latitude": "32.8307902",
+   "longitude": "-117.1315766",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
+   "image_src": "7ab05232cc365787.jpg"
   },
   {
    "slug": "https_www_wccsd_org_events_jobsite_tour_with_pcl_construction",
@@ -1048,8 +1178,8 @@
    "date_start": "2026-07-08T14:30:00-07:00",
    "date_end": "2026-07-08T16:00:00-07:00",
    "age_grade_level": [
-    "Grades 9-12",
-    "Adult"
+    "Adult",
+    "Grades 9-12"
    ],
    "cost_range": "Free",
    "time_of_day": [
@@ -1062,13 +1192,14 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "Educational Cultural Complex Theatre, 4343 Ocean View Boulevard\nSan Diego, California, 92113\nUnited States",
+   "location": "Educational Cultural Complex Theatre, 4343 Ocean View Boulevard, San Diego, California, 92113, United States",
    "latitude": "32.8307902",
    "longitude": "-117.1315766",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
    "image_src": "fdc5c98e693fbafe.png"
   },
   {
@@ -1089,7 +1220,7 @@
    "time_of_day": [
     "Morning"
    ],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Career Connections",
    "areas_of_interest": [
     "Engineering"
    ],
@@ -1103,6 +1234,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
    "image_src": ""
   }
  ]

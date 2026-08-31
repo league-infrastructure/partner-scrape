@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-08-31T00:40:43Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "biomimicry_san_diego",
  "kind": "past",
  "event_count": 3,
@@ -37,6 +37,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "biomimicry_san_diego.jpg",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -67,6 +68,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "biomimicry_san_diego.jpg",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -81,7 +83,7 @@
    "date_end": "2013-11-06T18:30:00-08:00",
    "age_grade_level": [
     "Adult",
-    "Grades 9-12"
+    "Family"
    ],
    "cost_range": "",
    "time_of_day": [
@@ -89,8 +91,7 @@
    ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
-    "Earth Science/Ecology",
-    "Biology / LifeSciences"
+    "Earth Science/Ecology"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -102,6 +103,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "biomimicry_san_diego.jpg",
+   "eligibility": "",
    "image_src": ""
   }
  ]

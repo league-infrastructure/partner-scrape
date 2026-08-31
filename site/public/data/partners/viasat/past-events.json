@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-08-31T00:40:44Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "viasat",
  "kind": "past",
- "event_count": 10,
+ "event_count": 13,
  "events": [
   {
    "slug": "https_www_viasat_com_events_september_world_space_business_week_2025",
@@ -35,6 +35,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "viasat.png",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -48,7 +49,10 @@
    "date_start": "",
    "date_end": "",
    "age_grade_level": [
-    "Family"
+    "Family",
+    "Grades 6-8",
+    "Grades 9-12",
+    "Adult"
    ],
    "cost_range": "",
    "time_of_day": [],
@@ -67,6 +71,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "viasat.png",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -84,8 +89,8 @@
    "time_of_day": [],
    "opportunity_type": "Professional Development / Conferences",
    "areas_of_interest": [
-    "Engineering",
-    "Physics"
+    "Physics",
+    "Engineering"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -97,6 +102,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "viasat.png",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -126,6 +132,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "viasat.png",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -157,6 +164,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "viasat.png",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -189,6 +197,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "viasat.png",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -209,7 +218,7 @@
    "opportunity_type": "Professional Development / Conferences",
    "areas_of_interest": [
     "Engineering",
-    "Physics"
+    "Physical Science"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -221,6 +230,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "viasat.png",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -253,6 +263,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "viasat.png",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -285,6 +296,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "viasat.png",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -297,9 +309,7 @@
    "availability": "",
    "date_start": "",
    "date_end": "",
-   "age_grade_level": [
-    "Adult"
-   ],
+   "age_grade_level": [],
    "cost_range": "",
    "time_of_day": [],
    "opportunity_type": "Professional Development / Conferences",
@@ -318,6 +328,103 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "viasat.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_www_viasat_com_events_october_satellite_innovation_symposium_2025",
+   "title": "Satellite Innovation Symposium 2025",
+   "partner_name": "Viasat",
+   "partner_id": 166,
+   "description": "",
+   "link": "https://www.viasat.com/events/october/satellite-innovation-symposium-2025/",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Earth Science/Ecology",
+    "Engineering",
+    "Physics"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "6155 El Camino Real, Carlsbad, California, 92009",
+   "latitude": "33.126769",
+   "longitude": "-117.2669894",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "viasat.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_www_viasat_com_events_november_2025_global_milsatcom_2025",
+   "title": "Global MilsatCom 2025",
+   "partner_name": "Viasat",
+   "partner_id": 166,
+   "description": "",
+   "link": "https://www.viasat.com/events/november-2025/global-milsatcom-2025/",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Engineering",
+    "Physics"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "6155 El Camino Real, Carlsbad, California, 92009",
+   "latitude": "33.126769",
+   "longitude": "-117.2669894",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "viasat.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_www_viasat_com_events_february_2026_space_summit_2026",
+   "title": "Space Summit 2026",
+   "partner_name": "Viasat",
+   "partner_id": 166,
+   "description": "",
+   "link": "https://www.viasat.com/events/february-2026/space-summit-2026/",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Conferences",
+   "areas_of_interest": [
+    "Physics",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "6155 El Camino Real, Carlsbad, California, 92009",
+   "latitude": "33.126769",
+   "longitude": "-117.2669894",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "viasat.png",
+   "eligibility": "",
    "image_src": ""
   }
  ]

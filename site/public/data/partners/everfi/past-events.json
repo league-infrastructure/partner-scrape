@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-08-31T00:40:43Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "everfi",
  "kind": "past",
- "event_count": 8,
+ "event_count": 11,
  "events": [
   {
    "slug": "https_everfi_com_courses_k_12_healthcare_literacy",
@@ -33,6 +33,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "everfi.png",
+   "eligibility": "",
    "image_src": "e9cdc8f1a3285904.webp"
   },
   {
@@ -62,6 +63,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "everfi.png",
+   "eligibility": "",
    "image_src": "5ae307450b412318.webp"
   },
   {
@@ -91,6 +93,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "everfi.png",
+   "eligibility": "",
    "image_src": "8f068a98ca3380c4.webp"
   },
   {
@@ -122,6 +125,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "everfi.png",
+   "eligibility": "",
    "image_src": "2508821418e47c9d.webp"
   },
   {
@@ -151,6 +155,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "everfi.png",
+   "eligibility": "",
    "image_src": "40df305c51af169b.webp"
   },
   {
@@ -172,7 +177,8 @@
    "areas_of_interest": [
     "Coding/Computer Science/Cyber Security",
     "Engineering",
-    "General Science"
+    "Mathematics",
+    "Physical Science"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -184,6 +190,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "everfi.png",
+   "eligibility": "",
    "image_src": "cfb2d1da5ffaa2a8.webp"
   },
   {
@@ -214,6 +221,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "everfi.png",
+   "eligibility": "",
    "image_src": "35bd1c719301399e.webp"
   },
   {
@@ -247,7 +255,99 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "everfi.png",
+   "eligibility": "",
    "image_src": "1125796a861af4e4.webp"
+  },
+  {
+   "slug": "https_everfi_com_courses_k_12_plants_animals_our_world",
+   "title": "Sustainability Foundations: Plants, Animals and Our World",
+   "partner_name": "EVERFI",
+   "partner_id": 162,
+   "description": "",
+   "link": "https://everfi.com/courses/k-12/plants-animals-our-world/",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego, California",
+   "latitude": "32.715738",
+   "longitude": "-117.1610838",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "everfi.png",
+   "eligibility": "",
+   "image_src": "cb77c848d7f0d4b4.webp"
+  },
+  {
+   "slug": "https_everfi_com_courses_k_12_financial_literacy_elementary_students",
+   "title": "Vault: Understanding Money",
+   "partner_name": "EVERFI",
+   "partner_id": 162,
+   "description": "",
+   "link": "https://everfi.com/courses/k-12/financial-literacy-elementary-students/",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Mathematics"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego, California",
+   "latitude": "32.715738",
+   "longitude": "-117.1610838",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "everfi.png",
+   "eligibility": "",
+   "image_src": "ed066fabbbba98a6.webp"
+  },
+  {
+   "slug": "https_everfi_com_courses_k_12_youth_entrepreneurship_curriculum",
+   "title": "Venture: Entrepreneurial Expedition",
+   "partner_name": "EVERFI",
+   "partner_id": 162,
+   "description": "",
+   "link": "https://everfi.com/courses/k-12/youth-entrepreneurship-curriculum/",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego, California",
+   "latitude": "32.715738",
+   "longitude": "-117.1610838",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "everfi.png",
+   "eligibility": "",
+   "image_src": "84ffc9250bc2d0a9.png"
   }
  ]
 }

@@ -1,43 +1,9 @@
 {
- "generated_at": "2026-08-31T00:40:43Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "national_society_of_black_engineers_san_diego",
  "kind": "past",
- "event_count": 9,
+ "event_count": 8,
  "events": [
-  {
-   "slug": "https_nsbe_org_programs_pci_competitions",
-   "title": "Pre-Collegiate Competitions | NSBE",
-   "partner_name": "National Society of Black Engineers - San Diego",
-   "partner_id": 402,
-   "description": "NSBE’s pre-collegiate competitions engage students in grades 4–12 in hands-on STEM challenges — from wind turbine design to robotics and math contests — building real-world engineering skills through friendly competition.",
-   "link": "https://nsbe.org/programs/pci-competitions/",
-   "availability": "",
-   "date_start": "",
-   "date_end": "",
-   "age_grade_level": [
-    "Grades 6-8",
-    "Grades 9-12"
-   ],
-   "cost_range": "",
-   "time_of_day": [],
-   "opportunity_type": "Out-of-school Programs",
-   "areas_of_interest": [
-    "Engineering",
-    "Mathematics",
-    "Physics"
-   ],
-   "specific_attention": [],
-   "financial_support": "No",
-   "ngss_aligned": "No",
-   "location": "5995 DANDRIDGE LN Unit 138, San Diego, CA, 92115",
-   "latitude": "32.7476852",
-   "longitude": "-117.0680417",
-   "contact_name": "",
-   "contact_email": "",
-   "contact_phone": "",
-   "logo_src": "national_society_of_black.png",
-   "image_src": "8106cc6405b88839.png"
-  },
   {
    "slug": "https_nsbe_org_program_engineering_diversity",
    "title": "NSBE Engineering Diversity Program",
@@ -67,6 +33,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "national_society_of_black.png",
+   "eligibility": "",
    "image_src": "8106cc6405b88839.png"
   },
   {
@@ -79,11 +46,7 @@
    "availability": "",
    "date_start": "",
    "date_end": "",
-   "age_grade_level": [
-    "Family",
-    "Grades 9-12",
-    "Grades 6-8"
-   ],
+   "age_grade_level": [],
    "cost_range": "",
    "time_of_day": [],
    "opportunity_type": "Out-of-school Programs",
@@ -100,6 +63,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "national_society_of_black.png",
+   "eligibility": "",
    "image_src": "8106cc6405b88839.png"
   },
   {
@@ -131,6 +95,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "national_society_of_black.png",
+   "eligibility": "",
    "image_src": "8106cc6405b88839.png"
   },
   {
@@ -163,6 +128,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "national_society_of_black.png",
+   "eligibility": "",
    "image_src": "8106cc6405b88839.png"
   },
   {
@@ -194,6 +160,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "national_society_of_black.png",
+   "eligibility": "",
    "image_src": "758cb1fcc4250bab.webp"
   },
   {
@@ -215,7 +182,7 @@
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
     "Engineering",
-    "Physics"
+    "Physical Science"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -227,6 +194,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "national_society_of_black.png",
+   "eligibility": "",
    "image_src": "fdad8e5e232f16d0.png"
   },
   {
@@ -258,6 +226,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "national_society_of_black.png",
+   "eligibility": "",
    "image_src": "bb387feed51a4195.png"
   },
   {
@@ -275,9 +244,7 @@
     "Grades 9-12"
    ],
    "cost_range": "",
-   "time_of_day": [
-    "All Day"
-   ],
+   "time_of_day": [],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
     "Engineering",
@@ -293,6 +260,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "national_society_of_black.png",
+   "eligibility": "",
    "image_src": "a812d59aa6b6f0f2.png"
   }
  ]

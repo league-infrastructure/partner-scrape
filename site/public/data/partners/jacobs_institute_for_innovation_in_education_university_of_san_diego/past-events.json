@@ -1,7 +1,71 @@
 {
- "generated_at": "2026-08-31T00:40:43Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "jacobs_institute_for_innovation_in_education_university_of_san_diego",
  "kind": "past",
- "event_count": 0,
- "events": []
+ "event_count": 2,
+ "events": [
+  {
+   "slug": "https_www_sandiego_edu_college_initiatives_programs_global_connection_exchange_program_php",
+   "title": "Global Connection and Exchange Program Afghanistan: Afghan and American PreCollege Institute - Institute of College Initiatives - University of San Diego",
+   "partner_name": "Jacobs Institute for Innovation in Education, University of San Diego",
+   "partner_id": 44,
+   "description": "",
+   "link": "https://www.sandiego.edu/college-initiatives/programs/global-connection-exchange-program.php",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Grades 9-12"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "University of San Diego",
+   "latitude": "32.7702332",
+   "longitude": "-117.1945288",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "jacobs_institute_for_innovation.jpg",
+   "eligibility": "",
+   "image_src": "d272b9aa88507ab0.png"
+  },
+  {
+   "slug": "https_www_sandiego_edu_outdoor_adventures_classes",
+   "title": "Classes - Outdoor Adventures - University of San Diego",
+   "partner_name": "Jacobs Institute for Innovation in Education, University of San Diego",
+   "partner_id": 44,
+   "description": "",
+   "link": "https://www.sandiego.edu/outdoor-adventures/classes/",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "University of San Diego",
+   "latitude": "32.7702332",
+   "longitude": "-117.1945288",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "jacobs_institute_for_innovation.jpg",
+   "eligibility": "",
+   "image_src": "d272b9aa88507ab0.png"
+  }
+ ]
 }

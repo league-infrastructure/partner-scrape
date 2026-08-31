@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-08-31T00:40:43Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "fleet_science_center",
  "kind": "past",
  "event_count": 2,
@@ -26,13 +26,14 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "1875 El Prado, San Diego, CA, 92101",
+   "location": "1875 El Prado, San Diego, CA 92101",
    "latitude": "32.7308603",
    "longitude": "-117.1469718",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "fleet_science_center.jpg",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -46,7 +47,8 @@
    "date_start": "2026-08-29T00:00:00-07:00",
    "date_end": "",
    "age_grade_level": [
-    "Family"
+    "Family",
+    "Adult"
    ],
    "cost_range": "",
    "time_of_day": [
@@ -60,13 +62,14 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "1875 El Prado, San Diego, CA, 92101",
+   "location": "1875 El Prado, San Diego, CA 92101",
    "latitude": "32.7308603",
    "longitude": "-117.1469718",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "fleet_science_center.jpg",
+   "eligibility": "",
    "image_src": ""
   }
  ]

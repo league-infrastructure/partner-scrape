@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-08-31T00:40:43Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "girls_who_code",
  "kind": "past",
  "event_count": 1,
@@ -33,6 +33,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "girls_who_code.jpg",
+   "eligibility": "",
    "image_src": "59b2fe4f6fb2f78a.jpg"
   }
  ]

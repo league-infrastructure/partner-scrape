@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-08-31T00:40:43Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "high_tech_high_graduate_school_of_education",
  "kind": "past",
  "event_count": 1,
@@ -31,6 +31,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "high_tech_high_graduate.jpg",
+   "eligibility": "",
    "image_src": "bcfbcc97d7342541.jpg"
   }
  ]

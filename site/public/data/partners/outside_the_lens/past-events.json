@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-08-31T00:40:44Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "outside_the_lens",
  "kind": "past",
- "event_count": 34,
+ "event_count": 35,
  "events": [
   {
    "slug": "https_www_outsidethelens_org_events_photo_wonders_trick_photography",
@@ -33,6 +33,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "outside_the_lens.png",
+   "eligibility": "",
    "image_src": "092fbc7767f93903.jpg"
   },
   {
@@ -50,7 +51,7 @@
    ],
    "cost_range": "",
    "time_of_day": [],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Camps",
    "areas_of_interest": [
     "Coding/Computer Science/Cyber Security"
    ],
@@ -64,7 +65,8 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "outside_the_lens.png",
-   "image_src": "868d193cc1269811.jpg"
+   "eligibility": "",
+   "image_src": "08eb02616f6041b1.jpg"
   },
   {
    "slug": "https_www_outsidethelens_org_events_visualize_your_voice",
@@ -95,26 +97,26 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "outside_the_lens.png",
+   "eligibility": "",
    "image_src": "1227e31461032dfc.png"
   },
   {
-   "slug": "https_www_outsidethelens_org_events_summer_camp_photo_wonders_trick_photography",
-   "title": "Summer Camp: Photo Wonders: Trick Photography – Outside The Lens",
+   "slug": "https_www_outsidethelens_org_events_summer_camp_shutterbugs",
+   "title": "Summer Camp: Shutterbugs – Outside The Lens",
    "partner_name": "Outside the Lens",
    "partner_id": 53,
-   "description": "Transform photos with creative techniques! Using iPads and DSLR cameras, develop photography skills while creating eye-catching images as participants explore special effects in photography including fun with double exposure, forced perspective, light writing, stop-motion animation, and more. Age: 8-11Day: M-FTime: 1:00pm-4:00pm Dates: Jun 8-Jun 12Fee: $245/$258 Registration begins Tuesday, April 14 at 7:30am for residents and […]",
-   "link": "https://www.outsidethelens.org/events/summer-camp-photo-wonders-trick-photography/",
+   "description": "Embark on a fun and creative journey into the world of photography! Little ones use iPads to explore the basics of photography and stop-motion animation through engaging, hands-on activities. Learn about elements of art such as shapes, color, and lines, different perspectives like close up and worm’s eye, and elements of portraiture. Experiment with different […]",
+   "link": "https://www.outsidethelens.org/events/summer-camp-shutterbugs/",
    "availability": "",
-   "date_start": "2024-06-08T13:00:00-07:00",
-   "date_end": "2024-06-12T16:00:00-07:00",
+   "date_start": "",
+   "date_end": "",
    "age_grade_level": [
-    "Grades 6-8"
+    "Family",
+    "Pre-K"
    ],
-   "cost_range": "Less than $300",
-   "time_of_day": [
-    "Afternoon"
-   ],
-   "opportunity_type": "Out-of-school Programs",
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Camps",
    "areas_of_interest": [
     "General Science"
    ],
@@ -128,41 +130,8 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "outside_the_lens.png",
-   "image_src": "370a8b6f0d5d17c3.jpg"
-  },
-  {
-   "slug": "https_www_outsidethelens_org_events_summer_camp_flashbacks",
-   "title": "Summer Camp: Flashbacks – Outside The Lens",
-   "partner_name": "Outside the Lens",
-   "partner_id": 53,
-   "description": "Get retro! Discover photography’s earliest techniques using a 4×5 camera, capturing & developing film, trying alternative photographic processes, and exploring the past and present through the lens. Age: 11-17Day: M-FTime: 1:00-4:00pmDates: Jul 27-Jul 31Fee: $245/$258 Registration begins Tuesday, April 14 at 7:30am for residents and Wednesday, April 15 at 7:30am for everyone. There are 3 convenient ways […]",
-   "link": "https://www.outsidethelens.org/events/summer-camp-flashbacks/",
-   "availability": "",
-   "date_start": "2024-07-27T13:00:00-07:00",
-   "date_end": "2024-07-31T16:00:00-07:00",
-   "age_grade_level": [
-    "Grades 6-8",
-    "Grades 9-12"
-   ],
-   "cost_range": "Less than $300",
-   "time_of_day": [
-    "Afternoon"
-   ],
-   "opportunity_type": "Out-of-school Programs",
-   "areas_of_interest": [
-    "General Science"
-   ],
-   "specific_attention": [],
-   "financial_support": "No",
-   "ngss_aligned": "No",
-   "location": "2750 Historic Decatur Rd Studio 103, San Diego, California, 92106",
-   "latitude": "32.7394525",
-   "longitude": "-117.2122866",
-   "contact_name": "",
-   "contact_email": "",
-   "contact_phone": "",
-   "logo_src": "outside_the_lens.png",
-   "image_src": "120dc3d6a45a4950.jpg"
+   "eligibility": "",
+   "image_src": "383347aeda2cda7e.jpg"
   },
   {
    "slug": "https_www_outsidethelens_org_events_outside_the_lens_presents_media_makers_2024_winter_showcase",
@@ -175,9 +144,8 @@
    "date_start": "2024-12-20T00:00:00-08:00",
    "date_end": "",
    "age_grade_level": [
-    "Family",
     "Grades 9-12",
-    "Grades 6-8"
+    "Family"
    ],
    "cost_range": "",
    "time_of_day": [],
@@ -195,6 +163,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "outside_the_lens.png",
+   "eligibility": "",
    "image_src": "5e53df37ddca1926.jpg"
   },
   {
@@ -208,13 +177,10 @@
    "date_start": "2025-03-15T00:00:00-07:00",
    "date_end": "",
    "age_grade_level": [
-    "Family",
-    "Grades 6-8"
+    "Family"
    ],
    "cost_range": "",
-   "time_of_day": [
-    "Morning"
-   ],
+   "time_of_day": [],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
     "Earth Science/Ecology"
@@ -229,6 +195,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "outside_the_lens.png",
+   "eligibility": "",
    "image_src": "c9f548585111e04d.jpg"
   },
   {
@@ -247,7 +214,9 @@
     "Adult"
    ],
    "cost_range": "",
-   "time_of_day": [],
+   "time_of_day": [
+    "Afternoon"
+   ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
     "Earth Science/Ecology"
@@ -262,7 +231,8 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "outside_the_lens.png",
-   "image_src": "e8ab8a3f477bd0cf.jpg"
+   "eligibility": "",
+   "image_src": "c1f8f075a605135b.jpg"
   },
   {
    "slug": "https_www_outsidethelens_org_events_landlenses_1000_days",
@@ -279,7 +249,10 @@
     "Adult"
    ],
    "cost_range": "",
-   "time_of_day": [],
+   "time_of_day": [
+    "Morning",
+    "Afternoon"
+   ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
     "Earth Science/Ecology"
@@ -287,14 +260,15 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "San Diego beach area",
+   "location": "San Diego Beach (Tijuana River area)",
    "latitude": "32.7394525",
    "longitude": "-117.2122866",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "outside_the_lens.png",
-   "image_src": "36d3aef499bcac79.jpg"
+   "eligibility": "",
+   "image_src": "70499223968a4f66.jpg"
   },
   {
    "slug": "https_www_outsidethelens_org_events_landlenses_park_not_dump",
@@ -307,11 +281,14 @@
    "date_start": "2025-04-12T00:00:00-07:00",
    "date_end": "",
    "age_grade_level": [
+    "Family",
     "Grades 6-8",
     "Grades 9-12"
    ],
    "cost_range": "Free",
-   "time_of_day": [],
+   "time_of_day": [
+    "All Day"
+   ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
     "Earth Science/Ecology"
@@ -326,7 +303,8 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "outside_the_lens.png",
-   "image_src": "251923ae6f8fd0c2.jpg"
+   "eligibility": "",
+   "image_src": "1d6130eaf7d8f1ad.jpg"
   },
   {
    "slug": "https_www_outsidethelens_org_events_landlenses_planting_memories",
@@ -339,8 +317,8 @@
    "date_start": "2025-04-15T00:00:00-07:00",
    "date_end": "",
    "age_grade_level": [
-    "Family",
-    "Adult"
+    "Adult",
+    "Family"
    ],
    "cost_range": "",
    "time_of_day": [
@@ -348,7 +326,7 @@
    ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
-    "Earth Science/Ecology"
+    "General Science"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -360,6 +338,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "outside_the_lens.png",
+   "eligibility": "",
    "image_src": "667fd2d8f79dde57.jpg"
   },
   {
@@ -373,10 +352,7 @@
    "date_start": "2025-04-26T00:00:00-07:00",
    "date_end": "",
    "age_grade_level": [
-    "Family",
-    "Grades 6-8",
-    "Grades 9-12",
-    "Adult"
+    "Family"
    ],
    "cost_range": "",
    "time_of_day": [],
@@ -394,6 +370,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "outside_the_lens.png",
+   "eligibility": "",
    "image_src": "582b6151f540a36a.jpg"
   },
   {
@@ -411,13 +388,11 @@
     "Adult"
    ],
    "cost_range": "Free",
-   "time_of_day": [
-    "All Day"
-   ],
+   "time_of_day": [],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
     "Earth Science/Ecology",
-    "Biology / LifeSciences"
+    "General Science"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -429,7 +404,8 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "outside_the_lens.png",
-   "image_src": "33b015e365d2307a.jpg"
+   "eligibility": "",
+   "image_src": "0636c653b3266d9d.jpg"
   },
   {
    "slug": "https_www_outsidethelens_org_events_landlenses_rituals_remedies",
@@ -464,7 +440,42 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "outside_the_lens.png",
+   "eligibility": "",
    "image_src": "520d66cf34da568a.jpg"
+  },
+  {
+   "slug": "https_www_outsidethelens_org_events_summer_camp_photo_wonders_trick_photography",
+   "title": "Summer Camp: Photo Wonders: Trick Photography – Outside The Lens",
+   "partner_name": "Outside the Lens",
+   "partner_id": 53,
+   "description": "Transform photos with creative techniques! Using iPads and DSLR cameras, develop photography skills while creating eye-catching images as participants explore special effects in photography including fun with double exposure, forced perspective, light writing, stop-motion animation, and more. Age: 8-11Day: M-FTime: 1:00pm-4:00pm Dates: Jun 8-Jun 12Fee: $245/$258 Registration begins Tuesday, April 14 at 7:30am for residents and […]",
+   "link": "https://www.outsidethelens.org/events/summer-camp-photo-wonders-trick-photography/",
+   "availability": "",
+   "date_start": "2025-06-08T13:00:00-07:00",
+   "date_end": "2025-06-12T16:00:00-07:00",
+   "age_grade_level": [
+    "Grades 6-8"
+   ],
+   "cost_range": "Less than $300",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Camps",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "2750 Historic Decatur Rd Studio 103, San Diego, California, 92106",
+   "latitude": "32.7394525",
+   "longitude": "-117.2122866",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "outside_the_lens.png",
+   "eligibility": "",
+   "image_src": "370a8b6f0d5d17c3.jpg"
   },
   {
    "slug": "https_www_outsidethelens_org_events_lights_camera_create_narrative_filmmaking",
@@ -484,7 +495,7 @@
     "Morning",
     "Afternoon"
    ],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Camps",
    "areas_of_interest": [
     "General Science"
    ],
@@ -498,6 +509,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "outside_the_lens.png",
+   "eligibility": "",
    "image_src": "32bba82b8147413c.jpg"
   },
   {
@@ -513,11 +525,11 @@
    "age_grade_level": [
     "Grades 6-8"
    ],
-   "cost_range": "Less than $100",
+   "cost_range": "Less than $300",
    "time_of_day": [
     "Afternoon"
    ],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Camps",
    "areas_of_interest": [
     "General Science"
    ],
@@ -531,7 +543,43 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "outside_the_lens.png",
+   "eligibility": "",
    "image_src": "eb7605909b25f6eb.jpg"
+  },
+  {
+   "slug": "https_www_outsidethelens_org_events_summer_camp_flashbacks",
+   "title": "Summer Camp: Flashbacks – Outside The Lens",
+   "partner_name": "Outside the Lens",
+   "partner_id": 53,
+   "description": "Get retro! Discover photography’s earliest techniques using a 4×5 camera, capturing & developing film, trying alternative photographic processes, and exploring the past and present through the lens. Age: 11-17Day: M-FTime: 1:00-4:00pmDates: Jul 27-Jul 31Fee: $245/$258 Registration begins Tuesday, April 14 at 7:30am for residents and Wednesday, April 15 at 7:30am for everyone. There are 3 convenient ways […]",
+   "link": "https://www.outsidethelens.org/events/summer-camp-flashbacks/",
+   "availability": "",
+   "date_start": "2025-07-27T13:00:00-07:00",
+   "date_end": "2025-07-31T16:00:00-07:00",
+   "age_grade_level": [
+    "Grades 6-8",
+    "Grades 9-12"
+   ],
+   "cost_range": "Less than $300",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Camps",
+   "areas_of_interest": [
+    "Physics"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "2750 Historic Decatur Rd Studio 103, San Diego, California, 92106",
+   "latitude": "32.7394525",
+   "longitude": "-117.2122866",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "outside_the_lens.png",
+   "eligibility": "",
+   "image_src": "120dc3d6a45a4950.jpg"
   },
   {
    "slug": "https_www_outsidethelens_org_events_open_house_open_house_2025",
@@ -566,6 +614,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "outside_the_lens.png",
+   "eligibility": "",
    "image_src": "f08f3051fa18d5b7.png"
   },
   {
@@ -597,6 +646,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "outside_the_lens.png",
+   "eligibility": "",
    "image_src": "f22007f0ddea1792.jpg"
   },
   {
@@ -627,6 +677,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "outside_the_lens.png",
+   "eligibility": "",
    "image_src": "5ace39c6b3902b82.jpg"
   },
   {
@@ -658,6 +709,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "outside_the_lens.png",
+   "eligibility": "",
    "image_src": "910bff12eb6213ae.jpg"
   },
   {
@@ -690,6 +742,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "outside_the_lens.png",
+   "eligibility": "",
    "image_src": "49b9399c0576040b.jpg"
   },
   {
@@ -719,6 +772,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "outside_the_lens.png",
+   "eligibility": "",
    "image_src": "3963d3d03d054a8c.jpg"
   },
   {
@@ -732,8 +786,9 @@
    "date_start": "2025-11-12T16:30:00-08:00",
    "date_end": "2025-11-12T19:00:00-08:00",
    "age_grade_level": [
-    "Grades 9-12",
-    "Family"
+    "Family",
+    "Grades 6-8",
+    "Grades 9-12"
    ],
    "cost_range": "",
    "time_of_day": [
@@ -751,6 +806,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "outside_the_lens.png",
+   "eligibility": "",
    "image_src": "b9e67afb46b1565a.png"
   },
   {
@@ -782,6 +838,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "outside_the_lens.png",
+   "eligibility": "",
    "image_src": "910bff12eb6213ae.jpg"
   },
   {
@@ -812,6 +869,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "outside_the_lens.png",
+   "eligibility": "",
    "image_src": "49b9399c0576040b.jpg"
   },
   {
@@ -842,6 +900,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "outside_the_lens.png",
+   "eligibility": "",
    "image_src": "3963d3d03d054a8c.jpg"
   },
   {
@@ -855,12 +914,15 @@
    "date_start": "2025-12-17T00:00:00-08:00",
    "date_end": "",
    "age_grade_level": [
+    "Grades 6-8",
     "Grades 9-12"
    ],
    "cost_range": "",
    "time_of_day": [],
    "opportunity_type": "Out-of-school Programs",
-   "areas_of_interest": [],
+   "areas_of_interest": [
+    "General Science"
+   ],
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
@@ -871,6 +933,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "outside_the_lens.png",
+   "eligibility": "",
    "image_src": "a5eb642b62feecea.jpg"
   },
   {
@@ -905,6 +968,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "outside_the_lens.png",
+   "eligibility": "",
    "image_src": "910bff12eb6213ae.jpg"
   },
   {
@@ -934,6 +998,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "outside_the_lens.png",
+   "eligibility": "",
    "image_src": "d46854c09be19a73.jpg"
   },
   {
@@ -965,6 +1030,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "outside_the_lens.png",
+   "eligibility": "",
    "image_src": "8d67ad132d3e4ff1.jpg"
   },
   {
@@ -996,6 +1062,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "outside_the_lens.png",
+   "eligibility": "",
    "image_src": "ad282a0488bf7b40.jpg"
   },
   {
@@ -1014,7 +1081,9 @@
    "cost_range": "",
    "time_of_day": [],
    "opportunity_type": "Out-of-school Programs",
-   "areas_of_interest": [],
+   "areas_of_interest": [
+    "General Science"
+   ],
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
@@ -1025,6 +1094,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "outside_the_lens.png",
+   "eligibility": "",
    "image_src": "5ace39c6b3902b82.jpg"
   },
   {
@@ -1060,6 +1130,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "outside_the_lens.png",
+   "eligibility": "",
    "image_src": "559876dbfe024ed0.gif"
   },
   {
@@ -1069,7 +1140,7 @@
    "partner_id": 53,
    "description": "Outside the Lens invites you to Voice Out, its third annual juried youth media arts exhibition! Voice Out Event Dates & Times OPENING NIGHT PREVIEW May 15, 2026 | 5–7PMMuseum of Contemporary Art San Diego700 Prospect St, La Jolla, CA COMMUNITY CELEBRATION May 16, 2026 | 3–5PMSan Diego Central Library330 Park Blvd, San Diego, CA THESE EVENTS celebrate the voices […]",
    "link": "https://www.outsidethelens.org/events/voiceout/voice-out-2026/",
-   "availability": "",
+   "availability": "Apply by 2026-05-15",
    "date_start": "2026-05-15T17:00:00-07:00",
    "date_end": "2026-05-15T19:00:00-07:00",
    "age_grade_level": [
@@ -1080,7 +1151,7 @@
    "time_of_day": [
     "Evening"
    ],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Competitions",
    "areas_of_interest": [
     "General Science"
    ],
@@ -1094,7 +1165,8 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "outside_the_lens.png",
-   "image_src": "d792ad03712f0c0f.jpg"
+   "eligibility": "",
+   "image_src": "0ae3d56bf773bb61.jpg"
   }
  ]
 }

@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-08-31T00:40:44Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "the_ecologik_institute",
  "kind": "past",
- "event_count": 112,
+ "event_count": 117,
  "events": [
   {
    "slug": "https_www_ecologikinstitute_org_fieldnotes_tag_workshop",
@@ -31,6 +31,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "3a071bb51680b760.png"
   },
   {
@@ -50,7 +51,9 @@
     "Adult"
    ],
    "cost_range": "",
-   "time_of_day": [],
+   "time_of_day": [
+    "Afternoon"
+   ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
     "Biology / LifeSciences",
@@ -67,6 +70,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "3a071bb51680b760.png"
   },
   {
@@ -84,10 +88,9 @@
    "time_of_day": [
     "All Day"
    ],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Camps",
    "areas_of_interest": [
-    "Earth Science/Ecology",
-    "Biology / LifeSciences"
+    "Earth Science/Ecology"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -99,6 +102,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "3a071bb51680b760.png"
   },
   {
@@ -119,7 +123,7 @@
    "time_of_day": [
     "Afternoon"
    ],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Professional Development / Conferences",
    "areas_of_interest": [
     "Coding/Computer Science/Cyber Security"
    ],
@@ -133,6 +137,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -153,7 +158,7 @@
    "time_of_day": [
     "Afternoon"
    ],
-   "opportunity_type": "Career Connections",
+   "opportunity_type": "Professional Development / Conferences",
    "areas_of_interest": [
     "Biology / LifeSciences",
     "Engineering"
@@ -168,6 +173,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -181,8 +187,8 @@
    "date_start": "2024-07-22T16:00:00-07:00",
    "date_end": "2024-07-22T17:00:00-07:00",
    "age_grade_level": [
-    "Adult",
-    "Grades 9-12"
+    "Grades 9-12",
+    "Adult"
    ],
    "cost_range": "Free",
    "time_of_day": [
@@ -203,6 +209,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -216,8 +223,7 @@
    "date_start": "2024-07-25T18:30:00-07:00",
    "date_end": "2024-07-25T22:00:00-07:00",
    "age_grade_level": [
-    "Grades 6-8",
-    "Family"
+    "Grades 6-8"
    ],
    "cost_range": "",
    "time_of_day": [
@@ -225,8 +231,6 @@
    ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
-    "Biology / LifeSciences",
-    "Engineering",
     "General Science"
    ],
    "specific_attention": [],
@@ -239,6 +243,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "5b7a0f7a48614e62.jpg"
   },
   {
@@ -275,6 +280,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "db05dd9e90255aa7.jpg"
   },
   {
@@ -301,7 +307,7 @@
    "areas_of_interest": [
     "Earth Science/Ecology",
     "Biology / LifeSciences",
-    "General Science"
+    "Physical Science"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -313,6 +319,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "245d9e4f1e98ff36.jpg"
   },
   {
@@ -331,9 +338,9 @@
    ],
    "cost_range": "Free",
    "time_of_day": [
-    "Evening"
+    "Afternoon"
    ],
-   "opportunity_type": "Online",
+   "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
     "Biology / LifeSciences",
     "Coding/Computer Science/Cyber Security"
@@ -348,6 +355,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -361,13 +369,13 @@
    "date_start": "2024-07-31T16:00:00-07:00",
    "date_end": "2024-07-31T17:30:00-07:00",
    "age_grade_level": [
-    "Family"
+    "Grades 6-8"
    ],
    "cost_range": "Free",
    "time_of_day": [
     "Afternoon"
    ],
-   "opportunity_type": "Online",
+   "opportunity_type": "Camps",
    "areas_of_interest": [
     "Earth Science/Ecology"
    ],
@@ -381,6 +389,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "63ea83bace34bdac.jpg"
   },
   {
@@ -416,15 +425,51 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
-   "slug": "https_www_theecologikinstitute_org_mentorship_monday",
+   "slug": "https_www_ecologikinstitute_org_mentorship_monday",
+   "title": "THE ECOLOGIK INSTITUTE — MENTORSHIP MONDAY - Workshop with Entomologist Dr. Ronda Hamm",
+   "partner_name": "The EcoLogik Institute",
+   "partner_id": 671,
+   "description": "Mondays at 4:00 PM - 5:00 PM Pacific join amazing women-in-STEM mentors to hear about their STEM journeys, ask questions, and get career advice. Sign up to get the Zoom link to these live chats! Check back regularly as more women in STEM mentors are added!",
+   "link": "https://www.ecologikinstitute.org/mentorship-monday",
+   "availability": "",
+   "date_start": "2024-08-12T16:00:00-07:00",
+   "date_end": "2024-08-12T17:00:00-07:00",
+   "age_grade_level": [
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Online",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "VIRTUAL",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
+   "image_src": "e9ae2ed706ebf24e.png"
+  },
+  {
+   "slug": "https_www_ecologikinstitute_org_events_mentorship_monday_workshop_with_marine_conservationist_dr_lekelia_jenkins",
    "title": "THE ECOLOGIK INSTITUTE — MENTORSHIP MONDAY - Workshop with Marine Conservationist Dr. Lekelia Jenkins",
    "partner_name": "The EcoLogik Institute",
    "partner_id": 671,
    "description": "Mondays at 4:00 PM - 5:00 PM Pacific join amazing women-in-STEM mentors to hear about their STEM journeys, ask questions, and get career advice. Sign up to get the Zoom link to these live chats! Check back regularly as more women in STEM mentors are added!",
-   "link": "https://www.theecologikinstitute.org/mentorship-monday",
+   "link": "https://www.ecologikinstitute.org/events/mentorship-monday-workshop-with-marine-conservationist-dr-lekelia-jenkins",
    "availability": "",
    "date_start": "2024-08-19T16:00:00-07:00",
    "date_end": "2024-08-19T17:00:00-07:00",
@@ -436,7 +481,7 @@
    "time_of_day": [
     "Evening"
    ],
-   "opportunity_type": "Career Connections",
+   "opportunity_type": "Online",
    "areas_of_interest": [
     "Biology / LifeSciences",
     "Earth Science/Ecology"
@@ -451,6 +496,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -466,15 +512,16 @@
    "age_grade_level": [
     "Family"
    ],
-   "cost_range": "",
+   "cost_range": "Free",
    "time_of_day": [
     "Morning",
     "Afternoon"
    ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
-    "General Science",
-    "Earth Science/Ecology"
+    "Biology / LifeSciences",
+    "Earth Science/Ecology",
+    "General Science"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -486,6 +533,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "0c6fab7452886c8d.png"
   },
   {
@@ -499,16 +547,17 @@
    "date_start": "2024-08-26T16:00:00-07:00",
    "date_end": "2024-08-26T17:00:00-07:00",
    "age_grade_level": [
-    "Adult",
-    "Grades 9-12"
+    "Grades 9-12",
+    "Adult"
    ],
    "cost_range": "Free",
    "time_of_day": [
-    "Afternoon"
+    "Evening"
    ],
-   "opportunity_type": "Career Connections",
+   "opportunity_type": "Online",
    "areas_of_interest": [
-    "Biology / LifeSciences"
+    "Biology / LifeSciences",
+    "General Science"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -520,6 +569,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -555,6 +605,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "71e56f8fe14aaf87.png"
   },
   {
@@ -568,8 +619,7 @@
    "date_start": "2024-09-01T13:30:00-07:00",
    "date_end": "2024-09-01T14:30:00-07:00",
    "age_grade_level": [
-    "Grades 6-8",
-    "Grades 9-12"
+    "Family"
    ],
    "cost_range": "Free",
    "time_of_day": [
@@ -577,18 +627,20 @@
    ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
-    "Earth Science/Ecology"
+    "Earth Science/Ecology",
+    "General Science"
    ],
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "Cabrillo National Monument & Virtual, 1800 Cabrillo Memorial Drive, San Diego, CA, 92106, United States",
+   "location": "Cabrillo National Monument & Virtual, 1800 Cabrillo Memorial Drive\nSan Diego, CA, 92106\nUnited States",
    "latitude": "None",
    "longitude": "None",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "53dc619bbda10df6.png"
   },
   {
@@ -602,14 +654,14 @@
    "date_start": "2024-09-02T16:00:00-07:00",
    "date_end": "2024-09-02T17:00:00-07:00",
    "age_grade_level": [
-    "Grades 9-12",
-    "Adult"
+    "Adult",
+    "Grades 9-12"
    ],
    "cost_range": "Free",
    "time_of_day": [
-    "Afternoon"
+    "Evening"
    ],
-   "opportunity_type": "Online",
+   "opportunity_type": "Professional Development / Conferences",
    "areas_of_interest": [
     "Biology / LifeSciences"
    ],
@@ -623,6 +675,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -646,7 +699,7 @@
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
     "Engineering",
-    "Biology / LifeSciences"
+    "Earth Science/Ecology"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -658,6 +711,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "71e56f8fe14aaf87.png"
   },
   {
@@ -671,6 +725,7 @@
    "date_start": "2024-09-09T16:00:00-07:00",
    "date_end": "2024-09-09T17:00:00-07:00",
    "age_grade_level": [
+    "Grades 9-12",
     "Adult"
    ],
    "cost_range": "Free",
@@ -679,6 +734,7 @@
    ],
    "opportunity_type": "Professional Development / Conferences",
    "areas_of_interest": [
+    "Biology / LifeSciences",
     "Coding/Computer Science/Cyber Security",
     "Engineering",
     "General Science"
@@ -693,6 +749,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -728,6 +785,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "71e56f8fe14aaf87.png"
   },
   {
@@ -761,6 +819,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "0c3f75814d6e7fb4.png"
   },
   {
@@ -783,8 +842,7 @@
    ],
    "opportunity_type": "Career Connections",
    "areas_of_interest": [
-    "Biology / LifeSciences",
-    "General Science"
+    "Biology / LifeSciences"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -796,6 +854,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -815,7 +874,7 @@
    "time_of_day": [
     "Evening"
    ],
-   "opportunity_type": "Online",
+   "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
     "Earth Science/Ecology"
    ],
@@ -829,6 +888,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "74ae43e2b8744501.png"
   },
   {
@@ -842,14 +902,14 @@
    "date_start": "2024-09-23T16:00:00-07:00",
    "date_end": "2024-09-23T17:00:00-07:00",
    "age_grade_level": [
-    "Grades 9-12",
-    "Adult"
+    "Adult",
+    "Grades 9-12"
    ],
    "cost_range": "Free",
    "time_of_day": [
     "Afternoon"
    ],
-   "opportunity_type": "Online",
+   "opportunity_type": "Career Connections",
    "areas_of_interest": [
     "Biology / LifeSciences"
    ],
@@ -863,6 +923,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -898,6 +959,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "71e56f8fe14aaf87.png"
   },
   {
@@ -934,6 +996,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "8ea7c5b48a141f10.png"
   },
   {
@@ -950,14 +1013,14 @@
     "Grades 6-8",
     "Grades 9-12"
    ],
-   "cost_range": "Free",
+   "cost_range": "",
    "time_of_day": [
     "Afternoon"
    ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
-    "Biology / LifeSciences",
-    "Coding/Computer Science/Cyber Security"
+    "Coding/Computer Science/Cyber Security",
+    "Biology / LifeSciences"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -969,6 +1032,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "71e56f8fe14aaf87.png"
   },
   {
@@ -987,9 +1051,9 @@
    ],
    "cost_range": "Free",
    "time_of_day": [
-    "Evening"
+    "Afternoon"
    ],
-   "opportunity_type": "Career Connections",
+   "opportunity_type": "Professional Development / Conferences",
    "areas_of_interest": [
     "General Science"
    ],
@@ -1003,6 +1067,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -1021,13 +1086,12 @@
    ],
    "cost_range": "Free",
    "time_of_day": [
-    "Afternoon",
-    "Evening"
+    "Afternoon"
    ],
-   "opportunity_type": "Career Connections",
+   "opportunity_type": "Online",
    "areas_of_interest": [
     "Engineering",
-    "General Science"
+    "Earth Science/Ecology"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -1039,6 +1103,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -1072,6 +1137,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "cb664b8fdbd3dcd0.png"
   },
   {
@@ -1092,7 +1158,7 @@
    "time_of_day": [
     "Afternoon"
    ],
-   "opportunity_type": "Career Connections",
+   "opportunity_type": "Online",
    "areas_of_interest": [
     "Biology / LifeSciences",
     "Earth Science/Ecology"
@@ -1107,6 +1173,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -1129,7 +1196,7 @@
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
     "Earth Science/Ecology",
-    "General Science"
+    "Biology / LifeSciences"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -1141,6 +1208,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "cb664b8fdbd3dcd0.png"
   },
   {
@@ -1175,6 +1243,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -1209,6 +1278,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "cb664b8fdbd3dcd0.png"
   },
   {
@@ -1229,11 +1299,8 @@
    "time_of_day": [
     "Afternoon"
    ],
-   "opportunity_type": "Online",
+   "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
-    "Biology / LifeSciences",
-    "Coding/Computer Science/Cyber Security",
-    "Engineering",
     "General Science"
    ],
    "specific_attention": [],
@@ -1246,6 +1313,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -1260,6 +1328,7 @@
    "date_end": "2024-11-03T18:00:00-08:00",
    "age_grade_level": [
     "Family",
+    "Grades 6-8",
     "Grades 9-12"
    ],
    "cost_range": "",
@@ -1268,7 +1337,7 @@
    ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
-    "Earth Science/Ecology"
+    "General Science"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -1280,6 +1349,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "8e04fd013e9b0d78.png"
   },
   {
@@ -1293,14 +1363,14 @@
    "date_start": "2024-11-04T16:00:00-08:00",
    "date_end": "2024-11-04T17:00:00-08:00",
    "age_grade_level": [
-    "Adult",
-    "Grades 9-12"
+    "Grades 9-12",
+    "Adult"
    ],
    "cost_range": "Free",
    "time_of_day": [
     "Afternoon"
    ],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Online",
    "areas_of_interest": [
     "General Science"
    ],
@@ -1314,6 +1384,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -1347,6 +1418,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "74ae43e2b8744501.png"
   },
   {
@@ -1362,11 +1434,11 @@
    "age_grade_level": [
     "Family"
    ],
-   "cost_range": "Free",
+   "cost_range": "",
    "time_of_day": [
     "Evening"
    ],
-   "opportunity_type": "Online",
+   "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
     "Earth Science/Ecology"
    ],
@@ -1380,6 +1452,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "0c3f75814d6e7fb4.png"
   },
   {
@@ -1393,6 +1466,7 @@
    "date_start": "2024-11-11T16:00:00-08:00",
    "date_end": "2024-11-11T17:00:00-08:00",
    "age_grade_level": [
+    "Grades 6-8",
     "Grades 9-12",
     "Adult"
    ],
@@ -1400,8 +1474,15 @@
    "time_of_day": [
     "Afternoon"
    ],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Career Connections",
    "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Coding/Computer Science/Cyber Security",
+    "Engineering",
+    "Physical Science",
+    "Mathematics",
+    "Chemistry",
+    "Physics",
     "General Science"
    ],
    "specific_attention": [],
@@ -1414,6 +1495,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -1434,7 +1516,7 @@
    "time_of_day": [
     "Afternoon"
    ],
-   "opportunity_type": "Career Connections",
+   "opportunity_type": "Online",
    "areas_of_interest": [
     "Chemistry"
    ],
@@ -1448,6 +1530,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -1463,11 +1546,11 @@
    "age_grade_level": [
     "Family"
    ],
-   "cost_range": "Free",
+   "cost_range": "",
    "time_of_day": [
     "Evening"
    ],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Online",
    "areas_of_interest": [
     "Earth Science/Ecology"
    ],
@@ -1481,6 +1564,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "74ae43e2b8744501.png"
   },
   {
@@ -1501,10 +1585,9 @@
    "time_of_day": [
     "Afternoon"
    ],
-   "opportunity_type": "Career Connections",
+   "opportunity_type": "Professional Development / Conferences",
    "areas_of_interest": [
-    "Engineering",
-    "General Science"
+    "Engineering"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -1516,6 +1599,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -1551,6 +1635,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "41333ccc91fe5a03.png"
   },
   {
@@ -1572,7 +1657,7 @@
    ],
    "opportunity_type": "Professional Development / Conferences",
    "areas_of_interest": [
-    "Biology / LifeSciences"
+    "Coding/Computer Science/Cyber Security"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -1584,6 +1669,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -1603,7 +1689,7 @@
    "time_of_day": [
     "Evening"
    ],
-   "opportunity_type": "Online",
+   "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
     "Earth Science/Ecology"
    ],
@@ -1617,6 +1703,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "74ae43e2b8744501.png"
   },
   {
@@ -1635,9 +1722,9 @@
    ],
    "cost_range": "Free",
    "time_of_day": [
-    "Afternoon"
+    "Evening"
    ],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Career Connections",
    "areas_of_interest": [
     "Biology / LifeSciences",
     "Engineering"
@@ -1652,6 +1739,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -1665,8 +1753,8 @@
    "date_start": "2024-12-11T16:00:00-08:00",
    "date_end": "2024-12-11T17:30:00-08:00",
    "age_grade_level": [
-    "Family",
-    "Adult"
+    "Adult",
+    "Grades 9-12"
    ],
    "cost_range": "",
    "time_of_day": [
@@ -1687,7 +1775,78 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "41333ccc91fe5a03.png"
+  },
+  {
+   "slug": "https_www_ecologikinstitute_org_events_ecologik_game_night_march2025_lsmnl_bgfzp_yjaex_rbh9x",
+   "title": "THE ECOLOGIK INSTITUTE — EcoLogik Game Night!",
+   "partner_name": "The EcoLogik Institute",
+   "partner_id": 671,
+   "description": "Join advisors, apprentices, and EcoLogik campers for a night full of fun and games!",
+   "link": "https://www.ecologikinstitute.org/events/ecologik-game-night-march2025-lsmnl-bgfzp-yjaex-rbh9x",
+   "availability": "Repeats 8 times through 2025-07-11",
+   "date_start": "2024-12-13T18:00:00-08:00",
+   "date_end": "2025-07-11T19:00:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Virtual",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
+   "image_src": "0c3f75814d6e7fb4.png"
+  },
+  {
+   "slug": "https_www_theecologikinstitute_org_mentorship_monday",
+   "title": "THE ECOLOGIK INSTITUTE — Mentorship Monday - Fire Ecologist with the US Forest Service Sarah Hennessy",
+   "partner_name": "The EcoLogik Institute",
+   "partner_id": 671,
+   "description": "Mondays at 4:00 PM - 5:00 PM Pacific join amazing women-in-STEM mentors to hear about their STEM journeys, ask questions, and get career advice. Sign up to get the Zoom link to these live chats! Check back regularly as more women in STEM mentors are added!",
+   "link": "https://www.theecologikinstitute.org/mentorship-monday",
+   "availability": "",
+   "date_start": "2024-12-16T16:00:00-08:00",
+   "date_end": "2024-12-16T17:00:00-08:00",
+   "age_grade_level": [
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Career Connections",
+   "areas_of_interest": [
+    "Earth Science/Ecology",
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "VIRTUAL",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
+   "image_src": "e9ae2ed706ebf24e.png"
   },
   {
    "slug": "https_www_ecologikinstitute_org_events_mentorship_monday_fire_ecologist_with_the_us_forest_service_sarah_hennessy",
@@ -1721,6 +1880,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -1734,13 +1894,14 @@
    "date_start": "2024-12-30T16:00:00-08:00",
    "date_end": "2024-12-30T17:00:00-08:00",
    "age_grade_level": [
+    "Grades 9-12",
     "Adult"
    ],
    "cost_range": "Free",
    "time_of_day": [
     "Evening"
    ],
-   "opportunity_type": "Professional Development / Conferences",
+   "opportunity_type": "Online",
    "areas_of_interest": [
     "Biology / LifeSciences"
    ],
@@ -1754,7 +1915,43 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
+  },
+  {
+   "slug": "https_www_ecologikinstitute_org_events_cesap_steam_graduation_party",
+   "title": "THE ECOLOGIK INSTITUTE — CESAP STEAM Graduation Party",
+   "partner_name": "The EcoLogik Institute",
+   "partner_id": 671,
+   "description": "CESAP STEAM Grads! Save the date for a graduation party on Sunday, January 5th from 10:00 AM - 2:00 PM!",
+   "link": "https://www.ecologikinstitute.org/events/cesap-steam-graduation-party",
+   "availability": "",
+   "date_start": "2025-01-05T10:00:00-08:00",
+   "date_end": "2025-01-05T14:00:00-08:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Morning",
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Cabrillo National Monument",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
+   "image_src": "4668789d527ccb01.jpg"
   },
   {
    "slug": "https_www_ecologikinstitute_org_events_mentorship_monday_qa_with_biomedical_engineer_medical_student_sahana_kumar_2",
@@ -1772,9 +1969,9 @@
    ],
    "cost_range": "Free",
    "time_of_day": [
-    "Afternoon"
+    "Evening"
    ],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Career Connections",
    "areas_of_interest": [
     "Biology / LifeSciences",
     "Engineering"
@@ -1789,6 +1986,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -1822,6 +2020,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "0c3f75814d6e7fb4.png"
   },
   {
@@ -1844,8 +2043,8 @@
    ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
-    "Earth Science/Ecology",
-    "Biology / LifeSciences"
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -1857,6 +2056,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "de5b5dd9e80c4b06.png"
   },
   {
@@ -1870,17 +2070,22 @@
    "date_start": "2025-01-13T16:00:00-08:00",
    "date_end": "2025-01-13T17:00:00-08:00",
    "age_grade_level": [
-    "Family",
     "Grades 9-12",
-    "Grades 6-8",
     "Adult"
    ],
    "cost_range": "Free",
    "time_of_day": [
     "Afternoon"
    ],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Career Connections",
    "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Coding/Computer Science/Cyber Security",
+    "Engineering",
+    "Physical Science",
+    "Mathematics",
+    "Chemistry",
+    "Physics",
     "General Science"
    ],
    "specific_attention": [],
@@ -1893,6 +2098,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -1913,8 +2119,15 @@
    "time_of_day": [
     "Afternoon"
    ],
-   "opportunity_type": "Career Connections",
+   "opportunity_type": "Online",
    "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Coding/Computer Science/Cyber Security",
+    "Engineering",
+    "Physical Science",
+    "Mathematics",
+    "Chemistry",
+    "Physics",
     "General Science"
    ],
    "specific_attention": [],
@@ -1927,6 +2140,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -1940,15 +2154,17 @@
    "date_start": "2025-01-22T18:00:00-08:00",
    "date_end": "2025-01-22T19:00:00-08:00",
    "age_grade_level": [
-    "Grades 9-12"
+    "Grades 9-12",
+    "Family"
    ],
    "cost_range": "Free",
    "time_of_day": [
     "Evening"
    ],
-   "opportunity_type": "Online",
+   "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
-    "Earth Science/Ecology"
+    "Earth Science/Ecology",
+    "General Science"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -1960,6 +2176,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "1d06e3e37255bb69.png"
   },
   {
@@ -1973,8 +2190,8 @@
    "date_start": "2025-01-27T16:00:00-08:00",
    "date_end": "2025-01-27T17:00:00-08:00",
    "age_grade_level": [
-    "Grades 9-12",
-    "Adult"
+    "Adult",
+    "Grades 9-12"
    ],
    "cost_range": "Free",
    "time_of_day": [
@@ -1995,6 +2212,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -2013,9 +2231,9 @@
    ],
    "cost_range": "Free",
    "time_of_day": [
-    "Evening"
+    "Afternoon"
    ],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Professional Development / Conferences",
    "areas_of_interest": [
     "Coding/Computer Science/Cyber Security"
    ],
@@ -2029,6 +2247,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -2042,14 +2261,14 @@
    "date_start": "2025-02-10T16:00:00-08:00",
    "date_end": "2025-02-10T17:00:00-08:00",
    "age_grade_level": [
-    "Grades 9-12",
-    "Adult"
+    "Adult",
+    "Grades 9-12"
    ],
    "cost_range": "Free",
    "time_of_day": [
     "Afternoon"
    ],
-   "opportunity_type": "Career Connections",
+   "opportunity_type": "Online",
    "areas_of_interest": [
     "Chemistry",
     "General Science"
@@ -2064,6 +2283,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -2081,12 +2301,12 @@
    ],
    "cost_range": "Free",
    "time_of_day": [
-    "Afternoon"
+    "Evening"
    ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
     "Engineering",
-    "Biology / LifeSciences"
+    "Earth Science/Ecology"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -2098,6 +2318,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "7819c5a1b7153163.png"
   },
   {
@@ -2118,7 +2339,7 @@
    "time_of_day": [
     "Afternoon"
    ],
-   "opportunity_type": "Online",
+   "opportunity_type": "Career Connections",
    "areas_of_interest": [
     "Earth Science/Ecology"
    ],
@@ -2132,6 +2353,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -2166,6 +2388,45 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
+   "image_src": "e9ae2ed706ebf24e.png"
+  },
+  {
+   "slug": "https_www_ecologikinstitute_org_events_mentorship_monday_with_entomologist_and_if_then_ambassador_dr_ronda_hamm",
+   "title": "THE ECOLOGIK INSTITUTE — Mentorship Monday with entomologist and IF/THEN Ambassador Dr. Ronda Hamm",
+   "partner_name": "The EcoLogik Institute",
+   "partner_id": 671,
+   "description": "Mondays at 4:00 PM - 5:00 PM Pacific join amazing women-in-STEM mentors to hear about their STEM journeys, ask questions, and get career advice. Sign up to get the Zoom link to these live chats! Check back regularly as more women in STEM mentors are added!",
+   "link": "https://www.ecologikinstitute.org/events/mentorship-monday-with-entomologist-and-if/then-ambassador-dr-ronda-hamm",
+   "availability": "",
+   "date_start": "2025-03-03T16:30:00-08:00",
+   "date_end": "2025-03-03T17:00:00-08:00",
+   "age_grade_level": [
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Online",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Coding/Computer Science/Cyber Security",
+    "Engineering",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "VIRTUAL",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -2186,7 +2447,7 @@
    "time_of_day": [
     "Afternoon"
    ],
-   "opportunity_type": "Online",
+   "opportunity_type": "Career Connections",
    "areas_of_interest": [
     "Biology / LifeSciences"
    ],
@@ -2200,6 +2461,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -2213,8 +2475,8 @@
    "date_start": "2025-03-17T16:30:00-07:00",
    "date_end": "2025-03-17T17:00:00-07:00",
    "age_grade_level": [
-    "Adult",
-    "Grades 9-12"
+    "Grades 9-12",
+    "Adult"
    ],
    "cost_range": "Free",
    "time_of_day": [
@@ -2235,6 +2497,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -2255,10 +2518,10 @@
    "time_of_day": [
     "Afternoon"
    ],
-   "opportunity_type": "Online",
+   "opportunity_type": "Career Connections",
    "areas_of_interest": [
     "Engineering",
-    "Coding/Computer Science/Cyber Security"
+    "Physics"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -2270,6 +2533,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -2280,17 +2544,17 @@
    "description": "Mondays at 4:00 PM - 5:00 PM Pacific join amazing women-in-STEM mentors to hear about their STEM journeys, ask questions, and get career advice. Sign up to get the Zoom link to these live chats! Check back regularly as more women in STEM mentors are added!",
    "link": "https://www.ecologikinstitute.org/events/mentorship-monday-with-biologist-jessica-mcclure",
    "availability": "",
-   "date_start": "2025-03-31T16:30:00-07:00",
+   "date_start": "2025-03-31T16:00:00-07:00",
    "date_end": "2025-03-31T17:00:00-07:00",
    "age_grade_level": [
-    "Grades 9-12",
-    "Adult"
+    "Adult",
+    "Grades 9-12"
    ],
    "cost_range": "Free",
    "time_of_day": [
     "Afternoon"
    ],
-   "opportunity_type": "Career Connections",
+   "opportunity_type": "Online",
    "areas_of_interest": [
     "Biology / LifeSciences"
    ],
@@ -2304,6 +2568,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -2324,7 +2589,7 @@
    "time_of_day": [
     "Afternoon"
    ],
-   "opportunity_type": "Online",
+   "opportunity_type": "Career Connections",
    "areas_of_interest": [
     "Biology / LifeSciences",
     "Coding/Computer Science/Cyber Security"
@@ -2339,6 +2604,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -2373,6 +2639,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "5909c346eede957c.png"
   },
   {
@@ -2383,20 +2650,23 @@
    "description": "Mondays at 4:00 PM - 5:00 PM Pacific join amazing women-in-STEM mentors to hear about their STEM journeys, ask questions, and get career advice. Sign up to get the Zoom link to these live chats! Check back regularly as more women in STEM mentors are added!",
    "link": "https://www.ecologikinstitute.org/events/mentorship-monday-with-dr-paige-howorth",
    "availability": "",
-   "date_start": "2025-04-14T16:00:00-07:00",
+   "date_start": "2025-04-14T16:30:00-07:00",
    "date_end": "2025-04-14T17:00:00-07:00",
    "age_grade_level": [
-    "Grades 9-12",
     "Adult"
    ],
    "cost_range": "Free",
    "time_of_day": [
     "Afternoon"
    ],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Professional Development / Conferences",
    "areas_of_interest": [
+    "Biology / LifeSciences",
     "Coding/Computer Science/Cyber Security",
     "Engineering",
+    "Physical Science",
+    "Chemistry",
+    "Physics",
     "General Science"
    ],
    "specific_attention": [],
@@ -2409,6 +2679,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -2429,10 +2700,9 @@
    "time_of_day": [
     "Afternoon"
    ],
-   "opportunity_type": "Professional Development / Conferences",
+   "opportunity_type": "Career Connections",
    "areas_of_interest": [
-    "Biology / LifeSciences",
-    "Engineering"
+    "Biology / LifeSciences"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -2444,6 +2714,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -2462,17 +2733,13 @@
    ],
    "cost_range": "Free",
    "time_of_day": [
-    "Evening"
+    "Afternoon"
    ],
-   "opportunity_type": "Career Connections",
+   "opportunity_type": "Online",
    "areas_of_interest": [
-    "Engineering",
-    "Physical Science",
     "Biology / LifeSciences",
-    "Chemistry",
-    "Mathematics",
     "Coding/Computer Science/Cyber Security",
-    "Earth Science/Ecology",
+    "Engineering",
     "General Science"
    ],
    "specific_attention": [],
@@ -2485,6 +2752,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -2498,14 +2766,14 @@
    "date_start": "2025-05-05T16:30:00-07:00",
    "date_end": "2025-05-05T17:00:00-07:00",
    "age_grade_level": [
-    "Grades 9-12",
-    "Adult"
+    "Adult",
+    "Grades 9-12"
    ],
    "cost_range": "Free",
    "time_of_day": [
     "Afternoon"
    ],
-   "opportunity_type": "Career Connections",
+   "opportunity_type": "Online",
    "areas_of_interest": [
     "Biology / LifeSciences",
     "General Science"
@@ -2520,6 +2788,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -2540,9 +2809,10 @@
    "time_of_day": [
     "Afternoon"
    ],
-   "opportunity_type": "Career Connections",
+   "opportunity_type": "Online",
    "areas_of_interest": [
-    "Chemistry"
+    "Chemistry",
+    "General Science"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -2554,6 +2824,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -2564,10 +2835,11 @@
    "description": "Mondays at 4:00 PM - 5:00 PM Pacific join amazing women-in-STEM mentors to hear about their STEM journeys, ask questions, and get career advice. Sign up to get the Zoom link to these live chats! Check back regularly as more women in STEM mentors are added!",
    "link": "https://www.ecologikinstitute.org/events/mentorship-monday-with-dr-tracy-nguyen",
    "availability": "",
-   "date_start": "2025-05-19T16:00:00-07:00",
+   "date_start": "2025-05-19T16:30:00-07:00",
    "date_end": "2025-05-19T17:00:00-07:00",
    "age_grade_level": [
-    "Adult"
+    "Adult",
+    "Grades 9-12"
    ],
    "cost_range": "Free",
    "time_of_day": [
@@ -2587,6 +2859,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -2607,7 +2880,7 @@
    "time_of_day": [
     "Afternoon"
    ],
-   "opportunity_type": "Online",
+   "opportunity_type": "Career Connections",
    "areas_of_interest": [
     "Coding/Computer Science/Cyber Security",
     "Engineering",
@@ -2623,6 +2896,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -2637,8 +2911,7 @@
    "date_end": "2025-05-29T17:00:00-07:00",
    "age_grade_level": [
     "Family",
-    "Grades 6-8",
-    "Grades 9-12"
+    "Grades 6-8"
    ],
    "cost_range": "",
    "time_of_day": [
@@ -2659,6 +2932,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "25493f7fa11a9f4b.jpg"
   },
   {
@@ -2681,6 +2955,7 @@
    ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
+    "Biology / LifeSciences",
     "General Science"
    ],
    "specific_attention": [],
@@ -2693,6 +2968,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -2727,6 +3003,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -2737,8 +3014,8 @@
    "description": "Mondays at 4:00 PM - 5:00 PM Pacific join amazing women-in-STEM mentors to hear about their STEM journeys, ask questions, and get career advice. Sign up to get the Zoom link to these live chats! Check back regularly as more women in STEM mentors are added!",
    "link": "https://www.ecologikinstitute.org/events/mentorship-monday-with-molecular-biologist-monika-ramos-quakenbush-94r3g",
    "availability": "",
-   "date_start": "2025-06-23T16:00:00-07:00",
-   "date_end": "2025-06-23T17:00:00-07:00",
+   "date_start": "2025-06-23T16:30:00-07:00",
+   "date_end": "2025-06-23T17:30:00-07:00",
    "age_grade_level": [
     "Grades 9-12",
     "Adult"
@@ -2747,8 +3024,13 @@
    "time_of_day": [
     "Afternoon"
    ],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Career Connections",
    "areas_of_interest": [
+    "Coding/Computer Science/Cyber Security",
+    "Engineering",
+    "Biology / LifeSciences",
+    "Chemistry",
+    "Physics",
     "General Science"
    ],
    "specific_attention": [],
@@ -2761,6 +3043,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -2774,7 +3057,9 @@
    "date_start": "2025-06-26T14:00:00-07:00",
    "date_end": "2025-06-26T15:30:00-07:00",
    "age_grade_level": [
-    "Grades 6-8"
+    "Family",
+    "Grades 6-8",
+    "Grades 9-12"
    ],
    "cost_range": "",
    "time_of_day": [
@@ -2794,6 +3079,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "6d23d1085fc5cc26.png"
   },
   {
@@ -2814,7 +3100,7 @@
    "time_of_day": [
     "Afternoon"
    ],
-   "opportunity_type": "Online",
+   "opportunity_type": "Career Connections",
    "areas_of_interest": [
     "Biology / LifeSciences"
    ],
@@ -2828,6 +3114,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e9ae2ed706ebf24e.png"
   },
   {
@@ -2863,6 +3150,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "25493f7fa11a9f4b.jpg"
   },
   {
@@ -2876,7 +3164,8 @@
    "date_start": "2025-07-10T15:00:00-07:00",
    "date_end": "2025-07-10T17:00:00-07:00",
    "age_grade_level": [
-    "Family"
+    "Grades 6-8",
+    "Grades 9-12"
    ],
    "cost_range": "Free",
    "time_of_day": [
@@ -2896,6 +3185,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "bf937ff3de6a6e3a.png"
   },
   {
@@ -2917,7 +3207,7 @@
     "Morning",
     "Afternoon"
    ],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Camps",
    "areas_of_interest": [
     "Engineering"
    ],
@@ -2931,6 +3221,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "2055dca3b46cafd3.png"
   },
   {
@@ -2945,8 +3236,7 @@
    "date_end": "2025-08-17T12:30:00-07:00",
    "age_grade_level": [
     "Family",
-    "Grades 6-8",
-    "Grades 9-12"
+    "Grades 6-8"
    ],
    "cost_range": "Free",
    "time_of_day": [
@@ -2967,6 +3257,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "d0a74598ef995db3.png"
   },
   {
@@ -3003,6 +3294,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "8ebf870e85a9102b.jpg"
   },
   {
@@ -3024,8 +3316,8 @@
    ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
-    "Earth Science/Ecology",
-    "Biology / LifeSciences"
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -3037,6 +3329,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "ac0a15ca1e7cd529.jpg"
   },
   {
@@ -3071,6 +3364,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "e06840320b1d3552.png"
   },
   {
@@ -3086,7 +3380,8 @@
    "age_grade_level": [
     "Family",
     "Grades 6-8",
-    "Grades 9-12"
+    "Grades 9-12",
+    "Adult"
    ],
    "cost_range": "",
    "time_of_day": [
@@ -3100,13 +3395,14 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "Cabrillo National Monument, 1800 Cabrillo Memorial Drive, San Diego, CA 92106",
+   "location": "Cabrillo National Monument, 1800 Cabrillo Memorial Drive, San Diego, CA 92106, United States",
    "latitude": "None",
    "longitude": "None",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "16a2548da22bc808.png"
   },
   {
@@ -3121,13 +3417,11 @@
    "date_end": "2025-08-22T17:30:00-07:00",
    "age_grade_level": [
     "Family",
-    "Grades 6-8",
-    "Grades 9-12",
     "Adult"
    ],
    "cost_range": "Free",
    "time_of_day": [
-    "Afternoon"
+    "Evening"
    ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
@@ -3144,6 +3438,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "5e9d23e0c7c12773.jpg"
   },
   {
@@ -3156,7 +3451,10 @@
    "availability": "",
    "date_start": "2025-10-11T14:00:00-07:00",
    "date_end": "2025-10-11T16:30:00-07:00",
-   "age_grade_level": [],
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
    "cost_range": "",
    "time_of_day": [
     "Afternoon"
@@ -3175,6 +3473,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "4e4c3914419d88cb.jpg"
   },
   {
@@ -3188,9 +3487,11 @@
    "date_start": "2025-10-25T14:00:00-07:00",
    "date_end": "2025-10-25T16:30:00-07:00",
    "age_grade_level": [
-    "Family"
+    "Family",
+    "Grades 6-8",
+    "Grades 9-12"
    ],
-   "cost_range": "Free",
+   "cost_range": "",
    "time_of_day": [
     "Afternoon"
    ],
@@ -3208,6 +3509,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "fb21298aef7351fc.png"
   },
   {
@@ -3221,9 +3523,10 @@
    "date_start": "2025-11-23T15:00:00-08:00",
    "date_end": "2025-11-23T17:00:00-08:00",
    "age_grade_level": [
-    "Adult"
+    "Adult",
+    "Grades 9-12"
    ],
-   "cost_range": "",
+   "cost_range": "Free",
    "time_of_day": [
     "Afternoon"
    ],
@@ -3242,6 +3545,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "23535704df6bf061.png"
   },
   {
@@ -3278,6 +3582,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "ac532586247161ad.png"
   },
   {
@@ -3295,8 +3600,7 @@
    ],
    "cost_range": "Free",
    "time_of_day": [
-    "Morning",
-    "Afternoon"
+    "Morning"
    ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
@@ -3312,6 +3616,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "85e8418ee0c605b2.jpg"
   },
   {
@@ -3326,7 +3631,8 @@
    "date_end": "2025-12-10T17:30:00-08:00",
    "age_grade_level": [
     "Family",
-    "Grades 6-8"
+    "Grades 6-8",
+    "Grades 9-12"
    ],
    "cost_range": "Free",
    "time_of_day": [
@@ -3347,6 +3653,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "0de29e8b66d926b6.png"
   },
   {
@@ -3369,8 +3676,8 @@
    ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
-    "Biology / LifeSciences",
-    "Earth Science/Ecology"
+    "Earth Science/Ecology",
+    "Biology / LifeSciences"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -3382,6 +3689,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "27593e1ae54dece8.jpg"
   },
   {
@@ -3396,8 +3704,7 @@
    "date_end": "2026-01-04T11:00:00-08:00",
    "age_grade_level": [
     "Family",
-    "Grades 6-8",
-    "Grades 9-12"
+    "Grades 6-8"
    ],
    "cost_range": "Free",
    "time_of_day": [
@@ -3417,6 +3724,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "0462818dc6863d76.jpg"
   },
   {
@@ -3451,6 +3759,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "70e35f71b4cc4ecd.png"
   },
   {
@@ -3486,6 +3795,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "115cf59aeb1c4d5f.png"
   },
   {
@@ -3519,6 +3829,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "4080b21ff69cf0fe.png"
   },
   {
@@ -3540,7 +3851,8 @@
    ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
-    "Earth Science/Ecology"
+    "Earth Science/Ecology",
+    "Biology / LifeSciences"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -3552,6 +3864,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "061cf42e30d07dad.png"
   },
   {
@@ -3566,7 +3879,8 @@
    "date_end": "2026-03-18T17:00:00-07:00",
    "age_grade_level": [
     "Family",
-    "Grades 6-8"
+    "Grades 6-8",
+    "Grades 9-12"
    ],
    "cost_range": "Free",
    "time_of_day": [
@@ -3587,6 +3901,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "d5178c55618691b9.jpg"
   },
   {
@@ -3621,6 +3936,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "3e2644945bbfc560.png"
   },
   {
@@ -3656,6 +3972,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "0f00cbf3a9840167.jpg"
   },
   {
@@ -3670,8 +3987,7 @@
    "date_end": "2026-04-22T17:00:00-07:00",
    "age_grade_level": [
     "Family",
-    "Grades 6-8",
-    "Grades 9-12"
+    "Grades 6-8"
    ],
    "cost_range": "Free",
    "time_of_day": [
@@ -3692,6 +4008,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "8583ee9d96cc9145.jpg"
   },
   {
@@ -3707,8 +4024,7 @@
    "age_grade_level": [
     "Family",
     "Grades 6-8",
-    "Grades 9-12",
-    "Adult"
+    "Grades 9-12"
    ],
    "cost_range": "Free",
    "time_of_day": [
@@ -3729,6 +4045,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "667f38b59d51f6ec.png"
   },
   {
@@ -3764,6 +4081,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "b69a6f058ae3a5b3.jpg"
   },
   {
@@ -3777,10 +4095,9 @@
    "date_start": "2026-05-23T16:00:00-07:00",
    "date_end": "2026-05-23T17:00:00-07:00",
    "age_grade_level": [
-    "Family",
-    "Grades 6-8"
+    "Family"
    ],
-   "cost_range": "Free",
+   "cost_range": "",
    "time_of_day": [
     "Evening"
    ],
@@ -3798,6 +4115,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "6b3cf7d0ad172104.png"
   },
   {
@@ -3833,6 +4151,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "fcdcdf96b98183fd.png"
   },
   {
@@ -3867,6 +4186,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_ecologik_institute.png",
+   "eligibility": "",
    "image_src": "a60ad05b27cf3af8.png"
   }
  ]

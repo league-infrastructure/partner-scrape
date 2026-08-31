@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-08-31T00:40:43Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "challenge_island_san_diego_coastal",
  "kind": "past",
  "event_count": 5,
@@ -19,11 +19,10 @@
    ],
    "cost_range": "",
    "time_of_day": [],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Camps",
    "areas_of_interest": [
-    "Engineering",
-    "Physical Science",
-    "General Science"
+    "General Science",
+    "Engineering"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -35,6 +34,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "challenge_island_san_diego.png",
+   "eligibility": "",
    "image_src": "386d479686958e7f.jpg"
   },
   {
@@ -49,11 +49,12 @@
    "date_end": "",
    "age_grade_level": [
     "Grades 6-8",
-    "Grades 9-12"
+    "Grades 9-12",
+    "Family"
    ],
    "cost_range": "",
    "time_of_day": [],
-   "opportunity_type": "School Programs",
+   "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
     "Biology / LifeSciences",
     "Earth Science/Ecology",
@@ -75,6 +76,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "challenge_island_san_diego.png",
+   "eligibility": "",
    "image_src": "e1bdc36be2fb512a.jpg"
   },
   {
@@ -96,8 +98,7 @@
    "areas_of_interest": [
     "Engineering",
     "General Science",
-    "Mathematics",
-    "Physical Science"
+    "Mathematics"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -109,6 +110,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "challenge_island_san_diego.png",
+   "eligibility": "",
    "image_src": "3b7e80975b14bbee.png"
   },
   {
@@ -122,14 +124,13 @@
    "date_start": "",
    "date_end": "",
    "age_grade_level": [
-    "Family",
-    "Grades 6-8"
+    "Grades 6-8",
+    "Family"
    ],
    "cost_range": "",
    "time_of_day": [],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
-    "Engineering",
     "General Science"
    ],
    "specific_attention": [],
@@ -142,6 +143,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "challenge_island_san_diego.png",
+   "eligibility": "",
    "image_src": "3d3b597ee303a8eb.png"
   },
   {
@@ -156,13 +158,15 @@
    "date_end": "",
    "age_grade_level": [
     "Grades 6-8",
-    "Grades 9-12"
+    "Family"
    ],
    "cost_range": "",
    "time_of_day": [],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Camps",
    "areas_of_interest": [
     "Engineering",
+    "Physics",
+    "Chemistry",
     "General Science"
    ],
    "specific_attention": [],
@@ -175,6 +179,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "challenge_island_san_diego.png",
+   "eligibility": "",
    "image_src": "b701aea7d805c0c9.jpg"
   }
  ]

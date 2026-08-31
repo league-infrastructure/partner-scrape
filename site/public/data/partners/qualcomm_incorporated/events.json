@@ -1,7 +1,104 @@
 {
- "generated_at": "2026-08-31T00:40:44Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "qualcomm_incorporated",
  "kind": "current",
- "event_count": 0,
- "events": []
+ "event_count": 3,
+ "events": [
+  {
+   "slug": "https_www_qualcomm_com_developer_events_edge_ai_developer_hackathon",
+   "title": "Edge AI Developer Hackathon",
+   "partner_name": "Qualcomm Incorporated",
+   "partner_id": 156,
+   "description": "",
+   "link": "https://www.qualcomm.com/developer/events/edge-ai-developer-hackathon",
+   "availability": "Rolling — apply anytime",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Competitions",
+   "areas_of_interest": [
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "5775 Morehouse Dr, San Diego, California, 92121",
+   "latitude": "32.8960766",
+   "longitude": "-117.1957846",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "qualcomm_incorporated.jpg",
+   "eligibility": "",
+   "image_src": "fcb719c5cf53c8be.jpg"
+  },
+  {
+   "slug": "https_www_qualcomm_com_developer_events_snapdragon_multiverse_hackathon_princeton",
+   "title": "Snapdragon Multiverse Hackathon | Princeton",
+   "partner_name": "Qualcomm Incorporated",
+   "partner_id": 156,
+   "description": "",
+   "link": "https://www.qualcomm.com/developer/events/snapdragon-multiverse-hackathon-princeton",
+   "availability": "Rolling — apply anytime",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Competitions",
+   "areas_of_interest": [
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Princeton",
+   "latitude": "32.8960766",
+   "longitude": "-117.1957846",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "qualcomm_incorporated.jpg",
+   "eligibility": "",
+   "image_src": "fcb719c5cf53c8be.jpg"
+  },
+  {
+   "slug": "https_www_qualcomm_com_developer_events_mit_reality_hack_2026",
+   "title": "MIT Reality Hack 2026",
+   "partner_name": "Qualcomm Incorporated",
+   "partner_id": 156,
+   "description": "",
+   "link": "https://www.qualcomm.com/developer/events/mit-reality-hack-2026",
+   "availability": "Rolling — apply anytime",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Competitions",
+   "areas_of_interest": [
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "5775 Morehouse Dr, San Diego, California, 92121",
+   "latitude": "32.8960766",
+   "longitude": "-117.1957846",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "qualcomm_incorporated.jpg",
+   "eligibility": "",
+   "image_src": "fcb719c5cf53c8be.jpg"
+  }
+ ]
 }

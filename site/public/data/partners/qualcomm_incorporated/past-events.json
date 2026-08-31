@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-08-31T00:40:44Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "qualcomm_incorporated",
  "kind": "past",
- "event_count": 9,
+ "event_count": 7,
  "events": [
   {
    "slug": "https_www_qualcomm_com_company_events_snapdragon_sound",
@@ -34,70 +34,8 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "qualcomm_incorporated.jpg",
+   "eligibility": "",
    "image_src": "ae429435c62cc8a6.jpg"
-  },
-  {
-   "slug": "https_www_qualcomm_com_developer_events_edge_ai_developer_hackathon",
-   "title": "Edge AI Developer Hackathon",
-   "partner_name": "Qualcomm Incorporated",
-   "partner_id": 156,
-   "description": "",
-   "link": "https://www.qualcomm.com/developer/events/edge-ai-developer-hackathon",
-   "availability": "",
-   "date_start": "",
-   "date_end": "",
-   "age_grade_level": [],
-   "cost_range": "",
-   "time_of_day": [],
-   "opportunity_type": "Out-of-school Programs",
-   "areas_of_interest": [
-    "Coding/Computer Science/Cyber Security",
-    "Engineering"
-   ],
-   "specific_attention": [],
-   "financial_support": "No",
-   "ngss_aligned": "No",
-   "location": "5775 Morehouse Dr, San Diego, California, 92121",
-   "latitude": "32.8960766",
-   "longitude": "-117.1957846",
-   "contact_name": "",
-   "contact_email": "",
-   "contact_phone": "",
-   "logo_src": "qualcomm_incorporated.jpg",
-   "image_src": "fcb719c5cf53c8be.jpg"
-  },
-  {
-   "slug": "https_www_qualcomm_com_developer_events_snapdragon_multiverse_hackathon_princeton",
-   "title": "Snapdragon Multiverse Hackathon | Princeton",
-   "partner_name": "Qualcomm Incorporated",
-   "partner_id": 156,
-   "description": "",
-   "link": "https://www.qualcomm.com/developer/events/snapdragon-multiverse-hackathon-princeton",
-   "availability": "",
-   "date_start": "",
-   "date_end": "",
-   "age_grade_level": [
-    "Grades 9-12",
-    "Adult"
-   ],
-   "cost_range": "",
-   "time_of_day": [],
-   "opportunity_type": "Out-of-school Programs",
-   "areas_of_interest": [
-    "Coding/Computer Science/Cyber Security",
-    "Engineering"
-   ],
-   "specific_attention": [],
-   "financial_support": "No",
-   "ngss_aligned": "No",
-   "location": "5775 Morehouse Dr, San Diego, California, 92121",
-   "latitude": "32.8960766",
-   "longitude": "-117.1957846",
-   "contact_name": "",
-   "contact_email": "",
-   "contact_phone": "",
-   "logo_src": "qualcomm_incorporated.jpg",
-   "image_src": "fcb719c5cf53c8be.jpg"
   },
   {
    "slug": "https_www_qualcomm_com_developer_events_pytorch_2025",
@@ -126,6 +64,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "qualcomm_incorporated.jpg",
+   "eligibility": "",
    "image_src": "fcb719c5cf53c8be.jpg"
   },
   {
@@ -157,20 +96,57 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "qualcomm_incorporated.jpg",
+   "eligibility": "",
    "image_src": "fcb719c5cf53c8be.jpg"
   },
   {
-   "slug": "https_www_qualcomm_com_developer_events_mit_reality_hack_2026",
-   "title": "MIT Reality Hack 2026",
+   "slug": "https_www_qualcomm_com_developer_events_mwc_talent_arena_2026",
+   "title": "MWC Talent Arena 2026",
    "partner_name": "Qualcomm Incorporated",
    "partner_id": 156,
-   "description": "",
-   "link": "https://www.qualcomm.com/developer/events/mit-reality-hack-2026",
+   "description": "Discover Qualcomm Edge AI at MWC Talent Arena 2026. Hands on workshops for developers covering computer vision, on device LLMs, Arduino & robotics.",
+   "link": "https://www.qualcomm.com/developer/events/mwc-talent-arena-2026",
    "availability": "",
    "date_start": "",
    "date_end": "",
    "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Coding/Computer Science/Cyber Security",
+    "Engineering",
+    "Physical Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "5775 Morehouse Dr, San Diego, California, 92121",
+   "latitude": "32.8960766",
+   "longitude": "-117.1957846",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "qualcomm_incorporated.jpg",
+   "eligibility": "",
+   "image_src": "fcb719c5cf53c8be.jpg"
+  },
+  {
+   "slug": "https_www_qualcomm_com_developer_events_arduino_days",
+   "title": "Arduino Days",
+   "partner_name": "Qualcomm Incorporated",
+   "partner_id": 156,
+   "description": "Join Arduino Days 2026 to explore accessible AI, embedded innovation, and community-driven projects shaping the future of technology.",
+   "link": "https://www.qualcomm.com/developer/events/arduino-days",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Family",
     "Grades 9-12",
+    "Grades 6-8",
     "Adult"
    ],
    "cost_range": "",
@@ -190,15 +166,16 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "qualcomm_incorporated.jpg",
+   "eligibility": "",
    "image_src": "fcb719c5cf53c8be.jpg"
   },
   {
-   "slug": "https_www_qualcomm_com_developer_events_mwc_talent_arena_2026",
-   "title": "MWC Talent Arena 2026",
+   "slug": "https_www_qualcomm_com_company_events_aws_reinvent_2024",
+   "title": "AWS reInvent 2024",
    "partner_name": "Qualcomm Incorporated",
    "partner_id": 156,
-   "description": "Discover Qualcomm Edge AI at MWC Talent Arena 2026. Hands on workshops for developers covering computer vision, on device LLMs, Arduino & robotics.",
-   "link": "https://www.qualcomm.com/developer/events/mwc-talent-arena-2026",
+   "description": "Meet Qualcomm at Booth 137 at re:Invent",
+   "link": "https://www.qualcomm.com/company/events/aws-reinvent-2024",
    "availability": "",
    "date_start": "",
    "date_end": "",
@@ -222,41 +199,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "qualcomm_incorporated.jpg",
-   "image_src": "fcb719c5cf53c8be.jpg"
-  },
-  {
-   "slug": "https_www_qualcomm_com_developer_events_arduino_days",
-   "title": "Arduino Days",
-   "partner_name": "Qualcomm Incorporated",
-   "partner_id": 156,
-   "description": "Join Arduino Days 2026 to explore accessible AI, embedded innovation, and community-driven projects shaping the future of technology.",
-   "link": "https://www.qualcomm.com/developer/events/arduino-days",
-   "availability": "",
-   "date_start": "",
-   "date_end": "",
-   "age_grade_level": [
-    "Family",
-    "Grades 6-8",
-    "Grades 9-12",
-    "Adult"
-   ],
-   "cost_range": "",
-   "time_of_day": [],
-   "opportunity_type": "Out-of-school Programs",
-   "areas_of_interest": [
-    "Coding/Computer Science/Cyber Security",
-    "Engineering"
-   ],
-   "specific_attention": [],
-   "financial_support": "No",
-   "ngss_aligned": "No",
-   "location": "5775 Morehouse Dr, San Diego, California, 92121",
-   "latitude": "32.8960766",
-   "longitude": "-117.1957846",
-   "contact_name": "",
-   "contact_email": "",
-   "contact_phone": "",
-   "logo_src": "qualcomm_incorporated.jpg",
+   "eligibility": "",
    "image_src": "fcb719c5cf53c8be.jpg"
   },
   {
@@ -292,6 +235,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "qualcomm_incorporated.jpg",
+   "eligibility": "",
    "image_src": "fcb719c5cf53c8be.jpg"
   }
  ]

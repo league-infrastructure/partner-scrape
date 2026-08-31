@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-08-31T00:40:44Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "ocean_connectors",
  "kind": "current",
  "event_count": 3,
@@ -15,8 +15,8 @@
    "date_start": "2026-09-04T15:00:00-07:00",
    "date_end": "2026-09-04T17:00:00-07:00",
    "age_grade_level": [
-    "Adult",
-    "Family"
+    "Family",
+    "Adult"
    ],
    "cost_range": "Less than $50",
    "time_of_day": [
@@ -38,6 +38,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "ocean_connectors.jpg",
+   "eligibility": "",
    "image_src": "f10ca0b6c467e476.jpg"
   },
   {
@@ -73,6 +74,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "ocean_connectors.jpg",
+   "eligibility": "",
    "image_src": "ec6d55da1b629c43.jpg"
   },
   {
@@ -86,18 +88,16 @@
    "date_start": "2026-09-12T08:30:00-07:00",
    "date_end": "2026-11-21T11:30:00-08:00",
    "age_grade_level": [
-    "Family",
-    "Grades 6-8",
-    "Grades 9-12"
+    "Family"
    ],
-   "cost_range": "Less than $100",
+   "cost_range": "Less than $200",
    "time_of_day": [
     "Morning"
    ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
-    "Biology / LifeSciences",
-    "Earth Science/Ecology"
+    "Earth Science/Ecology",
+    "Biology / LifeSciences"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -109,6 +109,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "ocean_connectors.jpg",
+   "eligibility": "",
    "image_src": "1a2d4c03dab3c889.jpg"
   }
  ]

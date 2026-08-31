@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-08-31T00:40:43Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "anza_borrego_foundation",
  "kind": "current",
- "event_count": 8,
+ "event_count": 9,
  "events": [
   {
    "slug": "https_theabf_org_events_anza_borrego_under_the_stars_2",
@@ -37,6 +37,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "anzaborrego_foundation.jpeg",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -72,6 +73,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "anzaborrego_foundation.jpeg",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -86,7 +88,6 @@
    "date_end": "2026-10-03T21:00:00-07:00",
    "age_grade_level": [
     "Family",
-    "Grades 9-12",
     "Adult"
    ],
    "cost_range": "Less than $100",
@@ -95,8 +96,8 @@
    ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
-    "Earth Science/Ecology",
-    "Physics"
+    "Physics",
+    "Earth Science/Ecology"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -108,7 +109,8 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "anzaborrego_foundation.jpeg",
-   "image_src": ""
+   "eligibility": "",
+   "image_src": "3764ec194c0e1f32.png"
   },
   {
    "slug": "https_theabf_org_events_intermediate_hike_domelands",
@@ -121,8 +123,8 @@
    "date_start": "2026-11-14T07:00:00-08:00",
    "date_end": "2026-11-14T14:00:00-08:00",
    "age_grade_level": [
-    "Adult",
-    "Family"
+    "Family",
+    "Adult"
    ],
    "cost_range": "Less than $50",
    "time_of_day": [
@@ -137,14 +139,15 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "Anza-Borrego Desert State Park, meet at trailhead off S-22, Borrego Springs",
+   "location": "Anza-Borrego Desert State Park, trailhead off S-22, Borrego Springs",
    "latitude": "None",
    "longitude": "None",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "anzaborrego_foundation.jpeg",
-   "image_src": ""
+   "eligibility": "",
+   "image_src": "bc1c9d886241c88f.png"
   },
   {
    "slug": "https_theabf_org_events_december_anza_borrego_watercolor_workshop",
@@ -178,7 +181,44 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "anzaborrego_foundation.jpeg",
+   "eligibility": "",
    "image_src": ""
+  },
+  {
+   "slug": "https_theabf_org_events_3_day_nature_photography_workshop_with_paulette_donnellon",
+   "title": "3-Day Nature Photography Workshop with Paulette Donnellon",
+   "partner_name": "Anza-Borrego Foundation",
+   "partner_id": 646,
+   "description": "Master the Art of Nature Photography in Southern California’s Most Stunning Desert Landscapes  Description:  Join award-winning photographer Paulette Donnellon for an immersive weekend of breathtaking landscapes, golden hour shots, and hands-on instruction in southern California’s most scenic desert locations.    REGISTER TODAY!   Date: December 11-13, 2026  Time: 3:00 p.m. Friday- 12:00 p.m. Sunday  Location: Anza-Borrego Desert State Park and Sonny Bono National Wildlife Refuge     Cost:  ABF Member: $765 (Join for just $35 and get the Member rate!)  Non-Member: $900    What to Expect:   Sunset photography session in Anza-Borrego Desert State Park (Friday evening)    Sunrise shoot in Anza-Borrego Desert State Park (Saturday morning)    Saturday and Sunday morning photo workshop at Sonny Bono National Wildlife Refuge    Expert guidance on camera settings, composition, and editing   Who Should Attend:   Photographers of all levels—beginner to advanced    Nature and wildlife lovers looking to sharpen their photography skills    Anyone looking to learn from an award-winning nature photographer     What Previous Attendees Are Saying about Paulette’s Workshops:   “…loved the location, the instructor, so knowledgeable and so talented! So passionate about the area and her photography! Paulette is a treasure!”     “I was able to see the beauty of the desert in a new way. Plus, with Paulette’s help, I was able to capture the magic in photographs.”     “Paulette was very generous about sharing her expertise. Her suggestions for compositions in the field and her immediate feedback onsite were terrific. I appreciated her sharing post processing techniques as well. It was stunning to see the amazing range of color and beauty in the desert. I look forward to attending more workshops in the future. Thank you for an amazing day.”      What to Bring:   Your preferred camera and equipment (can even be a phone camera)    Sturdy closed-toe shoes    Long pants    Layers    Sun protection    Water &amp; snacks     What’s Included:   Happy hour drinks and charcuterie at Friday night’s sunset photography session    Light breakfast Saturday and Sunday    Lunch on Saturday     What’s Not Included:   Other meals    Lodging (we recommend staying in Borrego Springs Friday evening and in Brawley Saturday evening for close proximity to field locations)     Cancellation Policy: Please see our FAQs page to read our cancellation policy.      About the Instructor:  Paulette Donnellon is an award-winning nature and wildlife photographer whose image of an Eastern Collared Lizard is featured on the 2024 America the Beautiful National Park Pass.  When she isn’t out in nature taking photos, she is employed by LEGO® Education and has served as a trustee for eight years for the San Diego County Board of Education and as an Executive Board member of Anza-Borrego Foundation. Paulette served nine years in the U.S. Army and was deployed during Desert Storm. She is incredibly knowledgeable about the flora, fauna and landscape features of Anza-Borrego. You can check out her photos on Instagram at @photogpaulette.",
+   "link": "https://theabf.org/events/3-day-nature-photography-workshop-with-paulette-donnellon/",
+   "availability": "Repeats 2 times through 2027-01-10",
+   "date_start": "2026-12-11T15:00:00-08:00",
+   "date_end": "2027-01-10T12:00:00-08:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Less than $1000",
+   "time_of_day": [
+    "Morning",
+    "Afternoon",
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Anza-Borrego Desert State Park and Sonny Bono National Wildlife Refuge",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "anzaborrego_foundation.jpeg",
+   "eligibility": "",
+   "image_src": "3d1c9f2178fadccb.png"
   },
   {
    "slug": "https_theabf_org_events_desert_trails_a_primitive_camping_adventure",
@@ -211,6 +251,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "anzaborrego_foundation.jpeg",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -246,6 +287,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "anzaborrego_foundation.jpeg",
+   "eligibility": "",
    "image_src": "61a327a365097a9c.png"
   },
   {
@@ -259,8 +301,7 @@
    "date_start": "2027-02-07T05:30:00-08:00",
    "date_end": "2027-02-07T11:30:00-08:00",
    "age_grade_level": [
-    "Adult",
-    "Family"
+    "Adult"
    ],
    "cost_range": "Less than $100",
    "time_of_day": [
@@ -273,13 +314,14 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "587 Palm Canyon Dr. #122, Borrego Springs, CA 92004",
+   "location": "Anza-Borrego Desert State Park, meeting at Anza-Borrego Foundation Administrative Office, 587 Palm Canyon Dr. #122, Borrego Springs, CA 92004",
    "latitude": "None",
    "longitude": "None",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "anzaborrego_foundation.jpeg",
+   "eligibility": "",
    "image_src": "17d0566686360157.png"
   }
  ]

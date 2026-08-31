@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-08-31T00:40:44Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "women_s_construction_coalition",
  "kind": "current",
  "event_count": 1,
@@ -35,6 +35,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
    "image_src": ""
   }
  ]

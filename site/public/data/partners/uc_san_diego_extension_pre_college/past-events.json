@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-08-31T00:40:44Z",
+ "generated_at": "2026-08-31T19:31:52Z",
  "partner_slug": "uc_san_diego_extension_pre_college",
  "kind": "past",
- "event_count": 46,
+ "event_count": 75,
  "events": [
   {
    "slug": "https_extendedstudies_ucsd_edu_courses_hvac_design_calculations_ames_x400_19",
@@ -34,6 +34,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "ce247546cbaf2b46.jpg"
   },
   {
@@ -67,6 +68,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "76b2ff2b550491a7.jpg"
   },
   {
@@ -99,6 +101,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "76b2ff2b550491a7.jpg"
   },
   {
@@ -131,6 +134,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "ac815b40a6784d75.jpg"
   },
   {
@@ -162,6 +166,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "75ce64536f9fa0ce.jpg"
   },
   {
@@ -193,6 +198,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "6feac4599755d109.jpg"
   },
   {
@@ -218,13 +224,14 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "6256 Greenwich Drive, San Diego, California, 92122",
+   "location": "UC San Diego",
    "latitude": "32.8529929",
    "longitude": "-117.1830115",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "9ed845c4443723d8.jpg"
   },
   {
@@ -256,6 +263,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "9ed845c4443723d8.jpg"
   },
   {
@@ -288,6 +296,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "b4fb7e6457299a8d.jpg"
   },
   {
@@ -320,6 +329,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "fba7b85cafc02a43.jpg"
   },
   {
@@ -352,6 +362,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "9ed845c4443723d8.jpg"
   },
   {
@@ -384,6 +395,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "9ed845c4443723d8.jpg"
   },
   {
@@ -416,6 +428,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "9ed845c4443723d8.jpg"
   },
   {
@@ -447,6 +460,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "a08769ccc1d7244c.jpg"
   },
   {
@@ -464,7 +478,7 @@
    ],
    "cost_range": "",
    "time_of_day": [],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "School Programs",
    "areas_of_interest": [
     "Coding/Computer Science/Cyber Security"
    ],
@@ -478,6 +492,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "a08769ccc1d7244c.jpg"
   },
   {
@@ -509,6 +524,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "a08769ccc1d7244c.jpg"
   },
   {
@@ -533,13 +549,14 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "6256 Greenwich Drive, San Diego, California, 92122",
+   "location": "UC San Diego",
    "latitude": "32.8529929",
    "longitude": "-117.1830115",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "a08769ccc1d7244c.jpg"
   },
   {
@@ -571,6 +588,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "a08769ccc1d7244c.jpg"
   },
   {
@@ -603,6 +621,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "04188c1dfe977773.jpg"
   },
   {
@@ -632,6 +651,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "a08769ccc1d7244c.jpg"
   },
   {
@@ -663,6 +683,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "a08769ccc1d7244c.jpg"
   },
   {
@@ -692,6 +713,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "a08769ccc1d7244c.jpg"
   },
   {
@@ -724,6 +746,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "9da7ec6756bb5706.jpg"
   },
   {
@@ -756,6 +779,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "9da7ec6756bb5706.jpg"
   },
   {
@@ -780,13 +804,14 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "UC San Diego",
+   "location": "6256 Greenwich Drive, San Diego, California, 92122",
    "latitude": "32.8529929",
    "longitude": "-117.1830115",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "9da7ec6756bb5706.jpg"
   },
   {
@@ -818,6 +843,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "bf3678d2f8dbf6b2.jpg"
   },
   {
@@ -850,6 +876,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "76b2ff2b550491a7.jpg"
   },
   {
@@ -881,6 +908,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "76b2ff2b550491a7.jpg"
   },
   {
@@ -900,8 +928,7 @@
    "time_of_day": [],
    "opportunity_type": "Professional Development / Conferences",
    "areas_of_interest": [
-    "Chemistry",
-    "Biology / LifeSciences"
+    "Chemistry"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -913,6 +940,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "76b2ff2b550491a7.jpg"
   },
   {
@@ -945,6 +973,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "76b2ff2b550491a7.jpg"
   },
   {
@@ -977,6 +1006,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "76b2ff2b550491a7.jpg"
   },
   {
@@ -997,19 +1027,20 @@
    "opportunity_type": "Professional Development / Conferences",
    "areas_of_interest": [
     "Biology / LifeSciences",
-    "Engineering",
-    "Chemistry"
+    "Chemistry",
+    "Engineering"
    ],
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "6256 Greenwich Drive, San Diego, California, 92122",
+   "location": "UC San Diego",
    "latitude": "32.8529929",
    "longitude": "-117.1830115",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "76b2ff2b550491a7.jpg"
   },
   {
@@ -1041,6 +1072,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "76b2ff2b550491a7.jpg"
   },
   {
@@ -1072,6 +1104,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "76b2ff2b550491a7.jpg"
   },
   {
@@ -1103,6 +1136,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "76b2ff2b550491a7.jpg"
   },
   {
@@ -1127,13 +1161,14 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "6256 Greenwich Drive, San Diego, California, 92122",
+   "location": "UC San Diego",
    "latitude": "32.8529929",
    "longitude": "-117.1830115",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "76b2ff2b550491a7.jpg"
   },
   {
@@ -1158,13 +1193,14 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "UC San Diego",
+   "location": "6256 Greenwich Drive, San Diego, California, 92122",
    "latitude": "32.8529929",
    "longitude": "-117.1830115",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "76b2ff2b550491a7.jpg"
   },
   {
@@ -1190,13 +1226,14 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "6256 Greenwich Drive, San Diego, California, 92122",
+   "location": "UC San Diego",
    "latitude": "32.8529929",
    "longitude": "-117.1830115",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "76b2ff2b550491a7.jpg"
   },
   {
@@ -1229,6 +1266,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "76b2ff2b550491a7.jpg"
   },
   {
@@ -1260,6 +1298,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "76b2ff2b550491a7.jpg"
   },
   {
@@ -1293,6 +1332,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "76b2ff2b550491a7.jpg"
   },
   {
@@ -1324,6 +1364,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "76b2ff2b550491a7.jpg"
   },
   {
@@ -1356,6 +1397,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "76b2ff2b550491a7.jpg"
   },
   {
@@ -1387,6 +1429,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "9299403b9329ec7f.jpg"
   },
   {
@@ -1419,6 +1462,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "ac815b40a6784d75.jpg"
   },
   {
@@ -1452,7 +1496,948 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "75ce64536f9fa0ce.jpg"
+  },
+  {
+   "slug": "https_extendedstudies_ucsd_edu_courses_bioengineering_high_school_internship_program_beng_900_18",
+   "title": "BioEngineering High School Internship Program",
+   "partner_name": "UC San Diego Extension: Pre-College",
+   "partner_id": 40,
+   "description": "",
+   "link": "https://extendedstudies.ucsd.edu/courses/bioengineering-high-school-internship-program-beng-900-18",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Grades 9-12"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Career Connections",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "6256 Greenwich Drive, San Diego, California, 92122",
+   "latitude": "32.8529929",
+   "longitude": "-117.1830115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "9da7ec6756bb5706.jpg"
+  },
+  {
+   "slug": "https_extendedstudies_ucsd_edu_courses_elementary_school_life_cycle_adventures_biol_900_73",
+   "title": "Elementary School: Life Cycle Adventures",
+   "partner_name": "UC San Diego Extension: Pre-College",
+   "partner_id": 40,
+   "description": "",
+   "link": "https://extendedstudies.ucsd.edu/courses/elementary-school-life-cycle-adventures-biol-900-73",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Grades 6-8"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "6256 Greenwich Drive, San Diego, California, 92122",
+   "latitude": "32.8529929",
+   "longitude": "-117.1830115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "3dd1cb685ccd7e17.jpg"
+  },
+  {
+   "slug": "https_extendedstudies_ucsd_edu_courses_medicinal_chemistry_of_leading_drugs_biol_x401_61",
+   "title": "Medicinal Chemistry of Leading Drugs",
+   "partner_name": "UC San Diego Extension: Pre-College",
+   "partner_id": 40,
+   "description": "UC San Diego Division of Extended Studies is open to the public and harnesses the power of education to transform lives. Our unique educational formats support lifelong learning and meet the evolving needs of our students, businesses and the larger community.",
+   "link": "https://extendedstudies.ucsd.edu/courses/medicinal-chemistry-of-leading-drugs-biol-x401-61",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Chemistry"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "6256 Greenwich Drive, San Diego, California, 92122",
+   "latitude": "32.8529929",
+   "longitude": "-117.1830115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "76b2ff2b550491a7.jpg"
+  },
+  {
+   "slug": "https_extendedstudies_ucsd_edu_courses_immunology_biol_x403_71",
+   "title": "Immunology Online",
+   "partner_name": "UC San Diego Extension: Pre-College",
+   "partner_id": 40,
+   "description": "Take immunology online with UC San Diego Extended Studies. Learn about immune system function, disease mechanisms, and therapeutic approaches through flexible, university-level instruction.",
+   "link": "https://extendedstudies.ucsd.edu/courses/immunology-biol-x403-71",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Online",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "6256 Greenwich Drive, San Diego, California, 92122",
+   "latitude": "32.8529929",
+   "longitude": "-117.1830115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "76b2ff2b550491a7.jpg"
+  },
+  {
+   "slug": "https_extendedstudies_ucsd_edu_courses_epidemiology_biol_x403_77",
+   "title": "Epidemiology",
+   "partner_name": "UC San Diego Extension: Pre-College",
+   "partner_id": 40,
+   "description": "UC San Diego Division of Extended Studies is open to the public and harnesses the power of education to transform lives. Our unique educational formats support lifelong learning and meet the evolving needs of our students, businesses and the larger community.",
+   "link": "https://extendedstudies.ucsd.edu/courses/epidemiology-biol-x403-77",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "UC San Diego",
+   "latitude": "32.8529929",
+   "longitude": "-117.1830115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "76b2ff2b550491a7.jpg"
+  },
+  {
+   "slug": "https_extendedstudies_ucsd_edu_courses_global_health_policy_anes_x400_12",
+   "title": "Global Health Policy",
+   "partner_name": "UC San Diego Extension: Pre-College",
+   "partner_id": 40,
+   "description": "UC San Diego Division of Extended Studies is open to the public and harnesses the power of education to transform lives. Our unique educational formats support lifelong learning and meet the evolving needs of our students, businesses and the larger community.",
+   "link": "https://extendedstudies.ucsd.edu/courses/global-health-policy-anes-x400-12",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "UC San Diego",
+   "latitude": "32.8529929",
+   "longitude": "-117.1830115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "6feac4599755d109.jpg"
+  },
+  {
+   "slug": "https_extendedstudies_ucsd_edu_courses_make_your_own_inflatables_middle_school_art_900_43",
+   "title": "Make your own Inflatables (Middle School)",
+   "partner_name": "UC San Diego Extension: Pre-College",
+   "partner_id": 40,
+   "description": "UC San Diego Division of Extended Studies is open to the public and harnesses the power of education to transform lives. Our unique educational formats support lifelong learning and meet the evolving needs of our students, businesses and the larger community.",
+   "link": "https://extendedstudies.ucsd.edu/courses/make-your-own-inflatables-middle-school-art-900-43",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Grades 6-8"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering",
+    "Physical Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "6256 Greenwich Drive, San Diego, California, 92122",
+   "latitude": "32.8529929",
+   "longitude": "-117.1830115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "a08769ccc1d7244c.jpg"
+  },
+  {
+   "slug": "https_extendedstudies_ucsd_edu_courses_middle_school_creating_digital_art_using_google_drawing_art_900_93",
+   "title": "Middle School: Creating Digital Art using Google Drawing",
+   "partner_name": "UC San Diego Extension: Pre-College",
+   "partner_id": 40,
+   "description": "UC San Diego Division of Extended Studies is open to the public and harnesses the power of education to transform lives. Our unique educational formats support lifelong learning and meet the evolving needs of our students, businesses and the larger community.",
+   "link": "https://extendedstudies.ucsd.edu/courses/middle-school-creating-digital-art-using-google-drawing-art-900-93",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Grades 6-8"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "UC San Diego",
+   "latitude": "32.8529929",
+   "longitude": "-117.1830115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "85bed254f789c939.jpg"
+  },
+  {
+   "slug": "https_extendedstudies_ucsd_edu_courses_elementary_school_digital_design_using_adobe_photoshop_and_illustrator_art_900_95",
+   "title": "Elementary School: Digital Design Using Adobe Photoshop and Illustrator",
+   "partner_name": "UC San Diego Extension: Pre-College",
+   "partner_id": 40,
+   "description": "UC San Diego Division of Extended Studies is open to the public and harnesses the power of education to transform lives. Our unique educational formats support lifelong learning and meet the evolving needs of our students, businesses and the larger community.",
+   "link": "https://extendedstudies.ucsd.edu/courses/elementary-school-digital-design-using-adobe-photoshop-and-illustrator-art-900-95",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Grades 6-8"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "UC San Diego",
+   "latitude": "32.8529929",
+   "longitude": "-117.1830115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "a08769ccc1d7244c.jpg"
+  },
+  {
+   "slug": "https_extendedstudies_ucsd_edu_courses_high_school_digital_design_using_adobe_photoshop_and_illustrator_art_900_97",
+   "title": "High School: Digital Design Using Adobe Photoshop and Illustrator",
+   "partner_name": "UC San Diego Extension: Pre-College",
+   "partner_id": 40,
+   "description": "UC San Diego Division of Extended Studies is open to the public and harnesses the power of education to transform lives. Our unique educational formats support lifelong learning and meet the evolving needs of our students, businesses and the larger community.",
+   "link": "https://extendedstudies.ucsd.edu/courses/high-school-digital-design-using-adobe-photoshop-and-illustrator-art-900-97",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Grades 9-12"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "6256 Greenwich Drive, San Diego, California, 92122",
+   "latitude": "32.8529929",
+   "longitude": "-117.1830115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "a08769ccc1d7244c.jpg"
+  },
+  {
+   "slug": "https_extendedstudies_ucsd_edu_courses_biomechanics_and_mechano_biology_beng_900_10",
+   "title": "BioMechanics and Mechano Biology",
+   "partner_name": "UC San Diego Extension: Pre-College",
+   "partner_id": 40,
+   "description": "UC San Diego Division of Extended Studies is open to the public and harnesses the power of education to transform lives. Our unique educational formats support lifelong learning and meet the evolving needs of our students, businesses and the larger community.",
+   "link": "https://extendedstudies.ucsd.edu/courses/biomechanics-and-mechano-biology-beng-900-10",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Engineering",
+    "Physical Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "6256 Greenwich Drive, San Diego, California, 92122",
+   "latitude": "32.8529929",
+   "longitude": "-117.1830115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "9da7ec6756bb5706.jpg"
+  },
+  {
+   "slug": "https_extendedstudies_ucsd_edu_courses_bioengineering_research_project_b_research_beng_900_12",
+   "title": "BioEngineering Research Project B - Research",
+   "partner_name": "UC San Diego Extension: Pre-College",
+   "partner_id": 40,
+   "description": "UC San Diego Division of Extended Studies is open to the public and harnesses the power of education to transform lives. Our unique educational formats support lifelong learning and meet the evolving needs of our students, businesses and the larger community.",
+   "link": "https://extendedstudies.ucsd.edu/courses/bioengineering-research-project-b-research-beng-900-12",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "6256 Greenwich Drive, San Diego, California, 92122",
+   "latitude": "32.8529929",
+   "longitude": "-117.1830115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "9da7ec6756bb5706.jpg"
+  },
+  {
+   "slug": "https_extendedstudies_ucsd_edu_courses_organismic_evolutionary_biology_bild_x003",
+   "title": "Organismic & Evolutionary Biology",
+   "partner_name": "UC San Diego Extension: Pre-College",
+   "partner_id": 40,
+   "description": "UC San Diego Division of Extended Studies is open to the public and harnesses the power of education to transform lives. Our unique educational formats support lifelong learning and meet the evolving needs of our students, businesses and the larger community.",
+   "link": "https://extendedstudies.ucsd.edu/courses/organismic-evolutionary-biology-bild-x003",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "6256 Greenwich Drive, San Diego, California, 92122",
+   "latitude": "32.8529929",
+   "longitude": "-117.1830115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "bf3678d2f8dbf6b2.jpg"
+  },
+  {
+   "slug": "https_extendedstudies_ucsd_edu_courses_high_school_holobionts_in_space_designing_a_healthy_human_from_scratch_biol_900_52",
+   "title": "High School: Holobionts in Space Designing a Healthy Human from Scratch",
+   "partner_name": "UC San Diego Extension: Pre-College",
+   "partner_id": 40,
+   "description": "UC San Diego Division of Extended Studies is open to the public and harnesses the power of education to transform lives. Our unique educational formats support lifelong learning and meet the evolving needs of our students, businesses and the larger community.",
+   "link": "https://extendedstudies.ucsd.edu/courses/high-school-holobionts-in-space-designing-a-healthy-human-from-scratch-biol-900-52",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Grades 9-12"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "UC San Diego",
+   "latitude": "32.8529929",
+   "longitude": "-117.1830115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "ec9853af935db726.jpg"
+  },
+  {
+   "slug": "https_extendedstudies_ucsd_edu_courses_organismal_biology_lab_biol_900_56",
+   "title": "Organismal Biology Lab",
+   "partner_name": "UC San Diego Extension: Pre-College",
+   "partner_id": 40,
+   "description": "UC San Diego Division of Extended Studies is open to the public and harnesses the power of education to transform lives. Our unique educational formats support lifelong learning and meet the evolving needs of our students, businesses and the larger community.",
+   "link": "https://extendedstudies.ucsd.edu/courses/organismal-biology-lab-biol-900-56",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "UC San Diego",
+   "latitude": "32.8529929",
+   "longitude": "-117.1830115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "76b2ff2b550491a7.jpg"
+  },
+  {
+   "slug": "https_extendedstudies_ucsd_edu_courses_middle_school_microscope_biology_biol_900_62",
+   "title": "Middle School: Microscope Biology!",
+   "partner_name": "UC San Diego Extension: Pre-College",
+   "partner_id": 40,
+   "description": "UC San Diego Division of Extended Studies is open to the public and harnesses the power of education to transform lives. Our unique educational formats support lifelong learning and meet the evolving needs of our students, businesses and the larger community.",
+   "link": "https://extendedstudies.ucsd.edu/courses/middle-school-microscope-biology-biol-900-62",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Grades 6-8"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "UC San Diego",
+   "latitude": "32.8529929",
+   "longitude": "-117.1830115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "76b2ff2b550491a7.jpg"
+  },
+  {
+   "slug": "https_extendedstudies_ucsd_edu_courses_high_school_microscope_biology_biol_900_63",
+   "title": "High School: Microscope Biology!",
+   "partner_name": "UC San Diego Extension: Pre-College",
+   "partner_id": 40,
+   "description": "UC San Diego Division of Extended Studies is open to the public and harnesses the power of education to transform lives. Our unique educational formats support lifelong learning and meet the evolving needs of our students, businesses and the larger community.",
+   "link": "https://extendedstudies.ucsd.edu/courses/high-school-microscope-biology-biol-900-63",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Grades 9-12"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "UC San Diego",
+   "latitude": "32.8529929",
+   "longitude": "-117.1830115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "76b2ff2b550491a7.jpg"
+  },
+  {
+   "slug": "https_extendedstudies_ucsd_edu_courses_drug_metabolism_biol_x401_70",
+   "title": "Drug Metabolism",
+   "partner_name": "UC San Diego Extension: Pre-College",
+   "partner_id": 40,
+   "description": "UC San Diego Division of Extended Studies is open to the public and harnesses the power of education to transform lives. Our unique educational formats support lifelong learning and meet the evolving needs of our students, businesses and the larger community.",
+   "link": "https://extendedstudies.ucsd.edu/courses/drug-metabolism-biol-x401-70",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Chemistry",
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "UC San Diego",
+   "latitude": "32.8529929",
+   "longitude": "-117.1830115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "76b2ff2b550491a7.jpg"
+  },
+  {
+   "slug": "https_extendedstudies_ucsd_edu_courses_pharmacokinetics_biol_x401_76",
+   "title": "Pharmacokinetics",
+   "partner_name": "UC San Diego Extension: Pre-College",
+   "partner_id": 40,
+   "description": "UC San Diego Division of Extended Studies is open to the public and harnesses the power of education to transform lives. Our unique educational formats support lifelong learning and meet the evolving needs of our students, businesses and the larger community.",
+   "link": "https://extendedstudies.ucsd.edu/courses/pharmacokinetics-biol-x401-76",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Chemistry",
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "UC San Diego",
+   "latitude": "32.8529929",
+   "longitude": "-117.1830115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "76b2ff2b550491a7.jpg"
+  },
+  {
+   "slug": "https_extendedstudies_ucsd_edu_courses_biomarkers_biol_x402_58",
+   "title": "Biomarkers",
+   "partner_name": "UC San Diego Extension: Pre-College",
+   "partner_id": 40,
+   "description": "UC San Diego Division of Extended Studies is open to the public and harnesses the power of education to transform lives. Our unique educational formats support lifelong learning and meet the evolving needs of our students, businesses and the larger community.",
+   "link": "https://extendedstudies.ucsd.edu/courses/biomarkers-biol-x402-58",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "UC San Diego",
+   "latitude": "32.8529929",
+   "longitude": "-117.1830115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "76b2ff2b550491a7.jpg"
+  },
+  {
+   "slug": "https_extendedstudies_ucsd_edu_courses_applications_to_biology_and_medicine_ii_biol_x402_96",
+   "title": "Applications to Biology and Medicine II",
+   "partner_name": "UC San Diego Extension: Pre-College",
+   "partner_id": 40,
+   "description": "UC San Diego Division of Extended Studies is open to the public and harnesses the power of education to transform lives. Our unique educational formats support lifelong learning and meet the evolving needs of our students, businesses and the larger community.",
+   "link": "https://extendedstudies.ucsd.edu/courses/applications-to-biology-and-medicine-ii-biol-x402-96",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "UC San Diego",
+   "latitude": "32.8529929",
+   "longitude": "-117.1830115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "76b2ff2b550491a7.jpg"
+  },
+  {
+   "slug": "https_extendedstudies_ucsd_edu_courses_quality_management_systems_for_medical_devices_biol_x403_23",
+   "title": "Quality Management Systems for Medical Devices",
+   "partner_name": "UC San Diego Extension: Pre-College",
+   "partner_id": 40,
+   "description": "UC San Diego Division of Extended Studies is open to the public and harnesses the power of education to transform lives. Our unique educational formats support lifelong learning and meet the evolving needs of our students, businesses and the larger community.",
+   "link": "https://extendedstudies.ucsd.edu/courses/quality-management-systems-for-medical-devices-biol-x403-23",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "UC San Diego",
+   "latitude": "32.8529929",
+   "longitude": "-117.1830115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "76b2ff2b550491a7.jpg"
+  },
+  {
+   "slug": "https_extendedstudies_ucsd_edu_courses_processing_actionable_data_in_genomics_biol_x403_27",
+   "title": "Processing Actionable Data in Genomics",
+   "partner_name": "UC San Diego Extension: Pre-College",
+   "partner_id": 40,
+   "description": "UC San Diego Division of Extended Studies is open to the public and harnesses the power of education to transform lives. Our unique educational formats support lifelong learning and meet the evolving needs of our students, businesses and the larger community.",
+   "link": "https://extendedstudies.ucsd.edu/courses/processing-actionable-data-in-genomics-biol-x403-27",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "6256 Greenwich Drive, San Diego, California, 92122",
+   "latitude": "32.8529929",
+   "longitude": "-117.1830115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "76b2ff2b550491a7.jpg"
+  },
+  {
+   "slug": "https_extendedstudies_ucsd_edu_courses_introductory_pharmacology_biol_x403_29",
+   "title": "Introductory Pharmacology",
+   "partner_name": "UC San Diego Extension: Pre-College",
+   "partner_id": 40,
+   "description": "UC San Diego Division of Extended Studies is open to the public and harnesses the power of education to transform lives. Our unique educational formats support lifelong learning and meet the evolving needs of our students, businesses and the larger community.",
+   "link": "https://extendedstudies.ucsd.edu/courses/introductory-pharmacology-biol-x403-29",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Chemistry",
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "UC San Diego",
+   "latitude": "32.8529929",
+   "longitude": "-117.1830115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "76b2ff2b550491a7.jpg"
+  },
+  {
+   "slug": "https_extendedstudies_ucsd_edu_courses_blockchain_applications_in_healthcare_biol_x403_34",
+   "title": "Blockchain Applications in Healthcare",
+   "partner_name": "UC San Diego Extension: Pre-College",
+   "partner_id": 40,
+   "description": "UC San Diego Division of Extended Studies is open to the public and harnesses the power of education to transform lives. Our unique educational formats support lifelong learning and meet the evolving needs of our students, businesses and the larger community.",
+   "link": "https://extendedstudies.ucsd.edu/courses/blockchain-applications-in-healthcare-biol-x403-34",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "UC San Diego",
+   "latitude": "32.8529929",
+   "longitude": "-117.1830115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "76b2ff2b550491a7.jpg"
+  },
+  {
+   "slug": "https_extendedstudies_ucsd_edu_courses_human_physiology_biol_x403_40",
+   "title": "Human Physiology",
+   "partner_name": "UC San Diego Extension: Pre-College",
+   "partner_id": 40,
+   "description": "UC San Diego Division of Extended Studies is open to the public and harnesses the power of education to transform lives. Our unique educational formats support lifelong learning and meet the evolving needs of our students, businesses and the larger community.",
+   "link": "https://extendedstudies.ucsd.edu/courses/human-physiology-biol-x403-40",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "UC San Diego",
+   "latitude": "32.8529929",
+   "longitude": "-117.1830115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "76b2ff2b550491a7.jpg"
+  },
+  {
+   "slug": "https_extendedstudies_ucsd_edu_courses_general_biology_i_biol_x403_60",
+   "title": "General Biology I",
+   "partner_name": "UC San Diego Extension: Pre-College",
+   "partner_id": 40,
+   "description": "UC San Diego Division of Extended Studies is open to the public and harnesses the power of education to transform lives. Our unique educational formats support lifelong learning and meet the evolving needs of our students, businesses and the larger community.",
+   "link": "https://extendedstudies.ucsd.edu/courses/general-biology-i-biol-x403-60",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "UC San Diego",
+   "latitude": "32.8529929",
+   "longitude": "-117.1830115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "76b2ff2b550491a7.jpg"
+  },
+  {
+   "slug": "https_extendedstudies_ucsd_edu_courses_wort_production_recipe_formulation_brew_x400_02",
+   "title": "Wort Production & Recipe Formulation",
+   "partner_name": "UC San Diego Extension: Pre-College",
+   "partner_id": 40,
+   "description": "UC San Diego Division of Extended Studies is open to the public and harnesses the power of education to transform lives. Our unique educational formats support lifelong learning and meet the evolving needs of our students, businesses and the larger community.",
+   "link": "https://extendedstudies.ucsd.edu/courses/wort-production-recipe-formulation-brew-x400-02",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Chemistry"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "6256 Greenwich Drive, San Diego, California, 92122",
+   "latitude": "32.8529929",
+   "longitude": "-117.1830115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "ac815b40a6784d75.jpg"
+  },
+  {
+   "slug": "https_extendedstudies_ucsd_edu_courses_applied_bioinformatics_and_biostatistics_biol_900_74",
+   "title": "Applied Bioinformatics & Biostatistics",
+   "partner_name": "UC San Diego Extension: Pre-College",
+   "partner_id": 40,
+   "description": "",
+   "link": "https://extendedstudies.ucsd.edu/courses/applied-bioinformatics-and-biostatistics-biol-900-74",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult",
+    "Grades 9-12"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Coding/Computer Science/Cyber Security",
+    "Mathematics"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "6256 Greenwich Drive, San Diego, California, 92122",
+   "latitude": "32.8529929",
+   "longitude": "-117.1830115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "76b2ff2b550491a7.jpg"
   }
  ]
 }

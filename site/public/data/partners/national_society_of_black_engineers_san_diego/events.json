@@ -1,7 +1,43 @@
 {
- "generated_at": "2026-08-31T00:40:43Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "national_society_of_black_engineers_san_diego",
  "kind": "current",
- "event_count": 0,
- "events": []
+ "event_count": 1,
+ "events": [
+  {
+   "slug": "https_nsbe_org_programs_pci_competitions",
+   "title": "Pre-Collegiate Competitions | NSBE",
+   "partner_name": "National Society of Black Engineers - San Diego",
+   "partner_id": 402,
+   "description": "NSBE’s pre-collegiate competitions engage students in grades 4–12 in hands-on STEM challenges — from wind turbine design to robotics and math contests — building real-world engineering skills through friendly competition.",
+   "link": "https://nsbe.org/programs/pci-competitions/",
+   "availability": "Rolling — apply anytime",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Grades 6-8",
+    "Grades 9-12"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Competitions",
+   "areas_of_interest": [
+    "Engineering",
+    "Physics",
+    "Mathematics"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "5995 DANDRIDGE LN Unit 138, San Diego, CA, 92115",
+   "latitude": "32.7476852",
+   "longitude": "-117.0680417",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "national_society_of_black.png",
+   "eligibility": "",
+   "image_src": "8106cc6405b88839.png"
+  }
+ ]
 }

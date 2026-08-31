@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-08-31T00:40:44Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "the_energy_coalition",
  "kind": "past",
- "event_count": 6,
+ "event_count": 9,
  "events": [
   {
    "slug": "https_energycoalition_org_program_energy_is_everything",
@@ -36,6 +36,42 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_energy_coalition.png",
+   "eligibility": "",
+   "image_src": "3f6e59192f6054d6.png"
+  },
+  {
+   "slug": "https_energycoalition_org_es_program_energy_is_everything_2",
+   "title": "Energy is Everything - The Energy Coalition",
+   "partner_name": "The Energy Coalition",
+   "partner_id": 195,
+   "description": "Energy is Everything Recursos STEM para la enseñanza de la energía Energy is Everything es el programa educativo insignia de TEC. Proporciona a los educadores planes de estudio, materiales y otros recursos para que la educación energética sea fácil para los profesores y divertida para los alumnos.",
+   "link": "https://energycoalition.org/es/program/energy-is-everything-2/",
+   "availability": "Repeats 2 times through 2024-07-25",
+   "date_start": "2024-06-27T00:31:28-07:00",
+   "date_end": "2024-07-25T09:43:36-07:00",
+   "age_grade_level": [
+    "Grades 6-8",
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "School Programs",
+   "areas_of_interest": [
+    "Physical Science",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "2770 Historic Decatur Road Barracks 14 Suite 207 , San Diego, California, 92154",
+   "latitude": "32.7397854",
+   "longitude": "-117.2119348",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "the_energy_coalition.png",
+   "eligibility": "",
    "image_src": "3f6e59192f6054d6.png"
   },
   {
@@ -49,6 +85,7 @@
    "date_start": "2024-06-27T00:35:48-07:00",
    "date_end": "2024-07-25T09:49:21-07:00",
    "age_grade_level": [
+    "Family",
     "Grades 6-8",
     "Grades 9-12",
     "Adult"
@@ -57,9 +94,8 @@
    "time_of_day": [],
    "opportunity_type": "School Programs",
    "areas_of_interest": [
-    "Physics",
     "Earth Science/Ecology",
-    "Engineering"
+    "Physical Science"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -71,6 +107,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_energy_coalition.png",
+   "eligibility": "",
    "image_src": "29c54bce63e962af.png"
   },
   {
@@ -103,6 +140,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_energy_coalition.png",
+   "eligibility": "",
    "image_src": "a425319f9a39d8d1.png"
   },
   {
@@ -134,6 +172,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_energy_coalition.png",
+   "eligibility": "",
    "image_src": "4c0d7e0531870a34.jpg"
   },
   {
@@ -166,7 +205,40 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_energy_coalition.png",
+   "eligibility": "",
    "image_src": "0ee24d748309056c.png"
+  },
+  {
+   "slug": "https_energycoalition_org_es_program_es_socalren_public_agency_programs",
+   "title": "SoCalREN Public Agency Programs - The Energy Coalition",
+   "partner_name": "The Energy Coalition",
+   "partner_id": 195,
+   "description": "SoCalREN Public Agency Programs Crear un futuro energético limpio, resistente, asequible y sostenible para más de 230 organismos públicos. TEC adopta un enfoque integral y personalizado para apoyar las necesidades únicas de los organismos públicos como ejecutor de los programas sin coste para organismos públicos de SoCalREN.",
+   "link": "https://energycoalition.org/es/program/es-socalren-public-agency-programs/",
+   "availability": "",
+   "date_start": "2024-07-25T10:19:10-07:00",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "2770 Historic Decatur Road Barracks 14 Suite 207 , San Diego, California, 92154",
+   "latitude": "32.7397854",
+   "longitude": "-117.2119348",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "the_energy_coalition.png",
+   "eligibility": "",
+   "image_src": "a425319f9a39d8d1.png"
   },
   {
    "slug": "https_energycoalition_org_es_program_es_central_coast_leaders_in_energy_action_cc_leap_program",
@@ -185,8 +257,8 @@
    "time_of_day": [],
    "opportunity_type": "Professional Development / Conferences",
    "areas_of_interest": [
-    "Earth Science/Ecology",
-    "Engineering"
+    "Engineering",
+    "Physical Science"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -198,7 +270,43 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "the_energy_coalition.png",
+   "eligibility": "",
    "image_src": "b12d4fedf93af317.png"
+  },
+  {
+   "slug": "https_energycoalition_org_es_program_es_openstudio_coalition",
+   "title": "OpenStudio Coalition - The Energy Coalition",
+   "partner_name": "The Energy Coalition",
+   "partner_id": 195,
+   "description": "OpenStudio Coalition Software de código abierto de modelización energética de edificios TEC es miembro fundador de la Coalición OpenStudio, que apoya la aplicación OpenStudio y trabaja para ampliar el uso de la modelización energética de edificios.",
+   "link": "https://energycoalition.org/es/program/es-openstudio-coalition/",
+   "availability": "",
+   "date_start": "2024-07-25T11:36:07-07:00",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Engineering",
+    "Physical Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "2770 Historic Decatur Road Barracks 14 Suite 207 , San Diego, California, 92154",
+   "latitude": "32.7397854",
+   "longitude": "-117.2119348",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "the_energy_coalition.png",
+   "eligibility": "",
+   "image_src": "0ee24d748309056c.png"
   }
  ]
 }

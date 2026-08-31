@@ -1,7 +1,42 @@
 {
- "generated_at": "2026-08-31T00:40:43Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "national_inventors_hall_of_fame",
  "kind": "current",
- "event_count": 0,
- "events": []
+ "event_count": 1,
+ "events": [
+  {
+   "slug": "https_www_invent_org_events_cic",
+   "title": "Collegiate Inventors Competition",
+   "partner_name": "National Inventors Hall of Fame",
+   "partner_id": 564,
+   "description": "The National Inventors Hall of Fame® hosts a competition for college students to showcase their inventions.",
+   "link": "https://www.invent.org/events/cic",
+   "availability": "Rolling — apply anytime",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Competitions",
+   "areas_of_interest": [
+    "Engineering",
+    "Coding/Computer Science/Cyber Security",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "3701 Highland Park, Ohio, 44720",
+   "latitude": "40.9178286",
+   "longitude": "-81.4136466",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "national_inventors_hall_of.jpg",
+   "eligibility": "",
+   "image_src": "88ec67d7c351e2b5.jpg"
+  }
+ ]
 }

@@ -1,9 +1,43 @@
 {
- "generated_at": "2026-08-31T00:40:44Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "san_dieguito_river_park",
  "kind": "past",
- "event_count": 12,
+ "event_count": 13,
  "events": [
+  {
+   "slug": "https_sdrp_org_events",
+   "title": "SDRP Events - San Dieguito River Park",
+   "partner_name": "San Dieguito River Park",
+   "partner_id": 224,
+   "description": "The San Dieguito River Park hosts a variety of events throughout the year, from volunteer activities to bird walks.",
+   "link": "https://sdrp.org/events/",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Dieguito River Park",
+   "latitude": "33.042441",
+   "longitude": "-117.0405829",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_dieguito_river_park.jpg",
+   "eligibility": "",
+   "image_src": "b59217d918e1405f.png"
+  },
   {
    "slug": "https_sdrp_org_events_dust_devils_trail_maintenance_inland",
    "title": "Dust Devils Trail Maintenance - Inland - San Dieguito River Park",
@@ -36,6 +70,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_dieguito_river_park.jpg",
+   "eligibility": "",
    "image_src": "30a2e31a79a6ddbe.jpg"
   },
   {
@@ -50,10 +85,13 @@
    "date_end": "",
    "age_grade_level": [
     "Family",
+    "Grades 9-12",
     "Adult"
    ],
    "cost_range": "Free",
-   "time_of_day": [],
+   "time_of_day": [
+    "All Day"
+   ],
    "opportunity_type": "Volunteering",
    "areas_of_interest": [
     "Earth Science/Ecology"
@@ -68,6 +106,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_dieguito_river_park.jpg",
+   "eligibility": "",
    "image_src": "d609cfba0e617e89.jpg"
   },
   {
@@ -102,6 +141,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_dieguito_river_park.jpg",
+   "eligibility": "",
    "image_src": "619c70201737da00.jpg"
   },
   {
@@ -137,6 +177,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_dieguito_river_park.jpg",
+   "eligibility": "",
    "image_src": "9c94e2f2a399252f.jpg"
   },
   {
@@ -170,6 +211,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_dieguito_river_park.jpg",
+   "eligibility": "",
    "image_src": "e7f30e05d6537417.jpg"
   },
   {
@@ -203,6 +245,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_dieguito_river_park.jpg",
+   "eligibility": "",
    "image_src": "8c20ba9d0af81dc5.jpg"
   },
   {
@@ -213,15 +256,13 @@
    "description": "Enjoy and learn about the newest addition to the San Dieguito River Park’s trail system – the Tidal Trail - located along restored tidal wetlands. An easy",
    "link": "https://sdrp.org/events/guided-hike-san-dieguito-lagoon-tidal-trail/",
    "availability": "",
-   "date_start": "2024-11-02T00:00:00-07:00",
-   "date_end": "",
+   "date_start": "2024-11-02T09:00:00-07:00",
+   "date_end": "2024-11-02T11:00:00-07:00",
    "age_grade_level": [
     "Family",
-    "Grades 6-8",
-    "Grades 9-12",
     "Adult"
    ],
-   "cost_range": "",
+   "cost_range": "Free",
    "time_of_day": [
     "Morning"
    ],
@@ -233,13 +274,14 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "San Dieguito River Park, San Diego",
+   "location": "San Dieguito River Park, San Diego, CA",
    "latitude": "33.042441",
    "longitude": "-117.0405829",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_dieguito_river_park.jpg",
+   "eligibility": "",
    "image_src": "a20c03d9f31b7a4b.jpg"
   },
   {
@@ -275,6 +317,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_dieguito_river_park.jpg",
+   "eligibility": "",
    "image_src": "28ea954139887ab9.jpg"
   },
   {
@@ -288,7 +331,8 @@
    "date_start": "2025-03-22T00:00:00-07:00",
    "date_end": "",
    "age_grade_level": [
-    "Family"
+    "Family",
+    "Adult"
    ],
    "cost_range": "Free",
    "time_of_day": [
@@ -296,8 +340,8 @@
    ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
-    "Biology / LifeSciences",
-    "Earth Science/Ecology"
+    "Earth Science/Ecology",
+    "Biology / LifeSciences"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -309,6 +353,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_dieguito_river_park.jpg",
+   "eligibility": "",
    "image_src": "b5ce393d5f69cce2.jpg"
   },
   {
@@ -326,7 +371,9 @@
     "Adult"
    ],
    "cost_range": "Free",
-   "time_of_day": [],
+   "time_of_day": [
+    "All Day"
+   ],
    "opportunity_type": "Volunteering",
    "areas_of_interest": [
     "Earth Science/Ecology"
@@ -341,6 +388,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_dieguito_river_park.jpg",
+   "eligibility": "",
    "image_src": "84388ba42cde2249.jpg"
   },
   {
@@ -369,13 +417,14 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "San Dieguito River Park",
+   "location": "San Dieguito River Park, Rancho Bernardo",
    "latitude": "33.042441",
    "longitude": "-117.0405829",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_dieguito_river_park.jpg",
+   "eligibility": "",
    "image_src": "0ae81ef2ea86fa32.jpg"
   },
   {
@@ -393,7 +442,9 @@
     "Family"
    ],
    "cost_range": "Free",
-   "time_of_day": [],
+   "time_of_day": [
+    "All Day"
+   ],
    "opportunity_type": "Volunteering",
    "areas_of_interest": [
     "Earth Science/Ecology"
@@ -401,13 +452,14 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "San Dieguito River Park, San Diego, CA",
+   "location": "San Dieguito River Park",
    "latitude": "33.042441",
    "longitude": "-117.0405829",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_dieguito_river_park.jpg",
+   "eligibility": "",
    "image_src": "ce84f48ad8cafddb.jpg"
   }
  ]

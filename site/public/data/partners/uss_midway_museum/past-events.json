@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-08-31T00:56:16Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "uss_midway_museum",
  "kind": "past",
- "event_count": 2,
+ "event_count": 3,
  "events": [
   {
    "slug": "https_www_midway_org",
@@ -33,6 +33,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": "3cc932ad7a8668a5.jpg"
   },
   {
@@ -67,6 +68,45 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
+   "image_src": "3abb02ddec8d3026.jpg"
+  },
+  {
+   "slug": "https_www_midway_org_event_overnight_adventure_july_31_2026",
+   "title": "Overnight Adventure | USS Midway Museum",
+   "partner_name": "USS Midway Museum",
+   "partner_id": 56,
+   "description": "Spend the night on the longest-serving aircraft carrier of the 20th century!",
+   "link": "https://www.midway.org/event/overnight-adventure-july-31-2026",
+   "availability": "Repeats 16 times through 2026-08-22",
+   "date_start": "2026-02-07T00:00:00-08:00",
+   "date_end": "2026-08-22T00:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8",
+    "Grades 9-12"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening",
+    "All Day"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "USS Midway Museum, San Diego, CA",
+   "latitude": "32.7137622",
+   "longitude": "-117.175658",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
    "image_src": "3abb02ddec8d3026.jpg"
   }
  ]

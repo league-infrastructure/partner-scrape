@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-08-31T00:40:44Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "solana_center_for_environmental_innovation",
  "kind": "current",
- "event_count": 12,
+ "event_count": 13,
  "events": [
   {
    "slug": "https_www_solanacenter_org_events_backyard_composting_basics_webinar",
@@ -18,7 +18,7 @@
     "Family",
     "Adult"
    ],
-   "cost_range": "Free",
+   "cost_range": "",
    "time_of_day": [
     "Evening"
    ],
@@ -36,6 +36,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "solana_center_for_environmental.png",
+   "eligibility": "",
    "image_src": "e889ef8b3707dd9c.png"
   },
   {
@@ -71,6 +72,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "solana_center_for_environmental.png",
+   "eligibility": "",
    "image_src": "0a8921d9aa0dbc5f.png"
   },
   {
@@ -87,7 +89,7 @@
     "Family",
     "Adult"
    ],
-   "cost_range": "Free",
+   "cost_range": "",
    "time_of_day": [
     "Morning"
    ],
@@ -105,6 +107,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "solana_center_for_environmental.png",
+   "eligibility": "",
    "image_src": "3cf9fc93637a2b5d.png"
   },
   {
@@ -121,7 +124,7 @@
     "Family",
     "Adult"
    ],
-   "cost_range": "Free",
+   "cost_range": "",
    "time_of_day": [
     "Afternoon"
    ],
@@ -139,6 +142,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "solana_center_for_environmental.png",
+   "eligibility": "",
    "image_src": "ecaeee6a46f12f5b.png"
   },
   {
@@ -156,7 +160,7 @@
    ],
    "cost_range": "Free",
    "time_of_day": [
-    "Morning",
+    "Late Morning",
     "Afternoon"
    ],
    "opportunity_type": "Out-of-school Programs",
@@ -173,6 +177,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "solana_center_for_environmental.png",
+   "eligibility": "",
    "image_src": "4089e6d1abee0313.jpg"
   },
   {
@@ -206,6 +211,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "solana_center_for_environmental.png",
+   "eligibility": "",
    "image_src": "e02777516682c86d.png"
   },
   {
@@ -228,7 +234,8 @@
    ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
-    "Earth Science/Ecology"
+    "Earth Science/Ecology",
+    "Biology / LifeSciences"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -240,6 +247,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "solana_center_for_environmental.png",
+   "eligibility": "",
    "image_src": "bed6693f9edeb04b.png"
   },
   {
@@ -274,7 +282,42 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "solana_center_for_environmental.png",
+   "eligibility": "",
    "image_src": "43bc9c766c110a02.png"
+  },
+  {
+   "slug": "https_www_solanacenter_org_events_zoning_guidelines_for_rural_composting_seminar",
+   "title": "Zoning Guidelines for Rural Composting Seminar — Solana Center for Environmental Innovation",
+   "partner_name": "Solana Center for Environmental Innovation",
+   "partner_id": 618,
+   "description": "What to know if you’re composting organic materials from your neighbors in Unincorporated San Diego County   Farmers, ranchers, and livestock owners have reduced their waste-hauling expenses by composting their own organic wastes and manure, thanks to the updated San Diego County zoning ordinance. T",
+   "link": "https://www.solanacenter.org/events/zoning-guidelines-for-rural-composting-seminar",
+   "availability": "",
+   "date_start": "2026-10-17T10:30:00-07:00",
+   "date_end": "2026-10-17T12:00:00-07:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Park Horse Project, 14971 El Monte Road\nLakeside, California, 92040\nUnited States",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "solana_center_for_environmental.png",
+   "eligibility": "",
+   "image_src": "677cee4d1cbe2115.png"
   },
   {
    "slug": "https_www_solanacenter_org_events_inspection_training_october_2026",
@@ -301,13 +344,14 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "Zoom Meeting, California",
+   "location": "Virtual Zoom Meeting",
    "latitude": "None",
    "longitude": "None",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "solana_center_for_environmental.png",
+   "eligibility": "",
    "image_src": "90485c5762c0e6a2.png"
   },
   {
@@ -342,6 +386,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "solana_center_for_environmental.png",
+   "eligibility": "",
    "image_src": "a10d2131bf67b325.png"
   },
   {
@@ -376,6 +421,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "solana_center_for_environmental.png",
+   "eligibility": "",
    "image_src": "d22d3b2d823d313d.png"
   },
   {
@@ -409,6 +455,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "solana_center_for_environmental.png",
+   "eligibility": "",
    "image_src": "6c4da0628502fd45.png"
   }
  ]

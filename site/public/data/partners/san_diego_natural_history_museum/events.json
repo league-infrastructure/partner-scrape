@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-08-31T00:40:44Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "san_diego_natural_history_museum",
  "kind": "current",
  "event_count": 2,
@@ -31,13 +31,14 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "The Nat (San Diego Natural History Museum)",
+   "location": "San Diego Natural History Museum",
    "latitude": "32.7320808",
    "longitude": "-117.1473395",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_natural_history.png",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -67,13 +68,14 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "San Diego Natural History Museum, San Diego, CA",
+   "location": "San Diego Natural History Museum, Balboa Park, San Diego, CA",
    "latitude": "32.7320808",
    "longitude": "-117.1473395",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_natural_history.png",
+   "eligibility": "",
    "image_src": "23d39e43d1e240d8.jpg"
   }
  ]

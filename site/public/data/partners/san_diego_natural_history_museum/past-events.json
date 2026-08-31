@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-08-31T00:40:44Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "san_diego_natural_history_museum",
  "kind": "past",
- "event_count": 12,
+ "event_count": 13,
  "events": [
   {
    "slug": "https_www_sdnhm_org_calendar_summer_camp",
@@ -20,8 +20,11 @@
     "Grades 9-12"
    ],
    "cost_range": "",
-   "time_of_day": [],
-   "opportunity_type": "Out-of-school Programs",
+   "time_of_day": [
+    "Morning",
+    "Afternoon"
+   ],
+   "opportunity_type": "Camps",
    "areas_of_interest": [
     "Biology / LifeSciences",
     "Earth Science/Ecology",
@@ -37,6 +40,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_natural_history.png",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -51,27 +55,27 @@
    "date_end": "",
    "age_grade_level": [
     "Family",
-    "Adult",
-    "Grades 6-8"
+    "Adult"
    ],
    "cost_range": "",
    "time_of_day": [],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
+    "General Science",
     "Biology / LifeSciences",
-    "Earth Science/Ecology",
-    "General Science"
+    "Earth Science/Ecology"
    ],
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "San Diego Natural History Museum, San Diego, CA",
+   "location": "San Diego Natural History Museum",
    "latitude": "32.7320808",
    "longitude": "-117.1473395",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_natural_history.png",
+   "eligibility": "",
    "image_src": "8dc03e161f0df081.jpg"
   },
   {
@@ -105,6 +109,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_natural_history.png",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -118,8 +123,10 @@
    "date_start": "",
    "date_end": "",
    "age_grade_level": [
-    "Adult",
-    "Family"
+    "Family",
+    "Grades 9-12",
+    "Grades 6-8",
+    "Adult"
    ],
    "cost_range": "Free",
    "time_of_day": [],
@@ -139,6 +146,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_natural_history.png",
+   "eligibility": "",
    "image_src": "0070f31e2426b70c.jpg"
   },
   {
@@ -158,9 +166,9 @@
    ],
    "cost_range": "",
    "time_of_day": [],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Camps",
    "areas_of_interest": [
-    "Earth Science/Ecology"
+    "Biology / LifeSciences"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -172,6 +180,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_natural_history.png",
+   "eligibility": "",
    "image_src": "03a231182f71a77d.jpg"
   },
   {
@@ -189,7 +198,8 @@
    "time_of_day": [],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
-    "Earth Science/Ecology"
+    "Earth Science/Ecology",
+    "Biology / LifeSciences"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -201,6 +211,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_natural_history.png",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -216,12 +227,11 @@
    "age_grade_level": [
     "Family",
     "Grades 6-8",
-    "Grades 9-12",
-    "Pre-K"
+    "Grades 9-12"
    ],
    "cost_range": "",
    "time_of_day": [],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Camps",
    "areas_of_interest": [
     "Biology / LifeSciences",
     "Earth Science/Ecology",
@@ -230,13 +240,14 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "San Diego Natural History Museum, San Diego, CA",
+   "location": "San Diego Natural History Museum",
    "latitude": "32.7320808",
    "longitude": "-117.1473395",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_natural_history.png",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -261,13 +272,14 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "The Nat (San Diego Natural History Museum)",
+   "location": "San Diego Natural History Museum",
    "latitude": "32.7320808",
    "longitude": "-117.1473395",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_natural_history.png",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -298,6 +310,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_natural_history.png",
+   "eligibility": "",
    "image_src": "8b8133ea3d6bbf31.jpg"
   },
   {
@@ -330,6 +343,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_natural_history.png",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -344,6 +358,7 @@
    "date_end": "2024-10-31T23:59:59-07:00",
    "age_grade_level": [
     "Family",
+    "Pre-K",
     "Grades 6-8",
     "Grades 9-12"
    ],
@@ -353,19 +368,63 @@
    ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
-    "General Science"
+    "General Science",
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
    ],
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "The Nat, San Diego, CA",
+   "location": "The San Diego Natural History Museum",
    "latitude": "32.7320808",
    "longitude": "-117.1473395",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_natural_history.png",
+   "eligibility": "",
    "image_src": "0c754a4fe3221abf.png"
+  },
+  {
+   "slug": "https_www_sdnhm_org_calendar_december_nights",
+   "title": "December Nights",
+   "partner_name": "San Diego Natural History Museum",
+   "partner_id": 24,
+   "description": "",
+   "link": "https://www.sdnhm.org/calendar/december-nights/",
+   "availability": "",
+   "date_start": "2024-12-06T17:00:00-08:00",
+   "date_end": "2024-12-08T23:59:59-08:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K",
+    "Grades 6-8",
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology",
+    "Physical Science",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego Natural History Museum, Balboa Park, San Diego, CA",
+   "latitude": "32.7320808",
+   "longitude": "-117.1473395",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_diego_natural_history.png",
+   "eligibility": "",
+   "image_src": "8fe151929e7394b0.jpg"
   },
   {
    "slug": "https_www_sdnhm_org_calendar_museum_month",
@@ -384,7 +443,7 @@
     "Grades 9-12",
     "Adult"
    ],
-   "cost_range": "Less than $25",
+   "cost_range": "Less than $50",
    "time_of_day": [
     "All Day"
    ],
@@ -393,7 +452,6 @@
     "General Science",
     "Biology / LifeSciences",
     "Earth Science/Ecology",
-    "Physical Science",
     "Chemistry",
     "Physics"
    ],
@@ -407,6 +465,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "san_diego_natural_history.png",
+   "eligibility": "",
    "image_src": "6ee8179139810a59.png"
   }
  ]

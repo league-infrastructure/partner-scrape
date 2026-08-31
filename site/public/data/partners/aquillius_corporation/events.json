@@ -1,9 +1,41 @@
 {
- "generated_at": "2026-08-31T00:56:16Z",
+ "generated_at": "2026-08-31T19:31:52Z",
  "partner_slug": "aquillius_corporation",
  "kind": "current",
- "event_count": 22,
+ "event_count": 31,
  "events": [
+  {
+   "slug": "https_www_aquillius_com_event_2nd_innovation_in_womens_health_pitch_competition",
+   "title": "2nd Innovation in Women's Health Pitch Competition",
+   "partner_name": "Aquillius Corporation",
+   "partner_id": 631,
+   "description": "Details on Aquillius's upcoming workshops, symposiums, and networking events for San Diego's biotech and startup community.",
+   "link": "https://www.aquillius.com/event/2nd-innovation-in-womens-health-pitch-competition",
+   "availability": "Rolling — apply anytime",
+   "date_start": "2024-12-01T00:00:00-08:00",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Competitions",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "10918 Technology Place, San Diego, California, 92127",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
   {
    "slug": "https_www_aquillius_com_event_125k_international_pitch_competition",
    "title": "$125K International Pitch Competition",
@@ -11,17 +43,16 @@
    "partner_id": 631,
    "description": "Details on Aquillius's upcoming workshops, symposiums, and networking events for San Diego's biotech and startup community.",
    "link": "https://www.aquillius.com/event/125k-international-pitch-competition",
-   "availability": "",
+   "availability": "Rolling — apply anytime",
    "date_start": "2026-09-02T00:00:00-07:00",
    "date_end": "",
    "age_grade_level": [
-    "Adult"
+    "Adult",
+    "Grades 9-12"
    ],
    "cost_range": "",
-   "time_of_day": [
-    "All Day"
-   ],
-   "opportunity_type": "Career Connections",
+   "time_of_day": [],
+   "opportunity_type": "Competitions",
    "areas_of_interest": [
     "Biology / LifeSciences",
     "Engineering"
@@ -36,6 +67,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -68,6 +100,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -100,6 +133,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -131,6 +165,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -162,6 +197,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -178,9 +214,7 @@
     "Adult"
    ],
    "cost_range": "",
-   "time_of_day": [
-    "All Day"
-   ],
+   "time_of_day": [],
    "opportunity_type": "Professional Development / Conferences",
    "areas_of_interest": [
     "Biology / LifeSciences"
@@ -195,6 +229,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -224,6 +259,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -243,8 +279,7 @@
    "time_of_day": [],
    "opportunity_type": "Professional Development / Conferences",
    "areas_of_interest": [
-    "Coding/Computer Science/Cyber Security",
-    "Engineering"
+    "Coding/Computer Science/Cyber Security"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -256,6 +291,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -288,6 +324,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -319,6 +356,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -350,6 +388,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -381,6 +420,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -413,6 +453,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -422,7 +463,7 @@
    "partner_id": 631,
    "description": "Details on Aquillius's upcoming workshops, symposiums, and networking events for San Diego's biotech and startup community.",
    "link": "https://www.aquillius.com/event/she-talks-empower-lab-9",
-   "availability": "Repeats 8 times through 2026-09-02",
+   "availability": "Repeats 2 times through 2026-09-02",
    "date_start": "2026-09-02T00:00:00-07:00",
    "date_end": "",
    "age_grade_level": [
@@ -435,7 +476,7 @@
    "opportunity_type": "Professional Development / Conferences",
    "areas_of_interest": [
     "Biology / LifeSciences",
-    "Chemistry",
+    "Coding/Computer Science/Cyber Security",
     "Engineering"
    ],
    "specific_attention": [],
@@ -448,6 +489,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -483,6 +525,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -516,6 +559,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -529,16 +573,14 @@
    "date_start": "2026-09-02T00:00:00-07:00",
    "date_end": "",
    "age_grade_level": [
-    "Adult",
-    "Grades 9-12"
+    "Adult"
    ],
    "cost_range": "",
-   "time_of_day": [],
+   "time_of_day": [
+    "All Day"
+   ],
    "opportunity_type": "Professional Development / Conferences",
    "areas_of_interest": [
-    "Biology / LifeSciences",
-    "Chemistry",
-    "Engineering",
     "General Science"
    ],
    "specific_attention": [],
@@ -551,6 +593,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -583,6 +626,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -615,6 +659,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -634,11 +679,11 @@
    "time_of_day": [],
    "opportunity_type": "Professional Development / Conferences",
    "areas_of_interest": [
-    "Coding/Computer Science/Cyber Security",
-    "Engineering",
     "Biology / LifeSciences",
+    "Engineering",
     "Chemistry",
-    "Physics"
+    "Physics",
+    "General Science"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -650,6 +695,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -672,7 +718,7 @@
    "opportunity_type": "Professional Development / Conferences",
    "areas_of_interest": [
     "Biology / LifeSciences",
-    "Chemistry",
+    "Coding/Computer Science/Cyber Security",
     "Engineering"
    ],
    "specific_attention": [],
@@ -685,6 +731,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -694,7 +741,7 @@
    "partner_id": 631,
    "description": "Details on Aquillius's upcoming workshops, symposiums, and networking events for San Diego's biotech and startup community.",
    "link": "https://www.aquillius.com/event/sheconnects-empowering-women-through-community",
-   "availability": "Repeats 26 times through 2026-09-02",
+   "availability": "Repeats 27 times through 2026-09-02",
    "date_start": "2026-09-02T00:00:00-07:00",
    "date_end": "",
    "age_grade_level": [
@@ -702,6 +749,242 @@
    ],
    "cost_range": "",
    "time_of_day": [],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Coding/Computer Science/Cyber Security",
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "10918 Technology Place, San Diego, California, 92127",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_www_aquillius_com_event_advanced_in_vivo_research_training_ii",
+   "title": "Advanced In-Vivo Research Training II",
+   "partner_name": "Aquillius Corporation",
+   "partner_id": 631,
+   "description": "Details on Aquillius's upcoming workshops, symposiums, and networking events for San Diego's biotech and startup community.",
+   "link": "https://www.aquillius.com/event/advanced-in-vivo-research-training-ii",
+   "availability": "",
+   "date_start": "2026-09-02T00:00:00-07:00",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "10918 Technology Place, San Diego, California, 92127",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_www_aquillius_com_event_advanced_pre_clinical_techniques_workshop",
+   "title": "Advanced In-Vivo Research Training",
+   "partner_name": "Aquillius Corporation",
+   "partner_id": 631,
+   "description": "Details on Aquillius's upcoming workshops, symposiums, and networking events for San Diego's biotech and startup community.",
+   "link": "https://www.aquillius.com/event/advanced-pre-clinical-techniques-workshop",
+   "availability": "",
+   "date_start": "2026-09-02T00:00:00-07:00",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "10918 Technology Place, San Diego, California, 92127",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_www_aquillius_com_event_gen2x",
+   "title": "Lunch and Learn",
+   "partner_name": "Aquillius Corporation",
+   "partner_id": 631,
+   "description": "Details on Aquillius's upcoming workshops, symposiums, and networking events for San Diego's biotech and startup community.",
+   "link": "https://www.aquillius.com/event/gen2x",
+   "availability": "",
+   "date_start": "2026-09-02T00:00:00-07:00",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Chemistry"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "10918 Technology Place, San Diego, California, 92127",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_www_aquillius_com_event_health_innovation_pitch_competition",
+   "title": "Health Innovation Pitch Competition at the Festival of Biologics",
+   "partner_name": "Aquillius Corporation",
+   "partner_id": 631,
+   "description": "Details on Aquillius's upcoming workshops, symposiums, and networking events for San Diego's biotech and startup community.",
+   "link": "https://www.aquillius.com/event/health-innovation-pitch-competition",
+   "availability": "Rolling — apply anytime",
+   "date_start": "2026-09-02T00:00:00-07:00",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Competitions",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "10918 Technology Place, San Diego, California, 92127",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_www_aquillius_com_event_psychedelics",
+   "title": "Psychedelics",
+   "partner_name": "Aquillius Corporation",
+   "partner_id": 631,
+   "description": "Details on Aquillius's upcoming workshops, symposiums, and networking events for San Diego's biotech and startup community.",
+   "link": "https://www.aquillius.com/event/psychedelics",
+   "availability": "",
+   "date_start": "2026-09-02T00:00:00-07:00",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Chemistry"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "10918 Technology Place, San Diego, California, 92127",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_www_aquillius_com_event_sheconnects_empowering_women_through_community_22",
+   "title": "SheConnects: Empowering Women Through Community",
+   "partner_name": "Aquillius Corporation",
+   "partner_id": 631,
+   "description": "Details on Aquillius's upcoming workshops, symposiums, and networking events for San Diego's biotech and startup community.",
+   "link": "https://www.aquillius.com/event/sheconnects-empowering-women-through-community-22",
+   "availability": "Repeats 24 times through 2026-09-02",
+   "date_start": "2026-09-02T00:00:00-07:00",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "All Day"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Coding/Computer Science/Cyber Security",
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "10918 Technology Place, San Diego, California, 92127",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_www_aquillius_com_event_simbiosyx_matching_startups_with_verified_experts_to_fuel_innovation_33",
+   "title": "SIMBIOSYX: Matching Startups with Verified Experts to Fuel Innovation",
+   "partner_name": "Aquillius Corporation",
+   "partner_id": 631,
+   "description": "Details on Aquillius's upcoming workshops, symposiums, and networking events for San Diego's biotech and startup community.",
+   "link": "https://www.aquillius.com/event/simbiosyx-matching-startups-with-verified-experts-to-fuel-innovation-33",
+   "availability": "Repeats 13 times through 2026-09-02",
+   "date_start": "2026-09-02T00:00:00-07:00",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "All Day"
+   ],
    "opportunity_type": "Professional Development / Conferences",
    "areas_of_interest": [
     "Biology / LifeSciences",
@@ -717,6 +1000,42 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_www_aquillius_com_event_simbiosyx_matching_startups_with_verified_experts_to_fuel_innovation_22",
+   "title": "SIMBIOSYX: Matching Startups with Verified Experts to Fuel Innovation",
+   "partner_name": "Aquillius Corporation",
+   "partner_id": 631,
+   "description": "Details on Aquillius's upcoming workshops, symposiums, and networking events for San Diego's biotech and startup community.",
+   "link": "https://www.aquillius.com/event/simbiosyx-matching-startups-with-verified-experts-to-fuel-innovation-22",
+   "availability": "Repeats 7 times through 2026-09-02",
+   "date_start": "2026-09-02T00:00:00-07:00",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "All Day"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "10918 Technology Place, San Diego, California, 92127",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   }
  ]

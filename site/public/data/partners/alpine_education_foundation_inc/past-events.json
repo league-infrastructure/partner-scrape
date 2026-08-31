@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-08-31T00:40:43Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "alpine_education_foundation_inc",
  "kind": "past",
- "event_count": 2,
+ "event_count": 3,
  "events": [
   {
    "slug": "https_aef4kids_org_programs_punkin_chunkin",
@@ -23,8 +23,8 @@
    "time_of_day": [],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
-    "Engineering",
-    "Physics"
+    "Physics",
+    "Engineering"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -36,6 +36,39 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "alpine_education_foundation_inc.jpg",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_aef4kids_org_programs_littlelearners",
+   "title": "AEF Little Learners - Alpine Education Foundation",
+   "partner_name": "Alpine Education Foundation Inc.",
+   "partner_id": 228,
+   "description": "",
+   "link": "https://aef4kids.org/programs/littlelearners/",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Pre-K"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "2710 Alpine Blvd, Ste. K, PMB 101, Alpine, CA, 91901",
+   "latitude": "32.8349618",
+   "longitude": "-116.7553278",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "alpine_education_foundation_inc.jpg",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -55,10 +88,9 @@
    "time_of_day": [
     "All Day"
    ],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Camps",
    "areas_of_interest": [
-    "General Science",
-    "Engineering"
+    "General Science"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -70,6 +102,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "alpine_education_foundation_inc.jpg",
+   "eligibility": "",
    "image_src": ""
   }
  ]

@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-08-31T00:40:43Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "fleet_science_center",
  "kind": "current",
  "event_count": 1,
@@ -35,6 +35,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "fleet_science_center.jpg",
+   "eligibility": "",
    "image_src": ""
   }
  ]

@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-08-31T00:40:44Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "the_water_conservation_garden",
  "kind": "current",
- "event_count": 11,
+ "event_count": 12,
  "events": [
   {
    "slug": "https_thegarden_org_public_event_east_county_advanced_water_purification_2026_09_01",
@@ -36,6 +36,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -49,12 +50,14 @@
    "date_start": "2026-09-11T09:00:00-07:00",
    "date_end": "2028-08-11T23:59:59-07:00",
    "age_grade_level": [
-    "Family"
+    "Family",
+    "Pre-K",
+    "Grades 6-8",
+    "Grades 9-12"
    ],
    "cost_range": "Free",
    "time_of_day": [
-    "Morning",
-    "Afternoon"
+    "Morning"
    ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
@@ -71,6 +74,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -85,6 +89,7 @@
    "date_end": "2028-08-26T16:00:00-07:00",
    "age_grade_level": [
     "Family",
+    "Grades 9-12",
     "Adult"
    ],
    "cost_range": "Free",
@@ -106,6 +111,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -140,6 +146,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -174,6 +181,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -209,6 +217,41 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_thegarden_org_public_event_busy_312",
+   "title": "Small Business Saturday Craft Fair!",
+   "partner_name": "The Water Conservation Garden",
+   "partner_id": 233,
+   "description": "Celebrate Small Business Saturday at The Water Conservation Garden’s Craft Fair on our monthly Water District Wave-In Day. Free Event Enjoy a beautiful morning among the blooms while supporting local jewelers, artisans, and handmade makers spread through out The Garden. Stop in our volunteer-run gift shop with special garden items and decorative succulents created with love for the community by our volunteers. Bring the family and enjoy a peaceful stroll through the Garden after Thanksgiving!",
+   "link": "https://thegarden.org/public-event/busy-312/",
+   "availability": "",
+   "date_start": "2026-11-28T09:00:00-08:00",
+   "date_end": "2026-11-28T13:00:00-08:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "The Water Conservation Garden",
+   "latitude": "32.7427202",
+   "longitude": "-116.9395318",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -244,6 +287,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -277,6 +321,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -311,6 +356,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -345,6 +391,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -371,13 +418,14 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "The Garden (San Diego)",
+   "location": "12122 Cuyamaca College Drive West, El Cajon, California, 92019",
    "latitude": "32.7427202",
    "longitude": "-116.9395318",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   }
  ]

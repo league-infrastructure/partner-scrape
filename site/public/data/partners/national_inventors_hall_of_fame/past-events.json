@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-08-31T00:56:16Z",
+ "generated_at": "2026-08-31T19:31:52Z",
  "partner_slug": "national_inventors_hall_of_fame",
  "kind": "past",
- "event_count": 11,
+ "event_count": 10,
  "events": [
   {
    "slug": "https_www_invent_org_programs_camp_invention_elevate",
@@ -15,16 +15,20 @@
    "date_start": "",
    "date_end": "",
    "age_grade_level": [
-    "Family"
+    "Grades 6-8",
+    "Grades 9-12"
    ],
    "cost_range": "",
-   "time_of_day": [],
-   "opportunity_type": "Out-of-school Programs",
+   "time_of_day": [
+    "Morning",
+    "Afternoon"
+   ],
+   "opportunity_type": "Camps",
    "areas_of_interest": [
-    "General Science",
     "Engineering",
-    "Physics",
+    "Physical Science",
     "Chemistry",
+    "Biology / LifeSciences",
     "Mathematics"
    ],
    "specific_attention": [],
@@ -37,6 +41,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "national_inventors_hall_of.jpg",
+   "eligibility": "",
    "image_src": "ca9315310c84d23c.jpg"
   },
   {
@@ -57,10 +62,10 @@
    "time_of_day": [],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
+    "General Science",
     "Engineering",
     "Mathematics",
-    "Physical Science",
-    "General Science"
+    "Coding/Computer Science/Cyber Security"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -72,6 +77,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "national_inventors_hall_of.jpg",
+   "eligibility": "",
    "image_src": "06c3c9d3c5f62153.jpg"
   },
   {
@@ -90,7 +96,7 @@
    ],
    "cost_range": "",
    "time_of_day": [],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Camps",
    "areas_of_interest": [
     "Engineering",
     "General Science"
@@ -105,6 +111,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "national_inventors_hall_of.jpg",
+   "eligibility": "",
    "image_src": "a493fa99f428a397.jpg"
   },
   {
@@ -125,6 +132,14 @@
    "time_of_day": [],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology",
+    "Coding/Computer Science/Cyber Security",
+    "Engineering",
+    "Physical Science",
+    "Mathematics",
+    "Chemistry",
+    "Physics",
     "General Science"
    ],
    "specific_attention": [],
@@ -137,40 +152,8 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "national_inventors_hall_of.jpg",
+   "eligibility": "",
    "image_src": "6f2d1f82bc442ff2.jpg"
-  },
-  {
-   "slug": "https_www_invent_org_events_cic",
-   "title": "Collegiate Inventors Competition",
-   "partner_name": "National Inventors Hall of Fame",
-   "partner_id": 564,
-   "description": "The National Inventors Hall of Fame® hosts a competition for college students to showcase their inventions.",
-   "link": "https://www.invent.org/events/cic",
-   "availability": "",
-   "date_start": "",
-   "date_end": "",
-   "age_grade_level": [
-    "Grades 9-12",
-    "Adult"
-   ],
-   "cost_range": "",
-   "time_of_day": [],
-   "opportunity_type": "Professional Development / Conferences",
-   "areas_of_interest": [
-    "Engineering",
-    "Coding/Computer Science/Cyber Security"
-   ],
-   "specific_attention": [],
-   "financial_support": "No",
-   "ngss_aligned": "No",
-   "location": "3701 Highland Park, Ohio, 44720",
-   "latitude": "40.9178286",
-   "longitude": "-81.4136466",
-   "contact_name": "",
-   "contact_email": "",
-   "contact_phone": "",
-   "logo_src": "national_inventors_hall_of.jpg",
-   "image_src": "88ec67d7c351e2b5.jpg"
   },
   {
    "slug": "https_www_invent_org_programs_camp_invention",
@@ -183,14 +166,21 @@
    "date_start": "",
    "date_end": "",
    "age_grade_level": [
-    "Family"
+    "Family",
+    "Grades 6-8",
+    "Grades 9-12",
+    "Pre-K"
    ],
    "cost_range": "",
-   "time_of_day": [],
-   "opportunity_type": "Out-of-school Programs",
+   "time_of_day": [
+    "Morning",
+    "Afternoon"
+   ],
+   "opportunity_type": "Camps",
    "areas_of_interest": [
     "Engineering",
-    "General Science"
+    "Coding/Computer Science/Cyber Security",
+    "Physical Science"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -202,6 +192,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "national_inventors_hall_of.jpg",
+   "eligibility": "",
    "image_src": "ea50155d82727a06.jpg"
   },
   {
@@ -215,12 +206,13 @@
    "date_start": "",
    "date_end": "",
    "age_grade_level": [
-    "Family",
-    "Grades 6-8"
+    "Grades 6-8",
+    "Grades 9-12",
+    "Family"
    ],
    "cost_range": "",
    "time_of_day": [],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Camps",
    "areas_of_interest": [
     "Engineering",
     "General Science"
@@ -235,6 +227,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "national_inventors_hall_of.jpg",
+   "eligibility": "",
    "image_src": "83bc6852904651d9.jpg"
   },
   {
@@ -253,7 +246,7 @@
    ],
    "cost_range": "",
    "time_of_day": [],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Camps",
    "areas_of_interest": [
     "Engineering"
    ],
@@ -267,6 +260,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "national_inventors_hall_of.jpg",
+   "eligibility": "",
    "image_src": "142c653f83ad0a50.jpg"
   },
   {
@@ -284,7 +278,7 @@
    ],
    "cost_range": "",
    "time_of_day": [],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Camps",
    "areas_of_interest": [
     "Engineering",
     "General Science"
@@ -299,6 +293,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "national_inventors_hall_of.jpg",
+   "eligibility": "",
    "image_src": "4858ced749ad07ec.jpg"
   },
   {
@@ -317,7 +312,7 @@
    ],
    "cost_range": "",
    "time_of_day": [],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Camps",
    "areas_of_interest": [
     "Engineering",
     "General Science"
@@ -332,6 +327,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "national_inventors_hall_of.jpg",
+   "eligibility": "",
    "image_src": "4741455bad248606.jpg"
   },
   {
@@ -350,8 +346,10 @@
     "Family"
    ],
    "cost_range": "",
-   "time_of_day": [],
-   "opportunity_type": "Out-of-school Programs",
+   "time_of_day": [
+    "All Day"
+   ],
+   "opportunity_type": "Camps",
    "areas_of_interest": [
     "Engineering",
     "General Science"
@@ -366,6 +364,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "national_inventors_hall_of.jpg",
+   "eligibility": "",
    "image_src": "a51775e1bffc057d.jpg"
   }
  ]

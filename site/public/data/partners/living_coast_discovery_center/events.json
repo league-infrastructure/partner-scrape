@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-08-31T00:40:43Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "living_coast_discovery_center",
  "kind": "current",
- "event_count": 5,
+ "event_count": 8,
  "events": [
   {
    "slug": "https_www_thelivingcoast_org_programs_events_upcoming_events_eagle_presentation_2_2_2_2026_08_30",
@@ -35,6 +35,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "living_coast_discovery_center.jpg",
+   "eligibility": "",
    "image_src": "465f691c385da6ff.jpg"
   },
   {
@@ -68,6 +69,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "living_coast_discovery_center.jpg",
+   "eligibility": "",
    "image_src": "7e3ef527168178d8.jpg"
   },
   {
@@ -101,6 +103,109 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "living_coast_discovery_center.jpg",
+   "eligibility": "",
+   "image_src": "161d8716a54b0902.png"
+  },
+  {
+   "slug": "https_www_thelivingcoast_org_programs_events_upcoming_events_eagle_presentation_2_2_2_2026_09_02",
+   "title": "Eagle Presentation",
+   "partner_name": "Living Coast Discovery Center",
+   "partner_id": 46,
+   "description": "Join us at Eagle Mesa for a presentation about our bald & golden eagles! Learn about these two non-releasable raptors, like what they eat, why they reside at the Living Coast, fun facts, and more! *All events subject to cancellation at the discretion of our staff.",
+   "link": "https://www.thelivingcoast.org/programs-events-upcoming-events/eagle-presentation-2-2-2/2026-09-02/",
+   "availability": "Repeats 83 times through 2026-12-31",
+   "date_start": "2026-09-02T10:30:00-07:00",
+   "date_end": "2026-12-31T11:00:00-08:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Living Coast Discovery Center, 1000 Gunpowder Point Dr., Chula Vista, CA",
+   "latitude": "32.6401018",
+   "longitude": "-117.1103432",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "living_coast_discovery_center.jpg",
+   "eligibility": "",
+   "image_src": "465f691c385da6ff.jpg"
+  },
+  {
+   "slug": "https_www_thelivingcoast_org_programs_events_upcoming_events_shark_ray_presentation_2_2_2026_09_03",
+   "title": "Shark & Ray Presentation",
+   "partner_name": "Living Coast Discovery Center",
+   "partner_id": 46,
+   "description": "Visit the Shark & Ray Experience to learn about the diverse range of species that inhabit it, including leopard sharks, bat rays, diamond rays, shovelnose guitarfish, horn sharks, and more! This exhibit features a touch tank where you can interact with some of these residents while learning about them. *All presentations are subject to cancellation at the discretion of the staff.",
+   "link": "https://www.thelivingcoast.org/programs-events-upcoming-events/shark-ray-presentation-2-2/2026-09-03/",
+   "availability": "Repeats 83 times through 2026-12-31",
+   "date_start": "2026-09-02T13:30:00-07:00",
+   "date_end": "2026-12-31T14:00:00-08:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Less than $25",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Living Coast Discovery Center, 1000 Gunpowder Point Dr., Chula Vista, CA",
+   "latitude": "32.6401018",
+   "longitude": "-117.1103432",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "living_coast_discovery_center.jpg",
+   "eligibility": "",
+   "image_src": "7e3ef527168178d8.jpg"
+  },
+  {
+   "slug": "https_www_thelivingcoast_org_programs_events_upcoming_events_sea_turtle_presentation_2_2_2026_09_02",
+   "title": "Sea Turtle Presentation",
+   "partner_name": "Living Coast Discovery Center",
+   "partner_id": 46,
+   "description": "Join us at Turtle Lagoon to learn about green sea turtles, even the ones you can find right here in San Diego Bay! A Living Coast educator will tell you all about sea turtles, like their diet, shell, fun facts, and more! *All animal presentations are subject to cancellation at the discretion of our staff.",
+   "link": "https://www.thelivingcoast.org/programs-events-upcoming-events/sea-turtle-presentation-2-2/2026-09-02/",
+   "availability": "Repeats 83 times through 2026-12-31",
+   "date_start": "2026-09-02T14:30:00-07:00",
+   "date_end": "2026-12-31T15:00:00-08:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Living Coast Discovery Center, 1000 Gunpowder Point Dr., Chula Vista, CA",
+   "latitude": "32.6401018",
+   "longitude": "-117.1103432",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "living_coast_discovery_center.jpg",
+   "eligibility": "",
    "image_src": "161d8716a54b0902.png"
   },
   {
@@ -128,13 +233,14 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "Living Coast Discovery Center, 1000 Gunpowder Point Drive, Chula Vista, CA 91910",
+   "location": "Living Coast Discovery Center, 1000 Gunpowder Point Dr., Chula Vista, CA",
    "latitude": "32.6401018",
    "longitude": "-117.1103432",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "living_coast_discovery_center.jpg",
+   "eligibility": "",
    "image_src": "98f171d093824197.png"
   },
   {
@@ -170,6 +276,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "living_coast_discovery_center.jpg",
+   "eligibility": "",
    "image_src": "0ffd1923ca95be9e.jpg"
   }
  ]

@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-08-31T00:40:43Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "grossmont_college",
  "kind": "past",
- "event_count": 6,
+ "event_count": 8,
  "events": [
   {
    "slug": "https_www_grossmont_edu_academics_programs_allied_index_php",
@@ -33,6 +33,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -53,7 +54,7 @@
    "time_of_day": [],
    "opportunity_type": "School Programs",
    "areas_of_interest": [
-    "Physical Science"
+    "Biology / LifeSciences"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -65,6 +66,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -97,6 +99,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -127,6 +130,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -158,6 +162,7 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   },
   {
@@ -188,6 +193,68 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_www_grossmont_edu_academics_programs_biology_cssr_natives_wildlife_invertebrates_dragonflies_php",
+   "title": "Dragonflies",
+   "partner_name": "Grossmont College",
+   "partner_id": 10,
+   "description": "",
+   "link": "https://www.grossmont.edu/academics/programs/biology/cssr/natives/wildlife/invertebrates/dragonflies.php",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "8800 Grossmont College Dr, San Diego, California, 92020",
+   "latitude": "32.8167823",
+   "longitude": "-117.0062922",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_www_grossmont_edu_academics_programs_aoj_security_academy_php",
+   "title": "Security Academy",
+   "partner_name": "Grossmont College",
+   "partner_id": 10,
+   "description": "Security Academy",
+   "link": "https://www.grossmont.edu/academics/programs/aoj/security-academy.php",
+   "availability": "",
+   "date_start": "2018-07-01T00:00:00-07:00",
+   "date_end": "",
+   "age_grade_level": [],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "8800 Grossmont College Dr, San Diego, California, 92020",
+   "latitude": "32.8167823",
+   "longitude": "-117.0062922",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
    "image_src": ""
   }
  ]

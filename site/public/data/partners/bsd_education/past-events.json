@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-08-31T00:40:43Z",
+ "generated_at": "2026-08-31T19:11:09Z",
  "partner_slug": "bsd_education",
  "kind": "past",
  "event_count": 1,
@@ -17,7 +17,7 @@
    "age_grade_level": [],
    "cost_range": "",
    "time_of_day": [],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Camps",
    "areas_of_interest": [
     "Coding/Computer Science/Cyber Security"
    ],
@@ -31,7 +31,8 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "bsd_education.png",
-   "image_src": "3dab220dc8dbff09.jpg"
+   "eligibility": "",
+   "image_src": "a013060ec5e0f18d.jpg"
   }
  ]
 }
