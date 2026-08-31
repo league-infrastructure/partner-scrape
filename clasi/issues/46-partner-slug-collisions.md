@@ -7,27 +7,39 @@ status: pending
 ## Description
 
 Found live during sprint 018 ticket 010's verification of `publish.project()`
-(the first successful run since sprint 015): the curated partner roster has
-153 entries but the published `public/data/` tree produces only 144 partner
-directories — 9 pairs (or more) of partners whose slugified names collide,
-so one silently overwrites another's directory in the per-partner
+(the first successful run since sprint 015): the curated partner roster had
+153 entries but the published `public/data/` tree produced only 144 partner
+directories — 9 pairs of partners whose slugified names collided, so one
+silently overwrote another's directory in the per-partner
 `events.json`/`past-events.json` output. Not a regression from ticket 010's
 fix; pre-existing, confirmed unrelated, left untouched there.
 
-## Proposed fix
+## Resolution (2026-08-31, verified by stem-ecosystem-8d)
 
-Identify the 9 colliding name pairs (likely candidates: sprint 018 added
-69 new roster orgs across two batches plus 52 backfilled logos — check for
-near-duplicate names like differently-suffixed chapters, "X" vs "X, Inc.",
-or genuine accidental dupes the ticket-002 housekeeping pass didn't catch).
-Fix shape: either rename to disambiguate (append city/chapter per the
-Boys & Girls Clubs precedent from ticket 004) or, if genuinely the same
-org, dedupe per ticket 002's established method (verify registry org_name
-join before removing either row). Add a regression test asserting the
-roster's slugified names are unique (the missing invariant that let this
-happen silently).
+**Content already fixed, diagnosis corrected.** Running `slugify()`
+(`partner_scrape/model.py`) against both rosters: the old 153-row roster
+produced 144 distinct slugs (9 collisions); the 211-row curated roster
+that landed via sprint 018 + tonight's site consolidation produces 211
+distinct slugs, zero collisions.
+
+The 9 were **not** near-duplicate names needing disambiguation (what
+this issue originally guessed) — they were exact duplicate rows, the
+same org listed twice under two different ids (Fleet Science Center
+twice, Viasat twice, Ocean Connectors twice, and so on). This also
+explains the 8 id renumberings observed during the roster swap: the
+211-row dedup dropped one row of each pair, and surviving orgs kept
+different ids than their old duplicate-era selves. The published 144
+directories become 211 the next time the pipeline runs against the
+current roster.
+
+**Residual work — the regression guard — folded into issue 48**
+(pipeline-level roster validation), which now explicitly includes a
+slug-uniqueness check. No separate ticket needed; closing this issue
+rather than tracking a phantom "identify the 9 pairs" task that's
+already resolved.
 
 ## References
 
-Sprint 018 ticket 010 Notes (discovery); export/publish.py slug
-derivation; sprint 018 ticket 002 (roster dedup precedent).
+Sprint 018 ticket 010 Notes (original discovery); `export/publish.py`
+slug derivation; sprint 018 ticket 002 (roster dedup precedent); issue
+48 (where the regression guard lives).
