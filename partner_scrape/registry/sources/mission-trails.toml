@@ -1,0 +1,44 @@
+# Mission Trails Regional Park Foundation -- Google Calendar ICS
+# subscription feed (calendar id
+# grl4qojc788hl9inf3h4e1skdhm2dmas@import.calendar.google.com, embedded
+# on mtrp.org/events/). Live, well-formed, blocked at commit time by a
+# policy gate, not a technical one: calendar.google.com's robots.txt
+# disallows everything except the bare root for User-agent: *, and this
+# is a published ICS subscription URL, not a scraped HTML page.
+#
+# Sprint 015 issue 38 / ticket 005: Eric decided 2026-08-30 to treat
+# explicitly-published ICS subscription URLs as feed-client traffic --
+# poll politely, ignore robots.txt for this URL class (see issue 38's
+# "Stakeholder decision" section). `acquisition_policy.respect_robots
+# = false` below is real as of sprint 015 ticket 003's threading fix
+# (adapters.base.acquisition_kwargs -> PoliteFetcher.get()); this is
+# not dead configuration the way it would have been in sprint 014.
+#
+# Live-verified 2026-08-30 (sprint 015 ticket 005, re-confirming sprint
+# 014 ticket 004's original count of 164):
+#
+#   GET https://calendar.google.com/calendar/ical/grl4qojc788hl9inf3h4e1skdhm2dmas%40import.calendar.google.com/public/basic.ics
+#
+# returns HTTP 200, content-type text/calendar, 164 raw VEVENTs.
+# `uv run partner-scrape --dry-run --no-enrich --source mission-trails`
+# through the real `ical` adapter (not just a raw fetch) confirms
+# non-zero, dated output: found=138 dated=138 new=67 (a handful of
+# recurring VEVENTs are skipped per-record -- "RRULE UNTIL values must
+# be specified in UTC when DTSTART is timezone-aware", an existing
+# `ical.py` limitation, not something this ticket's scope touches --
+# the source as a whole is unaffected).
+#
+# No partners.json match -- candidate for issue 32's roster expansion
+# (per sprint 014 ticket 004's notes), not force-matched.
+
+org_name = "Mission Trails Regional Park Foundation"
+adapter_type = "ical"
+enabled = true
+
+[config]
+feed_url = "https://calendar.google.com/calendar/ical/grl4qojc788hl9inf3h4e1skdhm2dmas%40import.calendar.google.com/public/basic.ics"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = false
+discovered_via = "sprint 015 ticket 005 registration (issue 38 stakeholder decision 2026-08-30: published ICS subscription URLs are feed-client traffic; live dry-run found=138 dated events)"

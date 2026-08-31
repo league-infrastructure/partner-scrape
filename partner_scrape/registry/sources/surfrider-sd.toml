@@ -1,0 +1,47 @@
+# Surfrider Foundation San Diego County Chapter -- Google Calendar ICS
+# subscription feed (calendar id surfridersd.org@gmail.com, cited on
+# sandiego.surfrider.org/news/integrate-our-calendar-to-your-own).
+# Live, extremely high-yield, blocked at commit time by a policy gate,
+# not a technical one: calendar.google.com's robots.txt disallows
+# everything except the bare root for User-agent: *, and this is a
+# published ICS subscription URL, not a scraped HTML page.
+#
+# Sprint 015 issue 38 / ticket 005: Eric decided 2026-08-30 to treat
+# explicitly-published ICS subscription URLs as feed-client traffic --
+# poll politely, ignore robots.txt for this URL class (see issue 38's
+# "Stakeholder decision" section). `acquisition_policy.respect_robots
+# = false` below is real as of sprint 015 ticket 003's threading fix
+# (adapters.base.acquisition_kwargs -> PoliteFetcher.get()); this is
+# not dead configuration the way it would have been in sprint 014.
+#
+# Live-verified 2026-08-30 (sprint 015 ticket 005, re-confirming sprint
+# 014 ticket 004's original count of 2313):
+#
+#   GET https://calendar.google.com/calendar/ical/surfridersd.org%40gmail.com/public/basic.ics
+#
+# returns HTTP 200, content-type text/calendar, X-WR-CALNAME "Surfrider
+# Events SD County", 2313 raw VEVENTs. `uv run partner-scrape --dry-run
+# --no-enrich --source surfrider-sd` through the real `ical` adapter
+# (not just a raw fetch) confirms non-zero, dated output: found=2188
+# dated=2188 new=994 (some recurring VEVENTs skipped per-record on the
+# same pre-existing "RRULE UNTIL ... timezone-aware" limitation noted
+# in mission-trails.toml; the source as a whole is unaffected). Note
+# (per issue 25): this feed is broad chapter programming, not
+# STEM-filtered at the source -- the existing relevance gate is
+# responsible for narrowing it downstream, same as any other
+# high-volume general-interest feed.
+#
+# No partners.json match -- candidate for issue 32's roster expansion
+# (per sprint 014 ticket 004's notes), not force-matched.
+
+org_name = "Surfrider Foundation San Diego County Chapter"
+adapter_type = "ical"
+enabled = true
+
+[config]
+feed_url = "https://calendar.google.com/calendar/ical/surfridersd.org%40gmail.com/public/basic.ics"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = false
+discovered_via = "sprint 015 ticket 005 registration (issue 38 stakeholder decision 2026-08-30: published ICS subscription URLs are feed-client traffic; live dry-run found=2188 dated events)"

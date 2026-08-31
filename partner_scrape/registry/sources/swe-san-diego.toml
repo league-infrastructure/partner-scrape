@@ -1,0 +1,50 @@
+# Society of Women Engineers - San Diego (SWE San Diego) -- Google
+# Calendar ICS subscription feed (calendar id
+# c_47d13e174ec348496da4fa57070b9933a9b07369f257870d5288e602d7997d79
+# @group.calendar.google.com, embedded on swesandiego.org/events), the
+# section's calendar of events from all committees, including K-12
+# outreach. Existing partner with no other event source today. Live,
+# blocked at commit time by a policy gate, not a technical one:
+# calendar.google.com's robots.txt disallows everything except the
+# bare root for User-agent: *, and this is a published ICS subscription
+# URL, not a scraped HTML page.
+#
+# Sprint 015 issue 38 / ticket 005: Eric decided 2026-08-30 to treat
+# explicitly-published ICS subscription URLs as feed-client traffic --
+# poll politely, ignore robots.txt for this URL class (see issue 38's
+# "Stakeholder decision" section). `acquisition_policy.respect_robots
+# = false` below is real as of sprint 015 ticket 003's threading fix
+# (adapters.base.acquisition_kwargs -> PoliteFetcher.get()); this is
+# not dead configuration the way it would have been in sprint 014.
+#
+# Live-verified 2026-08-30 (sprint 015 ticket 005; not previously
+# counted by sprint 014 ticket 004, which flagged this feed as live and
+# well-formed but did not report a VEVENT count):
+#
+#   GET https://calendar.google.com/calendar/ical/c_47d13e174ec348496da4fa57070b9933a9b07369f257870d5288e602d7997d79%40group.calendar.google.com/public/basic.ics
+#
+# returns HTTP 200, content-type text/calendar, X-WR-CALNAME
+# "SWE-San Diego Calendar", 285 raw VEVENTs. `uv run partner-scrape
+# --dry-run --no-enrich --source swe-san-diego` through the real `ical`
+# adapter (not just a raw fetch) confirms non-zero, dated output:
+# found=280 dated=280 new=225 (a few recurring/malformed VEVENTs
+# skipped per-record on the same pre-existing "RRULE UNTIL ...
+# timezone-aware" limitation noted in mission-trails.toml, plus one
+# with no SUMMARY; the source as a whole is unaffected).
+#
+# org_name matches site/src/data/partners.json's existing entry exactly
+# ("Society of Women Engineers - San Diego") so
+# normalize.partners.find_partner joins automatically -- SWE San Diego
+# is already a partner with no other registered event source.
+
+org_name = "Society of Women Engineers - San Diego"
+adapter_type = "ical"
+enabled = true
+
+[config]
+feed_url = "https://calendar.google.com/calendar/ical/c_47d13e174ec348496da4fa57070b9933a9b07369f257870d5288e602d7997d79%40group.calendar.google.com/public/basic.ics"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = false
+discovered_via = "sprint 015 ticket 005 registration (issue 38 stakeholder decision 2026-08-30: published ICS subscription URLs are feed-client traffic; live dry-run found=280 dated events; org already a partner)"
