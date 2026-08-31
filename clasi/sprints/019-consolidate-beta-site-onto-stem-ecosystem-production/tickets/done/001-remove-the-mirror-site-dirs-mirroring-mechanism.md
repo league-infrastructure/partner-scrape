@@ -1,7 +1,7 @@
 ---
 id: '001'
 title: Remove the MIRROR_SITE_DIRS mirroring mechanism
-status: in-progress
+status: done
 use-cases:
 - SUC-002
 depends-on: []

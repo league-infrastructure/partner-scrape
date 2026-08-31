@@ -1,9 +1,11 @@
 ---
 id: '002'
 title: Convert site/ to a build-time checkout of stem-ecosystem in pages.yml
-status: open
-use-cases: [SUC-001]
-depends-on: ['001']
+status: in-progress
+use-cases:
+- SUC-001
+depends-on:
+- '001'
 github-issue: ''
 issue: consolidate-partner-scrape-s-beta-site-into-stem-ecosystem-production.md
 completes_issue: true
