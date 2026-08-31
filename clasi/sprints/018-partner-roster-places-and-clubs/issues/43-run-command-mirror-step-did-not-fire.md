@@ -1,5 +1,8 @@
 ---
-status: pending
+status: in-progress
+sprint: 018
+tickets:
+- 018-001
 ---
 
 # Triage: the run command's mirror step didn't update the beta site/ checkout
