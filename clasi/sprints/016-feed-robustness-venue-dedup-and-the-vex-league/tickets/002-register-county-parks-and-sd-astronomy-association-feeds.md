@@ -1,7 +1,7 @@
 ---
 id: '002'
 title: Register county-parks and sd-astronomy-association feeds
-status: open
+status: in-progress
 use-cases:
 - SUC-003
 depends-on:

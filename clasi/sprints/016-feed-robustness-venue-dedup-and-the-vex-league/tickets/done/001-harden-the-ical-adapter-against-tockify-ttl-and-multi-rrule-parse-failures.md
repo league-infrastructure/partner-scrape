@@ -1,7 +1,7 @@
 ---
 id: '001'
 title: Harden the ical adapter against Tockify TTL and multi-RRULE parse failures
-status: in-progress
+status: done
 use-cases:
 - SUC-001
 - SUC-002
