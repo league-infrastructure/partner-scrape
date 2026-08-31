@@ -1,5 +1,5 @@
 ---
-status: in-progress
+status: done
 sprint: '015'
 tickets:
 - 015-003
@@ -45,6 +45,20 @@ this window — seasonal), cafirst.org (no TEC REST despite plugin
 markup — needs a different approach; issue 30 covers FIRST events),
 California DI / Cabrillo NM Foundation (Squarespace per-event ICS only
 — a small multi-URL ical enhancement would unlock both).
+
+## Stakeholder decision (item 2) — RESOLVED 2026-08-30
+
+Eric decided 2026-08-30 (recorded by team-lead, sprint 015): **treat
+explicitly-published ICS subscription URLs as feed-client traffic.**
+Poll them politely (existing rate limits apply) but ignore host
+robots.txt for this URL class, matching what calendar clients
+(Google Calendar, Outlook) do with the same URLs. Register all five
+feeds — SD County Parks, Mission Trails Regional Park Foundation,
+Surfrider SD, San Diego Astronomy Association, SWE San Diego — with
+`acquisition_policy.respect_robots = false`. This clears ticket
+015-005's gate check. The decision covers published subscription-feed
+URLs only; strict robots compliance remains the default for every
+other URL class.
 
 ## References
 

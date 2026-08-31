@@ -26,8 +26,9 @@ path in `partners.py`, now hit by roughly 20 newly-registered sources, several w
 
 ## 2. Orientation
 
-One entry point: `run.run(events, partners_path, source_org_names=None, today=None,
-image_resolver=None) -> list[Opportunity]`. It executes in a fixed order:
+One entry point: `run.run(events, partners_path, source_org_names=None,
+source_taxonomy_defaults=None, today=None, image_resolver=None) -> list[Opportunity]`. It
+executes in a fixed order:
 
 1. **Coerce datetimes.** Any timezone-aware `start`/`end` is made naive, in one place.
 2. **Split internships out.** `kind="internship"` events bypass both dedup stages.
@@ -148,6 +149,28 @@ posting-observed date — routinely in the past for a still-open role — so the
 "ends today or later" rule would expire it immediately. `export/writer.py` implements the
 matching filter exception.
 
+**(Sprint 015, ticket 007, issue 27 item 2)** `DEADLINE_FIRST_TYPES` generalizes the
+internship-only special case above to a set: `{WORK_BASED_LEARNING_TYPE, "Competitions"}`.
+Both `export/writer.py`'s currency check (`is_current_or_upcoming`) and its export sort
+key (`_export_sort_key`) now branch on `opportunity_type in DEADLINE_FIRST_TYPES` instead
+of `== WORK_BASED_LEARNING_TYPE`, and `_to_opportunity`'s availability-text derivation
+does the same — `_internship_availability` (kept its name; its "Apply by <date>"/"Rolling
+— apply anytime" text is not internship-specific in behavior, only in the historical
+name) now applies whenever `is_internship or opportunity_type in DEADLINE_FIRST_TYPES`,
+computed *after* `opportunity_type` is resolved so the check can see the final,
+LLM-or-fallback-classified value. The `is_internship`/`kind` bypass used elsewhere
+(collapse, dedup, forced `opportunity_type`) is untouched — this generalization is
+availability-text derivation only, one of three call sites (with the currency check and
+sort key) reusing one constant instead of three independently hardcoded checks.
+
+Rejected alternative: a new `application_deadline` field, distinct from `date_end`. No
+adapter and no LLM-prompt field currently distinguishes a registration/application
+deadline from an event's own end date/time for any non-internship record — a new field
+would have no real producer this sprint, making it speculative generality. Reusing `end`
+is not speculative in the same way: it extends sprint 006's already-shipped
+`WORK_BASED_LEARNING_TYPE` convention to one more already-shipped `opportunity_type`
+value (`"Competitions"`, added ticket 006 this sprint), not a new mechanism.
+
 **Taxonomy is keyword rules, not ML.** `taxonomy.py` ports the pre-existing script's
 `AREA_KEYWORDS` / `AGE_KEYWORDS` / cost / time-of-day rules into pure functions.
 `derive_time_of_day` is the one deliberate reimplementation: it reads `Event.start`'s
@@ -159,6 +182,59 @@ existing, deliberate false-positive rationale documented on
 `OPPORTUNITY_TYPE_KEYWORDS` — only the LLM path can produce that value; the keyword
 fallback keeps defaulting ambiguous titles to `"Out-of-school Programs"`, which is the
 safer failure mode during an LLM outage.
+
+**(Sprint 015, ticket 006, issue 27)** `OPPORTUNITY_TYPE_KEYWORDS` gains one new rule,
+`\bcamps?\b` → `"Camps"` — word-bounded so it cannot fire inside "campus"/"campaign"/
+"campfire"/"campground"/"encampment", spot-checked against this project's own fixture
+titles (`"Ocean Explorers Camp"`, `"Summer Camp Registration Is Open!"`, `"Farm Camp"`,
+`"Camp-o-Saurus"`). `"Competitions"` deliberately gets **no** keyword rule, extending
+the same false-positive rationale that already excludes `"Funding Opportunities"`: the
+obvious candidate, `competit*` (competition/competitive), matches a real,
+already-fixtured title — `test_adapters_leaguesync.py`'s `"Competitive Robotics Summer
+Warm Up"` is an ordinary registration-based League *class*, not a competition. Other
+candidates considered (`tournament`, `hackathon`) don't appear anywhere in this
+codebase's fixtures/adapters to spot-check against, and a bare `fair` is already too
+ambiguous — county/health/book fairs, plus `career fair`/`job fair`/`college fair`
+already claimed by the Career Connections rule, all share the word. `"Competitions"` is
+LLM-only (`enrich/llm_client.py`'s `_OPPORTUNITY_TYPE_VALUES`); the keyword fallback
+keeps defaulting ambiguous titles to `DEFAULT_OPPORTUNITY_TYPE`, the safer failure mode
+during an LLM outage. See `enrich/DESIGN.md`'s own sprint 015 addendum for the
+`PROMPT_VERSION` 1 → 2 bump this pairs with, and `site/src/components/
+OpportunityFilters.astro`'s hardcoded facet list (updated by this ticket in this repo;
+the sibling `../stem-ecosystem` repo's identical copy is out of this ticket's write
+scope).
+
+**(Sprint 015, ticket 008, issue 27 item 3)** `Opportunity` gains `eligibility: str = ""`,
+sourced from `SourceConfig.taxonomy_defaults.eligibility` via a new optional
+`source_taxonomy_defaults: dict[str, dict] | None` parameter on `run()` — the identical
+shape and construction site as `source_org_names` (`pipeline.py` builds
+`{source.source_id: source.taxonomy_defaults for source in sources}` alongside it).
+`_to_opportunity()` resolves `taxonomy_defaults = source_taxonomy_defaults.get(
+event.source_id, {})` — the same lookup key `org_name` already uses — and sets
+`eligibility=taxonomy_defaults.get("eligibility", "")`. This is a correction as much as an
+addition: §6's Known Limitations previously stated that `specific_attention`,
+`financial_support`, `ngss_aligned`, and the contact fields "are populated only from
+`taxonomy_defaults` in the registry, if at all" — that was aspirational, not actual;
+before this ticket, nothing in the codebase read `taxonomy_defaults` at all, and those
+four fields (plus the three contact fields) remain hardcoded stubs in `_to_opportunity`
+(`[]`/`"No"`/`"No"`/`""`) unchanged by this ticket. `eligibility` is the *only* key this
+ticket wires — an explicit, narrow scope decision (see sprint 015's `sprint.md` Design
+Rationale), not an oversight. Eligibility was deliberately not routed through the LLM
+enrichment layer: a closed-enrollment restriction is an institutional fact about the
+partner organization, not something inferable from one scraped event's text, and codifying
+it as a controlled LLM-classified value would duplicate yet another concept into
+`enrich/llm_client.py` for what is really registry-level metadata "configuration is data"
+already covers. Of the five named-program candidates issue 27 cites (Northrop HIP, Scripps
+REACH, SBP Preuss, Illumina/SD2, Zoo free field trips), registry data was edited for none:
+four have no corresponding `registry/sources/*.toml` entry at all, and the fifth
+(`sandiegozoowildlifealliance.toml`) covers the organization's whole site generically, not
+the one named program, so setting a blanket `eligibility` there would misrepresent every
+other event that source might publish — see that TOML's own sprint 015 comment. This
+mechanism is exercised today only by test fixtures (`tests/test_normalize_run.py`'s
+`TestEligibilityTaxonomyDefaults`, `tests/test_pipeline_e2e.py`'s
+`test_taxonomy_defaults_eligibility_reaches_the_exported_payload`); it will not surface a
+real eligibility note in production until a source whose TOML corresponds 1:1 to a genuinely
+restricted program sets `taxonomy_defaults.eligibility`.
 
 **The DST-transition fold convention (sprint 012).** `zoneinfo`-based
 localization is unambiguous everywhere except the two hours a year the
@@ -204,11 +280,13 @@ title+date collision case.
 ## 5. Interfaces
 
 ### Exposes
-- **`run(events, partners_path, source_org_names=None, today=None, image_resolver=None)
-  -> list[Opportunity]`** — the subsystem's single entry point. Mutates input `Event`s'
-  `start`/`end` in place (tz coercion). Never raises for an unmatched partner or an
-  undated record. `image_resolver=None` leaves `image_src` empty with zero network
-  access.
+- **`run(events, partners_path, source_org_names=None, source_taxonomy_defaults=None,
+  today=None, image_resolver=None) -> list[Opportunity]`** — the subsystem's single entry
+  point. Mutates input `Event`s' `start`/`end` in place (tz coercion). Never raises for an
+  unmatched partner or an undated record. `image_resolver=None` leaves `image_src` empty
+  with zero network access. **(Sprint 015 ticket 008)** `source_taxonomy_defaults=None`
+  leaves `Opportunity.eligibility` at its `""` default for every record — see Design,
+  below.
 - **`Opportunity`** — the boundary dataclass between scraper and site. `sources` is
   internal bookkeeping and is not part of the site schema.
 - **`taxonomy.derive_areas_of_interest`, `classify_opportunity_type`,
@@ -245,7 +323,24 @@ title+date collision case.
   publish as two `Opportunity` records for one real event. This is accepted, not fixed, this
   sprint — no new dedup mechanism is introduced; a stronger cross-source identity (e.g.
   venue-plus-date-only, or a fuzzy title match) is deferred to a future sprint if the
-  duplication turns out to be material in practice.
+  duplication turns out to be material in practice. **(Sprint 015 ticket 004, re-measured.)**
+  Sprint 014 ticket 004 found a real title+date match this limitation predicted didn't
+  actually explain — Balboa Park's and Fleet's own "Educator Open House" (2026-09-24) both
+  matched on title *and* date but failed to merge only because `fleet-science-center.toml`'s
+  `listing_html` adapter left `Event.location` empty. `adapters/listing_html.py` gained a
+  `default_location` registry fallback (see that module's own Sprint 015 addendum) and Fleet
+  now carries a real, non-empty venue on every event. Re-measuring live against the same
+  8-source set still produced **0 cross-source collapses**, including for this exact
+  "Educator Open House" pair — but the mechanism has moved to precisely the
+  `normalized_venue` limitation this entry already names: `normalize_title()` only
+  lowercases/strips punctuation/collapses whitespace, so Balboa Park's TEC-supplied venue
+  string (`"Fleet Science Center, 1875 El Prado, San Diego, CA"`) and Fleet's configured
+  `default_location` (`"1875 El Prado, San Diego, CA 92101"`) normalize to two different
+  strings for the same physical address (org-name prefix vs. ZIP suffix, formatted
+  differently by each source). No `normalize/` code changed this sprint — an address-level
+  canonicalization or fuzzy-venue match is the same future-sprint deferral this entry
+  already anticipated, now with a concrete, reproducible example instead of a hypothetical
+  one. See sprint 015 ticket 004's Notes for the full measurement.
 - **(Sprint 014)** `partners.py`'s `find_partner` no-match behavior (keep the org name,
   leave `partner_id` unset — already the tested, non-fatal path) is now exercised by
   design, not just as an edge case: several of this sprint's ~20 newly-registered sources
@@ -279,4 +374,11 @@ title+date collision case.
   cross-partner legacy export.
 - Several `Opportunity` fields the site schema defines (`specific_attention`,
   `financial_support`, `ngss_aligned`, the contact fields) are populated only from
-  `taxonomy_defaults` in the registry, if at all. Nothing derives them.
+  `taxonomy_defaults` in the registry, if at all. Nothing derives them. **(Sprint 015
+  ticket 008)** This was inaccurate even before this sprint — before ticket 008, nothing
+  in the codebase read `taxonomy_defaults` for *any* key; these fields were, and (except
+  for `eligibility`) still are, hardcoded stubs in `_to_opportunity` regardless of what a
+  source's TOML sets. `eligibility` is now the one exception: it is genuinely sourced from
+  `taxonomy_defaults.eligibility` via `source_taxonomy_defaults` (see Design, above). The
+  other four fields' stub status is unchanged and is now an explicit, documented Out of
+  Scope decision for this ticket, not an open question.

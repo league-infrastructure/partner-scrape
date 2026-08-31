@@ -1,7 +1,7 @@
 ---
 id: '007'
 title: Generalize deadline-first currency and sort semantics
-status: open
+status: done
 use-cases:
 - SUC-008
 depends-on:
@@ -72,23 +72,23 @@ once the value is set correctly.
 
 ## Acceptance Criteria
 
-- [ ] `DEADLINE_FIRST_TYPES` is defined once in `normalize/run.py` and
+- [x] `DEADLINE_FIRST_TYPES` is defined once in `normalize/run.py` and
       imported (not re-declared) wherever `export/writer.py` needs it.
-- [ ] A fixture `Competitions`-typed, non-internship record with a
+- [x] A fixture `Competitions`-typed, non-internship record with a
       future `date_end` and a past `date_start` is exported by
       `is_current_or_upcoming()`.
-- [ ] The same record with a past `date_end` is excluded.
-- [ ] A fixture `Competitions`-typed record's `availability` reads
+- [x] The same record with a past `date_end` is excluded.
+- [x] A fixture `Competitions`-typed record's `availability` reads
       "Apply by <date>" (or "Rolling — apply anytime" if `date_end`
       unset), matching the existing `Work-based Learning` behavior
       exactly.
-- [ ] A sort-order fixture test in `export/writer.py`'s test module
+- [x] A sort-order fixture test in `export/writer.py`'s test module
       proves a deadline-first record sorts by `date_end`, and a
       non-deadline-first record still sorts by `date_start` as today.
-- [ ] Every existing `Work-based Learning`/internship fixture test
+- [x] Every existing `Work-based Learning`/internship fixture test
       continues to pass unmodified — this is a pure generalization,
       not a behavior change for the existing case.
-- [ ] Full test suite stays green.
+- [x] Full test suite stays green.
 
 ## Testing
 

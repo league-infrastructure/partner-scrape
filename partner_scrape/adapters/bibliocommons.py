@@ -116,7 +116,7 @@ import re
 from datetime import datetime
 from typing import Any, Iterable
 
-from partner_scrape.adapters.base import EventRef, RawResponse
+from partner_scrape.adapters.base import EventRef, RawResponse, acquisition_kwargs
 from partner_scrape.fetch import Fetcher
 from partner_scrape.model import Event
 from partner_scrape.registry.schema import SourceConfig
@@ -444,7 +444,7 @@ class BiblioCommonsAdapter:
         api_base = f"https://gateway.bibliocommons.com/v2/libraries/{subdomain}/events"
 
         probe_url = _page_url(api_base, limit, page=1)
-        probe = fetcher.get(probe_url)
+        probe = fetcher.get(probe_url, **acquisition_kwargs(source))
 
         total_pages = 1
         if probe.status == 200:
@@ -467,8 +467,8 @@ class BiblioCommonsAdapter:
             EventRef(url=_page_url(api_base, limit, page)) for page in range(1, total_pages + 1)
         ]
 
-    def fetch(self, ref: EventRef, fetcher: Fetcher) -> RawResponse:
-        response = fetcher.get(ref.url)
+    def fetch(self, ref: EventRef, fetcher: Fetcher, source: SourceConfig) -> RawResponse:
+        response = fetcher.get(ref.url, **acquisition_kwargs(source))
         return RawResponse(ref=ref, status=response.status, body=response.body)
 
     def extract(self, raw: RawResponse, source: SourceConfig) -> Iterable[Event]:

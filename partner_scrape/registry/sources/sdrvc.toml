@@ -29,3 +29,12 @@ discovered_via = "partners_viable.csv tier-1C bulk registration (2026-07-20)"
 # declared scope to fix; flagged for a follow-up ticket.
 # fetch_strategy = "headless" is left in place as a correct disposition
 # of this site's original (Wix JS-rendering) zero-yield cause.
+#
+# 2026-08-30 re-probe (sprint 015 ticket 002 / issue 37): with ticket
+# 001's PlaywrightFetcher raw-resource fetch fix live, a fresh
+# `--dry-run --no-enrich` re-probe finds 3 real, fully-dated events
+# (event-details/connecting-creatures-climate-and-communities,
+# .../creekside-critters-featuring-free-flight-bird-sanctuary,
+# .../yoga-at-the-birdwing) -- "did not parse" is gone and every
+# discovered URL round-trips to a dated record. enabled = true kept
+# (unchanged from before this ticket).

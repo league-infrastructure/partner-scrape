@@ -29,6 +29,11 @@ enabled = true
 [config]
 site_url = "https://www.fleetscience.org"
 listing_urls = ["/events"]
+# Sprint 015 ticket 004: constant venue, undocumented on any individual
+# detail page, so no ladder rung can recover it -- see
+# adapters/listing_html.py's `default_location` fallback and this
+# ticket's Balboa Park <-> Fleet dedup re-measurement.
+default_location = "1875 El Prado, San Diego, CA 92101"
 
 [acquisition_policy]
 rate_limit_seconds = 1.0

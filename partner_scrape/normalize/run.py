@@ -55,6 +55,17 @@ DEFAULT_OPPORTUNITY_TYPE = "Out-of-school Programs"
 #: branch on the same constant rather than a duplicated string literal.
 WORK_BASED_LEARNING_TYPE = "Work-based Learning"
 
+#: `opportunity_type` values that are "apply by" items, not "attend on"
+#: items (sprint 015 ticket 007, issue 27 item 2): `date_start` may be a
+#: posting-observed date routinely in the past, while `date_end` is
+#: reused as the application/registration deadline (the same convention
+#: `WORK_BASED_LEARNING_TYPE` already established, extended to one more
+#: already-shipped type value rather than adding a new field -- see
+#: `normalize/DESIGN.md`'s sprint 015 addendum). `export/writer.py`
+#: imports this set to apply the same currency rule and export sort key
+#: to every member, not only `WORK_BASED_LEARNING_TYPE`.
+DEADLINE_FIRST_TYPES = frozenset({WORK_BASED_LEARNING_TYPE, "Competitions"})
+
 #: Timezone every naive `datetime` is localized into at serialization
 #: time (sprint 012, issue 19) so the exported ISO 8601 offset matches
 #: true San Diego local time year-round -- matches `dev/export_site.py`'s
@@ -112,6 +123,19 @@ class Opportunity:
     contact_email: str
     contact_phone: str
     logo_src: str
+    # Sprint 015 ticket 008, issue 27 item 3: sourced from the owning
+    # source's `SourceConfig.taxonomy_defaults.eligibility` (see
+    # `_to_opportunity`'s resolution below), not derived from event text
+    # or the LLM -- an eligibility restriction is an institutional fact
+    # about the partner organization, not something inferable from one
+    # scraped event. `""` (the dataclass default) for the ~120 sources
+    # that don't set it -- purely additive, no behavior change for any
+    # existing record. Placed here, among the dataclass's other
+    # defaulted fields, rather than nearer `location`/`age_grade_level`
+    # semantically -- dataclass field-ordering rules require every
+    # defaulted field to follow every non-defaulted one, and only
+    # `image_src`/`sources` had defaults before this field existed.
+    eligibility: str = ""
     image_src: str = ""
     sources: frozenset[str] = field(default_factory=frozenset)
 
@@ -161,7 +185,12 @@ def _internship_availability(event: Event) -> str:
     "Rolling -- apply anytime" otherwise (sprint.md Design Rationale: reuse
     `date_start`/`date_end`/`availability` with redefined internship-specific
     meaning -- most ATS postings expose no reliable deadline, so "still
-    present in the feed" is itself the "still open" signal, not a date)."""
+    present in the feed" is itself the "still open" signal, not a date).
+
+    Despite the name, this is not internship-specific: sprint 015 ticket
+    007 reuses it, unchanged, for every `DEADLINE_FIRST_TYPES` member
+    (any deadline-first record's `event.end` is its deadline, not an
+    event end time), not only `kind == "internship"`."""
     if event.end is not None:
         return f"Apply by {event.end.date().isoformat()}"
     return "Rolling — apply anytime"
@@ -180,9 +209,19 @@ def _to_opportunity(
     instance: Instance,
     partners_by_norm: dict[str, dict[str, Any]],
     org_name: str,
+    source_taxonomy_defaults: dict[str, dict[str, Any]],
     image_resolver: Callable[[str], str] | None = None,
 ) -> Opportunity:
     event = instance.event
+
+    # Sprint 015 ticket 008: `taxonomy_defaults` keyed by `source_id`,
+    # the identical lookup key `org_name` already uses above it in
+    # `run()`. Resolved here (not pre-resolved by the caller like
+    # `org_name` is) since this is the only field this ticket wires
+    # from `taxonomy_defaults` -- see the `Opportunity.eligibility`
+    # field comment and `normalize/DESIGN.md`'s sprint 015 addendum.
+    taxonomy_defaults = source_taxonomy_defaults.get(event.source_id, {})
+    eligibility = taxonomy_defaults.get("eligibility", "")
     partner = find_partner(org_name, partners_by_norm) or {}
     partner_name = partner.get("name") or org_name
 
@@ -233,7 +272,6 @@ def _to_opportunity(
     )
 
     is_internship = event.kind == "internship"
-    availability = _internship_availability(event) if is_internship else _availability(instance)
     # Internships force Work-based Learning by kind, checked first and
     # unconditionally. Otherwise: prefer an Event's own LLM-set
     # opportunity_type (sprint 009, issue 13) over taxonomy.py's keyword
@@ -252,6 +290,19 @@ def _to_opportunity(
             if "opportunity_type" in event.field_provenance
             else classify_opportunity_type(event.title)
         )
+    )
+    # Computed after opportunity_type so this branch can check
+    # DEADLINE_FIRST_TYPES membership too (sprint 015 ticket 007): any
+    # deadline-first record -- an internship by `kind`, or any other
+    # opportunity_type in DEADLINE_FIRST_TYPES (e.g. Competitions) --
+    # reuses `_internship_availability`'s "Apply by <date>" / "Rolling --
+    # apply anytime" text. This is availability-text derivation only;
+    # the `is_internship`/`kind` bypass used above for the forced
+    # opportunity_type, and elsewhere for collapse/dedup, is unaffected.
+    availability = (
+        _internship_availability(event)
+        if is_internship or opportunity_type in DEADLINE_FIRST_TYPES
+        else _availability(instance)
     )
 
     # Event Image Downloader (sprint 008 ticket 008, issue 19 scraper
@@ -295,6 +346,7 @@ def _to_opportunity(
         contact_email="",
         contact_phone="",
         logo_src=partner.get("logo_src", ""),
+        eligibility=eligibility,
         image_src=image_src,
         sources=instance.sources,
     )
@@ -304,6 +356,7 @@ def run(
     events: Iterable[Event],
     partners_path: str | Path,
     source_org_names: dict[str, str] | None = None,
+    source_taxonomy_defaults: dict[str, dict[str, Any]] | None = None,
     today: date | None = None,
     image_resolver: Callable[[str], str] | None = None,
 ) -> list[Opportunity]:
@@ -326,6 +379,20 @@ def run(
             a `partners.json` entry, which is fine -- SUC-005's
             documented error flow is "no match -> keep the org name,
             leave partner_id unset, do not fail the record."
+        source_taxonomy_defaults: optional `source_id -> taxonomy_defaults`
+            map (sprint 015 ticket 008, issue 27 item 3) -- the identical
+            shape and construction site as `source_org_names`, built by
+            `pipeline.run()` as `{source.source_id: source.taxonomy_defaults
+            for source in sources}`. Currently consumed for exactly one
+            key, `eligibility`, which flows unchanged into
+            `Opportunity.eligibility`; `SourceConfig.taxonomy_defaults`'s
+            other conventional keys (`specific_attention`,
+            `financial_support`, `ngss_aligned`) remain unread hardcoded
+            stubs in `_to_opportunity` -- an explicit, separate decision,
+            not an oversight this parameter left behind. A `source_id`
+            absent from the map (including when the map itself is
+            omitted) resolves to `{}`, so `eligibility` defaults to `""`
+            -- no regression for any source that doesn't set it.
         image_resolver: optional `image_url -> local filename` callable
             (sprint 008 ticket 008, issue 19), called once per surviving
             `Event` that has a non-empty `image_url` to populate
@@ -341,6 +408,7 @@ def run(
         One `Opportunity` per surviving, deduplicated/collapsed record.
     """
     source_org_names = source_org_names or {}
+    source_taxonomy_defaults = source_taxonomy_defaults or {}
     today = today or date.today()
     partners_by_norm = load_partners(partners_path)
 
@@ -390,6 +458,8 @@ def run(
     for instance in all_instances:
         org_name = source_org_names.get(instance.event.source_id, instance.event.source_id)
         opportunities.append(
-            _to_opportunity(instance, partners_by_norm, org_name, image_resolver)
+            _to_opportunity(
+                instance, partners_by_norm, org_name, source_taxonomy_defaults, image_resolver
+            )
         )
     return opportunities

@@ -7,6 +7,24 @@
 # this discovery mechanism looks for (San Diego Zoo Wildlife Alliance's
 # real calendar/ticketing content is most likely served from a separate
 # ticketing-platform integration, not on-site Drupal pages).
+#
+# Sprint 015 ticket 008 / issue 27 item 3: deliberately does NOT set
+# `taxonomy_defaults.eligibility`, even though the gap analysis names
+# "Zoo free field trips (SD County schools only)" as one of the
+# restricted programs the eligibility note is meant to surface. This
+# source covers `sandiegozoowildlifealliance.org` generically, not a
+# single named program -- the free-field-trips offering is one program
+# among whatever else this org publishes, so a blanket eligibility note
+# here would misrepresent every other event from this source as
+# SD-County-schools-only too. Per the ticket's own guidance ("if a
+# source publishes both restricted and open programs, note that as a
+# limitation rather than force an inaccurate blanket eligibility
+# note"), this is left unset until/unless the free-field-trips program
+# gets its own dedicated source entry. The other four named programs
+# (Northrop HIP, Scripps REACH, SBP Preuss, Illumina/SD2) have no
+# registry source at all -- confirmed by name/org search across
+# `registry/sources/*.toml` -- so there is no TOML to edit for them
+# either.
 
 org_name = "San Diego Zoo"
 adapter_type = "generic_html"

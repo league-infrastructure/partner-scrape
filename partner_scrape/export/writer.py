@@ -34,7 +34,7 @@ from pathlib import Path
 from typing import Any, Iterable
 
 from partner_scrape.config import get_site_dir
-from partner_scrape.normalize.run import WORK_BASED_LEARNING_TYPE, Opportunity
+from partner_scrape.normalize.run import DEADLINE_FIRST_TYPES, Opportunity
 
 #: The exact field set written to `opportunities.json` -- every
 #: `Opportunity` field except `sources`, which is normalize's internal
@@ -58,20 +58,21 @@ def is_current_or_upcoming(opportunity: Opportunity, today: date) -> bool:
     `dev/export_site.py`'s equivalent string comparison, an unset date
     can never be judged "today or later".
 
-    `opportunity_type == "Work-based Learning"` (internship) records get
-    a different rule (sprint 006 Design Rationale, SUC-004): `date_start`
-    is redefined as the posting-observed date, which is routinely in the
-    past for a still-open, no-deadline internship -- the ordinary
-    `date_end or date_start >= today` rule would wrongly expire it. Such
-    a record is current if `date_end` (the application deadline) is
-    unset or still in the future; every other `opportunity_type` keeps
-    the exact rule above, unchanged.
+    `opportunity_type in DEADLINE_FIRST_TYPES` (originally just
+    `"Work-based Learning"`/internship) records get a different rule
+    (sprint 006 Design Rationale, SUC-004; generalized sprint 015 ticket
+    007): `date_start` is redefined as the posting-observed date, which
+    is routinely in the past for a still-open, no-deadline record -- the
+    ordinary `date_end or date_start >= today` rule would wrongly expire
+    it. Such a record is current if `date_end` (the application/
+    registration deadline) is unset or still in the future; every other
+    `opportunity_type` keeps the exact rule above, unchanged.
 
     Sprint 009: promoted from `_is_current_or_upcoming` (non-underscore,
     no behavior change) so `export/publish.py` reuses this exact
     judgment for its current/past split instead of reimplementing it.
     """
-    if opportunity.opportunity_type == WORK_BASED_LEARNING_TYPE:
+    if opportunity.opportunity_type in DEADLINE_FIRST_TYPES:
         if not opportunity.date_end:
             return True
         return date.fromisoformat(opportunity.date_end[:10]) >= today
@@ -105,6 +106,23 @@ def _dedupe_slugs(payload: list[dict[str, Any]]) -> None:
             record["slug"] = f"{slug}_{seen[slug]}"
         else:
             seen[slug] = 1
+
+
+def _export_sort_key(opportunity: Opportunity) -> str:
+    """Sort key for the exported payload: `date_end` for a
+    `DEADLINE_FIRST_TYPES` record (sprint 015 ticket 007), `date_start`
+    for every other record (unchanged).
+
+    A deadline-first record's `date_start` is a posting-observed date,
+    not the date that should drive ordering -- a winter-posted internship
+    or competition with a spring/summer deadline must sort near other
+    near-term deadlines, not get stuck at the top (or bottom) of the list
+    by a stale `date_start` (issue 27's "Dec-Mar deadlines for Jun-Aug
+    programs in winter" scenario).
+    """
+    if opportunity.opportunity_type in DEADLINE_FIRST_TYPES:
+        return opportunity.date_end
+    return opportunity.date_start
 
 
 def _now_iso() -> str:
@@ -151,7 +169,7 @@ def export_opportunities(
     reference_date = today if today is not None else date.today()
 
     current = [o for o in opportunities if is_current_or_upcoming(o, reference_date)]
-    current.sort(key=lambda o: o.date_start)
+    current.sort(key=_export_sort_key)
 
     payload = [to_json_dict(o) for o in current]
     _dedupe_slugs(payload)

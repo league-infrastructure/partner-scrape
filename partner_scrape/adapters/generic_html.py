@@ -16,7 +16,7 @@ from __future__ import annotations
 import logging
 from typing import Iterable
 
-from partner_scrape.adapters.base import EventRef, RawResponse
+from partner_scrape.adapters.base import EventRef, RawResponse, acquisition_kwargs
 from partner_scrape.extract.ladder import extract_fields
 from partner_scrape.fetch import Fetcher
 from partner_scrape.model import Event
@@ -46,11 +46,11 @@ class GenericHtmlAdapter:
 
         return discover_changed_urls(source, fetcher)
 
-    def fetch(self, ref: EventRef, fetcher: Fetcher) -> RawResponse:
+    def fetch(self, ref: EventRef, fetcher: Fetcher, source: SourceConfig) -> RawResponse:
         """Standard single-page GET, matching every other adapter's
         ``fetch()`` -- a ``generic_html`` ``EventRef`` is just a URL.
         """
-        response = fetcher.get(ref.url)
+        response = fetcher.get(ref.url, **acquisition_kwargs(source))
         return RawResponse(ref=ref, status=response.status, body=response.body)
 
     def extract(self, raw: RawResponse, source: SourceConfig) -> Iterable[Event]:

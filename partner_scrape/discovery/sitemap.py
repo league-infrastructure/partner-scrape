@@ -42,7 +42,7 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 from partner_scrape import config
-from partner_scrape.adapters.base import EventRef
+from partner_scrape.adapters.base import EventRef, acquisition_kwargs
 from partner_scrape.fetch import Fetcher
 from partner_scrape.registry.schema import SourceConfig
 
@@ -123,6 +123,24 @@ def _local_name(tag: str) -> str:
     return tag.split("}")[-1] if "}" in tag else tag
 
 
+def _find_local_child_text(parent: ET.Element, local_name: str) -> str:
+    """Return the stripped text of ``parent``'s first direct child
+    whose tag, once namespace-stripped (:func:`_local_name`), equals
+    ``local_name`` -- or ``""`` if there is no such child.
+
+    The namespace-agnostic counterpart to
+    ``parent.findtext("sm:child", "", _NS)``: used only once the
+    qualified query has already been tried and found nothing (see
+    :func:`_parse_urlset`), since a child in an unqualified or
+    differently-namespaced document cannot be found by a hardcoded
+    namespace URI either.
+    """
+    for child in parent:
+        if _local_name(child.tag) == local_name:
+            return (child.text or "").strip()
+    return ""
+
+
 def _parse_urlset(root: ET.Element, *, path_filter: bool) -> dict[str, str]:
     """Extract ``{loc: lastmod}`` from a ``<urlset>`` root.
 
@@ -131,15 +149,41 @@ def _parse_urlset(root: ET.Element, *, path_filter: bool) -> dict[str, str]:
     sitemap and needs URL-path filtering; skipped when the urlset is
     already known to be event-dedicated (a filename-matched child
     sitemap from a ``<sitemapindex>``), where every URL in it is kept.
+
+    **(Sprint 015)** Tries the namespace-qualified ``sm:url`` query
+    (:data:`_NS`, the sitemaps.org 0.9 schema every currently-registered
+    sitemap already validates against) first. Only if that query finds
+    zero ``<url>`` elements does this retry with a namespace-agnostic
+    match over ``root``'s direct children (:func:`_local_name`,
+    already used elsewhere in this module for root/child-tag
+    acceptance) -- a real sitemap declaring a different namespace (the
+    legacy 0.84 schema, confirmed live on sandiego.edu) or none at all
+    otherwise parses with a recognized root element but silently
+    yields zero URLs. See issue 37 and SUC-002 (sprint 015). Purely
+    additive: the fallback only fires when the qualified query already
+    found nothing, so a document that validates against :data:`_NS`
+    is entirely unaffected.
     """
+    url_els = root.findall("sm:url", _NS)
+    namespace_agnostic = False
+    if not url_els:
+        url_els = [child for child in root if _local_name(child.tag) == "url"]
+        namespace_agnostic = True
+
     urls: dict[str, str] = {}
-    for url_el in root.findall("sm:url", _NS):
-        loc = (url_el.findtext("sm:loc", "", _NS) or "").strip()
+    for url_el in url_els:
+        if namespace_agnostic:
+            loc = _find_local_child_text(url_el, "loc")
+        else:
+            loc = (url_el.findtext("sm:loc", "", _NS) or "").strip()
         if not loc:
             continue
         if path_filter and not EVENT_PATH_RE.search(loc):
             continue
-        lastmod = (url_el.findtext("sm:lastmod", "", _NS) or "").strip()
+        if namespace_agnostic:
+            lastmod = _find_local_child_text(url_el, "lastmod")
+        else:
+            lastmod = (url_el.findtext("sm:lastmod", "", _NS) or "").strip()
         urls[loc] = lastmod
     return urls
 
@@ -152,7 +196,7 @@ def _is_event_related_filename(loc: str) -> bool:
     return bool(EVENT_PATTERNS.search(filename) or PROGRAM_PATTERNS.search(filename))
 
 
-def _parse_sitemap_index(root: ET.Element, fetcher: Fetcher) -> dict[str, str]:
+def _parse_sitemap_index(root: ET.Element, fetcher: Fetcher, source: SourceConfig) -> dict[str, str]:
     """Resolve a ``<sitemapindex>`` root into ``{loc: lastmod}`` across
     its children.
 
@@ -182,7 +226,7 @@ def _parse_sitemap_index(root: ET.Element, fetcher: Fetcher) -> dict[str, str]:
 
     urls: dict[str, str] = {}
     for child_url in candidates:
-        response = fetcher.get(child_url)
+        response = fetcher.get(child_url, **acquisition_kwargs(source))
         if response.status != 200:
             logger.warning(
                 "Child sitemap %s returned status %s; skipping", child_url, response.status
@@ -226,7 +270,7 @@ def _parse_sitemap_root(body: str) -> ET.Element | None:
 
 
 def _fetch_root_sitemap(
-    site_url: str, fetcher: Fetcher, sitemap_url: str | None = None
+    site_url: str, fetcher: Fetcher, source: SourceConfig, sitemap_url: str | None = None
 ) -> tuple[str, ET.Element] | None:
     """Resolve the root sitemap URL and its already-parsed root element
     to hand to :func:`_resolve_event_urls`.
@@ -251,7 +295,7 @@ def _fetch_root_sitemap(
     parses with a recognized sitemap root element.
     """
     if sitemap_url is not None:
-        response = fetcher.get(sitemap_url)
+        response = fetcher.get(sitemap_url, **acquisition_kwargs(source))
         root = _parse_sitemap_root(response.body) if response.status == 200 else None
         if root is not None:
             return sitemap_url, root
@@ -265,7 +309,7 @@ def _fetch_root_sitemap(
 
     for filename in _ROOT_SITEMAP_FILENAMES:
         url = f"{site_url}/{filename}"
-        response = fetcher.get(url)
+        response = fetcher.get(url, **acquisition_kwargs(source))
         if response.status != 200:
             logger.info("Sitemap probe %s returned status %s", url, response.status)
             continue
@@ -302,7 +346,7 @@ def _resolve_event_urls(source: SourceConfig, fetcher: Fetcher) -> dict[str, str
     site_url = source.config["site_url"].rstrip("/")
     sitemap_url = source.config.get("sitemap_url")
 
-    fetched = _fetch_root_sitemap(site_url, fetcher, sitemap_url=sitemap_url)
+    fetched = _fetch_root_sitemap(site_url, fetcher, source, sitemap_url=sitemap_url)
     if fetched is None:
         if sitemap_url is not None:
             logger.warning(
@@ -323,7 +367,7 @@ def _resolve_event_urls(source: SourceConfig, fetcher: Fetcher) -> dict[str, str
 
     tag = _local_name(root.tag)
     if tag == "sitemapindex":
-        return _parse_sitemap_index(root, fetcher)
+        return _parse_sitemap_index(root, fetcher, source)
     return _parse_urlset(root, path_filter=True)
 
 

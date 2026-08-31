@@ -30,3 +30,15 @@ discovered_via = "partners_viable.csv tier-2 bulk registration (2026-07-20)"
 # declared scope to fix; flagged for a follow-up ticket.
 # fetch_strategy = "headless" is left in place as a correct disposition
 # of this site's original (client-rendered JS shell) zero-yield cause.
+#
+# 2026-08-30 re-probe (sprint 015 ticket 002 / issue 37): with ticket
+# 001's PlaywrightFetcher raw-resource fetch fix live, a fresh
+# `--dry-run --no-enrich` re-probe finds 50 real URLs -- a full course
+# catalog (courses/catalog/academic-year, courses/catalog/summer, and
+# ~48 individual courses/course/... pages). "did not parse" is gone;
+# this is by far the strongest discovery yield of the re-probed
+# sources. dated=0: these are course-catalog pages, not per-session
+# dated events, so the extraction ladder recovers no clean date --
+# an extraction-quality question, not a discovery/fetch failure, out
+# of this ticket's scope. enabled = true kept (unchanged from before
+# this ticket).

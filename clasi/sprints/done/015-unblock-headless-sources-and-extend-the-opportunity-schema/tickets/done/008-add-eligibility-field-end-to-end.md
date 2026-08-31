@@ -1,7 +1,7 @@
 ---
-id: '008'
+id: 008
 title: Add eligibility field end-to-end
-status: open
+status: done
 use-cases:
 - SUC-009
 depends-on:
@@ -72,31 +72,47 @@ overlap in that file.
 
 ## Acceptance Criteria
 
-- [ ] `Opportunity` gains `eligibility: str = ""`.
-- [ ] `normalize.run()` accepts `source_taxonomy_defaults` and passes
+- [x] `Opportunity` gains `eligibility: str = ""`.
+- [x] `normalize.run()` accepts `source_taxonomy_defaults` and passes
       it through to `_to_opportunity()` exactly as `source_org_names`
       already flows.
-- [ ] A fixture test proves `taxonomy_defaults.eligibility` reaches
+- [x] A fixture test proves `taxonomy_defaults.eligibility` reaches
       `Opportunity.eligibility` unchanged, keyed by `source_id`.
-- [ ] A fixture test proves a source with no
+- [x] A fixture test proves a source with no
       `taxonomy_defaults.eligibility` key (or no `source_taxonomy_defaults`
       map at all, e.g. `run()` called without it) still produces
       `eligibility == ""` — no regression for the ~120 sources that
       don't set it.
-- [ ] `pipeline.py` builds and threads `source_taxonomy_defaults`
+- [x] `pipeline.py` builds and threads `source_taxonomy_defaults`
       identically to `source_org_names`.
-- [ ] `export/writer.py`'s existing `SITE_SCHEMA_FIELDS`/`to_json_dict`
+- [x] `export/writer.py`'s existing `SITE_SCHEMA_FIELDS`/`to_json_dict`
       tests are extended to assert `eligibility` round-trips into the
       exported payload — no code change required in `export/writer.py`
       itself, only a test-coverage extension proving that.
-- [ ] At least the five named programs' registry TOML entries are
+- [x] At least the five named programs' registry TOML entries are
       edited with a real, reviewable, source-accurate eligibility
       note (or a documented reason why a given source can't be
-      edited accurately — see Fix shape point 4).
-- [ ] `[slug].astro` renders the `Eligibility` row only when
+      edited accurately — see Fix shape point 4). **Deviation:** none
+      of the five were edited with an actual eligibility value.
+      Investigation (name/org search across
+      `registry/sources/*.toml`) found Northrop HIP, Scripps REACH,
+      SBP Preuss, and Illumina/SD2 have no corresponding registry
+      source at all. The fifth, `sandiegozoowildlifealliance.toml`,
+      covers the org's whole site generically (and is disabled), not
+      the specific free-field-trips program, so setting a blanket
+      `eligibility` there would misrepresent every other event that
+      source might publish — exactly the "note as a limitation rather
+      than force an inaccurate blanket eligibility note" case Fix
+      shape point 4 anticipates. Documented in that TOML's own
+      comment, in `normalize/DESIGN.md`'s sprint 015 addendum, and in
+      the pipeline threading fixture test
+      (`tests/fixtures/e2e_registry/coastalrootsfarm.toml`), which
+      proves the mechanism itself works even though no real registry
+      entry exercises it yet.
+- [x] `[slug].astro` renders the `Eligibility` row only when
       `opp.eligibility` is non-empty, matching the existing
       conditional-block convention.
-- [ ] Full test suite stays green.
+- [x] Full test suite stays green.
 
 ## Testing
 

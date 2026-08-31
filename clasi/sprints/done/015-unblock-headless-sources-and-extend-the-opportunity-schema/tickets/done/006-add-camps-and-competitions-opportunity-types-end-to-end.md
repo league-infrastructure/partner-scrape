@@ -1,7 +1,7 @@
 ---
 id: '006'
 title: Add Camps and Competitions opportunity types end-to-end
-status: open
+status: done
 use-cases:
 - SUC-007
 depends-on: []
@@ -53,29 +53,29 @@ opportunity_type` already flows through unchanged), and this repo's
 
 ## Acceptance Criteria
 
-- [ ] `_OPPORTUNITY_TYPE_VALUES` includes `"Camps"` and
+- [x] `_OPPORTUNITY_TYPE_VALUES` includes `"Camps"` and
       `"Competitions"`; `PROMPT_VERSION` is bumped to 2.
-- [ ] `FixtureLLMClient` test cases cover both new values end-to-end
+- [x] `FixtureLLMClient` test cases cover both new values end-to-end
       through `LLMEnricher.enrich()`.
-- [ ] A cache-hit regression test proves a pre-bump
+- [x] A cache-hit regression test proves a pre-bump
       (`prompt_version=1`) cache entry is treated as a miss under the
       new prompt version, forcing exactly one re-evaluation — mirrors
       sprint 014's existing `prompt_version` cache test shape.
-- [ ] `OPPORTUNITY_TYPE_KEYWORDS` gains a `Camps` rule with fixture
+- [x] `OPPORTUNITY_TYPE_KEYWORDS` gains a `Camps` rule with fixture
       tests proving it matches representative camp titles and does not
       false-positive against a representative sample of non-camp
       titles already in the test fixtures.
-- [ ] The `Competitions` keyword-fallback decision (added, or
+- [x] The `Competitions` keyword-fallback decision (added, or
       explicitly declined per the `Funding Opportunities` precedent)
       is recorded in this ticket's Notes with the reasoning, either
       way.
-- [ ] `normalize.run()`'s existing `field_provenance`-presence
+- [x] `normalize.run()`'s existing `field_provenance`-presence
       precedence (LLM/fallback value wins when enrichment ran, else
       `classify_opportunity_type()` directly) requires no code change
       — both new values flow through the existing mechanism unchanged.
-- [ ] `site/src/components/OpportunityFilters.astro`'s
+- [x] `site/src/components/OpportunityFilters.astro`'s
       `opportunityTypes` array includes both new values.
-- [ ] Full test suite stays green.
+- [x] Full test suite stays green.
 
 ## Testing
 
@@ -107,3 +107,48 @@ convention). Note in both that the sibling `../stem-ecosystem`
 checkout's own `OpportunityFilters.astro` carries the identical
 hardcoded facet list and needs the same one-line edit there, on its
 own schedule — out of this ticket's write scope (a different repo).
+
+## Notes
+
+**`Competitions` keyword-fallback decision: declined.** No keyword rule
+was added for `Competitions` to `OPPORTUNITY_TYPE_KEYWORDS` — it is
+LLM-only, matching the existing `"Funding Opportunities"` precedent.
+
+Reasoning: the obvious keyword candidate, a `competit*` pattern
+(competition/competitive), false-positives on a real title already
+sitting in this project's own fixtures —
+`tests/test_adapters_leaguesync.py`'s `"Competitive Robotics Summer
+Warm Up"` is an ordinary registration-based League *class* (kind
+`"event"`, one of leaguesync's Pike13-sourced offerings), not a
+competition itself. That is exactly the same failure shape that killed
+the `"Funding Opportunities"` keyword rule (a common word — there
+"grant", here "competitive" — appears routinely in unrelated program
+text). Other candidates considered:
+- `tournament`, `hackathon`, `science fair` — none appears anywhere in
+  this codebase's adapters, fixtures, or test titles to spot-check
+  against, so there is no evidence either way that they're safe, and
+  adding an unverified rule risks silently mis-tagging whatever real
+  titles do contain them.
+- A bare `fair` — already too ambiguous even before checking real
+  data: county fair, health fair, book fair, and `career fair`/`job
+  fair`/`college fair` (already claimed by the existing Career
+  Connections rule) all share the word, and `"STEM Fair: Grades 6-8
+  (Free!)"` (a real title in `tests/test_model.py`) shows a genuinely
+  competition-shaped event can also just say "fair" — no substring of
+  it is a safe standalone signal.
+
+`Camps` did get a rule (`\bcamps?\b`), by contrast, because the
+word-boundary pattern is naturally self-limiting (it cannot fire inside
+"campus"/"campaign"/"campfire"/"campground"/"encampment" — none of
+those has a word boundary immediately before/after the substring
+"camp") and every real camp title checked against it
+("Ocean Explorers Camp", "Summer Camp Registration Is Open!", "Farm
+Camp", "Camp-o-Saurus", "Summer Camps@SFA") matches cleanly with no
+competing false-positive found anywhere in the fixture corpus.
+
+Both new values remain fully available via the LLM classification path
+(`enrich/llm_client.py`'s `_OPPORTUNITY_TYPE_VALUES`) regardless of this
+decision — `Competitions` is simply never produced by the deterministic
+keyword fallback (`normalize/taxonomy.py`'s
+`classify_opportunity_type()`), the same as `Funding Opportunities`
+before it.

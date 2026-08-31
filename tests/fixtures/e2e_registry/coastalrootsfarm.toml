@@ -10,3 +10,10 @@ enabled = true
 
 [config]
 api_base = "https://coastalrootsfarm.example/wp-json/tribe/events/v1/events/"
+
+# Sprint 015 ticket 008: exercises `pipeline.py`'s `source_taxonomy_defaults`
+# threading end-to-end (source_id "coastalrootsfarm" -> Opportunity.eligibility).
+# Not a real-world eligibility restriction -- this fixture org is otherwise
+# open to the public; the note exists purely to prove the wiring.
+[taxonomy_defaults]
+eligibility = "Fixture-only eligibility note for pipeline threading test"

@@ -161,6 +161,7 @@ const base = import.meta.env.BASE_URL.replace(/\/+$/, ''); // "" or "/partner-sc
             <tr><td><code>contact_email</code></td><td>string — Reserved; always <code>""</code> in the current pipeline.</td></tr>
             <tr><td><code>contact_phone</code></td><td>string — Reserved; always <code>""</code> in the current pipeline.</td></tr>
             <tr><td><code>logo_src</code></td><td>string — Partner logo filename, self-hosted and already downloaded (never a remote URL), or <code>""</code> if absent.</td></tr>
+            <tr><td><code>eligibility</code></td><td>string — Free-text restriction note (e.g. "Open only to partner high schools") for programs with a closed enrollment pipeline, sourced from the registry, or <code>""</code> when the program is open/unrestricted.</td></tr>
             <tr><td><code>image_src</code></td><td>string — Event image filename, self-hosted and already downloaded (never a remote URL), or <code>""</code> if absent.</td></tr>
           </tbody>
         </table>
@@ -228,6 +229,7 @@ const base = import.meta.env.BASE_URL.replace(/\/+$/, ''); // "" or "/partner-sc
       "contact_email": "",
       "contact_phone": "",
       "logo_src": "example-stem-center.png",
+      "eligibility": "",
       "image_src": ""
     }
   ]

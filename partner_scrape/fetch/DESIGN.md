@@ -27,6 +27,30 @@ sources headless, which — under `pipeline.py`'s existing 8-worker source-level
 concurrency — would make concurrent, multi-threaded headless dispatch a near-certainty
 in a normal run if nothing changed.
 
+**(Sprint 015)** `PlaywrightFetcher.get()` gains a second internal retrieval path:
+a URL-extension heuristic (`_looks_like_raw_resource`) routes a raw, non-HTML target
+(`.xml`, `.json`, `.csv`, `.rss`, `.atom`) through Playwright's `page.request`
+(`APIRequestContext`) surface instead of `page.goto()` + `page.content()`. Root
+cause, live-confirmed on 9 of the 10 headless-flagged sources (issue 37, sprint 014
+ticket 003's triage): navigating to a bare `.xml` sitemap either returns Chromium's
+own XML-viewer-wrapped markup instead of the real body, or aborts navigation outright
+(`net::ERR_ABORTED`) — the method's external contract, and every other module's
+unawareness that headless fetching exists, are both unchanged. See §4's Design
+Rationale for the fuller account and §6 for why `.txt` is deliberately excluded.
+
+**(Sprint 015 ticket 003)** `PoliteFetcher.get()`'s `rate_limit_seconds`/
+`respect_robots` parameters are unchanged — both this method's signature and its
+defaults — but every caller now actually supplies them. Before this ticket, every
+`adapters/*.py` and `discovery/sitemap.py`/`discovery/listing.py` call site invoked
+`fetcher.get(url)` with no override, so a source's `acquisition_policy` (parsed by
+`registry/schema.py`) never reached this method despite this class's own docstring
+describing exactly that design since before it was implemented (`leaguesync.toml`'s
+`respect_robots = false` had no effect until this ticket). `adapters/base.py`'s new
+`acquisition_kwargs(source)` helper is what each caller now spreads into this call
+— see `adapters/DESIGN.md`. This package itself is unchanged: it still has no
+dependency on the Registry, and still accepts these two values as plain per-call
+parameters rather than reading a `SourceConfig` here.
+
 ## 2. Orientation
 
 The contract is `fetcher.py`'s `Fetcher` Protocol — one method,
@@ -180,6 +204,26 @@ in a way a few extra seconds of wall-clock time is not.
 `Fetcher` and `LLMClient` use, applied one level deeper — here the *dependency itself*,
 not just the network call, must be avoidable.
 
+**(Sprint 015) Fix the raw-resource bug entirely inside `fetch/headless.py`, as a
+second internal path behind the same `Fetcher.get()` contract — not a second Fetcher,
+not a `discovery`-side change.** *Context:* issue 37's two candidate fix shapes were
+routing non-HTML URLs through the plain HTTP fetcher, or using Playwright's request API
+for raw resources. *Alternatives considered:* give `pipeline.py` a second "raw" fetcher
+threaded through `discovery.discover_changed_urls()` for non-HTML URLs — rejected: it
+would break the "no adapter and no discovery module ever learns that headless fetching
+exists" invariant this section already documents, for a fix that belongs entirely inside
+one method. *Why this choice:* `PlaywrightFetcher.get()` now checks
+`_looks_like_raw_resource(url)` (a URL-extension heuristic — there is no real
+`Content-Type` to inspect before a request is made) before deciding whether to navigate
+or issue a raw `page.request.get()` call; `HeadlessPage`'s fixture-double Protocol grew
+a `request` property (`HeadlessRequestContext`/`HeadlessRawResponse`) to support this in
+tests with no real browser. `PoliteFetcher`, every adapter, and `discovery/sitemap.py`
+are unaffected by construction — same as the class docstring already promised.
+*Consequences:* one root cause (navigating to a raw resource at all), one fix, fully
+contained to this module; live-verified against `lajollalibrary.org`'s real sitemap
+index and a real child `<urlset>` sitemap, both previously `net::ERR_ABORTED`, now
+returning their real XML bodies unchanged.
+
 ## 5. Interfaces
 
 ### Exposes
@@ -200,6 +244,9 @@ not just the network call, must be avoidable.
   new constructor parameter. The load-bearing thread-affinity guarantee is provided
   by `pipeline.py`'s dispatch (a dedicated single-worker executor for
   `headless`-strategy sources), not by this lock alone — see Design above.
+  **(Sprint 015)** `.get()` routes a non-HTML target through `page.request.get()`
+  instead of navigating — see Design above. Still the same external contract; still no
+  new constructor parameter.
 - **`Throttle(clock=..., sleep=...)`** with `.wait(domain, rate_limit_seconds)` — shared,
   thread-safe, per-domain.
 - **`is_allowed(url, fetcher, user_agent) -> bool`**, **`RobotsDisallowed`** — robots
@@ -276,6 +323,14 @@ dependency graph.
   registered headless sources, no fixtures) completed with both sources' calls
   landing on the same worker thread and no such error — the fix works; the
   hazard it fixes is real.
+- **(Sprint 015)** `_RAW_RESOURCE_EXTENSIONS` deliberately excludes `.txt`, even though
+  it is exactly as non-HTML as `.xml`/`.json`/etc. `fetch/robots.py` fetches
+  `robots.txt` through this same `get()` for every source (headless or not), and that
+  path has no evidenced bug — issue 37's live triage found only `.xml` sitemaps
+  failing. Adding `.txt` would silently change robots.txt retrieval behavior as a side
+  effect of a fix scoped to sitemaps, not a deliberate, evidenced change; a future
+  ticket with actual evidence of a broken `.txt` (or other extension) fetch can extend
+  the tuple then.
 - The cache has no eviction policy. It grows without bound and is pruned by hand.
 - `PoliteFetcher` has no retry/backoff. A transient 5xx or timeout is a status-0 or
   non-200 response for that run, recovered only on the next scheduled run.

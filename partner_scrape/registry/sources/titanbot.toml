@@ -16,10 +16,26 @@
 # ticket. fetch_strategy = "headless" is left in place as a correct
 # disposition of this site's original (Wix JS-rendering) zero-yield
 # cause.
+#
+# 2026-08-30 re-probe (sprint 015 ticket 002 / issue 37): with ticket
+# 001's PlaywrightFetcher raw-resource fetch fix live, the
+# net::ERR_ABORTED crash is confirmed gone -- a direct fetch of
+# sitemap.xml now returns real status=200 <sitemapindex> XML, and its
+# one real child sitemap (pages-sitemap.xml) also parses correctly (9
+# URLs: booster, event-list, about-6, copy-of-history, leadership, fll,
+# our-robots, home, blog). But a fresh `--dry-run --no-enrich` re-probe
+# still finds 0 URLs: this is a small FRC team site with no dedicated
+# event/program pages -- "event-list" is one hyphenated path segment,
+# not `/events?(/|$)`, so it doesn't match EVENT_PATH_RE, and none of
+# the other 8 pages are event-shaped either. Disabled here: the fetch
+# bug that blocked this source is fixed, but the site itself has no
+# matching content to discover, the same "reachable but no matching
+# content" disposition sprint 014 ticket 003 already used for ~14
+# other sources.
 
 org_name = "FRC Team 2543 TitanBot"
 adapter_type = "generic_html"
-enabled = true
+enabled = false  # disabled: fetch bug fixed (sprint 015 ticket 001) and confirmed live -- site has no event/program-shaped URLs in its sitemap, verified 2026-08-30
 
 [config]
 site_url = "https://titanbot.org"

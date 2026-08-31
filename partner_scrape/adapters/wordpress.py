@@ -23,7 +23,7 @@ import logging
 import re
 from typing import Any, Iterable
 
-from partner_scrape.adapters.base import EventRef, RawResponse
+from partner_scrape.adapters.base import EventRef, RawResponse, acquisition_kwargs
 from partner_scrape.fetch import Fetcher
 from partner_scrape.model import Event
 from partner_scrape.registry.schema import SourceConfig
@@ -132,8 +132,8 @@ class WordPressRestAdapter:
         post_types = source.config.get("post_types") or list(DEFAULT_POST_TYPES)
         return [EventRef(url=_post_type_url(api_base, post_type)) for post_type in post_types]
 
-    def fetch(self, ref: EventRef, fetcher: Fetcher) -> RawResponse:
-        response = fetcher.get(ref.url)
+    def fetch(self, ref: EventRef, fetcher: Fetcher, source: SourceConfig) -> RawResponse:
+        response = fetcher.get(ref.url, **acquisition_kwargs(source))
         return RawResponse(ref=ref, status=response.status, body=response.body)
 
     def extract(self, raw: RawResponse, source: SourceConfig) -> Iterable[Event]:

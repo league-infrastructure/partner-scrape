@@ -22,6 +22,15 @@ disabled-with-reason), two known mis-registrations are corrected
 mismatch), and roughly 20 new entries are added against already-existing adapters. No
 schema, loader, or catalog-separation change is needed for any of it — see §6.
 
+**(Sprint 015 ticket 005)** Three of five feeds sprint 014 deferred solely on a
+robots.txt policy gate (`county-parks`, `mission-trails`, `surfrider-sd`,
+`sd-astronomy-association`, `swe-san-diego`) are registered with
+`acquisition_policy.respect_robots = false`, following a stakeholder decision
+(issue 38) that published ICS subscription URLs are feed-client traffic, and made
+real by ticket 003's fetcher-threading fix; `county-parks` and
+`sd-astronomy-association` were dropped after live dry-run exposed pre-existing
+`ical.py` parsing bugs unrelated to robots policy (see the ticket's Notes).
+
 ## 2. Orientation
 
 Four data directories, three schema/loader pairs:
@@ -135,7 +144,13 @@ Otherwise nothing: `registry/` sits near the bottom of the dependency graph, con
 
 `taxonomy_defaults` supplies `Opportunity` fields that cannot be derived from event text
 (contact details, `financial_support`, `ngss_aligned`, and similar), applied during
-`normalize/`'s mapping stage.
+`normalize/`'s mapping stage. **(Sprint 015 ticket 008)** `eligibility` is now the one key
+actually consumed — threaded through `normalize.run()`'s `source_taxonomy_defaults`
+parameter into `Opportunity.eligibility`; the other conventional keys named above remain
+unread hardcoded stubs in `normalize/run.py`, an explicit Out of Scope decision (see
+`normalize/DESIGN.md`'s own sprint 015 addendum). §6's "no schema validation for the
+contents of `config`" limitation applies identically to `taxonomy_defaults`: a typo'd key
+(e.g. `elegibility`) is silently ignored, not an error.
 
 ## 6. Open Questions / Known Limitations
 

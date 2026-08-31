@@ -45,6 +45,7 @@ full rationale.
 from __future__ import annotations
 
 import threading
+import urllib.parse
 from typing import Callable, Protocol
 
 from partner_scrape.fetch.fetcher import DEFAULT_USER_AGENT, FetchResponse
@@ -79,6 +80,35 @@ NETWORK_IDLE_TIMEOUT_MS = 15_000
 #: below and ``pyproject.toml`` cannot silently drift apart.
 HEADLESS_EXTRA_NAME = "headless"
 
+#: URL path extensions that never hold the client-rendered HTML
+#: ``get()``'s navigate-and-read path exists for -- a bare sitemap,
+#: feed, or data file. Fetching one of these via ``page.goto()`` +
+#: ``page.content()`` either returns Chromium's own viewer-wrapped
+#: markup (observed live: ``.xml`` sitemaps on 5 Wix-hosted sources)
+#: or aborts navigation outright with ``net::ERR_ABORTED`` (observed
+#: live: 4 more sources) -- see issue 37 (sprint 015) and
+#: ``fetch/DESIGN.md``'s sprint 015 section. There is no real
+#: ``Content-Type`` to inspect before a request is made, so this is
+#: necessarily a URL heuristic, not a response-header one.
+#:
+#: Deliberately excludes ``.txt``: ``fetch/robots.py`` fetches
+#: ``robots.txt`` through this same ``get()`` for every source
+#: (headless or not), and that path is untouched, evidenced-bug-free
+#: territory this ticket's scope does not extend to (see the ticket's
+#: "no ``robots.py`` changes" boundary) -- adding ``.txt`` here would
+#: silently change robots.txt retrieval behavior as a side effect
+#: instead of a deliberate, evidenced fix.
+_RAW_RESOURCE_EXTENSIONS = (".xml", ".json", ".csv", ".rss", ".atom")
+
+
+def _looks_like_raw_resource(url: str) -> bool:
+    """Whether ``url``'s path suggests a raw, non-HTML resource that
+    :meth:`PlaywrightFetcher.get` should retrieve through a raw
+    request instead of navigating -- see :data:`_RAW_RESOURCE_EXTENSIONS`.
+    """
+    path = urllib.parse.urlsplit(url).path
+    return path.lower().endswith(_RAW_RESOURCE_EXTENSIONS)
+
 
 class HeadlessNavigationResponse(Protocol):
     """The minimal shape read off a Playwright navigation ``Response``
@@ -88,13 +118,51 @@ class HeadlessNavigationResponse(Protocol):
     status: int
 
 
+class HeadlessRawResponse(Protocol):
+    """The minimal shape read off a Playwright raw ``APIResponse``
+    (or a fixture double standing in for one) -- the result of routing
+    a non-HTML target through :attr:`HeadlessPage.request` instead of
+    navigating. Mirrors the slice of the real ``playwright.sync_api.
+    APIResponse`` surface this module actually reads: ``status`` and
+    ``headers`` are properties, ``text()`` is a method, on both the
+    real type and the fixture double.
+    """
+
+    status: int
+    headers: dict[str, str]
+
+    def text(self) -> str:
+        """Return the raw response body, decoded as text."""
+        ...
+
+
+class HeadlessRequestContext(Protocol):
+    """The minimal Playwright ``APIRequestContext``-shaped seam this
+    module depends on for raw (non-navigating) requests -- what
+    ``page.request`` returns on a real ``Page``.
+    """
+
+    def get(
+        self, url: str, headers: dict[str, str] | None = None
+    ) -> HeadlessRawResponse:
+        """Issue a raw GET request to ``url`` with optional ``headers``,
+        without navigating -- no rendering, no ``page.content()``.
+        """
+        ...
+
+
 class HeadlessPage(Protocol):
     """The minimal Playwright ``Page``-shaped seam this module depends
     on. Deliberately narrow -- a fixture test double needs only
-    ``goto``/``content`` to stand in for a real browser page, exactly
-    as ``fetch/fetcher.py``'s ``Fetcher`` protocol lets
+    ``goto``/``content``/``request`` to stand in for a real browser
+    page, exactly as ``fetch/fetcher.py``'s ``Fetcher`` protocol lets
     ``FixtureFetcher`` stand in for ``UrllibFetcher`` with no real
     socket.
+
+    **(Sprint 015)** ``request`` was added alongside ``goto``/
+    ``content`` so :meth:`PlaywrightFetcher.get` can route a non-HTML
+    target (:func:`_looks_like_raw_resource`) through a raw request
+    instead of navigating -- see issue 37.
     """
 
     def goto(
@@ -111,6 +179,13 @@ class HeadlessPage(Protocol):
 
     def content(self) -> str:
         """Return the current (fully rendered) page HTML."""
+        ...
+
+    @property
+    def request(self) -> HeadlessRequestContext:
+        """The page's raw ``APIRequestContext`` -- issues requests
+        without navigating or rendering.
+        """
         ...
 
 
@@ -204,10 +279,25 @@ class PlaywrightFetcher:
         return self._page
 
     def get(self, url: str, headers: dict[str, str] | None = None) -> FetchResponse:
-        """Navigate to ``url``, wait for the page to finish loading
-        (``wait_until="load"``, bounded by
-        :data:`NETWORK_IDLE_TIMEOUT_MS`), and return the rendered HTML
-        as a ``FetchResponse``.
+        """Retrieve ``url`` as a ``FetchResponse``.
+
+        **(Sprint 015)** If ``url`` looks like a raw, non-HTML resource
+        (:func:`_looks_like_raw_resource` -- a bare sitemap, feed, or
+        data file), it is retrieved through :attr:`HeadlessPage.request`
+        (:meth:`_get_raw_response`) instead of being navigated to.
+        Navigating to a raw resource either returns Chromium's own
+        viewer-wrapped markup instead of the real body, or aborts
+        navigation outright (``net::ERR_ABORTED``) -- see issue 37
+        (sprint 015) and ``fetch/DESIGN.md``'s sprint 015 section. This
+        keeps the method's external contract identical
+        (``Fetcher.get(url, headers=None) -> FetchResponse``) --
+        ``PoliteFetcher``, every adapter, and every discovery module
+        remain unaware headless fetching exists, let alone that it now
+        has two internal retrieval paths.
+
+        Otherwise, navigates to ``url``, waits for the page to finish
+        loading (``wait_until="load"``, bounded by
+        :data:`NETWORK_IDLE_TIMEOUT_MS`), and returns the rendered HTML.
 
         **(Sprint 014 revision)** Uses ``wait_until="load"``, not the
         stricter ``"networkidle"`` this method used before the same
@@ -219,18 +309,17 @@ class PlaywrightFetcher:
         for the live evidence.
 
         ``status`` on the returned ``FetchResponse`` is always taken
-        from the real navigation response -- never hardcoded -- so
-        ``PoliteFetcher``'s ``200 <= status < 300`` cache-write branch
+        from the real navigation (or raw) response -- never hardcoded --
+        so ``PoliteFetcher``'s ``200 <= status < 300`` cache-write branch
         behaves identically for a headless fetch and a static one.
 
         **(Sprint 014)** Holds ``self._lock`` for the method's entire
         duration -- ``_get_page()`` (lazy page construction) through
-        ``page.content()`` -- so two threads calling ``get()`` on the
-        same instance concurrently never interleave their navigation
-        and content-read calls against the one shared page. Defense in
-        depth only: see the class docstring for why the real
-        thread-affinity guarantee lives in ``pipeline.py``'s dispatch,
-        not here.
+        the navigation or raw-request call -- so two threads calling
+        ``get()`` on the same instance concurrently never interleave
+        their calls against the one shared page. Defense in depth
+        only: see the class docstring for why the real thread-affinity
+        guarantee lives in ``pipeline.py``'s dispatch, not here.
 
         Raises:
             PlaywrightNotInstalledError: no ``page_factory`` was
@@ -239,6 +328,10 @@ class PlaywrightFetcher:
         """
         with self._lock:
             page = self._get_page()
+
+            if _looks_like_raw_resource(url):
+                return self._get_raw_response(page, url, headers)
+
             if headers:
                 set_extra_headers = getattr(page, "set_extra_http_headers", None)
                 if set_extra_headers is not None:
@@ -254,3 +347,25 @@ class PlaywrightFetcher:
                 headers=response_headers,
                 body=body,
             )
+
+    def _get_raw_response(
+        self, page: HeadlessPage, url: str, headers: dict[str, str] | None
+    ) -> FetchResponse:
+        """Retrieve ``url`` through ``page.request`` (Playwright's raw
+        ``APIRequestContext`` surface) instead of navigating -- the
+        sprint 015 fix for :func:`_looks_like_raw_resource` targets.
+
+        Called with :attr:`_lock` already held by :meth:`get`. ``headers``
+        is passed straight through to the request call (the real
+        conditional-GET forwarding mechanism for this path) rather than
+        via ``set_extra_http_headers``, which applies to page
+        navigation, not ``page.request``.
+        """
+        response = page.request.get(url, headers=headers or None)
+        response_headers = dict(getattr(response, "headers", None) or {})
+        return FetchResponse(
+            url=url,
+            status=response.status,
+            headers=response_headers,
+            body=response.text(),
+        )

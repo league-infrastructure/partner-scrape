@@ -556,6 +556,11 @@ def run(
         else resolved_site_dir / "src" / "data" / "partners.json"
     )
     source_org_names = {source.source_id: source.org_name for source in sources}
+    # Sprint 015 ticket 008, issue 27 item 3: identical shape and
+    # construction site as `source_org_names` above -- `normalize.run()`
+    # threads this through to `Opportunity.eligibility` via
+    # `taxonomy_defaults.get("eligibility", "")`, keyed by `source_id`.
+    source_taxonomy_defaults = {source.source_id: source.taxonomy_defaults for source in sources}
 
     # Event Image Downloader (sprint 008 ticket 008, issue 19 scraper
     # half): constructed here, not defaulted inside `normalize_run()`
@@ -576,6 +581,7 @@ def run(
         events,
         resolved_partners_path,
         source_org_names=source_org_names,
+        source_taxonomy_defaults=source_taxonomy_defaults,
         image_resolver=resolved_image_resolver,
     )
     active_reporter.record_opportunities(opportunities)

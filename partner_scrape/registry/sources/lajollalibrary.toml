@@ -15,10 +15,24 @@
 # this ticket's declared scope to fix; flagged for a follow-up ticket.
 # fetch_strategy = "headless" is left in place as a correct disposition
 # of this site's original (Wix JS-rendering) zero-yield cause.
+#
+# 2026-08-30 re-probe (sprint 015 ticket 002 / issue 37): with ticket
+# 001's PlaywrightFetcher raw-resource fetch fix live, the
+# net::ERR_ABORTED crash is confirmed gone -- a direct fetch of
+# sitemap.xml now returns real status=200 <sitemapindex> XML, and its
+# real child sitemap (pages-sitemap.xml) also parses correctly. But a
+# fresh `--dry-run --no-enrich` re-probe still finds 0 URLs: this
+# site's real, working sitemap simply has no event/program-shaped
+# pages (its actual pages -- staff-picks, summer-reading-program,
+# kids, etc. -- don't match EVENT_PATH_RE's path-segment patterns).
+# Disabled here: the fetch bug that blocked this source is fixed, but
+# the site itself has no matching content to discover, the same
+# "reachable but no matching content" disposition sprint 014 ticket
+# 003 already used for ~14 other sources.
 
 org_name = "La Jolla/Riford Library"
 adapter_type = "generic_html"
-enabled = true
+enabled = false  # disabled: fetch bug fixed (sprint 015 ticket 001) and confirmed live -- site has no event/program-shaped URLs in its sitemap, verified 2026-08-30
 
 [config]
 site_url = "https://www.lajollalibrary.org"

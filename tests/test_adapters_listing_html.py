@@ -22,7 +22,8 @@ import pytest
 
 from partner_scrape.adapters import ADAPTERS, get_adapter, run
 from partner_scrape.adapters.base import EventRef, RawResponse
-from partner_scrape.adapters.listing_html import ListingHtmlAdapter
+from partner_scrape.adapters.listing_html import CONFIDENCE_DEFAULT_LOCATION, ListingHtmlAdapter
+from partner_scrape.fetch import DEFAULT_RATE_LIMIT_SECONDS
 from partner_scrape.fetch.fetcher import FetchResponse
 from partner_scrape.model import Provenance
 from partner_scrape.registry.schema import SourceConfig
@@ -69,18 +70,31 @@ class FixtureFetcher:
 
     responses: dict[str, FetchResponse]
     calls: list[str] = field(default_factory=list)
+    #: Every call's rate_limit_seconds/respect_robots, keyed by URL --
+    #: sprint 015 ticket 003's acquisition_kwargs() threading, recorded
+    #: separately from ``calls`` so existing ``calls == [...]``-style
+    #: assertions elsewhere in this file are unaffected.
+    policy_calls: dict[str, tuple[float, bool]] = field(default_factory=dict)
 
-    def get(self, url: str, headers: dict[str, str] | None = None) -> FetchResponse:
+    def get(
+        self,
+        url: str,
+        headers: dict[str, str] | None = None,
+        rate_limit_seconds: float = 1.0,
+        respect_robots: bool = True,
+    ) -> FetchResponse:
         self.calls.append(url)
+        self.policy_calls[url] = (rate_limit_seconds, respect_robots)
         return self.responses[url]
 
 
-def _source() -> SourceConfig:
+def _source(acquisition_policy: dict | None = None, config: dict | None = None) -> SourceConfig:
     return SourceConfig(
         source_id="fleet-science-center",
         org_name="Fleet Science Center",
         adapter_type="listing_html",
-        config={"site_url": SITE_URL, "listing_urls": ["/events"]},
+        config=config or {"site_url": SITE_URL, "listing_urls": ["/events"]},
+        acquisition_policy=acquisition_policy or {},
     )
 
 
@@ -169,6 +183,43 @@ class TestEndToEndDiscoverFetchExtract:
         assert first.start is None
 
 
+class TestAcquisitionPolicyThreading:
+    """Sprint 015 ticket 003: the source's acquisition_kwargs() must
+    reach both discovery.listing's own fetch (the listing page) and
+    this adapter's own fetch() (each detail page).
+    """
+
+    def test_sources_acquisition_policy_reaches_listing_and_detail_page_fetches(self):
+        opengraph_body = _read(HTML_FIXTURES_DIR / "fleet_style_opengraph.html")
+        responses = {
+            LISTING_URL: _response(
+                _read(LISTING_FIXTURES_DIR / "fleet_events_listing.html")
+            ),
+            **{url: _response(opengraph_body) for url in EVENT_URLS},
+        }
+        fetcher = FixtureFetcher(responses)
+        source = _source(acquisition_policy={"rate_limit_seconds": 3.0, "respect_robots": False})
+
+        run(source, fetcher)
+
+        assert fetcher.policy_calls[LISTING_URL] == (3.0, False)
+        assert fetcher.policy_calls[EVENT_URLS[0]] == (3.0, False)
+
+    def test_source_with_no_acquisition_policy_still_gets_polite_fetcher_defaults(self):
+        opengraph_body = _read(HTML_FIXTURES_DIR / "fleet_style_opengraph.html")
+        responses = {
+            LISTING_URL: _response(
+                _read(LISTING_FIXTURES_DIR / "fleet_events_listing.html")
+            ),
+            **{url: _response(opengraph_body) for url in EVENT_URLS},
+        }
+        fetcher = FixtureFetcher(responses)
+
+        run(_source(), fetcher)
+
+        assert fetcher.policy_calls[EVENT_URLS[0]] == (DEFAULT_RATE_LIMIT_SECONDS, True)
+
+
 class TestExtractPerRungFallback:
     def test_opengraph_only_page_still_yields_an_event(self):
         adapter = ListingHtmlAdapter()
@@ -242,3 +293,90 @@ class TestExtractRobustness:
         )
 
         assert list(adapter.extract(raw, _source())) == []
+
+
+class TestDefaultLocationFallback:
+    """Sprint 015 ticket 004: ``source.config["default_location"]``
+    backstops ``Event.location`` only when the extraction ladder left it
+    empty -- see this ticket's Fix shape and ``adapters/DESIGN.md``'s
+    Sprint 015 addendum. Fleet's real detail pages carry no per-page
+    venue markup, so this closes the gap that blocked the Balboa Park
+    <-> Fleet cross-source dedup collapse measured in sprint 014 ticket
+    004's Notes.
+    """
+
+    def _source_with_default_location(self, default_location: str | None) -> SourceConfig:
+        config = {"site_url": SITE_URL, "listing_urls": ["/events"]}
+        if default_location is not None:
+            config["default_location"] = default_location
+        return _source(config=config)
+
+    def test_ladder_recovered_location_wins_over_default_location(self):
+        """A page whose JSON-LD carries a real ``location`` (the
+        json_ld_event.html fixture, reused as-is from
+        test_extract_ladder.py's own JSON-LD coverage) must keep that
+        value -- the fallback must never override a ladder-recovered
+        location, even when ``default_location`` is set to something
+        different.
+        """
+        adapter = ListingHtmlAdapter()
+        raw = RawResponse(
+            ref=EventRef(url=f"{SITE_URL}/events/tide-pools"),
+            status=200,
+            body=_read(HTML_FIXTURES_DIR / "json_ld_event.html"),
+        )
+        source = self._source_with_default_location("1875 El Prado, San Diego, CA 92101")
+
+        events = list(adapter.extract(raw, source))
+
+        assert len(events) == 1
+        event = events[0]
+        assert event.location != "1875 El Prado, San Diego, CA 92101"
+        assert "Cabrillo Tide Pools" in event.location
+        # Ladder provenance (JSON-LD, confidence 1.0) is preserved --
+        # the fallback branch never re-``set()``s an already-populated
+        # field.
+        assert event.field_provenance["location"].source == "listing_html"
+
+    def test_empty_ladder_location_falls_back_to_default_location(self):
+        """fleet_style_opengraph.html has no location signal anywhere
+        (matches Fleet's confirmed real page shape) -- with
+        ``default_location`` set, the adapter fills it in.
+        """
+        adapter = ListingHtmlAdapter()
+        raw = RawResponse(
+            ref=EventRef(url=f"{SITE_URL}/events/candlelight-concerts"),
+            status=200,
+            body=_read(HTML_FIXTURES_DIR / "fleet_style_opengraph.html"),
+        )
+        source = self._source_with_default_location("1875 El Prado, San Diego, CA 92101")
+
+        events = list(adapter.extract(raw, source))
+
+        assert len(events) == 1
+        event = events[0]
+        assert event.location == "1875 El Prado, San Diego, CA 92101"
+        assert event.field_provenance["location"] == Provenance(
+            source="listing_html", confidence=CONFIDENCE_DEFAULT_LOCATION
+        )
+
+    def test_no_default_location_configured_leaves_location_empty(self):
+        """A source with no ``default_location`` key (every listing_html
+        source but Fleet, this sprint) reproduces today's behavior
+        exactly: no ladder rung fired, no fallback configured, so
+        ``location`` stays empty with no field_provenance entry.
+        """
+        adapter = ListingHtmlAdapter()
+        raw = RawResponse(
+            ref=EventRef(url=f"{SITE_URL}/events/candlelight-concerts"),
+            status=200,
+            body=_read(HTML_FIXTURES_DIR / "fleet_style_opengraph.html"),
+        )
+        source = self._source_with_default_location(None)
+
+        events = list(adapter.extract(raw, source))
+
+        assert len(events) == 1
+        event = events[0]
+        assert event.location == ""
+        assert "location" not in event.field_provenance

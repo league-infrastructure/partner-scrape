@@ -86,6 +86,24 @@ DEFAULT_AREA = "General Science"
 #: magnet. Bare "school" is likewise avoided -- it matches the
 #: "preschool"/"school-age" AUDIENCE terms -- so phrases are used.
 #:
+#: Sprint 015 (ticket 006, issue 27): `"Camps"` gets a rule (see below).
+#: `"Competitions"` deliberately does NOT -- same rationale as
+#: `"Funding Opportunities"` above. The obvious keyword candidate,
+#: `competit*` (competition/competitive), false-positives on a real,
+#: already-fixtured title: `tests/test_adapters_leaguesync.py`'s
+#: "Competitive Robotics Summer Warm Up" is a League *class* (kind
+#: "event", ordinary registration-based instruction), not a
+#: competition -- exactly the "common word appears in unrelated
+#: program text" failure mode that killed the "grant" keyword. Other
+#: candidates (`tournament`, `hackathon`, `fair`) either do not appear
+#: anywhere in this codebase's fixtures/adapters to spot-check against,
+#: or (`fair` alone) are already too ambiguous -- county fair, health
+#: fair, book fair, and `career fair`/`job fair`/`college fair` (already
+#: claimed by the Career Connections rule below) all share the bare
+#: word. "Competitions" is LLM-only; the keyword fallback keeps
+#: defaulting ambiguous titles to `DEFAULT_OPPORTUNITY_TYPE`, the safer
+#: failure mode during an LLM outage.
+#:
 #: Internships are handled separately by kind in normalize/run.py (they
 #: force "Work-based Learning") and never reach this function.
 OPPORTUNITY_TYPE_KEYWORDS: list[tuple[str, str]] = [
@@ -99,6 +117,14 @@ OPPORTUNITY_TYPE_KEYWORDS: list[tuple[str, str]] = [
      "Career Connections"),
     (r"\b(field trip|school program|in-school|school group|for schools|"
      r"school assembly)\b", "School Programs"),
+    # Sprint 015 (ticket 006): bare "camps?", word-bounded so it never
+    # matches inside "campus"/"campaign"/"campfire"/"campground" (no
+    # word boundary immediately follows "camp" in any of those) or
+    # "encampment" (no word boundary immediately precedes it) -- see
+    # `normalize/DESIGN.md`'s addendum for the fixture titles this was
+    # spot-checked against ("Ocean Explorers Camp", "Summer Camp
+    # Registration Is Open!", "Farm Camp", "Camp-o-Saurus").
+    (r"\bcamps?\b", "Camps"),
 ]
 
 #: Default `opportunity_type` when no `OPPORTUNITY_TYPE_KEYWORDS` rule

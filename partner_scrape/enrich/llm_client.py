@@ -74,6 +74,11 @@ _COST_RANGE_VALUES = [
     "Greater than $200",
 ]
 _TIME_OF_DAY_VALUES = ["Morning", "Afternoon", "Evening", "All Day"]
+#: Sprint 015 (ticket 006, issue 27): `"Camps"` and `"Competitions"` added
+#: -- additive only, the prior seven values are unchanged. See
+#: `PROMPT_VERSION` below (bumped 1 -> 2 for this widening) and
+#: `normalize/taxonomy.py`'s `OPPORTUNITY_TYPE_KEYWORDS` for the
+#: keyword-fallback side of the same change.
 _OPPORTUNITY_TYPE_VALUES = [
     "Out-of-school Programs",
     "Online",
@@ -82,6 +87,8 @@ _OPPORTUNITY_TYPE_VALUES = [
     "Career Connections",
     "Volunteering",
     "Funding Opportunities",
+    "Camps",
+    "Competitions",
 ]
 
 
@@ -219,7 +226,15 @@ ENRICHMENT_JSON_SCHEMA = _build_enrichment_json_schema()
 #: reasoning: `content_hash` deliberately covers only an Event's input
 #: fields, never the prompt text, so it cannot detect a prompt-semantics
 #: change on its own.
-PROMPT_VERSION = 1
+#:
+#: Sprint 015 (ticket 006, issue 27): bumped 1 -> 2. Adding `"Camps"`/
+#: `"Competitions"` to `_OPPORTUNITY_TYPE_VALUES` and describing them in
+#: `_SYSTEM_PROMPT` changes the classification criteria the model
+#: applies, so every previously-cached judgment (written under the old,
+#: narrower vocabulary) needs exactly one forced re-evaluation -- the
+#: same mechanism sprint 014's 0 -> 1 bump exercised, just the next
+#: increment.
+PROMPT_VERSION = 2
 
 _SYSTEM_PROMPT = f"""You are helping curate a directory of STEM learning \
 opportunities for learners of all ages in the San Diego area. You are \
@@ -239,10 +254,13 @@ be recovered. Never overwrite a field that already has a value.
    - time_of_day: zero or more of {_TIME_OF_DAY_VALUES}
    - opportunity_type: exactly one of {_OPPORTUNITY_TYPE_VALUES}, based \
 on what kind of opportunity this is (e.g. a fully virtual/remote program \
-is "Online"; a paid role/apprenticeship for a business is not this \
-schema's concern -- it is never sent to you). Use "Out-of-school \
-Programs" as the general default whenever nothing more specific \
-clearly applies -- this field is never left blank.
+is "Online"; a summer or school-break camp, or that camp's own \
+enrollment/registration session, is "Camps"; a tournament, contest, \
+fair, or other competitive event -- including its own registration \
+window -- is "Competitions"; a paid role/apprenticeship for a business \
+is not this schema's concern -- it is never sent to you). Use \
+"Out-of-school Programs" as the general default whenever nothing more \
+specific clearly applies -- this field is never left blank.
    - relevant: true if this is a STEM learning opportunity for any \
 audience (children, teens, families, adults, educators, college-bound \
 students all count -- an adult or professional audience is never by \
