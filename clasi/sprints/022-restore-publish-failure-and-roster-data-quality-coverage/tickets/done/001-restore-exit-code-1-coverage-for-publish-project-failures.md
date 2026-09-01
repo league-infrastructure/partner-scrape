@@ -1,7 +1,7 @@
 ---
 id: '001'
 title: Restore exit-code-1 coverage for publish.project() failures
-status: in-progress
+status: done
 use-cases:
 - SUC-024
 depends-on: []

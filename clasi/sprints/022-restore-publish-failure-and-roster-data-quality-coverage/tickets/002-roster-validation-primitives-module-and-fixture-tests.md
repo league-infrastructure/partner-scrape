@@ -1,7 +1,7 @@
 ---
 id: '002'
 title: Roster validation primitives module and fixture tests
-status: open
+status: in-progress
 use-cases:
 - SUC-025
 - SUC-026
