@@ -1,7 +1,7 @@
 ---
 id: '001'
 title: Add CredentialError and an aggregate credential-failure alert to run_teams()
-status: in-progress
+status: done
 use-cases:
 - SUC-027
 depends-on: []

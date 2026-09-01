@@ -1,7 +1,7 @@
 ---
 id: '002'
 title: Add credential_failures to teams.json's meta payload
-status: open
+status: in-progress
 use-cases:
 - SUC-027
 depends-on:
