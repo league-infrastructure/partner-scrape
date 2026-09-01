@@ -846,6 +846,122 @@ class TestSponsorExtractionWiring:
         assert published["sponsors"] == []
 
 
+class TestWebsiteOverlayToVerificationWiring:
+    """Sprint 021 ticket 001 (issue 44): proves `apply_website_overrides()`
+    -> `verify_team_websites()` end to end inside `run_teams()` for a
+    team whose `website` is **empty from its own (stubbed) source** --
+    the one real test-coverage gap the ticket's audit found. Every
+    `TestSponsorExtractionWiring` test above sets `website=` directly
+    on the stub `Team` it constructs, which never exercises
+    `apply_website_overrides()` populating that field from the overlay
+    at all; `teams.pipeline.run_teams()`'s stage order (confirmed by
+    reading the module directly, not just trusting its docstring)
+    sequences `apply_website_overrides()` immediately before
+    `verify_team_websites()`, unconditionally, every run.
+
+    Uses a small, dedicated fixture overlay --
+    `tests/fixtures/teams/discovered_websites_sample.toml`, the same
+    one `tests/teams/test_website_overrides.py`'s own `overlay_dir`
+    fixture copies -- passed via `website_data_dir`, never the real
+    52-entry `teams/data/discovered-websites.toml`."""
+
+    def test_overlay_sourced_website_reaches_confirmed_via_run_teams(
+        self, monkeypatch, tmp_path
+    ):
+        # ftc-1622's website is empty from its own (stubbed) source --
+        # only the fixture overlay's "https://teamspyder.org" entry can
+        # supply it, so a "confirmed" website_status here can only have
+        # come from the real apply_website_overrides() ->
+        # verify_team_websites() chain, not from a website the stub
+        # Team already carried.
+        team = Team(
+            team_id="ftc-1622",
+            league="FTC",
+            program="FIRST Tech Challenge",
+            number=1622,
+            name="Team Spyder",
+            organization="Poway High School",
+            website="",
+        )
+        monkeypatch.setattr(teams_pipeline, "_TEAM_SOURCES", {"ftcscout": _StubTeamSource([team])})
+
+        overlay_dir = tmp_path / "overlay-data"
+        overlay_dir.mkdir()
+        (overlay_dir / "discovered-websites.toml").write_text(
+            (FIXTURES_DIR / "discovered_websites_sample.toml").read_text()
+        )
+
+        overlay_website = "https://teamspyder.org"
+        fetcher = FixtureFetcher(
+            {
+                robots_txt_url(overlay_website): FetchResponse(
+                    url="", status=200, headers={}, body=_ALLOW_ALL_ROBOTS
+                ),
+                overlay_website: FetchResponse(
+                    url="", status=200, headers={}, body="<html><body>Team Spyder</body></html>"
+                ),
+            }
+        )
+
+        payload = run_teams(
+            registry_dir=_one_team_registry(tmp_path),
+            site_dir=tmp_path,
+            fetcher=fetcher,
+            dry_run=True,
+            website_data_dir=overlay_dir,
+            no_sponsors=True,
+        )
+
+        [published] = payload["teams"]
+        assert published["website"] == overlay_website
+        assert published["website_status"] == "confirmed"
+        # Social ingestion (website_overrides.py's step 3) rode along in
+        # the same overlay pass -- confirms the whole overlay entry was
+        # applied, not just its `website` field in isolation.
+        assert published["social"] == [
+            "https://www.instagram.com/spyder1622",
+            "https://www.youtube.com/@spyder1622",
+            "https://twitter.com/team1622",
+            "https://twitter.com/frc1622",
+        ]
+
+    def test_a_team_with_no_overlay_entry_and_no_source_website_is_never_verified(
+        self, monkeypatch, tmp_path
+    ):
+        # Control case: a team absent from the overlay and with no
+        # source-reported website stays at website_status == "none" --
+        # confirms the test above's "confirmed" result is actually
+        # caused by the overlay entry, not some other default behavior.
+        team = Team(
+            team_id="ftc-99999999",
+            league="FTC",
+            program="FIRST Tech Challenge",
+            number=99999999,
+            name="No Website Team",
+            website="",
+        )
+        monkeypatch.setattr(teams_pipeline, "_TEAM_SOURCES", {"ftcscout": _StubTeamSource([team])})
+
+        overlay_dir = tmp_path / "overlay-data"
+        overlay_dir.mkdir()
+        (overlay_dir / "discovered-websites.toml").write_text(
+            (FIXTURES_DIR / "discovered_websites_sample.toml").read_text()
+        )
+
+        payload = run_teams(
+            registry_dir=_one_team_registry(tmp_path),
+            site_dir=tmp_path,
+            fetcher=FixtureFetcher({}),
+            dry_run=True,
+            website_data_dir=overlay_dir,
+            no_sponsors=True,
+        )
+
+        [published] = payload["teams"]
+        assert published["website"] == ""
+        assert published["website_status"] == "none"
+
+
 class TestCanonicalizeSponsorsWiring:
     """Ticket 005's reopening: `canonicalize_sponsors()` sequenced after
     `extract_sponsors()`/`--no-sponsors` and before `export_teams()`,
