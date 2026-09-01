@@ -1,7 +1,7 @@
 ---
 id: 008
 title: Retire the dead stem-ecosystem CI publish step and live-verify the full write-removal
-status: in-progress
+status: done
 use-cases:
 - SUC-029
 - SUC-030
