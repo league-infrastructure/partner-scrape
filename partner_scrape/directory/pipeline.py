@@ -43,10 +43,12 @@ is written alongside `places.json`.
 
 from __future__ import annotations
 
+import json
 import logging
 from pathlib import Path
 from typing import Any
 
+from partner_scrape.config import get_site_dir
 from partner_scrape.directory.export import export_directory
 from partner_scrape.directory.model import Club, Place
 from partner_scrape.directory.sources.base import (
@@ -60,6 +62,7 @@ from partner_scrape.directory.sources.static_roster import StaticRosterSource
 from partner_scrape.fetch import Fetcher, PoliteFetcher
 from partner_scrape.geo_ladder import GeoLadder
 from partner_scrape.registry.loader import load_active_sources
+from partner_scrape.registry.validate_roster import check_partner_references
 
 logger = logging.getLogger(__name__)
 
@@ -211,6 +214,62 @@ def _apply_club_geocoding(clubs: list[Club], *, data_dir: str | Path | None) -> 
     return clubs
 
 
+def _check_related_partner_references(places: list[Place], *, site_dir: str | Path | None) -> None:
+    """Join-integrity guard for `Place.related_partner_id` (issue 48,
+    ticket 004): recovers, as real pipeline-level validation, the guard
+    `tests/directory/test_dataset_validity.py`'s deleted
+    `TestRelatedPartnerIdJoinIntegrity` class used to provide.
+
+    Unlike `partner_scrape.pipeline.run()`'s ticket-003 wiring (an
+    *unconditional* `partners.json` read), this is a *conditional* one:
+    `directory.pipeline.run_directory()` never read `partners.json`
+    before this ticket, and `Place.related_partner_id` is a hand-copied
+    value with "no automatic cross-reference join" by original design
+    (sprint 018 ticket 007). Building `references` and returning early
+    when it is empty means a `directory`-only environment with no
+    sibling `stem-ecosystem` checkout's `partners.json` still runs
+    cleanly when no `Place` references one -- this is the one
+    behavioral difference from ticket 003's unconditional read.
+
+    When at least one reference exists, `site_dir` is resolved
+    identically to `export.export_directory()`'s own resolution (`Path
+    (site_dir) if site_dir is not None else get_site_dir()`) -- no
+    independent, potentially-divergent resolution logic -- and
+    `check_partner_references()` is left to raise
+    `RosterValidationError` uncaught: a fatal, structural problem, not
+    per-source isolated (contrast with `run_directory()`'s own
+    try/except-and-continue for a flaky third-party fetch, which a
+    hand-copy typo in a curated, ~19-row dataset is not).
+
+    A missing `partners.json` when references exist is re-raised as a
+    `RuntimeError` with an actionable message, matching
+    `export_directory()`'s and `publish.project()`'s own "site_dir does
+    not exist, check --site-dir" message convention -- never a bare,
+    unexplained `FileNotFoundError`.
+    """
+    references = [
+        (place.place_id, place.related_partner_id)
+        for place in places
+        if place.related_partner_id is not None
+    ]
+    if not references:
+        return
+
+    resolved_site_dir = Path(site_dir) if site_dir is not None else get_site_dir()
+    partners_path = resolved_site_dir / "src" / "data" / "partners.json"
+
+    try:
+        raw_partners = json.loads(partners_path.read_text(encoding="utf-8"))
+    except OSError as exc:
+        raise RuntimeError(
+            f"Cannot read {partners_path} to validate related_partner_id "
+            f"references: {exc}. Check --site-dir or SITE_DIR, and that "
+            "the sibling site checkout's src/data/partners.json is present."
+        ) from exc
+
+    check_partner_references(references, raw_partners)
+
+
 def run_directory(
     *,
     registry_dir: str | Path | None = None,
@@ -257,6 +316,18 @@ def run_directory(
         `export_directory()`'s `{"meta": ..., "places": [...],
         "clubs_meta": ..., "clubs": [...]}` payload, passed through
         unchanged.
+
+    Raises:
+        RosterValidationError: at least one `Place` has a non-`None`
+            `related_partner_id` and it does not resolve against
+            `{resolved site_dir}/src/data/partners.json` (issue 48,
+            ticket 004) -- see `_check_related_partner_references()`'s
+            own docstring. Never raised when no `Place` in the run sets
+            `related_partner_id` at all; `partners.json` is not even
+            read in that case.
+        RuntimeError: at least one `Place` has a non-`None`
+            `related_partner_id` and `partners.json` cannot be read at
+            the resolved `site_dir`.
     """
     sources = load_active_sources(
         Path(registry_dir) if registry_dir is not None else DEFAULT_PLACES_REGISTRY_DIR
@@ -334,5 +405,12 @@ def run_directory(
 
     places = _apply_geo_fallback(places, data_dir=geo_data_dir)
     clubs = _apply_club_geocoding(clubs, data_dir=geo_data_dir)
+
+    # Join-integrity validation (issue 48, ticket 004) -- after the
+    # final Place list is settled, before export_directory() writes
+    # anything. See _check_related_partner_references()'s own
+    # docstring for the full "conditional read, uncaught raise"
+    # rationale.
+    _check_related_partner_references(places, site_dir=site_dir)
 
     return export_directory(places, clubs=clubs, site_dir=site_dir, dry_run=dry_run)

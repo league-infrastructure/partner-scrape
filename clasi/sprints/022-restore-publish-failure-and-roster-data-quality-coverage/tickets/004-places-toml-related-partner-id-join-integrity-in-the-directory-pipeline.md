@@ -72,24 +72,24 @@ site_dir=site_dir, dry_run=dry_run)` is called.
 
 ## Acceptance Criteria
 
-- [ ] `run_directory()` calls `validate_roster.check_partner_references(
+- [x] `run_directory()` calls `validate_roster.check_partner_references(
       )` after `_apply_geo_fallback()` and before `export_directory()`,
       whenever at least one `Place` has a non-`None`
       `related_partner_id`.
-- [ ] When no `Place` in the run has a `related_partner_id` set,
+- [x] When no `Place` in the run has a `related_partner_id` set,
       `partners.json` is never read, and the run succeeds even if no
       such file exists at the resolved `site_dir`.
-- [ ] A dangling `related_partner_id` (one with no matching row in the
+- [x] A dangling `related_partner_id` (one with no matching row in the
       loaded roster) makes `run_directory()` raise, before
       `export_directory()` writes `places.json`, naming both the
       offending `place_id` and the invalid `partner_id`.
-- [ ] A missing `partners.json` when at least one reference needs it
+- [x] A missing `partners.json` when at least one reference needs it
       raises with an actionable message (not a bare, unexplained
       `FileNotFoundError`).
-- [ ] `site_dir` is resolved identically to `export_directory()`'s own
+- [x] `site_dir` is resolved identically to `export_directory()`'s own
       resolution — no independent, potentially-divergent resolution
       logic.
-- [ ] **Required pre-close live validation**: run `partner-scrape
+- [x] **Required pre-close live validation**: run `partner-scrape
       directory --dry-run -v --site-dir ../stem-ecosystem` (or the
       resolved default if this machine's sibling checkout has moved)
       against the real sibling checkout and the real committed
@@ -98,12 +98,78 @@ site_dir=site_dir, dry_run=dry_run)` is called.
       `related_partner_id` references were checked (sprint.md's
       planning-time check found 17 set, all resolving — confirm this at
       execution time rather than assuming it is unchanged).
-- [ ] Optional, low-risk hygiene: `tests/test_roster_housekeeping.py`'s
+- [x] Optional, low-risk hygiene: `tests/test_roster_housekeeping.py`'s
       module docstring currently claims logo-backfill checks are
       "tracked for recovery ... in issue 48" — they are not (see
       sprint.md Scope > Out of Scope). If touching that docstring is
       convenient while this ticket is in progress, correct it; if not,
       leave it — not required for this ticket's completion.
+
+## Notes
+
+**Implementation**: Added `_check_related_partner_references()` to
+`partner_scrape/directory/pipeline.py`, called from `run_directory()`
+immediately after `_apply_geo_fallback()`/`_apply_club_geocoding()` and
+before `export_directory(...)`. Builds `references` from `places`
+exactly as specified; returns immediately (no read) when empty.
+Otherwise resolves `site_dir` with the identical expression
+`export_directory()` uses (`Path(site_dir) if site_dir is not None else
+get_site_dir()`), reads `{resolved_site_dir}/src/data/partners.json`,
+and calls `check_partner_references(references, raw_partners)`,
+letting `RosterValidationError` propagate uncaught. A missing/unreadable
+`partners.json` when references exist is caught (`OSError`) and
+re-raised as a `RuntimeError` with an actionable message, matching
+`export_directory()`'s/`publish.project()`'s "check --site-dir or
+SITE_DIR" convention — chosen over `RosterValidationError` because this
+is an infrastructure/missing-file problem, not a content defect in the
+roster itself.
+
+**Regression discovered and fixed**: wiring this in as unconditional
+(matching ticket 003's "runs regardless of --dry-run" convention)
+exposed 12 pre-existing tests across `tests/directory/test_pipeline.py`,
+`tests/directory/test_club_dataset_validity.py`, and
+`tests/test_cli_directory.py` that exercise the *real* committed
+`places.toml`/registry against a nonexistent or empty `site_dir` — the
+real data already carries 17 `related_partner_id` references, so those
+tests now need a `partners.json` fixture to keep passing. Fixed by
+adding a small per-file helper that derives the fixture's `id` set by
+parsing `related_partner_id = N` out of the real `places.toml` text
+(never hand-listed, so it can't drift from the real data) and writes a
+minimal `partners.json` at each test's `site_dir`. One test,
+`test_dry_run_reports_19_places_with_no_network_and_no_disk_write` in
+`tests/test_cli_directory.py`, previously asserted `not
+site_dir.exists()` after a `--dry-run` invocation against a
+`site_dir` that was never created; since the join-integrity read now
+needs a real `partners.json` to exist even under `--dry-run` (this
+check runs before `export_directory()`, unconditionally — dry_run only
+governs whether `export_directory()` itself writes), that assertion is
+no longer achievable in the same run. Narrowed the assertion from "the
+whole `site_dir` was never created" to "no `places.json`/`clubs.json`
+was ever written" — the substantive guarantee `--dry-run` actually
+makes — while pre-populating a fixture `partners.json` as the test's own
+setup step (not something the code under test writes).
+
+**Live validation** (2026-08-31, against the real sibling
+`../stem-ecosystem` checkout and the real committed
+`directory/data/places.toml`):
+
+```
+$ partner-scrape directory --dry-run -v --site-dir ../stem-ecosystem
+INFO partner_scrape.directory.pipeline: Club source 'hack-club-sd' yielded 4 club(s)
+INFO partner_scrape.directory.pipeline: Place source 'places-sd' yielded 19 place(s)
+partner-scrape directory: wrote 19 places and 4 clubs (dry run -- nothing written).
+```
+
+Completed without raising. Verified programmatically: the real
+`places.toml` carries **17** `Place` records with a non-`None`
+`related_partner_id` (16 unique partner ids — id 85 is referenced by
+two places), and every one of the 17 resolves against the real
+`../stem-ecosystem/src/data/partners.json`'s `id` values (zero
+dangling). This matches sprint.md's planning-time count of "17 set, all
+resolving" exactly — unchanged at execution time.
+
+**Test results**: `uv run pytest tests/directory/ -q` — 175 passed.
+`uv run pytest -q` (full suite) — 1934 passed, zero regressions.
 
 ## Testing
 

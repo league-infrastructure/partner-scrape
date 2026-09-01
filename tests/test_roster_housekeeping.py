@@ -16,18 +16,26 @@ then deleted `data/partners_viable.csv` itself (confirmed dead, zero
 production readers -- issue 60), which took the CSV-side half
 (`TestNoBareCaliforniaCentroid`, `TestNoOutOfBoundsCoordinates`,
 `TestNoHijackedDomain`, and their shared `_load_partners_csv()` helper)
-with it. All of those guards (bare-California-centroid, out-of-bounds,
+with it. Most of those guards (bare-California-centroid, out-of-bounds,
 hijacked-domain, and JSON/CSV sync checks against `partners.json`, plus
-the JSON-side registry join-integrity and logo-backfill checks) are
-tracked for recovery as pipeline-level validation in issue 48 -- not
+the JSON-side registry join-integrity check) were tracked for recovery
+as pipeline-level validation in issue 48, and recovered by sprint 022
+tickets 002-004 (`partner_scrape.registry.validate_roster`, wired into
+`pipeline.run()` and `directory.pipeline.run_directory()`) -- not
 reproduced here against a re-copied fixture (that would recreate the
 exact two-copies-of-the-same-file problem the site consolidation exists
-to eliminate). Only the registry-TOML-side guards below survive locally,
-since they have no dependency on either retired file. The bounding-box
-constant that guarded coordinates against `site/src/pages/partners/
-index.astro`'s `SD_BOUNDS` (San Diego County's lat/lng box) went with
-`TestNoOutOfBoundsCoordinates`; issue 48's pipeline-level validation is
-expected to need the identical box when it recovers that guard.
+to eliminate). The logo-backfill check (the old
+`TestLogoBackfillIntegrity`) is explicitly *not* part of that recovery
+-- issue 48's own Proposed Fix never listed it, and it would need a
+different validation surface entirely (the actual image files under
+`{site_dir}/public/images/logos/`, not just `partners.json`'s own
+structure); see sprint 022's sprint.md Scope > Out of Scope. Only the
+registry-TOML-side guards below survive locally, since they have no
+dependency on either retired file. The bounding-box constant that
+guarded coordinates against `site/src/pages/partners/index.astro`'s
+`SD_BOUNDS` (San Diego County's lat/lng box) went with
+`TestNoOutOfBoundsCoordinates`; `validate_roster.SD_BOUNDS` is the
+recovered guard's own copy of that same box.
 """
 
 from __future__ import annotations

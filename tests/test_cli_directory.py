@@ -15,12 +15,14 @@ uses for its own subcommand.
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 
 import pytest
 
 from partner_scrape import cli
 from partner_scrape.directory import export as directory_export
+from partner_scrape.directory.pipeline import DEFAULT_GEO_DATA_DIR
 from partner_scrape.fetch import PoliteFetcher
 from partner_scrape.fetch.fetcher import FetchResponse
 
@@ -78,6 +80,25 @@ class _NeverCalledFetcher:
 def _make_site(root: Path) -> Path:
     (root / "src" / "data").mkdir(parents=True)
     return root
+
+
+def _write_real_partners_fixture(site_dir: Path) -> None:
+    """Ticket 004 (issue 48): the real, committed `places.toml` carries
+    17 `related_partner_id` references, and `run_directory()` now
+    validates those before export -- unconditionally, regardless of
+    `--dry-run` (mirrors ticket 003's own "runs unconditionally
+    regardless of --dry-run" convention in `pipeline.run()`). A test
+    that drives the real seeded registry needs a `partners.json` with a
+    matching `id` for each real reference. Parsed straight out of the
+    real `places.toml` text rather than hand-listed, so this can never
+    drift from the data it stands in for -- mirrors
+    `tests/directory/test_pipeline.py`'s identical fixture."""
+    text = (DEFAULT_GEO_DATA_DIR / "places.toml").read_text(encoding="utf-8")
+    ids = sorted({int(m) for m in re.findall(r"related_partner_id\s*=\s*(\d+)", text)})
+    data_dir = site_dir / "src" / "data"
+    data_dir.mkdir(parents=True, exist_ok=True)
+    partners = [{"id": pid, "name": f"Fixture Partner {pid}"} for pid in ids]
+    (data_dir / "partners.json").write_text(json.dumps(partners), encoding="utf-8")
 
 
 class TestArgumentWiring:
@@ -237,7 +258,17 @@ class TestDirectoryEndToEnd:
     ):
         monkeypatch.setattr(cli, "PoliteFetcher", lambda: _NeverCalledFetcher())
 
+        # ticket 004 (issue 48): the real registry's related_partner_id
+        # references are now validated unconditionally, even under
+        # --dry-run, so a fixture partners.json must already exist at
+        # site_dir for this real-registry run to complete -- this is
+        # the test's own setup, not something the dry run itself
+        # writes. "no disk write" below is narrowed from "site_dir was
+        # never created" to "no places.json/clubs.json was ever
+        # written", which is what --dry-run actually promises.
         site_dir = tmp_path / "site"
+        _write_real_partners_fixture(site_dir)
+
         exit_code = cli.main(
             ["directory", "--dry-run", "-v", "--site-dir", str(site_dir)]
         )
@@ -246,12 +277,14 @@ class TestDirectoryEndToEnd:
         out = capsys.readouterr().out
         assert "19" in out
         assert "dry run" in out.lower()
-        assert not site_dir.exists()
+        assert not (site_dir / "src" / "data" / "places.json").exists()
+        assert not (site_dir / "public" / "data" / "places.json").exists()
 
     def test_real_run_writes_places_json(self, monkeypatch, tmp_path):
         monkeypatch.setattr(cli, "PoliteFetcher", lambda: _NeverCalledFetcher())
 
         site_dir = _make_site(tmp_path / "site")
+        _write_real_partners_fixture(site_dir)
 
         exit_code = cli.main(["directory", "--site-dir", str(site_dir)])
 
@@ -265,6 +298,7 @@ class TestDirectoryEndToEnd:
         monkeypatch.setattr(cli, "PoliteFetcher", lambda: _NeverCalledFetcher())
 
         site_dir = _make_site(tmp_path / "site")
+        _write_real_partners_fixture(site_dir)
         cli.main(["directory", "--site-dir", str(site_dir)])
 
         assert not list(tmp_path.rglob("opportunities.json"))

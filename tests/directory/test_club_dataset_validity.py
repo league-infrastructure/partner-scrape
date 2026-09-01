@@ -15,13 +15,32 @@ regresses one of these is caught directly.
 
 from __future__ import annotations
 
+import json
+import re
 from pathlib import Path
 
 from partner_scrape.directory.model import VALID_CLUB_TYPES
-from partner_scrape.directory.pipeline import run_directory
+from partner_scrape.directory.pipeline import DEFAULT_GEO_DATA_DIR, run_directory
 from partner_scrape.directory.sources.base import run_club_source
 from partner_scrape.directory.sources.hack_club_static_roster import HackClubStaticRosterSource
 from partner_scrape.registry.loader import load_active_sources
+
+# -- ticket 004 (issue 48): the real, committed places.toml carries 17
+# related_partner_id references; run_directory() now validates those
+# before export, so this class's real-registry-against-a-fake-site_dir
+# pattern needs a partners.json fixture with a matching `id` for each
+# one. Parsed straight out of the real places.toml text rather than
+# hand-listed, so this can never drift from the data it stands in for
+# -- mirrors tests/directory/test_pipeline.py's identical fixture. ----
+
+
+def _write_real_partners_fixture(site_dir: Path) -> None:
+    text = (DEFAULT_GEO_DATA_DIR / "places.toml").read_text(encoding="utf-8")
+    ids = sorted({int(m) for m in re.findall(r"related_partner_id\s*=\s*(\d+)", text)})
+    data_dir = site_dir / "src" / "data"
+    data_dir.mkdir(parents=True, exist_ok=True)
+    partners = [{"id": pid, "name": f"Fixture Partner {pid}"} for pid in ids]
+    (data_dir / "partners.json").write_text(json.dumps(partners), encoding="utf-8")
 
 DIRECTORY_REGISTRY_DIR = (
     Path(__file__).resolve().parents[2] / "partner_scrape" / "directory" / "registry"
@@ -115,6 +134,7 @@ class TestRealPipelineGeocodingResolvesEveryChapterHonestly:
     fixture stand-in."""
 
     def _real_geocoded_clubs(self, tmp_path):
+        _write_real_partners_fixture(tmp_path / "unused")
         payload = run_directory(
             fetcher=_NeverCalledFetcher(), dry_run=True, site_dir=tmp_path / "unused"
         )
