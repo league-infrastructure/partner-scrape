@@ -53,26 +53,26 @@ input, regardless of what the model would have done with it.
 
 ## Acceptance Criteria
 
-- [ ] `gather_description_content(html, page_url)` returns content that
+- [x] `gather_description_content(html, page_url)` returns content that
       includes a page's `<meta name="description">` tag content when
       present.
-- [ ] A page with no meta description but a title and headings still
+- [x] A page with no meta description but a title and headings still
       returns usable bounded content (title/heading/body text).
-- [ ] A page whose body text contains an email address in prose (e.g.
+- [x] A page whose body text contains an email address in prose (e.g.
       "Contact us at team1234@school.org for more info") returns content
       with that address stripped — a dedicated, explicit test for this,
       not incidental coverage.
-- [ ] A page with no extractable content (parked-domain placeholder,
+- [x] A page with no extractable content (parked-domain placeholder,
       pure-JS shell) returns an empty string.
-- [ ] Malformed/unparseable HTML returns an empty string with a logged
+- [x] Malformed/unparseable HTML returns an empty string with a logged
       warning, never raises — matching
       `sponsor_candidates.gather_sponsor_candidates()`'s existing
       precedent exactly.
-- [ ] The returned content never exceeds a documented, named character
+- [x] The returned content never exceeds a documented, named character
       cap (a module-level constant, mirroring
       `sponsor_candidates.MAX_CANDIDATES`'s convention of a single named
       constant, not a magic number).
-- [ ] Fixtures are captured from or representative of real team-site HTML
+- [x] Fixtures are captured from or representative of real team-site HTML
       shapes, not hand-authored approximations — matching this project's
       own sprint 011 ticket-011-003 lesson (already on record: a
       hand-authored fixture silently passed every unit test while the
