@@ -481,10 +481,23 @@ class TestTbaFailureIsolation:
     `static_roster` (48, the real committed FLL roster -- it never
     touches the fetcher, so a TBA-only failure never isolates it):
     200 total, not 152. TBA remains the only source these tests make
-    fail."""
+    fail.
+
+    Sprint 023 ticket 002: every test below that asserts an exact
+    `credential_failures` value also sets `ROBOTEVENTS_KEY` to a
+    fixture key (without registering any RobotEvents fixture response)
+    -- this makes RobotEvents' own acquisition raise a plain `KeyError`
+    from the fixture Fetcher (an unregistered URL), not
+    `config.CredentialError`, so it is isolated as an ordinary failure
+    and never contributes a spurious `"VEX"` to `credential_failures`
+    regardless of whether the real `ROBOTEVENTS_KEY` happens to be set
+    in whatever environment runs this suite. Mirrors
+    `TestRobotEventsFailureIsolation`'s identical existing convention
+    of setting `TBA_KEY` to isolate that class's own target failure."""
 
     def test_missing_tba_key_still_publishes_ftc_and_fll_200_teams(self, monkeypatch, tmp_path):
         monkeypatch.delenv("TBA_KEY", raising=False)
+        monkeypatch.setenv("ROBOTEVENTS_KEY", "fixture-test-key")
         fetcher = _ftc_and_tba_fetcher()
 
         payload = run_teams(site_dir=tmp_path, fetcher=fetcher, dry_run=True)
@@ -495,9 +508,13 @@ class TestTbaFailureIsolation:
         # The TBA status probe was never even attempted -- the missing
         # key is caught in _auth_headers() before any fetcher.get().
         assert TBA_STATUS_URL not in fetcher.calls
+        # Sprint 023 ticket 002 AC: the same failure also lands as an
+        # active payload signal, not just the aggregate log warning.
+        assert payload["meta"]["credential_failures"] == ["FRC"]
 
     def test_tba_401_still_publishes_ftc_and_fll_200_teams(self, monkeypatch, tmp_path):
         monkeypatch.setenv("TBA_KEY", "fixture-test-key")
+        monkeypatch.setenv("ROBOTEVENTS_KEY", "fixture-test-key")
         fetcher = FixtureFetcher(
             {
                 SEARCH_URL: _fixture_response("ftcscout_search.json"),
@@ -509,11 +526,14 @@ class TestTbaFailureIsolation:
 
         assert payload["meta"]["total"] == 200
         assert payload["meta"]["by_league"] == {"FTC": 152, "FLL": 48}
+        # Sprint 023 ticket 002 AC.
+        assert payload["meta"]["credential_failures"] == ["FRC"]
 
     def test_missing_tba_key_writes_a_valid_teams_json_to_disk(self, monkeypatch, tmp_path):
         # Not just dry_run -- confirm the degraded run still writes a
         # real, valid teams.json rather than nothing at all.
         monkeypatch.delenv("TBA_KEY", raising=False)
+        monkeypatch.setenv("ROBOTEVENTS_KEY", "fixture-test-key")
         fetcher = _ftc_and_tba_fetcher()
         site = _make_site(tmp_path)
 
@@ -522,6 +542,31 @@ class TestTbaFailureIsolation:
         written = json.loads((site / "src" / "data" / "teams.json").read_text())
         assert written["meta"]["total"] == 200
         assert written["meta"]["by_league"] == {"FTC": 152, "FLL": 48}
+        # Sprint 023 ticket 002 AC: real-write path carries the same
+        # active signal as dry_run, read back off disk (not just the
+        # in-memory payload).
+        assert written["meta"]["credential_failures"] == ["FRC"]
+
+    def test_tba_401_writes_a_valid_teams_json_to_disk(self, monkeypatch, tmp_path):
+        # Sprint 023 ticket 002 AC: the 401 case, mirroring
+        # test_missing_tba_key_writes_a_valid_teams_json_to_disk's own
+        # real-write pattern exactly, one credential-failure mode over.
+        monkeypatch.setenv("TBA_KEY", "fixture-test-key")
+        monkeypatch.setenv("ROBOTEVENTS_KEY", "fixture-test-key")
+        fetcher = FixtureFetcher(
+            {
+                SEARCH_URL: _fixture_response("ftcscout_search.json"),
+                TBA_STATUS_URL: FetchResponse(url="", status=401, headers={}, body="{}"),
+            }
+        )
+        site = _make_site(tmp_path)
+
+        run_teams(site_dir=site, fetcher=fetcher, dry_run=False)
+
+        written = json.loads((site / "src" / "data" / "teams.json").read_text())
+        assert written["meta"]["total"] == 200
+        assert written["meta"]["by_league"] == {"FTC": 152, "FLL": 48}
+        assert written["meta"]["credential_failures"] == ["FRC"]
 
     def test_missing_tba_key_logs_exactly_one_aggregate_credential_warning_naming_frc(
         self, monkeypatch, tmp_path, caplog
@@ -590,6 +635,8 @@ class TestRobotEventsFailureIsolation:
         # The RobotEvents probe was never even attempted -- the missing
         # key is caught in _auth_headers() before any fetcher.get().
         assert ROBOTEVENTS_PROBE_URL not in fetcher.calls
+        # Sprint 023 ticket 002 AC.
+        assert payload["meta"]["credential_failures"] == ["VEX"]
 
     def test_robotevents_401_still_publishes_207_teams(self, monkeypatch, tmp_path):
         monkeypatch.setenv("TBA_KEY", "fixture-test-key")
@@ -605,6 +652,8 @@ class TestRobotEventsFailureIsolation:
 
         assert payload["meta"]["total"] == 207
         assert payload["meta"]["by_league"] == {"FTC": 152, "FRC": 7, "FLL": 48}
+        # Sprint 023 ticket 002 AC.
+        assert payload["meta"]["credential_failures"] == ["VEX"]
 
     def test_missing_robotevents_key_writes_a_valid_teams_json_to_disk(self, monkeypatch, tmp_path):
         monkeypatch.setenv("TBA_KEY", "fixture-test-key")
@@ -617,6 +666,30 @@ class TestRobotEventsFailureIsolation:
         written = json.loads((site / "src" / "data" / "teams.json").read_text())
         assert written["meta"]["total"] == 207
         assert written["meta"]["by_league"] == {"FTC": 152, "FRC": 7, "FLL": 48}
+        # Sprint 023 ticket 002 AC: real-write path, read back off disk.
+        assert written["meta"]["credential_failures"] == ["VEX"]
+
+    def test_robotevents_401_writes_a_valid_teams_json_to_disk(self, monkeypatch, tmp_path):
+        # Sprint 023 ticket 002 AC: the 401 case, mirroring
+        # test_missing_robotevents_key_writes_a_valid_teams_json_to_disk's
+        # own real-write pattern exactly, one credential-failure mode
+        # over.
+        monkeypatch.setenv("TBA_KEY", "fixture-test-key")
+        monkeypatch.setenv("ROBOTEVENTS_KEY", "fixture-test-key")
+        responses = {
+            SEARCH_URL: _fixture_response("ftcscout_search.json"),
+            **_tba_responses(),
+            ROBOTEVENTS_PROBE_URL: FetchResponse(url="", status=401, headers={}, body="{}"),
+        }
+        fetcher = FixtureFetcher(responses)
+        site = _make_site(tmp_path)
+
+        run_teams(site_dir=site, fetcher=fetcher, dry_run=False)
+
+        written = json.loads((site / "src" / "data" / "teams.json").read_text())
+        assert written["meta"]["total"] == 207
+        assert written["meta"]["by_league"] == {"FTC": 152, "FRC": 7, "FLL": 48}
+        assert written["meta"]["credential_failures"] == ["VEX"]
 
     def test_missing_robotevents_key_logs_exactly_one_aggregate_credential_warning_naming_vex(
         self, monkeypatch, tmp_path, caplog
@@ -760,6 +833,37 @@ class TestRobotEventsIntegration:
         assert by_id["vex-90210A"]["organization"] == "Poway High School"
         assert by_id["vex-90210A"]["org_key"] != ""
         assert "location_precision" in by_id["vex-90210A"]
+
+
+class TestCredentialFailuresMeta:
+    """Sprint 023 ticket 002's own clean-run AC: when every credentialed
+    source (TBA, RobotEvents) succeeds, `meta.credential_failures` is
+    present and empty -- never an absent key, never a stale value from
+    a prior run. Reuses `TestRobotEventsIntegration`'s own all-three-
+    keyed-sources-succeed fixture (the only scenario in this file where
+    neither TBA nor RobotEvents fails)."""
+
+    def test_a_fully_successful_run_reports_no_credential_failures(self, monkeypatch, tmp_path):
+        monkeypatch.setenv("TBA_KEY", "fixture-test-key")
+        monkeypatch.setenv("ROBOTEVENTS_KEY", "fixture-test-key")
+        fetcher = _ftc_tba_and_robotevents_fetcher()
+
+        payload = run_teams(site_dir=tmp_path, fetcher=fetcher, dry_run=True)
+
+        assert payload["meta"]["credential_failures"] == []
+
+    def test_a_fully_successful_real_write_run_reports_no_credential_failures(
+        self, monkeypatch, tmp_path
+    ):
+        monkeypatch.setenv("TBA_KEY", "fixture-test-key")
+        monkeypatch.setenv("ROBOTEVENTS_KEY", "fixture-test-key")
+        fetcher = _ftc_tba_and_robotevents_fetcher()
+        site = _make_site(tmp_path)
+
+        run_teams(site_dir=site, fetcher=fetcher, dry_run=False)
+
+        written = json.loads((site / "src" / "data" / "teams.json").read_text())
+        assert written["meta"]["credential_failures"] == []
 
 
 class TestGeocodingAggregateDistribution:

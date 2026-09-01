@@ -54,6 +54,7 @@ from partner_scrape.fetch.fetcher import FetchResponse
 from partner_scrape.teams import export
 from partner_scrape.teams.export import (
     TEAMS_SCHEMA_FIELDS,
+    _build_meta,
     _natural_number_key,
     export_teams,
     to_json_dict,
@@ -414,6 +415,44 @@ class TestPayloadShape:
         written = json.loads((site / "src" / "data" / "teams.json").read_text())
         assert written["meta"]["total"] == 1
         assert written["teams"][0]["team_id"] == "ftc-1622"
+
+
+class TestCredentialFailuresMeta:
+    """Sprint 023 ticket 002 AC: `_build_meta()`/`export_teams()` publish
+    an always-present, sorted, de-duplicated `credential_failures` key
+    -- `[]` when none were passed, the active counterpart to
+    `by_league`'s passive omission signal."""
+
+    def test_build_meta_sorts_and_dedupes_a_non_empty_list(self):
+        meta = _build_meta([], ["VEX", "FRC", "FRC"])
+
+        assert meta["credential_failures"] == ["FRC", "VEX"]
+
+    def test_build_meta_defaults_to_empty_list_when_omitted(self):
+        meta = _build_meta([])
+
+        assert meta["credential_failures"] == []
+
+    def test_build_meta_empty_list_input_yields_empty_list(self):
+        meta = _build_meta([], [])
+
+        assert meta["credential_failures"] == []
+
+    def test_export_teams_threads_credential_failures_into_meta(self, tmp_path):
+        site = _make_site(tmp_path)
+
+        payload = export_teams(
+            [_make_team()], site_dir=site, credential_failures=["FRC", "VEX", "FRC"]
+        )
+
+        assert payload["meta"]["credential_failures"] == ["FRC", "VEX"]
+
+    def test_export_teams_omitted_credential_failures_yields_empty_list_in_meta(self, tmp_path):
+        site = _make_site(tmp_path)
+
+        payload = export_teams([_make_team()], site_dir=site)
+
+        assert payload["meta"]["credential_failures"] == []
 
 
 class TestDryRun:

@@ -174,6 +174,20 @@ isolation, it does not change the isolation itself. `_SOURCE_LEAGUES`
 below is this addition's own private `adapter_type -> League` lookup,
 matching `_TEAM_SOURCES`'s existing "private lookup local to the one
 caller that needs it" convention, not a new public registry.
+
+Sprint 023 ticket 002 adds a *third* signal, this time in the
+published artifact itself rather than the run log: the same league
+codes collected into `credential_failures` above are threaded through
+`export_teams()`'s new `credential_failures` parameter into
+`teams.export._build_meta()`, which publishes them as an always-
+present, sorted, de-duplicated `meta.credential_failures` key in
+`teams.json` (`[]` on a clean run). Ticket 001's aggregate log warning
+is only visible to whoever captures that specific run's log; this
+extends the same signal into the artifact that actually ships and gets
+read downstream (issue 62's own text: the existing `by_league`-omission
+signal is "a much weaker guarantee than an active alert"). See
+`export.py`'s own module docstring and `_build_meta()`'s docstring for
+the payload side of this.
 """
 
 from __future__ import annotations
@@ -335,6 +349,12 @@ def run_teams(
     No new parameter here: the alert is unconditional whenever a
     credential failure occurs, mirroring `_check_sunset_seasons()`'s
     own no-opt-out design.
+
+    Sprint 023 ticket 002: the same affected league codes are also
+    threaded, unconditionally, into `export_teams()`'s
+    `credential_failures` parameter, so they land as an always-present
+    `meta.credential_failures` key in the returned/written `teams.json`
+    payload itself -- `[]` on a clean run -- not just in this run's log.
 
     Args:
         registry_dir: Team Registry directory to load sources from.
@@ -644,4 +664,16 @@ def run_teams(
             teams, fetch_results, active_description_llm_client, active_description_cache
         )
 
-    return export_teams(teams, site_dir=site_dir, dry_run=dry_run)
+    # Sprint 023 ticket 002: thread the league codes collected above
+    # into export_teams()'s new credential_failures parameter, so the
+    # aggregate warning above (a signal only whoever captures this
+    # run's log sees) is joined by an always-present, active payload
+    # signal in teams.json itself -- export_teams()/_build_meta() sort
+    # and de-duplicate, so passing every (possibly repeated) league
+    # here as-is is sufficient.
+    return export_teams(
+        teams,
+        site_dir=site_dir,
+        dry_run=dry_run,
+        credential_failures=[league for _, _, league, _ in credential_failures],
+    )
