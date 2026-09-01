@@ -1,7 +1,7 @@
 ---
 id: '004'
 title: Description extraction orchestration and pipeline wiring
-status: in-progress
+status: done
 use-cases:
 - SUC-023
 depends-on:
