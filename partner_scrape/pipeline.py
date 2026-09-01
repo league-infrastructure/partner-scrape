@@ -37,6 +37,7 @@ from __future__ import annotations
 
 import concurrent.futures
 import contextlib
+import json
 import logging
 import threading
 from dataclasses import dataclass
@@ -56,8 +57,13 @@ from partner_scrape.export import (
 from partner_scrape.fetch import Fetcher, PlaywrightFetcher, PoliteFetcher
 from partner_scrape.model import Event
 from partner_scrape.normalize import run as normalize_run
+from partner_scrape.normalize.partners import load_partners
 from partner_scrape.registry import load_active_sources
 from partner_scrape.registry.schema import SourceConfig
+from partner_scrape.registry.validate_roster import (
+    find_unresolved_active_sources,
+    validate_roster,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -555,6 +561,45 @@ def run(
         if partners_path is not None
         else resolved_site_dir / "src" / "data" / "partners.json"
     )
+
+    # Roster data-quality and join-integrity validation (issue 48,
+    # ticket 003) -- runs here, immediately after `resolved_partners_path`
+    # is computed and before it's used by `normalize_run()` or
+    # `partner_log.record()` below. Unconditional: runs regardless of
+    # `dry_run`, exactly like every other computation at this point in
+    # `run()` -- validating a would-be-written export payload before
+    # it's computed is exactly as valuable as validating a written one.
+    #
+    # Content checks (`validate_roster`): self-contained defects in
+    # `partners.json` itself (bad geocode, hijacked domain, duplicate
+    # slug, ...). Deliberately fatal and uncaught -- a structural data
+    # problem, not a per-source isolated error (contrast with
+    # `_run_one_source`'s try/except-and-continue convention above,
+    # which this is not). Must run on the **raw** partner list
+    # (`json.loads`), never `normalize.partners.load_partners()`'s
+    # name-deduplicated `partners_by_norm` -- see `validate_roster`'s
+    # own module docstring for why only the raw list can catch issue
+    # 46's exact failure mode (a duplicate-slug collision).
+    raw_partners = json.loads(resolved_partners_path.read_text(encoding="utf-8"))
+    validate_roster(raw_partners)
+
+    # Join-integrity check: registry sources whose `org_name` has no
+    # `partners.json` match. Never raises -- real production data has a
+    # live, currently-nonzero gap here (see `find_unresolved_active_
+    # sources`'s own docstring), so this is logged as a warning and the
+    # run continues. A second, independent read of the same small file
+    # (accepted per sprint.md's Migration Concerns) rather than adapting
+    # `raw_partners` in memory, so this reuses `normalize.partners`'s own
+    # normalized-name join logic instead of duplicating it here.
+    partners_by_norm = load_partners(resolved_partners_path)
+    unresolved_org_names = find_unresolved_active_sources(sources, partners_by_norm)
+    if unresolved_org_names:
+        logger.warning(
+            "%d active source(s) have no partners.json match (org_name): %s",
+            len(unresolved_org_names),
+            ", ".join(unresolved_org_names),
+        )
+
     source_org_names = {source.source_id: source.org_name for source in sources}
     # Sprint 015 ticket 008, issue 27 item 3: identical shape and
     # construction site as `source_org_names` above -- `normalize.run()`

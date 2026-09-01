@@ -5,7 +5,11 @@ sequencing, for both Places (ticket 007) and Clubs (ticket 018-008).
 
 from __future__ import annotations
 
+import json
+import re
 from pathlib import Path
+
+import pytest
 
 from partner_scrape.directory.model import Club, Place
 from partner_scrape.directory.pipeline import (
@@ -15,7 +19,9 @@ from partner_scrape.directory.pipeline import (
     _apply_geo_fallback,
     run_directory,
 )
+from partner_scrape.directory.sources.base import PlaceRef, RawPlaceResponse
 from partner_scrape.fetch.fetcher import FetchResponse
+from partner_scrape.registry.validate_roster import RosterValidationError
 
 # -- fixture geo data dir, mirroring tests/teams/test_geo.py's own
 # "small, hand-authored fixture data directory" pattern rather than
@@ -67,6 +73,35 @@ def _build_geo_data_dir(
 class _NeverCalledFetcher:
     def get(self, url: str, headers=None) -> FetchResponse:
         raise AssertionError("must never call the injected Fetcher")
+
+
+# -- ticket 004 (issue 48): real-data tests below now dispatch through
+# the real static_roster source, whose real, committed places.toml
+# carries 17 related_partner_id references (see this ticket's Notes).
+# run_directory() now validates those references before export, so any
+# test exercising the real registry against a fake site_dir needs a
+# partners.json fixture with a matching `id` for each one. Parsed
+# straight out of the real places.toml text rather than hand-listed, so
+# this fixture can never drift from the data it stands in for -- and
+# never a duplicate committed copy of the real partners.json itself
+# (sprint.md Scope > Out of Scope). --------------------------------
+
+
+def _real_related_partner_ids() -> list[int]:
+    text = (DEFAULT_GEO_DATA_DIR / "places.toml").read_text(encoding="utf-8")
+    return sorted({int(m) for m in re.findall(r"related_partner_id\s*=\s*(\d+)", text)})
+
+
+def _write_real_partners_fixture(site_dir: Path) -> None:
+    """Write a `partners.json` at `{site_dir}/src/data/partners.json`
+    with a fixture row for every id `_real_related_partner_ids()` finds
+    -- enough for `check_partner_references()` to resolve every real
+    reference, without asserting anything about the fixture rows'
+    content beyond their `id`."""
+    data_dir = site_dir / "src" / "data"
+    data_dir.mkdir(parents=True, exist_ok=True)
+    partners = [{"id": pid, "name": f"Fixture Partner {pid}"} for pid in _real_related_partner_ids()]
+    (data_dir / "partners.json").write_text(json.dumps(partners), encoding="utf-8")
 
 
 class TestApplyGeoFallback:
@@ -270,6 +305,7 @@ class TestRunDirectoryRealFixtureData:
     tests."""
 
     def test_dry_run_reports_19_places_with_no_network(self, tmp_path):
+        _write_real_partners_fixture(tmp_path / "unused")
         payload = run_directory(
             fetcher=_NeverCalledFetcher(), dry_run=True, site_dir=tmp_path / "unused"
         )
@@ -282,6 +318,7 @@ class TestRunDirectoryRealFixtureData:
         assert DEFAULT_PLACES_REGISTRY_DIR.parent.name == "directory"
 
     def test_atlas_labs_resolves_via_the_real_zip_centroid_fallback(self, tmp_path):
+        _write_real_partners_fixture(tmp_path / "unused")
         payload = run_directory(
             fetcher=_NeverCalledFetcher(), dry_run=True, site_dir=tmp_path / "unused"
         )
@@ -297,6 +334,7 @@ class TestRunDirectoryRealFixtureData:
         # populated directory/data/ school directories -- not a fixture
         # copy, the same "trust the real data" precedent this class
         # already applies to Places.
+        _write_real_partners_fixture(tmp_path / "unused")
         payload = run_directory(
             fetcher=_NeverCalledFetcher(), dry_run=True, site_dir=tmp_path / "unused"
         )
@@ -307,6 +345,7 @@ class TestRunDirectoryRealFixtureData:
     def test_every_real_hack_club_chapter_resolves_to_school_precision_never_a_guess(
         self, tmp_path
     ):
+        _write_real_partners_fixture(tmp_path / "unused")
         payload = run_directory(
             fetcher=_NeverCalledFetcher(), dry_run=True, site_dir=tmp_path / "unused"
         )
@@ -323,6 +362,7 @@ class TestRunDirectoryRealFixtureData:
         # record is named "Helix High" -- a legitimate rung-3
         # same-city fuzzy match, not an exact one, so it is flagged
         # rather than silently trusted. See directory/DESIGN.md.
+        _write_real_partners_fixture(tmp_path / "unused")
         payload = run_directory(
             fetcher=_NeverCalledFetcher(), dry_run=True, site_dir=tmp_path / "unused"
         )
@@ -333,6 +373,7 @@ class TestRunDirectoryRealFixtureData:
         assert needing_review == {"hack-club-helix-charter-high"}
 
     def test_public_school_chapters_carry_the_matched_schools_own_website(self, tmp_path):
+        _write_real_partners_fixture(tmp_path / "unused")
         payload = run_directory(
             fetcher=_NeverCalledFetcher(), dry_run=True, site_dir=tmp_path / "unused"
         )
@@ -348,6 +389,7 @@ class TestRunDirectoryRealFixtureData:
 
 class TestSourceFilter:
     def test_source_filter_by_adapter_type_matches_the_real_registry(self, tmp_path):
+        _write_real_partners_fixture(tmp_path / "unused")
         payload = run_directory(
             source="static_roster",
             fetcher=_NeverCalledFetcher(),
@@ -429,6 +471,7 @@ class TestPerSourceErrorIsolation:
             pipeline_module._CLUB_SOURCES, "hack_club_static_roster", _BoomingSource()
         )
 
+        _write_real_partners_fixture(tmp_path / "unused")
         payload = run_directory(
             fetcher=_NeverCalledFetcher(), dry_run=True, site_dir=tmp_path / "unused"
         )
@@ -451,7 +494,7 @@ class TestPerSourceErrorIsolation:
         assert payload["clubs_meta"]["total"] == 4
 
     def test_combined_dispatch_never_logs_a_spurious_place_warning_for_a_real_club_entry(
-        self, caplog
+        self, tmp_path, caplog
     ):
         # Regression guard for the "one combined loop, not two separate
         # ones" design decision (see pipeline.py's own module
@@ -460,9 +503,164 @@ class TestPerSourceErrorIsolation:
         # "no PlaceSource registered" warning.
         import logging
 
+        _write_real_partners_fixture(tmp_path / "unused")
         with caplog.at_level(logging.WARNING):
-            run_directory(fetcher=_NeverCalledFetcher(), dry_run=True, site_dir="unused")
+            run_directory(
+                fetcher=_NeverCalledFetcher(), dry_run=True, site_dir=tmp_path / "unused"
+            )
 
         assert not any(
             "no placesource registered" in record.message.lower() for record in caplog.records
         )
+
+
+class _FixedPlaceSource:
+    """A `PlaceSource` fixture that ignores discover/fetch and hands
+    back a fixed, caller-supplied `Place` list from `extract()` --
+    mirrors `_BoomingSource`'s "monkeypatch `_PLACE_SOURCES['static_
+    roster']`" injection pattern above, but yields real records instead
+    of raising."""
+
+    def __init__(self, places: list[Place]) -> None:
+        self._places = places
+
+    def discover(self, source, fetcher):
+        return [PlaceRef(url="fixture://places")]
+
+    def fetch(self, ref, fetcher):
+        return RawPlaceResponse(ref=ref, status=200, body="")
+
+    def extract(self, raw, source):
+        return self._places
+
+
+def _write_static_roster_only_registry(tmp_path: Path) -> Path:
+    """A registry dir with only a `static_roster`-adapter_type entry --
+    no `hack_club_static_roster` entry -- so a test's injected
+    `_FixedPlaceSource` is the only source `run_directory()` dispatches
+    to, matching `TestPerSourceErrorIsolation`'s own registry-dir
+    fixture pattern."""
+    registry_dir = tmp_path / "registry"
+    registry_dir.mkdir()
+    (registry_dir / "places.toml").write_text(
+        'org_name = "Fixture Places"\nadapter_type = "static_roster"\nenabled = true\n'
+        "[config]\n",
+        encoding="utf-8",
+    )
+    return registry_dir
+
+
+class TestRelatedPartnerIdJoinIntegrity:
+    """Recovers, as pipeline-level validation, the join-integrity
+    guard `tests/directory/test_dataset_validity.py`'s deleted
+    `TestRelatedPartnerIdJoinIntegrity` class used to provide (issue
+    48, ticket 004). See `pipeline._check_related_partner_references()`'s
+    own docstring for the full rationale."""
+
+    def test_dangling_related_partner_id_raises_naming_both_ids(self, tmp_path, monkeypatch):
+        import partner_scrape.directory.pipeline as pipeline_module
+
+        registry_dir = _write_static_roster_only_registry(tmp_path)
+        monkeypatch.setitem(
+            pipeline_module._PLACE_SOURCES,
+            "static_roster",
+            _FixedPlaceSource(
+                [
+                    Place(
+                        place_id="orphan-place",
+                        name="Orphan Place",
+                        category="makerspace",
+                        related_partner_id=999,
+                    )
+                ]
+            ),
+        )
+
+        site_dir = tmp_path / "site"
+        data_dir = site_dir / "src" / "data"
+        data_dir.mkdir(parents=True)
+        (data_dir / "partners.json").write_text(
+            json.dumps([{"id": 1, "name": "Real Partner"}]), encoding="utf-8"
+        )
+
+        with pytest.raises(RosterValidationError) as excinfo:
+            run_directory(
+                registry_dir=registry_dir,
+                fetcher=_NeverCalledFetcher(),
+                dry_run=True,
+                site_dir=site_dir,
+            )
+
+        message = str(excinfo.value)
+        assert "orphan-place" in message
+        assert "999" in message
+
+    def test_valid_related_partner_id_does_not_raise(self, tmp_path, monkeypatch):
+        import partner_scrape.directory.pipeline as pipeline_module
+
+        registry_dir = _write_static_roster_only_registry(tmp_path)
+        monkeypatch.setitem(
+            pipeline_module._PLACE_SOURCES,
+            "static_roster",
+            _FixedPlaceSource(
+                [
+                    Place(
+                        place_id="matched-place",
+                        name="Matched Place",
+                        category="makerspace",
+                        related_partner_id=1,
+                    )
+                ]
+            ),
+        )
+
+        site_dir = tmp_path / "site"
+        data_dir = site_dir / "src" / "data"
+        data_dir.mkdir(parents=True)
+        (data_dir / "partners.json").write_text(
+            json.dumps([{"id": 1, "name": "Real Partner"}]), encoding="utf-8"
+        )
+
+        payload = run_directory(
+            registry_dir=registry_dir,
+            fetcher=_NeverCalledFetcher(),
+            dry_run=True,
+            site_dir=site_dir,
+        )
+
+        assert payload["meta"]["total"] == 1
+
+    def test_no_related_partner_id_set_succeeds_without_partners_json(
+        self, tmp_path, monkeypatch
+    ):
+        import partner_scrape.directory.pipeline as pipeline_module
+
+        registry_dir = _write_static_roster_only_registry(tmp_path)
+        monkeypatch.setitem(
+            pipeline_module._PLACE_SOURCES,
+            "static_roster",
+            _FixedPlaceSource(
+                [
+                    Place(
+                        place_id="unrelated-place",
+                        name="Unrelated Place",
+                        category="makerspace",
+                    )
+                ]
+            ),
+        )
+
+        # site_dir exists, but its src/data/partners.json deliberately
+        # does not -- no Place sets related_partner_id, so
+        # partners.json must never be read at all.
+        site_dir = tmp_path / "site"
+
+        payload = run_directory(
+            registry_dir=registry_dir,
+            fetcher=_NeverCalledFetcher(),
+            dry_run=True,
+            site_dir=site_dir,
+        )
+
+        assert payload["meta"]["total"] == 1
+        assert not (site_dir / "src" / "data" / "partners.json").exists()
