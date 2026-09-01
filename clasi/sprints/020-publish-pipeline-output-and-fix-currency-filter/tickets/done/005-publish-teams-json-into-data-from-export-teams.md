@@ -1,7 +1,7 @@
 ---
 id: '005'
 title: Publish teams.json into data/ from export_teams()
-status: in-progress
+status: done
 use-cases:
 - SUC-019
 depends-on:
