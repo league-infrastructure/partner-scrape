@@ -41,6 +41,7 @@ from pathlib import Path
 import pytest
 
 from partner_scrape import config
+from partner_scrape.config import CredentialError
 from partner_scrape.fetch.fetcher import FetchResponse
 from partner_scrape.registry.loader import load_active_sources
 from partner_scrape.registry.schema import SourceConfig
@@ -137,6 +138,14 @@ class TestAuthHeaders:
         with pytest.raises(RuntimeError):
             _auth_headers()
 
+    def test_raises_credential_error_specifically_when_key_is_unset(self, monkeypatch):
+        # Sprint 023 ticket 001: this propagates
+        # config.get_robotevents_api_key()'s own CredentialError, not
+        # just any RuntimeError.
+        monkeypatch.delenv("ROBOTEVENTS_KEY", raising=False)
+        with pytest.raises(CredentialError):
+            _auth_headers()
+
 
 class TestDiscover:
     def test_probes_page_one_then_returns_one_ref_per_page(self):
@@ -166,11 +175,29 @@ class TestDiscover:
 
         assert fetcher.calls == []  # never even attempted the probe
 
+    def test_missing_key_raises_credential_error_specifically(self, monkeypatch):
+        # Sprint 023 ticket 001 AC.
+        monkeypatch.delenv("ROBOTEVENTS_KEY", raising=False)
+        source_obj = VexTeamSource()
+        fetcher = _full_fetcher()
+
+        with pytest.raises(CredentialError):
+            source_obj.discover(_source(), fetcher)
+
     def test_401_status_raises(self):
         source_obj = VexTeamSource()
         fetcher = FixtureFetcher({PROBE_URL: _response("{}", status=401)})
 
         with pytest.raises(RuntimeError, match="auth failed"):
+            source_obj.discover(_source(), fetcher)
+
+    def test_401_status_raises_credential_error_specifically(self):
+        # Sprint 023 ticket 001 AC: the 401 branch, and only the 401
+        # branch, raises the dedicated CredentialError subclass.
+        source_obj = VexTeamSource()
+        fetcher = FixtureFetcher({PROBE_URL: _response("{}", status=401)})
+
+        with pytest.raises(CredentialError):
             source_obj.discover(_source(), fetcher)
 
     def test_non_200_non_401_status_raises(self):
@@ -184,6 +211,16 @@ class TestDiscover:
         with pytest.raises(RuntimeError):
             source_obj.discover(_source(), fetcher)
 
+    def test_non_200_non_401_status_raises_plain_runtime_error_not_credential_error(self):
+        # Sprint 023 ticket 001 AC: every non-401 probe failure stays a
+        # plain RuntimeError, not the new CredentialError subclass.
+        source_obj = VexTeamSource()
+        fetcher = FixtureFetcher({PROBE_URL: _response("", status=500)})
+
+        with pytest.raises(RuntimeError) as exc_info:
+            source_obj.discover(_source(), fetcher)
+        assert not isinstance(exc_info.value, CredentialError)
+
     def test_unparseable_probe_body_raises(self):
         source_obj = VexTeamSource()
         fetcher = FixtureFetcher({PROBE_URL: _response("not json {")})
@@ -191,12 +228,28 @@ class TestDiscover:
         with pytest.raises(RuntimeError):
             source_obj.discover(_source(), fetcher)
 
+    def test_unparseable_probe_body_raises_plain_runtime_error_not_credential_error(self):
+        source_obj = VexTeamSource()
+        fetcher = FixtureFetcher({PROBE_URL: _response("not json {")})
+
+        with pytest.raises(RuntimeError) as exc_info:
+            source_obj.discover(_source(), fetcher)
+        assert not isinstance(exc_info.value, CredentialError)
+
     def test_missing_last_page_raises(self):
         source_obj = VexTeamSource()
         fetcher = FixtureFetcher({PROBE_URL: _response('{"meta": {}, "data": []}')})
 
         with pytest.raises(RuntimeError):
             source_obj.discover(_source(), fetcher)
+
+    def test_missing_last_page_raises_plain_runtime_error_not_credential_error(self):
+        source_obj = VexTeamSource()
+        fetcher = FixtureFetcher({PROBE_URL: _response('{"meta": {}, "data": []}')})
+
+        with pytest.raises(RuntimeError) as exc_info:
+            source_obj.discover(_source(), fetcher)
+        assert not isinstance(exc_info.value, CredentialError)
 
     def test_config_overrides_api_base_and_country(self):
         source_obj = VexTeamSource()

@@ -129,6 +129,15 @@ credential failure; raising here is exactly what lets
 ``teams.pipeline.run_teams()``'s existing per-source ``try``/``except``
 isolate it, degrading a ``teams`` run to non-VEX-only output, never
 aborting it).
+
+Sprint 023 ticket 001: a missing ``ROBOTEVENTS_KEY``
+(``config.get_robotevents_api_key()``) and a live 401 from the
+``/teams`` probe below both now raise ``config.CredentialError``
+specifically (not a bare ``RuntimeError``), mirroring
+``sources/tba.py``'s identical treatment -- see that class's own
+docstring for why. Every other probe failure (non-200 non-401,
+unparseable JSON, an invalid ``meta.last_page``) still raises plain
+``RuntimeError``, unchanged.
 """
 
 from __future__ import annotations
@@ -237,8 +246,8 @@ def _auth_headers() -> dict[str, str]:
     source instance -- source instances are constructed fresh per
     ``sources.base.run()`` call, matching ``sources/tba.py``'s and
     ``adapters/robotevents.py``'s ``_auth_headers()`` exactly. Raises
-    ``RuntimeError`` (uncaught here) when ``ROBOTEVENTS_KEY`` is unset --
-    this is deliberate: it is the "config-read failure"
+    ``config.CredentialError`` (uncaught here) when ``ROBOTEVENTS_KEY``
+    is unset -- this is deliberate: it is the "config-read failure"
     ``teams.pipeline.run_teams()``'s existing per-source isolation must
     catch, matching ``sources/tba.py``'s documented rationale for why
     this propagates rather than being caught locally.
@@ -312,15 +321,20 @@ class VexTeamSource:
         real (configured ``per_page``) page.
 
         Raises:
-            RuntimeError: on *any* probe failure -- a missing/invalid
-                ``ROBOTEVENTS_KEY`` (propagated uncaught from
-                ``_auth_headers()``, before any request is sent), a
-                non-200 probe response (including 401), unparseable JSON,
-                or a missing/invalid ``meta.last_page``. Matches
-                ``sources/tba.py``'s exact "raise on any probe failure,
-                never degrade" contract -- see this module's own
-                docstring for why that (not ``adapters/robotevents.py``'s
-                graceful degrade) is the right contract here.
+            config.CredentialError: a missing/invalid ``ROBOTEVENTS_KEY``
+                (propagated uncaught from ``_auth_headers()``, before
+                any request is sent) or a live 401 response from the
+                probe -- sprint 023 ticket 001's credential-specific
+                cases, mirroring ``sources/tba.py``'s identical
+                treatment.
+            RuntimeError: every other probe failure -- a non-200
+                non-401 status, unparseable JSON, or a missing/invalid
+                ``meta.last_page`` -- unchanged, still a plain
+                ``RuntimeError``. Matches ``sources/tba.py``'s exact
+                "raise on any probe failure, never degrade" contract --
+                see this module's own docstring for why that (not
+                ``adapters/robotevents.py``'s graceful degrade) is the
+                right contract here.
         """
         api_base = source.config.get("api_base") or config.get_robotevents_url()
         country = source.config.get("country") or ""
@@ -330,7 +344,7 @@ class VexTeamSource:
         response = fetcher.get(probe_url, headers=_auth_headers())
 
         if response.status == 401:
-            raise RuntimeError(
+            raise config.CredentialError(
                 f"RobotEvents auth failed (401) for {probe_url}; check ROBOTEVENTS_KEY"
             )
         if response.status != 200:

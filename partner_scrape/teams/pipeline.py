@@ -151,6 +151,29 @@ regardless of how many sources are stale, and never raises: a sunset
 date is a staleness signal for an operator to notice, not a reason to
 stop publishing what may still be the best available data (see
 `teams/DESIGN.md`'s Constraints).
+
+Sprint 023 ticket 001 adds a second alerting convention alongside
+`_check_sunset_seasons()`'s pre-flight one, this time inside the
+per-source loop itself: a source whose acquisition raises
+`config.CredentialError` (a missing/invalid `TBA_KEY`/
+`ROBOTEVENTS_KEY`, or a live 401 -- see that class's own docstring)
+still gets the exact same per-source `logger.exception()` ERROR log
+every other failure gets, unchanged, but is additionally recorded;
+once the per-source loop finishes, exactly one aggregate
+`logger.warning()` names every league/source that failed on a
+credential error, mirroring `_check_sunset_seasons()`'s own "never
+more than one log call regardless of how many are affected"
+convention. The point (issue 62) is telling a structural, recurring
+credential outage -- one an operator must fix, that will keep
+recurring on every run until they do -- apart from a one-off scrape
+hiccup that is indistinguishable from it today, without loosening the
+per-source isolation this loop already gives every failure: a
+credential failure still degrades, never aborts, the run -- this
+ticket only adds a *second*, additional signal on top of the existing
+isolation, it does not change the isolation itself. `_SOURCE_LEAGUES`
+below is this addition's own private `adapter_type -> League` lookup,
+matching `_TEAM_SOURCES`'s existing "private lookup local to the one
+caller that needs it" convention, not a new public registry.
 """
 
 from __future__ import annotations
@@ -161,6 +184,7 @@ from datetime import date
 from pathlib import Path
 from typing import Any
 
+from partner_scrape.config import CredentialError
 from partner_scrape.fetch import Fetcher, PoliteFetcher
 from partner_scrape.registry.loader import load_active_sources
 from partner_scrape.registry.schema import SourceConfig
@@ -206,6 +230,20 @@ _TEAM_SOURCES: dict[str, TeamSource] = {
     "tba": TBASource(),
     "static_roster": StaticRosterSource(),
     "robotevents": VexTeamSource(),
+}
+
+#: `adapter_type` -> `League` (`teams/model.py`'s `League` docstring) --
+#: sprint 023 ticket 001's own private lookup, matching `_TEAM_SOURCES`'s
+#: "private lookup local to the one caller that needs it" convention
+#: exactly, not a new public registry. Used only by `run_teams()`'s
+#: per-source loop below to name which league a `CredentialError`
+#: failure belongs to in the aggregate alert -- see this module's own
+#: docstring.
+_SOURCE_LEAGUES: dict[str, str] = {
+    "ftcscout": "FTC",
+    "tba": "FRC",
+    "static_roster": "FLL",
+    "robotevents": "VEX",
 }
 
 
@@ -287,6 +325,16 @@ def run_teams(
     -> `verify_team_websites()` -> `extract_sponsors()` ->
     `canonicalize_sponsors()` -> `extract_descriptions()` ->
     `export_teams()`.
+
+    Sprint 023 ticket 001: a source whose acquisition raises
+    `config.CredentialError` is still isolated by the per-source
+    `try`/`except` below exactly like any other failure -- logged at
+    ERROR with a traceback, skipped, run continues -- but is
+    additionally recorded, and once every source has run, exactly one
+    aggregate `logger.warning()` names every affected league/source.
+    No new parameter here: the alert is unconditional whenever a
+    credential failure occurs, mirroring `_check_sunset_seasons()`'s
+    own no-opt-out design.
 
     Args:
         registry_dir: Team Registry directory to load sources from.
@@ -404,6 +452,13 @@ def run_teams(
 
     active_fetcher = fetcher if fetcher is not None else PoliteFetcher()
 
+    # Sprint 023 ticket 001: recorded here, one entry per source whose
+    # acquisition raised config.CredentialError -- (source_id,
+    # adapter_type, league, message) -- and consumed once, after the
+    # loop below, to log exactly one aggregate warning. See this
+    # module's own docstring.
+    credential_failures: list[tuple[str, str, str, str]] = []
+
     teams: list[Team] = []
     for source_config in sources:
         team_source = _TEAM_SOURCES.get(source_config.adapter_type)
@@ -418,6 +473,28 @@ def run_teams(
 
         try:
             source_teams = run_team_source(source_config, team_source, active_fetcher)
+        except CredentialError as exc:
+            # Sprint 023 ticket 001: same per-source ERROR + traceback
+            # log as the plain-Exception branch below, unchanged -- a
+            # credential failure is still isolated exactly like any
+            # other failure, never fatal to the rest of the run. The
+            # only addition is recording it here so the aggregate
+            # warning after this loop can name it specifically; issue
+            # 62's complaint was never "we don't log it," it's that a
+            # structural, recurring credential outage looks identical,
+            # in both the log and teams.json, to a one-off scrape
+            # hiccup or a genuine empty result.
+            logger.exception(
+                "Team source %r (adapter_type=%r) failed; skipping it, "
+                "run continues with the remaining sources",
+                source_config.source_id,
+                source_config.adapter_type,
+            )
+            league = _SOURCE_LEAGUES.get(source_config.adapter_type, source_config.adapter_type)
+            credential_failures.append(
+                (source_config.source_id, source_config.adapter_type, league, str(exc))
+            )
+            continue
         except Exception:
             # Per-source error isolation, matching pipeline.run()'s own
             # SUC-008 contract: one broken source is logged and
@@ -425,7 +502,9 @@ def run_teams(
             # lets ticket 011-003's TBA outage handling (Migration
             # Concerns: "a missing TBA_KEY degrades to FTC-only
             # teams.json") fall straight out of this loop with no
-            # further change here.
+            # further change here. config.CredentialError is caught
+            # above, before this branch, so it never reaches here --
+            # everything else (a transient/one-off failure) still does.
             logger.exception(
                 "Team source %r (adapter_type=%r) failed; skipping it, "
                 "run continues with the remaining sources",
@@ -438,6 +517,27 @@ def run_teams(
             "Team source %r yielded %d team(s)", source_config.source_id, len(source_teams)
         )
         teams.extend(source_teams)
+
+    # Sprint 023 ticket 001: exactly one aggregate warning for the whole
+    # run if any source above failed on a credential error -- never more
+    # than one log call, matching _check_sunset_seasons()'s own
+    # convention -- and none at all when zero credential failures
+    # occurred. This is a second, additional signal on top of the
+    # per-source ERROR logs already emitted above; it does not change
+    # per-source isolation (every failed source was already skipped,
+    # the run already continued).
+    if credential_failures:
+        logger.warning(
+            "%d team source(s) failed on a credential error -- this is "
+            "structural and will recur on every run until an operator "
+            "fixes the credential (unlike a transient scrape failure): "
+            "%s. See config.CredentialError's own docstring.",
+            len(credential_failures),
+            ", ".join(
+                f"{league} ({source_id!r}, adapter_type={adapter_type!r}): {message}"
+                for source_id, adapter_type, league, message in credential_failures
+            ),
+        )
 
     # Cross-league organizational identity (teams.merge) needs the
     # full, combined Team[] from every source that succeeded above --

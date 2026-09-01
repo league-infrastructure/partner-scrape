@@ -41,7 +41,13 @@ before that comparison runs.
 ``_auth_headers()``, never cached on the source instance, matching
 ``adapters/leaguesync.py::_auth_headers``'s pattern exactly (source
 instances are constructed fresh per run -- see ``sources/base.py``'s
-``TeamSource`` docstring).
+``TeamSource`` docstring). Sprint 023 ticket 001: a missing ``TBA_KEY``
+(``config.get_tba_api_key()``) and a live 401 from the ``/status``
+probe below both now raise ``config.CredentialError`` specifically
+(not a bare ``RuntimeError``) -- see that class's own docstring for
+why. Every other probe failure (non-200 non-401, unparseable JSON, an
+invalid ``max_team_page``) still raises plain ``RuntimeError``,
+unchanged.
 
 **``discover()`` fails loudly; it does not degrade gracefully.**
 Unlike ``adapters/tec.py``'s pagination probe (which falls back to
@@ -185,11 +191,11 @@ def _auth_headers() -> dict[str, str]:
     rather than caching it on the source instance -- source instances
     are constructed fresh per ``sources.base.run()`` call, matching
     ``adapters/leaguesync.py``'s ``_auth_headers()`` docstring ("no
-    adapter-instance state to inject into"). Raises ``RuntimeError``
-    (uncaught here) when ``TBA_KEY`` is unset -- see this module's own
-    docstring for why that propagates all the way to
-    ``teams.pipeline.run_teams()``'s per-source isolation rather than
-    being caught locally.
+    adapter-instance state to inject into"). Raises
+    ``config.CredentialError`` (uncaught here) when ``TBA_KEY`` is
+    unset -- see this module's own docstring for why that propagates
+    all the way to ``teams.pipeline.run_teams()``'s per-source
+    isolation rather than being caught locally.
     """
     return {"X-TBA-Auth-Key": config.get_tba_api_key()}
 
@@ -328,18 +334,29 @@ class TBASource:
         """Probe ``/api/v3/status`` for ``max_team_page``, then return
         one ``TeamRef`` per page (``0..max_team_page`` inclusive).
 
-        Raises ``RuntimeError`` -- deliberately, not caught here -- on
-        a missing/invalid credential, a non-200 probe response, an
-        unparseable body, or a missing/invalid ``max_team_page``. See
-        this module's docstring for why raising (not degrading) is the
-        right contract for TBA specifically.
+        Raises -- deliberately, not caught here -- on a missing/invalid
+        credential or a non-200 probe response, an unparseable body, or
+        a missing/invalid ``max_team_page``. See this module's
+        docstring for why raising (not degrading) is the right contract
+        for TBA specifically.
+
+        Raises:
+            config.CredentialError: a missing/invalid ``TBA_KEY``
+                (propagated uncaught from ``_auth_headers()``, before
+                any request is sent) or a live 401 response from the
+                ``/status`` probe -- sprint 023 ticket 001's
+                credential-specific cases.
+            RuntimeError: every other probe failure -- a non-200
+                non-401 status, unparseable JSON, or an invalid
+                ``max_team_page`` -- unchanged, still a plain
+                ``RuntimeError``.
         """
         api_base = source.config.get("api_base") or config.get_tba_url()
         status_url = _status_url(api_base)
         response = fetcher.get(status_url, headers=_auth_headers())
 
         if response.status == 401:
-            raise RuntimeError(
+            raise config.CredentialError(
                 f"TBA auth failed (401) for {status_url}; check TBA_KEY"
             )
         if response.status != 200:

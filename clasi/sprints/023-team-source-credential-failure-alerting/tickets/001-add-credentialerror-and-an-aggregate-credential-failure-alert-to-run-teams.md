@@ -41,45 +41,45 @@ reasoning behind this approach.
 
 ## Acceptance Criteria
 
-- [ ] `partner_scrape/config.py` defines `CredentialError(RuntimeError)`
+- [x] `partner_scrape/config.py` defines `CredentialError(RuntimeError)`
       — a plain marker subclass, no new behavior.
-- [ ] `config.get_tba_api_key()` and `config.get_robotevents_api_key()`
+- [x] `config.get_tba_api_key()` and `config.get_robotevents_api_key()`
       raise `CredentialError` (not bare `RuntimeError`) when their env
       var is unset/empty — message text unchanged.
-- [ ] `teams/sources/tba.py`'s `TBASource.discover()` raises
+- [x] `teams/sources/tba.py`'s `TBASource.discover()` raises
       `config.CredentialError` (not `RuntimeError`) specifically for
       the `response.status == 401` branch — message text unchanged.
       Every other raise in `discover()` (non-200 non-401, unparseable
       JSON, invalid `max_team_page`) stays plain `RuntimeError`.
-- [ ] `teams/sources/robotevents.py`'s `VexTeamSource.discover()` gets
+- [x] `teams/sources/robotevents.py`'s `VexTeamSource.discover()` gets
       the identical treatment for its own 401 branch, and only that
       branch.
-- [ ] `teams/pipeline.py` adds a private `_SOURCE_LEAGUES: dict[str,
+- [x] `teams/pipeline.py` adds a private `_SOURCE_LEAGUES: dict[str,
       str]` lookup (`adapter_type -> League`: `{"ftcscout": "FTC",
       "tba": "FRC", "static_roster": "FLL", "robotevents": "VEX"}`),
       matching `_TEAM_SOURCES`'s existing "private lookup local to the
       one caller that needs it" convention — not a new public registry.
-- [ ] `run_teams()`'s per-source loop catches `CredentialError`
+- [x] `run_teams()`'s per-source loop catches `CredentialError`
       *before* the existing `except Exception` branch, logs the same
       per-source ERROR + traceback it does today (unchanged message),
       and additionally records `(source_id, adapter_type, league,
       str(exc))` for this failure before `continue`-ing.
-- [ ] After the per-source loop completes, if any credential failures
+- [x] After the per-source loop completes, if any credential failures
       were recorded, `run_teams()` logs exactly one aggregate
       `logger.warning` (never more than one call, matching
       `_check_sunset_seasons()`'s existing convention) naming every
       affected league and source. No such warning is logged when no
       credential failures occurred.
-- [ ] `_check_sunset_seasons()` is untouched — no interaction with the
+- [x] `_check_sunset_seasons()` is untouched — no interaction with the
       new alert logic.
-- [ ] `run_teams()`'s own module/function docstring gains one
+- [x] `run_teams()`'s own module/function docstring gains one
       paragraph narrating this addition, matching the file's existing
       per-sprint/per-ticket docstring convention (see the many prior
       examples already in that docstring).
-- [ ] `config.py`'s and each source's own docstrings are updated where
+- [x] `config.py`'s and each source's own docstrings are updated where
       they currently describe the raised exception as `RuntimeError`
       for the credential-specific cases.
-- [ ] Full existing test suite (`uv run pytest`) stays green.
+- [x] Full existing test suite (`uv run pytest`) stays green.
 
 ## Testing
 
@@ -121,3 +121,74 @@ reasoning behind this approach.
   supplementary evidence, per this project's sprints 020-022
   live-verification convention.
 - **Verification command**: `uv run pytest`
+
+## Notes
+
+**Test results.** `uv run pytest tests/teams/test_pipeline.py
+tests/teams/test_sources_tba.py tests/teams/test_sources_robotevents.py
+tests/test_config.py -q` → 168 passed. Full suite `uv run pytest -q` →
+1956 passed, zero regressions (`CredentialError is-a RuntimeError`, so
+every pre-existing `except RuntimeError`/`except Exception` assertion
+kept passing unmodified, as expected).
+
+**Live run** (required, per Testing above). This session's ambient
+environment genuinely has neither `TBA_KEY` nor `ROBOTEVENTS_KEY` set
+(confirmed via `env | grep -i "TBA_KEY\|ROBOTEVENTS_KEY"` — empty; no
+`dotconfig load` or other secret-loading mechanism was attempted, per
+this ticket's explicit instruction). Ran:
+
+```
+SCRAPE_CACHE_DIR=/Volumes/Cache/stem-ecosystem uv run partner-scrape teams --dry-run -v
+```
+
+(`SCRAPE_CACHE_DIR` is a plain, non-secret cache-directory path — its
+real value is visible in the repo's own committed
+`config/prod/public.env` — set here only because `PoliteFetcher()`
+otherwise refuses to construct at all before any source runs; no
+credential/secret was loaded to make this run possible.)
+
+**Observed output** (verbatim, relevant lines):
+
+```
+INFO partner_scrape.teams.pipeline: Team source 'fll-sd' yielded 48 team(s)
+ERROR partner_scrape.teams.pipeline: Team source 'frc-sd' (adapter_type='tba') failed; skipping it, run continues with the remaining sources
+Traceback (most recent call last):
+  ...
+partner_scrape.config.CredentialError: TBA_KEY is not set. Configure it via the assembled .env (see config/prod/secrets.env) before running the tba team source.
+INFO partner_scrape.teams.pipeline: Team source 'ftc-sd' yielded 152 team(s)
+ERROR partner_scrape.teams.pipeline: Team source 'vex-sd' (adapter_type='robotevents') failed; skipping it, run continues with the remaining sources
+Traceback (most recent call last):
+  ...
+partner_scrape.config.CredentialError: ROBOTEVENTS_KEY is not set. Configure it via the assembled .env (see config/prod/secrets.env) before running the robotevents adapter/team source.
+WARNING partner_scrape.teams.pipeline: 2 team source(s) failed on a credential error -- this is structural and will recur on every run until an operator fixes the credential (unlike a transient scrape failure): FRC ('frc-sd', adapter_type='tba'): TBA_KEY is not set. Configure it via the assembled .env (see config/prod/secrets.env) before running the tba team source., VEX ('vex-sd', adapter_type='robotevents'): ROBOTEVENTS_KEY is not set. Configure it via the assembled .env (see config/prod/secrets.env) before running the robotevents adapter/team source.. See config.CredentialError's own docstring.
+...
+partner-scrape teams: wrote 200 teams (dry run -- nothing written).
+```
+
+This is exactly the scenario issue 62 describes: both `TBA_KEY` and
+`ROBOTEVENTS_KEY` are genuinely unprovisioned in this run's
+environment, both `frc-sd`/`tba` and `vex-sd`/`robotevents` raised
+`CredentialError` and were isolated the same way any other per-source
+failure is (unchanged ERROR + traceback, run continued, 200 teams
+still published — FTC 152 + FLL 48 = 200, matching the pre-existing
+per-source-isolation contract). The new aggregate `WARNING` fired
+**exactly once**, naming both affected leagues (`FRC`, `VEX`) and both
+source IDs (`frc-sd`, `vex-sd`) in a single log line — confirming the
+alert fires in the exact real-world scenario that motivated this
+ticket, on real (not fixture) credential state.
+
+**Judgment calls / deviations.**
+- Set `SCRAPE_CACHE_DIR` (a non-secret path constant) inline on the
+  command, since `PoliteFetcher()` construction fails before any
+  source-level code runs otherwise — this is unrelated to
+  `TBA_KEY`/`ROBOTEVENTS_KEY` and was not covered by the "do not load
+  secrets" instruction, which is specific to credentials.
+- Added a few extra unit tests beyond the ticket's literal list (e.g.
+  `TestCredentialError.test_is_a_runtime_error_subclass`, and a
+  `..._not_credential_error` companion assertion alongside each
+  existing `discover()` non-401 raise test) to pin the "every other
+  raise branch stays plain `RuntimeError`, not `CredentialError`" AC
+  more directly than a bare `pytest.raises(RuntimeError)` does on its
+  own (that alone would also pass if the branch wrongly raised
+  `CredentialError`, since `CredentialError is-a RuntimeError`).
+- No other deviations from the plan.
