@@ -1,7 +1,7 @@
 ---
 id: '020'
 title: Publish Pipeline Output and Fix Currency Filter
-status: executing
+status: done
 branch: sprint/020-publish-pipeline-output-and-fix-currency-filter
 use-cases:
 - SUC-019
