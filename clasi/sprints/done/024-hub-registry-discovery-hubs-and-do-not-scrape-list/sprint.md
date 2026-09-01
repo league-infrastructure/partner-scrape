@@ -1,7 +1,7 @@
 ---
 id: '024'
 title: Hub Registry Discovery Hubs and Do-Not-Scrape List
-status: executing
+status: done
 branch: sprint/024-hub-registry-discovery-hubs-and-do-not-scrape-list
 use-cases:
 - SUC-001
