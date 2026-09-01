@@ -1,7 +1,7 @@
 ---
 id: '022'
 title: Restore Publish-Failure and Roster Data-Quality Coverage
-status: executing
+status: done
 branch: sprint/022-restore-publish-failure-and-roster-data-quality-coverage
 use-cases:
 - SUC-024
