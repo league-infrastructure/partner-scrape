@@ -14,13 +14,15 @@ import logging
 import tomllib
 from pathlib import Path
 
+from partner_scrape.config import REPO_ROOT
 from partner_scrape.registry.schema import InvalidSourceConfig, SourceConfig
 
 logger = logging.getLogger(__name__)
 
 #: Default location of the Source Registry's per-organization TOML
-#: files: ``partner_scrape/registry/sources/``.
-DEFAULT_SOURCES_DIR = Path(__file__).resolve().parent / "sources"
+#: files: ``registry/sources/`` at the repo root (sibling to
+#: ``partner_scrape/``, not inside it -- see sprint 025 ticket 001).
+DEFAULT_SOURCES_DIR = REPO_ROOT / "registry" / "sources"
 
 
 def load_sources(directory: Path | None = None) -> list[SourceConfig]:

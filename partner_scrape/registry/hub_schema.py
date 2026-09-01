@@ -26,6 +26,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+from partner_scrape.config import REPO_ROOT
+
 logger = logging.getLogger(__name__)
 
 #: Top-level TOML keys every hub file must define. A file missing
@@ -35,9 +37,10 @@ logger = logging.getLogger(__name__)
 _REQUIRED_FIELDS = ("hub_name", "page_urls")
 
 #: Default location of the Hub Registry's per-hub TOML files:
-#: ``partner_scrape/registry/hubs/`` -- physically separate from
-#: ``registry/sources/`` (see this module's docstring).
-DEFAULT_HUBS_DIR = Path(__file__).resolve().parent / "hubs"
+#: ``registry/hubs/`` at the repo root -- physically separate from
+#: ``registry/sources/`` (see this module's docstring; see sprint 025
+#: ticket 001 for the move out of ``partner_scrape/registry/``).
+DEFAULT_HUBS_DIR = REPO_ROOT / "registry" / "hubs"
 
 
 class InvalidHubConfig(Exception):

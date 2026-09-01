@@ -28,28 +28,28 @@ reasoning behind the chosen approach.
 
 ## Acceptance Criteria
 
-- [ ] `registry/sources/`, `registry/hubs/`, `registry/candidates/`,
+- [x] `registry/sources/`, `registry/hubs/`, `registry/candidates/`,
       `registry/ads/` exist at the repo root (sibling to `data/`,
       `partner_scrape/`) with all 366 files present, moved via `git mv`
       (preserving history).
-- [ ] `partner_scrape/registry/` contains no `.toml` files; only code
+- [x] `partner_scrape/registry/` contains no `.toml` files; only code
       and its two `.md` docs remain.
-- [ ] `config.py` exposes a new public `REPO_ROOT` constant (the
+- [x] `config.py` exposes a new public `REPO_ROOT` constant (the
       existing private `_REPO_ROOT`, promoted — not a second,
       independently-computed constant).
-- [ ] `registry/loader.py`'s `DEFAULT_SOURCES_DIR`,
+- [x] `registry/loader.py`'s `DEFAULT_SOURCES_DIR`,
       `registry/hub_schema.py`'s `DEFAULT_HUBS_DIR`,
       `registry/candidates.py`'s `DEFAULT_CANDIDATES_DIR`, and
       `export/ads.py`'s `DEFAULT_ADS_DIR` each resolve to
       `REPO_ROOT / "registry" / "<subdir>"`, imported from `config.py`.
-- [ ] `partner_scrape/registry/DESIGN.md`, `DO_NOT_SCRAPE.md`, and
+- [x] `partner_scrape/registry/DESIGN.md`, `DO_NOT_SCRAPE.md`, and
       `cli.py`'s `--registry-dir`/`--hubs-dir`/`--candidates-dir` help
       text no longer describe the old `partner_scrape/registry/...`
       location as current.
-- [ ] `uv run partner-scrape --dry-run --limit 5` and
+- [x] `uv run partner-scrape --dry-run --limit 5` and
       `uv run partner-scrape discover-candidates --no-enrich` both run
       cleanly with no path errors.
-- [ ] `uv run pytest -q` is green.
+- [x] `uv run pytest -q` is green.
 
 ## Implementation Plan
 

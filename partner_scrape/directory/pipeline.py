@@ -67,7 +67,7 @@ from partner_scrape.registry.validate_roster import check_partner_references
 logger = logging.getLogger(__name__)
 
 #: This subsystem's own Registry directory -- `directory/registry/`,
-#: disjoint from `partner_scrape/registry/sources/` and from
+#: disjoint from the root-level `registry/sources/` and from
 #: `teams/registry/` (see `directory/DESIGN.md`'s Constraints). Holds
 #: both Place Registry entries (`places-sd.toml`) and, from this
 #: ticket, Club Registry entries (`hack-club-sd.toml`) -- one shared

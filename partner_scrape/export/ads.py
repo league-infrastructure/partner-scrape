@@ -63,7 +63,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable
 
-from partner_scrape.config import get_own_data_dir, get_site_dir
+from partner_scrape.config import REPO_ROOT, get_own_data_dir, get_site_dir
 
 logger = logging.getLogger(__name__)
 
@@ -74,8 +74,9 @@ logger = logging.getLogger(__name__)
 _REQUIRED_FIELDS = ("headline", "body", "link", "logo_src")
 
 #: Default location of the hand-authored Ad Registry's per-advertiser
-#: TOML files: `partner_scrape/registry/ads/`.
-DEFAULT_ADS_DIR = Path(__file__).resolve().parent.parent / "registry" / "ads"
+#: TOML files: `registry/ads/` at the repo root (see sprint 025 ticket
+#: 001 for the move out of `partner_scrape/registry/`).
+DEFAULT_ADS_DIR = REPO_ROOT / "registry" / "ads"
 
 
 class InvalidAdConfig(Exception):

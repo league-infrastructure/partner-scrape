@@ -230,7 +230,7 @@ logger = logging.getLogger(__name__)
 _SUNSET_SEASON_RE = re.compile(r"(\d{4})-(\d{2})")
 
 #: This subsystem's own Team Registry directory -- `teams/registry/`,
-#: disjoint from `partner_scrape/registry/sources/` (see
+#: disjoint from the root-level `registry/sources/` (see
 #: `teams/DESIGN.md`'s Constraints and Invariants).
 DEFAULT_TEAMS_REGISTRY_DIR = Path(__file__).resolve().parent / "registry"
 

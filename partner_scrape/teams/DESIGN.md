@@ -1277,7 +1277,7 @@ after `geocode_teams()`), the same single-call-sequencing cost
   (the last, sprint 016 ticket 005) — the FTCScout, TBA, static-roster,
   and RobotEvents sources' `SourceConfig`s, loaded via
   `registry.loader.load_active_sources` pointed at `teams/registry/`
-  (not the main `partner_scrape/registry/sources/` directory — a
+  (not the main root-level `registry/sources/` directory — a
   separate, disjoint registry namespace). `fll-sd.toml`'s `config` dict
   additionally carries `sunset_season = "2026-27"` (Constraints) — no
   `SourceConfig` schema change, since `config` is already free-form per

@@ -143,6 +143,13 @@ _PACKAGE_DIR = Path(__file__).resolve().parent
 # The repo root, e.g. .../partner-scrape
 _REPO_ROOT = _PACKAGE_DIR.parent
 
+#: The repo root, e.g. ``.../partner-scrape`` -- a public alias for
+#: :data:`_REPO_ROOT`. Exists so other modules needing a root-relative
+#: default (e.g. the root-level ``registry/`` data directory) can import
+#: one shared constant instead of each recomputing their own
+#: ``Path(__file__).resolve()`` parent-chain (sprint 025 ticket 001).
+REPO_ROOT = _REPO_ROOT
+
 #: Default location of the sibling ``stem-ecosystem`` site repo -- the
 #: real production site codebase, checked out next to this repo
 #: (``../stem-ecosystem`` relative to the repo root) for local

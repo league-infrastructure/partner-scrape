@@ -91,7 +91,7 @@ def _build_parser() -> argparse.ArgumentParser:
         default=None,
         help=(
             "Source Registry directory to load sources from (default: "
-            "the real seed registry under partner_scrape/registry/sources/)."
+            "the real seed registry under registry/sources/)."
         ),
     )
     parser.add_argument(
@@ -197,7 +197,7 @@ def _add_discover_candidates_subcommand(subparsers: argparse._SubParsersAction) 
         default=None,
         help=(
             "Hub Registry directory to load hubs from (default: the real "
-            "seed hub registry under partner_scrape/registry/hubs/)."
+            "seed hub registry under registry/hubs/)."
         ),
     )
     parser.add_argument(
@@ -206,7 +206,7 @@ def _add_discover_candidates_subcommand(subparsers: argparse._SubParsersAction) 
         default=None,
         help=(
             "Candidate Review Queue directory to write stub TOML files "
-            "into (default: partner_scrape/registry/candidates/)."
+            "into (default: registry/candidates/)."
         ),
     )
     parser.add_argument(
@@ -216,7 +216,7 @@ def _add_discover_candidates_subcommand(subparsers: argparse._SubParsersAction) 
         help=(
             "Source Registry directory Hub Scan's dedup check reads "
             "against (default: the real seed registry under "
-            "partner_scrape/registry/sources/). Mirrors the `run` "
+            "registry/sources/). Mirrors the `run` "
             "command's own --registry-dir."
         ),
     )
