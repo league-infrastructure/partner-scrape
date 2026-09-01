@@ -1,7 +1,7 @@
 ---
 id: '026'
 title: Backfill Missing Opportunity Images from Stem-Ecosystem
-status: executing
+status: done
 branch: sprint/026-backfill-missing-opportunity-images-from-stem-ecosystem
 use-cases: []
 issues:
