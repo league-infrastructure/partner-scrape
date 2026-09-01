@@ -99,14 +99,16 @@ def _build_parser() -> argparse.ArgumentParser:
         type=Path,
         default=None,
         help=(
-            "Sibling stem-ecosystem checkout to write opportunities.json / "
-            "scrape-meta.json into (default: ../stem-ecosystem, or $SITE_DIR)."
+            "Sibling stem-ecosystem checkout to read partners.json from "
+            "(default: ../stem-ecosystem, or $SITE_DIR). Read-only as of "
+            "sprint 025 -- opportunities.json/scrape-meta.json/images are "
+            "written to partner-scrape's own data/ directory, never here."
         ),
     )
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Compute the export payload without writing anything to --site-dir.",
+        help="Compute the export payload without writing anything to disk.",
     )
     parser.add_argument(
         "--limit",
@@ -310,17 +312,16 @@ def _add_directory_subcommand(subparsers: argparse._SubParsersAction) -> None:
             "Registry (partner_scrape/directory/registry/, disjoint from "
             "the Opportunity Source Registry and from teams/registry/), "
             "acquire each active place/club source, and publish "
-            "{site_dir}/src/data/places.json and "
-            "{site_dir}/src/data/clubs.json. Never runs the normal "
-            "scrape/export or the teams pipeline -- opportunities.json, "
-            "scrape-meta.json, and teams.json are never touched by this "
-            "command."
+            "places.json and clubs.json into partner-scrape's own data "
+            "directory. Never runs the normal scrape/export or the teams "
+            "pipeline -- opportunities.json, scrape-meta.json, and "
+            "teams.json are never touched by this command."
         ),
     )
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Compute the places.json/clubs.json payloads without writing anything to --site-dir.",
+        help="Compute the places.json/clubs.json payloads without writing anything to disk.",
     )
     parser.add_argument(
         "--source",
@@ -339,10 +340,12 @@ def _add_directory_subcommand(subparsers: argparse._SubParsersAction) -> None:
         type=Path,
         default=None,
         help=(
-            "Sibling stem-ecosystem checkout to write places.json and "
-            "clubs.json into (default: ../stem-ecosystem, or $SITE_DIR) "
-            "-- same default and override as the `run`/`teams` "
-            "commands' --site-dir."
+            "Sibling stem-ecosystem checkout to read partners.json from, "
+            "for the related-partner-reference join-integrity check only "
+            "(default: ../stem-ecosystem, or $SITE_DIR) -- same default "
+            "as the `run` command's --site-dir. Read-only: places.json/ "
+            "clubs.json are always written to partner-scrape's own data/ "
+            "directory, never here."
         ),
     )
     parser.add_argument(

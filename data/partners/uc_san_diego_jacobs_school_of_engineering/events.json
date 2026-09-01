@@ -1,0 +1,42 @@
+{
+ "generated_at": "2026-09-01T08:27:52Z",
+ "partner_slug": "uc_san_diego_jacobs_school_of_engineering",
+ "kind": "current",
+ "event_count": 1,
+ "events": [
+  {
+   "slug": "https_ucsdtritons_com_sports_womens_soccer",
+   "title": "Engineering Night at Triton Women's Soccer",
+   "partner_name": "UC San Diego Jacobs School of Engineering",
+   "partner_id": null,
+   "description": "Engineers, mark your calendars!\n\nFor the first time ever, the Jacobs School of Engineering is taking over Triton Women's Soccer for a night built for our engineering community of alumni, students, faculty and staff.\n\nThis isn't just a game, it's also a chance to reconnect, celebrate what makes Triton engineers different, and cheer on as three of our own engineering Tritons take the pitch vs. Sacramento State.\n\nWednesday, Oct. 147 p.m.Triton Soccer Stadium, UC San DiegoRefreshments will be served at a pre-game happy hour. See you there!",
+   "link": "https://ucsdtritons.com/sports/womens-soccer",
+   "availability": "",
+   "date_start": "2026-10-14T19:00:00-07:00",
+   "date_end": "2026-10-14T00:00:00-07:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Career Connections",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Triton Soccer Stadium, UC San Diego",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "bebab3ff364911ba.jpg"
+  }
+ ]
+}

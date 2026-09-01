@@ -1,0 +1,42 @@
+{
+ "generated_at": "2026-09-01T08:27:52Z",
+ "partner_slug": "san_dieguito_river_park",
+ "kind": "current",
+ "event_count": 1,
+ "events": [
+  {
+   "slug": "https_sdrp_org_events_roaming_with_rangers",
+   "title": "Roaming with Rangers - San Dieguito River Park",
+   "partner_name": "San Dieguito River Park",
+   "partner_id": 224,
+   "description": "Join San Diegiuto River Park Ranger Nico on a hike around Piedras Pintadas in Rancho Bernardo.",
+   "link": "https://sdrp.org/events/roaming-with-rangers/",
+   "availability": "",
+   "date_start": "2026-10-17T00:00:00-07:00",
+   "date_end": "",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Piedras Pintadas, Rancho Bernardo",
+   "latitude": "33.042441",
+   "longitude": "-117.0405829",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_dieguito_river_park.jpg",
+   "eligibility": "",
+   "image_src": "8b211aa0ff54d0f1.jpg"
+  }
+ ]
+}

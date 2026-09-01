@@ -1,0 +1,39 @@
+{
+ "generated_at": "2026-09-01T08:27:52Z",
+ "partner_slug": "uc_san_diego_extended_studies",
+ "kind": "current",
+ "event_count": 1,
+ "events": [
+  {
+   "slug": "https_extendedstudies_ucsd_edu_courses_preclinical_drug_discovery_immersive_biol_x404_08",
+   "title": "Preclinical Drug Discovery Immersive",
+   "partner_name": "UC San Diego Extended Studies",
+   "partner_id": 285,
+   "description": "",
+   "link": "https://extendedstudies.ucsd.edu/courses/preclinical-drug-discovery-immersive-biol-x404-08",
+   "availability": "",
+   "date_start": "2026-09-07T00:00:00-07:00",
+   "date_end": "",
+   "age_grade_level": [],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Chemistry"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego, California",
+   "latitude": "32.715738",
+   "longitude": "-117.1610838",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "uc_san_diego_extended.jpg",
+   "eligibility": "",
+   "image_src": "9061749bc8d36d12.png"
+  }
+ ]
+}

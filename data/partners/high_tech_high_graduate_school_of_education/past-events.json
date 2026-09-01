@@ -1,0 +1,38 @@
+{
+ "generated_at": "2026-09-01T08:27:52Z",
+ "partner_slug": "high_tech_high_graduate_school_of_education",
+ "kind": "past",
+ "event_count": 1,
+ "events": [
+  {
+   "slug": "https_hthgse_edu_events_pbl_design_camp_in_person_nov_2026",
+   "title": "PBL Design Camp | High Tech High Graduate School of Education",
+   "partner_name": "High Tech High Graduate School of Education",
+   "partner_id": 534,
+   "description": "Collaborate with HTH students and teachers to design engaging PBL curriculum through immersive, hands-on workshops and modeled protocols.",
+   "link": "https://hthgse.edu/events/pbl-design-camp-in-person-nov-2026/",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "2150 Cushing Road, San Diego, California, 92108",
+   "latitude": "32.7320001",
+   "longitude": "-117.21766",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "high_tech_high_graduate.jpg",
+   "eligibility": "",
+   "image_src": "bcfbcc97d7342541.jpg"
+  }
+ ]
+}

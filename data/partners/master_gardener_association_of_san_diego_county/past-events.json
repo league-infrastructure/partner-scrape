@@ -1,0 +1,42 @@
+{
+ "generated_at": "2026-09-01T08:27:52Z",
+ "partner_slug": "master_gardener_association_of_san_diego_county",
+ "kind": "past",
+ "event_count": 1,
+ "events": [
+  {
+   "slug": "http_www_mastergardenerssandiego_org_calendar_calendar_php",
+   "title": "San Diego Master Gardeners - Gardening Calendar of Events",
+   "partner_name": "Master Gardener Association of San Diego County",
+   "partner_id": 341,
+   "description": "San Diego Master Gardeners are volunteers trained and supervised by the University of California Cooperative Extension (UCCE) to provide research based garden and pest information to the public.",
+   "link": "http://www.mastergardenerssandiego.org/calendar/calendar.php",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology",
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "9335 Hazard Way, Suite #201, San Diego, California, 92123",
+   "latitude": "32.835259",
+   "longitude": "-117.1278081",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  }
+ ]
+}

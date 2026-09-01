@@ -2,19 +2,30 @@ name: Scheduled scrape and publish
 
 # Sprint 004 / SUC-017 / issue 07: unattended weekly run of the
 # partner-scrape pipeline (scrape -> enrich -> normalize -> export),
-# publishing the refreshed site data across the repo boundary into the
-# sibling `stem-ecosystem` checkout. Pushing to `stem-ecosystem`'s
-# `master` is the entire "trigger a deploy" step -- its existing,
-# UNMODIFIED `deploy.yml` already rebuilds/deploys GitHub Pages on any
-# push to `master`; nothing here duplicates or calls that workflow.
+# publishing the refreshed data back to partner-scrape's OWN data/ on
+# this repo's master (see the "Publish refreshed data to
+# partner-scrape's own data/" step below).
+#
+# (Sprint 025 ticket 008) stem-ecosystem is checked out READ-ONLY here,
+# solely to supply `{site_dir}/src/data/partners.json` as a pipeline
+# input. Nothing in this workflow writes to, commits into, or pushes the
+# stem-ecosystem checkout anymore -- the "Publish refreshed site data to
+# stem-ecosystem" step that used to do that has been removed as
+# permanently dead code, now that tickets 001-007 redirected every write
+# this pipeline makes onto partner-scrape's own data/ and registry/.
 #
 # Secrets required (referenced by name only -- never a literal value in
 # this file). See docs/deploy/scheduled-run.md for the one-time operator
 # setup that provisions them; that setup is NOT performed by this file:
 #   ANTHROPIC_API_KEY  - LLM enrichment (already used for local runs)
 #   SITE_REPO_TOKEN    - fine-grained PAT, `contents: write` on
-#                        stem-ecosystem only, used both to check out
-#                        stem-ecosystem and to push back to it
+#                        stem-ecosystem, used ONLY to check it out (the
+#                        default GITHUB_TOKEN cannot check out a
+#                        different repository). Its write scope is no
+#                        longer exercised by this workflow -- see the
+#                        note above the "Checkout stem-ecosystem" step
+#                        below. Informational only: no token/secret
+#                        change is made by this ticket.
 #
 # NOTE: GitHub only fires `schedule` triggers for workflow files that
 # exist on the repository's *default* branch, so this file has no effect
@@ -39,7 +50,8 @@ on:
   workflow_dispatch: {}
 
 # Manual activation/testing and the weekly cron should never race each
-# other into two concurrent cross-repo publishes.
+# other into two concurrent runs publishing to partner-scrape's own
+# data/.
 concurrency:
   group: scheduled-run
   cancel-in-progress: false
@@ -49,8 +61,9 @@ concurrency:
 # to partner-scrape's own data/" step below can commit and push its own
 # data/ changes back to this repo's master. This is unrelated to, and
 # does not widen, SITE_REPO_TOKEN's separate cross-repo contents:write
-# scope on stem-ecosystem, used below for the stem-ecosystem checkout
-# and publish steps.
+# scope on stem-ecosystem, used below only for the read-only
+# stem-ecosystem checkout -- no push happens using that token anymore
+# (Sprint 025 ticket 008 removed the step that used to do so).
 permissions:
   contents: write
 
@@ -68,9 +81,11 @@ jobs:
           SITE_REPO_TOKEN: ${{ secrets.SITE_REPO_TOKEN }}
         run: |
           if [ -z "$SITE_REPO_TOKEN" ]; then
-            echo "::error::SITE_REPO_TOKEN is not set. This workflow publishes"
-            echo "::error::scraped data to league-infrastructure/stem-ecosystem and"
-            echo "::error::needs a fine-grained PAT with contents:write on that repo."
+            echo "::error::SITE_REPO_TOKEN is not set. This workflow reads"
+            echo "::error::partners.json from a read-only checkout of"
+            echo "::error::league-infrastructure/stem-ecosystem, and needs a"
+            echo "::error::fine-grained PAT for that repo (the default GITHUB_TOKEN"
+            echo "::error::cannot check out a different repository)."
             echo "::error::Set it via 'dotconfig gh-push' (see docs/deploy/scheduled-run.md),"
             echo "::error::then re-enable the weekly schedule in this workflow."
             exit 1
@@ -83,7 +98,15 @@ jobs:
 
       # A fine-grained PAT is required here: the default GITHUB_TOKEN a
       # workflow receives is scoped to the repo it runs in only, and
-      # cannot check out (let alone later push to) a different repo.
+      # cannot check out (let alone push to) a different repo.
+      #
+      # (Sprint 025 ticket 008) This checkout is READ-ONLY now: only
+      # `{site_dir}/src/data/partners.json` is read from it as a
+      # pipeline input. SITE_REPO_TOKEN is still provisioned with
+      # `contents: write` on stem-ecosystem (see the top-of-file secrets
+      # note), but that write scope is no longer exercised anywhere in
+      # this workflow -- informational only, no token/secret change is
+      # made by this ticket.
       - name: Checkout stem-ecosystem
         uses: actions/checkout@v4
         with:
@@ -176,38 +199,21 @@ jobs:
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
 
-      # Skipped entirely (no commit, no push) when the run produced no
-      # change to the checked-out tree, so an unchanged week never
-      # creates an empty commit or a spurious deploy.yml trigger.
-      # `git add -A` before diffing is required, not optional: a
-      # first-ever yield-history.json (or any other brand-new file) is
-      # untracked, and a plain `git diff --quiet` (without staging
-      # first) does not see untracked files at all -- only `git diff
-      # --cached --quiet` after `git add -A` correctly reports "no
-      # changes" vs. "new file to publish" in that case.
-      - name: Publish refreshed site data to stem-ecosystem
-        working-directory: stem-ecosystem
-        run: |
-          git config user.name "partner-scrape-bot"
-          git config user.email "actions@users.noreply.github.com"
-          git add -A
-          if git diff --cached --quiet; then
-            echo "No data changes this run -- nothing to publish."
-          else
-            git commit -m "chore: scheduled partner-scrape data refresh"
-            git push origin HEAD:master
-          fi
-
-      # (Sprint 020 ticket 008 / SUC-019 / issue 60) Structurally
-      # independent of the stem-ecosystem publish step above -- ordered
-      # after it, never blocking or blocked by it. Publishes this same
-      # run's output back to partner-scrape's OWN data/ directory on its
-      # own master, so the weekly cron keeps data/ current in git
-      # without operator intervention. `git add data/`, not `-A`: scoped
-      # to only the directory tickets 002-007 write into, never picking
-      # up an unrelated stray file the runner happened to leave behind
+      # (Sprint 020 ticket 008 / SUC-019 / issue 60) Publishes this run's
+      # output back to partner-scrape's OWN data/ directory on its own
+      # master, so the weekly cron keeps data/ current in git without
+      # operator intervention. `git add data/`, not `-A`: scoped to only
+      # the directory tickets 002-007 write into, never picking up an
+      # unrelated stray file the runner happened to leave behind
       # elsewhere in this checkout. Uses only the workflow's own default
       # GITHUB_TOKEN (contents: write, granted above) -- no new secret.
+      #
+      # (Sprint 025 ticket 008) This is now the ONLY publish step in this
+      # workflow. The sibling "Publish refreshed site data to
+      # stem-ecosystem" step that used to run before this one (`git add
+      # -A` / commit / push inside the stem-ecosystem checkout) has been
+      # removed as permanently dead code: nothing writes into the
+      # stem-ecosystem checkout anymore, so that step always no-opped.
       - name: Publish refreshed data to partner-scrape's own data/
         working-directory: partner-scrape
         run: |

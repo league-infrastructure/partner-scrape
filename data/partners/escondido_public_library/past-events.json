@@ -1,0 +1,287 @@
+{
+ "generated_at": "2026-09-01T08:27:52Z",
+ "partner_slug": "escondido_public_library",
+ "kind": "past",
+ "event_count": 8,
+ "events": [
+  {
+   "slug": "adult_src_dig_deeper_with_dogs_20260805",
+   "title": "Adult SRC: Dig Deeper with Dogs",
+   "partner_name": "Escondido Public Library",
+   "partner_id": null,
+   "description": "Celebrate National Dog Month with us and learn more about the San Diego Humane Society from one of our Paws to Read volunteers, Janet Downer!\n\nMeet and greet with some of Janet's furry friends and and learn about their roles as therapy dogs.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-08-05T23:00:00-07:00",
+   "date_end": "2026-08-06T00:00:00-07:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Turrentine Room, Downtown Library Campus",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "kids_src_critter_encounters_20260806",
+   "title": "KIDS SRC: Critter Encounters",
+   "partner_name": "Escondido Public Library",
+   "partner_id": null,
+   "description": "Enjoy a one-hour interactive and educational animal experience featuring five exotic animals.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-08-06T21:00:00-07:00",
+   "date_end": "2026-08-06T22:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8",
+    "Grades 9-12"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Turrentine Room, Downtown Library Campus",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "adult_src_gardens_of_balboa_park_20260808",
+   "title": "Adult SRC: Gardens of Balboa Park",
+   "partner_name": "Escondido Public Library",
+   "partner_id": null,
+   "description": "Welcome back to our newly refreshed library! To cap off an incredible first week of our grand re‑opening, we’re delighted to host UC Master Gardener, author, and Forever Balboa Park Trustee Lucy Warren.\n\nLucy will present “Gardens of Balboa Park,” an exploration of the park’s rich horticultural history. She’ll guide patrons through an immersive audiovisual tour showcasing the park’s remarkable gardens and world‑renowned plant collections—many of which remain hidden gems even to longtime San Diegans.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-08-08T21:00:00-07:00",
+   "date_end": "2026-08-08T22:00:00-07:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology",
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Turrentine Room, Downtown Library Campus",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "ecovivarium_presents_dino_dig_20260812",
+   "title": "EcoViVarium presents Dino Dig!",
+   "partner_name": "Escondido Public Library",
+   "partner_id": null,
+   "description": "Explore 6 dinosaur-related animals and participate in a dinosaur egg excavation activity led by EcoVivarium. Using safety goggles and wooden hammers, children will tap open handmade dinosaur eggs to uncover either a dinosaur skeleton figure or a dinosaur skull. The dinosaur discoveries are take-home keepsakes to remember a successful excavation. Registration required per child.. Registration begins Wednesday, July 22nd. Seating limited to 50 ages 6-12 years only.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-08-12T22:30:00-07:00",
+   "date_end": "2026-08-13T00:30:00-07:00",
+   "age_grade_level": [
+    "Grades 6-8"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Turrentine Room, Downtown Library Campus",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "kids_src_wild_wonders_20260813",
+   "title": "KIDS SRC: Wild Wonders",
+   "partner_name": "Escondido Public Library",
+   "partner_id": null,
+   "description": "The Emerald Forest Visit with the mysterious rainforest dwellers of South America! This theme contains a pre-set assortment of 6 animals, and may include a kinkajou, boa constrictor, iguana, or armadillo!",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-08-13T21:00:00-07:00",
+   "date_end": "2026-08-13T22:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8",
+    "Pre-K"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Turrentine Room",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "rated_g_tween_book_club_lu_and_ren_s_guide_to_geozoology_20260820",
+   "title": "RATED G Tween Book Club – Lu and Ren's Guide to Geozoology",
+   "partner_name": "Escondido Public Library",
+   "partner_id": null,
+   "description": "August 20, 2026 – Lu and Ren's Guide to Geozoology by Angela Hsieh\n\nSummary:\n\nLu dreams of being a great adventurer, just like her ah-ma, who is a world-renowned geozoologist. Ah-ma has traveled far and wide, researching unique animals like dreamy cloud-jellies, enormous sunfish, and playful mossgoats. There’s nothing Lu loves more than reading Ah-ma’s letters about her quests, even if she and her mom struggle to understand the Cylian language Ah-ma writes in.\n\nBut when Ah-ma’s letters suddenly stop, Lu becomes worried. So when a nearby town needs a geozoologist, Lu decides to go on the journey to find Ah-ma. She charts a course with the help of Ren, an old friend turned new travel buddy.\n\nAs they follow in Ah-ma’s footsteps, Lu begins to discover the complex relationships between geofauna—and between people. What stories has Ah-ma never told her? And what’s Ren hiding from her?\n\n\nAbout the Book Club:\n\nJoin us for our RATED G Tween Book Club, where we Read, Eat, And Discuss graphic novels! For children ages 9-12. New members are always welcome. Meetings are held in the Library Events Space at the North County Mall on the 3rd Thursday of each month, from 4:00-5:00 p.m. \n\nThis book club alternates every other month with our R.E.A.D. Tween Book Club.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-08-20T16:00:00-07:00",
+   "date_end": "2026-08-20T17:00:00-07:00",
+   "age_grade_level": [
+    "Grades 6-8"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology",
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Turrentine Room, Downtown Library Campus",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "brick_builders_club_20260826",
+   "title": "Brick Builders Club",
+   "partner_name": "Escondido Public Library",
+   "partner_id": null,
+   "description": "Join us for an interactive and imaginative experience where you can build, play, and learn with toy bricks! This program encourages creativity, program-solving, and teamwork through themed challenges and creative exploration. Ages 9-12.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-08-26T23:00:00-07:00",
+   "date_end": "2026-08-27T00:00:00-07:00",
+   "age_grade_level": [
+    "Grades 6-8"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Tween Space, Downtown Library Campus",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "watershed_literacy_program_20260827",
+   "title": "Watershed Literacy Program",
+   "partner_name": "Escondido Public Library",
+   "partner_id": null,
+   "description": "The 2026 Watershed Literacy Program teaches students how watersheds, stormwater, pollution, and local ecosystems are connected. Through hands-on activities, experiments, models, and creative projects, students explore how water moves through their community and learn practical ways to prevent pollution, protect local waterways, and become everyday Watershed Heroes.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-08-27T22:00:00-07:00",
+   "date_end": "2026-08-27T23:00:00-07:00",
+   "age_grade_level": [
+    "Grades 6-8",
+    "Grades 9-12"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Turrentine Room, Downtown Library Campus",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  }
+ ]
+}

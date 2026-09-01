@@ -1,0 +1,43 @@
+{
+ "generated_at": "2026-09-01T08:27:52Z",
+ "partner_slug": "shpe_san_diego",
+ "kind": "current",
+ "event_count": 1,
+ "events": [
+  {
+   "slug": "https_forms_gle_4yumgsk1wrcj5r3e8",
+   "title": "Rick Engineering GBM 9/17/26",
+   "partner_name": "SHPE San Diego",
+   "partner_id": null,
+   "description": "&#x1f499;&#x1f9e1; Let’s Kick Off the Year Together! A new SHPE San Diego year is here, and we’d love to have you join us for our first General Body Meeting of the fiscal year! &#x1f389; Whether you’re a longtime SHPE member, a student, a professional, new to SHPE, or simply curious about what our community is all about—you’re invited. Come meet new people, reconnect with familiar faces, and be part of the conversation as we look ahead to the year. &#x2728; Join us to: &#x1f91d; Connect with the SHPE San Diego community &#x1f4a1; Learn more about SHPE and what’s coming this year &#x1f3e2; Meet our host, Rick Engineering &#x1f310; Network with students and professionals &#x1f680; Discover opportunities to get involved and grow with us &#x1f4c5; September 17, 2026 &#x1f555; 6:00 PM – 8:00 PM &#x1f4cd; Rick Engineering 5620 Friars Rd., San Diego, CA 92110 RSVP by September 14 at 11:59 PM https://forms.gle/4yUmGSk1wRcj5r3e8 Come as you are, bring your curiosity, and bring a friend. There’s a place for you in our SHPE community. &#x1f499;&#x1f9e1; We can’t wait to see you!",
+   "link": "https://forms.gle/4yUmGSk1wRcj5r3e8",
+   "availability": "",
+   "date_start": "2026-09-17T18:00:00-07:00",
+   "date_end": "2026-09-17T20:00:00-07:00",
+   "age_grade_level": [
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "RICK Engineering, 5620 Friars Road, San Diego, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  }
+ ]
+}

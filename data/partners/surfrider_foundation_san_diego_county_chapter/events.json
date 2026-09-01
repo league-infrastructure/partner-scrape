@@ -1,0 +1,386 @@
+{
+ "generated_at": "2026-09-01T08:27:52Z",
+ "partner_slug": "surfrider_foundation_san_diego_county_chapter",
+ "kind": "current",
+ "event_count": 11,
+ "events": [
+  {
+   "slug": "https_x_gldn_io_e_j1ao2msc74b",
+   "title": "Costa x Surfrider Foundation - Ocean Beach Cleanup",
+   "partner_name": "Surfrider Foundation San Diego County Chapter",
+   "partner_id": null,
+   "description": "<b>REGISTER HERE: </b><a href=\"https://x.gldn.io/e/J1AO2MSC74b\"><b>https://x.gldn.io/e/J1AO2MSC74b</b></a><br><br><b>Description</b><br>Join us on the sand and let's leave it better! <br><br><b>Purpose</b><br>Our local beaches are protected by volunteers, just like you! We welcome you to a fun day in the sand with family, friends, and new acquaintances while removing trash and raising awareness about plastic pollution. <br><br><b>Role</b><br>Take action to protect the environment by removing trash from our coastline! Please check out the Pro Tips Section after you sign up for everything you will need to know about this cleanup! You will also find these details in your confirmation email.<br><br><b>Vibe</b><br>Active teamwork, education and fun!",
+   "link": "https://x.gldn.io/e/J1AO2MSC74b",
+   "availability": "",
+   "date_start": "2026-09-05T09:00:00-07:00",
+   "date_end": "2026-09-05T11:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Volunteering",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Ocean Beach",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "latino_conservation_week_20260912",
+   "title": "Latino Conservation Week",
+   "partner_name": "Surfrider Foundation San Diego County Chapter",
+   "partner_id": 739,
+   "description": "",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-09-12T00:00:00-07:00",
+   "date_end": "2026-09-21T00:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8",
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "All Day"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego County, California",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "surfrider_foundation_san_diego.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_secure_sandiegobirdalliance_org_np_clients_sandiegobirdalliance_event_jsp_event_19624",
+   "title": "Latino Conservation Week: Wander the Wetlands special event (Bilingual)",
+   "partner_name": "Surfrider Foundation San Diego County Chapter",
+   "partner_id": 739,
+   "description": "<b>Learn more here: <a href=\"https://secure.sandiegobirdalliance.org/np/clients/sandiegobirdalliance/event.jsp?event=19624\">https://secure.sandiegobirdalliance.org/np/clients/sandiegobirdalliance/event.jsp?event=19624</a></b>",
+   "link": "https://secure.sandiegobirdalliance.org/np/clients/sandiegobirdalliance/event.jsp?event=19624",
+   "availability": "",
+   "date_start": "2026-09-12T16:00:00-07:00",
+   "date_end": "2026-09-12T20:00:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego County, California",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "surfrider_foundation_san_diego.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_secure_sandiegobirdalliance_org_np_clients_sandiegobirdalliance_event_jsp_event_21155",
+   "title": "Latino Conservation Week \"Journey Through the Wetlands”",
+   "partner_name": "Surfrider Foundation San Diego County Chapter",
+   "partner_id": 739,
+   "description": "<b>Learn more here: <a href=\"https://secure.sandiegobirdalliance.org/np/clients/sandiegobirdalliance/event.jsp?event=21155\">https://secure.sandiegobirdalliance.org/np/clients/sandiegobirdalliance/event.jsp?event=21155</a></b>",
+   "link": "https://secure.sandiegobirdalliance.org/np/clients/sandiegobirdalliance/event.jsp?event=21155",
+   "availability": "",
+   "date_start": "2026-09-13T16:00:00-07:00",
+   "date_end": "2026-09-13T21:00:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego County, California",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "surfrider_foundation_san_diego.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_us02web_zoom_us_j_82822923893",
+   "title": "Clean Border Water Now Meeting",
+   "partner_name": "Surfrider Foundation San Diego County Chapter",
+   "partner_id": null,
+   "description": "Please email <a href=\"mailto:CBWN@surfridersd.org\">CBWN@surfridersd.org</a> with any questions! <br><br>Surfrider Foundation SD County is inviting you to a scheduled Zoom meeting.<br><br>Topic: Clean Border Water Now&nbsp;<br>Time: Nov 12, 2020 06:30 PM Pacific Time (US and Canada)<br><br>Join Zoom Meeting<br>https://us02web.zoom.us/j/82822923893<br><br>Meeting ID: 828 2292 3893<br>One tap mobile<br>+16699009128,,82822923893# US (San Jose)<br>+13462487799,,82822923893# US (Houston)<br><br>Dial by your location<br>&nbsp; &nbsp; &nbsp; &nbsp; +1 669 900 9128 US (San Jose)<br>&nbsp; &nbsp; &nbsp; &nbsp; +1 346 248 7799 US (Houston)<br>&nbsp; &nbsp; &nbsp; &nbsp; +1 253 215 8782 US (Tacoma)<br>&nbsp; &nbsp; &nbsp; &nbsp; +1 312 626 6799 US (Chicago)<br>&nbsp; &nbsp; &nbsp; &nbsp; +1 646 558 8656 US (New York)<br>&nbsp; &nbsp; &nbsp; &nbsp; +1 301 715 8592 US (Germantown)<br>Meeting ID: 828 2292 3893<br>Find your local number: https://us02web.zoom.us/u/kdCV56tgwV",
+   "link": "https://us02web.zoom.us/j/82822923893",
+   "availability": "Repeats 19 times through 2026-11-09",
+   "date_start": "2026-09-14T18:00:00-07:00",
+   "date_end": "2026-11-09T19:00:00-08:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "https://us02web.zoom.us/j/82822923893",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_us02web_zoom_us_j_82432734779",
+   "title": "Clean Border Water Now Meeting",
+   "partner_name": "Surfrider Foundation San Diego County Chapter",
+   "partner_id": null,
+   "description": "Surfrider Foundation SD County is inviting you to a scheduled Zoom meeting.<br><br>Topic: Clean Border Water Now&nbsp;<br>Time: Dec 10, 2020 06:30 PM Pacific Time (US and Canada)<br><br>Join Zoom Meeting<br>https://us02web.zoom.us/j/82432734779<br><br>Meeting ID: 824 3273 4779<br>One tap mobile<br>+16699009128,,82432734779# US (San Jose)<br>+13462487799,,82432734779# US (Houston)<br><br>Dial by your location<br>&nbsp; &nbsp; &nbsp; &nbsp; +1 669 900 9128 US (San Jose)<br>&nbsp; &nbsp; &nbsp; &nbsp; +1 346 248 7799 US (Houston)<br>&nbsp; &nbsp; &nbsp; &nbsp; +1 253 215 8782 US (Tacoma)<br>&nbsp; &nbsp; &nbsp; &nbsp; +1 312 626 6799 US (Chicago)<br>&nbsp; &nbsp; &nbsp; &nbsp; +1 646 558 8656 US (New York)<br>&nbsp; &nbsp; &nbsp; &nbsp; +1 301 715 8592 US (Washington D.C)<br>Meeting ID: 824 3273 4779<br>Find your local number: https://us02web.zoom.us/u/ktUEVrJ08<br><br><br><br>Please email <a href=\"mailto:CBWN@surfridersd.org\">CBWN@surfridersd.org</a> with any questions!\n\nJoin with Google Meet: https://meet.google.com/kse-rrts-xzp\nOr dial: (US) +1 929-287-3360 PIN: 709844476#\nMore phone numbers: https://tel.meet/kse-rrts-xzp?pin=1111139239161&hs=7\n\nLearn more about Meet at: https://support.google.com/a/users/answer/9282720",
+   "link": "https://us02web.zoom.us/j/82432734779",
+   "availability": "Repeats 18 times through 2026-11-09",
+   "date_start": "2026-09-14T18:00:00-07:00",
+   "date_end": "2026-11-09T19:00:00-08:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Online (Zoom)",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_volunteer_surfrider_org_timeslots_s1pauq2pqg",
+   "title": "Clean Border Water Now Meeting",
+   "partner_name": "Surfrider Foundation San Diego County Chapter",
+   "partner_id": 739,
+   "description": "<br><b>REGISTER HERE: <a href=\"https://volunteer.surfrider.org/timeslots/S1paUQ2pQG\">https://volunteer.surfrider.org/timeslots/S1paUQ2pQG</a></b><br><br><b>Description<br></b>Join us to learn about the border pollution crisis and how each of us can contribute to solutions. Cover photo by William Bay.<br><br><b>Purpose<br></b>To collectively learn about, address, and eliminate the sewage, trash, sediment, and chemical waste that plagues the Southern California border region. These monthly CBWN meetings occur every second Monday and are open to the public. <br><b><br></b><br><b>Role</b><br>Addressing this massive public health and environmental justice crisis will take all of us. Swing by our meetings to learn more about the issue and ways to get involved. CBWN is a volunteer working group. <br><br><b>Vibe<br></b>Practical and actionable solutions!",
+   "link": "https://volunteer.surfrider.org/timeslots/S1paUQ2pQG",
+   "availability": "Repeats 17 times through 2026-11-09",
+   "date_start": "2026-09-14T18:00:00-07:00",
+   "date_end": "2026-11-09T19:00:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Volunteering",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego County, California",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "surfrider_foundation_san_diego.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_secure_sandiegobirdalliance_org_np_clients_sandiegobirdalliance_event_jsp_event_21661",
+   "title": "SAVE THE DATE: Latino Conservation Week Movie Screening",
+   "partner_name": "Surfrider Foundation San Diego County Chapter",
+   "partner_id": 739,
+   "description": "<b>Learn more here: <a href=\"https://secure.sandiegobirdalliance.org/np/clients/sandiegobirdalliance/event.jsp?event=21661\">https://secure.sandiegobirdalliance.org/np/clients/sandiegobirdalliance/event.jsp?event=21661</a></b>",
+   "link": "https://secure.sandiegobirdalliance.org/np/clients/sandiegobirdalliance/event.jsp?event=21661",
+   "availability": "",
+   "date_start": "2026-09-17T01:00:00-07:00",
+   "date_end": "2026-09-17T02:30:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego County, California",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "surfrider_foundation_san_diego.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_secure_sandiegobirdalliance_org_np_clients_sandiegobirdalliance_event_jsp_event_21656",
+   "title": "SAVE THE DATE: Latino Conservation Week Beach Fiesta",
+   "partner_name": "Surfrider Foundation San Diego County Chapter",
+   "partner_id": 739,
+   "description": "<b>Learn more here: <a href=\"https://secure.sandiegobirdalliance.org/np/clients/sandiegobirdalliance/event.jsp?event=21656\">https://secure.sandiegobirdalliance.org/np/clients/sandiegobirdalliance/event.jsp?event=21656</a></b>",
+   "link": "https://secure.sandiegobirdalliance.org/np/clients/sandiegobirdalliance/event.jsp?event=21656",
+   "availability": "",
+   "date_start": "2026-09-18T00:00:00-07:00",
+   "date_end": "2026-09-18T02:00:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego County, California",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "surfrider_foundation_san_diego.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_secure_sandiegobirdalliance_org_np_clients_sandiegobirdalliance_event_jsp_event_21160",
+   "title": "SAVE THE DATE: Latino Conservation Week Celebration",
+   "partner_name": "Surfrider Foundation San Diego County Chapter",
+   "partner_id": 739,
+   "description": "<b>Learn more here: <a href=\"https://secure.sandiegobirdalliance.org/np/clients/sandiegobirdalliance/event.jsp?event=21160\">https://secure.sandiegobirdalliance.org/np/clients/sandiegobirdalliance/event.jsp?event=21160</a></b>",
+   "link": "https://secure.sandiegobirdalliance.org/np/clients/sandiegobirdalliance/event.jsp?event=21160",
+   "availability": "",
+   "date_start": "2026-09-20T16:00:00-07:00",
+   "date_end": "2026-09-20T21:00:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego County, California",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "surfrider_foundation_san_diego.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_volunteer_surfrider_org_timeslots_rzahe8v05z",
+   "title": "Downtown San Diego Cleanup",
+   "partner_name": "Surfrider Foundation San Diego County Chapter",
+   "partner_id": null,
+   "description": "<b>REGISTER HERE: <a href=\"https://volunteer.surfrider.org/timeslots/RZAhE8v05z\">https://volunteer.surfrider.org/timeslots/RZAhE8v05z</a></b><br><br><b>Description</b><br>Cleanups are a fun way to engage in your community and leave the coast better than you found it.<br><br><b>Purpose</b><br>Join Surfrider San Diego and our Ocean Friendly Hosts, Sally's Waterfront Dining, for a cleanup at Seaport Village! Help protect our coastline by removing trash and collecting data to support a healthier ocean, waves, and beaches.<br><br><b>Role</b><br>Take action to protect the environment by removing trash from our coastline! Please check out the Pro Tips Section after you sign up for everything you will need to know about this cleanup! You will also find these details in your confirmation email.<br><br><b>Vibe</b><br>Active teamwork, education and fun!",
+   "link": "https://volunteer.surfrider.org/timeslots/RZAhE8v05z",
+   "availability": "Repeats 3 times through 2026-12-26",
+   "date_start": "2026-10-24T09:00:00-07:00",
+   "date_end": "2026-12-26T11:00:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Volunteering",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Seaport Village, San Diego",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  }
+ ]
+}

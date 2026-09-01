@@ -339,10 +339,13 @@ def run(
         registry_dir: Source Registry directory to load sources from.
             Defaults to the real seed registry (`registry/sources/`) when
             omitted -- see `registry.load_active_sources`.
-        site_dir: sibling `stem-ecosystem` checkout to write into.
+        site_dir: sibling `stem-ecosystem` checkout to read from --
+            specifically, `partners_path`'s default location (see below).
             Defaults to `Config.get_site_dir()` (`../stem-ecosystem`, or
-            `$SITE_DIR`) when omitted. Tests should always pass an
-            explicit `tmp_path`-based directory here.
+            `$SITE_DIR`) when omitted. Read-only as of sprint 025 ticket
+            007: nothing this function does writes into `site_dir`.
+            Tests should always pass an explicit `tmp_path`-based
+            directory here.
         ads_dir: directory of hand-authored ad-config TOML files (Ad
             Content Export, sprint 005 ticket 005). Defaults to the real
             seed ad registry (`registry/ads/`) when

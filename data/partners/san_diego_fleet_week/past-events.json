@@ -1,0 +1,80 @@
+{
+ "generated_at": "2026-09-01T08:27:52Z",
+ "partner_slug": "san_diego_fleet_week",
+ "kind": "past",
+ "event_count": 2,
+ "events": [
+  {
+   "slug": "https_fleetweeksandiego_org_events_military_appreciation_concert",
+   "title": "Fleet Week San Diego - Military Celebration Events",
+   "partner_name": "San Diego Fleet Week",
+   "partner_id": 385,
+   "description": "Fleet Week San Diego celebrates our military with ship tours, concerts, STEM events, and community activities. Join us in honoring those who serve.",
+   "link": "https://fleetweeksandiego.org/events/military-appreciation-concert",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8",
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science",
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego",
+   "latitude": "32.7509746",
+   "longitude": "-117.2169314",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_diego_fleet_week.gif",
+   "eligibility": "",
+   "image_src": "a1f93009734adb95.png"
+  },
+  {
+   "slug": "https_fleetweeksandiego_org_events",
+   "title": "Fleet Week San Diego - Military Celebration Events",
+   "partner_name": "San Diego Fleet Week",
+   "partner_id": 385,
+   "description": "Fleet Week San Diego celebrates our military with ship tours, concerts, STEM events, and community activities. Join us in honoring those who serve.",
+   "link": "https://fleetweeksandiego.org/events",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8",
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science",
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego",
+   "latitude": "32.7509746",
+   "longitude": "-117.2169314",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_diego_fleet_week.gif",
+   "eligibility": "",
+   "image_src": "a1f93009734adb95.png"
+  }
+ ]
+}

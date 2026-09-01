@@ -1,0 +1,139 @@
+{
+ "generated_at": "2026-09-01T08:27:52Z",
+ "partner_slug": "san_diego_automotive_museum",
+ "kind": "past",
+ "event_count": 4,
+ "events": [
+  {
+   "slug": "https_sdautomuseum_org_events_ambassador_form",
+   "title": "Ambassador Form - San Diego Automotive Museum",
+   "partner_name": "San Diego Automotive Museum",
+   "partner_id": 551,
+   "description": "Ambassador Interest Form",
+   "link": "https://sdautomuseum.org/events/ambassador-form/",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Volunteering",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego Automotive Museum",
+   "latitude": "36.778261",
+   "longitude": "-119.4179324",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_diego_automotive_museum.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_sdautomuseum_org_education_school_programs_camps_selection",
+   "title": "Selection - San Diego Automotive Museum",
+   "partner_name": "San Diego Automotive Museum",
+   "partner_id": 551,
+   "description": "",
+   "link": "https://sdautomuseum.org/education/school-programs/camps/selection/",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego Automotive Museum",
+   "latitude": "36.778261",
+   "longitude": "-119.4179324",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_diego_automotive_museum.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_sdautomuseum_org_events_venue_rental_the_exhibit_floor",
+   "title": "The Exhibit Floor | San Diego Automotive Museum",
+   "partner_name": "San Diego Automotive Museum",
+   "partner_id": 551,
+   "description": "Step into the San Diego Automotive Museum's exhibit floor where art, technology, and history creates an unforgettable automotive experience.",
+   "link": "https://sdautomuseum.org/events/venue-rental/the-exhibit-floor/",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering",
+    "Physical Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego Automotive Museum",
+   "latitude": "36.778261",
+   "longitude": "-119.4179324",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_diego_automotive_museum.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_sdautomuseum_org_events_ignite_2025",
+   "title": "Ignite 2025 - San Diego Automotive Museum",
+   "partner_name": "San Diego Automotive Museum",
+   "partner_id": 551,
+   "description": ". . . IGNITE!",
+   "link": "https://sdautomuseum.org/events/ignite-2025/",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego Automotive Museum",
+   "latitude": "36.778261",
+   "longitude": "-119.4179324",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_diego_automotive_museum.png",
+   "eligibility": "",
+   "image_src": "9190fd4da3cb1967.jpg"
+  }
+ ]
+}

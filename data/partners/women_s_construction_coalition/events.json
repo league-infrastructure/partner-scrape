@@ -1,0 +1,42 @@
+{
+ "generated_at": "2026-09-01T08:27:52Z",
+ "partner_slug": "women_s_construction_coalition",
+ "kind": "current",
+ "event_count": 1,
+ "events": [
+  {
+   "slug": "https_www_wccsd_org_events",
+   "title": "EVENTS | Women's Construction Coalition | San Diego — Women's Construction Coalition",
+   "partner_name": "Women's Construction Coalition",
+   "partner_id": 39,
+   "description": "",
+   "link": "https://www.wccsd.org/events",
+   "availability": "",
+   "date_start": "2026-09-02T00:00:00-07:00",
+   "date_end": "2026-09-02T00:00:00-07:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "All Day"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "9187 Clairemont Mesa Blvd., Suite 6-740, San Diego, California, 92123",
+   "latitude": "32.8307902",
+   "longitude": "-117.1315766",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "womens_construction_coalition.jpg",
+   "eligibility": "",
+   "image_src": ""
+  }
+ ]
+}

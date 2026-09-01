@@ -1,0 +1,42 @@
+{
+ "generated_at": "2026-09-01T08:27:52Z",
+ "partner_slug": "oceanside_public_library",
+ "kind": "past",
+ "event_count": 1,
+ "events": [
+  {
+   "slug": "san_diego_comic_con_graphic_novel_book_club_20260109",
+   "title": "San Diego Comic-Con Graphic Novel Book Club",
+   "partner_name": "Oceanside Public Library",
+   "partner_id": null,
+   "description": "Oceanside Public Library hosts a Graphic Novel Book Club for adults in partnership with San Diego Comic-Con International.\n\nThis program meets the 2nd Thursday of each month and is currently meeting online from January - November and in person in December at the Civic Center Library.\n\nBook Club members decide on the topics and books for each month.\n\nTitles Coming Soon...",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-01-09T02:00:00-08:00",
+   "date_end": "2026-01-09T03:30:00-08:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Oceanside Public Library (online January-November, Civic Center Library in December)",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  }
+ ]
+}
