@@ -1,7 +1,7 @@
 ---
 id: '002'
 title: Register SDCEC as a live-verified discovery-only hub
-status: in-progress
+status: done
 use-cases:
 - SUC-001
 depends-on: []
