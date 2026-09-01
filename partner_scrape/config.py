@@ -11,12 +11,44 @@ Configuration is assembled by dotconfig (layered ``.env`` files under
 ``config/``) before the process starts; this module only reads what
 lands in ``os.environ`` at call time, it does not know about dotconfig
 itself.
+
+Sprint 023 ticket 001 adds :class:`CredentialError`, a dedicated
+``RuntimeError`` subclass raised specifically by
+:func:`get_tba_api_key`/:func:`get_robotevents_api_key` when their env
+var is unset -- and, in ``teams/sources/tba.py``/``teams/sources/
+robotevents.py``, specifically by each source's ``discover()`` 401
+branch. Every other config accessor here, and every other raise branch
+in those two ``discover()`` methods, keeps raising plain
+``RuntimeError`` unchanged. The point is letting
+``teams.pipeline.run_teams()`` tell a structural, recurring credential
+failure (issue 62) apart from a one-off scrape hiccup by exception type
+rather than by message-substring matching -- see sprint.md's Design
+Rationale ("a dedicated ``CredentialError`` type, not message-substring
+matching") for the full reasoning.
 """
 
 from __future__ import annotations
 
 import os
 from pathlib import Path
+
+class CredentialError(RuntimeError):
+    """A structural, recurring credential failure -- a missing/invalid
+    API key or a 401 response -- as distinct from a transient/one-off
+    scrape failure (a bad page, a flaky network blip).
+
+    A plain marker subclass, no new behavior: it exists so
+    ``teams.pipeline.run_teams()`` can catch this specifically (before
+    its existing broader ``except Exception``) and raise exactly one
+    aggregate alert naming every affected league/source, rather than
+    treating a credential outage the same as any other per-source
+    hiccup (issue 62). Since it subclasses ``RuntimeError``, every
+    existing ``except RuntimeError``/``except Exception`` call site
+    continues to catch it unchanged -- this ticket narrows *which*
+    exception type specific raise sites use, it does not change what
+    catches them.
+    """
+
 
 #: Environment variable holding the root directory for the on-disk
 #: fetch cache (raw HTML + response metadata). Kept off the repo volume
@@ -220,20 +252,25 @@ def get_tba_api_key() -> str:
     token, never the quote characters.
 
     Raises:
-        RuntimeError: if ``TBA_KEY`` is not set (or is empty after
+        CredentialError: if ``TBA_KEY`` is not set (or is empty after
             stripping) -- there is no safe default for an API
             credential, matching ``get_leaguesync_api_key()``'s
-            convention. This is the failure mode
-            ``teams.pipeline.run_teams()`` must isolate (Migration
-            Concerns): a missing ``TBA_KEY`` degrades the ``teams``
-            export to FTC-only, it must never raise out of the whole
-            run.
+            convention, except that this specific missing-credential
+            case raises the dedicated ``CredentialError`` subclass
+            (sprint 023 ticket 001), not a bare ``RuntimeError``. This
+            is the failure mode ``teams.pipeline.run_teams()`` must
+            isolate (Migration Concerns): a missing ``TBA_KEY``
+            degrades the ``teams`` export to FTC-only, it must never
+            raise out of the whole run -- and, since ``CredentialError``
+            is-a ``RuntimeError``, every existing catch site keeps
+            working unchanged; only ``run_teams()``'s new aggregate
+            credential-failure alert additionally distinguishes it.
     """
     value = os.environ.get(TBA_API_KEY_ENV_VAR)
     if value is not None:
         value = value.strip().strip("'\"").strip()
     if not value:
-        raise RuntimeError(
+        raise CredentialError(
             f"{TBA_API_KEY_ENV_VAR} is not set. Configure it via the "
             "assembled .env (see config/prod/secrets.env) before running "
             "the tba team source."
@@ -264,20 +301,27 @@ def get_robotevents_api_key() -> str:
     bare token, never the quote characters.
 
     Raises:
-        RuntimeError: if ``ROBOTEVENTS_KEY`` is not set (or is empty
+        CredentialError: if ``ROBOTEVENTS_KEY`` is not set (or is empty
             after stripping) -- there is no safe default for an API
-            credential, matching ``get_tba_api_key()``'s convention.
+            credential, matching ``get_tba_api_key()``'s convention,
+            including that convention's sprint 023 ticket 001 update:
+            this specific missing-credential case raises the dedicated
+            ``CredentialError`` subclass, not a bare ``RuntimeError``.
             This is the failure mode both ``pipeline.run()`` and
             ``teams.pipeline.run_teams()`` must isolate (see
             :data:`ROBOTEVENTS_API_KEY_ENV_VAR`'s own docstring): a
             missing ``ROBOTEVENTS_KEY`` degrades to that one source
-            being skipped, it must never raise out of the whole run.
+            being skipped, it must never raise out of the whole run --
+            and, since ``CredentialError`` is-a ``RuntimeError``, every
+            existing catch site keeps working unchanged; only
+            ``run_teams()``'s new aggregate credential-failure alert
+            additionally distinguishes it.
     """
     value = os.environ.get(ROBOTEVENTS_API_KEY_ENV_VAR)
     if value is not None:
         value = value.strip().strip("'\"").strip()
     if not value:
-        raise RuntimeError(
+        raise CredentialError(
             f"{ROBOTEVENTS_API_KEY_ENV_VAR} is not set. Configure it via the "
             "assembled .env (see config/prod/secrets.env) before running "
             "the robotevents adapter/team source."

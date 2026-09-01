@@ -7,6 +7,18 @@ import pytest
 from partner_scrape import config
 
 
+class TestCredentialError:
+    """AC: CredentialError(RuntimeError) is a plain marker subclass, no
+    new behavior -- sprint 023 ticket 001."""
+
+    def test_is_a_runtime_error_subclass(self):
+        assert issubclass(config.CredentialError, RuntimeError)
+
+    def test_can_be_raised_and_caught_as_runtime_error(self):
+        with pytest.raises(RuntimeError):
+            raise config.CredentialError("boom")
+
+
 class TestScrapeCacheDir:
     def test_reads_configured_value(self, monkeypatch):
         monkeypatch.setenv("SCRAPE_CACHE_DIR", "/tmp/some-cache-dir")
@@ -113,6 +125,15 @@ class TestTbaApiKey:
         with pytest.raises(RuntimeError):
             config.get_tba_api_key()
 
+    def test_raises_credential_error_specifically_when_unset(self, monkeypatch):
+        # Sprint 023 ticket 001: the missing-key case raises the
+        # dedicated CredentialError subclass, not just any RuntimeError
+        # -- teams.pipeline.run_teams()'s new aggregate alert depends on
+        # this exception type distinction.
+        monkeypatch.delenv("TBA_KEY", raising=False)
+        with pytest.raises(config.CredentialError):
+            config.get_tba_api_key()
+
 
 class TestTbaUrl:
     def test_default_url_when_unset(self, monkeypatch):
@@ -158,6 +179,14 @@ class TestRobotEventsApiKey:
     def test_raises_when_only_quotes(self, monkeypatch):
         monkeypatch.setenv("ROBOTEVENTS_KEY", "''")
         with pytest.raises(RuntimeError):
+            config.get_robotevents_api_key()
+
+    def test_raises_credential_error_specifically_when_unset(self, monkeypatch):
+        # Sprint 023 ticket 001: the missing-key case raises the
+        # dedicated CredentialError subclass, not just any RuntimeError
+        # -- mirrors TestTbaApiKey's identical assertion.
+        monkeypatch.delenv("ROBOTEVENTS_KEY", raising=False)
+        with pytest.raises(config.CredentialError):
             config.get_robotevents_api_key()
 
 

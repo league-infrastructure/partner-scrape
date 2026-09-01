@@ -1676,7 +1676,23 @@ after `geocode_teams()`), the same single-call-sequencing cost
   `TestTbaFailureIsolation` exercises both cases end-to-end. This is
   the real mechanism `TBA_KEY` not yet being in GitHub Actions repo
   secrets (sprint.md's Migration Concerns) depends on until an operator
-  pushes it.
+  pushes it. **Sprint 023** raises this from silent isolation to an
+  alerted one, in two layers: ticket 001 catches the now-dedicated
+  `config.CredentialError` in `run_teams()`'s per-source loop and logs
+  exactly one aggregate `logger.warning()` for the whole run naming
+  every affected league/source (issue 62 — this was previously
+  indistinguishable, in both the log and `teams.json`, from a one-off
+  scrape hiccup or a genuine empty result); ticket 002 threads that
+  same league list through `export_teams()` into
+  `teams.export._build_meta()`, which publishes it as an always-
+  present, sorted, de-duplicated `meta.credential_failures` key in
+  `teams.json` itself (`[]` on a clean run) — an *active* signal in the
+  shipped artifact, not just the passive absence of a league from
+  `by_league` that a consumer would otherwise have to already know to
+  check for. See `export.py`'s own module docstring for the payload
+  contract and `teams.pipeline`'s module docstring for the full
+  three-layer sequencing (per-source log -> aggregate log -> payload
+  key).
 - `sources.ftcscout.OUT_OF_REGION_CITIES` is a small hand-maintained
   denylist derived from one live measurement (2026-08-27).
   `sources.tba.SD_COUNTY_CITIES` is the equivalent allowlist for TBA —

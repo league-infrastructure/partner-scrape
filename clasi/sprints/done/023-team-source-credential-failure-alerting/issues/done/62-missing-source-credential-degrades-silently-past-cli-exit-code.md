@@ -1,5 +1,9 @@
 ---
-status: pending
+status: done
+sprint: '023'
+tickets:
+- 023-001
+- 023-002
 ---
 
 # A missing source credential (TBA_KEY, ROBOTEVENTS_KEY) degrades past exit code 0 with no active alert

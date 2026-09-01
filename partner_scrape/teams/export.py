@@ -39,7 +39,8 @@ calls.
     "total": 152,
     "by_league": {"FTC": 152},
     "out_of_region": 6,
-    "by_location_precision": {"none": 152}
+    "by_location_precision": {"none": 152},
+    "credential_failures": []
   },
   "teams": [ {"team_id": "ftc-1622", "league": "FTC", ...}, ... ]
 }
@@ -54,7 +55,15 @@ coverage and data-quality gaps (an unresolved location, a league with
 no active source this run) are visible in the artifact itself, not
 just in a log line -- the same "a partial result ships, the gap is
 reported" principle `docs/design/design.md` Sec.5 states for the rest
-of this project.
+of this project. `credential_failures` (sprint 023 ticket 002) is the
+active counterpart to `by_league`'s passive omission signal above: an
+always-present, sorted, de-duplicated list of league codes (e.g.
+`["FRC", "VEX"]`) whose acquisition source failed on a credential
+error this run -- `[]` on a clean run, never an absent key -- so a
+downstream consumer (e.g. the stem-ecosystem peer's cross-check, issue
+62) does not have to already know to check `by_league` for a missing
+key in a dict with no declared complete key set to notice a structural
+credential outage.
 
 ## Two hard invariants
 
@@ -162,7 +171,9 @@ def _now_iso() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
-def _build_meta(teams: list[Team]) -> dict[str, Any]:
+def _build_meta(
+    teams: list[Team], credential_failures: list[str] | None = None
+) -> dict[str, Any]:
     """Coverage/data-quality envelope for `teams`. `by_league` and
     `by_location_precision` are built as plain `dict`s (insertion order
     of first appearance) rather than pre-seeded from `model.League`/
@@ -170,7 +181,20 @@ def _build_meta(teams: list[Team]) -> dict[str, Any]:
     zero teams this run simply doesn't appear, which is itself a
     meaningful, visible signal (e.g. a `TBA_KEY`-missing run's `meta`
     has no `"FRC"` key in `by_league` at all, once ticket 011-003 adds
-    TBA)."""
+    TBA).
+
+    Sprint 023 ticket 002: `credential_failures` is the *active*
+    counterpart to that passive `by_league`-omission signal -- issue
+    62's own text calls a missing dict key "a much weaker guarantee
+    than an active alert." Always present in the returned dict (never
+    an absent key a consumer has to know to check for), as the sorted,
+    de-duplicated list of league codes passed in, or `[]` when `None`/
+    empty (a clean run). Sorting/deduping happens here, not at the
+    caller, so every caller -- `export_teams()`'s production path and
+    any direct test of this function -- gets the same normalized shape
+    regardless of what order or how many times a league appears in
+    whatever was passed in.
+    """
     by_league: dict[str, int] = {}
     by_location_precision: dict[str, int] = {}
     out_of_region = 0
@@ -188,6 +212,7 @@ def _build_meta(teams: list[Team]) -> dict[str, Any]:
         "by_league": by_league,
         "out_of_region": out_of_region,
         "by_location_precision": by_location_precision,
+        "credential_failures": sorted(set(credential_failures)) if credential_failures else [],
     }
 
 
@@ -197,6 +222,7 @@ def export_teams(
     *,
     dry_run: bool = False,
     own_data_dir: str | Path | None = None,
+    credential_failures: Iterable[str] = (),
 ) -> dict[str, Any]:
     """Serialize and write `teams` into `teams.json` -- three times:
     once to the build-time `src/data/teams.json` Astro input, once to
@@ -223,6 +249,15 @@ def export_teams(
             directory is created automatically if missing. Tests should
             always pass an explicit `tmp_path` here, never rely on the
             default, matching `site_dir`'s own test convention.
+        credential_failures: sprint 023 ticket 002 -- league codes
+            (e.g. `["FRC", "VEX"]`) whose acquisition source failed on
+            a credential error this run (`teams.pipeline.run_teams()`'s
+            own collection, threaded straight through). Defaults to
+            `()` so every existing call site that omits it keeps
+            working unchanged and gets a clean-run `[]` in
+            `meta.credential_failures`. Sorted and de-duplicated by
+            `_build_meta()`, not here -- see that function's own
+            docstring.
 
     Returns:
         The `{"meta": ..., "teams": [...]}` payload that was (or, for
@@ -254,7 +289,7 @@ def export_teams(
     team_list.sort(key=lambda t: (t.league, *_natural_number_key(t.number)))
 
     payload: dict[str, Any] = {
-        "meta": _build_meta(team_list),
+        "meta": _build_meta(team_list, list(credential_failures)),
         "teams": [to_json_dict(t) for t in team_list],
     }
 
