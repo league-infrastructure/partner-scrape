@@ -36,31 +36,31 @@ options considered.
 
 ## Acceptance Criteria
 
-- [ ] `project()` gains an `own_data_dir` parameter (default:
+- [x] `project()` gains an `own_data_dir` parameter (default:
       `config.get_own_data_dir()`, matching every other export
       function's convention).
-- [ ] `project()` writes `{own_data_dir}/partners.json` and, per
+- [x] `project()` writes `{own_data_dir}/partners.json` and, per
       partner, `{own_data_dir}/partners/<slug>/events.json` and
       `{own_data_dir}/partners/<slug>/past-events.json`. It never
       writes anywhere under `{site_dir}/...`.
-- [ ] `project()`'s `site_dir` parameter is unchanged in role — still
+- [x] `project()`'s `site_dir` parameter is unchanged in role — still
       resolves the default `partners_path`
       (`{site_dir}/src/data/partners.json`) when `partners_path` is not
       given explicitly.
-- [ ] `cli.py`'s existing call to `publish.project(site_dir=...,
+- [x] `cli.py`'s existing call to `publish.project(site_dir=...,
       partners_path=...)` continues to resolve `partners_path` from
       `site_dir` exactly as today (unchanged read); no new
       `own_data_dir` argument is required at the call site if
       `project()`'s default already resolves correctly, but pass it
       explicitly if that's clearer.
-- [ ] `own_data_dir` is created automatically if missing, matching every
+- [x] `own_data_dir` is created automatically if missing, matching every
       other export function's convention (`site_dir`'s `src/data` stays
       the one exception that must already exist, per `partners_path`'s
       read requirement).
-- [ ] The existing `_to_opportunity()` field-tolerance behavior (a log
+- [x] The existing `_to_opportunity()` field-tolerance behavior (a log
       line recorded before a field existed on `Opportunity` falls back
       to that field's dataclass default) is unchanged.
-- [ ] `uv run pytest -q` is green.
+- [x] `uv run pytest -q` is green.
 
 ## Implementation Plan
 
