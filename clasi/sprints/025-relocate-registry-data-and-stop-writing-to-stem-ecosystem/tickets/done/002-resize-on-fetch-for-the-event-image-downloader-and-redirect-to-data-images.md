@@ -1,7 +1,7 @@
 ---
 id: '002'
 title: Resize-on-fetch for the Event Image Downloader and redirect to data/images/
-status: in-progress
+status: done
 use-cases:
 - SUC-030
 depends-on: []

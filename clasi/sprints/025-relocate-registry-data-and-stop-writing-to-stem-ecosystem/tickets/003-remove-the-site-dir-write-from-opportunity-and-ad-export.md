@@ -1,9 +1,11 @@
 ---
 id: '003'
 title: Remove the site_dir write from Opportunity and Ad export
-status: open
-use-cases: [SUC-029]
-depends-on: ['002']
+status: in-progress
+use-cases:
+- SUC-029
+depends-on:
+- '002'
 github-issue: ''
 issue: stop-writing-to-stem-ecosystem-checkout.md
 completes_issue: true
