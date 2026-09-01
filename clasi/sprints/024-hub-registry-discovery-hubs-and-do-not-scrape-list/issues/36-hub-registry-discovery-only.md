@@ -1,5 +1,9 @@
 ---
-status: pending
+status: in-progress
+sprint: '024'
+tickets:
+- 024-001
+- 024-002
 ---
 
 # Hub registry: real discovery-only hubs + the do-not-scrape list
