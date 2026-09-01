@@ -1,7 +1,7 @@
 ---
 id: '023'
 title: Team Source Credential Failure Alerting
-status: executing
+status: done
 branch: sprint/023-team-source-credential-failure-alerting
 use-cases:
 - SUC-027
