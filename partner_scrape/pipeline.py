@@ -46,7 +46,7 @@ from pathlib import Path
 from typing import Any, Callable, Protocol, Sequence
 
 from partner_scrape.adapters import run as run_adapter
-from partner_scrape.config import get_site_dir
+from partner_scrape.config import get_own_data_dir, get_site_dir
 from partner_scrape.export import (
     EventImageDownloader,
     export_ads,
@@ -417,7 +417,9 @@ def run(
             (sprint 008 ticket 008, issue 19). Defaults to `None`, which
             makes `run()` construct a real
             `export.images.EventImageDownloader` writing into
-            `{resolved site_dir}/public/images/opportunities/` --
+            `get_own_data_dir() / "images" / "opportunities"` (sprint 025
+            ticket 002; before that ticket, this wrote into
+            `{resolved site_dir}/public/images/opportunities/` instead) --
             *unless* `dry_run` is `True`, in which case no downloader is
             constructed and `image_src` simply stays `""` for every
             record, matching `export_opportunities`'/`export_ads`'s own
@@ -617,8 +619,13 @@ def run(
     # contract.
     resolved_image_resolver = image_resolver
     if resolved_image_resolver is None and not dry_run:
+        # Sprint 025 ticket 002: this repo's own `get_own_data_dir()`
+        # publish target, not `{resolved_site_dir}/public/images/...` --
+        # every other export write already goes through `own_data_dir`
+        # (see `export/writer.py`, `export/ads.py`); this was the one
+        # write path sprint 020 never gave that equivalent.
         resolved_image_resolver = EventImageDownloader(
-            resolved_site_dir / "public" / "images" / "opportunities"
+            get_own_data_dir() / "images" / "opportunities"
         ).download
 
     opportunities = normalize_run(

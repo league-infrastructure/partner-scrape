@@ -37,32 +37,32 @@ is not an infrastructure/hosting decision requiring stakeholder input.
 
 ## Acceptance Criteria
 
-- [ ] `Pillow` is declared in `pyproject.toml`'s `dependencies` (not an
+- [x] `Pillow` is declared in `pyproject.toml`'s `dependencies` (not an
       optional extra — unlike `playwright`, no external browser binary
       is needed).
-- [ ] A newly-downloaded image whose width or height exceeds 1600px
+- [x] A newly-downloaded image whose width or height exceeds 1600px
       (long edge) is resized (aspect ratio preserved) and re-encoded as
       JPEG at quality 80.
-- [ ] An image already within the 1600px cap is written through with
+- [x] An image already within the 1600px cap is written through with
       its original bytes and format unchanged — no unnecessary
       re-encode.
-- [ ] Only PNG/JPEG/WebP are eligible for resize; GIF is passed through
+- [x] Only PNG/JPEG/WebP are eligible for resize; GIF is passed through
       unresized (animation-safety — see sprint.md's Design Rationale).
-- [ ] The dedup-by-hash filename is computed from the *final* (possibly
+- [x] The dedup-by-hash filename is computed from the *final* (possibly
       resized) bytes, not the original fetch — two images that resize to
       identical final bytes dedupe to one written file.
-- [ ] `pipeline.run()`'s default `image_resolver` construction (used
+- [x] `pipeline.run()`'s default `image_resolver` construction (used
       when the caller omits one) targets `data/images/opportunities/`
       via `config.get_own_data_dir()`, never
       `{site_dir}/public/images/opportunities/`.
-- [ ] `data/images/opportunities/` is created automatically if missing
+- [x] `data/images/opportunities/` is created automatically if missing
       (`mkdir(parents=True, exist_ok=True)`), matching every other
       `own_data_dir` write's convention.
-- [ ] Existing `EventImageDownloader` quality-gate tests (scheme check,
+- [x] Existing `EventImageDownloader` quality-gate tests (scheme check,
       status, `Content-Type`, size cap, structural decode check, minimum
       dimensions) pass unmodified — this ticket adds a new step after
       the existing gate, it doesn't change the gate itself.
-- [ ] `uv run pytest -q` is green.
+- [x] `uv run pytest -q` is green.
 
 ## Implementation Plan
 

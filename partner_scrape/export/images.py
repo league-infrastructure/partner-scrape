@@ -49,21 +49,36 @@ case of a generic partner-site banner reused across many unrelated
 events, sprint.md Approach step 2) reuses its existing filename rather
 than writing a duplicate file.
 
-**Pixel-dimension downscaling is intentionally not implemented.**
-`logo_src`'s one-off partner-icon sourcing script (ticket 005) downscales
-via an external ImageMagick invocation, but that script is explicitly
-*not* part of the recurring `partner_scrape` pipeline (sprint.md's module
-table: "not part of the recurring scrape pipeline"). This module *is*
-part of that recurring pipeline, which keeps zero external
-dependencies -- matching `fetch/fetcher.py`'s documented rationale
-("stdlib `urllib.request`, zero new dependencies") -- so adding an
-image-resampling dependency (e.g. Pillow) or shelling out to ImageMagick
-was assessed as unnecessary weight for this ticket: neither ticket 008's
-acceptance criteria nor its test plan gate on true pixel resampling.
-`MAX_IMAGE_BYTES` gives comparable size discipline (a bounded stored
-payload) without one. If genuine pixel downscaling becomes a real
-operational need, revisit adding an image-processing dependency in a
-follow-up ticket.
+**Resize-on-fetch (sprint 025 ticket 002).** Pixel-dimension downscaling
+was intentionally *not* implemented as of ticket 008 -- this docstring's
+own earlier text named the exact trigger for revisiting that call ("if
+genuine pixel downscaling becomes a real operational need, revisit
+adding an image-processing dependency in a follow-up ticket"). Sprint
+025's own measurement of stem-ecosystem's 631 already-self-hosted images
+was that trigger: ~405MB total, mean 655KB/median 303KB, 147 files over
+1MB accounting for 67% of total bytes (including a 5.2MB
+raw-camera-original JPEG served as a card thumbnail). `MAX_IMAGE_BYTES`
+bounds the *fetched* payload but was never a substitute for true
+resampling of what gets *stored*.
+
+A newly-downloaded image (only -- the 631 legacy images already
+self-hosted before this ticket are explicitly out of scope; this module
+never re-processes an already-stored file) whose long edge exceeds
+`RESIZE_LONG_EDGE` is downscaled, aspect ratio preserved, via Pillow's
+`Image.thumbnail`, and re-encoded: JPEG at `RESIZE_JPEG_QUALITY` for an
+opaque image, PNG for one with an alpha channel (so transparency isn't
+silently lost). GIF is passed through unresized regardless of size --
+`Image.thumbnail` only touches a GIF's first frame, which would silently
+drop animation. An image already within the cap on both dimensions is
+written through unchanged, byte-for-byte -- no unnecessary re-encode.
+See `_resize_if_needed`.
+
+This is the one exception to `fetch/fetcher.py`'s "zero new
+dependencies" rationale (echoed in this module's own `UrllibImageFetcher`
+docstring, which still holds for *fetching*): this module now takes a
+hard dependency on Pillow (`pyproject.toml`'s `dependencies`, not an
+optional extra like `playwright` -- no external browser/binary is
+needed).
 
 A missing, unreachable, or rejected image never raises -- `.download()`
 returns `""`, and the caller leaves `Opportunity.image_src` empty,
@@ -74,6 +89,7 @@ normally otherwise").
 from __future__ import annotations
 
 import hashlib
+import io
 import logging
 import struct
 import urllib.error
@@ -81,6 +97,8 @@ import urllib.request
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Protocol
+
+from PIL import Image
 
 logger = logging.getLogger(__name__)
 
@@ -99,6 +117,20 @@ MAX_IMAGE_BYTES = 5 * 1024 * 1024  # 5 MB
 #: while still accepting a small-but-legitimate square photo used as an
 #: event's image.
 MIN_DIMENSION = 80
+
+#: Resize-on-fetch long-edge cap, in pixels (sprint 025 ticket 002). A
+#: newly-downloaded image with either dimension above this is downscaled
+#: (aspect ratio preserved) before being written -- see
+#: `_resize_if_needed` and the module docstring's "Resize-on-fetch"
+#: section for the stem-ecosystem measurement that motivated this value.
+RESIZE_LONG_EDGE = 1600
+
+#: JPEG re-encode quality used by `_resize_if_needed` for an opaque
+#: resized image -- 80 is a conventional "visually lossless enough for a
+#: web card thumbnail" quality/size tradeoff point, well above JPEG's
+#: perceptible-artifact range (roughly <60) and well below the
+#: diminishing-returns range near 100.
+RESIZE_JPEG_QUALITY = 80
 
 
 @dataclass
@@ -302,6 +334,47 @@ def _extension_for(data: bytes) -> str:
     return _EXTENSIONS[found[0]]
 
 
+def _resize_if_needed(data: bytes, dimensions: tuple[int, int], extension: str) -> bytes:
+    """Return `data`, downscaled and re-encoded if it exceeds
+    `RESIZE_LONG_EDGE` on either dimension; otherwise `data` unchanged,
+    byte-for-byte (see module docstring's "Resize-on-fetch" section).
+
+    `extension` (the format `_extension_for` sniffed from `data`) gates
+    two passthrough cases before any Pillow decode is attempted:
+    `".gif"` is always passed through -- `Image.thumbnail` only touches
+    a GIF's first frame, which would silently drop animation -- and an
+    image already within the cap on both `dimensions` needs no
+    re-encode at all. Only PNG/JPEG/WebP inputs above the cap actually
+    reach Pillow.
+
+    An image with an alpha channel (`RGBA`/`LA` mode, or `P`-mode with a
+    `transparency` entry) is re-encoded as PNG so transparency survives;
+    every other (opaque) image is re-encoded as JPEG at
+    `RESIZE_JPEG_QUALITY`, regardless of its original format -- matching
+    this ticket's acceptance criteria, not a format-preserving resize.
+    """
+    width, height = dimensions
+    if extension == ".gif":
+        return data
+    if width <= RESIZE_LONG_EDGE and height <= RESIZE_LONG_EDGE:
+        return data
+
+    with Image.open(io.BytesIO(data)) as opened:
+        opened.load()
+        image = opened.copy()
+    image.thumbnail((RESIZE_LONG_EDGE, RESIZE_LONG_EDGE), Image.Resampling.LANCZOS)
+
+    has_alpha = image.mode in ("RGBA", "LA") or (
+        image.mode == "P" and "transparency" in image.info
+    )
+    buffer = io.BytesIO()
+    if has_alpha:
+        image.convert("RGBA").save(buffer, format="PNG")
+    else:
+        image.convert("RGB").save(buffer, format="JPEG", quality=RESIZE_JPEG_QUALITY)
+    return buffer.getvalue()
+
+
 class EventImageDownloader:
     """Fetches, validates, quality-gates, dedupes, and self-hosts one
     Event's `image_url` per `.download()` call.
@@ -368,13 +441,21 @@ class EventImageDownloader:
         if width < self.min_dimension or height < self.min_dimension:
             return ""
 
-        digest = hashlib.sha256(response.body).hexdigest()
+        # Resize-on-fetch (sprint 025 ticket 002): applies only to this
+        # newly-fetched image, never to anything already written by an
+        # earlier `.download()` call. The dedup hash/filename below is
+        # computed from these *final* bytes, not `response.body` --
+        # two images that resize to identical final bytes dedupe to one
+        # written file, matching the acceptance criteria.
+        final_bytes = _resize_if_needed(response.body, dimensions, _extension_for(response.body))
+
+        digest = hashlib.sha256(final_bytes).hexdigest()
         cached = self._hash_to_filename.get(digest)
         if cached is not None:
             return cached
 
-        filename = f"{digest[:16]}{_extension_for(response.body)}"
+        filename = f"{digest[:16]}{_extension_for(final_bytes)}"
         self.dest_dir.mkdir(parents=True, exist_ok=True)
-        (self.dest_dir / filename).write_bytes(response.body)
+        (self.dest_dir / filename).write_bytes(final_bytes)
         self._hash_to_filename[digest] = filename
         return filename

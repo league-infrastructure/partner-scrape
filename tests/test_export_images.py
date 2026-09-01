@@ -7,13 +7,23 @@ from each format's real container structure (PNG `IHDR`, JPEG `SOF0`,
 GIF header, WebP `VP8X`) rather than loaded from binary files, so these
 tests exercise `_sniff_dimensions`'s actual byte-level parsing against
 spec-compliant layouts, not a stand-in.
+
+`TestResizeOnFetch` (sprint 025 ticket 002) is the one exception to the
+"hand-built header bytes" convention above: a real resize needs a real
+Pillow-decodable image, so those fixtures are built with `PIL.Image`
+itself (still entirely in-memory, still no file/network I/O) rather than
+hand-assembled headers.
 """
 
 from __future__ import annotations
 
+import io
 import struct
 
+from PIL import Image
+
 from partner_scrape.export.images import (
+    RESIZE_LONG_EDGE,
     EventImageDownloader,
     ImageFetchResponse,
     _extension_for,
@@ -56,6 +66,35 @@ def _webp_vp8x_bytes(width: int, height: int) -> bytes:
 LARGE_JPEG = _jpeg_bytes(800, 600)
 LARGE_PNG = _png_bytes(1024, 768)
 TINY_JPEG = _jpeg_bytes(2, 2)
+
+
+def _real_jpeg_bytes(width: int, height: int, color: tuple[int, int, int] = (200, 50, 50)) -> bytes:
+    """A genuinely Pillow-decodable opaque JPEG -- unlike `_jpeg_bytes`
+    above (a bare `SOF0` header with no real entropy-coded scan data),
+    `TestResizeOnFetch` needs fixtures `_resize_if_needed` can actually
+    open and re-encode, not just sniff the dimensions of."""
+    buffer = io.BytesIO()
+    Image.new("RGB", (width, height), color=color).save(buffer, format="JPEG", quality=95)
+    return buffer.getvalue()
+
+
+def _real_rgba_png_bytes(
+    width: int, height: int, color: tuple[int, int, int, int] = (10, 20, 30, 128)
+) -> bytes:
+    """A genuinely Pillow-decodable PNG with a real alpha channel."""
+    buffer = io.BytesIO()
+    Image.new("RGBA", (width, height), color=color).save(buffer, format="PNG")
+    return buffer.getvalue()
+
+
+def _real_gif_bytes(width: int, height: int) -> bytes:
+    """A genuinely Pillow-decodable GIF (animation-shaped in the sense
+    that matters here: it has real, sniffable GIF header dimensions --
+    `_resize_if_needed` must never even attempt to open it, since GIF is
+    passed through unresized regardless of size)."""
+    buffer = io.BytesIO()
+    Image.new("P", (width, height)).save(buffer, format="GIF")
+    return buffer.getvalue()
 
 
 class _FakeFetcher:
@@ -282,3 +321,93 @@ class TestDedup:
 
         assert filename_a != filename_b
         assert len(list(tmp_path.iterdir())) == 2
+
+
+class TestResizeOnFetch:
+    """Sprint 025 ticket 002: resize-on-fetch for *newly* downloaded
+    images only -- see `_resize_if_needed` and this module's own
+    docstring "Resize-on-fetch" section. Every fixture here is a real,
+    Pillow-decodable in-memory image (`_real_jpeg_bytes` /
+    `_real_rgba_png_bytes` / `_real_gif_bytes`), not the hand-built
+    header-only bytes this file's other tests use -- a genuine resize
+    needs a genuine decode, and no test still touches a file or a
+    socket."""
+
+    def test_oversized_image_is_resized_smaller_and_stays_a_valid_image(self, tmp_path):
+        url = "https://example.org/huge-event.jpg"
+        oversized = _real_jpeg_bytes(2000, 1000)
+        fetcher = _FakeFetcher({url: _ok(oversized)})
+        downloader = EventImageDownloader(tmp_path, fetcher=fetcher)
+
+        filename = downloader.download(url)
+
+        assert filename != ""
+        stored_bytes = (tmp_path / filename).read_bytes()
+        assert len(stored_bytes) < len(oversized)
+        stored_dimensions = _sniff_dimensions(stored_bytes)
+        assert stored_dimensions is not None
+        width, height = stored_dimensions
+        assert width <= RESIZE_LONG_EDGE and height <= RESIZE_LONG_EDGE
+        # Aspect ratio (2:1) preserved.
+        assert width == 2 * height
+
+    def test_image_already_within_the_cap_is_written_through_byte_identical(self, tmp_path):
+        url = "https://example.org/small-event.jpg"
+        small = _real_jpeg_bytes(400, 300)
+        fetcher = _FakeFetcher({url: _ok(small)})
+        downloader = EventImageDownloader(tmp_path, fetcher=fetcher)
+
+        filename = downloader.download(url)
+
+        assert filename != ""
+        assert (tmp_path / filename).read_bytes() == small
+
+    def test_two_images_that_resize_to_identical_final_bytes_dedupe_to_one_file(self, tmp_path):
+        """The core "hash the final bytes, not the original fetch" case:
+        two URLs whose *fetched* bytes genuinely differ (one PNG-sourced,
+        one JPEG-sourced -- see `_real_jpeg_bytes`/no PNG helper reuse
+        here) but whose content, once decoded, resized, and re-encoded to
+        JPEG at the same quality, is pixel-for-pixel identical, so the
+        resize step's output is byte-identical -- must dedupe to a single
+        written file, extending `TestDedup`'s original-bytes dedup case
+        to the resized-bytes case this ticket adds."""
+        url_png_sourced = "https://example.org/banner-from-png.png"
+        url_jpeg_sourced = "https://example.org/banner-from-jpeg.jpg"
+
+        png_buffer = io.BytesIO()
+        Image.new("RGB", (2000, 1000), color=(100, 150, 200)).save(png_buffer, format="PNG")
+        oversized_png = png_buffer.getvalue()
+        oversized_jpeg = _real_jpeg_bytes(2000, 1000, color=(100, 150, 200))
+        assert oversized_png != oversized_jpeg  # genuinely different fetched bytes
+
+        fetcher = _FakeFetcher(
+            {
+                url_png_sourced: _ok(oversized_png, content_type="image/png"),
+                url_jpeg_sourced: _ok(oversized_jpeg),
+            }
+        )
+        downloader = EventImageDownloader(tmp_path, fetcher=fetcher)
+
+        filename_png_sourced = downloader.download(url_png_sourced)
+        filename_jpeg_sourced = downloader.download(url_jpeg_sourced)
+
+        assert filename_png_sourced == filename_jpeg_sourced
+        assert filename_png_sourced != ""
+        assert len(list(tmp_path.iterdir())) == 1
+        # Both URLs were genuinely fetched -- dedup happens after resize,
+        # not by skipping the second request.
+        assert fetcher.calls == [url_png_sourced, url_jpeg_sourced]
+
+    def test_gif_is_passed_through_unresized_regardless_of_size(self, tmp_path):
+        url = "https://example.org/animated.gif"
+        oversized_gif = _real_gif_bytes(2000, 1000)
+        fetcher = _FakeFetcher({url: _ok(oversized_gif, content_type="image/gif")})
+        downloader = EventImageDownloader(tmp_path, fetcher=fetcher)
+
+        filename = downloader.download(url)
+
+        assert filename.endswith(".gif")
+        stored_bytes = (tmp_path / filename).read_bytes()
+        assert stored_bytes == oversized_gif
+        # Dimensions unchanged -- no resize was applied.
+        assert _sniff_dimensions(stored_bytes) == (2000, 1000)
