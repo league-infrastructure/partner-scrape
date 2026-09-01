@@ -1,7 +1,7 @@
 ---
 id: '001'
 title: Write the do-not-scrape / excluded-source reference
-status: in-progress
+status: done
 use-cases:
 - SUC-002
 depends-on: []

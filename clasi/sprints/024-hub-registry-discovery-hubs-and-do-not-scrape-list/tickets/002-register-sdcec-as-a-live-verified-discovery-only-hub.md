@@ -1,8 +1,9 @@
 ---
 id: '002'
 title: Register SDCEC as a live-verified discovery-only hub
-status: open
-use-cases: [SUC-001]
+status: in-progress
+use-cases:
+- SUC-001
 depends-on: []
 github-issue: ''
 issue: 36-hub-registry-discovery-only.md
