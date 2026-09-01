@@ -1,7 +1,7 @@
 ---
 id: '003'
 title: Publish opportunities.json/scrape-meta.json into data/ from export_opportunities()
-status: in-progress
+status: done
 use-cases:
 - SUC-019
 depends-on:
