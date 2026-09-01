@@ -146,11 +146,6 @@ def _ftc_tba_and_robotevents_fetcher() -> FixtureFetcher:
     return FixtureFetcher(responses)
 
 
-def _make_site(root: Path) -> Path:
-    (root / "src" / "data").mkdir(parents=True)
-    return root
-
-
 @pytest.fixture(autouse=True)
 def _clean_tba_key_env(monkeypatch):
     """Every test in this module starts with `TBA_KEY` unset,
@@ -166,24 +161,26 @@ def _clean_tba_key_env(monkeypatch):
 @pytest.fixture(autouse=True)
 def _own_data_dir_default(tmp_path_factory, monkeypatch):
     """Pin `export.get_own_data_dir()`'s resolution to a throwaway
-    directory for every test in this file (sprint 020 ticket 005).
+    directory for every test in this file (sprint 020 ticket 005;
+    sole write target since sprint 025 ticket 004 removed
+    `export_teams()`'s `site_dir` parameter entirely).
 
-    `run_teams()` calls `export_teams(teams, site_dir=site_dir,
-    dry_run=dry_run)` without ever passing `own_data_dir` through --
-    that parameter's default resolves via `config.get_own_data_dir()`
-    (a real repo path with no environment-variable override) inside
-    `export_teams()` itself. This file's several `dry_run=False` calls
-    (`TestEndToEndAgainstTheRealRegistry.
-    test_real_run_writes_teams_json_to_site_dir`,
-    `TestTbaFailureIsolation.test_missing_tba_key_writes_a_valid_teams_json_to_disk`,
-    `TestRobotEventsFailureIsolation.
-    test_missing_robotevents_key_writes_a_valid_teams_json_to_disk`)
-    would otherwise write real files into this repo's actual `data/`
-    directory on every test run. Mirrors
+    `run_teams()` calls `export_teams(teams, dry_run=dry_run,
+    credential_failures=...)` without ever passing `own_data_dir`
+    through -- that parameter's default resolves via
+    `config.get_own_data_dir()` (a real repo path with no
+    environment-variable override) inside `export_teams()` itself. This
+    file's several `dry_run=False` calls (each in
+    `TestEndToEndAgainstTheRealRegistry`, `TestTbaFailureIsolation`, and
+    `TestRobotEventsFailureIsolation` that reads a real written
+    `teams.json` back off disk) would otherwise write real files into
+    this repo's actual `data/` directory on every test run. Mirrors
     `tests/teams/test_export.py`'s identical `_own_data_dir_default`
     fixture, patched here on the `export` module directly since
     `pipeline.py` imports `export_teams` by name, not the module
-    itself.
+    itself. A handful of those same tests additionally monkeypatch this
+    directly, themselves, to pin `own_data_dir` to a directory they can
+    read back from -- see each one's own comment.
     """
     fake_own_data_dir = tmp_path_factory.mktemp("own-data-default")
     monkeypatch.setattr(teams_export, "get_own_data_dir", lambda: fake_own_data_dir)
@@ -205,7 +202,6 @@ class TestEndToEndAgainstTheRealRegistry:
 
     def test_dry_run_reports_152_teams_with_no_disk_write(self, tmp_path):
         fetcher = _ftcscout_fetcher()
-        site = tmp_path / "stem-ecosystem"
 
         # source="ftcscout": the real registry also loads frc-sd.toml and
         # (sprint 012) fll-sd.toml now -- TBA is isolated by a missing
@@ -215,11 +211,16 @@ class TestEndToEndAgainstTheRealRegistry:
         # teams. This test's whole point is FTCScout's own behavior, so
         # it filters explicitly rather than absorbing a third source's
         # count into an assertion about FTCScout.
-        payload = run_teams(source="ftcscout", site_dir=site, fetcher=fetcher, dry_run=True)
+        payload = run_teams(source="ftcscout", fetcher=fetcher, dry_run=True)
 
         assert payload["meta"]["total"] == 152
         assert len(payload["teams"]) == 152
-        assert not site.exists()
+        # Sprint 025 ticket 004: run_teams() no longer accepts a
+        # site_dir at all, and export_teams()'s own_data_dir default
+        # (pinned by the _own_data_dir_default fixture above) resolves
+        # elsewhere entirely -- nothing is ever written under this
+        # test's own tmp_path.
+        assert list(tmp_path.iterdir()) == []
 
     def test_dry_run_only_fetches_the_search_url_and_robots_txt_probes(self, tmp_path):
         # Pre-ticket-013-001 this asserted `fetcher.calls == [SEARCH_URL]`
@@ -241,24 +242,30 @@ class TestEndToEndAgainstTheRealRegistry:
         # still holds and is asserted directly below.
         fetcher = _ftcscout_fetcher()
 
-        run_teams(site_dir=tmp_path, fetcher=fetcher, dry_run=True)
+        run_teams(fetcher=fetcher, dry_run=True)
 
         assert SEARCH_URL in fetcher.calls
         assert all(
             call == SEARCH_URL or call.endswith("/robots.txt") for call in fetcher.calls
         )
 
-    def test_real_run_writes_teams_json_to_site_dir(self, tmp_path):
+    def test_real_run_writes_teams_json_to_own_data_dir(self, tmp_path, monkeypatch):
         fetcher = _ftcscout_fetcher()
-        site = _make_site(tmp_path)
+        # Sprint 025 ticket 004: own_data_dir is the sole write target
+        # now -- run_teams() has no site_dir/own_data_dir passthrough of
+        # its own, so this pins export_teams()'s own_data_dir default
+        # directly, overriding the module-level _own_data_dir_default
+        # fixture just for this test.
+        own_data_dir = tmp_path / "own-data"
+        monkeypatch.setattr(teams_export, "get_own_data_dir", lambda: own_data_dir)
 
         # source="ftcscout" -- see the dry-run test above for why: the
         # real registry's fll-sd.toml (sprint 012) always succeeds
         # regardless of this fixture Fetcher, so an unfiltered run would
         # also publish 48 FLL teams here.
-        run_teams(source="ftcscout", site_dir=site, fetcher=fetcher, dry_run=False)
+        run_teams(source="ftcscout", fetcher=fetcher, dry_run=False)
 
-        written = json.loads((site / "src" / "data" / "teams.json").read_text())
+        written = json.loads((own_data_dir / "teams.json").read_text())
         assert written["meta"]["total"] == 152
         assert written["meta"]["by_league"] == {"FTC": 152}
         assert written["meta"]["out_of_region"] == 6
@@ -266,7 +273,7 @@ class TestEndToEndAgainstTheRealRegistry:
     def test_source_filter_ftcscout_matches_the_real_registry_entry(self, tmp_path):
         fetcher = _ftcscout_fetcher()
 
-        payload = run_teams(source="ftcscout", site_dir=tmp_path, fetcher=fetcher, dry_run=True)
+        payload = run_teams(source="ftcscout", fetcher=fetcher, dry_run=True)
 
         assert payload["meta"]["total"] == 152
 
@@ -278,7 +285,7 @@ class TestEndToEndAgainstTheRealRegistry:
         monkeypatch.setenv("TBA_KEY", "fixture-test-key")
         fetcher = _ftc_and_tba_fetcher()
 
-        payload = run_teams(source="tba", site_dir=tmp_path, fetcher=fetcher, dry_run=True)
+        payload = run_teams(source="tba", fetcher=fetcher, dry_run=True)
 
         assert payload["meta"]["total"] == 7
         assert SEARCH_URL not in fetcher.calls  # the filtered-out source is never fetched
@@ -286,7 +293,7 @@ class TestEndToEndAgainstTheRealRegistry:
     def test_source_filter_for_an_unknown_source_yields_zero_teams(self, tmp_path):
         fetcher = _ftcscout_fetcher()
 
-        payload = run_teams(source="seed", site_dir=tmp_path, fetcher=fetcher, dry_run=True)
+        payload = run_teams(source="seed", fetcher=fetcher, dry_run=True)
 
         assert payload["meta"]["total"] == 0
         assert fetcher.calls == []  # the filtered-out source's fetcher is never even called
@@ -305,7 +312,6 @@ class TestExplicitRegistryDir:
 
         payload = run_teams(
             registry_dir=empty_registry,
-            site_dir=tmp_path,
             fetcher=FixtureFetcher({}),
             dry_run=True,
         )
@@ -333,7 +339,6 @@ class TestUnrecognizedAdapterTypeIsSkippedNotFatal:
 
         payload = run_teams(
             registry_dir=registry_dir,
-            site_dir=tmp_path,
             fetcher=FixtureFetcher({}),
             dry_run=True,
         )
@@ -382,7 +387,6 @@ class TestSourceFailureIsolation:
 
         payload = run_teams(
             registry_dir=registry_dir,
-            site_dir=tmp_path,
             fetcher=FixtureFetcher({}),
             dry_run=True,
         )
@@ -413,7 +417,7 @@ class TestBothRealSourcesTogether:
         monkeypatch.setenv("TBA_KEY", "fixture-test-key")
         fetcher = _ftc_and_tba_fetcher()
 
-        payload = run_teams(site_dir=tmp_path, fetcher=fetcher, dry_run=True)
+        payload = run_teams(fetcher=fetcher, dry_run=True)
 
         assert payload["meta"]["total"] == 207
         assert payload["meta"]["by_league"] == {"FTC": 152, "FRC": 7, "FLL": 48}
@@ -425,7 +429,7 @@ class TestBothRealSourcesTogether:
         monkeypatch.setenv("TBA_KEY", "fixture-test-key")
         fetcher = _ftc_and_tba_fetcher()
 
-        payload = run_teams(site_dir=tmp_path, fetcher=fetcher, dry_run=True)
+        payload = run_teams(fetcher=fetcher, dry_run=True)
         by_id = {t["team_id"]: t for t in payload["teams"]}
 
         cca_ids = {"ftc-7159", "ftc-9837", "ftc-14425", "frc-3128"}
@@ -445,7 +449,7 @@ class TestBothRealSourcesTogether:
         monkeypatch.setenv("TBA_KEY", "fixture-test-key")
         fetcher = _ftc_and_tba_fetcher()
 
-        payload = run_teams(site_dir=tmp_path, fetcher=fetcher, dry_run=True)
+        payload = run_teams(fetcher=fetcher, dry_run=True)
         team_1622 = [t for t in payload["teams"] if t["number"] == 1622]
 
         assert len(team_1622) == 2
@@ -460,7 +464,7 @@ class TestBothRealSourcesTogether:
         monkeypatch.setenv("TBA_KEY", "fixture-test-key")
         fetcher = _ftc_and_tba_fetcher()
 
-        payload = run_teams(site_dir=tmp_path, fetcher=fetcher, dry_run=True)
+        payload = run_teams(fetcher=fetcher, dry_run=True)
         empty_org_teams = [t for t in payload["teams"] if t["organization"] == ""]
 
         # 58 FTC Family/Community teams + the FRC no-school-reported
@@ -500,7 +504,7 @@ class TestTbaFailureIsolation:
         monkeypatch.setenv("ROBOTEVENTS_KEY", "fixture-test-key")
         fetcher = _ftc_and_tba_fetcher()
 
-        payload = run_teams(site_dir=tmp_path, fetcher=fetcher, dry_run=True)
+        payload = run_teams(fetcher=fetcher, dry_run=True)
 
         assert payload["meta"]["total"] == 200
         assert payload["meta"]["by_league"] == {"FTC": 152, "FLL": 48}
@@ -522,7 +526,7 @@ class TestTbaFailureIsolation:
             }
         )
 
-        payload = run_teams(site_dir=tmp_path, fetcher=fetcher, dry_run=True)
+        payload = run_teams(fetcher=fetcher, dry_run=True)
 
         assert payload["meta"]["total"] == 200
         assert payload["meta"]["by_league"] == {"FTC": 152, "FLL": 48}
@@ -535,11 +539,12 @@ class TestTbaFailureIsolation:
         monkeypatch.delenv("TBA_KEY", raising=False)
         monkeypatch.setenv("ROBOTEVENTS_KEY", "fixture-test-key")
         fetcher = _ftc_and_tba_fetcher()
-        site = _make_site(tmp_path)
+        own_data_dir = tmp_path / "own-data"
+        monkeypatch.setattr(teams_export, "get_own_data_dir", lambda: own_data_dir)
 
-        run_teams(site_dir=site, fetcher=fetcher, dry_run=False)
+        run_teams(fetcher=fetcher, dry_run=False)
 
-        written = json.loads((site / "src" / "data" / "teams.json").read_text())
+        written = json.loads((own_data_dir / "teams.json").read_text())
         assert written["meta"]["total"] == 200
         assert written["meta"]["by_league"] == {"FTC": 152, "FLL": 48}
         # Sprint 023 ticket 002 AC: real-write path carries the same
@@ -559,11 +564,12 @@ class TestTbaFailureIsolation:
                 TBA_STATUS_URL: FetchResponse(url="", status=401, headers={}, body="{}"),
             }
         )
-        site = _make_site(tmp_path)
+        own_data_dir = tmp_path / "own-data"
+        monkeypatch.setattr(teams_export, "get_own_data_dir", lambda: own_data_dir)
 
-        run_teams(site_dir=site, fetcher=fetcher, dry_run=False)
+        run_teams(fetcher=fetcher, dry_run=False)
 
-        written = json.loads((site / "src" / "data" / "teams.json").read_text())
+        written = json.loads((own_data_dir / "teams.json").read_text())
         assert written["meta"]["total"] == 200
         assert written["meta"]["by_league"] == {"FTC": 152, "FLL": 48}
         assert written["meta"]["credential_failures"] == ["FRC"]
@@ -580,7 +586,7 @@ class TestTbaFailureIsolation:
         fetcher = _ftc_and_tba_fetcher()
 
         with caplog.at_level(logging.WARNING, logger="partner_scrape.teams.pipeline"):
-            run_teams(site_dir=tmp_path, fetcher=fetcher, dry_run=True)
+            run_teams(fetcher=fetcher, dry_run=True)
 
         credential_records = [
             r for r in caplog.records if "credential error" in r.getMessage()
@@ -602,7 +608,7 @@ class TestTbaFailureIsolation:
         )
 
         with caplog.at_level(logging.WARNING, logger="partner_scrape.teams.pipeline"):
-            run_teams(site_dir=tmp_path, fetcher=fetcher, dry_run=True)
+            run_teams(fetcher=fetcher, dry_run=True)
 
         credential_records = [
             r for r in caplog.records if "credential error" in r.getMessage()
@@ -627,7 +633,7 @@ class TestRobotEventsFailureIsolation:
         monkeypatch.delenv("ROBOTEVENTS_KEY", raising=False)
         fetcher = _ftc_tba_and_robotevents_fetcher()
 
-        payload = run_teams(site_dir=tmp_path, fetcher=fetcher, dry_run=True)
+        payload = run_teams(fetcher=fetcher, dry_run=True)
 
         assert payload["meta"]["total"] == 207
         assert payload["meta"]["by_league"] == {"FTC": 152, "FRC": 7, "FLL": 48}
@@ -648,7 +654,7 @@ class TestRobotEventsFailureIsolation:
         }
         fetcher = FixtureFetcher(responses)
 
-        payload = run_teams(site_dir=tmp_path, fetcher=fetcher, dry_run=True)
+        payload = run_teams(fetcher=fetcher, dry_run=True)
 
         assert payload["meta"]["total"] == 207
         assert payload["meta"]["by_league"] == {"FTC": 152, "FRC": 7, "FLL": 48}
@@ -659,11 +665,12 @@ class TestRobotEventsFailureIsolation:
         monkeypatch.setenv("TBA_KEY", "fixture-test-key")
         monkeypatch.delenv("ROBOTEVENTS_KEY", raising=False)
         fetcher = _ftc_tba_and_robotevents_fetcher()
-        site = _make_site(tmp_path)
+        own_data_dir = tmp_path / "own-data"
+        monkeypatch.setattr(teams_export, "get_own_data_dir", lambda: own_data_dir)
 
-        run_teams(site_dir=site, fetcher=fetcher, dry_run=False)
+        run_teams(fetcher=fetcher, dry_run=False)
 
-        written = json.loads((site / "src" / "data" / "teams.json").read_text())
+        written = json.loads((own_data_dir / "teams.json").read_text())
         assert written["meta"]["total"] == 207
         assert written["meta"]["by_league"] == {"FTC": 152, "FRC": 7, "FLL": 48}
         # Sprint 023 ticket 002 AC: real-write path, read back off disk.
@@ -682,11 +689,12 @@ class TestRobotEventsFailureIsolation:
             ROBOTEVENTS_PROBE_URL: FetchResponse(url="", status=401, headers={}, body="{}"),
         }
         fetcher = FixtureFetcher(responses)
-        site = _make_site(tmp_path)
+        own_data_dir = tmp_path / "own-data"
+        monkeypatch.setattr(teams_export, "get_own_data_dir", lambda: own_data_dir)
 
-        run_teams(site_dir=site, fetcher=fetcher, dry_run=False)
+        run_teams(fetcher=fetcher, dry_run=False)
 
-        written = json.loads((site / "src" / "data" / "teams.json").read_text())
+        written = json.loads((own_data_dir / "teams.json").read_text())
         assert written["meta"]["total"] == 207
         assert written["meta"]["by_league"] == {"FTC": 152, "FRC": 7, "FLL": 48}
         assert written["meta"]["credential_failures"] == ["VEX"]
@@ -701,7 +709,7 @@ class TestRobotEventsFailureIsolation:
         fetcher = _ftc_tba_and_robotevents_fetcher()
 
         with caplog.at_level(logging.WARNING, logger="partner_scrape.teams.pipeline"):
-            run_teams(site_dir=tmp_path, fetcher=fetcher, dry_run=True)
+            run_teams(fetcher=fetcher, dry_run=True)
 
         credential_records = [
             r for r in caplog.records if "credential error" in r.getMessage()
@@ -724,7 +732,7 @@ class TestRobotEventsFailureIsolation:
         fetcher = FixtureFetcher(responses)
 
         with caplog.at_level(logging.WARNING, logger="partner_scrape.teams.pipeline"):
-            run_teams(site_dir=tmp_path, fetcher=fetcher, dry_run=True)
+            run_teams(fetcher=fetcher, dry_run=True)
 
         credential_records = [
             r for r in caplog.records if "credential error" in r.getMessage()
@@ -761,7 +769,6 @@ class TestCredentialFailureAlertIsCredentialSpecific:
         with caplog.at_level(logging.WARNING, logger="partner_scrape.teams.pipeline"):
             payload = run_teams(
                 registry_dir=registry_dir,
-                site_dir=tmp_path,
                 fetcher=FixtureFetcher({}),
                 dry_run=True,
             )
@@ -793,7 +800,6 @@ class TestCredentialFailureAlertIsCredentialSpecific:
         with caplog.at_level(logging.WARNING, logger="partner_scrape.teams.pipeline"):
             payload = run_teams(
                 registry_dir=registry_dir,
-                site_dir=tmp_path,
                 fetcher=FixtureFetcher({}),
                 dry_run=True,
             )
@@ -814,7 +820,7 @@ class TestRobotEventsIntegration:
         monkeypatch.setenv("ROBOTEVENTS_KEY", "fixture-test-key")
         fetcher = _ftc_tba_and_robotevents_fetcher()
 
-        payload = run_teams(site_dir=tmp_path, fetcher=fetcher, dry_run=True)
+        payload = run_teams(fetcher=fetcher, dry_run=True)
 
         assert payload["meta"]["by_league"]["VEX"] == 4  # page0's 4 in-county records
         assert payload["meta"]["total"] == 211  # 207 + 4 VEX
@@ -848,7 +854,7 @@ class TestCredentialFailuresMeta:
         monkeypatch.setenv("ROBOTEVENTS_KEY", "fixture-test-key")
         fetcher = _ftc_tba_and_robotevents_fetcher()
 
-        payload = run_teams(site_dir=tmp_path, fetcher=fetcher, dry_run=True)
+        payload = run_teams(fetcher=fetcher, dry_run=True)
 
         assert payload["meta"]["credential_failures"] == []
 
@@ -858,11 +864,12 @@ class TestCredentialFailuresMeta:
         monkeypatch.setenv("TBA_KEY", "fixture-test-key")
         monkeypatch.setenv("ROBOTEVENTS_KEY", "fixture-test-key")
         fetcher = _ftc_tba_and_robotevents_fetcher()
-        site = _make_site(tmp_path)
+        own_data_dir = tmp_path / "own-data"
+        monkeypatch.setattr(teams_export, "get_own_data_dir", lambda: own_data_dir)
 
-        run_teams(site_dir=site, fetcher=fetcher, dry_run=False)
+        run_teams(fetcher=fetcher, dry_run=False)
 
-        written = json.loads((site / "src" / "data" / "teams.json").read_text())
+        written = json.loads((own_data_dir / "teams.json").read_text())
         assert written["meta"]["credential_failures"] == []
 
 
@@ -899,7 +906,7 @@ class TestGeocodingAggregateDistribution:
         monkeypatch.setenv("TBA_KEY", "fixture-test-key")
         fetcher = _ftc_and_tba_fetcher()
 
-        payload = run_teams(site_dir=tmp_path, fetcher=fetcher, dry_run=True)
+        payload = run_teams(fetcher=fetcher, dry_run=True)
 
         assert payload["meta"]["total"] == 207
         by_precision = payload["meta"]["by_location_precision"]
@@ -1010,7 +1017,6 @@ class TestSponsorExtractionWiring:
 
         payload = run_teams(
             registry_dir=_one_team_registry(tmp_path),
-            site_dir=tmp_path,
             fetcher=fetcher,
             dry_run=True,
             llm_client=llm_client,
@@ -1059,7 +1065,6 @@ class TestSponsorExtractionWiring:
 
         payload = run_teams(
             registry_dir=_one_team_registry(tmp_path),
-            site_dir=tmp_path,
             fetcher=fetcher,
             dry_run=True,
             no_sponsors=True,
@@ -1122,7 +1127,6 @@ class TestSponsorExtractionWiring:
 
         payload = run_teams(
             registry_dir=_one_team_registry(tmp_path),
-            site_dir=tmp_path,
             fetcher=fetcher,
             dry_run=True,
             no_descriptions=True,
@@ -1192,7 +1196,6 @@ class TestWebsiteOverlayToVerificationWiring:
 
         payload = run_teams(
             registry_dir=_one_team_registry(tmp_path),
-            site_dir=tmp_path,
             fetcher=fetcher,
             dry_run=True,
             website_data_dir=overlay_dir,
@@ -1243,7 +1246,6 @@ class TestWebsiteOverlayToVerificationWiring:
 
         payload = run_teams(
             registry_dir=_one_team_registry(tmp_path),
-            site_dir=tmp_path,
             fetcher=FixtureFetcher({}),
             dry_run=True,
             website_data_dir=overlay_dir,
@@ -1299,7 +1301,6 @@ class TestCanonicalizeSponsorsWiring:
 
         payload = run_teams(
             registry_dir=_one_team_registry(tmp_path),
-            site_dir=tmp_path,
             fetcher=FixtureFetcher({}),
             dry_run=True,
             no_sponsors=True,
@@ -1360,7 +1361,6 @@ class TestDescriptionExtractionWiring:
 
         payload = run_teams(
             registry_dir=_one_team_registry(tmp_path),
-            site_dir=tmp_path,
             fetcher=fetcher,
             dry_run=True,
             description_llm_client=llm_client,
@@ -1414,7 +1414,6 @@ class TestDescriptionExtractionWiring:
 
         payload = run_teams(
             registry_dir=_one_team_registry(tmp_path),
-            site_dir=tmp_path,
             fetcher=fetcher,
             dry_run=True,
             no_descriptions=True,
@@ -1470,7 +1469,6 @@ class TestDescriptionExtractionWiring:
 
         payload = run_teams(
             registry_dir=_one_team_registry(tmp_path),
-            site_dir=tmp_path,
             fetcher=fetcher,
             dry_run=True,
         )
@@ -1514,7 +1512,6 @@ class TestSunsetSeasonWarning:
         with caplog.at_level(logging.WARNING, logger="partner_scrape.teams.pipeline"):
             run_teams(
                 source="static_roster",
-                site_dir=tmp_path,
                 fetcher=FixtureFetcher({}),
                 dry_run=True,
                 today=date(2027, 6, 2),  # one day past the parsed 2027-06-01 end
@@ -1536,7 +1533,6 @@ class TestSunsetSeasonWarning:
         with caplog.at_level(logging.WARNING, logger="partner_scrape.teams.pipeline"):
             run_teams(
                 source="static_roster",
-                site_dir=tmp_path,
                 fetcher=FixtureFetcher({}),
                 dry_run=True,
                 today=date(2027, 6, 1),
@@ -1548,7 +1544,6 @@ class TestSunsetSeasonWarning:
         with caplog.at_level(logging.WARNING, logger="partner_scrape.teams.pipeline"):
             run_teams(
                 source="static_roster",
-                site_dir=tmp_path,
                 fetcher=FixtureFetcher({}),
                 dry_run=True,
                 today=date(2026, 8, 28),
@@ -1562,7 +1557,6 @@ class TestSunsetSeasonWarning:
         with caplog.at_level(logging.WARNING, logger="partner_scrape.teams.pipeline"):
             run_teams(
                 source="ftcscout",
-                site_dir=tmp_path,
                 fetcher=_ftcscout_fetcher(),
                 dry_run=True,
                 today=date(2099, 1, 1),

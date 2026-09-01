@@ -335,10 +335,7 @@ class TestExportSortOrder:
     identically to its pre-widen order, and a VEX fixture's alphanumeric
     siblings must sort adjacently."""
 
-    def test_mixed_ftc_frc_fll_numeric_numbers_sort_identically_to_pre_widen_order(
-        self, tmp_path
-    ):
-        site = _make_site(tmp_path)
+    def test_mixed_ftc_frc_fll_numeric_numbers_sort_identically_to_pre_widen_order(self):
         teams = [
             _make_team(team_id="ftc-100", league="FTC", number="100", name="Hundred"),
             _make_team(team_id="ftc-99", league="FTC", number="99", name="Ninety-Nine"),
@@ -348,7 +345,7 @@ class TestExportSortOrder:
             _make_team(team_id="fll-1", league="FLL", number="1", name="One"),
         ]
 
-        payload = export_teams(teams, site_dir=site)
+        payload = export_teams(teams)
         ordered_ids = [t["team_id"] for t in payload["teams"]]
 
         # Grouped by league (FLL, FRC, FTC alphabetically), each group
@@ -356,39 +353,35 @@ class TestExportSortOrder:
         # lexicographic "100" before "9" a bare string sort would give.
         assert ordered_ids == ["fll-1", "frc-2", "frc-10", "ftc-9", "ftc-99", "ftc-100"]
 
-    def test_vex_alphanumeric_siblings_sort_adjacently(self, tmp_path):
-        site = _make_site(tmp_path)
+    def test_vex_alphanumeric_siblings_sort_adjacently(self):
         teams = [
             _make_team(team_id="vex-90210C", league="VEX", number="90210C", name="C"),
             _make_team(team_id="vex-90210A", league="VEX", number="90210A", name="A"),
             _make_team(team_id="vex-90210B", league="VEX", number="90210B", name="B"),
         ]
 
-        payload = export_teams(teams, site_dir=site)
+        payload = export_teams(teams)
         ordered_ids = [t["team_id"] for t in payload["teams"]]
 
         assert ordered_ids == ["vex-90210A", "vex-90210B", "vex-90210C"]
 
 
 class TestPayloadShape:
-    def test_payload_has_meta_and_teams_keys(self, tmp_path):
-        site = _make_site(tmp_path)
-
-        payload = export_teams([_make_team()], site_dir=site)
+    def test_payload_has_meta_and_teams_keys(self):
+        payload = export_teams([_make_team()])
 
         assert set(payload.keys()) == {"meta", "teams"}
         assert isinstance(payload["teams"], list)
         assert len(payload["teams"]) == 1
 
-    def test_meta_carries_generated_total_by_league_and_out_of_region(self, tmp_path):
-        site = _make_site(tmp_path)
+    def test_meta_carries_generated_total_by_league_and_out_of_region(self):
         teams = [
             _make_team(team_id="ftc-1", number=1, in_region=True),
             _make_team(team_id="ftc-2", number=2, in_region=False),
             _make_team(team_id="frc-1", league="FRC", number=1, in_region=True),
         ]
 
-        payload = export_teams(teams, site_dir=site)
+        payload = export_teams(teams)
         meta = payload["meta"]
 
         assert meta["total"] == 3
@@ -396,23 +389,24 @@ class TestPayloadShape:
         assert meta["out_of_region"] == 1
         assert meta["generated"]
 
-    def test_meta_carries_location_precision_breakdown(self, tmp_path):
-        site = _make_site(tmp_path)
+    def test_meta_carries_location_precision_breakdown(self):
         teams = [
             _make_team(team_id="ftc-1", number=1, location_precision="none"),
             _make_team(team_id="ftc-2", number=2, location_precision="city"),
         ]
 
-        payload = export_teams(teams, site_dir=site)
+        payload = export_teams(teams)
 
         assert payload["meta"]["by_location_precision"] == {"none": 1, "city": 1}
 
     def test_teams_are_written_to_disk_at_the_documented_path(self, tmp_path):
-        site = _make_site(tmp_path)
+        # Sprint 025 ticket 004: own_data_dir is now the documented path
+        # -- export_teams() no longer writes anywhere under a site_dir.
+        own_data_dir = tmp_path / "own-data"
 
-        export_teams([_make_team()], site_dir=site)
+        export_teams([_make_team()], own_data_dir=own_data_dir)
 
-        written = json.loads((site / "src" / "data" / "teams.json").read_text())
+        written = json.loads((own_data_dir / "teams.json").read_text())
         assert written["meta"]["total"] == 1
         assert written["teams"][0]["team_id"] == "ftc-1622"
 
@@ -438,157 +432,59 @@ class TestCredentialFailuresMeta:
 
         assert meta["credential_failures"] == []
 
-    def test_export_teams_threads_credential_failures_into_meta(self, tmp_path):
-        site = _make_site(tmp_path)
-
-        payload = export_teams(
-            [_make_team()], site_dir=site, credential_failures=["FRC", "VEX", "FRC"]
-        )
+    def test_export_teams_threads_credential_failures_into_meta(self):
+        payload = export_teams([_make_team()], credential_failures=["FRC", "VEX", "FRC"])
 
         assert payload["meta"]["credential_failures"] == ["FRC", "VEX"]
 
-    def test_export_teams_omitted_credential_failures_yields_empty_list_in_meta(self, tmp_path):
-        site = _make_site(tmp_path)
-
-        payload = export_teams([_make_team()], site_dir=site)
+    def test_export_teams_omitted_credential_failures_yields_empty_list_in_meta(self):
+        payload = export_teams([_make_team()])
 
         assert payload["meta"]["credential_failures"] == []
 
 
 class TestDryRun:
     def test_dry_run_computes_the_payload_without_writing(self, tmp_path):
-        site = _make_site(tmp_path)
+        # Sprint 025 ticket 004: own_data_dir is export_teams()'s only
+        # write target now -- this both computes the payload without
+        # touching disk and confirms a not-yet-existing target
+        # directory is never created under dry_run.
+        own_data_dir = tmp_path / "does-not-exist-yet"
 
-        payload = export_teams([_make_team()], site_dir=site, dry_run=True)
-
-        assert payload["meta"]["total"] == 1
-        assert not (site / "src" / "data" / "teams.json").exists()
-        assert not (site / "public" / "data" / "teams.json").exists()
-
-    def test_dry_run_never_touches_a_nonexistent_site_dir(self, tmp_path):
-        absent = tmp_path / "not-checked-out"
-
-        payload = export_teams([_make_team()], site_dir=absent, dry_run=True)
+        payload = export_teams([_make_team()], own_data_dir=own_data_dir, dry_run=True)
 
         assert payload["meta"]["total"] == 1
-        assert not absent.exists()
-
-
-class TestUnwritableSiteDirFailsLoudly:
-    def test_missing_src_data_raises_runtime_error(self, tmp_path):
-        site = tmp_path / "no-data-dir"
-        site.mkdir()
-
-        with pytest.raises(RuntimeError, match="Cannot write teams export"):
-            export_teams([_make_team()], site_dir=site)
-
-
-class TestPublicDataPublish:
-    """Sprint 017 ticket 001: `export_teams()`'s second write target,
-    `{site_dir}/public/data/teams.json` -- the same already-built
-    payload as `src/data/teams.json`, written in the same call. See
-    the module docstring's "The three write targets are not symmetric"
-    section for the `mkdir`/ordering contract these tests pin down."""
-
-    def test_public_data_teams_json_is_byte_identical_to_src_data(self, tmp_path):
-        site = _make_site(tmp_path)
-
-        export_teams(_real_fixture_teams(), site_dir=site)
-
-        src_text = (site / "src" / "data" / "teams.json").read_text()
-        public_text = (site / "public" / "data" / "teams.json").read_text()
-        assert public_text == src_text
-
-        # Parsed-content check too, per the ticket's own wording --
-        # belt-and-suspenders alongside the byte-identical assertion
-        # above (a byte-identical file is trivially content-identical,
-        # but this pins the parsed shape independently).
-        assert json.loads(public_text) == json.loads(src_text)
-
-    def test_public_data_directory_is_created_when_absent(self, tmp_path):
-        site = _make_site(tmp_path)
-        assert not (site / "public").exists()
-
-        export_teams([_make_team()], site_dir=site)
-
-        public_teams_path = site / "public" / "data" / "teams.json"
-        assert public_teams_path.exists()
-        assert json.loads(public_teams_path.read_text())["teams"][0]["team_id"] == "ftc-1622"
-
-    def test_public_data_directory_is_reused_when_already_present(self, tmp_path):
-        site = _make_site(tmp_path)
-        existing_public_data = site / "public" / "data"
-        existing_public_data.mkdir(parents=True)
-        (existing_public_data / "partners.json").write_text("[]")
-
-        export_teams([_make_team()], site_dir=site)
-
-        # The existing sibling file (from export/publish.py's contract)
-        # is left alone -- this write only ever adds teams.json.
-        assert (existing_public_data / "partners.json").read_text() == "[]"
-        assert (existing_public_data / "teams.json").exists()
-
-    def test_unwritable_public_data_path_raises_runtime_error(self, tmp_path):
-        site = _make_site(tmp_path)
-        public_dir = site / "public"
-        public_dir.mkdir()
-        # A file occupies the exact path public/data must become a
-        # directory at -- mkdir(parents=True, exist_ok=True) cannot
-        # succeed, so the write must fail loudly, not silently skip.
-        (public_dir / "data").write_text("not a directory")
-
-        with pytest.raises(RuntimeError, match="Cannot write teams export"):
-            export_teams([_make_team()], site_dir=site)
-
-    def test_src_data_failure_is_raised_before_public_data_is_touched(self, tmp_path):
-        # src/data missing entirely (TestUnwritableSiteDirFailsLoudly's
-        # scenario) -- confirm no public/data/teams.json is left behind
-        # by a failed run, i.e. the src/data write really does happen,
-        # and fail, before public/data is ever attempted.
-        site = tmp_path / "no-data-dir"
-        site.mkdir()
-
-        with pytest.raises(RuntimeError, match="Cannot write teams export"):
-            export_teams([_make_team()], site_dir=site)
-
-        assert not (site / "public").exists()
+        assert not own_data_dir.exists()
 
 
 class TestOwnDataDirPublish:
-    """Sprint 020 ticket 005 (issue 60): the third write path -- the
-    same already-built payload written to `site_dir` (both copies),
-    written again into partner-scrape's own `data/` directory via
+    """Sprint 020 ticket 005 (issue 60), sole write target since sprint
+    025 ticket 004 removed `export_teams()`'s two `stem-ecosystem`-
+    checkout writes: the already-built payload written into
+    partner-scrape's own `data/` directory via
     `config.get_own_data_dir()`. Mirrors `tests/test_export.py`'s and
     `tests/test_export_ads.py`'s `TestOwnDataDirPublish` structure and
     naming conventions, scoped to `teams.json`.
     """
 
-    def test_own_data_dir_content_matches_site_dir_content_exactly(self, tmp_path):
-        site = _make_site(tmp_path)
-        own_data_dir = tmp_path / "own-data"
-
-        export_teams([_make_team()], site_dir=site, own_data_dir=own_data_dir)
-
-        src_text = (site / "src" / "data" / "teams.json").read_text()
-        public_text = (site / "public" / "data" / "teams.json").read_text()
-        own_text = (own_data_dir / "teams.json").read_text()
-
-        assert own_text == src_text
-        assert own_text == public_text
-
     def test_writes_only_under_the_given_own_data_dir(self, tmp_path):
+        # Sprint 025 ticket 004: inverted from this test's pre-ticket
+        # form (which also asserted a `{site_dir}/src/data/teams.json`
+        # and a `{site_dir}/public/data/teams.json` were written) --
+        # export_teams() no longer accepts or writes to a site_dir at
+        # all, so the pre-existing site tree below (from _make_site())
+        # is left completely untouched; own_data_dir/teams.json is the
+        # only file this call writes anywhere under tmp_path.
         site = _make_site(tmp_path)
         own_data_dir = tmp_path / "own-data"
 
-        export_teams([_make_team()], site_dir=site, own_data_dir=own_data_dir)
+        export_teams([_make_team()], own_data_dir=own_data_dir)
 
         written_files = sorted(p for p in tmp_path.rglob("*") if p.is_file())
         assert written_files == sorted(
             [
                 site / "src" / "data" / "opportunities.json",
                 site / "src" / "data" / "scrape-meta.json",
-                site / "src" / "data" / "teams.json",
-                site / "public" / "data" / "teams.json",
                 own_data_dir / "teams.json",
             ]
         )
@@ -596,65 +492,27 @@ class TestOwnDataDirPublish:
     def test_omitted_own_data_dir_resolves_via_config_get_own_data_dir(
         self, tmp_path, monkeypatch
     ):
-        site = _make_site(tmp_path)
         fake_own_data_dir = tmp_path / "fake-own-data"
         monkeypatch.setattr(export, "get_own_data_dir", lambda: fake_own_data_dir)
 
-        export_teams([_make_team()], site_dir=site)
+        export_teams([_make_team()])
 
         assert (fake_own_data_dir / "teams.json").exists()
 
     def test_missing_own_data_dir_is_created_automatically_never_raises(self, tmp_path):
-        site = _make_site(tmp_path)
         own_data_dir = tmp_path / "does-not-exist-yet" / "nested"
         assert not own_data_dir.exists()
 
-        export_teams([_make_team()], site_dir=site, own_data_dir=own_data_dir)
+        export_teams([_make_team()], own_data_dir=own_data_dir)
 
         assert (own_data_dir / "teams.json").exists()
 
     def test_dry_run_writes_nothing_to_own_data_dir(self, tmp_path):
-        site = _make_site(tmp_path)
         own_data_dir = tmp_path / "own-data"
 
-        payload = export_teams(
-            [_make_team()], site_dir=site, own_data_dir=own_data_dir, dry_run=True
-        )
+        payload = export_teams([_make_team()], own_data_dir=own_data_dir, dry_run=True)
 
         assert payload["meta"]["total"] == 1
-        assert not own_data_dir.exists()
-        assert not (site / "src" / "data" / "teams.json").exists()
-        assert not (site / "public" / "data" / "teams.json").exists()
-
-    def test_src_data_failure_leaves_own_data_dir_untouched(self, tmp_path):
-        # src/data missing entirely -- confirm own_data_dir is never
-        # created (let alone written to) when the first write fails,
-        # matching TestPublicDataPublish's identical ordering proof for
-        # public/data one target over.
-        site = tmp_path / "no-data-dir"
-        site.mkdir()
-        own_data_dir = tmp_path / "own-data"
-
-        with pytest.raises(RuntimeError, match="Cannot write teams export"):
-            export_teams([_make_team()], site_dir=site, own_data_dir=own_data_dir)
-
-        assert not own_data_dir.exists()
-
-    def test_public_data_failure_leaves_own_data_dir_untouched(self, tmp_path):
-        # public/data unwritable (TestPublicDataPublish's own scenario:
-        # a file occupies the path public/data must become a directory
-        # at) -- src/data's write succeeds, but the run still must
-        # raise before own_data_dir is ever touched.
-        site = _make_site(tmp_path)
-        public_dir = site / "public"
-        public_dir.mkdir()
-        (public_dir / "data").write_text("not a directory")
-        own_data_dir = tmp_path / "own-data"
-
-        with pytest.raises(RuntimeError, match="Cannot write teams export"):
-            export_teams([_make_team()], site_dir=site, own_data_dir=own_data_dir)
-
-        assert (site / "src" / "data" / "teams.json").exists()
         assert not own_data_dir.exists()
 
 
@@ -663,7 +521,14 @@ class TestHardInvariants:
     touches `opportunities.json`/`scrape-meta.json` -- covered here with
     the full 200-team (152 FTC + 48 FLL) fixture set, not just a single
     hand-built Team, so a real-scale export is what's actually proven
-    byte-identical."""
+    byte-identical.
+
+    Sprint 025 ticket 004: `export_teams()` no longer accepts a
+    `site_dir` at all, so `site`/`tmp_path` below are just ordinary
+    directories this call is never even told about -- the strongest
+    possible version of "never touches" these files, now structural
+    rather than merely tested.
+    """
 
     def test_opportunities_and_scrape_meta_are_byte_identical_after_a_teams_run(self, tmp_path):
         opportunities_body = json.dumps([{"title": "Untouched Opportunity"}])
@@ -672,21 +537,26 @@ class TestHardInvariants:
             tmp_path, opportunities=opportunities_body, scrape_meta=scrape_meta_body
         )
 
-        export_teams(_real_fixture_teams(), site_dir=site)
+        export_teams(_real_fixture_teams())
 
         data_dir = site / "src" / "data"
         assert (data_dir / "opportunities.json").read_text() == opportunities_body
         assert (data_dir / "scrape-meta.json").read_text() == scrape_meta_body
 
-    def test_no_opportunities_or_scrape_meta_file_is_created_when_absent(self, tmp_path):
+    def test_no_teams_json_is_written_under_the_unrelated_site_tree(self, tmp_path):
+        # Sprint 025 ticket 004: inverted from this test's pre-ticket
+        # form (which asserted teams.json *was* written under
+        # {site_dir}/src/data/) now that export_teams() has no
+        # awareness of site_dir at all -- an ordinary, unrelated
+        # directory is never written into.
         data_dir = tmp_path / "src" / "data"
         data_dir.mkdir(parents=True)
 
-        export_teams(_real_fixture_teams(), site_dir=tmp_path)
+        export_teams(_real_fixture_teams())
 
         assert not (data_dir / "opportunities.json").exists()
         assert not (data_dir / "scrape-meta.json").exists()
-        assert (data_dir / "teams.json").exists()
+        assert not (data_dir / "teams.json").exists()
 
 
 class TestNoEmailInExport:
@@ -701,23 +571,23 @@ class TestNoEmailInExport:
     file (see `sources/static_roster.py`'s module docstring)."""
 
     def test_written_json_contains_no_email_pattern(self, tmp_path):
-        site = _make_site(tmp_path)
+        own_data_dir = tmp_path / "own-data"
 
-        export_teams(_real_fixture_teams(), site_dir=site)
+        export_teams(_real_fixture_teams(), own_data_dir=own_data_dir)
 
-        raw_text = (site / "src" / "data" / "teams.json").read_text()
+        raw_text = (own_data_dir / "teams.json").read_text()
         assert not _EMAIL_PATTERN.search(raw_text)
 
     def test_dry_run_payload_contains_no_email_pattern(self):
-        payload = export_teams(_real_fixture_teams(), site_dir=Path("/unused"), dry_run=True)
+        payload = export_teams(_real_fixture_teams(), dry_run=True)
 
         serialized = json.dumps(payload)
         assert not _EMAIL_PATTERN.search(serialized)
 
     def test_no_key_or_value_in_the_parsed_payload_matches_an_email(self, tmp_path):
-        site = _make_site(tmp_path)
-        export_teams(_real_fixture_teams(), site_dir=site)
-        parsed = json.loads((site / "src" / "data" / "teams.json").read_text())
+        own_data_dir = tmp_path / "own-data"
+        export_teams(_real_fixture_teams(), own_data_dir=own_data_dir)
+        parsed = json.loads((own_data_dir / "teams.json").read_text())
 
         def _walk(node):
             if isinstance(node, dict):
@@ -740,9 +610,8 @@ class TestSponsorExtractionFixtureIsWired:
     actually producing output -- so a silent regression there could not
     hide behind the privacy regression test still passing vacuously."""
 
-    def test_team_spyder_carries_the_scraped_sponsor_and_provenance(self, tmp_path):
-        site = _make_site(tmp_path)
-        payload = export_teams(_real_fixture_teams(), site_dir=site)
+    def test_team_spyder_carries_the_scraped_sponsor_and_provenance(self):
+        payload = export_teams(_real_fixture_teams())
 
         spyder = next(t for t in payload["teams"] if t["team_id"] == "ftc-1622")
         assert "Scraped Sponsor Co" in spyder["sponsors"]
@@ -757,9 +626,8 @@ class TestDescriptionExtractionFixtureIsWired:
     not hide behind the privacy regression test still passing
     vacuously."""
 
-    def test_team_spyder_carries_the_generated_description(self, tmp_path):
-        site = _make_site(tmp_path)
-        payload = export_teams(_real_fixture_teams(), site_dir=site)
+    def test_team_spyder_carries_the_generated_description(self):
+        payload = export_teams(_real_fixture_teams())
 
         spyder = next(t for t in payload["teams"] if t["team_id"] == "ftc-1622")
         assert spyder["description"] == "Team Spyder is a FIRST Tech Challenge robotics team."

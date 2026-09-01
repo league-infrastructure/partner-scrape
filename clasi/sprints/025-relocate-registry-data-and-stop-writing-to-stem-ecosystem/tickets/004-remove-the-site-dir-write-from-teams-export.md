@@ -27,19 +27,19 @@ subcommand's now-meaningless `--site-dir` flag.
 
 ## Acceptance Criteria
 
-- [ ] `export_teams()` no longer accepts a `site_dir` parameter and
+- [x] `export_teams()` no longer accepts a `site_dir` parameter and
       never writes `teams.json` under `{site_dir}/...` (neither
       `src/data/` nor `public/data/`). Its `own_data_dir` write is
       unchanged in shape.
-- [ ] `run_teams()` (`teams/pipeline.py`) no longer accepts a `site_dir`
+- [x] `run_teams()` (`teams/pipeline.py`) no longer accepts a `site_dir`
       parameter.
-- [ ] `cli.py`'s `teams` subcommand no longer defines a `--site-dir`
+- [x] `cli.py`'s `teams` subcommand no longer defines a `--site-dir`
       flag, and `_run_teams()` no longer threads one through.
-- [ ] The "Two hard invariants" regression test in
+- [x] The "Two hard invariants" regression test in
       `tests/teams/test_export.py` (asserting `opportunities.json`/
       `scrape-meta.json` are byte-identical before/after a `teams` run)
       still passes — untouched by this ticket.
-- [ ] `uv run pytest -q` is green.
+- [x] `uv run pytest -q` is green.
 
 ## Implementation Plan
 

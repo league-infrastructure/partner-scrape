@@ -246,15 +246,16 @@ def _add_teams_subcommand(subparsers: argparse._SubParsersAction) -> None:
             "Run the Teams pipeline: load this subsystem's own Team "
             "Registry (partner_scrape/teams/registry/, disjoint from the "
             "Opportunity Source Registry), acquire each active team "
-            "source, and publish {site_dir}/src/data/teams.json. Never "
-            "runs the normal scrape/export -- opportunities.json and "
-            "scrape-meta.json are never touched by this command."
+            "source, and publish teams.json into partner-scrape's own "
+            "data directory. Never runs the normal scrape/export -- "
+            "opportunities.json and scrape-meta.json are never touched "
+            "by this command."
         ),
     )
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Compute the teams.json payload without writing anything to --site-dir.",
+        help="Compute the teams.json payload without writing anything to disk.",
     )
     parser.add_argument(
         "--source",
@@ -266,16 +267,6 @@ def _add_teams_subcommand(subparsers: argparse._SubParsersAction) -> None:
             "(e.g. 'ftcscout', 'tba', 'static_roster', or "
             "'robotevents') -- not a Team Registry file's stem. "
             "Omitted, every active team source runs."
-        ),
-    )
-    parser.add_argument(
-        "--site-dir",
-        type=Path,
-        default=None,
-        help=(
-            "Sibling stem-ecosystem checkout to write teams.json into "
-            "(default: ../stem-ecosystem, or $SITE_DIR) -- same default "
-            "and override as the `run` command's --site-dir."
         ),
     )
     parser.add_argument(
@@ -427,7 +418,6 @@ def _run_teams(args: argparse.Namespace) -> int:
 
     payload = run_teams(
         source=args.source,
-        site_dir=args.site_dir,
         fetcher=PoliteFetcher(),
         dry_run=args.dry_run,
         no_sponsors=args.no_sponsors,

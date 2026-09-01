@@ -321,7 +321,6 @@ def run_teams(
     *,
     registry_dir: str | Path | None = None,
     source: str | None = None,
-    site_dir: str | Path | None = None,
     fetcher: Fetcher | None = None,
     dry_run: bool = False,
     geo_data_dir: str | Path | None = None,
@@ -369,10 +368,6 @@ def run_teams(
             since a TBA outage needs to be isolated by acquisition
             method, not by which one organization's TOML file it came
             from.
-        site_dir: sibling `stem-ecosystem` checkout to write
-            `teams.json` into. Defaults to `Config.get_site_dir()` when
-            omitted (via `export_teams`). Tests should always pass an
-            explicit `tmp_path`-based directory here.
         fetcher: the `Fetcher` every active source retrieves raw
             content through. Defaults to a real `PoliteFetcher()` when
             omitted -- the production path. Tests inject a fixture
@@ -673,7 +668,6 @@ def run_teams(
     # here as-is is sufficient.
     return export_teams(
         teams,
-        site_dir=site_dir,
         dry_run=dry_run,
         credential_failures=[league for _, _, league, _ in credential_failures],
     )
