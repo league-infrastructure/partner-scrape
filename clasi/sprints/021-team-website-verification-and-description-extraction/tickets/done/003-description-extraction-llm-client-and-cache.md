@@ -1,7 +1,7 @@
 ---
 id: '003'
 title: Description extraction LLM client and cache
-status: in-progress
+status: done
 use-cases:
 - SUC-023
 depends-on:
