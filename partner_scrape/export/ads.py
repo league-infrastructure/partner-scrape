@@ -40,6 +40,18 @@ resolves an image, and the whole card wrapped in an anchor to `link`.
 A missing or unwritable `site_dir` (or its `src/data` subdirectory)
 fails loudly -- mirrors `export_opportunities`'s existing contract:
 "fail loudly, do not silently skip the export."
+
+Sprint 020 ticket 004 (issue 60): the same already-computed payload is
+also written a second time, into partner-scrape's own `data/` directory
+(`config.get_own_data_dir()`) -- the same "one export, three files, two
+directories" contract `export/writer.py`'s `export_opportunities()`
+already gives `opportunities.json`/`scrape-meta.json` (sprint 020
+ticket 003). No re-serialization: both copies come from the exact same
+`payload` computed once in this function call. Like `own_data_dir` in
+`writer.py`, this second target is not symmetric with `site_dir`: it is
+created automatically if missing (`Path.mkdir(parents=True,
+exist_ok=True)`), and the `site_dir` write happens first -- its
+`RuntimeError` propagates before `own_data_dir` is touched at all.
 """
 
 from __future__ import annotations
@@ -51,7 +63,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable
 
-from partner_scrape.config import get_site_dir
+from partner_scrape.config import get_own_data_dir, get_site_dir
 
 logger = logging.getLogger(__name__)
 
@@ -156,8 +168,11 @@ def export_ads(
     site_dir: str | Path | None = None,
     *,
     dry_run: bool = False,
+    own_data_dir: str | Path | None = None,
 ) -> list[dict[str, Any]]:
-    """Write `ad_configs` into `site_dir`'s `ads.json` data contract.
+    """Write `ad_configs` into `site_dir`'s `ads.json` data contract --
+    and, as of sprint 020 ticket 004, into partner-scrape's own
+    `own_data_dir` too, from the exact same computed payload.
 
     Args:
         ad_configs: already-loaded `AdConfig` records (typically
@@ -168,7 +183,14 @@ def export_ads(
             should always pass an explicit `tmp_path` here, never rely on
             the default, so runs never touch the real site repo.
         dry_run: when `True`, compute and return the would-be-written
-            payload without touching disk.
+            payload without touching disk -- neither `site_dir` nor
+            `own_data_dir` is written.
+        own_data_dir: path to partner-scrape's own pipeline-output
+            directory. Defaults to `Config.get_own_data_dir()`
+            (`<repo_root>/data`) when `None`. Unlike `site_dir`, this
+            directory is created automatically if missing. Tests should
+            always pass an explicit `tmp_path` here, never rely on the
+            default, matching `site_dir`'s own test convention.
 
     Returns:
         The list of ad dicts that were (or, for `dry_run`, would have
@@ -176,25 +198,50 @@ def export_ads(
 
     Raises:
         RuntimeError: `site_dir`'s `src/data` subdirectory does not
-            exist or is not writable. Never silently skips the write.
+            exist or is not writable, or `own_data_dir` is occupied by
+            something unwritable (e.g. a non-directory file). Never
+            silently skips either write. The `site_dir` write is
+            attempted first and its failure propagates before
+            `own_data_dir` is touched -- see this module's docstring.
     """
     resolved_site_dir = Path(site_dir) if site_dir is not None else get_site_dir()
+    resolved_own_data_dir = Path(own_data_dir) if own_data_dir is not None else get_own_data_dir()
 
     payload = [_to_json_dict(ad) for ad in ad_configs]
 
     if dry_run:
         return payload
 
+    serialized_ads = json.dumps(payload, indent=1, ensure_ascii=False)
+
     data_dir = resolved_site_dir / "src" / "data"
     ads_path = data_dir / "ads.json"
 
     try:
-        ads_path.write_text(json.dumps(payload, indent=1, ensure_ascii=False), encoding="utf-8")
+        ads_path.write_text(serialized_ads, encoding="utf-8")
     except OSError as exc:
         raise RuntimeError(
             f"Cannot write ads export to {data_dir}: {exc}. Check that "
             f"site_dir ({resolved_site_dir}) exists and its src/data "
             "subdirectory is writable."
+        ) from exc
+
+    # Sprint 020 ticket 004 (issue 60): the same payload, written a
+    # second time into partner-scrape's own data/ directory -- reusing
+    # `serialized_ads` computed above rather than re-serializing, so the
+    # two copies can never drift. Unlike src/data above, own_data_dir is
+    # created if missing (see module docstring). Mirrors
+    # `export_opportunities`'s identical own_data_dir write (sprint 020
+    # ticket 003).
+    own_ads_path = resolved_own_data_dir / "ads.json"
+
+    try:
+        resolved_own_data_dir.mkdir(parents=True, exist_ok=True)
+        own_ads_path.write_text(serialized_ads, encoding="utf-8")
+    except OSError as exc:
+        raise RuntimeError(
+            f"Cannot write own-data ads export to {resolved_own_data_dir}: {exc}. "
+            "Check that own_data_dir is writable."
         ) from exc
 
     return payload

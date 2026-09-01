@@ -28,14 +28,14 @@ depends only on ticket 002 for `get_own_data_dir()`.
 
 ## Acceptance Criteria
 
-- [ ] `export_ads(..., own_data_dir=<tmp_path>)` writes `ads.json` into
+- [x] `export_ads(..., own_data_dir=<tmp_path>)` writes `ads.json` into
       `own_data_dir`, byte-identical to the `SITE_DIR` copy.
-- [ ] Omitting `own_data_dir` resolves via `config.get_own_data_dir()`.
-- [ ] `dry_run=True` writes nothing to `own_data_dir`.
-- [ ] A missing `own_data_dir` is created automatically, never raises.
-- [ ] Every existing test exercising `export_ads()` continues to pass
+- [x] Omitting `own_data_dir` resolves via `config.get_own_data_dir()`.
+- [x] `dry_run=True` writes nothing to `own_data_dir`.
+- [x] A missing `own_data_dir` is created automatically, never raises.
+- [x] Every existing test exercising `export_ads()` continues to pass
       unmodified.
-- [ ] `export_ads()`'s docstrings are updated to describe the new third
+- [x] `export_ads()`'s docstrings are updated to describe the new third
       write path.
 
 ## Implementation Plan
