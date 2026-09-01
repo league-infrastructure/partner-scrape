@@ -1,8 +1,9 @@
 ---
 id: '007'
 title: Redirect publish.project()'s per-partner projection to data/
-status: open
-use-cases: [SUC-029]
+status: in-progress
+use-cases:
+- SUC-029
 depends-on: []
 github-issue: ''
 issue: stop-writing-to-stem-ecosystem-checkout.md

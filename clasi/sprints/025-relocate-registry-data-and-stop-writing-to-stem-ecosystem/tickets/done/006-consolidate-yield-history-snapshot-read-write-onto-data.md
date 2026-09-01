@@ -1,7 +1,7 @@
 ---
 id: '006'
 title: Consolidate yield-history snapshot read/write onto data/
-status: in-progress
+status: done
 use-cases:
 - SUC-029
 depends-on: []
