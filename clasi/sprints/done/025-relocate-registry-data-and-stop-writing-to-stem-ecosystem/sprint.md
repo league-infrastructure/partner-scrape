@@ -1,7 +1,7 @@
 ---
 id: '025'
 title: Relocate Registry Data and Stop Writing to Stem-Ecosystem
-status: executing
+status: done
 branch: sprint/025-relocate-registry-data-and-stop-writing-to-stem-ecosystem
 use-cases:
 - SUC-028
