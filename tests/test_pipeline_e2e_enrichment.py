@@ -219,10 +219,15 @@ def _own_data_dir_default(tmp_path_factory, monkeypatch):
     `_own_data_dir_default` fixture, for the same underlying reason.
     `writer` and `ads` each import `get_own_data_dir` separately, so
     both must be patched.
+
+    Returns `fake_own_data_dir` so tests can assert against the actual
+    (sole, since sprint 025 ticket 003) write target without duplicating
+    this fixture's own throwaway directory.
     """
     fake_own_data_dir = tmp_path_factory.mktemp("own-data-default")
     monkeypatch.setattr(writer, "get_own_data_dir", lambda: fake_own_data_dir)
     monkeypatch.setattr(ads, "get_own_data_dir", lambda: fake_own_data_dir)
+    return fake_own_data_dir
 
 
 class TestDiscoveryExtractEnrichGateExport:
@@ -230,7 +235,7 @@ class TestDiscoveryExtractEnrichGateExport:
     enrich (classification + date recovery) -> relevance gate ->
     normalize -> export, in one real `pipeline.run()` call."""
 
-    def test_produces_a_valid_opportunities_json(self, tmp_path):
+    def test_produces_a_valid_opportunities_json(self, tmp_path, _own_data_dir_default):
         site_dir = _site_dir(tmp_path)
         fetcher = _fixture_fetcher()
         enricher, _llm_client = _llm_enricher(tmp_path / "enrichment_cache")
@@ -243,8 +248,11 @@ class TestDiscoveryExtractEnrichGateExport:
             today=TODAY,
         )
 
-        opportunities_path = site_dir / "src" / "data" / "opportunities.json"
-        meta_path = site_dir / "src" / "data" / "scrape-meta.json"
+        # Sprint 025 ticket 003: export_opportunities() no longer writes
+        # into {site_dir}/src/data/... -- own_data_dir (this file's
+        # autouse fixture default) is the sole write target.
+        opportunities_path = _own_data_dir_default / "opportunities.json"
+        meta_path = _own_data_dir_default / "scrape-meta.json"
         assert opportunities_path.exists()
         assert meta_path.exists()
 

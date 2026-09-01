@@ -38,14 +38,13 @@ def _own_data_dir_default(tmp_path_factory, monkeypatch):
     """Pin `writer.get_own_data_dir()`'s resolution to a throwaway
     directory for every test in this file (sprint 020 ticket 003).
 
-    `export_opportunities()`'s new `own_data_dir` parameter defaults to
+    `export_opportunities()`'s `own_data_dir` parameter defaults to
     `config.get_own_data_dir()` -- a real repo path with no
     environment-variable override -- when a caller doesn't pass one
-    explicitly. `TestLegacyExportUnaffected` below calls the real
-    `export_opportunities()` directly without it, which would otherwise
-    write real files into this repo's actual `data/` directory on every
-    test run. Mirrors `tests/test_export.py`'s identical
-    `_own_data_dir_default` fixture, for the same underlying reason.
+    explicitly. A test that omits it would otherwise write real files
+    into this repo's actual `data/` directory on every test run.
+    Mirrors `tests/test_export.py`'s identical `_own_data_dir_default`
+    fixture, for the same underlying reason.
     """
     fake_own_data_dir = tmp_path_factory.mktemp("own-data-default")
     monkeypatch.setattr(writer, "get_own_data_dir", lambda: fake_own_data_dir)
@@ -363,20 +362,26 @@ class TestDryRun:
 
 class TestLegacyExportUnaffected:
     def test_opportunities_json_is_unaffected_by_project(self, tmp_path):
+        # Sprint 025 ticket 003: export_opportunities() no longer writes
+        # into {site_dir}/src/data/... at all -- own_data_dir is its sole
+        # write target, entirely separate from project()'s own
+        # {site_dir}/public/data/... tree below. This test's point still
+        # holds with the new target: project() (a different write path)
+        # must not disturb export_opportunities()'s own output.
         site_dir = _site_dir(tmp_path)
-        (site_dir / "src" / "data").mkdir(parents=True)
+        own_data_dir = tmp_path / "own-data"
         log_dir = tmp_path / "partner_log"
         opp = _opportunity()
         partner_log.record([opp], log_dir=log_dir, partners_path=PARTNERS_PATH)
 
-        export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
-        before = (site_dir / "src" / "data" / "opportunities.json").read_text()
-        before_meta = (site_dir / "src" / "data" / "scrape-meta.json").read_text()
+        export_opportunities([opp], today=date(2026, 7, 19), own_data_dir=own_data_dir)
+        before = (own_data_dir / "opportunities.json").read_text()
+        before_meta = (own_data_dir / "scrape-meta.json").read_text()
 
         project(site_dir=site_dir, log_dir=log_dir, partners_path=PARTNERS_PATH, today=date(2026, 7, 19))
 
-        after = (site_dir / "src" / "data" / "opportunities.json").read_text()
-        after_meta = (site_dir / "src" / "data" / "scrape-meta.json").read_text()
+        after = (own_data_dir / "opportunities.json").read_text()
+        after_meta = (own_data_dir / "scrape-meta.json").read_text()
         assert before == after
         assert before_meta == after_meta
         # And the new tree was written alongside it, additively.

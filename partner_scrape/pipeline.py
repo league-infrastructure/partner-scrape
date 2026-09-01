@@ -655,19 +655,17 @@ def run(
 
     result = export_opportunities(
         opportunities,
-        site_dir=resolved_site_dir,
         today=today,
         dry_run=dry_run,
     )
 
-    # Ad Content Export (sprint 005 ticket 005): one more "write a site
-    # data-contract file" sequencing step, structurally identical to the
-    # Site Export call above -- see sprint.md's self-review note on
+    # Ad Content Export (sprint 005 ticket 005): one more "write a data
+    # contract file" sequencing step, structurally identical to the Site
+    # Export call above -- see sprint.md's self-review note on
     # Pipeline's fan-out. Additive: existing callers/tests that only
     # inspect run()'s own return value are unaffected.
     export_ads(
         load_ad_configs(Path(ads_dir) if ads_dir is not None else None),
-        site_dir=resolved_site_dir,
         dry_run=dry_run,
     )
 

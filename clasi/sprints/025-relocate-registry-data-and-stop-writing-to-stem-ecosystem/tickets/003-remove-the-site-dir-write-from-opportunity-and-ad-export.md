@@ -27,22 +27,22 @@ Depends on ticket 002 landing first (both tickets touch `pipeline.py`'s
 
 ## Acceptance Criteria
 
-- [ ] `export_opportunities()` no longer accepts a `site_dir` parameter
+- [x] `export_opportunities()` no longer accepts a `site_dir` parameter
       and never writes `opportunities.json`/`scrape-meta.json` under
       `{site_dir}/...`. Its `own_data_dir` write is unchanged in shape.
-- [ ] `export_ads()` no longer accepts a `site_dir` parameter and never
+- [x] `export_ads()` no longer accepts a `site_dir` parameter and never
       writes `ads.json` under `{site_dir}/...`. Its `own_data_dir` write
       is unchanged in shape.
-- [ ] `pipeline.py`'s `run()` no longer passes `site_dir` to either
+- [x] `pipeline.py`'s `run()` no longer passes `site_dir` to either
       call. `run()`'s own `site_dir` parameter is unchanged (still
       resolves `partners_path` for the roster-validation read).
-- [ ] `is_current_or_upcoming()` and every other function in
+- [x] `is_current_or_upcoming()` and every other function in
       `export/writer.py` not related to the write target is unchanged.
-- [ ] Existing `TestTargetDirIsolation`-style tests (or equivalent) in
+- [x] Existing `TestTargetDirIsolation`-style tests (or equivalent) in
       `tests/test_export.py` and `tests/test_export_ads.py` are updated
       to assert the `{site_dir}/...` path is never created/written,
       rather than asserting it is.
-- [ ] `uv run pytest -q` is green.
+- [x] `uv run pytest -q` is green.
 
 ## Implementation Plan
 

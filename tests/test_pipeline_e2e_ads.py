@@ -6,8 +6,9 @@ Proves `export_ads()` is really wired into `run()` -- not just declared
 `test_pipeline_e2e.py`) plus a small fixture Ad Registry
 (`tests/fixtures/ad_registry/`, reused unchanged from
 `test_export_ads.py`), asserting a single `run()` call writes both
-`opportunities.json` and `ads.json` into the same `tmp_path` site dir,
-and that `dry_run=True` writes neither.
+`opportunities.json` and `ads.json` into the same `own_data_dir`
+(sprint 025 ticket 003 removed the `{site_dir}/src/data/...` write both
+functions used to make first), and that `dry_run=True` writes neither.
 
 No test here opens a socket, matching every other file in this suite's
 own convention -- `FixtureFetcher` raises for any URL it wasn't given a
@@ -72,10 +73,15 @@ def _own_data_dir_default(tmp_path_factory, monkeypatch):
     `_own_data_dir_default` fixture, for the same underlying reason.
     `writer` and `ads` each import `get_own_data_dir` separately, so
     both must be patched.
+
+    Returns `fake_own_data_dir` so tests can assert against the actual
+    (sole, since sprint 025 ticket 003) write target without duplicating
+    this fixture's own throwaway directory.
     """
     fake_own_data_dir = tmp_path_factory.mktemp("own-data-default")
     monkeypatch.setattr(writer, "get_own_data_dir", lambda: fake_own_data_dir)
     monkeypatch.setattr(ads, "get_own_data_dir", lambda: fake_own_data_dir)
+    return fake_own_data_dir
 
 
 class NoFixtureResponse(RuntimeError):
@@ -128,7 +134,9 @@ def _site_dir(tmp_path: Path) -> Path:
 
 
 class TestAdsExportWiredIntoPipelineRun:
-    def test_a_single_run_produces_both_opportunities_json_and_ads_json(self, tmp_path):
+    def test_a_single_run_produces_both_opportunities_json_and_ads_json(
+        self, tmp_path, _own_data_dir_default
+    ):
         site_dir = _site_dir(tmp_path)
         fetcher = _fixture_fetcher()
 
@@ -140,8 +148,11 @@ class TestAdsExportWiredIntoPipelineRun:
             today=TODAY,
         )
 
-        opportunities_path = site_dir / "src" / "data" / "opportunities.json"
-        ads_path = site_dir / "src" / "data" / "ads.json"
+        # Sprint 025 ticket 003: both functions' sole write target is now
+        # own_data_dir (this file's autouse fixture default) -- neither
+        # writes into {site_dir}/src/data/... any more.
+        opportunities_path = _own_data_dir_default / "opportunities.json"
+        ads_path = _own_data_dir_default / "ads.json"
         assert opportunities_path.exists()
         assert ads_path.exists()
 
@@ -172,10 +183,12 @@ class TestAdsExportWiredIntoPipelineRun:
         assert all(isinstance(record, dict) for record in payload)
         assert all("headline" not in record for record in payload)
 
-    def test_omitted_ads_dir_falls_back_to_the_real_seeded_league_registry(self, tmp_path):
+    def test_omitted_ads_dir_falls_back_to_the_real_seeded_league_registry(
+        self, tmp_path, _own_data_dir_default
+    ):
         # No ads_dir override -- exercises the production default path
-        # (partner_scrape/registry/ads/), proving the League's real seed
-        # content reaches a real run() call end to end.
+        # (registry/ads/), proving the League's real seed content reaches
+        # a real run() call end to end.
         site_dir = _site_dir(tmp_path)
         fetcher = _fixture_fetcher()
 
@@ -186,11 +199,13 @@ class TestAdsExportWiredIntoPipelineRun:
             today=TODAY,
         )
 
-        written_ads = json.loads((site_dir / "src" / "data" / "ads.json").read_text())
+        written_ads = json.loads((_own_data_dir_default / "ads.json").read_text())
         assert len(written_ads) >= 1
         assert written_ads[0]["link"].startswith("https://www.jointheleague.org")
 
-    def test_dry_run_writes_neither_opportunities_json_nor_ads_json(self, tmp_path):
+    def test_dry_run_writes_neither_opportunities_json_nor_ads_json(
+        self, tmp_path, _own_data_dir_default
+    ):
         site_dir = _site_dir(tmp_path)
         fetcher = _fixture_fetcher()
 
@@ -204,5 +219,5 @@ class TestAdsExportWiredIntoPipelineRun:
         )
 
         assert len(payload) == 2
-        assert not (site_dir / "src" / "data" / "opportunities.json").exists()
-        assert not (site_dir / "src" / "data" / "ads.json").exists()
+        assert not (_own_data_dir_default / "opportunities.json").exists()
+        assert not (_own_data_dir_default / "ads.json").exists()

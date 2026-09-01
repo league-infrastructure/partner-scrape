@@ -203,7 +203,9 @@ _SITE_SCHEMA_FIELDS = {
 
 
 class TestWalkingSkeletonEndToEnd:
-    def test_produces_valid_opportunities_and_scrape_meta_json(self, tmp_path):
+    def test_produces_valid_opportunities_and_scrape_meta_json(
+        self, tmp_path, _own_data_dir_default
+    ):
         site_dir = _site_dir(tmp_path)
         fetcher = _fixture_fetcher()
 
@@ -214,8 +216,11 @@ class TestWalkingSkeletonEndToEnd:
             today=TODAY,
         )
 
-        opportunities_path = site_dir / "src" / "data" / "opportunities.json"
-        meta_path = site_dir / "src" / "data" / "scrape-meta.json"
+        # Sprint 025 ticket 003: export_opportunities() no longer writes
+        # into {site_dir}/src/data/... -- own_data_dir (here, this
+        # file's autouse fixture default) is the sole write target.
+        opportunities_path = _own_data_dir_default / "opportunities.json"
+        meta_path = _own_data_dir_default / "scrape-meta.json"
         assert opportunities_path.exists()
         assert meta_path.exists()
 
@@ -373,7 +378,9 @@ class TestRosterValidationWiring:
     """
 
     @pytest.mark.parametrize("dry_run", [False, True])
-    def test_bad_roster_raises_and_writes_nothing(self, tmp_path, dry_run):
+    def test_bad_roster_raises_and_writes_nothing(
+        self, tmp_path, dry_run, _own_data_dir_default
+    ):
         site_dir = _site_dir(tmp_path)
         partners_path = site_dir / "src" / "data" / "partners.json"
         partners = json.loads(partners_path.read_text())
@@ -397,12 +404,18 @@ class TestRosterValidationWiring:
 
         # Both dry_run=True and dry_run=False must raise before writing
         # anything -- unconditional, no `--dry-run` exemption (this
-        # ticket's Acceptance Criteria).
-        assert not (site_dir / "src" / "data" / "opportunities.json").exists()
-        assert not (site_dir / "src" / "data" / "scrape-meta.json").exists()
+        # ticket's Acceptance Criteria). Sprint 025 ticket 003:
+        # export_opportunities() no longer writes into
+        # {site_dir}/src/data/... at all -- own_data_dir (this file's
+        # autouse fixture default) is the sole write target, so it's the
+        # one that must stay untouched here.
+        assert not (_own_data_dir_default / "opportunities.json").exists()
+        assert not (_own_data_dir_default / "scrape-meta.json").exists()
         assert not (tmp_path / "scrape_cache" / "partner_log").exists()
 
-    def test_unresolved_active_source_logs_warning_and_does_not_raise(self, tmp_path, caplog):
+    def test_unresolved_active_source_logs_warning_and_does_not_raise(
+        self, tmp_path, caplog, _own_data_dir_default
+    ):
         # brokensource.toml's org_name, "Broken Fixture Org", has no
         # match in tests/fixtures/partners.json (Coastal Roots Farm /
         # The Living Coast Discovery Center / Ocean Connectors) -- an
@@ -421,10 +434,10 @@ class TestRosterValidationWiring:
 
         # Never raises -- the run completes normally, output intact.
         assert len(payload) == 2
-        assert (site_dir / "src" / "data" / "opportunities.json").exists()
+        assert (_own_data_dir_default / "opportunities.json").exists()
         assert "Broken Fixture Org" in caplog.text
 
-    def test_clean_roster_run_is_unaffected(self, tmp_path):
+    def test_clean_roster_run_is_unaffected(self, tmp_path, _own_data_dir_default):
         """A roster with no offenders and no unresolved active source
         behaves identically to before this ticket -- same payload shape
         `TestWalkingSkeletonEndToEnd` already proves in detail; this
@@ -440,7 +453,7 @@ class TestRosterValidationWiring:
         assert len(payload) == 2
         titles = {record["title"] for record in payload}
         assert titles == {"Tide Pool Exploration", "Weekly Story Time"}
-        assert (site_dir / "src" / "data" / "opportunities.json").exists()
+        assert (_own_data_dir_default / "opportunities.json").exists()
 
 
 class TestEnricherHook:
@@ -709,7 +722,7 @@ class TestNoNetworkAccess:
 
 
 class TestDryRun:
-    def test_dry_run_computes_payload_but_writes_nothing(self, tmp_path):
+    def test_dry_run_computes_payload_but_writes_nothing(self, tmp_path, _own_data_dir_default):
         site_dir = _site_dir(tmp_path)
         fetcher = _fixture_fetcher()
 
@@ -722,8 +735,12 @@ class TestDryRun:
         )
 
         assert len(payload) == 2
-        assert not (site_dir / "src" / "data" / "opportunities.json").exists()
-        assert not (site_dir / "src" / "data" / "scrape-meta.json").exists()
+        # Sprint 025 ticket 003: own_data_dir (this file's autouse
+        # fixture default) is export_opportunities()'s sole write
+        # target -- the removed {site_dir}/src/data/... write no longer
+        # exists to assert against.
+        assert not (_own_data_dir_default / "opportunities.json").exists()
+        assert not (_own_data_dir_default / "scrape-meta.json").exists()
 
     def test_dry_run_never_creates_the_images_directory(self, tmp_path, _own_data_dir_default):
         """Sprint 008 ticket 008: `run()`'s default `EventImageDownloader`
