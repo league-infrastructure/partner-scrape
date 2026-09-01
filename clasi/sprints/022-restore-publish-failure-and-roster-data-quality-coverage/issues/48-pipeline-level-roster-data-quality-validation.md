@@ -1,5 +1,10 @@
 ---
-status: pending
+status: in-progress
+sprint: '022'
+tickets:
+- 022-002
+- 022-003
+- 022-004
 ---
 
 # Pipeline-level data-quality validation for the partner roster (recover lost regression guards)

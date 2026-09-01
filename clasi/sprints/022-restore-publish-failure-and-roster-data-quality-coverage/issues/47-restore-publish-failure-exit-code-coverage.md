@@ -1,5 +1,8 @@
 ---
-status: pending
+status: in-progress
+sprint: '022'
+tickets:
+- 022-001
 ---
 
 # Restore test coverage for exit code 1 when publish.project() raises
