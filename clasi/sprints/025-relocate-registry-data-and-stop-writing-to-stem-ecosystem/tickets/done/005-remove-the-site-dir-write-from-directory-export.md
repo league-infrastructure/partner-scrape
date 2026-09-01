@@ -1,7 +1,7 @@
 ---
 id: '005'
 title: Remove the site_dir write from Directory export
-status: in-progress
+status: done
 use-cases:
 - SUC-029
 depends-on: []

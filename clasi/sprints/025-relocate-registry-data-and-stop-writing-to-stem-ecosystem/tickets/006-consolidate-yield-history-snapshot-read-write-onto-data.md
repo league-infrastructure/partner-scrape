@@ -1,8 +1,9 @@
 ---
 id: '006'
 title: Consolidate yield-history snapshot read/write onto data/
-status: open
-use-cases: [SUC-029]
+status: in-progress
+use-cases:
+- SUC-029
 depends-on: []
 github-issue: ''
 issue: stop-writing-to-stem-ecosystem-checkout.md
