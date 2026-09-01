@@ -1,7 +1,7 @@
 ---
 id: '021'
 title: Team Website Verification and Description Extraction
-status: executing
+status: done
 branch: sprint/021-team-website-verification-and-description-extraction
 use-cases:
 - SUC-021
