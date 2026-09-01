@@ -1,7 +1,7 @@
 ---
 id: '001'
 title: Relocate registry data to a root-level registry/ directory
-status: in-progress
+status: done
 use-cases:
 - SUC-028
 depends-on: []

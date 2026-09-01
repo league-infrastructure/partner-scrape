@@ -1,8 +1,9 @@
 ---
 id: '002'
 title: Resize-on-fetch for the Event Image Downloader and redirect to data/images/
-status: open
-use-cases: [SUC-030]
+status: in-progress
+use-cases:
+- SUC-030
 depends-on: []
 github-issue: ''
 issue: stop-writing-to-stem-ecosystem-checkout.md
