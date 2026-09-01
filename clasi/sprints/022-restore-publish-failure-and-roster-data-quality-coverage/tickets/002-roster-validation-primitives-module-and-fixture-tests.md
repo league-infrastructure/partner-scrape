@@ -123,27 +123,27 @@ raising. Also:
 
 ## Acceptance Criteria
 
-- [ ] `partner_scrape/registry/validate_roster.py` exists with
+- [x] `partner_scrape/registry/validate_roster.py` exists with
       `RosterValidationError`, `validate_roster()`,
       `find_unresolved_active_sources()`, and
       `check_partner_references()`, matching the shapes above.
-- [ ] `validate_roster()` checks the raw partner list, never a
+- [x] `validate_roster()` checks the raw partner list, never a
       name-deduplicated view — proven by a dedicated test (see above).
-- [ ] Every one of the four content checks (bare-California centroid,
+- [x] Every one of the four content checks (bare-California centroid,
       out-of-bounds/malformed coordinate, hijacked domain, duplicate
       slug) has both a fires-on-bad-data test and a
       passes-on-clean-data test.
-- [ ] The duplicate-slug check reports every colliding pair when more
+- [x] The duplicate-slug check reports every colliding pair when more
       than one exists in a single call, not just the first found.
-- [ ] `find_unresolved_active_sources()` returns (never raises) the
+- [x] `find_unresolved_active_sources()` returns (never raises) the
       correct subset of unresolved `org_name`s.
-- [ ] `check_partner_references()` raises `RosterValidationError` naming
+- [x] `check_partner_references()` raises `RosterValidationError` naming
       every dangling `(referencer_id, partner_id)` pair, and does not
       raise when every reference resolves.
-- [ ] `RosterValidationError`'s message, for a multi-offender case,
+- [x] `RosterValidationError`'s message, for a multi-offender case,
       names every offender in one raised exception — not one exception
       per offender.
-- [ ] No change to `pipeline.py`, `directory/pipeline.py`, or `cli.py`
+- [x] No change to `pipeline.py`, `directory/pipeline.py`, or `cli.py`
       in this ticket — wiring is tickets 003/004.
 
 ## Testing
