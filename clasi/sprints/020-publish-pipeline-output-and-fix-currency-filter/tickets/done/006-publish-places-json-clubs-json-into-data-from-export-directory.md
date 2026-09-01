@@ -1,7 +1,7 @@
 ---
 id: '006'
 title: Publish places.json/clubs.json into data/ from export_directory()
-status: in-progress
+status: done
 use-cases:
 - SUC-019
 depends-on:

@@ -1,9 +1,11 @@
 ---
 id: '007'
 title: Publish yield-history.json into data/ from cli.py
-status: open
-use-cases: [SUC-019]
-depends-on: ['002']
+status: in-progress
+use-cases:
+- SUC-019
+depends-on:
+- '002'
 github-issue: ''
 issue: 60-publish-pipeline-output-in-well-known-data-directory.md
 completes_issue: true
