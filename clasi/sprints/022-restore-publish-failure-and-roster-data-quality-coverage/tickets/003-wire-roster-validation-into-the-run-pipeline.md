@@ -1,7 +1,7 @@
 ---
 id: '003'
 title: Wire roster validation into the run pipeline
-status: open
+status: in-progress
 use-cases:
 - SUC-025
 depends-on:
