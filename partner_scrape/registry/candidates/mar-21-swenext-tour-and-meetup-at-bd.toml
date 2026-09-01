@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "Mar 21 - SWENext Tour and Meetup at BD"
+candidate_url = "https://docs.google.com/forms/d/e/1FAIpQLScMp3qS3YBSI1o9U-YA9-pqkrEZe1V54AdSM4WVuCeEhEkCQA/viewform"
+discovered_via = "sdcec-stem"
+evidence_text = "Mar 21 - SWENext Tour and Meetup at BD"

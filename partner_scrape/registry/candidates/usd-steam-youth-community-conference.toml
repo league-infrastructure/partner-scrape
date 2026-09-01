@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "USD STEAM Youth & Community Conference"
+candidate_url = "https://usdsteamteam.wixsite.com/2025-conference"
+discovered_via = "sdcec-stem"
+evidence_text = "Jul 19 - USD STEAM Youth & Community Conference"

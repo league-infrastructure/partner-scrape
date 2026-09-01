@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "Nov 5 - Scratch Workshop"
+candidate_url = "https://tcs-lajolla.pike13.com/events/10983667"
+discovered_via = "sdcec-stem"
+evidence_text = "Nov 5 - Scratch Workshop (the Coder School, free, age 7-10)"

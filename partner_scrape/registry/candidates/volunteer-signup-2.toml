@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "VOLUNTEER/SIGNUP"
+candidate_url = "https://www.eventbrite.com/e/spring-steam-resource-career-fair-tickets-519506125807"
+discovered_via = "sdcec-stem"
+evidence_text = "Apr 8 - Spring STEAM (Family) VOLUNTEER/SIGNUP"

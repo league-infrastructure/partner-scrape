@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "Boolean Girl: Full Steam Ahead (ages 8 - 18)"
+candidate_url = "https://booleangirl.org/full-stem-ahead/"
+discovered_via = "sdcec-stem"
+evidence_text = "Boolean Girl: Full Steam Ahead (ages 8 - 18),"

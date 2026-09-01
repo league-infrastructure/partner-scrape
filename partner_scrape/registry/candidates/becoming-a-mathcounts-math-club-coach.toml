@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "Becoming a MATHCOUNTS Math Club Coach"
+candidate_url = "https://www.youtube.com/watch?v=uDqRKguZIgY"
+discovered_via = "sdcec-stem"
+evidence_text = "MathCounts Club - Middle-school student club and competitions through MathCounts.  Becoming a MATHCOUNTS Math Club Coach"

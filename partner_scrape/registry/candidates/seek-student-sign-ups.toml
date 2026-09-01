@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "SEEK Student Sign Ups"
+candidate_url = "https://seeknsbe.smapply.io/prog/student_applicants_-_2023/"
+discovered_via = "sdcec-stem"
+evidence_text = "Jul 17-Aug 15 - NSBE Summer SEEK Camp NSBE SEEK Staff Applications, SEEK Student Sign Ups"

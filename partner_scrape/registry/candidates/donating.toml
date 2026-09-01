@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "Donating"
+candidate_url = "https://cspeef.org/competitions/san-diego/"
+discovered_via = "sdcec-stem"
+evidence_text = "MATHCOUNTS is a way to make math fun for middle school students - You can help, support host NSPE-CA by Donating / Volunteering for the San Diego Regional Mathcounts Competition at UCSD"

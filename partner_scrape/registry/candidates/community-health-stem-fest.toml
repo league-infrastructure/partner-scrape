@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "Community Health & STEM Fest"
+candidate_url = "https://www.eventbrite.com/e/3rd-annual-community-health-stem-fest-tickets-684390890577?aff=oddtdtcreator"
+discovered_via = "sdcec-stem"
+evidence_text = "Sept 16 - Community Health & STEM Fest (Black Tech Link, Famly)"

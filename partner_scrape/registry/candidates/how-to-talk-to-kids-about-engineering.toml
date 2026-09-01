@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "How to Talk to Kids about Engineering"
+candidate_url = "http://www.google.com/url?q=http%3A%2F%2Fdiscovere.org%2Fonline-training&sa=D&sntz=1&usg=AOvVaw108qHvrP2wn4150Wva0uC9"
+discovered_via = "sdcec-stem"
+evidence_text = "How to Talk to Kids about Engineering"

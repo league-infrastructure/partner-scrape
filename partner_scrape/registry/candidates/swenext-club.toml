@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "SWENext Club"
+candidate_url = "https://swe.org/k-12-outreach/swenext-clubs/"
+discovered_via = "sdcec-stem"
+evidence_text = "SWENext Club - K-12 students can join SWENext for free. Here are the San Diego Clubs."

@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "FUTURE CITY"
+candidate_url = "https://futurecity.org/"
+discovered_via = "sdcec-stem"
+evidence_text = "FUTURE CITY is a program for middle to high school student teams to create a city 100 years in the future.  The Southern California Region supports competitions for San Diego students (email california_southern@futurecity.org). The general schedule: May-Aug Registration, Sept - Oct: Teams kick off their projects / registration closes, January - Regional Competitions"

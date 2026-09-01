@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "RSVP Required"
+candidate_url = "https://sdaf.wildapricot.org/event-6566812"
+discovered_via = "sdcec-stem"
+evidence_text = "Apr 25 - \"Dome Sweet Dome\" hands on construction project for youth 6-18 yrs, RSVP Required, 10am-1:30pm, Civita Park (by SD Architectural Foundation)"

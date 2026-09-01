@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "Nov 20 Due-SWENext JensenHughes Fire Prevention Challenge"
+candidate_url = "https://info.jensenhughes.com/acton/fs/blocks/showLandingPage/a/43128/p/p-001f/t/page/fm/0"
+discovered_via = "sdcec-stem"
+evidence_text = "Nov 20 Due-SWENext JensenHughes Fire Prevention Challenge (G6-12)"

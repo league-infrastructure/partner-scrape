@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "Girls in Aviation Day"
+candidate_url = "https://www.zeffy.com/en-US/ticketing/girls-in-aviation-day--2026-4"
+discovered_via = "sdcec-stem"
+evidence_text = "Sept 19 - Girls in Aviation Day"

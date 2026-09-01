@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "100 Black Girls STEM Event"
+candidate_url = "https://www.eventbrite.com/e/100-black-girls-stem-kickoff-photo-video-shoot-registration-797163777317?aff=ebemoffollowpublishemail&utm_term=100+Black+Girls+STEM%21+Kickoff+Photo+%26+Video+Shoot&utm_campaign=following_published_event&utm_content=follow_notification&utm_source=eventbrite&utm_medium=email&utm_experiment=follow_template.B"
+discovered_via = "sdcec-stem"
+evidence_text = "Feb 10 - 100 Black Girls STEM Event (MS-HS)"

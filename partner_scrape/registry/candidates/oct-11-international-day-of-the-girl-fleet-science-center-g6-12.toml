@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "Oct 11 - International Day of the Girl @ Fleet Science center (G6-12)"
+candidate_url = "https://www.eventbrite.com/e/two-events-one-day-celebrate-women-in-stem-tickets-402693837107"
+discovered_via = "sdcec-stem"
+evidence_text = "Oct 11 - International Day of the Girl @ Fleet Science center (G6-12)"

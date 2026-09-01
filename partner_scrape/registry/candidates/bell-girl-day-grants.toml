@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "BELL Girl Day GRANTS"
+candidate_url = "http://discovere.org/about-us/outreach-grants/bell-girl-day-grants"
+discovered_via = "sdcec-stem"
+evidence_text = "DiscoverE Grants - Nov 5, 2022 - To support your outreach initiatives, DiscoverE.org has two grants for funding up to $1k. (1) EWEEK GRANTS - For underserved student programs taking place Feb - April, 2022 offered in connection with Engineers Week (Eweek). BELL Girl Day GRANTS - For age 5 to 18 girl-centered programs taking place Jan - April, 2022."

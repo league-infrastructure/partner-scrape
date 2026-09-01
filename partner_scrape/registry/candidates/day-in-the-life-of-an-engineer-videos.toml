@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "Day in the Life of An Engineer Videos"
+candidate_url = "https://www.youtube.com/channel/UCvzrrmryff6Vdxbj3ZBb_Fw"
+discovered_via = "sdcec-stem"
+evidence_text = "SWE SD Day in the Life of An Engineer Videos"

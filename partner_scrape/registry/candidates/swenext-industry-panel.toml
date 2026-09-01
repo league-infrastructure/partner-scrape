@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "SWENext Industry Panel"
+candidate_url = "https://docs.google.com/forms/d/e/1FAIpQLSdwC__ZZ8hE74Pb3HF_NaaxmEkkTV8_LZM045JTh3TFoPzxlw/viewform"
+discovered_via = "sdcec-stem"
+evidence_text = "Apr 24 - SWENext Industry Panel (RSVP, virtual)"

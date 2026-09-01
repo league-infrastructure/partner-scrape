@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "SIGNUP"
+candidate_url = "https://login2.firstinspires.org/Account/Login?ReturnUrl=%2Fconnect%2Fauthorize%2Fcallback%3Fclient_id%3DFIRSTClients2%26redirect_uri%3Dhttps%253A%252F%252Fmy.firstinspires.org%252FVolunteers%252F%26response_mode%3Dform_post%26response_type%3Dcode%2520id_token%2520token%26scope%3Dopenid%2520email%2520FirstID%2520read%2520write%26state%3DOpenIdConnect.AuthenticationProperties%253DKsw5DGKDcGlBAqP98KiVcg776aAKwhHItJHRfqbmGEKI4XREvlzL4depQUmAo28HlTrN7WUCemjEpsjMs3Ch5--6EhDoyLLMch90Ut2s1AbUQMWSz5mLdVTouUoGORqwUGQw7J_IVZuCK0YCVa1NGpPOmBEBxNbGZS_PbLGoSH0Jf6QEgT42a0tKDGqBJMZv01b36Q-hwMZe-Ec32Ld6H1X30wv9WdRxoFkFVrKDnm_nPtkXDMoqurpHJmsulV5UEW8_H5ig-9Q1vKp9vEgPW7OUMv3sCJBmia-VnI6IMIg%26nonce%3D638081345297681707.OTRjYmY4MjItOGM2NC00NDc2LTk5MmMtYzMyMzM3MzdjMWJlM2Y0M2I3ZWItY2U3NC00MDk0LTg0YmUtZTIzMDQyNzZhMTJl"
+discovered_via = "sdcec-stem"
+evidence_text = "Mar 23-26 FIRST SD Regionals VOLUNTEER/SIGNUP"

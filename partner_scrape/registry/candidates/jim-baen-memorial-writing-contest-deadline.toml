@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "Jim Baen Memorial Writing Contest Deadline"
+candidate_url = "https://www.baen.com/contest-jbmssa"
+discovered_via = "sdcec-stem"
+evidence_text = "Feb 1 - Jim Baen Memorial Writing Contest Deadline - science fiction short story that shows the near future of manned space exploration. (no apparent age restriction)"

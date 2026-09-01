@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "Dec 17 - Radio Telemetry Workshop"
+candidate_url = "https://docs.google.com/forms/d/e/1FAIpQLScZnqfsqy5Y0JWejUCbHSa_9hZtgxatHRuje343HfnyuuokKQ/viewform"
+discovered_via = "sdcec-stem"
+evidence_text = "Dec 17 - Radio Telemetry Workshop (G6-12 by SWE SD)"

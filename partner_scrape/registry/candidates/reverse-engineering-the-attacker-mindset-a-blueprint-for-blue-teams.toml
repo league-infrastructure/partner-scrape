@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "Reverse Engineering the Attacker Mindset: A Blueprint for Blue teams"
+candidate_url = "https://www.eventbrite.com/e/reverse-engineering-the-attacker-mindset-a-blueprint-for-blue-teams-tickets-1508131685469?aff=ebemoffollowpublishemail&ref=eemail&utm_campaign=following_published_event&utm_content=follow_notification&utm_medium=email&utm_source=eventbrite"
+discovered_via = "sdcec-stem"
+evidence_text = "Aug 16 - Reverse Engineering the Attacker Mindset: A Blueprint for Blue teams (WiCyS Hacker Speaker Series)"

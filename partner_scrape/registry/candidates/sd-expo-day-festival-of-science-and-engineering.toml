@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "SD Expo Day (Festival of  Science and Engineering"
+candidate_url = "https://lovestemsd.org/steam-week-events-2021"
+discovered_via = "sdcec-stem"
+evidence_text = "Apr 24 - May 2:  SD Expo Day (Festival of  Science and Engineering)"

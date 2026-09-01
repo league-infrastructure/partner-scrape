@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "Latina Engineers Women's ILEW Conference"
+candidate_url = "https://latinaengineer.com/"
+discovered_via = "sdcec-stem"
+evidence_text = "Oct 9-13: Latina Engineers Women's ILEW Conference (Virtual)"

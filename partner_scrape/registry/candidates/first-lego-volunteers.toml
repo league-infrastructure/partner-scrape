@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "FIRST Lego Volunteers"
+candidate_url = "https://www.firstinspires.org/resource-library/fll/challenge/volunteer-resources"
+discovered_via = "sdcec-stem"
+evidence_text = "Nov 5 - FIRST Lego Volunteers (contact tparr@powayusd.com)"

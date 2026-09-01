@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "WICYS - Women in Cyber Security Career Day"
+candidate_url = "https://sites.google.com/wicys.org/wicys-san-diego/home"
+discovered_via = "sdcec-stem"
+evidence_text = "Mar 8 - WICYS - Women in Cyber Security Career Day"

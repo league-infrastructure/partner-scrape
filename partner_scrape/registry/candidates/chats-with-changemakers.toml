@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "Chats with Changemakers"
+candidate_url = "https://discovere.org/programs/chats-with-change-makers/?utm_medium=email&utm_campaign=Oct%201%20DiscoverE%20October%20Newsletter&utm_content=Oct%201%20DiscoverE%20October%20Newsletter+CID_da8bf452f639f28bc92c9dfb044ef03f&utm_source=Email%20marketing%20software&utm_term=Chats%20with%20Change%20Makers"
+discovered_via = "sdcec-stem"
+evidence_text = "Oct 7 - Chats with Changemakers (Grades 4-12)"

@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "EYH Bioengineering Summer Course"
+candidate_url = "https://eyhsandiego.wufoo.com/forms/eyh-2025-bioengineering-summer-course/?fbclid=IwY2xjawJiZ6tleHRuA2FlbQIxMAABHo2cjtMBThNDf03p5e3HNadW2flDjzeB-9DiOG6s3BdVdA3A6iBnG3xopYfZ_aem_USMwXSmKeHlAd3XAPymQOg"
+discovered_via = "sdcec-stem"
+evidence_text = "Jun 9-13 - EYH Bioengineering Summer Course (Grade 10-11)"

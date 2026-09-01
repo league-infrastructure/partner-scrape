@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "SHPE / SWE Call for Volunteers to Staff Table"
+candidate_url = "https://docs.google.com/forms/d/e/1FAIpQLSeEqFyNhEy_u8FhiomGPOvP4tduFESvy8TCqfX5Pu5dRecpRQ/viewform"
+discovered_via = "sdcec-stem"
+evidence_text = "Mar 1 - PETCO PARK San Diego Festival of Sciences & Engineering Call for participation (Open through Dec 6th) - SHPE / SWE Call for Volunteers to Staff Table"

@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "NGCP Outreach Training - Supporting AI Education in Out-of-School Time Spaces (by NGCP and STEM Next)"
+candidate_url = "https://ngcproject.app.neoncrm.com/np/clients/ngcproject/event.jsp?event=808"
+discovered_via = "sdcec-stem"
+evidence_text = "Nov 25 - NGCP Outreach Training - Supporting AI Education in Out-of-School Time Spaces (by NGCP and STEM Next)"

@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "WOAA SDSU \"Women in Aerospace Panel\""
+candidate_url = "https://www.linkedin.com/in/woaa-sdsu-844bbb252/"
+discovered_via = "sdcec-stem"
+evidence_text = "Mar 13 - WOAA SDSU \"Women in Aerospace Panel\""

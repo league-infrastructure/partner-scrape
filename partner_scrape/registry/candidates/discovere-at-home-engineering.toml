@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "DiscoverE At Home Engineering"
+candidate_url = "http://www.google.com/url?q=http%3A%2F%2Fdiscovere.org%2Fat-home-engineering&sa=D&sntz=1&usg=AOvVaw2QBerlOiwes5aXyGLROc-F"
+discovered_via = "sdcec-stem"
+evidence_text = "DiscoverE At Home Engineering"

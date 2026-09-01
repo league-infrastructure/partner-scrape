@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "Engineering Career Panel (Software, Structures, Plumbing, Semiconductor Engineers)"
+candidate_url = "https://www.signupgenius.com/go/10C0E4EABA62EA2FEC25-stem2#/"
+discovered_via = "sdcec-stem"
+evidence_text = "Nov 6 - Engineering Career Panel (Software, Structures, Plumbing, Semiconductor Engineers) (MESA College, Virtual, HS+)"

@@ -1,0 +1,30 @@
+# San Diego County Engineering Council (SDCEC) -- hand-curated youth
+# STEM program list, a real (not template) discovery-only hub.
+# Live-verified 2026-08-31 (sprint 024 planning; see sprint.md's
+# Architecture > What Changed):
+#
+#   GET https://www.sandiegoengineers.org/stem
+#
+# returns HTTP 200. Note the `www.` host is required -- the bare
+# `sandiegoengineers.org` domain (no `www`) fails TLS negotiation
+# entirely, so `page_urls` below must not be pointed at the bare domain.
+#
+#   GET https://www.sandiegoengineers.org/robots.txt
+#
+# returns HTTP 404 (no robots.txt file present). Per `fetch/robots.py`'s
+# existing `is_allowed()` contract, any non-200 response is already
+# treated as "everything allowed" -- no code change needed, this is
+# just confirmation the existing behavior is correct for this hub.
+#
+# No Terms of Service, legal, or usage-restriction link exists anywhere
+# on the site (checked both the homepage and the `/stem` page).
+#
+# A direct fetch of the `/stem` page found 124 distinct outbound
+# (different-domain) links -- real lead-generation signal, not a sparse
+# or placeholder page.
+
+hub_name = "San Diego County Engineering Council -- Youth STEM Programs"
+
+page_urls = [
+    "https://www.sandiegoengineers.org/stem",
+]

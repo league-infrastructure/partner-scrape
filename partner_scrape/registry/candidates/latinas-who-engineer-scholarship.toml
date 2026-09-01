@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "Latinas who Engineer Scholarship"
+candidate_url = "https://docs.google.com/forms/d/e/1FAIpQLSffyApV4CofKxfJuOuRfjzK6ZEIURAUfJXDq9BoGK2s4ykRxQ/viewform?mc_cid=2332882c64&mc_eid=29b91c9daf"
+discovered_via = "sdcec-stem"
+evidence_text = "Sept 10 deadline - Latinas who Engineer Scholarship"

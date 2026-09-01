@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "SWE Community College Advocates"
+candidate_url = "https://swe.org/calendar/connecting-swe-professional-sections-and-community-colleges/"
+discovered_via = "sdcec-stem"
+evidence_text = "Feb 21 - SWE Community College Advocates"

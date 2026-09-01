@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "STEM Influencer 101 Role Model Training"
+candidate_url = "https://www.eventbrite.com/e/stem-influencer-101-tickets-232216595087"
+discovered_via = "sdcec-stem"
+evidence_text = "Feb 23 - STEM Influencer 101 Role Model Training for HS girls by the San Diego STEM Ecosystem Women in STEM Workgroup"

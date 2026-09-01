@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "SWE SD Girls in STEM Day event"
+candidate_url = "https://docs.google.com/forms/d/e/1FAIpQLSfWGPHWKPckz5Pk7vS00s7n7W-T0mqLSDqeZKMqMNoVwF8j5g/viewform"
+discovered_via = "sdcec-stem"
+evidence_text = "Apr 25 - SWE SD Girls in STEM Day event (Grade 6-12)"

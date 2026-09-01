@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "Athena & Scientella - Student Mentorfest (MS - College)"
+candidate_url = "https://www.athenastemwomen.org/event-details/student-mentorfest-create-lasting-connections-for-your-future-career"
+discovered_via = "sdcec-stem"
+evidence_text = "Aug 21 = Athena & Scientella - Student Mentorfest (MS - College)"

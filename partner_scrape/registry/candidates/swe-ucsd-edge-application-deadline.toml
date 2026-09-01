@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "SWE UCSD EDGE Application deadline"
+candidate_url = "https://edgeucsd.wixsite.com/edge/apply-now"
+discovered_via = "sdcec-stem"
+evidence_text = "Oct 5 - SWE UCSD EDGE Application deadline (9th - 12th grade)"
