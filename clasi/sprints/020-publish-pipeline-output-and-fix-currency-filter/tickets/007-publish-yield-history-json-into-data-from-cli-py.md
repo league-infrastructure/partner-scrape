@@ -39,19 +39,19 @@ this sprint auto-creating its target) or explicitly create
 
 ## Acceptance Criteria
 
-- [ ] A non-dry-run `run` invocation with reporting enabled (the
+- [x] A non-dry-run `run` invocation with reporting enabled (the
       default; `--no-report` not given) writes
       `data/yield-history.json` in partner-scrape's own repo, with
       content identical to the `SITE_DIR`/`--yield-history` copy.
-- [ ] `--dry-run` writes to neither location (unchanged for `SITE_DIR`,
+- [x] `--dry-run` writes to neither location (unchanged for `SITE_DIR`,
       extended to the new own-repo path).
-- [ ] `--no-report` skips both writes entirely (unchanged existing
+- [x] `--no-report` skips both writes entirely (unchanged existing
       behavior for `SITE_DIR`, extended to the new own-repo path — no
       `yield_reporter`, nothing to report, nothing written anywhere).
-- [ ] A missing own-repo `data/` directory does not raise — created
+- [x] A missing own-repo `data/` directory does not raise — created
       automatically, matching every other own-repo write in this
       sprint.
-- [ ] Existing CLI wiring tests (`--yield-history` override,
+- [x] Existing CLI wiring tests (`--yield-history` override,
       `--no-report`, dry-run) continue to pass unmodified.
 
 ## Implementation Plan

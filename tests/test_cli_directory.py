@@ -46,11 +46,22 @@ def _cache_dir(tmp_path, tmp_path_factory, monkeypatch):
     `data/` directory on every test run. Mirrors `test_cli_teams.py`'s
     identical `own_data_dir` guard, folded into this file's existing
     single autouse fixture rather than a second one.
+
+    Sprint 020 ticket 007: also pins `cli.get_own_data_dir()`'s
+    resolution to the same throwaway directory.
+    `TestNeverCrossesIntoOtherPipelines.test_default_run_never_calls_run_directory`
+    drives the real no-subcommand/`run` path via `cli.main([])`
+    (reporting enabled by default, no `--dry-run`) -- as of ticket 007,
+    that path writes `yield-history.json` into `cli.get_own_data_dir()`
+    a second time, alongside the `SITE_DIR` copy. Without pinning this
+    too, that single test would write a real `yield-history.json` into
+    this repo's actual `data/` directory on every test run.
     """
     monkeypatch.setenv("SCRAPE_CACHE_DIR", str(tmp_path))
     monkeypatch.setenv("SITE_DIR", str(tmp_path))
     fake_own_data_dir = tmp_path_factory.mktemp("own-data-default")
     monkeypatch.setattr(directory_export, "get_own_data_dir", lambda: fake_own_data_dir)
+    monkeypatch.setattr(cli, "get_own_data_dir", lambda: fake_own_data_dir)
     monkeypatch.setattr(
         cli.publish,
         "project",

@@ -57,12 +57,23 @@ def _cache_dir(tmp_path, tmp_path_factory, monkeypatch):
     test run. Mirrors `tests/teams/test_pipeline.py`'s identical
     `_own_data_dir_default` fixture, folded into this file's existing
     single autouse fixture rather than a second one.
+
+    Sprint 020 ticket 007: also pins `cli.get_own_data_dir()`'s
+    resolution to the same throwaway directory.
+    `TestNeverCrossesIntoTheOtherPipeline.test_default_run_never_calls_run_teams`
+    drives the real no-subcommand/`run` path via `cli.main([])`
+    (reporting enabled by default, no `--dry-run`) -- as of ticket 007,
+    that path writes `yield-history.json` into `cli.get_own_data_dir()`
+    a second time, alongside the `SITE_DIR` copy. Without pinning this
+    too, that single test would write a real `yield-history.json` into
+    this repo's actual `data/` directory on every test run.
     """
     monkeypatch.setenv("SCRAPE_CACHE_DIR", str(tmp_path))
     monkeypatch.setenv("SITE_DIR", str(tmp_path))
     monkeypatch.delenv("TBA_KEY", raising=False)
     fake_own_data_dir = tmp_path_factory.mktemp("own-data-default")
     monkeypatch.setattr(teams_export, "get_own_data_dir", lambda: fake_own_data_dir)
+    monkeypatch.setattr(cli, "get_own_data_dir", lambda: fake_own_data_dir)
     # `cli.main()`'s no-subcommand/`run` path calls `publish.project(...)`
     # after `run()` returns, which raises loudly on a missing curated
     # `partners.json` -- only `TestNeverCrossesIntoTheOtherPipeline`'s
