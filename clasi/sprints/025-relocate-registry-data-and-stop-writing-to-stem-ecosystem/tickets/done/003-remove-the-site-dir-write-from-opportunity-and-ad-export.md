@@ -1,7 +1,7 @@
 ---
 id: '003'
 title: Remove the site_dir write from Opportunity and Ad export
-status: in-progress
+status: done
 use-cases:
 - SUC-029
 depends-on:
