@@ -54,13 +54,13 @@ own hash (not the raw page body's) means unrelated page changes
 
 ## Acceptance Criteria
 
-- [ ] `DescriptionLLMClient` is a `Protocol` with one method,
+- [x] `DescriptionLLMClient` is a `Protocol` with one method,
       `summarize_description(content, context) -> DescriptionExtractionResult`,
       mirroring `SponsorLLMClient.classify_sponsors()`'s shape.
-- [ ] `DescriptionExtractionResult` is a small dataclass carrying at
+- [x] `DescriptionExtractionResult` is a small dataclass carrying at
       least `description: str` (empty string is a valid, expected value,
       not an error).
-- [ ] `AnthropicDescriptionLLMClient` constructs `anthropic.Anthropic()`
+- [x] `AnthropicDescriptionLLMClient` constructs `anthropic.Anthropic()`
       with no explicit `api_key` (SDK resolves `ANTHROPIC_API_KEY`
       itself), uses the Haiku-tier model ID (matching
       `sponsor_llm.MODEL_ID`'s cost/quality tradeoff rationale), and
@@ -68,23 +68,23 @@ own hash (not the raw page body's) means unrelated page changes
       `DescriptionExtractionResult`'s dataclass fields (mirroring
       `sponsor_llm.py`'s `_build_sponsor_extraction_json_schema()`
       pattern).
-- [ ] The system prompt explicitly instructs: summarize only the given
+- [x] The system prompt explicitly instructs: summarize only the given
       text; never state a fact not present in it; never include contact
       information; return an empty string if nothing substantive is
       present.
-- [ ] `FixtureDescriptionLLMClient` is a test double (mirroring
+- [x] `FixtureDescriptionLLMClient` is a test double (mirroring
       `FixtureSponsorLLMClient`) that returns canned results with no
       network/API call, recording every call made.
-- [ ] `DescriptionCache.lookup()`/`.store()` mirror `SponsorCache`'s
+- [x] `DescriptionCache.lookup()`/`.store()` mirror `SponsorCache`'s
       exact contract: a schema-version mismatch or missing entry is a
       miss; a hit returns the cached `DescriptionExtractionResult`
       without any LLM call.
-- [ ] Malformed LLM response handling (bad JSON, missing required field,
+- [x] Malformed LLM response handling (bad JSON, missing required field,
       no text content block) raises a dedicated
       `DescriptionClassificationError`-style exception, mirroring
       `SponsorClassificationError`'s role — distinguishable from an
       unrelated programming error.
-- [ ] Fixture test: a cache hit for the same `(team_id, content_hash)`
+- [x] Fixture test: a cache hit for the same `(team_id, content_hash)`
       makes zero calls to the injected LLM client.
 
 ## Implementation Plan
