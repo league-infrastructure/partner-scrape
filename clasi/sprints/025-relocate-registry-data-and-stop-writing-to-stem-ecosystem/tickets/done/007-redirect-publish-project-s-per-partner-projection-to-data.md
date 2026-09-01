@@ -1,7 +1,7 @@
 ---
 id: '007'
 title: Redirect publish.project()'s per-partner projection to data/
-status: in-progress
+status: done
 use-cases:
 - SUC-029
 depends-on: []

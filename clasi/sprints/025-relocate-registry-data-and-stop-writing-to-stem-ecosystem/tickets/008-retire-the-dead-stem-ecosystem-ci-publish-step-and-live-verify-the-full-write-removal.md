@@ -1,9 +1,18 @@
 ---
-id: '008'
+id: 008
 title: Retire the dead stem-ecosystem CI publish step and live-verify the full write-removal
-status: open
-use-cases: [SUC-029, SUC-030]
-depends-on: ['001', '002', '003', '004', '005', '006', '007']
+status: in-progress
+use-cases:
+- SUC-029
+- SUC-030
+depends-on:
+- '001'
+- '002'
+- '003'
+- '004'
+- '005'
+- '006'
+- '007'
 github-issue: ''
 issue: stop-writing-to-stem-ecosystem-checkout.md
 completes_issue: true
