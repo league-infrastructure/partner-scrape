@@ -1,7 +1,7 @@
 ---
 id: '007'
 title: Publish yield-history.json into data/ from cli.py
-status: in-progress
+status: done
 use-cases:
 - SUC-019
 depends-on:

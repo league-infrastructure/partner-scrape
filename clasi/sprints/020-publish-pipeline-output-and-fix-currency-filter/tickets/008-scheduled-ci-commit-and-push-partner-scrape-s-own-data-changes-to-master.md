@@ -1,9 +1,15 @@
 ---
-id: '008'
-title: "Scheduled CI: commit and push partner-scrape's own data/ changes to master"
-status: open
-use-cases: [SUC-019]
-depends-on: ['003', '004', '005', '006', '007']
+id: 008
+title: 'Scheduled CI: commit and push partner-scrape''s own data/ changes to master'
+status: in-progress
+use-cases:
+- SUC-019
+depends-on:
+- '003'
+- '004'
+- '005'
+- '006'
+- '007'
 github-issue: ''
 issue: 60-publish-pipeline-output-in-well-known-data-directory.md
 completes_issue: true
