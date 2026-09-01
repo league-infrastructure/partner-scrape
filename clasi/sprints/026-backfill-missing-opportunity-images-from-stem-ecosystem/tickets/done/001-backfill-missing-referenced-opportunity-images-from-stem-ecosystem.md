@@ -1,7 +1,7 @@
 ---
 id: '001'
 title: Backfill missing referenced opportunity images from stem-ecosystem
-status: in-progress
+status: done
 use-cases: []
 depends-on: []
 github-issue: ''
