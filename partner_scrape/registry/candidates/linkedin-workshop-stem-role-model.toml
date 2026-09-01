@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "Linkedin Workshop & STEM Role Model"
+candidate_url = "https://www.eventbrite.com/e/workshop-stem-role-model-event-for-female-junior-senior-hs-students-tickets-854006334937?utm_source=eventbrite&utm_medium=email&utm_content=follow_notification&utm_campaign=following_published_event&utm_term=Workshop+%26+STEM+Role+Model+Event+for+Female+Junior+%26+Senior+HS+Students&aff=ebemoffollowpublishemail&utm_experiment=follow_template.B"
+discovered_via = "sdcec-stem"
+evidence_text = "Apr 24 - Linkedin Workshop & STEM Role Model (HS girls, Fleet Science Center)"

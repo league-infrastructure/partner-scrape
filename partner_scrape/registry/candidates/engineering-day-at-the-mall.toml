@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "Engineering Day at the Mall"
+candidate_url = "http://www.sandiego-ymf.org/engineering-day-at-the-mall1.html"
+discovered_via = "sdcec-stem"
+evidence_text = "Feb 24 - Engineering Day at the Mall (ASCE YMF SD) (Families)"

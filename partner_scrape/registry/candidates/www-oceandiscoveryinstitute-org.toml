@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "www.OceanDiscoveryInstitute.org"
+candidate_url = "http://www.oceandiscoveryinstitute.org/"
+discovered_via = "sdcec-stem"
+evidence_text = "Ocean Discovery Institute - Is looking for mentors. For more info, contact Founder and Executive Director, Shara Fisler sfisler 'at' oceandi.org  or visit www.OceanDiscoveryInstitute.org"

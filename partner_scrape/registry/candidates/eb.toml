@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "EB"
+candidate_url = "https://www.eventbrite.com/e/swe-san-diego-international-women-in-engineering-day-celebration-tickets-648999483927?utm_source=eventbrite&utm_medium=email&utm_content=follow_notification&utm_campaign=following_published_event&utm_term=SWE+San+Diego+International+Women+in+Engineering+Day+Celebration&aff=ebemoffollowpublishemail"
+discovered_via = "sdcec-stem"
+evidence_text = "Jun 23 - SWE International Women in Engineering Day (Note: while EB sold out, tickets are still available through this google form signup)"

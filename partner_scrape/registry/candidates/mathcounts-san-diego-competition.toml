@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "Mathcounts San Diego Competition"
+candidate_url = "https://www.volunteermatch.org/search/opp3630768.jsp"
+discovered_via = "sdcec-stem"
+evidence_text = "Feb 25 Mathcounts San Diego Competition (VOLUNTEER SIGNUP)"

@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "DiscoverE Kick Off Webinar"
+candidate_url = "https://us02web.zoom.us/webinar/register/4517520912912/WN_x2y1GzGgTxGjUekeX7rnKQ?utm_source=EngineerGirl+Mailing+List&utm_campaign=b9d43e3c2f-EMAIL_CAMPAIGN_2025_05_06_12_55_COPY_01&utm_medium=email&utm_term=0_-043a52a686-392334702#/registration"
+discovered_via = "sdcec-stem"
+evidence_text = "Oct 15 - DiscoverE Kick Off Webinar"

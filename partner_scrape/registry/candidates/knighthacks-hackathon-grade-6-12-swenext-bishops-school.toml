@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "KnightHacks Hackathon (grade 6-12, SWENext Bishops School)"
+candidate_url = "https://docs.google.com/forms/d/e/1FAIpQLSfibfsFeJQ94zaTfN_HyVzXiS8lH2c2puZrm8pI9wi_YdeeWQ/viewform"
+discovered_via = "sdcec-stem"
+evidence_text = "Sept 14 - KnightHacks Hackathon (grade 6-12, SWENext Bishops School)"

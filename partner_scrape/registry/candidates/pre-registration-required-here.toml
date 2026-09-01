@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "Pre-registration required here."
+candidate_url = "https://worldengineeringday.net/"
+discovered_via = "sdcec-stem"
+evidence_text = "Jan 12 - World Engineering Day Hackathon challenge is released on Jan 12th. Submissions due by Jan 26th.  Pre-registration required here."

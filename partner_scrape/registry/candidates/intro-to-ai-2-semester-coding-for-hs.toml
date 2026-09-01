@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "Intro to AI (2 semester coding for HS)"
+candidate_url = "https://the-cs.org/train-course?fbclid=IwAR37q3qnS915SNz4RMiGHgauHxwbQBOviF1cCJtN1qTOHLAbneTlOff2bww"
+discovered_via = "sdcec-stem"
+evidence_text = "Sept 10 Application - Intro to AI (2 semester coding for HS)"

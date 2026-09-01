@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "SWENext Design Challenge"
+candidate_url = "https://docs.google.com/document/d/1006-R0DKqz5XjOTRFPeIydK5qmlmuL04F7z9ZFGH1ks/edit"
+discovered_via = "sdcec-stem"
+evidence_text = "Nov-Feb - SWENext Design Challenge (by SWE@CalPoly)"

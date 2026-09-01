@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "SHPE SDSU HS Conference Signup"
+candidate_url = "https://docs.google.com/forms/d/e/1FAIpQLSed58XPUlSA1X_kFJNjIxKCtjJd0PBmxJMfnSP8WkPHRp4xrw/viewform"
+discovered_via = "sdcec-stem"
+evidence_text = "Apr 5 - SHPE SDSU HS Conference Signup (Volunteer Signup)"

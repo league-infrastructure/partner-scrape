@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "Deadline STEAM Tshirt Art Design Contest"
+candidate_url = "https://lovestemsd.org/stem-t-shirt-design-contest"
+discovered_via = "sdcec-stem"
+evidence_text = "Dec 1 - Deadline STEAM Tshirt Art Design Contest (K-12)"

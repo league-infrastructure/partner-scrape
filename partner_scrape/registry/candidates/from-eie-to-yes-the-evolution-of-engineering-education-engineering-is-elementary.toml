@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "From EiE to YES: The Evolution of Engineering Education (Engineering is Elementary)"
+candidate_url = "https://www.eventbrite.com/e/from-eie-to-yes-the-evolution-of-engineering-education-tickets-1990566077723?utm_campaign=159035092-Monthly%20Newsletters&utm_medium=email&_hsenc=p2ANqtz--07dreZnN7uJSqtViRqY11hUvV5ULwoRPLxQ4vS786J7uQkK_uCcsYA3SWWxHCnOvtEyikKDJimeFNmmpg-x2LgYtilN51k6op5mv2KWoLLs8mPmE&_hsmi=33611714&utm_content=33611714&utm_source=hs_email"
+discovered_via = "sdcec-stem"
+evidence_text = "Sept 24 - From EiE to YES: The Evolution of Engineering Education (Engineering is Elementary)"

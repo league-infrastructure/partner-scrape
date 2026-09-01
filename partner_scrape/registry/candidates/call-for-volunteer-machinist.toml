@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "Call for Volunteer Machinist"
+candidate_url = "https://mailchi.mp/affd4f215e6b/sme-chapter-44-news-6226150?e=0ffca5dd6a"
+discovered_via = "sdcec-stem"
+evidence_text = "Jan 16 - Call for Volunteer Machinist in Westview HS engineering \"Computer Integrated Manufacturing Class\" dhester@powayusd.com"

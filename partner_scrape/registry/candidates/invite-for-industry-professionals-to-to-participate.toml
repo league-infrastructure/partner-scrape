@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "Invite for industry professionals to to participate"
+candidate_url = "https://docs.google.com/forms/d/e/1FAIpQLSdOpMeAzbozB0oHsv10G8plGq5Y2lFqGbMk7kKV7ldFE4nP0g/viewform"
+discovered_via = "sdcec-stem"
+evidence_text = "Dec 11 - Kearny HS Engineering Senior Presentations (Invite for industry professionals to to participate)"

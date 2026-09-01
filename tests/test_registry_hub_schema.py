@@ -87,7 +87,10 @@ class TestLoadHubs:
 
     def test_defaults_to_the_real_hubs_directory_when_no_argument_given(self):
         hubs = load_hubs()
-        assert {h.hub_id for h in hubs} == {"example-regional-calendar"}
+        assert {h.hub_id for h in hubs} == {
+            "example-regional-calendar",
+            "sdcec-stem",
+        }
 
 
 class TestRealSeedHubRegistry:

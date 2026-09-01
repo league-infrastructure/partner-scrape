@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "STEM NEXT Training \"Building Engineering Awareness in Pre-K and Kindergarten\""
+candidate_url = "https://40iqg4.share-na2.hsforms.com/2aMtb9NEvREOmQZMahESTug?__hstc=101568734.9def52b6a8a06d17ec749e0e782a63a9.1761513129046.1761513129046.1761513129046.1&__hssc=101568734.2.1761513129046&__hsfp=2032924051"
+discovered_via = "sdcec-stem"
+evidence_text = "Jan 21 - STEM NEXT Training \"Building Engineering Awareness in Pre-K and Kindergarten\""

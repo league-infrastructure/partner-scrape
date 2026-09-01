@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "SHPE Jr Club"
+candidate_url = "http://programs.shpe.org/get-involved-with-shpe/"
+discovered_via = "sdcec-stem"
+evidence_text = "SHPE Jr Club - Middle/High-school students can join SHPE Jr and/or form their own SHPE Jr Club"

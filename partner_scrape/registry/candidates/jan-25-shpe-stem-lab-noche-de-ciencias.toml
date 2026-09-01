@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "Jan 25 - SHPE \"STEM Lab\" (Noche de Ciencias)"
+candidate_url = "https://form.jotform.com/223486282095159"
+discovered_via = "sdcec-stem"
+evidence_text = "Jan 25 - SHPE \"STEM Lab\" (Noche de Ciencias) Virtual K12"

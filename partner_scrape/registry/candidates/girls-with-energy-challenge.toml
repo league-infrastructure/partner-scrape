@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "Girls with Energy Challenge"
+candidate_url = "https://vision.hack2skill.com/event/girlswithenergychallenge2026?utm_source=hack2skill&utm_medium=homepage&sectionid=69a59ebe78179c085e9b5920"
+discovered_via = "sdcec-stem"
+evidence_text = "Jun 21-Jul 11 - Girls with Energy Challenge (Girls grade 6-12, team registration open March 5 - Jun 19)"

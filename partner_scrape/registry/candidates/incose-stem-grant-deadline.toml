@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "INCOSE STEM GRANT DEADLINE"
+candidate_url = "https://sdincose.org/news/call-for-stem-grant-proposals-for-20242025-school-year/"
+discovered_via = "sdcec-stem"
+evidence_text = "Nov 10 - INCOSE STEM GRANT DEADLINE ($400 - $1,100 for grade 4-12 in-class or afterschool programs)"

@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "Exhibitor Registration for San Ysidro STEM Fair"
+candidate_url = "https://docs.google.com/forms/d/e/1FAIpQLSf_hMv5D5UsW_v28v97d2rGTYsWOm6zePTSzueyxCajq5gYsA/viewform"
+discovered_via = "sdcec-stem"
+evidence_text = "Apr 3 - Exhibitor Registration for San Ysidro STEM Fair"

@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "INCOSE Annual STEM Recognition Celebration (for families, Family Fun Center in Poway, 4:30 pm - 7:30 pm)"
+candidate_url = "https://sdincose.org/rsvpmaker/stem-celebration-at-family-fun-center/"
+discovered_via = "sdcec-stem"
+evidence_text = "Nov 1 - INCOSE Annual STEM Recognition Celebration (for families, Family Fun Center in Poway, 4:30 pm - 7:30 pm)"

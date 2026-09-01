@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "Nov 4 Deadline - SWENext SWEet Creation Club Challenge"
+candidate_url = "https://alltogether.swe.org/2022/09/swenext-clubs-sweet-creation-challenge-welead/"
+discovered_via = "sdcec-stem"
+evidence_text = "Nov 4 Deadline - SWENext SWEet Creation Club Challenge (HS)"

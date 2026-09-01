@@ -56,22 +56,22 @@ Test Strategy.
 
 ## Acceptance Criteria
 
-- [ ] `partner_scrape/registry/hubs/sdcec-stem.toml` exists with
+- [x] `partner_scrape/registry/hubs/sdcec-stem.toml` exists with
       `hub_name` set and `page_urls = ["https://www.sandiegoengineers.org/stem"]`
       (the `www.` host — the bare domain does not negotiate TLS).
-- [ ] The file's header comment documents the 2026-08-31 live
+- [x] The file's header comment documents the 2026-08-31 live
       verification: HTTP 200 on the page, robots.txt 404 (no
       restriction), no ToS found, 124 distinct outbound domains
       observed — mirroring the comment convention already used in
       `registry/sources/balboa-park.toml` and
       `registry/sources/usasciencefestival.toml`.
-- [ ] `HubConfig.from_toml` parses the new file without raising
+- [x] `HubConfig.from_toml` parses the new file without raising
       `InvalidHubConfig`.
-- [ ] `tests/test_registry_hub_schema.py`'s
+- [x] `tests/test_registry_hub_schema.py`'s
       `test_defaults_to_the_real_hubs_directory_when_no_argument_given`
       is updated to assert
       `{"example-regional-calendar", "sdcec-stem"}`.
-- [ ] A live dry run of `discover-candidates` scoped to just this hub
+- [x] A live dry run of `discover-candidates` scoped to just this hub
       (e.g. `uv run partner-scrape discover-candidates --hubs-dir <a
       directory containing only sdcec-stem.toml>`, or the real
       `registry/hubs/` directory if the template hub's own dry-run
@@ -81,7 +81,41 @@ Test Strategy.
       reachability" convention from sprints 014-016 (e.g. their
       `found=N new=M`-style verification). Record the actual count
       observed in this ticket's Notes.
-- [ ] `uv run pytest` passes in full.
+- [x] `uv run pytest` passes in full.
+
+## Notes (ticket 002 completion, 2026-08-31)
+
+**Live dry-run result**: ran
+`uv run partner-scrape discover-candidates --hubs-dir <tmp dir
+containing only sdcec-stem.toml> -v` with the real `AnthropicLLMClient`
+relevance gate (`ANTHROPIC_API_KEY` present, no `--no-enrich`) against
+the real Candidate Review Queue (`partner_scrape/registry/candidates/`,
+previously empty). Output:
+
+```
+partner-scrape discover-candidates: scanned 1 hub, queued 241 candidates for review.
+```
+
+Full log line from `candidate_pipeline`: "Scanned 1 hub(s): 257
+candidate(s) survived relevance gating, 241 written to the review
+queue" — the remaining 16 were exact-URL duplicates within the same
+page (e.g. repeated "Volunteer" links pointing at the same Google Form
+across multiple listed programs), correctly deduped by
+`registry/candidates.py`'s existing skip-on-duplicate-URL logic. Exit
+code 0, no errors. 241 real `OrgCandidate` stub TOML files were written
+to `partner_scrape/registry/candidates/` and are included in this
+ticket's commit as the designed, expected output of running this
+feature (per this ticket's dispatch instructions — matches how sprints
+014-016 committed live feed-verification output).
+
+No code changes were needed anywhere — `HubConfig`, `hub_schema.py`,
+`discovery/hub_scan.py`, `discovery/candidate_pipeline.py`,
+`registry/candidates.py`, and `cli.py`'s `discover-candidates`
+subcommand (including its existing `--hubs-dir` scoping flag) all
+worked unmodified. `fetch/robots.py`'s `is_allowed()` correctly treated
+the site's HTTP 404 robots.txt as allow-all, as documented in the TOML
+header comment and confirmed live by this run (the page was fetched
+successfully).
 
 ## Implementation Plan
 

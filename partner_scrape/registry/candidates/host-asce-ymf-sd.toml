@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "Host ASCE YMF SD"
+candidate_url = "http://www.sandiego-ymf.org/earth--engineering-day.html"
+discovered_via = "sdcec-stem"
+evidence_text = "Apr 18 - Earth & Engineering Day, Mission Valley Mall (outside Nordstrom Rack), 10 am - 5 pm (Families, No cost, Host ASCE YMF SD)"

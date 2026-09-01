@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "Expanding Your Horizons Conference (Girls Grade 6-10)"
+candidate_url = "https://eyhsandiego.org/home/"
+discovered_via = "sdcec-stem"
+evidence_text = "Mar 14 - Expanding Your Horizons Conference (Girls Grade 6-10)"

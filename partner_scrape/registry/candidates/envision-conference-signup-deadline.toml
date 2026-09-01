@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "Envision Conference signup deadline"
+candidate_url = "https://ucsdenvision.wixsite.com/envision/students"
+discovered_via = "sdcec-stem"
+evidence_text = "Feb 5 - Envision Conference signup deadline for HS girls virtual event on Feb 26 & Mar 5 (hosted by SWE UCSD)"

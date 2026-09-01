@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "\"Innovating Smarter\" EngineerGirl Writing Contest"
+candidate_url = "https://www.engineergirl.org/154382/2025-Writing-Contest-Innovating-Smarter"
+discovered_via = "sdcec-stem"
+evidence_text = "Feb 1 - \"Innovating Smarter\" EngineerGirl Writing Contest deadline (girls-boys, Grade 3-12) deadline"

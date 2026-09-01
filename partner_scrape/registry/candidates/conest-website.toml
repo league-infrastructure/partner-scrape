@@ -1,0 +1,10 @@
+# Candidate review stub -- NOT a live source.
+#
+# This file is deliberately missing adapter_type/config: it is
+# never loaded by registry.loader.load_sources(). To promote this
+# candidate, investigate its own site, add adapter_type/config,
+# and move the completed file into registry/sources/.
+org_name = "conest website"
+candidate_url = "https://rocketcontest.org/"
+discovered_via = "sdcec-stem"
+evidence_text = "American Rocketry Grant - Dec 1, 2021 - The Aerospace Industries Association (AIA) and National Association of Rocketry (NAR) are awarding grants of $2k to Title I schools to participate in a rocketry competition. Funding is intended to assist grade 6-12 schools in initiate a program to build, design, and launch model rockets. conest website."
