@@ -19,6 +19,16 @@ job is sort, serialize, write; there is no current/upcoming filter
 (`place_id`/`club_id` are already unique by construction -- see
 `directory/DESIGN.md`'s Notes and `directory/model.py`'s docstrings).
 
+Sprint 020 (ticket 006, issue 60): both `places.json` and (when
+`clubs is not None`) `clubs.json` gain a *third* write target, into
+partner-scrape's own `own_data_dir` (`config.get_own_data_dir()`,
+`<repo_root>/data` by default) -- "one publish, three paths" now,
+mirroring `teams/export.py`'s `export_teams()` (ticket 005) and
+`export/writer.py`'s/`export/ads.py`'s own third write paths (tickets
+003/004). Each own-repo write reuses the already-serialized
+`places.json`/`clubs.json` string built for the `SITE_DIR` copies, so
+no target can ever drift from another.
+
 ## The `places.json` data contract
 
 ```json
@@ -91,14 +101,23 @@ asserting those three files are byte-identical before and after a
 `directory` run, matching `tests/teams/test_export.py`'s own
 `TestHardInvariants` precedent.
 
-A missing or unwritable `site_dir` (or its `src/data` subdirectory)
-fails loudly, matching `export_teams`'s and `export_opportunities`'s
-contract exactly -- "fail loudly, do not silently skip the export."
-The `places.json` write (both paths) is attempted, and must fully
-succeed, before the `clubs.json` write (when `clubs is not None`)
-begins -- a `clubs.json` failure never leaves `places.json` half
-written, and a `places.json` failure raises before `clubs.json` is
-ever touched.
+A missing or unwritable `site_dir` (or its `src/data` subdirectory), or
+an unwritable `own_data_dir`, fails loudly, matching `export_teams`'s
+and `export_opportunities`'s contract exactly -- "fail loudly, do not
+silently skip the export." The `places.json` write (all three paths --
+`src/data`, then `public/data`, then `own_data_dir`, in that order) is
+attempted, and must fully succeed, before the `clubs.json` write (when
+`clubs is not None`) begins -- a `clubs.json` failure never leaves
+`places.json` half written, and a `places.json` failure at *any* of its
+three targets raises before `clubs.json` is ever touched. Within
+`clubs.json`'s own write, the same "src/data, then public/data, then
+own_data_dir" ordering applies -- its own-repo write is only reached
+once its `src/data` and `public/data` writes have both succeeded.
+`public/data` and `own_data_dir` are each created automatically
+(`Path.mkdir(parents=True, exist_ok=True)`) if missing, matching
+`teams/export.py`'s identical "not guaranteed to exist yet" rationale
+for both targets; `src/data` is not -- a missing `src/data` is always a
+loud failure, never auto-created.
 """
 
 from __future__ import annotations
@@ -109,7 +128,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
-from partner_scrape.config import get_site_dir
+from partner_scrape.config import get_own_data_dir, get_site_dir
 from partner_scrape.directory.model import Club, Place
 
 #: The exact field set written to `places.json`, minus `sources` --
@@ -207,18 +226,20 @@ def export_directory(
     *,
     clubs: Iterable[Club] | None = None,
     dry_run: bool = False,
+    own_data_dir: str | Path | None = None,
 ) -> dict[str, Any]:
-    """Serialize and write `places` into `site_dir`'s `places.json` --
-    twice: once to the build-time `src/data/places.json` Astro input,
-    once to the publicly-served `public/data/places.json`, both from
-    the single payload built below (sprint 017's convention, already
-    established for `teams.json` -- see that module's own docstring for
-    the full "one publish, two paths" rationale, reused unmodified
-    here). When `clubs` is given (ticket 018-008), also serializes and
-    writes `clubs.json` at the same two paths, from its own independent
-    `{"meta": ..., "clubs": [...]}` document -- see this module's own
-    docstring for the full `clubs.json` data contract and why `clubs`
-    defaults to `None` rather than an empty list.
+    """Serialize and write `places` into `places.json` -- three times:
+    once to the build-time `src/data/places.json` Astro input, once to
+    the publicly-served `public/data/places.json` (sprint 017's
+    convention, already established for `teams.json`), and once into
+    partner-scrape's own `own_data_dir` (sprint 020 ticket 006), all
+    from the single payload built below -- see `teams/export.py`'s own
+    docstring for the full "one publish, three paths" rationale, reused
+    unmodified here. When `clubs` is given (ticket 018-008), also
+    serializes and writes `clubs.json` at the same three paths, from
+    its own independent `{"meta": ..., "clubs": [...]}` document -- see
+    this module's own docstring for the full `clubs.json` data contract
+    and why `clubs` defaults to `None` rather than an empty list.
 
     Args:
         places: acquired `Place` records
@@ -240,7 +261,14 @@ def export_directory(
             "no filter, no slug-uniqueness pass needed" properties as
             `places` above.
         dry_run: when `True`, compute and return the would-be-written
-            payload without touching disk (no location is written).
+            payload without touching disk (none of the three locations
+            is written, for either file).
+        own_data_dir: path to partner-scrape's own pipeline-output
+            directory. Defaults to `Config.get_own_data_dir()`
+            (`<repo_root>/data`) when `None`. Like `public/data`, this
+            directory is created automatically if missing. Tests should
+            always pass an explicit `tmp_path` here, never rely on the
+            default, matching `site_dir`'s own test convention.
 
     Returns:
         A dict with `payload["meta"]`/`payload["places"]` set to the
@@ -248,21 +276,26 @@ def export_directory(
         been) written -- unchanged from ticket 007's own contract. When
         `clubs is not None`, also carries `payload["clubs_meta"]`/
         `payload["clubs"]` for the clubs.json content. Both files, when
-        written, are identical at their `src/data` and `public/data`
-        copies.
+        written, are identical at their `src/data`, `public/data`, and
+        `own_data_dir` copies.
 
     Raises:
         RuntimeError: `site_dir`'s `src/data` subdirectory does not
-            exist or is not writable, or `site_dir`'s `public/data`
-            target is not writable, for either `places.json` or (when
-            `clubs is not None`) `clubs.json`. Never silently skips a
-            write. Both of `places.json`'s writes (`src/data` then
-            `public/data`) complete, in that order, before any
+            exist or is not writable, `site_dir`'s `public/data` target
+            is not writable, or `own_data_dir` is not writable, for
+            either `places.json` or (when `clubs is not None`)
+            `clubs.json`. Never silently skips a write. All three of
+            `places.json`'s writes (`src/data`, then `public/data`,
+            then `own_data_dir`, in that order) complete before any
             `clubs.json` write is attempted -- matches `export_teams`'s
-            exact "src/data before public/data" ordering contract,
-            extended here to "places.json before clubs.json".
+            exact "src/data before public/data before own_data_dir"
+            ordering contract, extended here to "places.json (all three
+            targets) before clubs.json". `clubs.json`'s own three
+            writes follow the identical `src/data` -> `public/data` ->
+            `own_data_dir` order.
     """
     resolved_site_dir = Path(site_dir) if site_dir is not None else get_site_dir()
+    resolved_own_data_dir = Path(own_data_dir) if own_data_dir is not None else get_own_data_dir()
 
     place_list = sorted(list(places), key=lambda p: (p.category, p.name))
 
@@ -315,6 +348,24 @@ def export_directory(
             "writable."
         ) from exc
 
+    # Sprint 020 ticket 006 (issue 60): the same payload, written a
+    # third time into partner-scrape's own data/ directory -- reusing
+    # `serialized` computed above rather than re-serializing, so the
+    # three copies can never drift. Always last: only reached once both
+    # SITE_DIR writes above have succeeded. Only once this write also
+    # succeeds is clubs.json touched at all (see the `if club_payload
+    # is not None` block below).
+    own_places_path = resolved_own_data_dir / "places.json"
+
+    try:
+        resolved_own_data_dir.mkdir(parents=True, exist_ok=True)
+        own_places_path.write_text(serialized, encoding="utf-8")
+    except OSError as exc:
+        raise RuntimeError(
+            f"Cannot write places export to {resolved_own_data_dir}: {exc}. "
+            "Check that own_data_dir is writable."
+        ) from exc
+
     if club_payload is not None:
         serialized_clubs = json.dumps(club_payload, indent=1, ensure_ascii=False)
 
@@ -337,6 +388,20 @@ def export_directory(
                 f"Cannot write clubs export to {public_data_dir}: {exc}. Check "
                 f"that site_dir ({resolved_site_dir})'s public/data path is "
                 "writable."
+            ) from exc
+
+        # Sprint 020 ticket 006: clubs.json's own third write, into the
+        # same own_data_dir -- reached only once clubs.json's own
+        # src/data and public/data writes above have both succeeded,
+        # mirroring places.json's own three-target ordering above.
+        own_clubs_path = resolved_own_data_dir / "clubs.json"
+        try:
+            resolved_own_data_dir.mkdir(parents=True, exist_ok=True)
+            own_clubs_path.write_text(serialized_clubs, encoding="utf-8")
+        except OSError as exc:
+            raise RuntimeError(
+                f"Cannot write clubs export to {resolved_own_data_dir}: {exc}. "
+                "Check that own_data_dir is writable."
             ) from exc
 
     return payload

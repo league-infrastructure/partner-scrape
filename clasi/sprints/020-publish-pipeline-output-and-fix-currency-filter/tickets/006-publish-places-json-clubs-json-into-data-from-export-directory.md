@@ -33,29 +33,29 @@ Independent of tickets 003-005/007; depends only on ticket 002.
 
 ## Acceptance Criteria
 
-- [ ] `export_directory(places, ..., own_data_dir=<tmp_path>)` writes
+- [x] `export_directory(places, ..., own_data_dir=<tmp_path>)` writes
       `places.json` into `own_data_dir`, byte-identical to the
       `SITE_DIR` copies.
-- [ ] `export_directory(places, ..., clubs=[...], own_data_dir=<tmp_path>)`
+- [x] `export_directory(places, ..., clubs=[...], own_data_dir=<tmp_path>)`
       additionally writes `clubs.json` into `own_data_dir`,
       byte-identical to the `SITE_DIR` copies.
-- [ ] `clubs=None` (the default) still means `clubs.json` is untouched
+- [x] `clubs=None` (the default) still means `clubs.json` is untouched
       at all three locations, including `own_data_dir` — unchanged
       ticket-007-era contract, extended consistently.
-- [ ] Omitting `own_data_dir` resolves via `config.get_own_data_dir()`.
-- [ ] `dry_run=True` writes to none of the locations.
-- [ ] A missing `own_data_dir` is created automatically, never raises.
-- [ ] Ordering: `places.json`'s three writes (site `src/data`, site
+- [x] Omitting `own_data_dir` resolves via `config.get_own_data_dir()`.
+- [x] `dry_run=True` writes to none of the locations.
+- [x] A missing `own_data_dir` is created automatically, never raises.
+- [x] Ordering: `places.json`'s three writes (site `src/data`, site
       `public/data`, own-repo) complete before any `clubs.json` write is
       attempted; a `places.json` write failure at any of its three
       targets prevents `clubs.json` from being touched.
-- [ ] The "two hard invariants" this module documents (never touches
+- [x] The "two hard invariants" this module documents (never touches
       `opportunities.json`/`scrape-meta.json`/`teams.json`) still hold,
       remaining covered by `tests/directory/test_export.py`'s existing
       `TestHardInvariants`.
-- [ ] Every existing test in `tests/directory/test_export.py` continues
+- [x] Every existing test in `tests/directory/test_export.py` continues
       to pass unmodified.
-- [ ] `export_directory()`'s docstrings are updated to describe the new
+- [x] `export_directory()`'s docstrings are updated to describe the new
       third path and its place in the existing ordering contract.
 
 ## Implementation Plan
