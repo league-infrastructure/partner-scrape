@@ -15,6 +15,7 @@ below, covering the new `discover-candidates` subcommand.
 
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -482,6 +483,26 @@ class TestPublishWiring:
         exit_code = cli.main(["--no-enrich", "--no-report"])
 
         assert exit_code == 0
+
+    def test_exit_code_is_one_and_failure_is_logged_when_publish_project_raises(
+        self, monkeypatch, caplog
+    ):
+        """publish.project() failing must not crash main() or take the
+        rest of the run down with it, but it must not be silently
+        swallowed either: cli.py logs it via logger.exception(...) and
+        surfaces it as a non-zero exit code (lines 569-617)."""
+
+        def _boom(**kwargs):
+            raise RuntimeError("boom")
+
+        monkeypatch.setattr(cli, "run", lambda **kwargs: [])
+        monkeypatch.setattr(cli.publish, "project", _boom)
+
+        with caplog.at_level(logging.ERROR, logger="partner_scrape.cli"):
+            exit_code = cli.main(["--no-enrich", "--no-report"])
+
+        assert exit_code == 1
+        assert any(record.levelno == logging.ERROR for record in caplog.records)
 
 
 class TestHelp:

@@ -53,19 +53,19 @@ and assert on `caplog.text` or `caplog.records`.
 
 ## Acceptance Criteria
 
-- [ ] A new test in `tests/test_cli.py`'s `TestPublishWiring` class
+- [x] A new test in `tests/test_cli.py`'s `TestPublishWiring` class
       monkeypatches `cli.run` to a stub and `cli.publish.project` to
       raise an exception.
-- [ ] The test asserts `cli.main(...)` (a non-`--dry-run` invocation,
+- [x] The test asserts `cli.main(...)` (a non-`--dry-run` invocation,
       since `publish.project()` is skipped entirely under `--dry-run`)
       returns exit code `1`.
-- [ ] The test asserts (via `caplog`) that the failure was logged —
+- [x] The test asserts (via `caplog`) that the failure was logged —
       at minimum, that a log record at `ERROR` level was emitted by
       `partner_scrape.cli` during the call.
-- [ ] The test contains no assertion referencing `MIRROR_SITE_DIRS` or
+- [x] The test contains no assertion referencing `MIRROR_SITE_DIRS` or
       any other mirror-mechanism concept — that framing is gone and
       must not be reintroduced.
-- [ ] No production code in `partner_scrape/cli.py` changes — this
+- [x] No production code in `partner_scrape/cli.py` changes — this
       ticket is test-only; the behavior it covers already exists.
 
 ## Testing
