@@ -34,23 +34,23 @@ succeed. Independent of tickets 003/004/006/007; depends only on ticket
 
 ## Acceptance Criteria
 
-- [ ] `export_teams(..., own_data_dir=<tmp_path>)` writes `teams.json`
+- [x] `export_teams(..., own_data_dir=<tmp_path>)` writes `teams.json`
       into `own_data_dir`, byte-identical to the `SITE_DIR` copies.
-- [ ] Omitting `own_data_dir` resolves via `config.get_own_data_dir()`.
-- [ ] `dry_run=True` writes to none of the three locations (unchanged
+- [x] Omitting `own_data_dir` resolves via `config.get_own_data_dir()`.
+- [x] `dry_run=True` writes to none of the three locations (unchanged
       for the first two, extended to the third).
-- [ ] A missing `own_data_dir` is created automatically, never raises.
-- [ ] Write ordering: a `src/data` failure still propagates before
+- [x] A missing `own_data_dir` is created automatically, never raises.
+- [x] Write ordering: a `src/data` failure still propagates before
       `public/data` or `own_data_dir` is touched; a `public/data`
       failure still propagates before `own_data_dir` is touched (new:
       the own-repo write is always last).
-- [ ] The "two hard invariants" this module documents (never touches
+- [x] The "two hard invariants" this module documents (never touches
       `opportunities.json`/`scrape-meta.json`) still hold and remain
       covered by `tests/teams/test_export.py`'s existing
       `TestHardInvariants`.
-- [ ] Every existing test in `tests/teams/test_export.py` continues to
+- [x] Every existing test in `tests/teams/test_export.py` continues to
       pass unmodified.
-- [ ] `export_teams()`'s docstrings (including its "two write targets
+- [x] `export_teams()`'s docstrings (including its "two write targets
       are not symmetric" section) are updated to describe the new third
       path and its ordering.
 

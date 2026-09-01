@@ -38,6 +38,7 @@ import pytest
 from partner_scrape import config
 from partner_scrape.fetch.fetcher import FetchResponse
 from partner_scrape.fetch.robots import robots_txt_url
+from partner_scrape.teams import export as teams_export
 from partner_scrape.teams import pipeline as teams_pipeline
 from partner_scrape.teams.model import Team
 from partner_scrape.teams.pipeline import (
@@ -154,6 +155,32 @@ def _clean_tba_key_env(monkeypatch):
     without it. Tests that need a valid key set it explicitly via
     `monkeypatch.setenv("TBA_KEY", ...)`."""
     monkeypatch.delenv("TBA_KEY", raising=False)
+
+
+@pytest.fixture(autouse=True)
+def _own_data_dir_default(tmp_path_factory, monkeypatch):
+    """Pin `export.get_own_data_dir()`'s resolution to a throwaway
+    directory for every test in this file (sprint 020 ticket 005).
+
+    `run_teams()` calls `export_teams(teams, site_dir=site_dir,
+    dry_run=dry_run)` without ever passing `own_data_dir` through --
+    that parameter's default resolves via `config.get_own_data_dir()`
+    (a real repo path with no environment-variable override) inside
+    `export_teams()` itself. This file's several `dry_run=False` calls
+    (`TestEndToEndAgainstTheRealRegistry.
+    test_real_run_writes_teams_json_to_site_dir`,
+    `TestTbaFailureIsolation.test_missing_tba_key_writes_a_valid_teams_json_to_disk`,
+    `TestRobotEventsFailureIsolation.
+    test_missing_robotevents_key_writes_a_valid_teams_json_to_disk`)
+    would otherwise write real files into this repo's actual `data/`
+    directory on every test run. Mirrors
+    `tests/teams/test_export.py`'s identical `_own_data_dir_default`
+    fixture, patched here on the `export` module directly since
+    `pipeline.py` imports `export_teams` by name, not the module
+    itself.
+    """
+    fake_own_data_dir = tmp_path_factory.mktemp("own-data-default")
+    monkeypatch.setattr(teams_export, "get_own_data_dir", lambda: fake_own_data_dir)
 
 
 class TestEndToEndAgainstTheRealRegistry:

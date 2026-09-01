@@ -22,6 +22,14 @@ Rationale in `sprint.md` (sprint 017) for why this write lives here and
 not in `export/publish.py` -- `teams/` and `export/` share no import in
 either direction, and this keeps it that way.
 
+Sprint 020 (ticket 005, issue 60): a third write, of the same payload,
+into partner-scrape's own `own_data_dir` (`config.get_own_data_dir()`,
+`<repo_root>/data` by default) -- "one publish, three paths" now.
+Mirrors `export/writer.py`'s `export_opportunities()` and
+`export/ads.py`'s `export_ads()`, sprint 020 tickets 003/004, which add
+the identical third write target to their own single-payload publish
+calls.
+
 ## The `teams.json` data contract
 
 ```json
@@ -64,7 +72,7 @@ A missing or unwritable `site_dir` (or its `src/data` subdirectory)
 fails loudly, matching `export_opportunities`'s contract exactly --
 "fail loudly, do not silently skip the export."
 
-## The two write targets are not symmetric
+## The three write targets are not symmetric
 
 `src/data/` must already exist (a missing `src/data` fails loudly, as
 above) -- it is created once, up front, by the checkout itself.
@@ -73,10 +81,18 @@ above) -- it is created once, up front, by the checkout itself.
 a fresh `site_dir` checkout is not guaranteed to have a `public/data/`
 directory yet (it's normally created by
 `export/publish.py::project()`, which may not have run there before a
-`teams` run does). Ordering: the `src/data` write happens first and
-its `RuntimeError` propagates immediately, before `public/data` is
-touched at all -- a `src/data` failure never leaves a stray
-`public/data/teams.json` behind.
+`teams` run does). `own_data_dir` (sprint 020 ticket 005) is likewise
+created if missing (`Path.mkdir(parents=True, exist_ok=True)`) -- a
+fresh partner-scrape clone is not guaranteed to have a `data/`
+directory either.
+
+Ordering: `src/data` is written first and its `RuntimeError` propagates
+immediately, before `public/data` or `own_data_dir` is touched at all;
+`public/data` is written next and its `RuntimeError` likewise
+propagates before `own_data_dir` is touched. `own_data_dir` is always
+written last, only after both `SITE_DIR` writes have succeeded -- a
+`src/data` or `public/data` failure never leaves a stray
+`own_data_dir/teams.json` behind.
 """
 
 from __future__ import annotations
@@ -88,7 +104,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
-from partner_scrape.config import get_site_dir
+from partner_scrape.config import get_own_data_dir, get_site_dir
 from partner_scrape.teams.model import Team
 
 #: The exact field set written to `teams.json`, minus `sources` --
@@ -180,11 +196,13 @@ def export_teams(
     site_dir: str | Path | None = None,
     *,
     dry_run: bool = False,
+    own_data_dir: str | Path | None = None,
 ) -> dict[str, Any]:
-    """Serialize and write `teams` into `site_dir`'s `teams.json` --
-    twice: once to the build-time `src/data/teams.json` Astro input,
-    once to the publicly-served `public/data/teams.json` (sprint 017
-    ticket 001), both from the single payload built below.
+    """Serialize and write `teams` into `teams.json` -- three times:
+    once to the build-time `src/data/teams.json` Astro input, once to
+    the publicly-served `public/data/teams.json` (sprint 017 ticket
+    001), and once into partner-scrape's own `own_data_dir` (sprint 020
+    ticket 005), all from the single payload built below.
 
     Args:
         teams: acquired `Team` records (`teams.pipeline.run_teams()`'s
@@ -197,25 +215,35 @@ def export_teams(
             should always pass an explicit `tmp_path` here, never rely
             on the default.
         dry_run: when `True`, compute and return the would-be-written
-            payload without touching disk (neither location is
-            written).
+            payload without touching disk (none of the three locations
+            is written).
+        own_data_dir: path to partner-scrape's own pipeline-output
+            directory. Defaults to `Config.get_own_data_dir()`
+            (`<repo_root>/data`) when `None`. Like `public/data`, this
+            directory is created automatically if missing. Tests should
+            always pass an explicit `tmp_path` here, never rely on the
+            default, matching `site_dir`'s own test convention.
 
     Returns:
         The `{"meta": ..., "teams": [...]}` payload that was (or, for
         `dry_run`, would have been) written -- identical content at
-        both write targets.
+        all three write targets.
 
     Raises:
         RuntimeError: `site_dir`'s `src/data` subdirectory does not
-            exist or is not writable, or `site_dir`'s `public/data`
-            target is not writable (e.g. occupied by a non-directory
-            file, or a read-only parent). Never silently skips either
-            write. The `src/data` write is attempted first and its
-            failure propagates before `public/data` is touched -- see
-            "The two write targets are not symmetric" in this module's
-            docstring.
+            exist or is not writable, `site_dir`'s `public/data` target
+            is not writable, or `own_data_dir` is not writable (e.g.
+            any of them is occupied by a non-directory file, or has a
+            read-only parent). Never silently skips any write. The
+            `src/data` write is attempted first and its failure
+            propagates before `public/data` or `own_data_dir` is
+            touched; the `public/data` write is attempted next and its
+            failure propagates before `own_data_dir` is touched -- see
+            "The three write targets are not symmetric" in this
+            module's docstring.
     """
     resolved_site_dir = Path(site_dir) if site_dir is not None else get_site_dir()
+    resolved_own_data_dir = Path(own_data_dir) if own_data_dir is not None else get_own_data_dir()
 
     team_list = list(teams)
     # Sprint 016 ticket 005: t.number widened from int to str (VEX
@@ -262,6 +290,26 @@ def export_teams(
             f"Cannot write teams export to {public_data_dir}: {exc}. Check "
             f"that site_dir ({resolved_site_dir})'s public/data path is "
             "writable."
+        ) from exc
+
+    # Sprint 020 ticket 005 (issue 60): the same payload, written a
+    # third time into partner-scrape's own data/ directory -- reusing
+    # `serialized` computed above rather than re-serializing, so the
+    # three copies can never drift. Always last: only reached once both
+    # SITE_DIR writes above have succeeded (see module docstring's "The
+    # three write targets are not symmetric"). Like public/data above,
+    # own_data_dir is created if missing. Mirrors export/writer.py's
+    # and export/ads.py's own third write path (sprint 020 tickets
+    # 003/004).
+    own_teams_path = resolved_own_data_dir / "teams.json"
+
+    try:
+        resolved_own_data_dir.mkdir(parents=True, exist_ok=True)
+        own_teams_path.write_text(serialized, encoding="utf-8")
+    except OSError as exc:
+        raise RuntimeError(
+            f"Cannot write teams export to {resolved_own_data_dir}: {exc}. "
+            "Check that own_data_dir is writable."
         ) from exc
 
     return payload
