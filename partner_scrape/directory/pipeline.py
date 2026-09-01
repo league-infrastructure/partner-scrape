@@ -293,10 +293,14 @@ def run_directory(
             source whose `adapter_type` matches (e.g.
             `"static_roster"` or `"hack_club_static_roster"`) -- mirrors
             `teams.pipeline.run_teams()`'s own `source` parameter.
-        site_dir: sibling `stem-ecosystem` checkout to write
-            `places.json`/`clubs.json` into. Defaults to
-            `Config.get_site_dir()` when omitted (via
-            `export_directory`).
+        site_dir: sibling `stem-ecosystem` checkout. No longer forwarded
+            into `export_directory()` (sprint 025 ticket 005 removed
+            that write target -- see `directory/export.py`'s own
+            docstring); still used by
+            `_check_related_partner_references()`'s `partners.json`
+            read for the `related_partner_id` join-integrity check.
+            Defaults to `Config.get_site_dir()` when omitted (via
+            `_check_related_partner_references()`).
         fetcher: the `Fetcher` every active source retrieves raw
             content through. Defaults to a real `PoliteFetcher()` when
             omitted -- the production path, even though every source
@@ -413,4 +417,4 @@ def run_directory(
     # rationale.
     _check_related_partner_references(places, site_dir=site_dir)
 
-    return export_directory(places, clubs=clubs, site_dir=site_dir, dry_run=dry_run)
+    return export_directory(places, clubs=clubs, dry_run=dry_run)

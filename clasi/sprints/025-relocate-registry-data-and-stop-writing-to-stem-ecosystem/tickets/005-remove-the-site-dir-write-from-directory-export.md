@@ -30,22 +30,22 @@ forwarding `site_dir` into `export_directory()`.
 
 ## Acceptance Criteria
 
-- [ ] `export_directory()` no longer accepts a `site_dir` parameter and
+- [x] `export_directory()` no longer accepts a `site_dir` parameter and
       never writes `places.json`/`clubs.json` under `{site_dir}/...`
       (neither `src/data/` nor `public/data/`, for either file). Its
       `own_data_dir` writes are unchanged in shape and ordering
       (`places.json` before `clubs.json`).
-- [ ] `run_directory()` (`directory/pipeline.py`) keeps its `site_dir`
+- [x] `run_directory()` (`directory/pipeline.py`) keeps its `site_dir`
       parameter, still used for `_check_related_partner_references()`'s
       `partners.json` read; it stops passing `site_dir` into its
       `export_directory()` call.
-- [ ] The `directory` CLI subcommand's `--site-dir` flag is unchanged
+- [x] The `directory` CLI subcommand's `--site-dir` flag is unchanged
       (it still controls the `related_partner_id` read).
-- [ ] The "Two hard invariants" regression test in
+- [x] The "Two hard invariants" regression test in
       `tests/directory/test_export.py` (asserting `opportunities.json`/
       `scrape-meta.json`/`teams.json` are byte-identical before/after a
       `directory` run) still passes — untouched by this ticket.
-- [ ] `uv run pytest -q` is green.
+- [x] `uv run pytest -q` is green.
 
 ## Implementation Plan
 
