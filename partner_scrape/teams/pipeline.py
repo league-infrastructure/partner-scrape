@@ -116,6 +116,27 @@ degrading gracefully, so this loop's existing per-source
 `try`/`except` isolates it identically -- no VEX-specific case needed
 here either.
 
+Sprint 021 ticket 004 adds one more stage, immediately after
+`canonicalize_sponsors()` and before `export_teams()`:
+`teams.description_extract.extract_descriptions()`, which reuses the
+same `fetch_results` dict `extract_sponsors()` already consumes (no
+second fetch) to gather a bounded content string per confirmed team
+page (`teams.description_candidates.gather_description_content()`),
+summarize it via the injectable `description_llm_client` (never
+generating from open context -- only summarizing the already-gathered,
+bounded text), validate the raw response against a no-email guard and a
+length cap, and publish `Team.description`/`description_status`/
+`description_provenance`/`description_fetched_at`. `description_llm_client`/
+`description_cache` are new `run_teams()` parameters, defaulting to a
+real `AnthropicDescriptionLLMClient()`/`DescriptionCache()` when
+omitted -- the same default-to-production convention `llm_client`/
+`sponsor_cache` already follow for sponsor extraction -- but
+constructed lazily, only when this stage actually runs, so a
+`--no-descriptions` run never touches the `anthropic` SDK at all. Like
+`extract_sponsors()`, `extract_descriptions()` isolates its own
+per-team failures internally (fail-open, SUC-023's Error Flows), so no
+additional try/except wraps this call either.
+
 Sprint 012 adds a third entry, `"static_roster"` (the committed FLL
 roster -- see `sources/static_roster.py`'s own module docstring), plus
 one new pre-flight check: `_check_sunset_seasons()`, called once per
@@ -143,6 +164,12 @@ from typing import Any
 from partner_scrape.fetch import Fetcher, PoliteFetcher
 from partner_scrape.registry.loader import load_active_sources
 from partner_scrape.registry.schema import SourceConfig
+from partner_scrape.teams.description_cache import DescriptionCache
+from partner_scrape.teams.description_extract import extract_descriptions
+from partner_scrape.teams.description_llm import (
+    AnthropicDescriptionLLMClient,
+    DescriptionLLMClient,
+)
 from partner_scrape.teams.export import export_teams
 from partner_scrape.teams.geo import geocode_teams
 from partner_scrape.teams.merge import merge_teams
@@ -250,12 +277,16 @@ def run_teams(
     llm_client: SponsorLLMClient | None = None,
     sponsor_cache: SponsorCache | None = None,
     no_sponsors: bool = False,
+    description_llm_client: DescriptionLLMClient | None = None,
+    description_cache: DescriptionCache | None = None,
+    no_descriptions: bool = False,
     today: date | None = None,
 ) -> dict[str, Any]:
     """Run the Teams pipeline end-to-end: Team Registry -> `TeamSource`(s)
     -> `merge_teams()` -> `geocode_teams()` -> `apply_website_overrides()`
     -> `verify_team_websites()` -> `extract_sponsors()` ->
-    `canonicalize_sponsors()` -> `export_teams()`.
+    `canonicalize_sponsors()` -> `extract_descriptions()` ->
+    `export_teams()`.
 
     Args:
         registry_dir: Team Registry directory to load sources from.
@@ -321,6 +352,33 @@ def run_teams(
             unconditional); only sponsor classification (the
             uncertain, `ANTHROPIC_API_KEY`-dependent, Anthropic-API-cost
             half) is skippable.
+        description_llm_client: the injectable `DescriptionLLMClient`
+            `extract_descriptions()` (sprint 021 ticket 004) summarizes
+            gathered team-website content through. Defaults to a real
+            `AnthropicDescriptionLLMClient()` when omitted -- the same
+            default-to-production convention `llm_client` already
+            follows for sponsor extraction -- constructed lazily, only
+            when description extraction actually has at least one
+            confirmed page to look at (`no_descriptions` is `False` and
+            `verify_team_websites()` produced a non-empty
+            `fetch_results`), so a `--no-descriptions` run and every
+            test that only cares about acquisition/merge/geocoding/
+            sponsor extraction never touches the `anthropic` SDK for
+            this stage at all. Tests that do exercise description
+            extraction inject a `FixtureDescriptionLLMClient` here.
+        description_cache: the `DescriptionCache` `extract_descriptions()`
+            looks up and stores summarization results in. Defaults to a
+            real `DescriptionCache()` (the real configured cache
+            directory) when omitted, constructed lazily for the same
+            reason as `description_llm_client` above. Tests should
+            always pass an explicit `tmp_path`-based `DescriptionCache`
+            here.
+        no_descriptions: when `True`, skip `extract_descriptions()`
+            entirely -- the CLI's `--no-descriptions` flag.
+            `verify_team_websites()`/`extract_sponsors()` always run
+            regardless; only description summarization (the uncertain,
+            `ANTHROPIC_API_KEY`-dependent, Anthropic-API-cost half) is
+            skippable.
         today: the reference date `_check_sunset_seasons()` compares
             every active source's `sunset_season` against. Defaults to
             real `date.today()` when omitted, matching
@@ -455,5 +513,35 @@ def run_teams(
     # input it can receive here (matches merge_teams()/geocode_teams()'s
     # own "not wrapped in its own try/except" convention above).
     canonicalize_sponsors(teams)
+
+    # Sprint 021 ticket 004: the final new stage. --no-descriptions
+    # skips it entirely. description_llm_client/description_cache are
+    # constructed lazily, only here, and only when there is at least
+    # one confirmed page to look at -- an empty fetch_results means
+    # extract_descriptions() would do nothing for any team regardless
+    # (its own per-team loop skips a team absent from fetch_results
+    # before any cache/LLM touch), so skipping construction here too
+    # means a run with no confirmed website (or --no-descriptions)
+    # never touches the anthropic SDK or requires a configured cache
+    # directory. Like extract_sponsors() above, extract_descriptions()
+    # isolates its own per-team failures internally (fail-open,
+    # SUC-023's Error Flows), so no additional try/except wraps this
+    # call either.
+    if no_descriptions:
+        logger.info("Description extraction skipped (--no-descriptions)")
+    elif not fetch_results:
+        logger.info("Description extraction skipped (no confirmed team pages fetched)")
+    else:
+        active_description_llm_client = (
+            description_llm_client
+            if description_llm_client is not None
+            else AnthropicDescriptionLLMClient()
+        )
+        active_description_cache = (
+            description_cache if description_cache is not None else DescriptionCache()
+        )
+        extract_descriptions(
+            teams, fetch_results, active_description_llm_client, active_description_cache
+        )
 
     return export_teams(teams, site_dir=site_dir, dry_run=dry_run)

@@ -291,6 +291,18 @@ def _add_teams_subcommand(subparsers: argparse._SubParsersAction) -> None:
         ),
     )
     parser.add_argument(
+        "--no-descriptions",
+        action="store_true",
+        help=(
+            "Skip description extraction (no ANTHROPIC_API_KEY needed, "
+            "no Anthropic API cost) -- website verification and sponsor "
+            "extraction still run. Description extraction (sprint 021 "
+            "ticket 004) is the uncertain, network+LLM-dependent half "
+            "of publishing Team.description; this is its escape hatch, "
+            "mirroring --no-sponsors exactly."
+        ),
+    )
+    parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
@@ -399,12 +411,14 @@ def _run_teams(args: argparse.Namespace) -> int:
     for the `run` command's `Fetcher`, and `_run_discover_candidates`
     plays for its own. Never calls `run`/`pipeline.run()` -- see cli.py's
     module docstring. Sponsor extraction's `llm_client`/`sponsor_cache`
-    are left unset here, not constructed by this handler -- `run_teams()`
-    itself defaults and lazily constructs those (see its own docstring),
-    matching this command's existing "let run_teams() own its own
-    defaults" convention for `fetcher` not being any different from
-    `llm_client`/`sponsor_cache` in that respect, except `fetcher` is
-    always needed while the other two are skippable via `--no-sponsors`.
+    and description extraction's `description_llm_client`/
+    `description_cache` (sprint 021 ticket 004) are left unset here, not
+    constructed by this handler -- `run_teams()` itself defaults and
+    lazily constructs those (see its own docstring), matching this
+    command's existing "let run_teams() own its own defaults" convention
+    for `fetcher` not being any different from those four in that
+    respect, except `fetcher` is always needed while the other four are
+    skippable via `--no-sponsors`/`--no-descriptions`.
     """
     logging.basicConfig(
         level=logging.INFO if args.verbose else logging.WARNING,
@@ -417,6 +431,7 @@ def _run_teams(args: argparse.Namespace) -> int:
         fetcher=PoliteFetcher(),
         dry_run=args.dry_run,
         no_sponsors=args.no_sponsors,
+        no_descriptions=args.no_descriptions,
     )
     teams = payload["teams"]
 

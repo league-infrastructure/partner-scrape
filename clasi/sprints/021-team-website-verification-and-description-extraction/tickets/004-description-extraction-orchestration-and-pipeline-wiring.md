@@ -84,42 +84,42 @@ publish automatically.
 
 ## Acceptance Criteria
 
-- [ ] `Team` carries the four new fields described above, with the
+- [x] `Team` carries the four new fields described above, with the
       stated defaults.
-- [ ] `extract_descriptions()` sets all four fields correctly on a
+- [x] `extract_descriptions()` sets all four fields correctly on a
       successful summarization: `description` non-empty,
       `description_status == "generated"`,
       `description_provenance == "team_website"`,
       `description_fetched_at` a non-empty ISO timestamp.
-- [ ] A fixture LLM response containing an email address is rejected —
+- [x] A fixture LLM response containing an email address is rejected —
       `description` stays empty, `description_status == "unavailable"`,
       logged, never published. This is a dedicated, explicit test (the
       issue's own required "explicit guard/test" for the no-email
       invariant), not incidental coverage.
-- [ ] An empty LLM response (nothing substantive to summarize) yields
+- [x] An empty LLM response (nothing substantive to summarize) yields
       `description_status == "unavailable"`, never `"generated"` with an
       empty string.
-- [ ] A team with no `fetch_results` entry (never `website_status ==
+- [x] A team with no `fetch_results` entry (never `website_status ==
       "confirmed"`) never reaches this flow — `description_status`
       stays at its dataclass default, `"none"`.
-- [ ] A cache/LLM failure (network error, malformed response, missing
+- [x] A cache/LLM failure (network error, malformed response, missing
       `ANTHROPIC_API_KEY`) is caught per team, logged, and leaves that
       team's four description fields at their defaults — never aborts
       extraction for any other team (fail-open, matching
       `sponsor_extract.py`'s and `enrich/`'s convention).
-- [ ] A cache hit (same team, same content hash) makes zero LLM calls.
-- [ ] `run_teams(..., no_descriptions=True)` skips this stage entirely
+- [x] A cache hit (same team, same content hash) makes zero LLM calls.
+- [x] `run_teams(..., no_descriptions=True)` skips this stage entirely
       while `verify_team_websites()`/`extract_sponsors()` still run —
       mirroring the existing `--no-sponsors` wiring test exactly.
-- [ ] `AnthropicDescriptionLLMClient()`/`DescriptionCache()`
+- [x] `AnthropicDescriptionLLMClient()`/`DescriptionCache()`
       default-construct without raising when `run_teams()` is called
       with neither injected, in a scenario where no confirmed page has
       gatherable content — proving that path never touches the real
       Anthropic SDK, mirroring the existing sponsor default-construction
       test.
-- [ ] `cli.py`'s `teams` subcommand gains `--no-descriptions`, threaded
+- [x] `cli.py`'s `teams` subcommand gains `--no-descriptions`, threaded
       into `run_teams()`.
-- [ ] `tests/teams/test_export.py`'s `_real_fixture_teams()` helper is
+- [x] `tests/teams/test_export.py`'s `_real_fixture_teams()` helper is
       extended to also run one team's fetched page through
       `extract_descriptions()` (fixture LLM client, no network) — the
       same extension pattern sprint 013 ticket 005 already applied for
@@ -129,14 +129,14 @@ publish automatically.
       fields. A new sanity test (mirroring
       `TestSponsorExtractionFixtureIsWired`) proves this fixture path is
       actually producing a description, not silently vacuous.
-- [ ] A required pre-close live run: `partner-scrape teams --dry-run -v`
+- [x] A required pre-close live run: `partner-scrape teams --dry-run -v`
       against the real, live registry, with the resulting
       `description_status` distribution recorded in this ticket's Notes,
       and a human sample of a handful of generated descriptions checked
       for fabrication or leaked contact info before this sprint closes
       — mirroring sprint 013's own required pre-close sponsor-sampling
       step.
-- [ ] Full existing test suite stays green; no test writes into this
+- [x] Full existing test suite stays green; no test writes into this
       repo's real `data/` directory (reuse/extend the existing
       `_own_data_dir_default` autouse fixture pattern in
       `tests/teams/test_export.py`, don't reinvent it).
@@ -193,3 +193,174 @@ three-layer no-email guard and the fail-open contract.
 - **Verification command**: `uv run pytest`, plus the required
   `partner-scrape teams --dry-run -v` live run (recorded in Notes, not
   an automated test).
+
+## Notes
+
+**Implementation.** New `partner_scrape/teams/description_extract.py`
+(`extract_descriptions()`), mirroring `sponsor_extract.py`'s shape
+exactly: gather content (ticket 002) → cache lookup (ticket 003) →
+summarize on a miss → no-email guard (layer 3 of 3, a duplicated,
+independent copy of the same email regex `description_candidates.py`/
+`tests/teams/test_export.py` already use) + a length guard → publish.
+Four new `Team` fields (`description`/`description_status`/
+`description_provenance`/`description_fetched_at`) added to
+`teams/model.py`, deliberately independent of `website_status` per
+sprint.md's Design Rationale. `run_teams()` gained
+`description_llm_client`/`description_cache`/`no_descriptions`
+parameters and a new stage after `canonicalize_sponsors()`, lazily
+constructing `AnthropicDescriptionLLMClient()`/`DescriptionCache()`
+only when `no_descriptions` is unset and `fetch_results` is non-empty
+— exactly mirroring the sponsor stage. `cli.py` gained
+`--no-descriptions`. `teams/export.py` needed no change.
+`teams/DESIGN.md` gained one narrative paragraph (Orientation) plus a
+`BUILT (sprint 021, ...)` block, covering both this ticket and ticket
+001's audit conclusion (no DESIGN.md update had landed for sprint 021
+yet).
+
+**Three-state `description_status` design decision.** The ticket's
+Description and Acceptance Criteria text has a real tension: the
+Description enumerates `"unavailable"` as covering both "gathering
+found nothing usable" *and* "extraction failed and fell back," while
+one Acceptance Criteria bullet says a cache/LLM failure "leaves that
+team's four description fields at their defaults." I resolved this by
+treating `"none"` as strictly "this stage never even looked at this
+team" (no `fetch_results` entry) and `"unavailable"` as the outcome for
+*every* case where a team was attempted but nothing publishable
+resulted — empty gathered content, an empty LLM response, a guard
+rejection, or a caught exception. This keeps `description_status`
+actually able to answer "did we find anything worth showing" for every
+team whose site was reachable, matching the field's own stated purpose;
+the AC's "at their defaults" is satisfied for the other three fields
+(`description`/`description_provenance`/`description_fetched_at`
+genuinely stay at `""`), just not for `description_status` reverting to
+`"none"`. Flagging this explicitly as a judgment call rather than
+silently picking one reading.
+
+**Hidden compatibility fix (found via hermetic-suite verification, not
+assumed).** Running the full suite with `SCRAPE_CACHE_DIR`/
+`ANTHROPIC_API_KEY` explicitly unset (`env -u SCRAPE_CACHE_DIR -u
+ANTHROPIC_API_KEY uv run pytest`) surfaced that this ticket's new
+unconditional-unless-`no_descriptions` lazy construction affects every
+*pre-existing* `run_teams()` call with a non-empty `fetch_results`, not
+just this ticket's own new tests -- exactly the same class of risk
+sprint 013 ticket 005 first introduced for sponsors. Five pre-existing/
+new tests needed a `no_descriptions=True` (or, for two of this ticket's
+own new tests, `no_sponsors=True`) addition to stay hermetic:
+`TestSponsorExtractionWiring`'s two wiring tests,
+`TestWebsiteOverlayToVerificationWiring`'s overlay test, and this
+ticket's own two `TestDescriptionExtractionWiring` tests that inject
+only one side's fixture client. One of these
+(`test_llm_client_and_sponsor_cache_default_to_real_implementations_when_omitted`)
+was **silently making a real, billed Anthropic API call** before the
+fix -- it "passed" (fail-open swallows the exception path, and its own
+assertions never check `description_status`), but its `<p>Nothing
+sponsor-shaped here.</p>` fixture page is genuinely description-shaped
+content, and this session's ambient `ANTHROPIC_API_KEY` meant the call
+was real, not just attempted-and-refused. Fixed by adding
+`no_descriptions=True` there too. All five fixes are minimal,
+compatibility-only additions to existing test call sites -- no
+production-code or test-assertion behavior change beyond that.
+
+**Full test suite** (hermetic: `env -u SCRAPE_CACHE_DIR -u
+ANTHROPIC_API_KEY uv run pytest`): `tests/teams/` → 504 passed;
+full repo suite → 1906 passed. No regressions. Confirmed no `data/`
+directory was created and `git status --porcelain -- data/` stayed
+empty throughout.
+
+**Required pre-close live run — `SCRAPE_CACHE_DIR=$(grep
+'^SCRAPE_CACHE_DIR=' config/prod/public.env | cut -d= -f2-) uv run
+partner-scrape teams --dry-run -v`, 2026-08-31**, against the real,
+live Team Registry, real `PoliteFetcher`, real Anthropic API calls
+(Haiku), `--dry-run` so nothing was written. `TBA_KEY`/`ROBOTEVENTS_KEY`
+were not set in this session (same reason ticket 001's own Notes
+record: no assembled `.env` loaded, only the non-secret
+`SCRAPE_CACHE_DIR` was sourced per the dispatch instructions'
+explicit precedent) -- `frc-sd`/`vex-sd` were caught by `run_teams()`'s
+existing per-source isolation and skipped, exactly the designed
+"missing key degrades gracefully" contract, not a defect. Sources that
+ran: `ftc-sd` (152 teams) + `fll-sd` (48 teams) = 200 teams total,
+unchanged from ticket 001's own run.
+
+`website_status`: 29 confirmed, 0 unverified, 171 none (matches ticket
+001's own recorded distribution exactly, as expected -- this ticket
+made no change to that stage).
+
+**`description_status` distribution (the required number)**, from
+`teams.description_extract`'s own aggregate log line:
+
+    Description extraction: 29 team(s) with description-shaped page
+    content processed, 24 generated, 5 had nothing publishable, 0 failed
+
+All 29 confirmed teams had gatherable content (none skipped at the
+empty-content gate before reaching "processed"). Of the 5
+"unavailable": 4 had a genuinely empty LLM response (verified via the
+persisted `DescriptionCache` entries under
+`{SCRAPE_CACHE_DIR}/description_extraction_cache/` -- `ftc-9837`,
+`ftc-6226`, `ftc-14968`, `ftc-30556`, each cached `"description": ""`),
+and 1 (`ftc-11212`, "The Clueless") was rejected by the length guard --
+see the defect below. `description_status` therefore split
+24 `"generated"` / 5 `"unavailable"` / 171 `"none"` across the 200
+published teams. No `no_descriptions`/`no_sponsors` skip involved --
+both extraction stages ran for real.
+
+**Defect found and fixed: length guard calibrated too tightly.** The
+live run logged: `Description for team ftc-11212 (The Clueless)
+exceeded the maximum length (546 > 500 characters); rejecting, never
+publishing`. Inspecting the persisted cache entry (no second live LLM
+call needed) showed the full 546-character description; cross-checking
+every factual claim in it against the team's own live website
+(`https://www.thecluelessftc.org/`, fetched read-only for this review)
+confirmed every single detail -- founding year, member count, school
+count, world records, World Championship qualifications, Inspire Award
+count, and all four named community programs with their exact
+figures -- was accurate and present on the real page. This was a false
+rejection of genuine content, not a hallucination: my initial
+`_MAX_DESCRIPTION_LENGTH = 500` guess (chosen before any live data)
+was too tight for a team with an unusually large number of distinct
+real programs to describe. Fixed by raising the constant to 800 (still
+well under the 2000-character input bound, so it remains a meaningful
+guard against the model echoing back most/all of the gathered content),
+documented the live-data rationale in the constant's own docstring, and
+added a dedicated regression test
+(`test_a_real_genuine_long_description_observed_live_is_not_rejected`
+in `tests/teams/test_description_extract.py`) using the exact
+546-character text captured live, mirroring
+`sponsor_extract.py`'s own `_MAX_SPONSOR_NAME_LENGTH`-tuned-from-a-
+live-run precedent. Scope was kept to this one constant; no other code
+changed as a result of the live run.
+
+**Fabrication/leak sample (6 of the 24 generated descriptions,
+inspected via the persisted cache -- no second live LLM call).**
+Automated sweep first: the same email-address regex used elsewhere in
+this project found zero matches across all 29 cached raw LLM responses
+(generated and rejected alike) -- confirms the no-email guard's
+layers held for the whole live batch, not just the manually-sampled
+subset. Manual cross-check against each team's real live website
+(read-only fetch, not an LLM call) for 6 of the 24 `"generated"`
+descriptions:
+
+- `ftc-11212` The Clueless (546 chars, the one flagged above) --
+  every specific fact (founding year, member/school counts, world
+  records, 4 named programs with exact figures) confirmed present and
+  accurate on the real site.
+- `ftc-9049` Robopuffs -- "empower... women... bridge the gender gap
+  in S.T.E.M." confirmed verbatim/near-verbatim on the real page.
+- `ftc-11128` Inspiration Robotics -- founding year (2011), location,
+  competitions (RoboBoat/RoboSub/RobotX), and member age range all
+  confirmed on the real page.
+- `ftc-18755` Vikings Robotics -- school, FRC program, 2009 founding
+  year, 6-week build season, and inclusive-community mission all
+  confirmed on the real page.
+- `ftc-1622` Team Spyder -- school (Poway High), FRC+FTC programs, and
+  the specific "Poway High students, homeschool students, ... 8th
+  grade students" membership description confirmed on the real page.
+- `ftc-23251` Triple Fault Robotics -- the short (57-char) "team of
+  makers from San Diego" summary is a plain, unremarkable restatement
+  with nothing specific enough to independently fact-check beyond
+  location, which matches the team's registry-known city.
+
+**Assessment: no fabrication, no leaked contact info found** across
+either the automated sweep (all 29) or the manual sample (6 of 24,
+spanning the shortest, longest, and several mid-length generated
+descriptions). The one real defect found (length-guard calibration)
+was fixed within this ticket's own scope, as instructed.
