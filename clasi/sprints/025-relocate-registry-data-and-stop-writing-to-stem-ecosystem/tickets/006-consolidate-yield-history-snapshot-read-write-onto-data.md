@@ -31,19 +31,19 @@ sprint.md's Design Rationale ("consolidate `cli.py`'s yield-history read
 
 ## Acceptance Criteria
 
-- [ ] `yield_history_path`'s default (used when `--yield-history` is
+- [x] `yield_history_path`'s default (used when `--yield-history` is
       not given) resolves to `{own_data_dir}/yield-history.json`, not
       `{resolved_site_dir}/src/data/yield-history.json`.
-- [ ] `main()` calls `load_snapshot()` once, against this new default
+- [x] `main()` calls `load_snapshot()` once, against this new default
       (or the explicit `--yield-history` override), and `save_snapshot()`
       once, against the same path — not two `save_snapshot()` calls.
-- [ ] `--yield-history` remains available as an explicit override,
+- [x] `--yield-history` remains available as an explicit override,
       unchanged in behavior.
-- [ ] The first run after this change, with no pre-existing snapshot at
+- [x] The first run after this change, with no pre-existing snapshot at
       the new default location, produces an empty-baseline delta report
       (`load_snapshot()`'s existing "first run ever" contract) rather
       than an error.
-- [ ] `uv run pytest -q` is green.
+- [x] `uv run pytest -q` is green.
 
 ## Implementation Plan
 
