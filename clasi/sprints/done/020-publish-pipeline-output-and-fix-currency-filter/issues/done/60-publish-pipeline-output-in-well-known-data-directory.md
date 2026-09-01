@@ -1,5 +1,14 @@
 ---
-status: pending
+status: done
+sprint: '020'
+tickets:
+- 020-002
+- 020-003
+- 020-004
+- 020-005
+- 020-006
+- 020-007
+- 020-008
 ---
 
 # Publish the pipeline's own output in a well-known data/ directory in this repo

@@ -28,7 +28,7 @@ from partner_scrape.observability.reporter import YieldReporter
 
 
 @pytest.fixture(autouse=True)
-def _cache_dir(tmp_path, monkeypatch):
+def _cache_dir(tmp_path, tmp_path_factory, monkeypatch):
     """Point SCRAPE_CACHE_DIR (and, as of ticket 003, SITE_DIR) at a
     tmp_path for every test in this file.
 
@@ -62,9 +62,29 @@ def _cache_dir(tmp_path, monkeypatch):
     replaced, so tests that only care about flag-parsing/wiring don't
     need to know about this later pipeline step at all.
     `TestPublishWiring` below un-stubs it to test the wiring itself.
+
+    As of sprint 020 ticket 007, `cli.main()` also writes
+    `yield-history.json` a second time into `config.get_own_data_dir()`
+    (this repo's own `data/` directory) for any non-`--dry-run`,
+    reporting-enabled invocation. Unlike `own_data_dir` on the export
+    modules (tickets 003-006), there is no CLI flag or `run()`
+    parameter to override this -- `get_own_data_dir()` always resolves
+    to this repo's real `data/` directory (no environment-variable
+    override, by design). Several tests in `TestYieldReportWiring`
+    below (e.g. the default-path and explicit-`--yield-history` tests)
+    already exercise a real, non-dry-run, reporting-enabled `cli.main()`
+    call; without pinning `cli.get_own_data_dir` here too, those would
+    write a real `yield-history.json` into this repo's actual `data/`
+    directory on every test run. Resolved via `tmp_path_factory` (a
+    directory outside this test's own `tmp_path` tree, matching
+    `test_cli_teams.py`'s identical fixture) rather than `tmp_path`
+    itself, so it never inflates any test's own `tmp_path`-scoped file
+    count assertions.
     """
     monkeypatch.setenv("SCRAPE_CACHE_DIR", str(tmp_path))
     monkeypatch.setenv("SITE_DIR", str(tmp_path))
+    fake_own_data_dir = tmp_path_factory.mktemp("own-data-default")
+    monkeypatch.setattr(cli, "get_own_data_dir", lambda: fake_own_data_dir)
     monkeypatch.setattr(
         cli.publish,
         "project",
@@ -339,6 +359,64 @@ class TestYieldReportWiring:
         out = capsys.readouterr().out
         assert "--no-report" in out
         assert "--yield-history" in out
+
+
+class TestOwnDataDirYieldHistoryPublish:
+    """Sprint 020 ticket 007 (issue 60): `cli.main()` also writes
+    `yield-history.json` into `config.get_own_data_dir()` (this repo's
+    own `data/` directory), a second, independent copy of the same
+    report alongside the existing `SITE_DIR`/`--yield-history` write.
+    The `_cache_dir` autouse fixture pins `cli.get_own_data_dir` to a
+    throwaway `tmp_path_factory` directory for every test in this file,
+    so these tests read that same stand-in rather than the real repo
+    `data/` directory.
+    """
+
+    def test_normal_run_writes_yield_history_into_own_data_dir(self, monkeypatch, tmp_path):
+        monkeypatch.setattr(cli, "run", lambda **kwargs: [])
+
+        site_dir = tmp_path / "site"
+        cli.main(["--no-enrich", "--site-dir", str(site_dir)])
+
+        own_data_history_path = cli.get_own_data_dir() / "yield-history.json"
+        site_history_path = site_dir / "src" / "data" / "yield-history.json"
+        assert own_data_history_path.exists()
+        assert site_history_path.exists()
+        assert own_data_history_path.read_text() == site_history_path.read_text()
+
+    def test_dry_run_writes_nothing_into_own_data_dir(self, monkeypatch, tmp_path):
+        monkeypatch.setattr(cli, "run", lambda **kwargs: [{"slug": "a"}])
+
+        site_dir = tmp_path / "site"
+        cli.main(["--no-enrich", "--dry-run", "--site-dir", str(site_dir)])
+
+        own_data_history_path = cli.get_own_data_dir() / "yield-history.json"
+        assert not own_data_history_path.exists()
+
+    def test_no_report_writes_nothing_into_own_data_dir(self, monkeypatch, tmp_path):
+        monkeypatch.setattr(cli, "run", lambda **kwargs: [{"slug": "a"}])
+
+        site_dir = tmp_path / "site"
+        cli.main(["--no-enrich", "--no-report", "--site-dir", str(site_dir)])
+
+        own_data_history_path = cli.get_own_data_dir() / "yield-history.json"
+        assert not own_data_history_path.exists()
+
+    def test_own_data_dir_is_created_when_missing(self, monkeypatch, tmp_path):
+        """A missing own-repo `data/` directory must not raise -- created
+        automatically, matching every other own-repo write in this sprint
+        (`save_snapshot()`'s own `mkdir(parents=True, exist_ok=True)`)."""
+        monkeypatch.setattr(cli, "run", lambda **kwargs: [])
+
+        own_data_dir = tmp_path / "own-data" / "nested"
+        assert not own_data_dir.exists()
+        monkeypatch.setattr(cli, "get_own_data_dir", lambda: own_data_dir)
+
+        site_dir = tmp_path / "site"
+        exit_code = cli.main(["--no-enrich", "--site-dir", str(site_dir)])  # must not raise
+
+        assert exit_code == 0
+        assert (own_data_dir / "yield-history.json").exists()
 
 
 class TestPublishWiring:

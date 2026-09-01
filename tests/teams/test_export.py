@@ -23,6 +23,15 @@ network) so the privacy regression -- and every other assertion driven
 by this helper -- exercises output that includes a scraped sponsor name
 and ``sponsor_provenance``, not just the two structured sources' own
 fields.
+
+Sprint 020 ticket 005 adds a third, similarly-defaulting ``own_data_dir``
+parameter to ``export_teams()``. Every test written before that ticket
+predates the parameter and never passes it explicitly -- the
+module-level ``_own_data_dir_default`` autouse fixture below pins its
+default resolution to a throwaway directory for every test in this
+file, so none of them can reach this repo's real ``data/`` directory
+(mirrors ``tests/test_export.py``'s identical ``_own_data_dir_default``
+fixture for ``export_opportunities()``).
 """
 
 from __future__ import annotations
@@ -35,6 +44,7 @@ from pathlib import Path
 import pytest
 
 from partner_scrape.fetch.fetcher import FetchResponse
+from partner_scrape.teams import export
 from partner_scrape.teams.export import (
     TEAMS_SCHEMA_FIELDS,
     _natural_number_key,
@@ -57,6 +67,36 @@ SEARCH_URL = _search_url(DEFAULT_API_BASE, DEFAULT_REGION)
 #: A loose but sufficient email-address pattern for the privacy
 #: regression test -- matching `local@domain.tld`, case-insensitive.
 _EMAIL_PATTERN = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
+
+
+@pytest.fixture(autouse=True)
+def _own_data_dir_default(tmp_path_factory, monkeypatch):
+    """Pin `export.get_own_data_dir()`'s resolution to a throwaway
+    directory for every test in this file (sprint 020 ticket 005).
+
+    `own_data_dir` (like `site_dir`) resolves via a `config` accessor
+    when omitted, but unlike `site_dir` it has no environment-variable
+    override -- `config.get_own_data_dir()` always returns this repo's
+    real `data/` directory (`DEFAULT_OWN_DATA_DIR` is "not overridable
+    via environment variable" by design). Every test written before
+    this ticket predates the `own_data_dir` parameter and so never
+    passes it explicitly; without this fixture, each such test's
+    non-`dry_run` call would auto-create and write real files into
+    this repo's actual `data/` directory on every test run --
+    contradicting sprint.md's Test Strategy ("Hermetic throughout ...
+    tests pass an explicit tmp_path, never the real default"). Mirrors
+    `tests/test_export.py`'s and `tests/test_export_ads.py`'s identical
+    `_own_data_dir_default` fixtures for `export_opportunities()`/
+    `export_ads()` (sprint 020 tickets 003/004).
+
+    Deliberately resolved via `tmp_path_factory` (a directory outside
+    the current test's own `tmp_path` tree), not `tmp_path` itself --
+    matches those tickets' own reasoning: a test asserting the exact
+    set of files written under `tmp_path` must not have this default
+    land inside that tree.
+    """
+    fake_own_data_dir = tmp_path_factory.mktemp("own-data-default")
+    monkeypatch.setattr(export, "get_own_data_dir", lambda: fake_own_data_dir)
 
 
 @dataclass
@@ -350,7 +390,7 @@ class TestPublicDataPublish:
     """Sprint 017 ticket 001: `export_teams()`'s second write target,
     `{site_dir}/public/data/teams.json` -- the same already-built
     payload as `src/data/teams.json`, written in the same call. See
-    the module docstring's "The two write targets are not symmetric"
+    the module docstring's "The three write targets are not symmetric"
     section for the `mkdir`/ordering contract these tests pin down."""
 
     def test_public_data_teams_json_is_byte_identical_to_src_data(self, tmp_path):
@@ -415,6 +455,110 @@ class TestPublicDataPublish:
             export_teams([_make_team()], site_dir=site)
 
         assert not (site / "public").exists()
+
+
+class TestOwnDataDirPublish:
+    """Sprint 020 ticket 005 (issue 60): the third write path -- the
+    same already-built payload written to `site_dir` (both copies),
+    written again into partner-scrape's own `data/` directory via
+    `config.get_own_data_dir()`. Mirrors `tests/test_export.py`'s and
+    `tests/test_export_ads.py`'s `TestOwnDataDirPublish` structure and
+    naming conventions, scoped to `teams.json`.
+    """
+
+    def test_own_data_dir_content_matches_site_dir_content_exactly(self, tmp_path):
+        site = _make_site(tmp_path)
+        own_data_dir = tmp_path / "own-data"
+
+        export_teams([_make_team()], site_dir=site, own_data_dir=own_data_dir)
+
+        src_text = (site / "src" / "data" / "teams.json").read_text()
+        public_text = (site / "public" / "data" / "teams.json").read_text()
+        own_text = (own_data_dir / "teams.json").read_text()
+
+        assert own_text == src_text
+        assert own_text == public_text
+
+    def test_writes_only_under_the_given_own_data_dir(self, tmp_path):
+        site = _make_site(tmp_path)
+        own_data_dir = tmp_path / "own-data"
+
+        export_teams([_make_team()], site_dir=site, own_data_dir=own_data_dir)
+
+        written_files = sorted(p for p in tmp_path.rglob("*") if p.is_file())
+        assert written_files == sorted(
+            [
+                site / "src" / "data" / "opportunities.json",
+                site / "src" / "data" / "scrape-meta.json",
+                site / "src" / "data" / "teams.json",
+                site / "public" / "data" / "teams.json",
+                own_data_dir / "teams.json",
+            ]
+        )
+
+    def test_omitted_own_data_dir_resolves_via_config_get_own_data_dir(
+        self, tmp_path, monkeypatch
+    ):
+        site = _make_site(tmp_path)
+        fake_own_data_dir = tmp_path / "fake-own-data"
+        monkeypatch.setattr(export, "get_own_data_dir", lambda: fake_own_data_dir)
+
+        export_teams([_make_team()], site_dir=site)
+
+        assert (fake_own_data_dir / "teams.json").exists()
+
+    def test_missing_own_data_dir_is_created_automatically_never_raises(self, tmp_path):
+        site = _make_site(tmp_path)
+        own_data_dir = tmp_path / "does-not-exist-yet" / "nested"
+        assert not own_data_dir.exists()
+
+        export_teams([_make_team()], site_dir=site, own_data_dir=own_data_dir)
+
+        assert (own_data_dir / "teams.json").exists()
+
+    def test_dry_run_writes_nothing_to_own_data_dir(self, tmp_path):
+        site = _make_site(tmp_path)
+        own_data_dir = tmp_path / "own-data"
+
+        payload = export_teams(
+            [_make_team()], site_dir=site, own_data_dir=own_data_dir, dry_run=True
+        )
+
+        assert payload["meta"]["total"] == 1
+        assert not own_data_dir.exists()
+        assert not (site / "src" / "data" / "teams.json").exists()
+        assert not (site / "public" / "data" / "teams.json").exists()
+
+    def test_src_data_failure_leaves_own_data_dir_untouched(self, tmp_path):
+        # src/data missing entirely -- confirm own_data_dir is never
+        # created (let alone written to) when the first write fails,
+        # matching TestPublicDataPublish's identical ordering proof for
+        # public/data one target over.
+        site = tmp_path / "no-data-dir"
+        site.mkdir()
+        own_data_dir = tmp_path / "own-data"
+
+        with pytest.raises(RuntimeError, match="Cannot write teams export"):
+            export_teams([_make_team()], site_dir=site, own_data_dir=own_data_dir)
+
+        assert not own_data_dir.exists()
+
+    def test_public_data_failure_leaves_own_data_dir_untouched(self, tmp_path):
+        # public/data unwritable (TestPublicDataPublish's own scenario:
+        # a file occupies the path public/data must become a directory
+        # at) -- src/data's write succeeds, but the run still must
+        # raise before own_data_dir is ever touched.
+        site = _make_site(tmp_path)
+        public_dir = site / "public"
+        public_dir.mkdir()
+        (public_dir / "data").write_text("not a directory")
+        own_data_dir = tmp_path / "own-data"
+
+        with pytest.raises(RuntimeError, match="Cannot write teams export"):
+            export_teams([_make_team()], site_dir=site, own_data_dir=own_data_dir)
+
+        assert (site / "src" / "data" / "teams.json").exists()
+        assert not own_data_dir.exists()
 
 
 class TestHardInvariants:

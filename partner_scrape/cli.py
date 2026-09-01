@@ -43,7 +43,7 @@ import logging
 import sys
 from pathlib import Path
 
-from partner_scrape.config import get_site_dir
+from partner_scrape.config import get_own_data_dir, get_site_dir
 from partner_scrape.export import publish
 from partner_scrape.enrich.cache import EnrichmentCache
 from partner_scrape.enrich.enricher import LLMEnricher
@@ -582,6 +582,16 @@ def main(argv: list[str] | None = None) -> int:
         if not args.dry_run:
             assert yield_history_path is not None  # set above whenever yield_reporter is
             save_snapshot(yield_history_path, report)
+            # Sprint 020 ticket 007 (issue 60): also publish the same
+            # report into this repo's own data/ directory, alongside the
+            # SITE_DIR/--yield-history copy above. Unlike the export
+            # modules (tickets 003-006), there is no own_data_dir
+            # parameter to thread through here -- yield-history.json
+            # isn't owned by a data-contract export module, so this is a
+            # second, independent save_snapshot() call rather than a
+            # signature change. save_snapshot() already creates missing
+            # parent directories, so no explicit mkdir is needed here.
+            save_snapshot(get_own_data_dir() / "yield-history.json", report)
 
     # A publish.project() failure above is real (public/data/ is stale
     # until re-run) even though the rest of this run succeeded -- signal

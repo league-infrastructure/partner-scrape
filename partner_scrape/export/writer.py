@@ -20,20 +20,42 @@ its only responsibilities are:
    behavior and file shapes exactly so the site consumes them
    unchanged.
 
+Sprint 020 ticket 003 (issue 60): the same payload and timestamp are
+also written a second time, into partner-scrape's own `data/` directory
+(`config.get_own_data_dir()`) -- "one export, three files, two
+directories" -- so this repo's own pipeline output is inspectable and
+git-trackable without a `stem-ecosystem` checkout on hand. Both copies
+come from the exact same `payload`/timestamp computed once in this
+function call, so they can never drift from each other.
+
 A missing or unwritable `site_dir` (or its `src/data` subdirectory)
 fails loudly -- SUC-007's explicit error flow is "fail loudly, do not
-silently skip the export."
+silently skip the export." `own_data_dir` is different -- see "The two
+write targets are not symmetric" below.
+
+## The two write targets are not symmetric
+
+`site_dir`'s `src/data` must already exist -- a missing `src/data`
+fails loudly, unchanged from before this ticket. `own_data_dir`, by
+contrast, is created automatically if missing
+(`Path.mkdir(parents=True, exist_ok=True)`), mirroring
+`teams/export.py`'s `public/data/` write -- this sprint deletes the
+only two files this repo's `data/` directory tracked (ticket 002), so a
+fresh clone may have no `data/` at all yet. Ordering: the `site_dir`
+write happens first and its `RuntimeError` propagates immediately,
+before `own_data_dir` is touched at all -- a `site_dir` failure never
+leaves a stray `own_data_dir` write behind.
 """
 
 from __future__ import annotations
 
 import json
 from dataclasses import fields
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
-from partner_scrape.config import get_site_dir
+from partner_scrape.config import get_own_data_dir, get_site_dir
 from partner_scrape.normalize.run import DEADLINE_FIRST_TYPES, Opportunity
 
 #: The exact field set written to `opportunities.json` -- every
@@ -50,6 +72,23 @@ SITE_SCHEMA_FIELDS: tuple[str, ...] = tuple(
     f.name for f in fields(Opportunity) if f.name != "sources"
 )
 
+#: Sprint 020 ticket 001 (issue 61): bounds the `DEADLINE_FIRST_TYPES`
+#: "no `date_end` still counts as open" rule (below) to records whose
+#: `date_start` is no older than this many days before `today`. Without
+#: this bound, a genuinely one-time past event that happens to lack a
+#: recorded deadline -- the reported case, "2nd Innovation in Women's
+#: Health Pitch Competition" (`opportunity_type="Competitions"`,
+#: `date_start` 2024-12-01, no `date_end`, ~638 days stale) -- exports as
+#: perpetually current. 365 days is comfortably above the existing
+#: 30-day-old regression cases
+#: (`test_competitions_no_deadline_with_past_start_is_included`,
+#: `test_no_deadline_internship_with_past_start_is_included`) that this
+#: rule must keep protecting, and comfortably below the ~638-day-old
+#: reported outlier; it is not tightly calibrated beyond that one case
+#: (sprint 020 sprint.md Open Questions) and may need revisiting if more
+#: stale-but-undated records surface in production.
+_DEADLINE_FIRST_STALE_POSTING_DAYS = 365
+
 
 def is_current_or_upcoming(opportunity: Opportunity, today: date) -> bool:
     """True if `opportunity`'s end date, or start date if no end date, is
@@ -65,8 +104,12 @@ def is_current_or_upcoming(opportunity: Opportunity, today: date) -> bool:
     is routinely in the past for a still-open, no-deadline record -- the
     ordinary `date_end or date_start >= today` rule would wrongly expire
     it. Such a record is current if `date_end` (the application/
-    registration deadline) is unset or still in the future; every other
-    `opportunity_type` keeps the exact rule above, unchanged.
+    registration deadline) is unset and `date_start` is within
+    `_DEADLINE_FIRST_STALE_POSTING_DAYS` of `today` (sprint 020 ticket
+    001, SUC-020, issue 61) -- older than that, the posting is presumed
+    stale/closed rather than perpetually open -- or `date_end` is set and
+    still in the future; every other `opportunity_type` keeps the exact
+    rule above, unchanged.
 
     Sprint 009: promoted from `_is_current_or_upcoming` (non-underscore,
     no behavior change) so `export/publish.py` reuses this exact
@@ -74,7 +117,11 @@ def is_current_or_upcoming(opportunity: Opportunity, today: date) -> bool:
     """
     if opportunity.opportunity_type in DEADLINE_FIRST_TYPES:
         if not opportunity.date_end:
-            return True
+            if not opportunity.date_start:
+                return False
+            start = date.fromisoformat(opportunity.date_start[:10])
+            stale_cutoff = today - timedelta(days=_DEADLINE_FIRST_STALE_POSTING_DAYS)
+            return start >= stale_cutoff
         return date.fromisoformat(opportunity.date_end[:10]) >= today
 
     date_str = opportunity.date_end or opportunity.date_start
@@ -138,8 +185,11 @@ def export_opportunities(
     *,
     today: date | None = None,
     dry_run: bool = False,
+    own_data_dir: str | Path | None = None,
 ) -> list[dict[str, Any]]:
-    """Filter, dedupe, and write `opportunities` into `site_dir`'s data contract.
+    """Filter, dedupe, and write `opportunities` into `site_dir`'s data
+    contract -- and, as of sprint 020 ticket 003, into partner-scrape's
+    own `own_data_dir` too, from the exact same payload and timestamp.
 
     Args:
         opportunities: normalized, deduplicated `Opportunity` records
@@ -154,7 +204,14 @@ def export_opportunities(
             Defaults to `date.today()`. Tests should pass an explicit
             value for determinism.
         dry_run: when `True`, compute and return the would-be-written
-            payload without touching disk.
+            payload without touching disk -- neither `site_dir` nor
+            `own_data_dir` is written.
+        own_data_dir: path to partner-scrape's own pipeline-output
+            directory. Defaults to `Config.get_own_data_dir()`
+            (`<repo_root>/data`) when `None`. Unlike `site_dir`, this
+            directory is created automatically if missing. Tests should
+            always pass an explicit `tmp_path` here, never rely on the
+            default, matching `site_dir`'s own test convention.
 
     Returns:
         The list of opportunity dicts that were (or, for `dry_run`,
@@ -163,9 +220,15 @@ def export_opportunities(
 
     Raises:
         RuntimeError: `site_dir`'s `src/data` subdirectory does not
-            exist or is not writable. Never silently skips the write.
+            exist or is not writable, or `own_data_dir` is occupied by
+            something unwritable (e.g. a non-directory file). Never
+            silently skips either write. The `site_dir` write is
+            attempted first and its failure propagates before
+            `own_data_dir` is touched -- see "The two write targets are
+            not symmetric" in this module's docstring.
     """
     resolved_site_dir = Path(site_dir) if site_dir is not None else get_site_dir()
+    resolved_own_data_dir = Path(own_data_dir) if own_data_dir is not None else get_own_data_dir()
     reference_date = today if today is not None else date.today()
 
     current = [o for o in opportunities if is_current_or_upcoming(o, reference_date)]
@@ -177,20 +240,41 @@ def export_opportunities(
     if dry_run:
         return payload
 
+    serialized_opportunities = json.dumps(payload, indent=1, ensure_ascii=False)
+    serialized_meta = json.dumps({"last_updated": _now_iso()})
+
     data_dir = resolved_site_dir / "src" / "data"
     opportunities_path = data_dir / "opportunities.json"
     meta_path = data_dir / "scrape-meta.json"
 
     try:
-        opportunities_path.write_text(
-            json.dumps(payload, indent=1, ensure_ascii=False), encoding="utf-8"
-        )
-        meta_path.write_text(json.dumps({"last_updated": _now_iso()}), encoding="utf-8")
+        opportunities_path.write_text(serialized_opportunities, encoding="utf-8")
+        meta_path.write_text(serialized_meta, encoding="utf-8")
     except OSError as exc:
         raise RuntimeError(
             f"Cannot write site export to {data_dir}: {exc}. Check that "
             f"site_dir ({resolved_site_dir}) exists and its src/data "
             "subdirectory is writable."
+        ) from exc
+
+    # Sprint 020 ticket 003 (issue 60): the same payload and timestamp,
+    # written a second time into partner-scrape's own data/ directory --
+    # reusing `serialized_opportunities`/`serialized_meta` computed above
+    # rather than re-serializing or re-timestamping, so the two copies
+    # can never drift. Unlike src/data above, own_data_dir is created if
+    # missing (see module docstring). Mirrors teams/export.py's
+    # public/data/ second write path.
+    own_opportunities_path = resolved_own_data_dir / "opportunities.json"
+    own_meta_path = resolved_own_data_dir / "scrape-meta.json"
+
+    try:
+        resolved_own_data_dir.mkdir(parents=True, exist_ok=True)
+        own_opportunities_path.write_text(serialized_opportunities, encoding="utf-8")
+        own_meta_path.write_text(serialized_meta, encoding="utf-8")
+    except OSError as exc:
+        raise RuntimeError(
+            f"Cannot write own-data export to {resolved_own_data_dir}: {exc}. "
+            "Check that own_data_dir is writable."
         ) from exc
 
     return payload

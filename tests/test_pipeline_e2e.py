@@ -33,6 +33,7 @@ from pathlib import Path
 
 import pytest
 
+from partner_scrape.export import ads, writer
 from partner_scrape.fetch import PlaywrightFetcher, PoliteFetcher, Throttle
 from partner_scrape.fetch.fetcher import FetchResponse
 from partner_scrape.model import Event
@@ -79,6 +80,29 @@ def _scrape_cache_dir(tmp_path, monkeypatch):
     """
     monkeypatch.setenv("SCRAPE_CACHE_DIR", str(tmp_path / "scrape_cache"))
     return tmp_path
+
+
+@pytest.fixture(autouse=True)
+def _own_data_dir_default(tmp_path_factory, monkeypatch):
+    """Pin `writer.get_own_data_dir()`'s (and, sprint 020 ticket 004,
+    `ads.get_own_data_dir()`'s) resolution to a throwaway directory for
+    every test in this file (sprint 020 ticket 003).
+
+    `export_opportunities()`'s (and `export_ads()`'s) `own_data_dir`
+    parameter defaults to `config.get_own_data_dir()` -- a real repo
+    path with no environment-variable override -- when a caller doesn't
+    pass one explicitly. `pipeline.run()` never passes it for either
+    call, so every real (non-`dry_run`) `run()` call in this file would
+    otherwise write real files into this repo's actual `data/`
+    directory on every test run. Mirrors this file's own
+    `_scrape_cache_dir` fixture and `tests/test_export.py`'s identical
+    `_own_data_dir_default` fixture, for the same underlying reason.
+    `writer` and `ads` each import `get_own_data_dir` separately, so
+    both must be patched.
+    """
+    fake_own_data_dir = tmp_path_factory.mktemp("own-data-default")
+    monkeypatch.setattr(writer, "get_own_data_dir", lambda: fake_own_data_dir)
+    monkeypatch.setattr(ads, "get_own_data_dir", lambda: fake_own_data_dir)
 
 
 class NoFixtureResponse(RuntimeError):

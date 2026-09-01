@@ -1,5 +1,8 @@
 ---
-status: pending
+status: done
+sprint: '020'
+tickets:
+- 020-001
 ---
 
 # Undated-end events with a past start date survive the current/upcoming export filter

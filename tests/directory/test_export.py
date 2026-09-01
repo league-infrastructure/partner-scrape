@@ -1,5 +1,15 @@
 """Tests for partner_scrape.directory.export: the places.json/clubs.json
 publish step.
+
+Sprint 020 ticket 006 adds a third, similarly-defaulting `own_data_dir`
+parameter to `export_directory()`. Every test written before that
+ticket predates the parameter and never passes it explicitly -- the
+module-level `_own_data_dir_default` autouse fixture below pins its
+default resolution to a throwaway directory for every test in this
+file, so none of them can reach this repo's real `data/` directory
+(mirrors `tests/teams/test_export.py`'s identical
+`_own_data_dir_default` fixture for `export_teams()`, sprint 020 ticket
+005).
 """
 
 from __future__ import annotations
@@ -9,6 +19,7 @@ from pathlib import Path
 
 import pytest
 
+from partner_scrape.directory import export
 from partner_scrape.directory.export import (
     CLUBS_SCHEMA_FIELDS,
     PLACES_SCHEMA_FIELDS,
@@ -17,6 +28,33 @@ from partner_scrape.directory.export import (
     to_json_dict,
 )
 from partner_scrape.directory.model import Club, Place
+
+
+@pytest.fixture(autouse=True)
+def _own_data_dir_default(tmp_path_factory, monkeypatch):
+    """Pin `export.get_own_data_dir()`'s resolution to a throwaway
+    directory for every test in this file (sprint 020 ticket 006).
+
+    `own_data_dir` (like `site_dir`) resolves via a `config` accessor
+    when omitted, but unlike `site_dir` it has no environment-variable
+    override -- `config.get_own_data_dir()` always returns this repo's
+    real `data/` directory (`DEFAULT_OWN_DATA_DIR` is "not overridable
+    via environment variable" by design). Every test written before
+    this ticket predates the `own_data_dir` parameter and so never
+    passes it explicitly; without this fixture, each such test's
+    non-`dry_run` call would auto-create and write real files into
+    this repo's actual `data/` directory on every test run --
+    contradicting sprint.md's Test Strategy ("Hermetic throughout ...
+    tests pass an explicit tmp_path, never the real default").
+
+    Deliberately resolved via `tmp_path_factory` (a directory outside
+    the current test's own `tmp_path` tree), not `tmp_path` itself --
+    matches `tests/teams/test_export.py`'s own reasoning: a test
+    asserting the exact set of files written under `tmp_path` must not
+    have this default land inside that tree.
+    """
+    fake_own_data_dir = tmp_path_factory.mktemp("own-data-default")
+    monkeypatch.setattr(export, "get_own_data_dir", lambda: fake_own_data_dir)
 
 
 def _make_place(**overrides) -> Place:
@@ -456,3 +494,218 @@ class TestClubsHardInvariants:
         assert (data_dir / "opportunities.json").read_text() == opportunities_body
         assert (data_dir / "scrape-meta.json").read_text() == scrape_meta_body
         assert (data_dir / "teams.json").read_text() == teams_body
+
+
+# ---------------------------------------------------------------------
+# Sprint 020 (ticket 006, issue 60): the third write path -- the same
+# already-built places.json/clubs.json payloads written to `site_dir`
+# (both copies), written again into partner-scrape's own `data/`
+# directory via `config.get_own_data_dir()`. Mirrors
+# `tests/teams/test_export.py`'s `TestOwnDataDirPublish` structure and
+# naming conventions, scoped to `places.json`/`clubs.json` (and their
+# added "places.json before clubs.json" ordering dimension).
+# ---------------------------------------------------------------------
+
+
+class TestOwnDataDirPublish:
+    def test_own_data_dir_places_json_matches_site_dir_content_exactly(self, tmp_path):
+        site = _make_site(tmp_path)
+        own_data_dir = tmp_path / "own-data"
+
+        export_directory([_make_place()], site_dir=site, own_data_dir=own_data_dir)
+
+        src_text = (site / "src" / "data" / "places.json").read_text()
+        public_text = (site / "public" / "data" / "places.json").read_text()
+        own_text = (own_data_dir / "places.json").read_text()
+
+        assert own_text == src_text
+        assert own_text == public_text
+
+    def test_own_data_dir_clubs_json_matches_site_dir_content_exactly(self, tmp_path):
+        site = _make_site(tmp_path)
+        own_data_dir = tmp_path / "own-data"
+
+        export_directory(
+            [_make_place()], site_dir=site, clubs=[_make_club()], own_data_dir=own_data_dir
+        )
+
+        src_text = (site / "src" / "data" / "clubs.json").read_text()
+        public_text = (site / "public" / "data" / "clubs.json").read_text()
+        own_text = (own_data_dir / "clubs.json").read_text()
+
+        assert own_text == src_text
+        assert own_text == public_text
+
+    def test_writes_only_under_the_given_own_data_dir(self, tmp_path):
+        site = _make_site(tmp_path)
+        own_data_dir = tmp_path / "own-data"
+
+        export_directory(
+            [_make_place()], site_dir=site, clubs=[_make_club()], own_data_dir=own_data_dir
+        )
+
+        written_files = sorted(p for p in tmp_path.rglob("*") if p.is_file())
+        assert written_files == sorted(
+            [
+                site / "src" / "data" / "opportunities.json",
+                site / "src" / "data" / "scrape-meta.json",
+                site / "src" / "data" / "teams.json",
+                site / "src" / "data" / "places.json",
+                site / "src" / "data" / "clubs.json",
+                site / "public" / "data" / "places.json",
+                site / "public" / "data" / "clubs.json",
+                own_data_dir / "places.json",
+                own_data_dir / "clubs.json",
+            ]
+        )
+
+    def test_omitted_own_data_dir_resolves_via_config_get_own_data_dir(
+        self, tmp_path, monkeypatch
+    ):
+        site = _make_site(tmp_path)
+        fake_own_data_dir = tmp_path / "fake-own-data"
+        monkeypatch.setattr(export, "get_own_data_dir", lambda: fake_own_data_dir)
+
+        export_directory([_make_place()], site_dir=site)
+
+        assert (fake_own_data_dir / "places.json").exists()
+
+    def test_missing_own_data_dir_is_created_automatically_never_raises(self, tmp_path):
+        site = _make_site(tmp_path)
+        own_data_dir = tmp_path / "does-not-exist-yet" / "nested"
+        assert not own_data_dir.exists()
+
+        export_directory([_make_place()], site_dir=site, own_data_dir=own_data_dir)
+
+        assert (own_data_dir / "places.json").exists()
+
+    def test_dry_run_writes_nothing_to_own_data_dir(self, tmp_path):
+        site = _make_site(tmp_path)
+        own_data_dir = tmp_path / "own-data"
+
+        payload = export_directory(
+            [_make_place()],
+            site_dir=site,
+            clubs=[_make_club()],
+            own_data_dir=own_data_dir,
+            dry_run=True,
+        )
+
+        assert payload["meta"]["total"] == 1
+        assert payload["clubs_meta"]["total"] == 1
+        assert not own_data_dir.exists()
+        assert not (site / "src" / "data" / "places.json").exists()
+        assert not (site / "src" / "data" / "clubs.json").exists()
+
+    def test_clubs_none_means_clubs_json_untouched_at_own_data_dir(self, tmp_path):
+        # Extends the ticket-007-era "clubs=None means no clubs.json
+        # at all" contract to the new third target.
+        site = _make_site(tmp_path)
+        own_data_dir = tmp_path / "own-data"
+
+        export_directory([_make_place()], site_dir=site, own_data_dir=own_data_dir)
+
+        assert (own_data_dir / "places.json").exists()
+        assert not (own_data_dir / "clubs.json").exists()
+
+    def test_an_explicit_empty_club_list_does_write_clubs_json_to_own_data_dir_too(
+        self, tmp_path
+    ):
+        site = _make_site(tmp_path)
+        own_data_dir = tmp_path / "own-data"
+
+        export_directory([_make_place()], site_dir=site, clubs=[], own_data_dir=own_data_dir)
+
+        written = json.loads((own_data_dir / "clubs.json").read_text())
+        assert written["meta"]["total"] == 0
+
+    def test_src_data_failure_leaves_own_data_dir_untouched(self, tmp_path):
+        # src/data missing entirely -- confirm own_data_dir is never
+        # created (let alone written to) when the first write fails,
+        # matching TestPublicDataPublish's identical ordering proof for
+        # public/data one target over.
+        site = tmp_path / "no-data-dir"
+        site.mkdir()
+        own_data_dir = tmp_path / "own-data"
+
+        with pytest.raises(RuntimeError, match="Cannot write places export"):
+            export_directory(
+                [_make_place()], site_dir=site, clubs=[_make_club()], own_data_dir=own_data_dir
+            )
+
+        assert not own_data_dir.exists()
+
+    def test_public_data_failure_leaves_own_data_dir_untouched(self, tmp_path):
+        # public/data unwritable (a file occupies the path public/data
+        # must become a directory at) -- src/data's write succeeds, but
+        # the run still must raise before own_data_dir is ever touched.
+        site = _make_site(tmp_path)
+        public_dir = site / "public"
+        public_dir.mkdir()
+        (public_dir / "data").write_text("not a directory")
+        own_data_dir = tmp_path / "own-data"
+
+        with pytest.raises(RuntimeError, match="Cannot write places export"):
+            export_directory(
+                [_make_place()], site_dir=site, clubs=[_make_club()], own_data_dir=own_data_dir
+            )
+
+        assert (site / "src" / "data" / "places.json").exists()
+        assert not own_data_dir.exists()
+
+    def test_places_own_data_dir_failure_raises_before_clubs_is_touched_anywhere(
+        self, tmp_path
+    ):
+        # Critical ordering contract this ticket adds: places.json's
+        # three writes (src/data, public/data, own-repo) must ALL
+        # complete before clubs.json is touched at all. Here the first
+        # two of places.json's writes succeed, but its own-repo write
+        # fails (own_data_dir is pre-occupied by a plain file, not a
+        # directory) -- clubs.json must never be written anywhere, not
+        # even at the two SITE_DIR targets that would otherwise have
+        # succeeded.
+        site = _make_site(tmp_path)
+        own_data_dir = tmp_path / "own-data"
+        own_data_dir.write_text("not a directory")
+
+        with pytest.raises(RuntimeError, match="Cannot write places export"):
+            export_directory(
+                [_make_place()], site_dir=site, clubs=[_make_club()], own_data_dir=own_data_dir
+            )
+
+        # Places' own two SITE_DIR writes did succeed before the
+        # own-repo write failed -- only the third target's failure
+        # aborts the run.
+        assert (site / "src" / "data" / "places.json").exists()
+        assert (site / "public" / "data" / "places.json").exists()
+        # clubs.json is never touched anywhere.
+        assert not (site / "src" / "data" / "clubs.json").exists()
+        assert not (site / "public" / "data" / "clubs.json").exists()
+
+    def test_clubs_own_data_dir_write_only_happens_after_its_own_site_writes_succeed(
+        self, tmp_path
+    ):
+        # The mirrored ordering contract on the clubs.json side:
+        # clubs.json's own-repo write happens only after its own
+        # src/data and public/data writes succeed. Here clubs.json's
+        # own_data_dir path is pre-occupied by a directory (not a
+        # plain file), so only that specific write fails -- proven by
+        # clubs.json already existing at both SITE_DIR targets (and
+        # places.json existing at all three targets, since places.json
+        # fully succeeded first) by the time the RuntimeError is
+        # raised.
+        site = _make_site(tmp_path)
+        own_data_dir = tmp_path / "own-data"
+        own_data_dir.mkdir()
+        (own_data_dir / "clubs.json").mkdir()
+
+        with pytest.raises(RuntimeError, match="Cannot write clubs export"):
+            export_directory(
+                [_make_place()], site_dir=site, clubs=[_make_club()], own_data_dir=own_data_dir
+            )
+
+        assert (site / "src" / "data" / "places.json").exists()
+        assert (site / "public" / "data" / "places.json").exists()
+        assert (own_data_dir / "places.json").exists()
+        assert (site / "src" / "data" / "clubs.json").exists()
+        assert (site / "public" / "data" / "clubs.json").exists()

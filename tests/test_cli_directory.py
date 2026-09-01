@@ -20,21 +20,48 @@ from pathlib import Path
 import pytest
 
 from partner_scrape import cli
+from partner_scrape.directory import export as directory_export
 from partner_scrape.fetch import PoliteFetcher
 from partner_scrape.fetch.fetcher import FetchResponse
 
 
 @pytest.fixture(autouse=True)
-def _cache_dir(tmp_path, monkeypatch):
+def _cache_dir(tmp_path, tmp_path_factory, monkeypatch):
     """`_run_directory` constructs a real `PoliteFetcher()` before
     calling `run_directory()` -- even in wiring tests that monkeypatch
     `cli.run_directory` itself -- and `PoliteFetcher()`'s default
     `cache_dir` reads `SCRAPE_CACHE_DIR` eagerly. `SITE_DIR` is pinned
     too so any test that omits `--site-dir` can never reach the real
     sibling `../stem-ecosystem` checkout, matching `test_cli_teams.py`'s
-    own `_cache_dir` fixture."""
+    own `_cache_dir` fixture.
+
+    Sprint 020 ticket 006: also pins `export.get_own_data_dir()`'s
+    resolution to a throwaway directory. `TestDirectoryEndToEnd.
+    test_real_run_writes_places_json` and
+    `test_never_writes_opportunities_json_scrape_meta_or_teams_json_anywhere`
+    drive the real `cli.main(["directory", ...])` -> `run_directory()`
+    -> `export_directory()` chain without `--dry-run`, and
+    `run_directory()` never passes `own_data_dir` through -- without
+    this, those calls would write real files into this repo's actual
+    `data/` directory on every test run. Mirrors `test_cli_teams.py`'s
+    identical `own_data_dir` guard, folded into this file's existing
+    single autouse fixture rather than a second one.
+
+    Sprint 020 ticket 007: also pins `cli.get_own_data_dir()`'s
+    resolution to the same throwaway directory.
+    `TestNeverCrossesIntoOtherPipelines.test_default_run_never_calls_run_directory`
+    drives the real no-subcommand/`run` path via `cli.main([])`
+    (reporting enabled by default, no `--dry-run`) -- as of ticket 007,
+    that path writes `yield-history.json` into `cli.get_own_data_dir()`
+    a second time, alongside the `SITE_DIR` copy. Without pinning this
+    too, that single test would write a real `yield-history.json` into
+    this repo's actual `data/` directory on every test run.
+    """
     monkeypatch.setenv("SCRAPE_CACHE_DIR", str(tmp_path))
     monkeypatch.setenv("SITE_DIR", str(tmp_path))
+    fake_own_data_dir = tmp_path_factory.mktemp("own-data-default")
+    monkeypatch.setattr(directory_export, "get_own_data_dir", lambda: fake_own_data_dir)
+    monkeypatch.setattr(cli, "get_own_data_dir", lambda: fake_own_data_dir)
     monkeypatch.setattr(
         cli.publish,
         "project",

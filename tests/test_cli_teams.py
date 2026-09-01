@@ -22,6 +22,7 @@ import pytest
 from partner_scrape import cli
 from partner_scrape.fetch import PoliteFetcher
 from partner_scrape.fetch.fetcher import FetchResponse
+from partner_scrape.teams import export as teams_export
 from partner_scrape.teams.sources.ftcscout import DEFAULT_API_BASE, DEFAULT_REGION, _search_url
 
 FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures" / "teams"
@@ -29,7 +30,7 @@ SEARCH_URL = _search_url(DEFAULT_API_BASE, DEFAULT_REGION)
 
 
 @pytest.fixture(autouse=True)
-def _cache_dir(tmp_path, monkeypatch):
+def _cache_dir(tmp_path, tmp_path_factory, monkeypatch):
     """`_run_teams` constructs a real `PoliteFetcher()` before calling
     `run_teams()` -- even in wiring tests that monkeypatch `cli.run_teams`
     itself -- and `PoliteFetcher()`'s default `cache_dir` reads
@@ -43,10 +44,36 @@ def _cache_dir(tmp_path, monkeypatch):
     project's own `.env` -- without this, a run on a machine with that
     `.env` sourced could silently behave differently than one without
     it (the fixture Fetchers below only register FTCScout's URL).
-    Tests that need a valid key set it explicitly."""
+    Tests that need a valid key set it explicitly.
+
+    Sprint 020 ticket 005: also pins `export.get_own_data_dir()`'s
+    resolution to a throwaway directory. `TestTeamsEndToEnd.
+    test_real_run_writes_teams_json` and
+    `test_never_writes_opportunities_json_or_scrape_meta_anywhere` drive
+    the real `cli.main(["teams", ...])` -> `run_teams()` ->
+    `export_teams()` chain without `--dry-run`, and `run_teams()` never
+    passes `own_data_dir` through -- without this, those calls would
+    write real files into this repo's actual `data/` directory on every
+    test run. Mirrors `tests/teams/test_pipeline.py`'s identical
+    `_own_data_dir_default` fixture, folded into this file's existing
+    single autouse fixture rather than a second one.
+
+    Sprint 020 ticket 007: also pins `cli.get_own_data_dir()`'s
+    resolution to the same throwaway directory.
+    `TestNeverCrossesIntoTheOtherPipeline.test_default_run_never_calls_run_teams`
+    drives the real no-subcommand/`run` path via `cli.main([])`
+    (reporting enabled by default, no `--dry-run`) -- as of ticket 007,
+    that path writes `yield-history.json` into `cli.get_own_data_dir()`
+    a second time, alongside the `SITE_DIR` copy. Without pinning this
+    too, that single test would write a real `yield-history.json` into
+    this repo's actual `data/` directory on every test run.
+    """
     monkeypatch.setenv("SCRAPE_CACHE_DIR", str(tmp_path))
     monkeypatch.setenv("SITE_DIR", str(tmp_path))
     monkeypatch.delenv("TBA_KEY", raising=False)
+    fake_own_data_dir = tmp_path_factory.mktemp("own-data-default")
+    monkeypatch.setattr(teams_export, "get_own_data_dir", lambda: fake_own_data_dir)
+    monkeypatch.setattr(cli, "get_own_data_dir", lambda: fake_own_data_dir)
     # `cli.main()`'s no-subcommand/`run` path calls `publish.project(...)`
     # after `run()` returns, which raises loudly on a missing curated
     # `partners.json` -- only `TestNeverCrossesIntoTheOtherPipeline`'s
