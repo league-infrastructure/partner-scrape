@@ -71,6 +71,8 @@ Four data directories, three schema/loader pairs:
 | `ads/` | `export.ads.AdConfig` | `export.ads.load_ad_configs` | hand-authored ad slots |
 | `candidates/` | `candidates.CandidateStub` | `candidates.list_candidates` | discovered orgs awaiting human promotion |
 
+See also [`DO_NOT_SCRAPE.md`](DO_NOT_SCRAPE.md) — a checked-in, non-loaded reference of sites this project has investigated and decided not to scrape (or deferred); check it before re-researching a candidate hub or source's ToS/robots.txt from scratch.
+
 A `SourceConfig` is `source_id` (the TOML filename stem), `org_name`, `adapter_type`,
 `config`, plus optional `taxonomy_defaults`, `acquisition_policy`, and `enabled`.
 `config`, `taxonomy_defaults`, and `acquisition_policy` are plain dicts, not sub-schemas.

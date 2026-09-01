@@ -72,27 +72,27 @@ Impact on Existing Components for why that distinction matters).
 
 ## Acceptance Criteria
 
-- [ ] `partner_scrape/registry/DO_NOT_SCRAPE.md` exists and is checked in.
-- [ ] It contains all 10 entries from issue 36's original do-not-scrape
+- [x] `partner_scrape/registry/DO_NOT_SCRAPE.md` exists and is checked in.
+- [x] It contains all 10 entries from issue 36's original do-not-scrape
       list, each with the specific reason the issue names (ToS clause,
       robots directive, bot-wall, etc.) — not a generic restatement.
-- [ ] It contains the 4 newly-excluded entries (KidsOutAndAbout,
+- [x] It contains the 4 newly-excluded entries (KidsOutAndAbout,
       sandiegostemsummercamps.com, sandiegomoms.com, San Diego Reader),
       each with the exact ToS clause quoted from `sprint.md`'s Design
       Rationale and dated 2026-08-31.
-- [ ] It contains a clearly separate `## Deferred` section for KPBS's
+- [x] It contains a clearly separate `## Deferred` section for KPBS's
       community calendar and Macaroni Kid, each explaining why it's
       deferred rather than excluded (mechanism mismatch vs.
       unverifiable ToS), so a future session knows these are open, not
       closed, questions.
-- [ ] Every entry states what it's about (one line), the reason, and a
+- [x] Every entry states what it's about (one line), the reason, and a
       date — matching the "Live-verified `<date>`" phrasing convention
       already used in `registry/sources/balboa-park.toml` and
       `registry/sources/usasciencefestival.toml`'s header comments.
-- [ ] `partner_scrape/registry/DESIGN.md` gains exactly one new
+- [x] `partner_scrape/registry/DESIGN.md` gains exactly one new
       cross-reference line to `DO_NOT_SCRAPE.md` in its §2 Orientation
       section; its four-catalog table is otherwise untouched.
-- [ ] No code file is touched by this ticket.
+- [x] No code file is touched by this ticket.
 
 ## Implementation Plan
 
