@@ -1,7 +1,7 @@
 ---
 id: '004'
 title: places.toml related_partner_id join-integrity in the directory pipeline
-status: in-progress
+status: done
 use-cases:
 - SUC-026
 depends-on:
