@@ -2,17 +2,17 @@
 
 Publishes hand-authored League ad-slot content (sprint 005 ticket 005,
 issue 12: "give the League the ad placement it's owed in exchange" for
-funding this project) into the sibling `stem-ecosystem` repo's data
-contract -- the same cross-repo boundary `export/writer.py` already
-crosses for `opportunities.json` (sprint.md Architecture > Ad Content
-Export). This module does not implement any UI/placement/rotation
-decision -- that is the site repo's own, separately-scheduled work (see
+funding this project) into partner-scrape's own `own_data_dir` -- the
+same write target `export/writer.py` already uses for
+`opportunities.json` (sprint.md Architecture > Ad Content Export). This
+module does not implement any UI/placement/rotation decision -- that is
+the downstream consuming site's own, separately-scheduled work (see
 sprint.md's Design Rationale, "League's ad slot is delivered as a data
 contract...").
 
 ## The `ads.json` data contract
 
-`export_ads()` writes `{site_dir}/src/data/ads.json` as a JSON array of
+`export_ads()` writes `{own_data_dir}/ads.json` as a JSON array of
 objects, one per configured ad, each shaped:
 
 ```json
@@ -37,21 +37,21 @@ site-side UI work) -- `headline` as the card title, `body` as its
 copy, `logo_src` resolved the same way `Opportunity.logo_src` already
 resolves an image, and the whole card wrapped in an anchor to `link`.
 
-A missing or unwritable `site_dir` (or its `src/data` subdirectory)
-fails loudly -- mirrors `export_opportunities`'s existing contract:
-"fail loudly, do not silently skip the export."
+A missing `own_data_dir` is created automatically
+(`Path.mkdir(parents=True, exist_ok=True)`); an unwritable one fails
+loudly -- mirrors `export_opportunities`'s existing contract: "fail
+loudly, do not silently skip the export."
 
-Sprint 020 ticket 004 (issue 60): the same already-computed payload is
-also written a second time, into partner-scrape's own `data/` directory
-(`config.get_own_data_dir()`) -- the same "one export, three files, two
+Sprint 020 ticket 004 (issue 60) added this write, into
+partner-scrape's own `data/` directory (`config.get_own_data_dir()`),
+alongside an original write into a sibling `stem-ecosystem` checkout's
+`src/data/ads.json` -- the same "one export, three files, two
 directories" contract `export/writer.py`'s `export_opportunities()`
-already gives `opportunities.json`/`scrape-meta.json` (sprint 020
-ticket 003). No re-serialization: both copies come from the exact same
-`payload` computed once in this function call. Like `own_data_dir` in
-`writer.py`, this second target is not symmetric with `site_dir`: it is
-created automatically if missing (`Path.mkdir(parents=True,
-exist_ok=True)`), and the `site_dir` write happens first -- its
-`RuntimeError` propagates before `own_data_dir` is touched at all.
+already gave `opportunities.json`/`scrape-meta.json` (sprint 020 ticket
+003). Sprint 025 ticket 003 (issue 21, "stop writing to the
+stem-ecosystem checkout") removed the `stem-ecosystem` write entirely:
+this function no longer accepts a `site_dir` parameter, and
+`own_data_dir` is now the sole write target.
 """
 
 from __future__ import annotations
@@ -63,7 +63,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable
 
-from partner_scrape.config import get_own_data_dir, get_site_dir
+from partner_scrape.config import REPO_ROOT, get_own_data_dir
 
 logger = logging.getLogger(__name__)
 
@@ -74,8 +74,9 @@ logger = logging.getLogger(__name__)
 _REQUIRED_FIELDS = ("headline", "body", "link", "logo_src")
 
 #: Default location of the hand-authored Ad Registry's per-advertiser
-#: TOML files: `partner_scrape/registry/ads/`.
-DEFAULT_ADS_DIR = Path(__file__).resolve().parent.parent / "registry" / "ads"
+#: TOML files: `registry/ads/` at the repo root (see sprint 025 ticket
+#: 001 for the move out of `partner_scrape/registry/`).
+DEFAULT_ADS_DIR = REPO_ROOT / "registry" / "ads"
 
 
 class InvalidAdConfig(Exception):
@@ -165,46 +166,33 @@ def _to_json_dict(ad: AdConfig) -> dict[str, Any]:
 
 def export_ads(
     ad_configs: Iterable[AdConfig],
-    site_dir: str | Path | None = None,
     *,
     dry_run: bool = False,
     own_data_dir: str | Path | None = None,
 ) -> list[dict[str, Any]]:
-    """Write `ad_configs` into `site_dir`'s `ads.json` data contract --
-    and, as of sprint 020 ticket 004, into partner-scrape's own
-    `own_data_dir` too, from the exact same computed payload.
+    """Write `ad_configs` into `own_data_dir`'s `ads.json` data contract.
 
     Args:
         ad_configs: already-loaded `AdConfig` records (typically
             `load_ad_configs()`'s output).
-        site_dir: path to the sibling `stem-ecosystem` checkout. Defaults
-            to `Config.get_site_dir()` (`../stem-ecosystem`) when `None`
-            -- the same convention `export_opportunities` uses. Tests
-            should always pass an explicit `tmp_path` here, never rely on
-            the default, so runs never touch the real site repo.
         dry_run: when `True`, compute and return the would-be-written
-            payload without touching disk -- neither `site_dir` nor
-            `own_data_dir` is written.
+            payload without touching disk -- `own_data_dir` is not
+            written.
         own_data_dir: path to partner-scrape's own pipeline-output
             directory. Defaults to `Config.get_own_data_dir()`
-            (`<repo_root>/data`) when `None`. Unlike `site_dir`, this
-            directory is created automatically if missing. Tests should
-            always pass an explicit `tmp_path` here, never rely on the
-            default, matching `site_dir`'s own test convention.
+            (`<repo_root>/data`) when `None`. Created automatically if
+            missing. Tests should always pass an explicit `tmp_path`
+            here, never rely on the default.
 
     Returns:
         The list of ad dicts that were (or, for `dry_run`, would have
         been) written, in this module's documented `ads.json` schema.
 
     Raises:
-        RuntimeError: `site_dir`'s `src/data` subdirectory does not
-            exist or is not writable, or `own_data_dir` is occupied by
-            something unwritable (e.g. a non-directory file). Never
-            silently skips either write. The `site_dir` write is
-            attempted first and its failure propagates before
-            `own_data_dir` is touched -- see this module's docstring.
+        RuntimeError: `own_data_dir` is occupied by something
+            unwritable (e.g. a non-directory file). Never silently
+            skips the write.
     """
-    resolved_site_dir = Path(site_dir) if site_dir is not None else get_site_dir()
     resolved_own_data_dir = Path(own_data_dir) if own_data_dir is not None else get_own_data_dir()
 
     payload = [_to_json_dict(ad) for ad in ad_configs]
@@ -214,25 +202,11 @@ def export_ads(
 
     serialized_ads = json.dumps(payload, indent=1, ensure_ascii=False)
 
-    data_dir = resolved_site_dir / "src" / "data"
-    ads_path = data_dir / "ads.json"
-
-    try:
-        ads_path.write_text(serialized_ads, encoding="utf-8")
-    except OSError as exc:
-        raise RuntimeError(
-            f"Cannot write ads export to {data_dir}: {exc}. Check that "
-            f"site_dir ({resolved_site_dir}) exists and its src/data "
-            "subdirectory is writable."
-        ) from exc
-
-    # Sprint 020 ticket 004 (issue 60): the same payload, written a
-    # second time into partner-scrape's own data/ directory -- reusing
-    # `serialized_ads` computed above rather than re-serializing, so the
-    # two copies can never drift. Unlike src/data above, own_data_dir is
-    # created if missing (see module docstring). Mirrors
-    # `export_opportunities`'s identical own_data_dir write (sprint 020
-    # ticket 003).
+    # Sprint 020 ticket 004 (issue 60) added this write, into
+    # partner-scrape's own data/ directory, alongside a since-removed
+    # write into a sibling stem-ecosystem checkout (sprint 025 ticket
+    # 003 removed that second target -- see module docstring).
+    # own_data_dir is created if missing (see module docstring).
     own_ads_path = resolved_own_data_dir / "ads.json"
 
     try:

@@ -46,7 +46,7 @@ from pathlib import Path
 from typing import Any, Callable, Protocol, Sequence
 
 from partner_scrape.adapters import run as run_adapter
-from partner_scrape.config import get_site_dir
+from partner_scrape.config import get_own_data_dir, get_site_dir
 from partner_scrape.export import (
     EventImageDownloader,
     export_ads,
@@ -337,16 +337,18 @@ def run(
 
     Args:
         registry_dir: Source Registry directory to load sources from.
-            Defaults to the real seed registry
-            (`partner_scrape/registry/sources/`) when omitted -- see
-            `registry.load_active_sources`.
-        site_dir: sibling `stem-ecosystem` checkout to write into.
+            Defaults to the real seed registry (`registry/sources/`) when
+            omitted -- see `registry.load_active_sources`.
+        site_dir: sibling `stem-ecosystem` checkout to read from --
+            specifically, `partners_path`'s default location (see below).
             Defaults to `Config.get_site_dir()` (`../stem-ecosystem`, or
-            `$SITE_DIR`) when omitted. Tests should always pass an
-            explicit `tmp_path`-based directory here.
+            `$SITE_DIR`) when omitted. Read-only as of sprint 025 ticket
+            007: nothing this function does writes into `site_dir`.
+            Tests should always pass an explicit `tmp_path`-based
+            directory here.
         ads_dir: directory of hand-authored ad-config TOML files (Ad
             Content Export, sprint 005 ticket 005). Defaults to the real
-            seed ad registry (`partner_scrape/registry/ads/`) when
+            seed ad registry (`registry/ads/`) when
             omitted -- see `export.ads.load_ad_configs`. Tests that don't
             care about the exact seeded ad content may pass an explicit
             fixture directory here.
@@ -418,7 +420,9 @@ def run(
             (sprint 008 ticket 008, issue 19). Defaults to `None`, which
             makes `run()` construct a real
             `export.images.EventImageDownloader` writing into
-            `{resolved site_dir}/public/images/opportunities/` --
+            `get_own_data_dir() / "images" / "opportunities"` (sprint 025
+            ticket 002; before that ticket, this wrote into
+            `{resolved site_dir}/public/images/opportunities/` instead) --
             *unless* `dry_run` is `True`, in which case no downloader is
             constructed and `image_src` simply stays `""` for every
             record, matching `export_opportunities`'/`export_ads`'s own
@@ -618,8 +622,13 @@ def run(
     # contract.
     resolved_image_resolver = image_resolver
     if resolved_image_resolver is None and not dry_run:
+        # Sprint 025 ticket 002: this repo's own `get_own_data_dir()`
+        # publish target, not `{resolved_site_dir}/public/images/...` --
+        # every other export write already goes through `own_data_dir`
+        # (see `export/writer.py`, `export/ads.py`); this was the one
+        # write path sprint 020 never gave that equivalent.
         resolved_image_resolver = EventImageDownloader(
-            resolved_site_dir / "public" / "images" / "opportunities"
+            get_own_data_dir() / "images" / "opportunities"
         ).download
 
     opportunities = normalize_run(
@@ -649,19 +658,17 @@ def run(
 
     result = export_opportunities(
         opportunities,
-        site_dir=resolved_site_dir,
         today=today,
         dry_run=dry_run,
     )
 
-    # Ad Content Export (sprint 005 ticket 005): one more "write a site
-    # data-contract file" sequencing step, structurally identical to the
-    # Site Export call above -- see sprint.md's self-review note on
+    # Ad Content Export (sprint 005 ticket 005): one more "write a data
+    # contract file" sequencing step, structurally identical to the Site
+    # Export call above -- see sprint.md's self-review note on
     # Pipeline's fan-out. Additive: existing callers/tests that only
     # inspect run()'s own return value are unaffected.
     export_ads(
         load_ad_configs(Path(ads_dir) if ads_dir is not None else None),
-        site_dir=resolved_site_dir,
         dry_run=dry_run,
     )
 

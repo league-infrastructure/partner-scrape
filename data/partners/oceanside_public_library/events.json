@@ -1,0 +1,701 @@
+{
+ "generated_at": "2026-09-01T08:27:52Z",
+ "partner_slug": "oceanside_public_library",
+ "kind": "current",
+ "event_count": 20,
+ "events": [
+  {
+   "slug": "computer_basics_20260831",
+   "title": "Computer Basics",
+   "partner_name": "Oceanside Public Library",
+   "partner_id": null,
+   "description": "Basic computer skills. Class is drop-in and is designed to help users get more comfortable with technology.",
+   "link": "",
+   "availability": "Repeats 11 times through 2026-12-28",
+   "date_start": "2026-08-31T16:00:00-07:00",
+   "date_end": "2026-12-28T20:00:00-08:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "3861 Mission Ave, Oceanside, CA, 92058, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "baby_storytime_20260901",
+   "title": "Baby Storytime",
+   "partner_name": "Oceanside Public Library",
+   "partner_id": null,
+   "description": "",
+   "link": "",
+   "availability": "Repeats 5 times through 2026-12-22",
+   "date_start": "2026-09-01T17:30:00-07:00",
+   "date_end": "2026-12-22T19:15:00-08:00",
+   "age_grade_level": [
+    "Pre-K",
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "330 North Coast Hwy, Oceanside, CA, 92054, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "lego_brick_building_20260901",
+   "title": "LEGO Brick Building",
+   "partner_name": "Oceanside Public Library",
+   "partner_id": null,
+   "description": "",
+   "link": "",
+   "availability": "Repeats 5 times through 2026-09-29",
+   "date_start": "2026-09-01T21:30:00-07:00",
+   "date_end": "2026-09-29T23:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8",
+    "Grades 9-12",
+    "Pre-K"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "2855 Cedar Rd, Oceanside, CA, 92056, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "homework_helpers_20260901",
+   "title": "Homework Helpers",
+   "partner_name": "Oceanside Public Library",
+   "partner_id": null,
+   "description": "One-on-one homework help every Tuesday in the Civic Center Library Children's area for students in grades K-8.\n\nWalk-ins welcome, no registration required.",
+   "link": "",
+   "availability": "Repeats 71 times through 2027-05-28",
+   "date_start": "2026-09-01T23:00:00-07:00",
+   "date_end": "2027-05-28T01:00:00-07:00",
+   "age_grade_level": [
+    "Grades 6-8",
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science",
+    "Mathematics"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "330 North Coast Hwy, Oceanside, CA, 92054, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "homework_helpers_20260903",
+   "title": "Homework Helpers",
+   "partner_name": "Oceanside Public Library",
+   "partner_id": null,
+   "description": "One-on-one homework help every Tuesday in the Civic Center Library Children's area for students in grades K-8.\n\nWalk-ins welcome, no registration required.",
+   "link": "",
+   "availability": "Repeats 61 times through 2027-05-28",
+   "date_start": "2026-09-03T23:00:00-07:00",
+   "date_end": "2027-05-28T01:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science",
+    "Mathematics"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "330 North Coast Hwy, Oceanside, CA, 92054, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "come_meet_the_reach_program_20260910",
+   "title": "Come meet the REACH Program",
+   "partner_name": "Oceanside Public Library",
+   "partner_id": null,
+   "description": "Landes REACH Open House!\n\nMeet Reach staff and learn more about Project REACH, an after-school program for teens!\n\nFood and resources will be provided for families in attendance.\n\n5:00-6:30 - Resources & food\n\n6:30 - Program presentation",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-09-10T17:00:00-07:00",
+   "date_end": "2026-09-10T18:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 9-12"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "2855 Cedar Rd, Oceanside, CA, 92056, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "fizz_ferment_the_art_of_kombucha_20260910",
+   "title": "Fizz & Ferment: The Art of Kombucha",
+   "partner_name": "Oceanside Public Library",
+   "partner_id": null,
+   "description": "Fizz, flavor, and a little fermentation magic! Join UC Master Food Preservers for a 90-minute class all about crafting your own fermented beverages at home. You’ll learn the basics of fermentation and dive into the art of making kombucha—from brewing your first batch to safely fermenting and flavoring it with fruits, herbs, and spices.\n\nThis hands-on workshop will guide you through each step, with plenty of tips to help you create delicious, bubbly kombucha tailored to your taste. Each participant will take home a starter kit to make their first batch at home with confidence.\n\nThis free class will be held at the Oceanside Public Library Mission Branch. Registration is required.\n\nCome ready to sip, learn, and get brewing!",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-09-10T20:00:00-07:00",
+   "date_end": "2026-09-10T21:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Chemistry"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "3861 Mission Ave, Oceanside, CA, 92058, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "san_diego_comic_con_graphic_novel_book_club_20260911",
+   "title": "San Diego Comic-Con Graphic Novel Book Club",
+   "partner_name": "Oceanside Public Library",
+   "partner_id": null,
+   "description": "Oceanside Public Library hosts a Graphic Novel Book Club for adults in partnership with San Diego Comic-Con International.\n\nThis program meets the 2nd Thursday of each month and is currently meeting online from January - November and in person in December at the Civic Center Library.\n\nBook Club members decide on the topics and books for each month.\n\nSeptember 10, 2026: Adaptations - Zoom Only\n\nMain Book:\n\nParable of the Sower: a Graphic Novel Adaptation by Octavia Butler\nHoopla\nAmazon\n\nSupplemental Reads:\n\nThe Road by Cormac McCarthy, Manu Larcenet\nHoopla\nAmazon\n\nThe Forever War Vol. 1 by Joe Haldeman, Marvano\nHoopla\nAmazon",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-09-11T01:00:00-07:00",
+   "date_end": "2026-09-11T02:30:00-07:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Oceanside Public Library (online via Zoom for this session)",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "pre_k_steam_20260911",
+   "title": "Pre-K STEAM",
+   "partner_name": "Oceanside Public Library",
+   "partner_id": null,
+   "description": "",
+   "link": "",
+   "availability": "Repeats 6 times through 2026-12-11",
+   "date_start": "2026-09-11T17:30:00-07:00",
+   "date_end": "2026-12-11T19:15:00-08:00",
+   "age_grade_level": [
+    "Pre-K"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "3861 Mission Ave, Oceanside, CA, 92058, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "3_d_printer_hands_on_help_live_demos_20260921",
+   "title": "3-D Printer Hands-On Help & Live Demos",
+   "partner_name": "Oceanside Public Library",
+   "partner_id": null,
+   "description": "Bring your questions and see or participate in a hands-on demo.\n\nThis is a drop-in style workshop, no registration is required.\n\nFor the regular 3D printer class, held on the 1st Monday of the month, please click here.",
+   "link": "",
+   "availability": "Repeats 12 times through 2027-08-17",
+   "date_start": "2026-09-21T23:00:00-07:00",
+   "date_end": "2027-08-17T01:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "330 North Coast Hwy, Oceanside, CA, 92054, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "3_d_printer_class_evening_20261006",
+   "title": "3-D Printer Class Evening",
+   "partner_name": "Oceanside Public Library",
+   "partner_id": null,
+   "description": "Class laptops are available for the first 9 people.\n\nThe class is intended for adults, however, children are more than welcome to attend with a parent or guardian present.",
+   "link": "",
+   "availability": "Repeats 8 times through 2027-05-04",
+   "date_start": "2026-10-06T00:30:00-07:00",
+   "date_end": "2027-05-04T21:30:00-07:00",
+   "age_grade_level": [
+    "Adult",
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "330 North Coast Hwy, Oceanside, CA, 92054, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "hands_on_fermentation_class_diy_sauerkraut_workshop_20261008",
+   "title": "Hands-On Fermentation Class: DIY Sauerkraut Workshop",
+   "partner_name": "Oceanside Public Library",
+   "partner_id": null,
+   "description": "Get ready to bring old-world tradition into your kitchen with this hands-on fermentation class led by UC Master Food Preservers! In this 75-minute session, you’ll learn the fundamentals of fermentation—how beneficial bacteria transform simple ingredients into delicious, gut-friendly foods.\n\nParticipants will roll up their sleeves and make their own batch of classic sauerkraut, packing a full quart jar to take home. In just two weeks, it’ll be perfectly tangy and ready to enjoy—just in time for an Oktoberfest-inspired feast.\n\nThis free class will be held at the Oceanside Public Library Mission Branch. Come curious and leave confident, with the skills to keep fermenting at home!",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-10-08T20:00:00-07:00",
+   "date_end": "2026-10-08T21:15:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Chemistry"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "3861 Mission Ave, Oceanside, CA, 92058, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "once_upon_a_family_literacy_adventures_20261021",
+   "title": "Once Upon A Family: Literacy Adventures",
+   "partner_name": "Oceanside Public Library",
+   "partner_id": null,
+   "description": "Join our Family Literacy Program where we help adults build skills to support their families! We bring together books and crafts to help you read and learn with your kids. It's fun, interactive, and a great way to bond as a family. Program followed by light snacks for attendees.\n\nOceanside READS Family Literacy Program is designed to support adult learners build strong home literacy skills with their children as they work towards their own reading, writing and speaking goals. Upon registration, attendees will be asked about their goals.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-10-21T22:00:00-07:00",
+   "date_end": "2026-10-21T23:15:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "804 Pier View Wy, Oceanside, CA, 92054, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "berry_good_foods_cooking_class_20261023",
+   "title": "Berry Good Foods: Cooking Class",
+   "partner_name": "Oceanside Public Library",
+   "partner_id": null,
+   "description": "Join us for a fun and free cooking class with local chefs at the John Landes Community Resource Center in Oceanside! Brought to you by the Berry Good Foods Foundation, this hands-on class is a great opportunity to learn new skills, discover fresh ingredients, and connect with your neighbors.",
+   "link": "",
+   "availability": "Repeats 4 times through 2027-01-16",
+   "date_start": "2026-10-23T23:00:00-07:00",
+   "date_end": "2027-01-16T02:00:00-08:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "2855 Cedar Rd, Oceanside, CA, 92056, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "computer_basics_20261026",
+   "title": "Computer Basics",
+   "partner_name": "Oceanside Public Library",
+   "partner_id": null,
+   "description": "Basic computer skills. Class is drop-in and is designed to help users get more comfortable with technology.",
+   "link": "",
+   "availability": "Repeats 10 times through 2026-12-28",
+   "date_start": "2026-10-26T16:00:00-07:00",
+   "date_end": "2026-12-28T20:00:00-08:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "3861 Mission Ave, Oceanside, CA, 92058, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "game_night_20261029",
+   "title": "Game Night",
+   "partner_name": "Oceanside Public Library",
+   "partner_id": null,
+   "description": "Do you love playing games? Join us each Thursday from 4:00 - 5:00 p.m. at the John Landes Community Center Library to play with our Switches, VR Headsets, and board games!\n\nFor ages 10-17. No registration required!",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-10-29T16:00:00-07:00",
+   "date_end": "2026-10-29T17:00:00-07:00",
+   "age_grade_level": [
+    "Grades 6-8",
+    "Grades 9-12"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "2855 Cedar Rd, Oceanside, CA, 92056, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "bookmobile_s_bilingual_story_time_20261109",
+   "title": "Bookmobile's Bilingual Story Time",
+   "partner_name": "Oceanside Public Library",
+   "partner_id": null,
+   "description": "¡Acompáñanos en la parada de la Biblioteca Móvil para una hora de cuentos interactiva con canciones y juegos, dirigida a niños de 2 a 5 años!\n\nJoin us at the Library's Bookmobile stop for an interactive storytime with songs and play for ages 2-5 years old!",
+   "link": "",
+   "availability": "Repeats 2 times through 2027-08-09",
+   "date_start": "2026-11-09T22:30:00-08:00",
+   "date_end": "2027-08-09T22:00:00-07:00",
+   "age_grade_level": [
+    "Pre-K",
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "709 San Diego St, Oceanside, CA, 92058, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "pickle_lab_fast_and_easy_quick_pickles_20261112",
+   "title": "Pickle Lab: Fast and Easy Quick Pickles",
+   "partner_name": "Oceanside Public Library",
+   "partner_id": null,
+   "description": "Crunchy, tangy, and ready in a flash—discover the art of quick pickling in this fun, hands-on class led by UC Master Food Preservers! In just 75 minutes, you’ll learn how to transform fresh vegetables into bright, flavorful refrigerator pickles using simple ingredients and time-tested techniques.\n\nWe’ll cover the essentials of safe pickling, flavor balancing, and creative variations so you can customize your pickles with herbs, spices, and seasonal produce. Participants will make their own batches and head home with a couple jars of crisp, delicious refrigerator pickles to enjoy right away.\n\nThis free class will be held at the Oceanside Public Library Mission Branch. Come ready to slice, brine, and taste your way to pickle perfection!",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-11-12T21:00:00-08:00",
+   "date_end": "2026-11-12T23:00:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Chemistry"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "3861 Mission Ave, Oceanside, CA, 92058, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "tutor_connect_20261118",
+   "title": "Tutor Connect",
+   "partner_name": "Oceanside Public Library",
+   "partner_id": null,
+   "description": "Gather with current Oceanside READS tutors and volunteers to stay up to date, learn new techniques, and build community.\n\nThis event is for current Oceanside READS volunteers only.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-11-18T18:30:00-08:00",
+   "date_end": "2026-11-18T20:00:00-08:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "804 Pier View Wy, Oceanside, CA, 92054, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "bookmobile_s_bilingual_story_time_20261214",
+   "title": "Bookmobile's Bilingual Story Time",
+   "partner_name": "Oceanside Public Library",
+   "partner_id": null,
+   "description": "¡Acompáñanos en la parada de la Biblioteca Móvil para una hora de cuentos interactiva con canciones y juegos, dirigida a niños de 2 a 5 años!\n\nJoin us at the Library's Bookmobile stop for an interactive storytime with songs and play for ages 2-5 years old!",
+   "link": "",
+   "availability": "Repeats 5 times through 2028-04-10",
+   "date_start": "2026-12-14T22:30:00-08:00",
+   "date_end": "2028-04-10T22:00:00-07:00",
+   "age_grade_level": [
+    "Pre-K",
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "709 San Diego St, Oceanside, CA, 92058, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  }
+ ]
+}

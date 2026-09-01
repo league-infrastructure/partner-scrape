@@ -1,0 +1,220 @@
+{
+ "generated_at": "2026-09-01T08:27:52Z",
+ "partner_slug": "san_diego_county_parks_and_recreation",
+ "kind": "past",
+ "event_count": 6,
+ "events": [
+  {
+   "slug": "ranger_ruben_s_raptor_program_20260804",
+   "title": "Ranger Ruben’s Raptor Program",
+   "partner_name": "San Diego County Parks and Recreation",
+   "partner_id": null,
+   "description": "Meet real birds of prey up close! Ranger Ruben brings live raptors to the library and shares what makes them incredible hunters, from sharp eyesight to powerful talons. A wild, unforgettable experience!\n\nIn partnership with County of San Diego Parks and Recreation and County of San Diego Libraries.\n\nFor more information, call (760) 742-1631.",
+   "link": "",
+   "availability": "Repeats 3 times through 2026-08-29",
+   "date_start": "2026-08-04T19:30:00-07:00",
+   "date_end": "2026-08-29T18:00:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Fallbrook County Library, 124 S Mission Rd, Fallbrook, CA 92028, USA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "discovery_table_at_wilderness_gardens_county_preserve_20260815",
+   "title": "Discovery Table at Wilderness Gardens County Preserve",
+   "partner_name": "San Diego County Parks and Recreation",
+   "partner_id": null,
+   "description": "Celebrate 80 years of the County of San Diego’s Parks and Recreation Department at Wilderness Gardens! Join us for a Discovery Table and live animals such as: Rocco the Rosy Boa and Trent the Tarantula. Also, there is an opportunity for kids to participate in a visual scavenger hunt and identify plants and animals in the preserve.\n\nFor more info, call: (760) 742-1631",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-08-15T15:00:00-07:00",
+   "date_end": "2026-08-15T19:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon",
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Wilderness Gardens County Preserve, 14209 CA-76, Pala, CA 92059, USA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "birding_hike_at_san_elijo_with_women_in_the_wild_20260815",
+   "title": "Birding Hike at San Elijo with Women in the Wild",
+   "partner_name": "San Diego County Parks and Recreation",
+   "partner_id": null,
+   "description": "Join Women in the Wild for a scenic walk around the lagoon and learn about the many bird species that call San Elijo home. Bring binoculars!\n\nFree event. Open to all ages. A limited number of binoculars will be available for use.\n\nFor more information, call (760) 634-3026.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-08-15T16:00:00-07:00",
+   "date_end": "2026-08-15T18:30:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon",
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Elijo Lagoon Ecological Reserve, 2710 Manchester Ave, Cardiff, CA 92007, USA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "sturgeon_full_moon_hike_20260829",
+   "title": "Sturgeon Full Moon Hike",
+   "partner_name": "San Diego County Parks and Recreation",
+   "partner_id": null,
+   "description": "Experience the magic of the night as we take a leisurely evening stroll to discover the fascinating world of the prehistoric sturgeon. Along the way, we’ll meet the creatures who come alive after dusk—gliding bats, curious nocturnal mammals, and more.\n\nOur journey will lead us up a gentle hill where a stunning moonlit view awaits. And to make the night even more special, enjoy theme-inspired snacks that add a fun and flavorful twist to the experience.\n\nCome connect with nature, explore the mysteries of the night, and create memories under the glow of the moon. We can’t wait to walk with you!\n\nPlease RSVP at (619) 478-5212",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-08-29T02:00:00-07:00",
+   "date_end": "2026-08-29T03:00:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Potrero County Park, 24800 Potrero Park Dr, Potrero, CA 91963, USA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_www_cleansd_org_events_watershed_warriors_spring_valley_sweetwater_lane_county_park",
+   "title": "Watershed Warriors: Park Cleanup at Sweetwater Lane County Park",
+   "partner_name": "San Diego County Parks and Recreation",
+   "partner_id": null,
+   "description": "Join I Love A Clean San Diego and the County of San Diego for a litter cleanup! We will divert litter from our watersheds and keep it from traveling to the Pacific Ocean.\n\nOur staff will have check-in ready for you on-site. Be sure to wear comfortable clothes, closed-toed shoes, some form of sun protection (sunscreen or a hat), and bring a water bottle or two! Staff will be providing everything else you will need!\n\nFor more details: www.cleansd.org/events/watershed-warriors-spring-valley-sweetwater-lane-county-park/ https://www.cleansd.org/events/watershed-warriors-spring-valley-sweetwater-lane-county-park/ https://www.cleansd.org/events/watershed-warriors-spring-valley-sweetwater-lane-county-park/",
+   "link": "https://www.cleansd.org/events/watershed-warriors-spring-valley-sweetwater-lane-county-park/",
+   "availability": "",
+   "date_start": "2026-08-29T16:00:00-07:00",
+   "date_end": "2026-08-29T18:00:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Volunteering",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Sweetwater Lane County Park,1312 Sweetwater Ln, Spring Valley, CA 91977, USA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "junior_ranger_the_amazing_world_of_water_20260829",
+   "title": "Junior Ranger: The Amazing World of Water",
+   "partner_name": "San Diego County Parks and Recreation",
+   "partner_id": null,
+   "description": "Dive into an exciting Jr. Ranger adventure all about one of Earth’s most important resources—water! During this interactive program, young explorers will discover why water is essential for people, plants, and animals, and learn how we can protect our access to clean, safe drinking water.\n\nKids will:\n• Learn why our bodies need water and how staying hydrated helps us stay healthy\n• Explore how we keep water clean and safe to drink\n• Investigate which plants and animals in the park depend on water to survive\n• Help the ranger use water to support living organisms\n• Play a fun water‑themed game\n• Practice turning natural water into potable water through a hands‑on activity\n\nAll this learning and adventure leads to one big reward—earning a Jr. Ranger badge!\n\nThis event meets at the ranger station.\n\nFor more information, call (619) 478-5212.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-08-29T22:00:00-07:00",
+   "date_end": "2026-08-29T23:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology",
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Potrero County Park, 24800 Potrero Park Dr, Potrero, CA 91963, USA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  }
+ ]
+}

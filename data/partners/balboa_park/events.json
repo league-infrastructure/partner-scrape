@@ -1,0 +1,975 @@
+{
+ "generated_at": "2026-09-01T08:27:52Z",
+ "partner_slug": "balboa_park",
+ "kind": "current",
+ "event_count": 27,
+ "events": [
+  {
+   "slug": "https_balboapark_org_event_a_space_for_all_of_us_2_2026_08_30",
+   "title": "A Space for All of Us",
+   "partner_name": "Balboa Park",
+   "partner_id": null,
+   "description": "Sensory-Friendly Quiet Mornings at the Museum The Museum's sensory-friendly quiet hours are held every Sunday from 10 a.m. to 11 a.m. This time is dedicated to creating a calmer, quieter museum experience. We remain open to the public during this time, and all are welcome to visit the Museum. During this time, specific exhibit features in the main Museum building will be turned off to minimize audio and visual stimulation. Noise-blocking headphones are free for check-out at the main Admissions desk and the entrance to the Cannibals: Myth & Reality exhibition, Exhibit features in the Cannibals: Myth & Reality exhibit will remain on, and all exhibits will be fully turned on at 11 a.m. Admission purchased during sensory-friendly quiet hours is the same as standard admission and applies to the entire day. Please contact publicprograms@museumofus.org with any questions.",
+   "link": "https://balboapark.org/event/a-space-for-all-of-us-2/2026-08-30/",
+   "availability": "Repeats 9 times through 2026-12-27",
+   "date_start": "2026-08-30T10:00:00-07:00",
+   "date_end": "2026-12-27T11:00:00-08:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Museum of Us, 1350 El Prado, Balboa Park, San Diego, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "ad9e21030a68f941.png"
+  },
+  {
+   "slug": "https_balboapark_org_event_the_sky_tonight_4_2_2_2026_09_02",
+   "title": "The Sky Tonight",
+   "partner_name": "Balboa Park",
+   "partner_id": null,
+   "description": "Tour the solar system with the Fleet’s resident astronomer and connect with other skywatchers. Journey through the cosmos with us as we explore a new topic each month. The Sky Tonight : Monthly planetarium show at 7 p.m. and 8:15 p.m. on the first Wednesday of the month. NEW! The Sky Tonight: Virtual Edition at 7 p.m. on the third Wednesday of each month, via Zoom NEW! The Sky Tonight: Family Edition at 11 a.m. on the second Sunday of each month Presentations begin with a look at the sky followed by a special topic presentation. Before or after Wednesday shows at the Fleet, join members of the San Diego Astronomy Association on the Prado by the Bea Evenson Fountain and be inspired by the stars in the actual night sky (weather permitting) through different telescopes.",
+   "link": "https://balboapark.org/event/the-sky-tonight-4-2-2/2026-09-02/",
+   "availability": "Repeats 4 times through 2026-12-02",
+   "date_start": "2026-09-02T19:00:00-07:00",
+   "date_end": "2026-12-02T20:15:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8",
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "Less than $50",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology",
+    "Physics"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Fleet Science Center, 1875 El Prado, San Diego, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_balboapark_org_event_nat_at_night_2_2_2026_09_04",
+   "title": "Nat at Night",
+   "partner_name": "Balboa Park",
+   "partner_id": null,
+   "description": "On Fridays, the San Diego Natural History Museum is open until 11 PM just for you. Enjoy access to all open exhibitions and our rooftop deck for good views and great vibes. The rooftop is open to all visitors and serves beer, wine, non-alcoholic drinks , and food from Wolf in the Woods. Take a selfie with a megalodon shark, see scientists at work in our Paleo Center , admire glittering gems, get a close up look at spiders and snakes, and so much more. Best of all, get a look at our brand-new exhibition, Washed Ashore: Art to Save the Sea and grab a drink in the dive bar while chatting with a scientist. On select dates, channel your inner artist with Sketchparty , get competitive during trivia, or unwind while listening to the rooftop DJ. Hungry for more? The Craft Taco , located inside the Atrium, is a vibrant taco restaurant offering a delectable fusion of flavors and artisanal creations. They offer made-to-order tacos featuring signature blue corn tortillas, delectable burritos and bowls, and a variety of drinks and coffees. Admission is half-price after 5 PM, and parking is free after 6 PM. You can buy your tickets online in advance or buy them at the door the night of . As always, members of The Nat and Explorer pass holders enjoy free general admission.",
+   "link": "https://balboapark.org/event/nat-at-night-2-2/2026-09-04/",
+   "availability": "Repeats 3 times through 2026-09-18",
+   "date_start": "2026-09-04T17:00:00-07:00",
+   "date_end": "2026-09-18T23:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Less than $25",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology",
+    "Physical Science",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego Natural History Museum (The Nat), 1788 El Prado, Balboa Park, San Diego, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "74927ecc5000a4e0.png"
+  },
+  {
+   "slug": "https_balboapark_org_event_senior_monday_2_2026_09_07",
+   "title": "Senior Monday",
+   "partner_name": "Balboa Park",
+   "partner_id": null,
+   "description": "Come join us for an engaging lecture on fascinating scientific topics, followed by an unforgettable show in the Heikoff Giant Dome Theater—all for the discounted admission of $10! It's a great way to learn something new and connect with others in our community. Plus, enjoy engaging and interactive experiences that you won't want to miss. We can't wait to explore the wonders of science with you! Click here to see the lineup of lecture topics, speakers and documentaries. Tickets are available only at the ticket counter on the day of the event. Fleet Members have free access to the Sharp Minds lecture.",
+   "link": "https://balboapark.org/event/senior-monday-2/2026-09-07/",
+   "availability": "Repeats 4 times through 2026-12-07",
+   "date_start": "2026-09-07T10:00:00-07:00",
+   "date_end": "2026-12-07T17:00:00-08:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Less than $25",
+   "time_of_day": [
+    "Morning",
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Fleet Science Center, 1875 El Prado, San Diego, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_balboapark_org_event_knot_together_3",
+   "title": "Knot Together",
+   "partner_name": "Balboa Park",
+   "partner_id": null,
+   "description": "Inspired by the traditional fishing nets and nautical knots featured in To Catch a Fish , our newest Together workshop series, Knot Together , explores the art of macramé. The series is led by Sitoë Thiam, a fiber artist and mechanical engineer who bridges technical precision with organic expression. As the founder of Unknot, a design studio specializing in knotting and weaving, she brings a unique interdisciplinary perspective to the world of fiber arts. Knotted Rope Wall Hanging In September, learn to transform rope into a sculptural wall hanging. You’ll explore four foundational knots, building a rhythmic, colorful composition that celebrates the tactile beauty of fiber. The Together series at Mingei invites makers of all skill levels to come together and create in a supportive, low-pressure environment. Past iterations— Sew Together, Weave Together , Dye Together , Stitch Together , and Clay Together —explore a variety of craft techniques while emphasizing collaboration, experimentation, and hands-on learning. Each workshop encourages participants to connect with materials, try new skills, and enjoy the process of making together.",
+   "link": "https://balboapark.org/event/knot-together-3/",
+   "availability": "Repeats 2 times through 2026-10-09",
+   "date_start": "2026-09-11T17:00:00-07:00",
+   "date_end": "2026-10-09T19:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Less than $100",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Mingei International Museum, 1439 El Prado, San Diego, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "5ba0f42c3973159d.webp"
+  },
+  {
+   "slug": "https_balboapark_org_event_uc_master_gardener_plant_sale_and_garden_event",
+   "title": "UC Master Gardener Plant Sale and Garden Event",
+   "partner_name": "Balboa Park",
+   "partner_id": null,
+   "description": "Learn all about seed starting, vegetable gardening, native plants, garden art, food preservation, irrigation, and more. Shop from thousands of affordably priced plants: Spring garden vegetables, drought tolerant plants, natives, milkweeds, unique ornamentals, and houseplants. Shop Garden-related Retail:Unique Birdhouses, Garden Art and Green Elephant - repurposed garden tools, etc. Shop for locally grown produce at our Farmer's Market. Attend Free, Engaging Lightning Talks and Demonstrations. Visit Informational Booths and Exhibits. Free Tool Sharpening Have your garden and pest questions answered at our Ask a Master Gardener booth.",
+   "link": "https://balboapark.org/event/uc-master-gardener-plant-sale-and-garden-event/",
+   "availability": "",
+   "date_start": "2026-09-12T09:00:00-07:00",
+   "date_end": "2026-09-12T12:00:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Casa del Prado, Room 101, 1800 El Prado, San Diego, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "a44bece7b9a30daf.webp"
+  },
+  {
+   "slug": "https_balboapark_org_event_a_space_for_all_of_us_2_2026_09_13",
+   "title": "A Space for All of Us",
+   "partner_name": "Balboa Park",
+   "partner_id": null,
+   "description": "Sensory-Friendly Quiet Mornings at the Museum The Museum's sensory-friendly quiet hours are held every Sunday from 10 a.m. to 11 a.m. This time is dedicated to creating a calmer, quieter museum experience. We remain open to the public during this time, and all are welcome to visit the Museum. During this time, specific exhibit features in the main Museum building will be turned off to minimize audio and visual stimulation. Noise-blocking headphones are free for check-out at the main Admissions desk and the entrance to the Cannibals: Myth & Reality exhibition, Exhibit features in the Cannibals: Myth & Reality exhibit will remain on, and all exhibits will be fully turned on at 11 a.m. Admission purchased during sensory-friendly quiet hours is the same as standard admission and applies to the entire day. Please contact publicprograms@museumofus.org with any questions.",
+   "link": "https://balboapark.org/event/a-space-for-all-of-us-2/2026-09-13/",
+   "availability": "Repeats 7 times through 2026-12-20",
+   "date_start": "2026-09-13T10:00:00-07:00",
+   "date_end": "2026-12-20T11:00:00-08:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Museum of Us, 1350 El Prado, Balboa Park, San Diego, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "ad9e21030a68f941.png"
+  },
+  {
+   "slug": "https_balboapark_org_event_sky_tonight_weekend_edition_2026_09_13",
+   "title": "Sky Tonight: Weekend Edition",
+   "partner_name": "Balboa Park",
+   "partner_id": null,
+   "description": "Monthly planetarium show at 11 a.m. on the second Sunday of each month",
+   "link": "https://balboapark.org/event/sky-tonight-weekend-edition/2026-09-13/",
+   "availability": "Repeats 3 times through 2026-11-08",
+   "date_start": "2026-09-13T11:00:00-07:00",
+   "date_end": "2026-11-08T12:00:00-08:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology",
+    "Physics"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Fleet Science Center, 1875 El Prado, San Diego, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "fb93951230fbe48d.png"
+  },
+  {
+   "slug": "https_balboapark_org_event_sky_tonight_weekend_edition_2026_10_11",
+   "title": "Sky Tonight: Weekend Edition",
+   "partner_name": "Balboa Park",
+   "partner_id": null,
+   "description": "Monthly planetarium show at 11 a.m. on the second Sunday of each month",
+   "link": "https://balboapark.org/event/sky-tonight-weekend-edition/2026-10-11/",
+   "availability": "Repeats 3 times through 2026-11-08",
+   "date_start": "2026-09-13T11:00:00-07:00",
+   "date_end": "2026-11-08T12:00:00-08:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology",
+    "Physics"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Fleet Science Center, 1875 El Prado, San Diego, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "fb93951230fbe48d.png"
+  },
+  {
+   "slug": "https_balboapark_org_event_kokedama_workshop",
+   "title": "Kokedama Workshop",
+   "partner_name": "Balboa Park",
+   "partner_id": null,
+   "description": "Take home a piece of the garden with you! Join us for a hands-on Kokedama workshop where you'll make the ancient Japanese art of creating beautiful moss ball planters with JFGM staff. No experience necessary. Just bring your creativity and leave with a living, green masterpiece crafted by your own hands. Location: Education Center Date: 9/13/2026 Time: 3:00pm - 4:00pm JFGM Member: $30 | Non-member $45 *Admission is included in the ticket. This class is non-refundable 7 days before the event",
+   "link": "https://balboapark.org/event/kokedama-workshop/",
+   "availability": "",
+   "date_start": "2026-09-13T15:00:00-07:00",
+   "date_end": "2026-09-13T16:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Less than $50",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Japanese Friendship Garden and Museum, 2215 Pan American Road East, San Diego, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "d93f678468657703.webp"
+  },
+  {
+   "slug": "https_balboapark_org_event_san_diego_heart_and_stroke_walk",
+   "title": "San Diego Heart and Stroke Walk",
+   "partner_name": "Balboa Park",
+   "partner_id": null,
+   "description": "n a heartbeat, you could be the difference. 9 out of 10 people who suffer cardiac arrest outside the hospital don't survive. Most of the time, it's because no one nearby performed CPR. But together, we can change that. Extraordinary things happen when people take action. A small step. A simple skill. A lifesaving moment. Heart Walk brings communities together to create health and hope for every heartbeat. Every walker who joins, every dollar donated, means more people trained in CPR, more research and more lifesaving moments for everyone. Extraordinary starts with YOU. Join Heart Walk today. Take a moment and meet Willie. Because people took action, he survived. Join us today by registering now!",
+   "link": "https://balboapark.org/event/san-diego-heart-and-stroke-walk/",
+   "availability": "",
+   "date_start": "2026-09-19T06:30:00-07:00",
+   "date_end": "2026-09-19T10:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Balboa Park, San Diego, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "2b4f4653f7708ed7.jpg"
+  },
+  {
+   "slug": "https_balboapark_org_event_fleet_accessibility_mornings_2_2026_10_17",
+   "title": "Fleet Accessibility Mornings",
+   "partner_name": "Balboa Park",
+   "partner_id": null,
+   "description": "Early access to galleries at 9 a.m. On the third Saturday of every month, we open our doors one hour before the museum opens to the public and screen a documentary with house lights on and the soundtrack volume low. And if you want to stay and enjoy the museum all day? You can! Accessibility Morning features a special film screening of a documentary at 10 a.m. with house lights on and the soundtrack volume low. The Fleet Science Center strives to be an inclusive place where people of all needs and abilities are welcome and respectfully accommodated every day. Science is for everyone. Admission is free for one visitor and an accompanying guest. Regular admission rates apply for additional visitors. Noise-canceling headsets are available for use during your visit to the Fleet Science Center. Please inquire at the ticket counter or at the Heikoff Giant Dome Theater. For more information regarding accessibility at the Fleet Science Center, please visit our Accessibility page.",
+   "link": "https://balboapark.org/event/fleet-accessibility-mornings-2/2026-10-17/",
+   "availability": "Repeats 4 times through 2026-12-19",
+   "date_start": "2026-09-19T09:00:00-07:00",
+   "date_end": "2026-12-19T10:00:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Fleet Science Center, 1875 El Prado, San Diego, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_balboapark_org_event_fleet_accessibility_mornings_2_2026_09_19",
+   "title": "Fleet Accessibility Mornings",
+   "partner_name": "Balboa Park",
+   "partner_id": null,
+   "description": "Early access to galleries at 9 a.m. On the third Saturday of every month, we open our doors one hour before the museum opens to the public and screen a documentary with house lights on and the soundtrack volume low. And if you want to stay and enjoy the museum all day? You can! Accessibility Morning features a special film screening of a documentary at 10 a.m. with house lights on and the soundtrack volume low. The Fleet Science Center strives to be an inclusive place where people of all needs and abilities are welcome and respectfully accommodated every day. Science is for everyone. Admission is free for one visitor and an accompanying guest. Regular admission rates apply for additional visitors. Noise-canceling headsets are available for use during your visit to the Fleet Science Center. Please inquire at the ticket counter or at the Heikoff Giant Dome Theater. For more information regarding accessibility at the Fleet Science Center, please visit our Accessibility page.",
+   "link": "https://balboapark.org/event/fleet-accessibility-mornings-2/2026-09-19/",
+   "availability": "Repeats 3 times through 2026-12-19",
+   "date_start": "2026-09-19T09:00:00-07:00",
+   "date_end": "2026-12-19T10:00:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Fleet Science Center, 1875 El Prado, San Diego, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_balboapark_org_event_history_explorers_hispanic_heritage_month",
+   "title": "History Explorers: Hispanic Heritage Month",
+   "partner_name": "Balboa Park",
+   "partner_id": null,
+   "description": "Celebrate Hispanic Heritage Month with a fun day of hands-on history and creativity! Families are invited to explore local history through engaging activities, historical artifacts, and crafts. Create your own colorful mirror inspired by traditional Mexican tile designs, and discover the history, art, and community of Chicano Park. Drop in anytime between 11:00 a.m. and 2:00 p.m. This free program is designed for families and visitors of all ages.",
+   "link": "https://balboapark.org/event/history-explorers-hispanic-heritage-month/",
+   "availability": "",
+   "date_start": "2026-09-19T11:00:00-07:00",
+   "date_end": "2026-09-19T14:00:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Late Morning",
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego History Center, 1649 El Prado, Suite #3, San Diego, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "92a15487daa4f24c.webp"
+  },
+  {
+   "slug": "https_balboapark_org_event_make_at_mingei_3",
+   "title": "Make at Mingei",
+   "partner_name": "Balboa Park",
+   "partner_id": null,
+   "description": "This month’s Make at Mingei is inspired by our exhibition To Catch a Fish . Join Analiza del Rosario, founder of SoCal Fly Gals , for a presentation on fly fishing in California and the different trout that call California’s rivers home. Afterward, participants will paint a wooden trout to take home. Member Early Access is available by email only. Mingei Members will receive a registration link via email on Monday, September 14 at 10 AM. Public Registration opens here on our website on Tuesday, September 15 at 10 AM. Make at Mingei is made possible through a generous grant from the ResMed Foundation.",
+   "link": "https://balboapark.org/event/make-at-mingei-3/",
+   "availability": "",
+   "date_start": "2026-09-20T10:00:00-07:00",
+   "date_end": "2026-09-20T15:00:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning",
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Mingei International Museum, 1439 El Prado, San Diego, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "698f023bb6dd26c3.webp"
+  },
+  {
+   "slug": "https_balboapark_org_event_educator_open_house",
+   "title": "Educator Open House",
+   "partner_name": "Balboa Park",
+   "partner_id": null,
+   "description": "Join us for an evening of exploration, connection, and inspiration at the Fleet Science Center's Educator Open House! Discover hands-on STEM experiences, classroom resources, and opportunities to connect with fellow educators. Inspired by our latest exhibition, Mindbender Mansion, this interactive event invites educators to tackle brain-teasing puzzles, experience hands-on STEM activities, and discover engaging resources designed to support teaching and learning in the classroom. Connect with Fleet educators, explore museum exhibits after hours, and learn about field trips, educational programs, and classroom opportunities available throughout the year. Enjoy complimentary light appetizers while networking with fellow educators and exchanging ideas to spark curiosity in your students. Thursday, September 24, 2026. 5:30-7:30 p.m. RSVP by Monday, September 21. Each registered educator may bring up to two guests. Families are welcome! Children are invited to attend when accompanied by a registered educator.",
+   "link": "https://balboapark.org/event/educator-open-house/",
+   "availability": "",
+   "date_start": "2026-09-24T17:30:00-07:00",
+   "date_end": "2026-09-24T19:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology",
+    "Coding/Computer Science/Cyber Security",
+    "Engineering",
+    "Physical Science",
+    "Mathematics",
+    "Chemistry",
+    "Physics",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Fleet Science Center, 1875 El Prado, San Diego, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "f1c135df89cc5ccd.webp"
+  },
+  {
+   "slug": "https_balboapark_org_event_the_flight_of_jackie_cochran_documentary_screening",
+   "title": "The Flight of Jackie Cochran Documentary Screening",
+   "partner_name": "Balboa Park",
+   "partner_id": null,
+   "description": "Documentary Screening at the San Diego Air & Space Museum Friday, September 25, 2026 1:00 p.m. Pavilion of Flight Discover the remarkable story of one of aviation’s most accomplished—and often overlooked—pioneers during a special screening of The Flight of Jackie Cochran at the San Diego Air & Space Museum. The documentary will be presented on the Museum’s state-of-the-art LED video wall in the Pavilion of Flight. About the Documentary The Flight of Jackie Cochran tells the story of “the most famous pilot you’ve never heard of”—a woman who shattered aviation records, broke the sound barrier and helped change the course of history, only to be largely forgotten by it. A contemporary and rival of Amelia Earhart, Jackie Cochran became one of the most influential figures in American aviation. During World War II, she played a central role in establishing the Women Airforce Service Pilots, better known as the WASP, and later set an extraordinary number of speed, distance and altitude records. Behind Cochran’s public achievements, however, was a private life carefully constructed to conceal her past. Drawing on newly discovered archival materials and personal correspondence, the documentary explores a long-buried secret from her childhood and examines how her beginnings shaped her ambition, determination and relentless drive to succeed. The film also features scenes from the stage play The Flight of Jackie Cochran , written by and starring Nancy Hasty. Based on archival material uncovered during Hasty’s research, these dramatic reenactments bring Cochran’s voice and inner world to life while connecting her personal struggles with her historic accomplishments. More than a traditional biography, The Flight of Jackie Cochran examines how history chooses its heroes and why some extraordinary stories fade from public memory. It is a powerful exploration of ambition, perseverance, identity and the cost of greatness. Admission The screening is included with general Museum admission and is free for: San Diego Air & Space Museum Members Balboa Park Explorer Pass holders Seating is available on a first-come, first-served basis.",
+   "link": "https://balboapark.org/event/the-flight-of-jackie-cochran-documentary-screening/",
+   "availability": "",
+   "date_start": "2026-09-25T13:00:00-07:00",
+   "date_end": "2026-09-25T14:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego Air and Space Museum, 2001 Pan American Plaza, San Diego, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "e0d30f1a319d82cf.webp"
+  },
+  {
+   "slug": "https_balboapark_org_event_kintsugi_workshop",
+   "title": "Kintsugi Workshop",
+   "partner_name": "Balboa Park",
+   "partner_id": null,
+   "description": "In this hands-on workshop, guests are invited to bring a broken plate and learn the traditional Japanese art of kintsugi , the practice of repairing ceramics with gold. Guided by Japanese Friendship Garden & Museum staff, participants will carefully reassemble their piece while learning the philosophy behind this centuries-old technique. Kintsugi teaches us to see beauty in imperfection and to honor an object’s history rather than hide its flaws. By repairing what is broken, we celebrate resilience, transformation, and mindful making. No prior experience is necessary. This workshop is open to beginners and curious makers alike. The guest can practice on the small sauce dish that we provide before working on their own precious piece. To ensure a safe and successful experience for everyone, please follow these guidelines when selecting your plate: Guests will bring one broken plate The plate must be broken into no more than 5 pieces Maximum size: 12 inches (length) × 12 inches (width) × 4 inches (height) Plates should be clean and dry Please do not bring pieces with sharp shards or missing fragments Please bring a facemask if you are sensitive to the smell of glue All repair materials and tools will be provided. JFGM staff will assist throughout the process. Date: 9/26 Time: 10:00am-12:30pm Location: Education Center JFGM Member $80 | Non Member $100 *Admission to the garden is included. *Registration required. Refunds will not be given less than 7 days before the program.",
+   "link": "https://balboapark.org/event/kintsugi-workshop/",
+   "availability": "",
+   "date_start": "2026-09-26T10:00:00-07:00",
+   "date_end": "2026-09-26T12:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Less than $100",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Japanese Friendship Garden & Museum, Education Center, Balboa Park, San Diego",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "3284e56ec0cc91d7.webp"
+  },
+  {
+   "slug": "https_balboapark_org_event_nat_talk_screening_guardians_of_the_wild",
+   "title": "Nat Talk + Screening: Guardians of the Wild",
+   "partner_name": "Balboa Park",
+   "partner_id": null,
+   "description": "The Nat and WILDCOAST are proud to present a special screening of Guardians of the Wild , the inspiring story of international conservation teams and local communities working on the frontlines to protect Mexico’s truly wild places. After the screening, experts from The Nat, San Diego Zoo Wildlife Alliance, and WILDCOAST will discuss the current state of Mexico's wild places and the ongoing efforts to protect them.",
+   "link": "https://balboapark.org/event/nat-talk-screening-guardians-of-the-wild/",
+   "availability": "",
+   "date_start": "2026-09-29T19:00:00-07:00",
+   "date_end": "2026-09-29T21:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego Natural History Museum (The Nat), 1788 El Prado, Balboa Park, San Diego, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "c53f9271ca643230.png"
+  },
+  {
+   "slug": "https_balboapark_org_event_film_screening_talk_guardians_of_the_wild",
+   "title": "Film Screening + Talk: Guardians of the Wild",
+   "partner_name": "Balboa Park",
+   "partner_id": null,
+   "description": "The Nat and WILDCOAST are proud to present a special screening of Guardians of the Wild , the inspiring story of international conservation teams and local communities working on the frontlines to protect Mexico’s truly wild places. From Oaxaca's nesting sea turtles to the coastal deserts of Baja California, Guardians of the Wild immerses you in the stories of communities and organizations fighting to protect Mexico’s diverse ecosystems. This stunning documentary highlights the Indigenous women collectives planting mangroves, the heroes stopping coastal development, and the guardians of marine protected areas. After the screening, experts from The Nat, San Diego Zoo Wildlife Alliance, and WILDCOAST will discuss the current state of Mexico's wild places and the ongoing efforts to protect them.",
+   "link": "https://balboapark.org/event/film-screening-talk-guardians-of-the-wild/",
+   "availability": "",
+   "date_start": "2026-09-29T19:00:00-07:00",
+   "date_end": "2026-09-29T20:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Less than $25",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology",
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego Natural History Museum (The Nat), 1788 El Prado, Balboa Park, San Diego, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "3e26f62a39c04aa5.webp"
+  },
+  {
+   "slug": "https_balboapark_org_event_book_launch_the_zoo_lady_by_dr_sandra_e_bonura",
+   "title": "Book Launch: The Zoo Lady by Dr. Sandra E. Bonura",
+   "partner_name": "Balboa Park",
+   "partner_id": null,
+   "description": "The Zoo Lady: The Forgotten Legend Who Saved & Then Built The San Diego Zoo She was a middle-aged, divorced mother who became the world’s first female zoo director and the first woman to lead the National Zoo Association (AZA)—so why has history forgotten her name? While Harry Wegeforth was the founder, it was Belle Benchley who ensured the San Diego Zoo survived its darkest days. In 1925, she took a temporary bookkeeping job at the struggling four-year-old zoo—a position she admittedly ‘dreaded’—only to stay for thirty years. She didn’t just save a failing institution; she built it into a world-class treasure, reshaping global conservation long before Jane Goodall or Dian Fossey. From wrestling rattlesnakes to orchestrating the historic cross-country giraffe trek that inspired the bestseller West with Giraffes, Benchley was a “leader of steel” who broke the glass ceiling. Join award-winning author and historian Dr. Sandra E. Bonura for a journey through rare archival images as she uncovers how this unlikely pioneer transformed a struggling local park into a global icon. Book Signing & Special Offer: Copies of Dr. Bonura’s brand-new book, The Zoo Lady: How Belle Benchley Built the San Diego Zoo, will be autographed and available for purchase at a special author’s discount. Program ticket includes lunch",
+   "link": "https://balboapark.org/event/book-launch-the-zoo-lady-by-dr-sandra-e-bonura/",
+   "availability": "",
+   "date_start": "2026-10-06T11:30:00-07:00",
+   "date_end": "2026-10-06T13:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Less than $50",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego History Center, 1649 El Prado, Suite #3, San Diego, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "c894febfdc4c24df.webp"
+  },
+  {
+   "slug": "https_balboapark_org_event_meteorites_as_artistic_matter",
+   "title": "Meteorites as Artistic Matter",
+   "partner_name": "Balboa Park",
+   "partner_id": null,
+   "description": "Speakers: Ulrike Arnold , Artist; Gerard van Belle, PhD , Former Director of Science at Lowell Observatory; and Rachel Jans, PhD , Curator of Modern and Contemporary Art at The San Diego Museum of Art MOPA@SDMA Joan and Irwin Jacobs Theater   Meteorites as Artistic Matter brings together internationally acclaimed artist Ulrike Arnold, astronomer Gerard van Belle, and the Museum’s Curator of Modern and Contemporary Art Rachel Jans, PhD, for a fascinating interdisciplinary conversation exploring the intersection of art, science, and the cosmos. Known for incorporating meteorite dust and pigments gathered from some of the world’s most remote landscapes into her paintings, Arnold will discuss how celestial and earthly materials become powerful artistic media. Joined by van Belle’s astronomical perspective and Jans’s expertise on the work of Sigmar Polke, a German artist also known for incorporating unconventional materials into his work, and contemporary artistic practice, this engaging guest lecture offers a rare opportunity to discover how meteorites inspire creativity, expand our understanding of materiality, and connect artistic expression with the vast universe beyond our planet. Following the lecture, guests are invited to enjoy a guided tour led by our docent team.   Please note, this lecture is in-person only and held at the MOPA@SDMA Joan and Irwin Jacobs Theater in Balboa Park. $15 members and students | $20 seniors and military | $30 nonmembers This lecture is presented as a part of the Guest Lecture Series , which offers a platform for renowned scholars and experts from the art world to share their insights and knowledge on topics related to art history, art theory, and the museum’s collections.",
+   "link": "https://balboapark.org/event/meteorites-as-artistic-matter/",
+   "availability": "",
+   "date_start": "2026-10-16T10:00:00-07:00",
+   "date_end": "2026-10-16T11:00:00-07:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Less than $50",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology",
+    "Physics"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego Museum of Art, 1450 El Prado, San Diego, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "08d16bcba1e2cf76.webp"
+  },
+  {
+   "slug": "https_balboapark_org_event_house_of_turkey_lawn_program",
+   "title": "House of Turkey Lawn Program",
+   "partner_name": "Balboa Park",
+   "partner_id": null,
+   "description": "Join the House of Turkey for their Lawn Program.",
+   "link": "https://balboapark.org/event/house-of-turkey-lawn-program/",
+   "availability": "",
+   "date_start": "2026-10-25T11:00:00-07:00",
+   "date_end": "2026-10-25T16:00:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning",
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "House of Turkey, 2155 Pan American Rd E, San Diego, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "16aad03ea15eeb43.webp"
+  },
+  {
+   "slug": "https_balboapark_org_event_dia_de_los_muertos_at_sdma",
+   "title": "Día de los Muertos at SDMA",
+   "partner_name": "Balboa Park",
+   "partner_id": null,
+   "description": "Come together with family, friends, and the community at large at a special, free community event celebrating and honoring Día de los Muertos. Enjoy live performances, family-friendly art-making activities, and a special Día de los Muertos ofrenda created by visiting artist Betsabeé Romero in collaboration with local San Diego students, all in the Balboa Park Plaza de Panama in front of The San Diego Museum of Art and free to the community. Through artist-designed artmaking activities, community members will be invited to honor loved ones, share memories, and contribute meaningful objects and creative responses to the ofrenda on view in the plaza. Romero will join the Museum community for the inauguration of the SDMA ofrenda on Sunday, November 1 at 11:00 a.m. on the Museum’s front steps. The Taco Party , a gathering featuring unlimited street-style tacos, refreshing beverages, music, and a festive atmosphere, is a ticketed event complementing Día de los Muertos at SDMA.   Free admission to The San Diego Museum of Art (SDMA) and the Museum of Photographic Arts at The San Diego Museum of Art (MOPA@SDMA) on Sunday, November 1 at noon–5:00 p.m. further complements the Día de los Muertos celebration.",
+   "link": "https://balboapark.org/event/dia-de-los-muertos-at-sdma/",
+   "availability": "",
+   "date_start": "2026-11-01T11:00:00-08:00",
+   "date_end": "2026-11-01T17:00:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8",
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Late Morning",
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego Museum of Art, 1450 El Prado, San Diego, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "c635fe1db6b92b80.webp"
+  },
+  {
+   "slug": "https_balboapark_org_event_nat_talk_screening_why_dinosaurs",
+   "title": "Nat Talk + Screening: Why Dinosaurs?",
+   "partner_name": "Balboa Park",
+   "partner_id": null,
+   "description": "Dinosaurs fascinate us—from museums to movies, theme parks to toys. Discover why at a special screening of Why Dinosaurs? , followed by a talk with the filmmakers. The film follows dino-obsessed teen James and his filmmaker father, Tony, on a journey around the globe, interviewing world-renowned paleontologists about the latest discoveries, digging up 150-million-year-old bones, and encountering dinosaur fanatics of all walks of life. Together they track down the filmmakers behind Jurassic Park and Jurassic World , see the world’s largest dinosaur toy collection, and attempt to discover why everybody loves dinosaurs.",
+   "link": "https://balboapark.org/event/nat-talk-screening-why-dinosaurs/",
+   "availability": "",
+   "date_start": "2026-11-18T19:00:00-08:00",
+   "date_end": "2026-11-18T21:00:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego Natural History Museum (The Nat), 1788 El Prado, Balboa Park, San Diego, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "5e6963ebbd5c4fe3.png"
+  },
+  {
+   "slug": "https_balboapark_org_event_film_screening_talk_why_dinosaurs",
+   "title": "Film Screening + Talk: Why Dinosaurs?",
+   "partner_name": "Balboa Park",
+   "partner_id": null,
+   "description": "Dinosaurs fascinate us—from museums to movies, theme parks to toys. Discover why at a special screening of Why Dinosaurs ? , followed by a talk with the filmmakers. The film follows dino-obsessed teen James and his filmmaker father, Tony, on a journey around the globe, interviewing world-renowned paleontologists about the latest discoveries, digging up 150-million-year-old bones, and encountering dinosaur fanatics of all walks of life. Together they track down the filmmakers behind Jurassic Park and Jurassic World , see the world’s largest dinosaur toy collection, and attempt to discover why everybody loves dinosaurs. After the screening, hear James and Tony talk about their lifelong passion for dinosaurs and the adventure of making the documentary together.",
+   "link": "https://balboapark.org/event/film-screening-talk-why-dinosaurs/",
+   "availability": "",
+   "date_start": "2026-11-18T19:00:00-08:00",
+   "date_end": "2026-11-18T20:00:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "Less than $25",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego Natural History Museum (The Nat), 1788 El Prado, Balboa Park, San Diego, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "3e26f62a39c04aa5.webp"
+  },
+  {
+   "slug": "https_balboapark_org_event_skate_craft_do_it_yourself_design_in_skateboarding",
+   "title": "Skate Craft: Do-It-Yourself Design in Skateboarding",
+   "partner_name": "Balboa Park",
+   "partner_id": null,
+   "description": "Celebrate skateboarding's true \"Do It Yourself\" ethos, from the boards, gear, and ramps, to the machines and the repurposed boards as objects of use. To land a trick, to make the make—that moment is everything. It’s the struggle between you and the skateboard, the challenge of turning something sketchy into a clean run. Whether it's mastering a carve, dropping in, or landing a trick, the average number of attempts is 10,000. When you finally achieve it, that's when it becomes a true \"MAKE.\" This exhibition celebrates skateboarding's true \"Do It Yourself\" ethos, tracing its evolution from the early days of making decks in garages and building ramps from found lumber to the handcrafted works of art seen today. Experience how skateboarding nurtures creativity, self-expression, and joy through artisanal craftsmanship. The progression of skateboard design, safety gear, and skate shoes, alongside the inventive machines that facilitated their creation, is driven by a DIY ethos. Around the world, artists embrace this spirit by turning old skateboards into jewelry and furniture, demonstrating how skateboarding combines play, design, and sustainability in vibrant ways.",
+   "link": "https://balboapark.org/event/skate-craft-do-it-yourself-design-in-skateboarding/",
+   "availability": "",
+   "date_start": "2026-11-21T10:00:00-08:00",
+   "date_end": "2027-05-09T17:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8",
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "Less than $25",
+   "time_of_day": [
+    "Morning",
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Mingei International Museum, 1439 El Prado, San Diego, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "23445724d0821b7b.jpg"
+  }
+ ]
+}

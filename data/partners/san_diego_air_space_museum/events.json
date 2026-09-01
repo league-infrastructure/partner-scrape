@@ -1,0 +1,48 @@
+{
+ "generated_at": "2026-09-01T08:27:52Z",
+ "partner_slug": "san_diego_air_space_museum",
+ "kind": "current",
+ "event_count": 1,
+ "events": [
+  {
+   "slug": "https_sandiegoairandspace_org_volunteer_events",
+   "title": "San Diego Air & Space Museum - Historic Balboa Park, San Diego",
+   "partner_name": "San Diego Air & Space Museum",
+   "partner_id": 34,
+   "description": "The San Diego Air & Space Museum in Historical Balboa Park welcomes you to visit. The Official Air & Space Museum and Education Center of California has many attractions for the entire family.",
+   "link": "https://sandiegoairandspace.org//volunteer/events",
+   "availability": "Repeats 10 times through 2026-12-31",
+   "date_start": "2026-09-25T00:00:00-07:00",
+   "date_end": "2026-12-31T00:00:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K",
+    "Grades 6-8",
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "All Day"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Physics",
+    "Engineering",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego Air & Space Museum, Balboa Park, San Diego, CA",
+   "latitude": "32.7263215",
+   "longitude": "-117.1542858",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_diego_air_space.png",
+   "eligibility": "",
+   "image_src": ""
+  }
+ ]
+}

@@ -1,0 +1,790 @@
+{
+ "generated_at": "2026-09-01T08:27:52Z",
+ "partner_slug": "san_diego_county_parks_and_recreation",
+ "kind": "current",
+ "event_count": 22,
+ "events": [
+  {
+   "slug": "ranger_led_night_hike_20260830",
+   "title": "Ranger-led Night Hike",
+   "partner_name": "San Diego County Parks and Recreation",
+   "partner_id": null,
+   "description": "Join Rangers on a guided evening hike, avoiding the summer heat and learning about the native plants and nocturnal wildlife of this 2,272-acre preserve on the 2.5-mile loop incorporating upper Martha’s Grove trail. Bringing your own headlamp with a red-light setting is highly recommended.\n\nThis activity meets at the Goodan Staging Area located at 16281 Sycamore Canyon Road in Poway:\nGoodan Staging Area, 16281 Sycamore Canyon Road, Poway, CA, 92064\n\nInclement weather will cancel; call ahead. Park phone number: (858) 513-4737",
+   "link": "",
+   "availability": "Repeats 2 times through 2026-09-27",
+   "date_start": "2026-08-30T02:30:00-07:00",
+   "date_end": "2026-09-27T03:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Sycamore Canyon/Goodan Ranch, 16281 Sycamore Canyon Rd, Poway, CA 92064, USA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "ranch_house_tours_20260830",
+   "title": "Ranch House Tours",
+   "partner_name": "San Diego County Parks and Recreation",
+   "partner_id": null,
+   "description": "Visit a living piece of local history. This docent-led tour will take you back in time through a 200-year-old ranch house. Weddings and special events will cancel.\n\nFree. All ages.\n\nInclement weather may cancel; call ahead.\n\nPhone: (858) 484-7504",
+   "link": "",
+   "availability": "Repeats 51 times through 2027-11-27",
+   "date_start": "2026-08-30T20:00:00-07:00",
+   "date_end": "2027-11-27T20:00:00-08:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Los Penasquitos Ranch House, Canyonside Park Dr, San Diego, CA 92129, USA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "kidzone_at_the_park_20260903",
+   "title": "Kidzone at the Park",
+   "partner_name": "San Diego County Parks and Recreation",
+   "partner_id": null,
+   "description": "After school, head to the park! We've planned science activities, crafts and games for all school-aged kids, one day a week. Enjoy time playing, socializing and learning with us.\n\nWear clothes that are OK to get messy. Bring water and sun protection! Meet in front of the playground.\n\nFree. Ages 4-12.\n\nInclement weather will cancel; call ahead.\n\nPhone: (619) 478-5212",
+   "link": "",
+   "availability": "Repeats 69 times through 2027-11-26",
+   "date_start": "2026-09-03T22:30:00-07:00",
+   "date_end": "2027-11-26T00:30:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Potrero County Park, 24800 Potrero Park Dr, Potrero, CA 91963, USA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "saturday_morning_hike_20260905",
+   "title": "Saturday Morning Hike",
+   "partner_name": "San Diego County Parks and Recreation",
+   "partner_id": null,
+   "description": "Tour the County’s first open space preserve in this popular trek. View a historically significant grinding stone used by Native Americans and one of the first grist mills in Southern California. This 1.5-mile walk is easy and family-friendly. Extend your day by continuing to hike or enjoy a picnic in picturesque Pauma Valley.\n\nParking Fee: $5. All ages.\n\nThis hike meets at the main kiosk at the Wilderness Gardens parking area.\n\nInclement weather may cancel; call ahead.\n\nPhone: (760) 742-1631",
+   "link": "",
+   "availability": "Repeats 32 times through 2027-11-20",
+   "date_start": "2026-09-05T08:00:00-07:00",
+   "date_end": "2027-11-20T10:30:00-08:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Less than $25",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Wilderness Gardens County Preserve, 14209 CA-76, Pala, CA 92059, USA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "morning_ranger_led_hike_20260905",
+   "title": "Morning Ranger-led Hike",
+   "partner_name": "San Diego County Parks and Recreation",
+   "partner_id": null,
+   "description": "Grab your coffee or tea, then put on your hiking boots so you can join us for a ranger-led 1-to-2-mile walk through the trail system at San Dieguito County Park. During our hike, we'll discuss the history of the land, observe and learn about native plants and animals, cross a suspension bridge, and take in elevated views of the park from lookout towers.\n\nThis event meets at the wooden information kiosk inside the gate at the upper entrance.\n\nParking fee $5. Inclement weather may cancel; call ahead.\n\nPark phone number: (858) 755-2386.",
+   "link": "",
+   "availability": "Repeats 16 times through 2027-11-06",
+   "date_start": "2026-09-05T08:00:00-07:00",
+   "date_end": "2027-11-06T10:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Less than $25",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology",
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Dieguito County Park, 1628 Lomas Santa Fe Dr, Del Mar, CA 92014, USA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "ranch_house_tours_20260905",
+   "title": "Ranch House Tours",
+   "partner_name": "San Diego County Parks and Recreation",
+   "partner_id": null,
+   "description": "Visit a living piece of local history. This docent-led tour will take you back in time through a 200-year-old ranch house. Weddings and special events will cancel.\n\nFree. All ages.\n\nInclement weather may cancel; call ahead.\n\nPhone: (858) 484-7504",
+   "link": "",
+   "availability": "Repeats 51 times through 2027-11-27",
+   "date_start": "2026-09-05T18:00:00-07:00",
+   "date_end": "2027-11-27T20:00:00-08:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Los Penasquitos Ranch House, Canyonside Park Dr, San Diego, CA 92129, USA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "rancho_guajome_adobe_tour_loom_demonstration_20260906",
+   "title": "Rancho Guajome Adobe Tour & Loom Demonstration",
+   "partner_name": "San Diego County Parks and Recreation",
+   "partner_id": null,
+   "description": "Loom Demonstration (10 - 11a.m.):\nWe welcome the community to spend a day with us at Rancho Guajome Adobe, tour the adobe, enjoy our gardens, trails and also have an afternoon picnic at our picnic tables. Watch a traditional loom demonstration and learn about the art of weaving.\n\nGuided Tour (11 a.m. - 12 p.m.):\nJoin our knowledgeable docent for a guided tour of the historic Rancho Guajome Adobe.\n\nAdmission:\nAdults $3.00 (13 and older)\nChildren $1.00 (3 and under FREE)\nCash or check only",
+   "link": "",
+   "availability": "Repeats 4 times through 2026-09-27",
+   "date_start": "2026-09-06T10:00:00-07:00",
+   "date_end": "2026-09-27T12:00:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Less than $25",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Rancho Guajome Adobe, 2210 N Santa Fe Ave, Vista, CA 92083, USA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "sunday_family_fun_day_20260906",
+   "title": "Sunday Family Fun Day",
+   "partner_name": "San Diego County Parks and Recreation",
+   "partner_id": null,
+   "description": "Looking for something fun to do with the family? Pack up the kids and head to San Elijo Lagoon Nature Center for nature-themed crafts and activities, including our TRACK Trail program. The whole family will enjoy exploring Nature Center exhibits, the surrounding grounds and loop trail. Plan ahead and enjoy a picnic on the upstairs observation deck! Sunday Family Funday is a free event in which a different aspect of nature is explored each month.\n\nFamily Fun Day Topic: Bugs!\n\nInclement weather may cancel; call ahead.\nPhone: (760) 634-3026",
+   "link": "",
+   "availability": "Repeats 16 times through 2027-11-07",
+   "date_start": "2026-09-06T17:00:00-07:00",
+   "date_end": "2027-11-07T20:00:00-08:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Elijo Lagoon Ecological Reserve, 2710 Manchester Ave, Cardiff, CA 92007, USA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "reading_with_a_ranger_20260911",
+   "title": "Reading with a Ranger",
+   "partner_name": "San Diego County Parks and Recreation",
+   "partner_id": null,
+   "description": "Come spend your Friday morning with us! Join us for a fun hour of stories, live critters, touch tables, and tips for your next outdoor adventure. Reading with a Ranger happens every 2nd Friday of the month where you can meet our rosy boa and tarantula, explore interactive displays, and discover nearby parks and upcoming events.",
+   "link": "",
+   "availability": "Repeats 16 times through 2027-11-12",
+   "date_start": "2026-09-11T10:00:00-07:00",
+   "date_end": "2027-11-12T11:00:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K",
+    "Grades 6-8"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Valley Center Library,29200 Cole Grade Rd, Valley Center, CA 92082, USA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "early_bird_social_20260912",
+   "title": "Early Bird Social",
+   "partner_name": "San Diego County Parks and Recreation",
+   "partner_id": null,
+   "description": "Join park rangers Saturday, August 1 at 8 a.m. for a peaceful early morning walk through the beautiful 90-acre El Monte County Park. We’ll identify the birds we encounter and visit the park’s animal ambassadors—including hawks, owls, and a kestrel!\n\nRSVP to El Monte staff at (619) 443-1474.\n\nNote: Please use the staging lot located just before the park entrance on the left side of the road. It opens at 8 a.m. Look for the big yellow gates and the “El Monte Staging Lot” sign. Rangers will be there to gather everyone for the bird walk. From the staging lot, we’ll use the crosswalk to enter the back of the park before the front gates officially open at 9:30 a.m.\n\nInclement weather may cancel. For more information, call: (619) 443-1474.",
+   "link": "",
+   "availability": "Repeats 2 times through 2026-09-12",
+   "date_start": "2026-09-12T08:00:00-07:00",
+   "date_end": "2026-09-12T16:00:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "El Monte County Park, San Diego",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "stargazing_and_night_hike_with_women_in_the_wild_20260913",
+   "title": "Stargazing and Night Hike with Women in the Wild",
+   "partner_name": "San Diego County Parks and Recreation",
+   "partner_id": null,
+   "description": "When the sky is full of stars, moonlit paths take on a creepy hue - the perfect shade for seeking out nighttime critters like bats and scorpions. That’s what you can experience if you arrive on time for our Star Party! We kick things off with a short and optional ranger-led twilight hike.\n\nBack at the staging area, amateur astronomers set out giant telescopes to share different vantage points of stellar phenomenon above for a truly out-of-this-world experience. Dress warm and bring a flashlight (red- or amber-light preferred).\n\nAll children must be accompanied by an adult.\n\nCloud cover or inclement weather may cancel. Call Ranger Kyle ahead for weather status or if you're lost: (858) 699-8668.\n\nThis event is FREE. Parking is limited so come early, carpool, and park along the driveway if the lot is full.\n\nFor general park information, call (619) 561-0580.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-09-13T01:00:00-07:00",
+   "date_end": "2026-09-13T04:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8",
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening",
+    "All Day"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology",
+    "Physics",
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Oakoasis County Preserve, 12620 Wildcat Canyon Rd, Lakeside, CA 92040, USA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "star_party_at_oakoasis_20260913",
+   "title": "Star Party at Oakoasis",
+   "partner_name": "San Diego County Parks and Recreation",
+   "partner_id": null,
+   "description": "Visit real astronomers from the San Diego Astronomy Association and look through their big, beautiful telescopes at Mother Nature's night light display.\n\nThe evening starts off with a short, ranger-led, twilight hike down our HAUNTED TRAIL at 6 p.m., just for October!\n\nIt may be too cold to see bats and scorpions, but it should be a great night for stargazing! The evening continues with stars and refreshments.\n\nCome early to get a good parking spot and face your lights away from the telescopes so when you leave you won't blind them. Dress warmly and bring a flashlight.\n\nCloud cover or inclement weather may cancel. Call Ranger Kyle ahead for status or if you're lost: 858-699-8668.\n\nFor general park information: 619-561-0580",
+   "link": "",
+   "availability": "Repeats 13 times through 2027-08-15",
+   "date_start": "2026-09-13T02:00:00-07:00",
+   "date_end": "2027-08-15T04:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Physics",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Oakoasis County Preserve, 12620 Wildcat Canyon Rd, Lakeside, CA 92040, USA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "http_www_sdparks_org_volunteer",
+   "title": "Volunteers Needed: Tree Giveaway Day",
+   "partner_name": "San Diego County Parks and Recreation",
+   "partner_id": null,
+   "description": "Volunteers Needed for a Tree Giveaway Day at Live Oak County Park.\n\nWhat you'll do:\n\n  * Event setup and support\n  * Participant check-in and greeting\n  * Tree loading/distribution\n  * Share basic tree care info\n  * Cleanup and breakdown\n\n3-hour volunteer shifts available. Join for one shift or stay for more.\n\nFor more info, visit sdparks.org/volunteer http://www.sdparks.org/volunteer.\n\nResidents must apply to receive a tree via the Equity-Driven Tree Planting Program:\nMyImpactPage - Live Oak, Santa Margarita Preserve and local parks https://app.betterimpact.com/PublicOrganization/6f280547-a144-4d28-9b49-30df0aed03b9/Activity/c069991e-64fc-4cd7-bb36-295e22bfc487/2\n\nThis event is hosted in partnership with the California Climate Action Corps, a program of California Volunteers, Office of the Governor.",
+   "link": "http://www.sdparks.org/volunteer",
+   "availability": "Repeats 2 times through 2026-09-19",
+   "date_start": "2026-09-19T14:00:00-07:00",
+   "date_end": "2026-09-19T21:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon",
+    "Evening"
+   ],
+   "opportunity_type": "Volunteering",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Live Oak County Park, 2746 Reche Rd, Fallbrook, CA 92028, USA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "ranger_led_interpretive_hike_20260919",
+   "title": "Ranger-led Interpretive Hike",
+   "partner_name": "San Diego County Parks and Recreation",
+   "partner_id": null,
+   "description": "Join rangers every 3rd Saturday of the month for a moderate 3.5-mile loop on the Martha’s Grove Trail at Sycamore Canyon/Goodan Ranch. Learn about the native plants and wildlife of this 2,272-acre preserve while experiencing a variety of habitats, historic oak groves, and the remnants of an old ranch.\n\nThis activity meets at the Goodan Staging Area of the park located at 16281 Sycamore Canyon Road in Poway.\n\nInclement weather will cancel; call ahead.\n\nPark phone number: (858) 513-4737",
+   "link": "",
+   "availability": "Repeats 16 times through 2027-11-20",
+   "date_start": "2026-09-19T15:00:00-07:00",
+   "date_end": "2027-11-20T19:00:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology",
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Sycamore Canyon/Goodan Ranch, 16281 Sycamore Canyon Rd, Poway, CA 92064, USA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "picnic_with_the_goats_20260920",
+   "title": "Picnic with the Goats",
+   "partner_name": "San Diego County Parks and Recreation",
+   "partner_id": null,
+   "description": "Bring your lunch for a pen-side picnic with our goats. During the picnic, park rangers will discuss 1860s ranch life, animal care and Nubian goats. At the end, there will be an opportunity to interact with the goats and tour our 200-year-old ranch house.\n\nInclement weather may cancel; call ahead. Phone: (858) 484-7504",
+   "link": "",
+   "availability": "Repeats 16 times through 2027-11-21",
+   "date_start": "2026-09-20T19:00:00-07:00",
+   "date_end": "2027-11-21T21:00:00-08:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Los Penasquitos Ranch House, Canyonside Park Dr, San Diego, CA 92129, USA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "discovery_table_at_live_oak_20260920",
+   "title": "Discovery Table at Live Oak",
+   "partner_name": "San Diego County Parks and Recreation",
+   "partner_id": null,
+   "description": "Come Join Ranger Ben to learn more about native San Diego County wildlife species! Visitors will get the chance to touch real wildlife pelts, see track castings and more.\n\nInclement weather may cancel.\nParking: $5\nFor more information, please call (760) 728-2303.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-09-20T21:00:00-07:00",
+   "date_end": "2026-09-20T22:00:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Less than $25",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Live Oak County Park, 2746 Reche Rd, Fallbrook, CA 92028, USA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "star_party_at_sycamore_canyon_20260926",
+   "title": "Star Party at Sycamore Canyon",
+   "partner_name": "San Diego County Parks and Recreation",
+   "partner_id": null,
+   "description": "Join Park Rangers and the San Diego Astronomy Association for an unforgettable evening of stargazing and out-of-this-world educational fun. All ages are welcome and there’s no cost to attend.\nThis program will be held at the Highway 67 Staging Area located at the end of Sycamore Park Drive, accessible only from the southbound direction on Highway 67 at 13898 SR-67, Lakeside, CA 92040.\nCloud cover will cancel this event.\nFor more information, call (858) 513-4737.",
+   "link": "",
+   "availability": "Repeats 5 times through 2026-12-26",
+   "date_start": "2026-09-26T02:00:00-07:00",
+   "date_end": "2026-12-26T06:00:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8",
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Physics",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Sycamore Canyon (Highway 67 Staging Area), 13898 CA-67, Lakeside, CA 92040, USA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "ranger_led_night_hike_20260927",
+   "title": "Ranger-led Night Hike",
+   "partner_name": "San Diego County Parks and Recreation",
+   "partner_id": null,
+   "description": "Join Rangers on a guided evening hike, avoiding the summer heat and learning about the native plants and nocturnal wildlife of this 2,272-acre preserve on the 2.5-mile loop incorporating upper Martha’s Grove trail. Bringing your own headlamp with a red-light setting is highly recommended.\n\nThis activity meets at the Goodan Staging Area located at 16281 Sycamore Canyon Road in Poway:\nGoodan Staging Area, 16281 Sycamore Canyon Road, Poway, CA, 92064\n\nInclement weather will cancel; call ahead. Park phone number: (858) 513-4737",
+   "link": "",
+   "availability": "Repeats 2 times through 2026-09-27",
+   "date_start": "2026-09-27T01:30:00-07:00",
+   "date_end": "2026-09-27T03:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Sycamore Canyon/Goodan Ranch, 16281 Sycamore Canyon Rd, Poway, CA 92064, USA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "trail_trek_20260927",
+   "title": "Trail Trek",
+   "partner_name": "San Diego County Parks and Recreation",
+   "partner_id": null,
+   "description": "A behind-the-scenes trail adventure awaits you. During this 4.5-mile trek, experience the Preserve’s exhilarating vistas. Photographers and bird watchers, be prepared to capture the dramatic landscape and more than 40 bird species. Get a close look at the path of the San Luis Rey and view beautiful Palomar Mountain and Pauma Valley.\n\nTrail Trek is the 4th Sunday of the month.\n\nFree for all ages.\nParking: $5\n\nInclement weather may cancel. Call ahead.\nPark phone: (760) 742-1631",
+   "link": "",
+   "availability": "Repeats 5 times through 2026-12-27",
+   "date_start": "2026-09-27T16:00:00-07:00",
+   "date_end": "2026-12-27T20:00:00-08:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology",
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Wilderness Gardens County Preserve, 14209 CA-76, Pala, CA 92059, USA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_www_cleansd_org_events_watershed_warriors_spring_valley_lamar_county_park_2",
+   "title": "Watershed Warriors: Tree Planting and Cleanup at Lamar County Park",
+   "partner_name": "San Diego County Parks and Recreation",
+   "partner_id": null,
+   "description": "Join I Love A Clean San Diego and the County of San Diego for a litter cleanup! We will divert litter from our watersheds and keep it from traveling to the Pacific Ocean.\n\nOur staff will have check-in ready for you on-site. Be sure to wear comfortable clothes, closed-toed shoes, some form of sun protection (sunscreen or a hat), and bring a water bottle or two! Staff will be providing everything else you will need!\n\nFor more details: www.cleansd.org/events/watershed-warriors-spring-valley-lamar-county-park-2/ https://www.cleansd.org/events/watershed-warriors-spring-valley-lamar-county-park-2/ https://www.cleansd.org/events/watershed-warriors-spring-valley-lamar-county-park-2/",
+   "link": "https://www.cleansd.org/events/watershed-warriors-spring-valley-lamar-county-park-2/",
+   "availability": "",
+   "date_start": "2026-10-24T16:00:00-07:00",
+   "date_end": "2026-10-24T18:00:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon",
+    "Evening"
+   ],
+   "opportunity_type": "Volunteering",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Lamar County Park, 3180 Bancroft Dr, Spring Valley, CA 91977, USA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "discovery_table_at_ramona_grasslands_20261107",
+   "title": "Discovery Table at Ramona Grasslands",
+   "partner_name": "San Diego County Parks and Recreation",
+   "partner_id": null,
+   "description": "Come learn about the amazing animals you might spot while hiking our local trails. You’ll get to check out some taxidermy, pelts, skins, and skulls up close, and maybe even pick up a few fun wildlife facts to impress your friends on your next hike!\n\nMeets at the Main Staging Area.\n\nFor more information, call: (760) 788-3326.",
+   "link": "",
+   "availability": "Repeats 28 times through 2027-11-20",
+   "date_start": "2026-11-07T18:00:00-08:00",
+   "date_end": "2027-11-20T20:00:00-08:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Ramona Grasslands County Preserve, Highland Valley Rd, Ramona, CA, USA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_givebutter_com_ranchochristmas26",
+   "title": "Rancho Christmas at Rancho Guajome Adobe",
+   "partner_name": "San Diego County Parks and Recreation",
+   "partner_id": null,
+   "description": "Celebrate the season with history, culture, and holiday cheer!\n\nActivities: Tractor-drawn wagon ride, historical demonstrations, Native American storytelling, Ballet Folklorico performances, free arts and crafts, and free self-guided museum tours\n\nAdmission:\n$6: Ages 13 and older\n$3: Ages 4-12\nFREE: Ages 3 and under\n(Cash preferred)\n\nPurchase tickets here: givebutter.com/ranchochristmas26 https://givebutter.com/ranchochristmas26\n\nFor more info: (760) 724-4082 • sdparks.org/RanchoGuajomeAdobe http://sdparks.org/RanchoGuajomeAdobe",
+   "link": "https://givebutter.com/ranchochristmas26",
+   "availability": "",
+   "date_start": "2026-12-12T18:00:00-08:00",
+   "date_end": "2026-12-12T22:00:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8",
+    "Grades 9-12"
+   ],
+   "cost_range": "Less than $25",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Rancho Guajome Adobe, 2210 N Santa Fe Ave, Vista, CA 92083, USA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  }
+ ]
+}

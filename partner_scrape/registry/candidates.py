@@ -25,17 +25,20 @@ import tomllib
 from dataclasses import dataclass
 from pathlib import Path
 
+from partner_scrape.config import REPO_ROOT
 from partner_scrape.discovery.hub_scan import OrgCandidate
 from partner_scrape.normalize.partners import normalize_org_name
 
 logger = logging.getLogger(__name__)
 
 #: Default location of the Candidate Review Queue's stub TOML files:
-#: ``partner_scrape/registry/candidates/`` -- physically separate from
+#: ``registry/candidates/`` at the repo root -- physically separate from
 #: ``registry/sources/`` and ``registry/hubs/``, and never scanned by
 #: ``registry.loader.load_sources``/``load_active_sources`` (that
 #: module's ``DEFAULT_SOURCES_DIR`` is a different, unrelated directory).
-DEFAULT_CANDIDATES_DIR = Path(__file__).resolve().parent / "candidates"
+#: See sprint 025 ticket 001 for the move out of
+#: ``partner_scrape/registry/``.
+DEFAULT_CANDIDATES_DIR = REPO_ROOT / "registry" / "candidates"
 
 _SLUG_RE = re.compile(r"[^a-z0-9]+")
 

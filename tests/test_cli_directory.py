@@ -263,11 +263,17 @@ class TestDirectoryEndToEnd:
         # --dry-run, so a fixture partners.json must already exist at
         # site_dir for this real-registry run to complete -- this is
         # the test's own setup, not something the dry run itself
-        # writes. "no disk write" below is narrowed from "site_dir was
-        # never created" to "no places.json/clubs.json was ever
-        # written", which is what --dry-run actually promises.
+        # writes.
         site_dir = tmp_path / "site"
         _write_real_partners_fixture(site_dir)
+
+        # Sprint 025 ticket 005: own_data_dir is export_directory()'s
+        # only write target now -- "no disk write" is proven there, not
+        # under site_dir (which export_directory() no longer touches at
+        # all, dry-run or not; site_dir here only still feeds
+        # run_directory()'s own related_partner_id/partners.json read).
+        own_data_dir = tmp_path / "own-data"
+        monkeypatch.setattr(directory_export, "get_own_data_dir", lambda: own_data_dir)
 
         exit_code = cli.main(
             ["directory", "--dry-run", "-v", "--site-dir", str(site_dir)]
@@ -277,8 +283,7 @@ class TestDirectoryEndToEnd:
         out = capsys.readouterr().out
         assert "19" in out
         assert "dry run" in out.lower()
-        assert not (site_dir / "src" / "data" / "places.json").exists()
-        assert not (site_dir / "public" / "data" / "places.json").exists()
+        assert not own_data_dir.exists()
 
     def test_real_run_writes_places_json(self, monkeypatch, tmp_path):
         monkeypatch.setattr(cli, "PoliteFetcher", lambda: _NeverCalledFetcher())
@@ -286,10 +291,19 @@ class TestDirectoryEndToEnd:
         site_dir = _make_site(tmp_path / "site")
         _write_real_partners_fixture(site_dir)
 
+        # Sprint 025 ticket 005: own_data_dir is the sole write target
+        # now -- pin it directly here (overriding the module-level
+        # _cache_dir fixture's own pin) so this test can read the
+        # written places.json back. site_dir is still passed through
+        # (and still needed) for run_directory()'s own
+        # related_partner_id/partners.json read.
+        own_data_dir = tmp_path / "own-data"
+        monkeypatch.setattr(directory_export, "get_own_data_dir", lambda: own_data_dir)
+
         exit_code = cli.main(["directory", "--site-dir", str(site_dir)])
 
         assert exit_code == 0
-        primary_places = json.loads((site_dir / "src" / "data" / "places.json").read_text())
+        primary_places = json.loads((own_data_dir / "places.json").read_text())
         assert primary_places["meta"]["total"] == 19
 
     def test_never_writes_opportunities_json_scrape_meta_or_teams_json_anywhere(

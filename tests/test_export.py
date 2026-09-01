@@ -1,16 +1,22 @@
 """Tests for partner_scrape.export.writer: the Site Export entry point.
 
-Every test passes an explicit `today` and an explicit `site_dir` under
-`tmp_path` -- no test relies on the real system clock or writes to the
-real sibling `stem-ecosystem` checkout (see writer.py's module
-docstring and sprint.md's Test Strategy: "no live HTTP ... ever").
+Every test passes an explicit `today` -- no test relies on the real
+system clock (see writer.py's module docstring and sprint.md's Test
+Strategy: "no live HTTP ... ever").
 
-Sprint 020 ticket 003 adds a second, similarly-defaulting `own_data_dir`
-parameter to `export_opportunities()`. Every test written before that
-ticket predates the parameter and never passes it explicitly -- the
-module-level `_own_data_dir_default` autouse fixture below pins its
-default resolution to a throwaway directory for every test in this
-file, so none of them can reach this repo's real `data/` directory
+Sprint 020 ticket 003 added a second, similarly-defaulting `own_data_dir`
+parameter to `export_opportunities()`, alongside an original write into
+a sibling `stem-ecosystem` checkout's `site_dir`. Sprint 025 ticket 003
+removed that `site_dir` write (and the parameter itself) entirely --
+`own_data_dir` is now the function's sole write target. Every test in
+this file that used to pass an explicit `tmp_path`-backed `site_dir`
+now either drops it (when the test only cares about the returned
+payload) or passes an explicit `tmp_path`-backed `own_data_dir` and
+inspects that instead (when the test cares about what's on disk). The
+module-level `_own_data_dir_default` autouse fixture below pins
+`own_data_dir`'s *default* resolution to a throwaway directory for
+every test in this file, so a test that never passes `own_data_dir`
+explicitly still can't reach this repo's real `data/` directory
 (mirrors `test_cli.py`'s `_cache_dir` autouse fixture, which pins
 `SITE_DIR` the same way for the same reason).
 """
@@ -19,7 +25,6 @@ from __future__ import annotations
 
 import json
 from datetime import date, datetime, timezone
-from pathlib import Path
 from typing import Any
 
 import pytest
@@ -41,14 +46,6 @@ _EXPECTED_SITE_FIELDS = {
     "contact_name", "contact_email", "contact_phone", "logo_src", "eligibility",
     "image_src",
 }
-
-
-def _site_dir(tmp_path: Path) -> Path:
-    """A tmp_path-backed stand-in for the sibling stem-ecosystem repo,
-    with `src/data` pre-created (matching a real checkout's layout)."""
-    site_dir = tmp_path / "stem-ecosystem"
-    (site_dir / "src" / "data").mkdir(parents=True)
-    return site_dir
 
 
 def _opportunity(
@@ -97,92 +94,82 @@ def _own_data_dir_default(tmp_path_factory, monkeypatch):
     """Pin `writer.get_own_data_dir()`'s resolution to a throwaway
     directory for every test in this file (sprint 020 ticket 003).
 
-    `own_data_dir` (like `site_dir`) resolves via a `config` accessor
-    when omitted, but unlike `site_dir` it has no environment-variable
-    override -- `config.get_own_data_dir()` always returns this repo's
-    real `data/` directory (`DEFAULT_OWN_DATA_DIR` is "not overridable
-    via environment variable" by design). Every test written before
-    this ticket predates the `own_data_dir` parameter and so never
-    passes it explicitly; without this fixture, each such test's
-    non-`dry_run` call would auto-create and write real files into
-    this repo's actual `data/` directory on every test run --
-    contradicting sprint.md's Test Strategy ("Hermetic throughout ...
-    tests pass an explicit tmp_path, never the real default").
+    `own_data_dir` resolves via a `config` accessor when omitted --
+    `config.get_own_data_dir()` always returns this repo's real `data/`
+    directory (`DEFAULT_OWN_DATA_DIR` is "not overridable via
+    environment variable" by design). A test that never passes
+    `own_data_dir` explicitly would otherwise auto-create and write
+    real files into this repo's actual `data/` directory on every test
+    run -- contradicting sprint.md's Test Strategy ("Hermetic
+    throughout ... tests pass an explicit tmp_path, never the real
+    default").
 
     Deliberately resolved via `tmp_path_factory` (a directory outside
     the current test's own `tmp_path` tree), not `tmp_path` itself --
-    `TestTargetDirIsolation.test_writes_only_under_the_given_site_dir`
-    (and this ticket's own `test_writes_only_under_the_given_own_data_dir`)
-    assert the *exact* set of files written under `tmp_path`, so this
-    default must land outside that tree or it would inflate those
-    counts. Resolved once per test (not inside the lambda) so every
-    call to `get_own_data_dir()` within a single test returns the same
-    path, matching real usage.
+    `TestOwnDataDirIsolation.test_writes_only_under_the_given_own_data_dir`
+    asserts the *exact* set of files written under `tmp_path`, so this
+    default must land outside that tree or it would inflate that count.
+    Resolved once per test (not inside the lambda) so every call to
+    `get_own_data_dir()` within a single test returns the same path,
+    matching real usage.
     """
     fake_own_data_dir = tmp_path_factory.mktemp("own-data-default")
     monkeypatch.setattr(writer, "get_own_data_dir", lambda: fake_own_data_dir)
 
 
 class TestCurrentUpcomingFilter:
-    def test_end_date_before_today_is_excluded(self, tmp_path):
-        site_dir = _site_dir(tmp_path)
+    def test_end_date_before_today_is_excluded(self):
         opp = _opportunity(
             date_start="2026-07-01T09:00:00-07:00",
             date_end="2026-07-18T09:00:00-07:00",
         )
 
-        payload = export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+        payload = export_opportunities([opp], today=date(2026, 7, 19))
 
         assert payload == []
 
-    def test_start_date_before_today_with_no_end_date_is_excluded(self, tmp_path):
-        site_dir = _site_dir(tmp_path)
+    def test_start_date_before_today_with_no_end_date_is_excluded(self):
         opp = _opportunity(date_start="2026-07-18T09:00:00-07:00", date_end="")
 
-        payload = export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+        payload = export_opportunities([opp], today=date(2026, 7, 19))
 
         assert payload == []
 
-    def test_undated_opportunity_is_excluded(self, tmp_path):
-        site_dir = _site_dir(tmp_path)
+    def test_undated_opportunity_is_excluded(self):
         opp = _opportunity(date_start="", date_end="")
 
-        payload = export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+        payload = export_opportunities([opp], today=date(2026, 7, 19))
 
         assert payload == []
 
-    def test_end_date_today_is_included(self, tmp_path):
-        site_dir = _site_dir(tmp_path)
+    def test_end_date_today_is_included(self):
         opp = _opportunity(
             date_start="2026-07-01T09:00:00-07:00",
             date_end="2026-07-19T09:00:00-07:00",
         )
 
-        payload = export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+        payload = export_opportunities([opp], today=date(2026, 7, 19))
 
         assert len(payload) == 1
 
-    def test_end_date_after_today_is_included(self, tmp_path):
-        site_dir = _site_dir(tmp_path)
+    def test_end_date_after_today_is_included(self):
         opp = _opportunity(
             date_start="2026-07-01T09:00:00-07:00",
             date_end="2026-08-01T09:00:00-07:00",
         )
 
-        payload = export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+        payload = export_opportunities([opp], today=date(2026, 7, 19))
 
         assert len(payload) == 1
 
-    def test_start_date_today_or_later_with_no_end_date_is_included(self, tmp_path):
-        site_dir = _site_dir(tmp_path)
+    def test_start_date_today_or_later_with_no_end_date_is_included(self):
         opp = _opportunity(date_start="2026-07-19T09:00:00-07:00", date_end="")
 
-        payload = export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+        payload = export_opportunities([opp], today=date(2026, 7, 19))
 
         assert len(payload) == 1
 
-    def test_mixed_past_and_upcoming_only_upcoming_survive(self, tmp_path):
-        site_dir = _site_dir(tmp_path)
+    def test_mixed_past_and_upcoming_only_upcoming_survive(self):
         past = _opportunity(
             slug="past_event_20260101",
             title="Past Event",
@@ -196,9 +183,7 @@ class TestCurrentUpcomingFilter:
             date_end="",
         )
 
-        payload = export_opportunities(
-            [past, upcoming], site_dir=site_dir, today=date(2026, 7, 19)
-        )
+        payload = export_opportunities([past, upcoming], today=date(2026, 7, 19))
 
         assert [o["title"] for o in payload] == ["Upcoming Event"]
 
@@ -210,10 +195,11 @@ class TestDSTBoundaryPartitioning:
     by inspection), so the DST-aware offset fix in `normalize/run.py`'s
     `_iso()` changes no `export/` filtering behavior -- only the
     offset's own correctness. These tests exercise
-    `is_current_or_upcoming` directly (no `export_opportunities`/site_dir
-    needed) against an `Opportunity` dated exactly on a DST-transition
-    boundary date, on each side of `today`, and confirm the partition is
-    unaffected by which offset (`-07:00` vs `-08:00`) the string carries.
+    `is_current_or_upcoming` directly (no `export_opportunities`/
+    own_data_dir needed) against an `Opportunity` dated exactly on a
+    DST-transition boundary date, on each side of `today`, and confirm
+    the partition is unaffected by which offset (`-07:00` vs `-08:00`)
+    the string carries.
     """
 
     def test_record_on_november_fall_back_date_is_current_on_the_boundary_day(self):
@@ -256,57 +242,53 @@ class TestInternshipCurrentUpcomingFilter:
     the past, so it must not drive expiry the way it does for an
     ordinary event."""
 
-    def test_no_deadline_internship_with_past_start_is_included(self, tmp_path):
+    def test_no_deadline_internship_with_past_start_is_included(self):
         """Would be wrongly excluded under the pre-ticket
         `date_end or date_start >= today` rule."""
-        site_dir = _site_dir(tmp_path)
         opp = _opportunity(
             date_start="2026-06-19T09:00:00-07:00",  # 30 days before `today` below
             date_end="",
             opportunity_type=WORK_BASED_LEARNING_TYPE,
         )
 
-        payload = export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+        payload = export_opportunities([opp], today=date(2026, 7, 19))
 
         assert len(payload) == 1
 
-    def test_future_deadline_internship_is_included(self, tmp_path):
-        site_dir = _site_dir(tmp_path)
+    def test_future_deadline_internship_is_included(self):
         opp = _opportunity(
             date_start="2026-06-19T09:00:00-07:00",
             date_end="2026-08-01T09:00:00-07:00",
             opportunity_type=WORK_BASED_LEARNING_TYPE,
         )
 
-        payload = export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+        payload = export_opportunities([opp], today=date(2026, 7, 19))
 
         assert len(payload) == 1
 
-    def test_past_deadline_internship_is_excluded(self, tmp_path):
-        site_dir = _site_dir(tmp_path)
+    def test_past_deadline_internship_is_excluded(self):
         opp = _opportunity(
             date_start="2026-06-19T09:00:00-07:00",
             date_end="2026-07-01T09:00:00-07:00",
             opportunity_type=WORK_BASED_LEARNING_TYPE,
         )
 
-        payload = export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+        payload = export_opportunities([opp], today=date(2026, 7, 19))
 
         assert payload == []
 
-    def test_ordinary_event_with_past_start_and_no_end_is_still_excluded(self, tmp_path):
+    def test_ordinary_event_with_past_start_and_no_end_is_still_excluded(self):
         """Guards against a partition bug that accidentally applies the
         internship rule to `opportunity_type="Out-of-school Programs"`
         (the default) too -- must keep matching
         `TestCurrentUpcomingFilter`'s equivalent, non-internship case."""
-        site_dir = _site_dir(tmp_path)
         opp = _opportunity(
             date_start="2026-06-19T09:00:00-07:00",
             date_end="",
             opportunity_type="Out-of-school Programs",
         )
 
-        payload = export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+        payload = export_opportunities([opp], today=date(2026, 7, 19))
 
         assert payload == []
 
@@ -319,45 +301,42 @@ class TestDeadlineFirstCurrentUpcomingFilterGeneralization:
     `opportunity_type="Competitions"`, to prove the rule is genuinely
     shared rather than re-hardcoded for a second string."""
 
-    def test_competitions_no_deadline_with_past_start_is_included(self, tmp_path):
+    def test_competitions_no_deadline_with_past_start_is_included(self):
         """Would be wrongly excluded under the ordinary
         `date_end or date_start >= today` rule."""
-        site_dir = _site_dir(tmp_path)
         opp = _opportunity(
             date_start="2026-06-19T09:00:00-07:00",  # 30 days before `today` below
             date_end="",
             opportunity_type="Competitions",
         )
 
-        payload = export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+        payload = export_opportunities([opp], today=date(2026, 7, 19))
 
         assert len(payload) == 1
 
-    def test_competitions_future_deadline_with_past_start_is_included(self, tmp_path):
-        site_dir = _site_dir(tmp_path)
+    def test_competitions_future_deadline_with_past_start_is_included(self):
         opp = _opportunity(
             date_start="2026-06-19T09:00:00-07:00",
             date_end="2026-08-01T09:00:00-07:00",
             opportunity_type="Competitions",
         )
 
-        payload = export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+        payload = export_opportunities([opp], today=date(2026, 7, 19))
 
         assert len(payload) == 1
 
-    def test_competitions_past_deadline_is_excluded(self, tmp_path):
-        site_dir = _site_dir(tmp_path)
+    def test_competitions_past_deadline_is_excluded(self):
         opp = _opportunity(
             date_start="2026-06-19T09:00:00-07:00",
             date_end="2026-07-01T09:00:00-07:00",
             opportunity_type="Competitions",
         )
 
-        payload = export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+        payload = export_opportunities([opp], today=date(2026, 7, 19))
 
         assert payload == []
 
-    def test_competitions_no_deadline_with_far_past_start_is_excluded(self, tmp_path):
+    def test_competitions_no_deadline_with_far_past_start_is_excluded(self):
         """Regression for issue 61 / sprint 020 ticket 001: reproduces the
         exact reported record shape -- "2nd Innovation in Women's Health
         Pitch Competition" (`opportunity_type="Competitions"`, `date_start`
@@ -365,7 +344,6 @@ class TestDeadlineFirstCurrentUpcomingFilterGeneralization:
         comfortably past `_DEADLINE_FIRST_STALE_POSTING_DAYS` (365). Before
         this ticket's fix, the no-deadline-still-open rule had no upper
         bound and this record exported as perpetually current."""
-        site_dir = _site_dir(tmp_path)
         opp = _opportunity(
             title="2nd Innovation in Women's Health Pitch Competition",
             date_start="2024-12-01T09:00:00-08:00",
@@ -373,40 +351,38 @@ class TestDeadlineFirstCurrentUpcomingFilterGeneralization:
             opportunity_type="Competitions",
         )
 
-        payload = export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+        payload = export_opportunities([opp], today=date(2026, 7, 19))
 
         assert payload == []
 
     def test_competitions_no_deadline_start_exactly_at_staleness_boundary_is_included(
-        self, tmp_path
+        self,
     ):
         """`date_start` exactly `_DEADLINE_FIRST_STALE_POSTING_DAYS` (365)
         days before `today` is still within the window (`>=` cutoff, not
         `>`)."""
-        site_dir = _site_dir(tmp_path)
         opp = _opportunity(
             date_start="2025-07-19T09:00:00-07:00",  # exactly 365 days before today below
             date_end="",
             opportunity_type="Competitions",
         )
 
-        payload = export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+        payload = export_opportunities([opp], today=date(2026, 7, 19))
 
         assert len(payload) == 1
 
     def test_competitions_no_deadline_start_one_day_past_staleness_boundary_is_excluded(
-        self, tmp_path
+        self,
     ):
         """`date_start` one day older than the 365-day window falls
         outside it."""
-        site_dir = _site_dir(tmp_path)
         opp = _opportunity(
             date_start="2025-07-18T09:00:00-07:00",  # 366 days before today below
             date_end="",
             opportunity_type="Competitions",
         )
 
-        payload = export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+        payload = export_opportunities([opp], today=date(2026, 7, 19))
 
         assert payload == []
 
@@ -417,13 +393,12 @@ class TestExportSortOrder:
     the possibly-stale `date_start`; every other record keeps sorting by
     `date_start`, unchanged."""
 
-    def test_deadline_first_record_sorts_by_date_end_not_stale_date_start(self, tmp_path):
+    def test_deadline_first_record_sorts_by_date_end_not_stale_date_start(self):
         """A winter-posted internship with a later summer deadline must
         sort near other near-term deadlines by that deadline, not get
         pinned to the top of the list by its earlier, stale date_start
         (issue 27's "Dec-Mar deadlines for Jun-Aug programs in winter"
         scenario)."""
-        site_dir = _site_dir(tmp_path)
         deadline_first = _opportunity(
             slug="winter_posted_internship",
             title="Winter-Posted Internship",
@@ -439,17 +414,14 @@ class TestExportSortOrder:
             opportunity_type="Out-of-school Programs",
         )
 
-        payload = export_opportunities(
-            [deadline_first, ordinary], site_dir=site_dir, today=date(2026, 1, 2)
-        )
+        payload = export_opportunities([deadline_first, ordinary], today=date(2026, 1, 2))
 
         # `ordinary` sorts by its date_start (March); `deadline_first`
         # sorts by its later date_end (June) rather than its earlier,
         # stale date_start (January) -- so `ordinary` comes first.
         assert [o["title"] for o in payload] == ["Spring Event", "Winter-Posted Internship"]
 
-    def test_non_deadline_first_records_still_sort_by_date_start(self, tmp_path):
-        site_dir = _site_dir(tmp_path)
+    def test_non_deadline_first_records_still_sort_by_date_start(self):
         earlier = _opportunity(
             slug="earlier_event_20260201",
             title="Earlier Event",
@@ -463,16 +435,13 @@ class TestExportSortOrder:
             date_end="",
         )
 
-        payload = export_opportunities(
-            [later, earlier], site_dir=site_dir, today=date(2026, 1, 2)
-        )
+        payload = export_opportunities([later, earlier], today=date(2026, 1, 2))
 
         assert [o["title"] for o in payload] == ["Earlier Event", "Later Event"]
 
 
 class TestSlugDedup:
-    def test_colliding_slugs_get_disambiguating_suffix_neither_dropped(self, tmp_path):
-        site_dir = _site_dir(tmp_path)
+    def test_colliding_slugs_get_disambiguating_suffix_neither_dropped(self):
         a = _opportunity(
             slug="farm_camp_20260801",
             title="Farm Camp Session A",
@@ -484,7 +453,7 @@ class TestSlugDedup:
             date_start="2026-08-02T09:00:00-07:00",
         )
 
-        payload = export_opportunities([a, b], site_dir=site_dir, today=date(2026, 7, 19))
+        payload = export_opportunities([a, b], today=date(2026, 7, 19))
 
         slugs = [o["slug"] for o in payload]
         assert len(payload) == 2
@@ -494,8 +463,7 @@ class TestSlugDedup:
         titles = {o["title"] for o in payload}
         assert titles == {"Farm Camp Session A", "Farm Camp Session B"}
 
-    def test_three_way_collision_each_gets_a_distinct_suffix(self, tmp_path):
-        site_dir = _site_dir(tmp_path)
+    def test_three_way_collision_each_gets_a_distinct_suffix(self):
         events = [
             _opportunity(
                 slug="farm_camp_20260801",
@@ -505,7 +473,7 @@ class TestSlugDedup:
             for i in (1, 2, 3)
         ]
 
-        payload = export_opportunities(events, site_dir=site_dir, today=date(2026, 7, 19))
+        payload = export_opportunities(events, today=date(2026, 7, 19))
 
         slugs = {o["slug"] for o in payload}
         assert slugs == {
@@ -515,7 +483,7 @@ class TestSlugDedup:
         }
 
     def test_slugs_from_different_partners_with_no_link_can_collide_and_still_get_disambiguated(
-        self, tmp_path
+        self,
     ):
         """Reflects the new slug rule directly: `normalize.run()` no
         longer includes an org/partner prefix in the slug (sprint 009
@@ -524,7 +492,6 @@ class TestSlugDedup:
         *identical* slug more often than the old truncation-collision
         case did. `_dedupe_slugs` must disambiguate regardless of why
         the slugs collided."""
-        site_dir = _site_dir(tmp_path)
         a = _opportunity(
             slug="community_cleanup_20260801",
             title="Community Cleanup",
@@ -538,7 +505,7 @@ class TestSlugDedup:
             date_start="2026-08-01T09:00:00-07:00",
         )
 
-        payload = export_opportunities([a, b], site_dir=site_dir, today=date(2026, 7, 19))
+        payload = export_opportunities([a, b], today=date(2026, 7, 19))
 
         slugs = [o["slug"] for o in payload]
         assert len(payload) == 2
@@ -549,86 +516,83 @@ class TestSlugDedup:
 
 class TestSiteSchemaShape:
     def test_written_json_has_exact_site_schema_field_set(self, tmp_path):
-        site_dir = _site_dir(tmp_path)
+        own_data_dir = tmp_path / "own-data"
         opp = _opportunity(sources=frozenset({"tec_source", "wp_source"}))
 
-        payload = export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+        payload = export_opportunities([opp], today=date(2026, 7, 19), own_data_dir=own_data_dir)
 
         assert len(payload) == 1
         assert set(payload[0].keys()) == _EXPECTED_SITE_FIELDS
         assert "sources" not in payload[0]
 
-        written = json.loads((site_dir / "src" / "data" / "opportunities.json").read_text())
+        written = json.loads((own_data_dir / "opportunities.json").read_text())
         assert len(written) == 1
         assert set(written[0].keys()) == _EXPECTED_SITE_FIELDS
 
     def test_partner_id_none_serializes_to_null(self, tmp_path):
-        site_dir = _site_dir(tmp_path)
+        own_data_dir = tmp_path / "own-data"
         opp = _opportunity(partner_id=None)
 
-        export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+        export_opportunities([opp], today=date(2026, 7, 19), own_data_dir=own_data_dir)
 
-        written = json.loads((site_dir / "src" / "data" / "opportunities.json").read_text())
+        written = json.loads((own_data_dir / "opportunities.json").read_text())
         assert written[0]["partner_id"] is None
 
     def test_field_types_match_spec_lists_stay_lists_strings_stay_strings(self, tmp_path):
-        site_dir = _site_dir(tmp_path)
+        own_data_dir = tmp_path / "own-data"
         opp = _opportunity(
             age_grade_level=["Family"],
             areas_of_interest=["Biology / LifeSciences"],
             time_of_day=["Morning"],
         )
 
-        export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+        export_opportunities([opp], today=date(2026, 7, 19), own_data_dir=own_data_dir)
 
-        written = json.loads((site_dir / "src" / "data" / "opportunities.json").read_text())[0]
+        written = json.loads((own_data_dir / "opportunities.json").read_text())[0]
         assert isinstance(written["age_grade_level"], list)
         assert isinstance(written["areas_of_interest"], list)
         assert isinstance(written["time_of_day"], list)
         assert isinstance(written["slug"], str)
         assert isinstance(written["title"], str)
 
-    def test_image_src_is_exported_like_logo_src(self, tmp_path):
+    def test_image_src_is_exported_like_logo_src(self):
         """`image_src` (sprint 008 ticket 008, issue 19) is exported
         automatically -- `_SITE_SCHEMA_FIELDS` is derived from
         `fields(Opportunity)`, so no writer.py change is needed for a
         populated value to reach `opportunities.json`."""
-        site_dir = _site_dir(tmp_path)
         opp = _opportunity(image_src="a1b2c3d4e5f6a7b8.jpg")
 
-        payload = export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+        payload = export_opportunities([opp], today=date(2026, 7, 19))
 
         assert payload[0]["image_src"] == "a1b2c3d4e5f6a7b8.jpg"
 
-    def test_eligibility_is_exported_like_financial_support_and_ngss_aligned(self, tmp_path):
+    def test_eligibility_is_exported_like_financial_support_and_ngss_aligned(self):
         """`eligibility` (sprint 015 ticket 008, issue 27 item 3) is
         exported automatically -- same mechanism as `image_src` above,
         proving no `writer.py` code change was needed, only this
         test-coverage extension, for `SITE_SCHEMA_FIELDS`/`to_json_dict`
         to pick up the new `Opportunity` field."""
-        site_dir = _site_dir(tmp_path)
         opp = _opportunity(eligibility="Open only to nine named partner schools")
 
-        payload = export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+        payload = export_opportunities([opp], today=date(2026, 7, 19))
 
         assert payload[0]["eligibility"] == "Open only to nine named partner schools"
 
-    def test_eligibility_defaults_to_empty_string_when_unset(self, tmp_path):
+    def test_eligibility_defaults_to_empty_string_when_unset(self):
         """No regression for the ~120 sources that never set
         `taxonomy_defaults.eligibility` -- `Opportunity.eligibility`'s
         own dataclass default (`""`) round-trips through the export
         unchanged."""
-        site_dir = _site_dir(tmp_path)
         opp = _opportunity()
 
-        payload = export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+        payload = export_opportunities([opp], today=date(2026, 7, 19))
 
         assert payload[0]["eligibility"] == ""
 
 
 class TestScrapeMeta:
     def test_last_updated_changes_between_runs(self, tmp_path, monkeypatch):
-        site_dir = _site_dir(tmp_path)
+        own_data_dir = tmp_path / "own-data"
         stamps = iter(
             [
                 datetime(2026, 7, 19, 12, 0, 0, tzinfo=timezone.utc),
@@ -643,11 +607,11 @@ class TestScrapeMeta:
 
         monkeypatch.setattr(writer, "datetime", FakeDateTime)
 
-        export_opportunities([_opportunity()], site_dir=site_dir, today=date(2026, 7, 19))
-        first = json.loads((site_dir / "src" / "data" / "scrape-meta.json").read_text())
+        export_opportunities([_opportunity()], today=date(2026, 7, 19), own_data_dir=own_data_dir)
+        first = json.loads((own_data_dir / "scrape-meta.json").read_text())
 
-        export_opportunities([_opportunity()], site_dir=site_dir, today=date(2026, 7, 19))
-        second = json.loads((site_dir / "src" / "data" / "scrape-meta.json").read_text())
+        export_opportunities([_opportunity()], today=date(2026, 7, 19), own_data_dir=own_data_dir)
+        second = json.loads((own_data_dir / "scrape-meta.json").read_text())
 
         assert first["last_updated"] == "2026-07-19T12:00:00Z"
         assert second["last_updated"] == "2026-07-19T12:05:00Z"
@@ -656,7 +620,7 @@ class TestScrapeMeta:
     def test_last_updated_written_even_when_opportunity_set_is_unchanged(
         self, tmp_path, monkeypatch
     ):
-        site_dir = _site_dir(tmp_path)
+        own_data_dir = tmp_path / "own-data"
         stamps = iter(
             [
                 datetime(2026, 7, 19, 9, 0, 0, tzinfo=timezone.utc),
@@ -672,196 +636,149 @@ class TestScrapeMeta:
         monkeypatch.setattr(writer, "datetime", FakeDateTime)
         same_opportunity = _opportunity()
 
-        export_opportunities([same_opportunity], site_dir=site_dir, today=date(2026, 7, 19))
-        first_opps = (site_dir / "src" / "data" / "opportunities.json").read_text()
-        first_meta = json.loads((site_dir / "src" / "data" / "scrape-meta.json").read_text())
+        export_opportunities(
+            [same_opportunity], today=date(2026, 7, 19), own_data_dir=own_data_dir
+        )
+        first_opps = (own_data_dir / "opportunities.json").read_text()
+        first_meta = json.loads((own_data_dir / "scrape-meta.json").read_text())
 
-        export_opportunities([same_opportunity], site_dir=site_dir, today=date(2026, 7, 19))
-        second_opps = (site_dir / "src" / "data" / "opportunities.json").read_text()
-        second_meta = json.loads((site_dir / "src" / "data" / "scrape-meta.json").read_text())
+        export_opportunities(
+            [same_opportunity], today=date(2026, 7, 19), own_data_dir=own_data_dir
+        )
+        second_opps = (own_data_dir / "opportunities.json").read_text()
+        second_meta = json.loads((own_data_dir / "scrape-meta.json").read_text())
 
         assert first_opps == second_opps
         assert first_meta["last_updated"] != second_meta["last_updated"]
 
 
 class TestDryRun:
-    def test_dry_run_writes_nothing_but_returns_the_payload(self, tmp_path):
-        site_dir = _site_dir(tmp_path)
+    def test_dry_run_writes_nothing_but_returns_the_payload(self):
         opp = _opportunity()
 
-        payload = export_opportunities(
-            [opp], site_dir=site_dir, today=date(2026, 7, 19), dry_run=True
-        )
+        payload = export_opportunities([opp], today=date(2026, 7, 19), dry_run=True)
 
         assert len(payload) == 1
-        assert not (site_dir / "src" / "data" / "opportunities.json").exists()
-        assert not (site_dir / "src" / "data" / "scrape-meta.json").exists()
 
-    def test_dry_run_payload_matches_non_dry_run_payload(self, tmp_path):
-        site_dir = _site_dir(tmp_path)
+    def test_dry_run_payload_matches_non_dry_run_payload(self):
         opp = _opportunity()
 
-        dry_payload = export_opportunities(
-            [opp], site_dir=site_dir, today=date(2026, 7, 19), dry_run=True
-        )
-        real_payload = export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+        dry_payload = export_opportunities([opp], today=date(2026, 7, 19), dry_run=True)
+        real_payload = export_opportunities([opp], today=date(2026, 7, 19))
 
         assert dry_payload == real_payload
 
 
-class TestTargetDirIsolation:
-    def test_writes_only_under_the_given_site_dir(self, tmp_path):
-        site_dir = _site_dir(tmp_path)
+class TestOwnDataDirIsolation:
+    """Sprint 025 ticket 003 (issue 21, "stop writing to the
+    stem-ecosystem checkout"): `export_opportunities()` no longer
+    accepts a `site_dir` parameter and never writes into a sibling
+    `stem-ecosystem` checkout's `src/data/` -- `own_data_dir` is the
+    sole write target. Inverts this class's pre-ticket
+    `test_writes_only_under_the_given_site_dir` (which asserted the
+    `site_dir` write happened) into a proof that no such write happens,
+    alongside the equivalent isolation proof for `own_data_dir` itself.
+    """
+
+    def test_writes_only_under_the_given_own_data_dir(self, tmp_path):
+        own_data_dir = tmp_path / "own-data"
         opp = _opportunity()
 
-        export_opportunities([opp], site_dir=site_dir, today=date(2026, 7, 19))
+        export_opportunities([opp], today=date(2026, 7, 19), own_data_dir=own_data_dir)
 
-        assert (site_dir / "src" / "data" / "opportunities.json").exists()
-        assert (site_dir / "src" / "data" / "scrape-meta.json").exists()
+        assert (own_data_dir / "opportunities.json").exists()
+        assert (own_data_dir / "scrape-meta.json").exists()
         # Nothing written anywhere else under tmp_path.
         written_files = sorted(p for p in tmp_path.rglob("*") if p.is_file())
         assert written_files == sorted(
             [
-                site_dir / "src" / "data" / "opportunities.json",
-                site_dir / "src" / "data" / "scrape-meta.json",
-            ]
-        )
-
-    def test_explicit_site_dir_never_consults_config_default(self, tmp_path, monkeypatch):
-        site_dir = _site_dir(tmp_path)
-
-        def _boom():
-            raise AssertionError("get_site_dir() must not be called when site_dir is explicit")
-
-        monkeypatch.setattr(writer, "get_site_dir", _boom)
-
-        export_opportunities([_opportunity()], site_dir=site_dir, today=date(2026, 7, 19))
-
-    def test_omitted_site_dir_resolves_via_config_get_site_dir(self, tmp_path, monkeypatch):
-        fake_site_dir = _site_dir(tmp_path)
-        monkeypatch.setattr(writer, "get_site_dir", lambda: fake_site_dir)
-
-        export_opportunities([_opportunity()], today=date(2026, 7, 19))
-
-        assert (fake_site_dir / "src" / "data" / "opportunities.json").exists()
-
-
-class TestSiteDirErrors:
-    def test_missing_site_dir_raises_a_clear_error(self, tmp_path):
-        missing = tmp_path / "does-not-exist"
-
-        with pytest.raises(RuntimeError, match="site_dir"):
-            export_opportunities([_opportunity()], site_dir=missing, today=date(2026, 7, 19))
-
-    def test_missing_site_dir_writes_nothing(self, tmp_path):
-        missing = tmp_path / "does-not-exist"
-
-        with pytest.raises(RuntimeError):
-            export_opportunities([_opportunity()], site_dir=missing, today=date(2026, 7, 19))
-
-        assert not missing.exists()
-
-    def test_data_path_occupied_by_a_file_raises_a_clear_error(self, tmp_path):
-        site_dir = tmp_path / "stem-ecosystem"
-        (site_dir / "src").mkdir(parents=True)
-        # `src/data` is a plain file here, not a directory -- simulates an
-        # unwritable/broken site checkout without relying on OS
-        # permission bits (which root can bypass in some CI sandboxes).
-        (site_dir / "src" / "data").write_text("not a directory")
-
-        with pytest.raises(RuntimeError, match="site_dir"):
-            export_opportunities([_opportunity()], site_dir=site_dir, today=date(2026, 7, 19))
-
-
-class TestOwnDataDirPublish:
-    """Sprint 020 ticket 003 (issue 60): the third write path -- the
-    same payload and `scrape-meta.json` timestamp already written to
-    `site_dir`, written again into partner-scrape's own `data/`
-    directory via `config.get_own_data_dir()`. Mirrors
-    `TestTargetDirIsolation`/`TestDryRun`'s structure and naming
-    conventions above.
-    """
-
-    def test_own_data_dir_content_matches_site_dir_content_exactly(self, tmp_path):
-        site_dir = _site_dir(tmp_path)
-        own_data_dir = tmp_path / "own-data"
-
-        export_opportunities(
-            [_opportunity()],
-            site_dir=site_dir,
-            today=date(2026, 7, 19),
-            own_data_dir=own_data_dir,
-        )
-
-        site_opportunities = (site_dir / "src" / "data" / "opportunities.json").read_text()
-        site_meta = (site_dir / "src" / "data" / "scrape-meta.json").read_text()
-        own_opportunities = (own_data_dir / "opportunities.json").read_text()
-        own_meta = (own_data_dir / "scrape-meta.json").read_text()
-
-        assert own_opportunities == site_opportunities
-        assert own_meta == site_meta
-
-    def test_writes_only_under_the_given_own_data_dir(self, tmp_path):
-        site_dir = _site_dir(tmp_path)
-        own_data_dir = tmp_path / "own-data"
-
-        export_opportunities(
-            [_opportunity()],
-            site_dir=site_dir,
-            today=date(2026, 7, 19),
-            own_data_dir=own_data_dir,
-        )
-
-        written_files = sorted(p for p in tmp_path.rglob("*") if p.is_file())
-        assert written_files == sorted(
-            [
-                site_dir / "src" / "data" / "opportunities.json",
-                site_dir / "src" / "data" / "scrape-meta.json",
                 own_data_dir / "opportunities.json",
                 own_data_dir / "scrape-meta.json",
             ]
         )
 
+    def test_no_site_dir_shaped_write_occurs_anywhere(self, tmp_path):
+        """Direct inversion of the pre-ticket `site_dir` write proof: a
+        `src/data/opportunities.json`/`scrape-meta.json` pair -- the
+        removed `site_dir` write's exact old shape -- must never be
+        created, confirmed even when a directory that happens to look
+        like an old `site_dir` checkout already exists under
+        `tmp_path`."""
+        stale_site_dir_lookalike = tmp_path / "stem-ecosystem"
+        (stale_site_dir_lookalike / "src" / "data").mkdir(parents=True)
+        own_data_dir = tmp_path / "own-data"
+
+        export_opportunities(
+            [_opportunity()], today=date(2026, 7, 19), own_data_dir=own_data_dir
+        )
+
+        assert not (stale_site_dir_lookalike / "src" / "data" / "opportunities.json").exists()
+        assert not (stale_site_dir_lookalike / "src" / "data" / "scrape-meta.json").exists()
+
+
+class TestOwnDataDirErrors:
+    """Sprint 025 ticket 003: with the `site_dir` write removed,
+    `own_data_dir`'s own failure path -- previously untested because a
+    `site_dir` failure always propagated first (see this module's old
+    "The two write targets are not symmetric" docstring section, now
+    removed) -- is the only failure path `export_opportunities` has
+    left, and gets its own direct test."""
+
+    def test_own_data_dir_occupied_by_a_file_raises_a_clear_error(self, tmp_path):
+        # own_data_dir itself is a plain file, not a directory --
+        # `Path.mkdir(parents=True, exist_ok=True)` cannot succeed here
+        # even with exist_ok=True (that only forgives an *existing
+        # directory*, not an existing file) -- simulates an
+        # unwritable/broken own_data_dir without relying on OS
+        # permission bits (which root can bypass in some CI sandboxes).
+        own_data_dir = tmp_path / "own-data"
+        own_data_dir.write_text("not a directory")
+
+        with pytest.raises(RuntimeError, match="own_data_dir"):
+            export_opportunities(
+                [_opportunity()], today=date(2026, 7, 19), own_data_dir=own_data_dir
+            )
+
+
+class TestOwnDataDirPublish:
+    """Sprint 020 ticket 003 (issue 60) added this write path -- the
+    same payload and `scrape-meta.json` timestamp written into
+    partner-scrape's own `data/` directory via `config.get_own_data_dir()`.
+    Sprint 025 ticket 003 removed the sibling `stem-ecosystem` write this
+    used to run alongside (see `TestOwnDataDirIsolation` above for the
+    isolation/inversion proof) -- `own_data_dir` is now this function's
+    only write target, and these tests cover its own defaulting,
+    auto-creation, and dry_run behavior in isolation.
+    """
+
     def test_omitted_own_data_dir_resolves_via_config_get_own_data_dir(
         self, tmp_path, monkeypatch
     ):
-        site_dir = _site_dir(tmp_path)
         fake_own_data_dir = tmp_path / "fake-own-data"
         monkeypatch.setattr(writer, "get_own_data_dir", lambda: fake_own_data_dir)
 
-        export_opportunities([_opportunity()], site_dir=site_dir, today=date(2026, 7, 19))
+        export_opportunities([_opportunity()], today=date(2026, 7, 19))
 
         assert (fake_own_data_dir / "opportunities.json").exists()
         assert (fake_own_data_dir / "scrape-meta.json").exists()
 
     def test_missing_own_data_dir_is_created_automatically_never_raises(self, tmp_path):
-        site_dir = _site_dir(tmp_path)
         own_data_dir = tmp_path / "does-not-exist-yet" / "nested"
         assert not own_data_dir.exists()
 
         export_opportunities(
-            [_opportunity()],
-            site_dir=site_dir,
-            today=date(2026, 7, 19),
-            own_data_dir=own_data_dir,
+            [_opportunity()], today=date(2026, 7, 19), own_data_dir=own_data_dir
         )
 
         assert (own_data_dir / "opportunities.json").exists()
         assert (own_data_dir / "scrape-meta.json").exists()
 
     def test_dry_run_writes_nothing_to_own_data_dir(self, tmp_path):
-        site_dir = _site_dir(tmp_path)
         own_data_dir = tmp_path / "own-data"
 
         payload = export_opportunities(
-            [_opportunity()],
-            site_dir=site_dir,
-            today=date(2026, 7, 19),
-            own_data_dir=own_data_dir,
-            dry_run=True,
+            [_opportunity()], today=date(2026, 7, 19), own_data_dir=own_data_dir, dry_run=True
         )
 
         assert len(payload) == 1
         assert not own_data_dir.exists()
-        assert not (site_dir / "src" / "data" / "opportunities.json").exists()
-        assert not (site_dir / "src" / "data" / "scrape-meta.json").exists()

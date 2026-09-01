@@ -91,7 +91,7 @@ def _build_parser() -> argparse.ArgumentParser:
         default=None,
         help=(
             "Source Registry directory to load sources from (default: "
-            "the real seed registry under partner_scrape/registry/sources/)."
+            "the real seed registry under registry/sources/)."
         ),
     )
     parser.add_argument(
@@ -99,14 +99,16 @@ def _build_parser() -> argparse.ArgumentParser:
         type=Path,
         default=None,
         help=(
-            "Sibling stem-ecosystem checkout to write opportunities.json / "
-            "scrape-meta.json into (default: ../stem-ecosystem, or $SITE_DIR)."
+            "Sibling stem-ecosystem checkout to read partners.json from "
+            "(default: ../stem-ecosystem, or $SITE_DIR). Read-only as of "
+            "sprint 025 -- opportunities.json/scrape-meta.json/images are "
+            "written to partner-scrape's own data/ directory, never here."
         ),
     )
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Compute the export payload without writing anything to --site-dir.",
+        help="Compute the export payload without writing anything to disk.",
     )
     parser.add_argument(
         "--limit",
@@ -141,9 +143,9 @@ def _build_parser() -> argparse.ArgumentParser:
         metavar="PATH",
         help=(
             "Path to the per-source yield-history snapshot JSON file "
-            "(default: {site-dir}/src/data/yield-history.json, resolved "
-            "the same way --site-dir resolves against Config.get_site_dir()). "
-            "Ignored when --no-report is given."
+            "(default: {own-data-dir}/yield-history.json -- this repo's "
+            "own data/ directory per Config.get_own_data_dir(), not "
+            "--site-dir). Ignored when --no-report is given."
         ),
     )
     parser.add_argument(
@@ -197,7 +199,7 @@ def _add_discover_candidates_subcommand(subparsers: argparse._SubParsersAction) 
         default=None,
         help=(
             "Hub Registry directory to load hubs from (default: the real "
-            "seed hub registry under partner_scrape/registry/hubs/)."
+            "seed hub registry under registry/hubs/)."
         ),
     )
     parser.add_argument(
@@ -206,7 +208,7 @@ def _add_discover_candidates_subcommand(subparsers: argparse._SubParsersAction) 
         default=None,
         help=(
             "Candidate Review Queue directory to write stub TOML files "
-            "into (default: partner_scrape/registry/candidates/)."
+            "into (default: registry/candidates/)."
         ),
     )
     parser.add_argument(
@@ -216,7 +218,7 @@ def _add_discover_candidates_subcommand(subparsers: argparse._SubParsersAction) 
         help=(
             "Source Registry directory Hub Scan's dedup check reads "
             "against (default: the real seed registry under "
-            "partner_scrape/registry/sources/). Mirrors the `run` "
+            "registry/sources/). Mirrors the `run` "
             "command's own --registry-dir."
         ),
     )
@@ -246,15 +248,16 @@ def _add_teams_subcommand(subparsers: argparse._SubParsersAction) -> None:
             "Run the Teams pipeline: load this subsystem's own Team "
             "Registry (partner_scrape/teams/registry/, disjoint from the "
             "Opportunity Source Registry), acquire each active team "
-            "source, and publish {site_dir}/src/data/teams.json. Never "
-            "runs the normal scrape/export -- opportunities.json and "
-            "scrape-meta.json are never touched by this command."
+            "source, and publish teams.json into partner-scrape's own "
+            "data directory. Never runs the normal scrape/export -- "
+            "opportunities.json and scrape-meta.json are never touched "
+            "by this command."
         ),
     )
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Compute the teams.json payload without writing anything to --site-dir.",
+        help="Compute the teams.json payload without writing anything to disk.",
     )
     parser.add_argument(
         "--source",
@@ -266,16 +269,6 @@ def _add_teams_subcommand(subparsers: argparse._SubParsersAction) -> None:
             "(e.g. 'ftcscout', 'tba', 'static_roster', or "
             "'robotevents') -- not a Team Registry file's stem. "
             "Omitted, every active team source runs."
-        ),
-    )
-    parser.add_argument(
-        "--site-dir",
-        type=Path,
-        default=None,
-        help=(
-            "Sibling stem-ecosystem checkout to write teams.json into "
-            "(default: ../stem-ecosystem, or $SITE_DIR) -- same default "
-            "and override as the `run` command's --site-dir."
         ),
     )
     parser.add_argument(
@@ -319,17 +312,16 @@ def _add_directory_subcommand(subparsers: argparse._SubParsersAction) -> None:
             "Registry (partner_scrape/directory/registry/, disjoint from "
             "the Opportunity Source Registry and from teams/registry/), "
             "acquire each active place/club source, and publish "
-            "{site_dir}/src/data/places.json and "
-            "{site_dir}/src/data/clubs.json. Never runs the normal "
-            "scrape/export or the teams pipeline -- opportunities.json, "
-            "scrape-meta.json, and teams.json are never touched by this "
-            "command."
+            "places.json and clubs.json into partner-scrape's own data "
+            "directory. Never runs the normal scrape/export or the teams "
+            "pipeline -- opportunities.json, scrape-meta.json, and "
+            "teams.json are never touched by this command."
         ),
     )
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Compute the places.json/clubs.json payloads without writing anything to --site-dir.",
+        help="Compute the places.json/clubs.json payloads without writing anything to disk.",
     )
     parser.add_argument(
         "--source",
@@ -348,10 +340,12 @@ def _add_directory_subcommand(subparsers: argparse._SubParsersAction) -> None:
         type=Path,
         default=None,
         help=(
-            "Sibling stem-ecosystem checkout to write places.json and "
-            "clubs.json into (default: ../stem-ecosystem, or $SITE_DIR) "
-            "-- same default and override as the `run`/`teams` "
-            "commands' --site-dir."
+            "Sibling stem-ecosystem checkout to read partners.json from, "
+            "for the related-partner-reference join-integrity check only "
+            "(default: ../stem-ecosystem, or $SITE_DIR) -- same default "
+            "as the `run` command's --site-dir. Read-only: places.json/ "
+            "clubs.json are always written to partner-scrape's own data/ "
+            "directory, never here."
         ),
     )
     parser.add_argument(
@@ -427,7 +421,6 @@ def _run_teams(args: argparse.Namespace) -> int:
 
     payload = run_teams(
         source=args.source,
-        site_dir=args.site_dir,
         fetcher=PoliteFetcher(),
         dry_run=args.dry_run,
         no_sponsors=args.no_sponsors,
@@ -521,11 +514,21 @@ def main(argv: list[str] | None = None) -> int:
     yield_history_path: Path | None = None
     previous_snapshot: dict[str, object] = {}
     if not args.no_report:
-        resolved_site_dir = args.site_dir if args.site_dir is not None else get_site_dir()
+        # Ticket 006 (sprint 025): the snapshot read (here) and the
+        # snapshot write (below, at the single save_snapshot() call)
+        # share one default location -- own_data_dir/yield-history.json
+        # -- not {site-dir}/src/data/yield-history.json. Sprint 020
+        # ticket 007 added a second, independent own_data_dir write
+        # alongside the site-dir one and the site-dir *read* stayed
+        # put; this consolidates both onto own_data_dir together.
+        # Pointing the read at a location that stops being written
+        # would freeze every future found/dropped delta computation
+        # against a permanently stale snapshot -- see this ticket's
+        # file for the full reasoning.
         yield_history_path = (
             args.yield_history
             if args.yield_history is not None
-            else resolved_site_dir / "src" / "data" / "yield-history.json"
+            else get_own_data_dir() / "yield-history.json"
         )
         previous_snapshot = load_snapshot(yield_history_path)
         yield_reporter = YieldReporter()
@@ -592,21 +595,19 @@ def main(argv: list[str] | None = None) -> int:
         print(render_text(report))
         # --dry-run computes the would-be export payload without writing
         # anything to --site-dir (run()'s own dry_run contract); the
-        # yield-history snapshot is site-dir-adjacent output, so it
-        # follows the same "nothing written" promise here.
+        # yield-history snapshot follows the same "nothing written"
+        # promise here, even though (as of ticket 006) it no longer
+        # lives under --site-dir itself.
         if not args.dry_run:
             assert yield_history_path is not None  # set above whenever yield_reporter is
+            # Ticket 006 (sprint 025): a single save_snapshot() call, at
+            # yield_history_path -- which already defaults to
+            # own_data_dir/yield-history.json above, the same path
+            # load_snapshot() read from before run() executed. Sprint
+            # 020 ticket 007's second, independent own_data_dir write
+            # (alongside a site-dir one) is gone: it's now redundant
+            # with this single call.
             save_snapshot(yield_history_path, report)
-            # Sprint 020 ticket 007 (issue 60): also publish the same
-            # report into this repo's own data/ directory, alongside the
-            # SITE_DIR/--yield-history copy above. Unlike the export
-            # modules (tickets 003-006), there is no own_data_dir
-            # parameter to thread through here -- yield-history.json
-            # isn't owned by a data-contract export module, so this is a
-            # second, independent save_snapshot() call rather than a
-            # signature change. save_snapshot() already creates missing
-            # parent directories, so no explicit mkdir is needed here.
-            save_snapshot(get_own_data_dir() / "yield-history.json", report)
 
     # A publish.project() failure above is real (public/data/ is stale
     # until re-run) even though the rest of this run succeeded -- signal

@@ -1,10 +1,10 @@
 """`export_opportunities()`: the Site Export module's single entry point.
 
 Publishes already-normalized `Opportunity` records (produced by
-`partner_scrape.normalize.run`, ticket 006) into the sibling
-`stem-ecosystem` repo's data contract (sprint.md Architecture > Site
-Export, SUC-007). This module does not re-derive or re-map any field --
-its only responsibilities are:
+`partner_scrape.normalize.run`, ticket 006) into partner-scrape's own
+`own_data_dir` (sprint.md Architecture > Site Export, SUC-007). This
+module does not re-derive or re-map any field -- its only
+responsibilities are:
 
 1. Filter to current + upcoming records (historical data never ships).
 2. A defensive slug-uniqueness pass (normalize already dedupes by
@@ -15,36 +15,24 @@ its only responsibilities are:
    `Opportunity.sources`, which is normalize's own cross-source
    bookkeeping and not part of `stem-ecosystem/docs/site-implementation
    -spec.md`'s Opportunities table.
-4. Write `src/data/opportunities.json` and `src/data/scrape-meta.json`
-   into the site repo, matching `dev/export_site.py`'s existing
-   behavior and file shapes exactly so the site consumes them
-   unchanged.
+4. Write `opportunities.json` and `scrape-meta.json` into
+   `own_data_dir`, matching `dev/export_site.py`'s original behavior
+   and file shapes exactly.
 
-Sprint 020 ticket 003 (issue 60): the same payload and timestamp are
-also written a second time, into partner-scrape's own `data/` directory
-(`config.get_own_data_dir()`) -- "one export, three files, two
-directories" -- so this repo's own pipeline output is inspectable and
-git-trackable without a `stem-ecosystem` checkout on hand. Both copies
-come from the exact same `payload`/timestamp computed once in this
-function call, so they can never drift from each other.
+Sprint 020 ticket 003 (issue 60) added a second write target,
+partner-scrape's own `data/` directory (`config.get_own_data_dir()`),
+alongside the original write into a sibling `stem-ecosystem` checkout's
+`src/data/` -- "one export, three files, two directories" -- so this
+repo's own pipeline output was inspectable and git-trackable without a
+`stem-ecosystem` checkout on hand. Sprint 025 ticket 003 (issue 21,
+"stop writing to the stem-ecosystem checkout") removed the
+`stem-ecosystem` write entirely: this function no longer accepts a
+`site_dir` parameter, and `own_data_dir` is now the sole write target.
 
-A missing or unwritable `site_dir` (or its `src/data` subdirectory)
-fails loudly -- SUC-007's explicit error flow is "fail loudly, do not
-silently skip the export." `own_data_dir` is different -- see "The two
-write targets are not symmetric" below.
-
-## The two write targets are not symmetric
-
-`site_dir`'s `src/data` must already exist -- a missing `src/data`
-fails loudly, unchanged from before this ticket. `own_data_dir`, by
-contrast, is created automatically if missing
-(`Path.mkdir(parents=True, exist_ok=True)`), mirroring
-`teams/export.py`'s `public/data/` write -- this sprint deletes the
-only two files this repo's `data/` directory tracked (ticket 002), so a
-fresh clone may have no `data/` at all yet. Ordering: the `site_dir`
-write happens first and its `RuntimeError` propagates immediately,
-before `own_data_dir` is touched at all -- a `site_dir` failure never
-leaves a stray `own_data_dir` write behind.
+A missing `own_data_dir` is created automatically
+(`Path.mkdir(parents=True, exist_ok=True)`); an unwritable one fails
+loudly -- SUC-007's explicit error flow is "fail loudly, do not
+silently skip the export."
 """
 
 from __future__ import annotations
@@ -55,7 +43,7 @@ from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
-from partner_scrape.config import get_own_data_dir, get_site_dir
+from partner_scrape.config import get_own_data_dir
 from partner_scrape.normalize.run import DEADLINE_FIRST_TYPES, Opportunity
 
 #: The exact field set written to `opportunities.json` -- every
@@ -181,37 +169,28 @@ def _now_iso() -> str:
 
 def export_opportunities(
     opportunities: Iterable[Opportunity],
-    site_dir: str | Path | None = None,
     *,
     today: date | None = None,
     dry_run: bool = False,
     own_data_dir: str | Path | None = None,
 ) -> list[dict[str, Any]]:
-    """Filter, dedupe, and write `opportunities` into `site_dir`'s data
-    contract -- and, as of sprint 020 ticket 003, into partner-scrape's
-    own `own_data_dir` too, from the exact same payload and timestamp.
+    """Filter, dedupe, and write `opportunities` into `own_data_dir`'s
+    data contract.
 
     Args:
         opportunities: normalized, deduplicated `Opportunity` records
             (typically `normalize.run()`'s output).
-        site_dir: path to the sibling `stem-ecosystem` checkout. Defaults
-            to `Config.get_site_dir()` (`../stem-ecosystem`) when `None`
-            -- ticket 008's CLI wires a `--site-dir` override onto this
-            parameter. Tests should always pass an explicit `tmp_path`
-            here, never rely on the default, so runs never touch the
-            real site repo.
         today: the reference date for the current/upcoming filter.
             Defaults to `date.today()`. Tests should pass an explicit
             value for determinism.
         dry_run: when `True`, compute and return the would-be-written
-            payload without touching disk -- neither `site_dir` nor
-            `own_data_dir` is written.
+            payload without touching disk -- `own_data_dir` is not
+            written.
         own_data_dir: path to partner-scrape's own pipeline-output
             directory. Defaults to `Config.get_own_data_dir()`
-            (`<repo_root>/data`) when `None`. Unlike `site_dir`, this
-            directory is created automatically if missing. Tests should
-            always pass an explicit `tmp_path` here, never rely on the
-            default, matching `site_dir`'s own test convention.
+            (`<repo_root>/data`) when `None`. Created automatically if
+            missing. Tests should always pass an explicit `tmp_path`
+            here, never rely on the default.
 
     Returns:
         The list of opportunity dicts that were (or, for `dry_run`,
@@ -219,15 +198,10 @@ def export_opportunities(
         written to `opportunities.json`.
 
     Raises:
-        RuntimeError: `site_dir`'s `src/data` subdirectory does not
-            exist or is not writable, or `own_data_dir` is occupied by
-            something unwritable (e.g. a non-directory file). Never
-            silently skips either write. The `site_dir` write is
-            attempted first and its failure propagates before
-            `own_data_dir` is touched -- see "The two write targets are
-            not symmetric" in this module's docstring.
+        RuntimeError: `own_data_dir` is occupied by something
+            unwritable (e.g. a non-directory file). Never silently
+            skips the write.
     """
-    resolved_site_dir = Path(site_dir) if site_dir is not None else get_site_dir()
     resolved_own_data_dir = Path(own_data_dir) if own_data_dir is not None else get_own_data_dir()
     reference_date = today if today is not None else date.today()
 
@@ -243,27 +217,11 @@ def export_opportunities(
     serialized_opportunities = json.dumps(payload, indent=1, ensure_ascii=False)
     serialized_meta = json.dumps({"last_updated": _now_iso()})
 
-    data_dir = resolved_site_dir / "src" / "data"
-    opportunities_path = data_dir / "opportunities.json"
-    meta_path = data_dir / "scrape-meta.json"
-
-    try:
-        opportunities_path.write_text(serialized_opportunities, encoding="utf-8")
-        meta_path.write_text(serialized_meta, encoding="utf-8")
-    except OSError as exc:
-        raise RuntimeError(
-            f"Cannot write site export to {data_dir}: {exc}. Check that "
-            f"site_dir ({resolved_site_dir}) exists and its src/data "
-            "subdirectory is writable."
-        ) from exc
-
-    # Sprint 020 ticket 003 (issue 60): the same payload and timestamp,
-    # written a second time into partner-scrape's own data/ directory --
-    # reusing `serialized_opportunities`/`serialized_meta` computed above
-    # rather than re-serializing or re-timestamping, so the two copies
-    # can never drift. Unlike src/data above, own_data_dir is created if
-    # missing (see module docstring). Mirrors teams/export.py's
-    # public/data/ second write path.
+    # Sprint 020 ticket 003 (issue 60) added this write, into
+    # partner-scrape's own data/ directory, alongside a since-removed
+    # write into a sibling stem-ecosystem checkout (sprint 025 ticket
+    # 003 removed that second target -- see module docstring).
+    # own_data_dir is created if missing (see module docstring).
     own_opportunities_path = resolved_own_data_dir / "opportunities.json"
     own_meta_path = resolved_own_data_dir / "scrape-meta.json"
 

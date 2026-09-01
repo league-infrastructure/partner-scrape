@@ -1,5 +1,5 @@
-"""`publish.project()`: the build-time projection into the published
-`public/data/` tree.
+"""`publish.project()`: the build-time projection into partner-scrape's
+own `data/` tree.
 
 `export/partner_log.py` (ticket 003) accumulates every `Opportunity`
 ever seen into a durable, per-partner, append-only `.jsonl` log. That
@@ -7,8 +7,19 @@ log is not itself a publishable contract -- it can hold several lines
 for the same event (one per content change) and is keyed only by
 whatever partners happened to yield opportunities on some past run. This
 module turns that accumulated state into issue 15's actual public data
-contract: a partner roster (`public/data/partners.json`) plus, per
+contract: a partner roster (`{own_data_dir}/partners.json`) plus, per
 partner, a current/upcoming events file and a past-events file.
+
+Sprint 025 ticket 007 (issue 21, "stop writing to the stem-ecosystem
+checkout") redirected this projection's write target from
+`{site_dir}/public/data/` to partner-scrape's own `data/` directory
+(`config.get_own_data_dir()`), matching every other sprint-020 export
+module's convention -- for stem-ecosystem (or any consumer) to pull
+from at its own build time, rather than partner-scrape writing directly
+into a sibling checkout. `site_dir` stays as a parameter: it still
+resolves the default `partners_path` (the curated roster this
+projection reads and joins against), which this ticket leaves
+untouched.
 
 ## Self-describing, not just "correct"
 
@@ -26,10 +37,10 @@ knows what it is or where to look next.
 Reuses `writer.is_current_or_upcoming` for the current/past split and
 `writer.SITE_SCHEMA_FIELDS`/`writer.to_json_dict` for the event field
 set -- the exact same promoted helpers `export_opportunities` uses, so
-the two published contracts (`opportunities.json` and `public/data/`)
-can never silently disagree about which events are current or what an
-event record contains. This module adds no new judgment on top of
-those -- see `export/DESIGN.md`.
+the two published contracts (`opportunities.json` and this module's
+`own_data_dir` tree) can never silently disagree about which events are
+current or what an event record contains. This module adds no new
+judgment on top of those -- see `export/DESIGN.md`.
 
 ## One-way dependency on `partner_log.py`
 
@@ -60,7 +71,7 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from partner_scrape.config import get_scrape_cache_dir, get_site_dir
+from partner_scrape.config import get_own_data_dir, get_scrape_cache_dir, get_site_dir
 from partner_scrape.export.partner_log import _JSONL_FILENAME
 from partner_scrape.export.writer import SITE_SCHEMA_FIELDS, is_current_or_upcoming, to_json_dict
 from partner_scrape.model import slugify
@@ -201,11 +212,12 @@ def project(
     *,
     log_dir: str | Path | None = None,
     partners_path: str | Path | None = None,
+    own_data_dir: str | Path | None = None,
     today: date | None = None,
     dry_run: bool = False,
 ) -> dict[str, Any]:
-    """Project every partner's accumulated `.jsonl` log into the
-    published `{site_dir}/public/data/` tree.
+    """Project every partner's accumulated `.jsonl` log into
+    partner-scrape's own `{own_data_dir}/` tree.
 
     For every partner in the curated `partners_path` (not only ones
     with an accumulated log), resolves its slug (`model.slugify`,
@@ -216,33 +228,41 @@ def project(
     partner still appears in `partners.json`, with empty event files.
 
     Writes:
-        - `{site_dir}/public/data/partners.json` -- every curated
-          partner's full curated record plus `slug`, `events_url`, and
-          `past_events_url` (paths relative to `public/data/`), wrapped
-          in a `generated_at`/`partner_count` envelope.
-        - `{site_dir}/public/data/partners/<slug>/events.json` and
+        - `{own_data_dir}/partners.json` -- every curated partner's full
+          curated record plus `slug`, `events_url`, and `past_events_url`
+          (paths relative to `own_data_dir`), wrapped in a
+          `generated_at`/`partner_count` envelope.
+        - `{own_data_dir}/partners/<slug>/events.json` and
           `.../past-events.json` per partner -- each an envelope
           (`generated_at`/`kind`/`event_count`) around an `events` array
           using exactly `writer.SITE_SCHEMA_FIELDS` (`sources` excluded,
           matching `opportunities.json`).
 
-    `src/data/opportunities.json` (written by `export_opportunities`)
+    `own_data_dir/opportunities.json` (written by `export_opportunities`)
     is untouched -- this is a purely additive second contract.
 
     Args:
-        site_dir: path to the sibling `stem-ecosystem` checkout.
-            Defaults to `config.get_site_dir()` when `None`. Tests
-            should always pass an explicit `tmp_path`.
+        site_dir: path to the sibling `stem-ecosystem` checkout. Used
+            only to resolve the default `partners_path`
+            (`{site_dir}/src/data/partners.json`) when `partners_path`
+            is not given explicitly -- this function never writes
+            anywhere under `site_dir`. Defaults to `config.get_site_dir()`
+            when `None`. Tests should always pass an explicit `tmp_path`.
         log_dir: root of the per-partner accumulation store
             (`partner_log.py`'s `log_dir`). Defaults to
             `config.get_scrape_cache_dir() / "partner_log"`.
         partners_path: path to the curated `partners.json` this
             projection joins against. Defaults to
-            `{site_dir}/src/data/partners.json` -- note this is
-            `src/data/partners.json` (the curated input), a different
-            file from the `public/data/partners.json` this function
-            writes (see `export/DESIGN.md`'s Open Questions on the
-            naming overlap).
+            `{site_dir}/src/data/partners.json` -- note this is a
+            different file from the `{own_data_dir}/partners.json` this
+            function writes (see `export/DESIGN.md`'s Open Questions on
+            the naming overlap).
+        own_data_dir: path to partner-scrape's own pipeline-output
+            directory -- this function's sole write target. Defaults to
+            `config.get_own_data_dir()` (`<repo_root>/data`) when
+            `None`. Created automatically if missing. Tests should
+            always pass an explicit `tmp_path` here, never rely on the
+            default.
         today: reference date for the current/past split. Defaults to
             `date.today()`. Tests should pass an explicit value.
         dry_run: when `True`, compute and return the summary without
@@ -253,9 +273,10 @@ def project(
         `past_event_count`.
 
     Raises:
-        RuntimeError: `site_dir` does not exist, or `public/data`
-            cannot be created/written under it (e.g. the path is
-            occupied by a file). Never silently skips the write,
+        RuntimeError: `partners_path` cannot be read (e.g. `site_dir`
+            does not exist and no explicit `partners_path` was given),
+            or `own_data_dir` cannot be created/written (e.g. the path
+            is occupied by a file). Never silently skips the write,
             matching `export_opportunities`'s loud-failure contract.
     """
     resolved_site_dir = Path(site_dir) if site_dir is not None else get_site_dir()
@@ -263,19 +284,27 @@ def project(
     resolved_partners_path = (
         Path(partners_path) if partners_path is not None else _default_partners_path()
     )
+    resolved_own_data_dir = Path(own_data_dir) if own_data_dir is not None else get_own_data_dir()
     reference_date = today if today is not None else date.today()
 
-    if not resolved_site_dir.is_dir():
+    # own_data_dir is created automatically if missing (see docstring),
+    # matching every other sprint-020 export function's convention --
+    # it is never a hard precondition the way site_dir used to be when
+    # it was still this function's write target. partners_path is the
+    # one thing that must already exist: it is read-only input, not
+    # something this function can create on a caller's behalf, so a
+    # missing/unreadable partners_path still fails loudly here rather
+    # than propagating a bare FileNotFoundError.
+    try:
+        partners = json.loads(resolved_partners_path.read_text(encoding="utf-8"))
+    except OSError as exc:
         raise RuntimeError(
-            f"Cannot write published data export: site_dir "
-            f"({resolved_site_dir}) does not exist. Check --site-dir "
-            "or SITE_DIR, and that the sibling site checkout is present."
-        )
+            f"Cannot read curated partners file at {resolved_partners_path}: "
+            f"{exc}. Check --site-dir ({resolved_site_dir}) or SITE_DIR, or "
+            "pass partners_path directly."
+        ) from exc
 
-    partners = json.loads(resolved_partners_path.read_text(encoding="utf-8"))
-
-    data_dir = resolved_site_dir / "public" / "data"
-    partners_dir = data_dir / "partners"
+    partners_dir = resolved_own_data_dir / "partners"
 
     published_partners: list[dict[str, Any]] = []
     total_current = 0
@@ -319,7 +348,7 @@ def project(
 
     try:
         partners_dir.mkdir(parents=True, exist_ok=True)
-        (data_dir / "partners.json").write_text(
+        (resolved_own_data_dir / "partners.json").write_text(
             json.dumps(partners_payload, indent=1, ensure_ascii=False), encoding="utf-8"
         )
         for partner_slug, (events_payload, past_events_payload) in per_partner_events.items():
@@ -333,9 +362,8 @@ def project(
             )
     except OSError as exc:
         raise RuntimeError(
-            f"Cannot write published data export to {data_dir}: {exc}. Check "
-            f"that site_dir ({resolved_site_dir}) exists and its public/data "
-            "subdirectory is writable."
+            f"Cannot write published data export to {resolved_own_data_dir}: "
+            f"{exc}. Check that own_data_dir is writable."
         ) from exc
 
     return summary

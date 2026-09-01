@@ -1,0 +1,799 @@
+{
+ "generated_at": "2026-09-01T08:27:52Z",
+ "partner_slug": "mission_trails_regional_park_foundation",
+ "kind": "current",
+ "event_count": 22,
+ "events": [
+  {
+   "slug": "campfire_program_nocturnal_wildlife_20260906",
+   "title": "Campfire Program - Nocturnal Wildlife",
+   "partner_name": "Mission Trails Regional Park Foundation",
+   "partner_id": null,
+   "description": "Join MTRP Park Ranger Brandon Botticelli for a campfire program at the scenic Lake Amphitheater in Kumeyaay Lake Campground.  Join in singing some familiar songs as the campfire flames begin to flicker and cast a glow over the area.  Trail Guide Linda Stafford will then present a program on nocturnal wildlife.  Learn the fascinating stories of animals after dark.  Nature always surprises!\n\nThis program is free with no reservations required.  Please park in the dirt lot at the corner of Father Junipero Serra Trail and Bushy Hill Dr. across from the campground.  Walk into the campground and follow the road past the entry station around to the short Lake Amphitheater trail at campsite #10.  Mosquitoes are likely so take precautions.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-09-06T02:00:00-07:00",
+   "date_end": "2026-09-06T03:30:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Kumeyaay Lake Campground (2 Father Junipero Serra Trail, San Diego, CA 92119, United States)",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "guided_nature_walk_from_the_visitor_center_20260907",
+   "title": "Guided Nature Walk from the Visitor Center",
+   "partner_name": "Mission Trails Regional Park Foundation",
+   "partner_id": null,
+   "description": "Join an MTRP Trail Guide on a special Presidents Day nature walk and learn about the plants, animals, geology, history, and ecology of the park on one of these scenic trails:\n\n  *   The Oak Grove Loop showcasing majestic coast live oaks and rare Engelmann’s oaks.\n  *   The Visitor Center Loop highlighting coastal sage scrub, chaparral, and riparian woodland habitats.\n  *   The Riverside Grinding Rocks featuring one of the archaeological sites in the park.\n\nThese interpretive nature walks are offered to enhance your appreciation of the unique beauty of San Diego’s natural environment.  The park is constantly changing, so see and learn new things on walks throughout the year.\nWalks start from the Visitor Center every Saturday, Sunday, and Wednesday at 9:30 a.m.  Walks are free and open to the public, with no reservations required.\nThe trails used are easy, but have uneven surfaces and some involve steps, so be sure to wear sturdy, closed-toe shoes and bring along water.  A hat and sunscreen are also recommended.  Walks are canceled if raining.",
+   "link": "",
+   "availability": "Repeats 11 times through 2026-09-19",
+   "date_start": "2026-09-07T09:30:00-07:00",
+   "date_end": "2026-09-19T11:00:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Mission Trails Regional Park Visitor Center (1 Father Junipero Serra Trl, San Diego, CA 92119, United States)",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "discovery_table_plant_parts_20260912",
+   "title": "Discovery Table - Plant Parts",
+   "partner_name": "Mission Trails Regional Park Foundation",
+   "partner_id": null,
+   "description": "Stop by the Discovery Table in the lobby of the Visitor Center anytime between 10 a.m. and 1 p.m. to learn about plant parts from MTRP Trail Guides. See if you can correctly match the name and job of each plant part to its photo.  Identify the plant of some common foods. Also, discover what's inside of seeds!\n\nDiscovery tables are set up on the second Saturday of every month and some holidays at the Visitor Center and on selected Saturdays during the summer at Kumeyaay Lake Campground.  Tables feature hands-on activities and take-home materials for kids and adults.  Topics vary month-to-month.\n\nUpcoming Topics:\n\n  *   September 12 – Animal Skulls\n  *   September 19 – Kumeyaay Games (at Kumeyaay Lake Campground)\n  *   October 10 – Owl Pellets\n  *   October 31 – Spiders\n  *   October 31 – Bats",
+   "link": "",
+   "availability": "Repeats 2 times through 2026-09-12",
+   "date_start": "2026-09-12T10:00:00-07:00",
+   "date_end": "2026-09-12T13:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K",
+    "Grades 6-8",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning",
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Mission Trails Regional Park Visitor Center (1 Father Junipero Serra Trl, San Diego, CA 92119, United States)",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "discovery_table_animal_skulls_20260912",
+   "title": "Discovery Table - Animal Skulls",
+   "partner_name": "Mission Trails Regional Park Foundation",
+   "partner_id": null,
+   "description": "Stop by the Discovery Table in the Visitor Center Lobby anytime between 10 a.m. and 1 p.m. to learn about animal skulls from MTRP Trail Guides. You'll be amazed at how much you can learn about an animal's lifestyle by examining the features of its skull.\n\nDiscovery tables are set up on the second Saturday of every month and some holidays at the Visitor Center and on selected Saturdays during the summer at Kumeyaay Lake Campground.  Tables feature hands-on activities and take-home materials for kids and adults.  Topics vary month-to-month.\n\nUpcoming Topics:\n\n  *\nSeptember 19 – Owl Pellets (English & Spanish)\n  *   September 19 – Kumeyaay Games (at Kumeyaay Lake Campground)\n  *   October 10 – Owl Pellets\n  *   October 31 – Spiders\n  *   October 31 – Bats",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-09-12T10:00:00-07:00",
+   "date_end": "2026-09-12T13:00:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Mission Trails Regional Park Visitor Center (1 Father Junipero Serra Trl, San Diego, CA 92119, United States)",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "reading_with_a_ranger_20260912",
+   "title": "Reading with a Ranger",
+   "partner_name": "Mission Trails Regional Park Foundation",
+   "partner_id": null,
+   "description": "Celebrate Latino Conservation Week at Mission Trails with a special Reading with a Ranger program presented in both English and Spanish.\n\nCity of San Diego Park Ranger Elizabeth Delgado will lead a family-friendly read-aloud designed to help young visitors connect with nature, wildlife and the park through storytelling. It’s a fun opportunity for children and families to spend time together, meet a park ranger and learn more about the natural world around them.\n\nThis program is free.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-09-12T18:00:00-07:00",
+   "date_end": "2026-09-12T19:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K",
+    "Grades 6-8"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Mission Trails Regional Park Visitor Center (1 Father Junipero Serra Trl, San Diego, CA  92119)",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_forms_gle_arhhs2ljp9htcz579",
+   "title": "Bat Walk ***FULL***",
+   "partner_name": "Mission Trails Regional Park Foundation",
+   "partner_id": null,
+   "description": "Attendance on this bat walk is limited to 40.  Register at https://forms.gle/ArhHS2Ljp9Htcz579\nJoin MTRP Trail Guides for free special interpretive bat walks at twilight this summer. Come and enjoy an evening walk in the park and learn about the species of bats commonly found in Mission Trails, their diet, and behavior.  Trail Guides trained as Bat Ambassadors will identify the species of bats using Echo Meter electronic devices.  Everyone will get a chance to see and hear bat chatter.  Don't forget to bring along a flashlight and an extra layer of clothing -- it often cools down after the sun sets.  This walk is not recommended for children 5 and under.  For more information, contact Ranger Monica Demetry at mdemetry@sandiego.gov<mailto:mdemtry@sandiego.gov>.\nUpcoming Evening Walk:\n\n  *   Saturday, September 20 at 6:15 p.m.",
+   "link": "https://forms.gle/ArhHS2Ljp9Htcz579",
+   "availability": "Repeats 6 times through 2026-09-13",
+   "date_start": "2026-09-12T18:30:00-07:00",
+   "date_end": "2026-09-13T03:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8",
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Mission Trails Regional Park",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "guided_evening_nature_walk_around_kumeyaay_lake_20260913",
+   "title": "Guided Evening Nature Walk Around Kumeyaay Lake",
+   "partner_name": "Mission Trails Regional Park Foundation",
+   "partner_id": null,
+   "description": "Join MTRP Trail Guides on an evening nature walk around Kumeyaay Lake and learn about the plants, animals, geology, and history of the park.  These special summer walks start from the Kumeyaay Lake Campground Shade Structure shortly before sunset on several Saturdays during the summer.  Walks are free and open to the public, with no reservations required.  Please park in the dirt lot at the corner of Father Junipero Serra Trail and Bushy Hill Dr. across from the campground.\nThe trail is easy but has uneven surfaces and crosses a pontoon bridge so be sure to wear sturdy, closed-toe shoes.  Don't forget to bring along a flashlight and an extra layer of clothing -- it often cools down after the sun sets.  Walks are canceled if raining.",
+   "link": "",
+   "availability": "Repeats 6 times through 2026-09-13",
+   "date_start": "2026-09-13T19:30:00-07:00",
+   "date_end": "2026-09-13T20:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Kumeyaay Lake Campground (2 Father Junipero Serra Trail, San Diego, CA 92119, United States)",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "guided_bird_walk_old_mission_dam_20260918",
+   "title": "Guided Bird Walk - Old Mission Dam",
+   "partner_name": "Mission Trails Regional Park Foundation",
+   "partner_id": null,
+   "description": "Join MTRP bird walk leaders for a guided bird walk at historic Old Mission Dam.  In this dry season, the water will attract birds and some migratory species may have arrived. In addition to the riparian areas along the river, we will look for birds at the edge of the grasslands.\nMeet in the Old Mission Dam parking lot.\nBring binoculars if you have them.  Wear sturdy, closed-toe shoes, and bring along water.  A hat and sunscreen are also recommended.  Walks are canceled if raining.\nUpcoming Bird Walks:\n\n  *   September 19 – Old Mission Dam. Meet in the Old Mission Dam parking lot.\n  *   October 16 – Kumeyaay Lake. Meet in the Kumeyaay Lake Campground day use parking lot.\n  *   October 17 – Kumeyaay Lake. Meet in the Kumeyaay Lake Campground day use parking lot.",
+   "link": "",
+   "availability": "Repeats 6 times through 2026-09-19",
+   "date_start": "2026-09-18T15:00:00-07:00",
+   "date_end": "2026-09-19T17:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Old Mission Dam parking lot",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "summer_twilight_walk_20260919",
+   "title": "Summer Twilight Walk",
+   "partner_name": "Mission Trails Regional Park Foundation",
+   "partner_id": null,
+   "description": "Join MTRP Trail Guides for free special interpretive walks at twilight this summer. Come and enjoy an evening walk in the park and learn about the changes that occur at dusk as the sun goes down.  Walks meet at the parking lot at the corner of Bushy Hill Drive and Father Junípero Serra Trail, across from Kumeyaay Lake Campground.  Don't forget to bring along a flashlight and an extra layer of clothing -- it often cools down after the sun sets. For more information, call (619) 668-3281.\nUpcoming Evening Walks:\n\n  *\nSaturday, September 19 at 6:15 p.m.",
+   "link": "",
+   "availability": "Repeats 5 times through 2026-09-20",
+   "date_start": "2026-09-19T18:15:00-07:00",
+   "date_end": "2026-09-20T03:15:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Bushy Hill Parking Lot at the corner of Bushy Hill Drive and Padre Junipero Serra Trail, across from Kumeyaay Lake Campground",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "discovery_table_kumeyaay_children_s_games_and_toys_20260919",
+   "title": "Discovery Table - Kumeyaay Children's Games and Toys",
+   "partner_name": "Mission Trails Regional Park Foundation",
+   "partner_id": null,
+   "description": "Stop by the special Discovery Table at the Kumeyaay Lake Campground shade structure anytime between 4:15 p.m. and 6:15 p.m. and learn about different Kumeyaay games from MTRP Trail Guides.  Kids can make and take home their very own stick dice game!\n\nDiscovery tables are set up on the second Saturday of every month and some holidays at the Visitor Center and on selected Saturdays during the summer at Kumeyaay Lake Campground.  Tables feature hands-on activities and take-home materials for kids and adults.  Topics vary month-to-month.\n\nUpcoming Topics:\n\n  *   October 10 – Owl Pellets\n  *   October 31 – Spiders\n  *   October 31 – Bats",
+   "link": "",
+   "availability": "Repeats 4 times through 2026-11-14",
+   "date_start": "2026-09-19T23:15:00-07:00",
+   "date_end": "2026-11-14T13:00:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Kumeyaay Lake Campground (2 Father Junipero Serra Trail, San Diego, CA 92119, United States)",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "discovery_table_owl_pellets_20261010",
+   "title": "Discovery Table - Owl Pellets",
+   "partner_name": "Mission Trails Regional Park Foundation",
+   "partner_id": null,
+   "description": "Stop by the Discovery Table in the lobby of the Visitor Center anytime between 10 a.m. and 1 p.m. to learn all about Owl Pellets from MTRP Trail Guides. You will even get a chance to dissect one and take home some of its contents!\n\nDiscovery tables are set up on the second Saturday of every month and some holidays.  Tables feature hands-on activities and take-home materials for kids and adults.  Topics vary month-to-month.\n\nUpcoming Topics:\n\n  *   September 13 – Creatures in Camouflage\n  *   October 11 – Plant Parts\n  *   October 25 – Spiders\n  *   November 8 – Mountain Lions\n  *   November 10 – Kumeyaay Children’s Games and Toys",
+   "link": "",
+   "availability": "Repeats 3 times through 2026-10-10",
+   "date_start": "2026-10-10T10:00:00-07:00",
+   "date_end": "2026-10-10T13:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Mount Torrey Ranch Park Visitor Center",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "discovery_table_bats_20261010",
+   "title": "Discovery Table - Bats",
+   "partner_name": "Mission Trails Regional Park Foundation",
+   "partner_id": null,
+   "description": "Stop by the Discovery Table in the lobby of the Visitor Center anytime between 10 a.m. and 1 p.m. and learn about the amazing world of bats from MTRP Trail Guides. Learn how bats fly with their hands and find food with sound.\n\nDiscovery tables are set up on the second Saturday of every month and some holidays at the Visitor Center and on selected Saturdays during the summer at Kumeyaay Lake Campground.  Tables feature hands-on activities and take-home materials for kids and adults.  Topics vary month-to-month.\n\nUpcoming Topics:\n\n  *   June 13 – Mountain Lions\n  *   June 20 – Leave No Trace (at Kumeyaay Lake Campground)",
+   "link": "",
+   "availability": "Repeats 2 times through 2026-10-10",
+   "date_start": "2026-10-10T10:00:00-07:00",
+   "date_end": "2026-10-10T13:00:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Mission Trails Regional Park Visitor Center (1 Father Junipero Serra Trl, San Diego, CA 92119, United States)",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "discovery_table_owl_pellets_english_spanish_20261010",
+   "title": "Discovery Table - Owl Pellets (English & Spanish)",
+   "partner_name": "Mission Trails Regional Park Foundation",
+   "partner_id": null,
+   "description": "Stop by the Discovery Table in the Visitor Center lobby anytime between 10:00 a.m. and 1:00 p.m. and learn about Owl Pellets from MTRP Trail Guides.  You will get a chance to dissect one and take home some of its contents!  Information will be presented in English and Spanish.\n\nDiscovery tables are set up on the second Saturday of every month and some holidays at the Visitor Center and on selected Saturdays during the summer at Kumeyaay Lake Campground.  Tables feature hands-on activities and take-home materials for kids and adults.  Topics vary month-to-month.\n\nUpcoming Topics:\n\n  *   September 19 – Kumeyaay Games (at Kumeyaay Lake Campground)\n  *   October 10 – Owl Pellets\n  *   October 31 – Spiders\n  *\nOctober 31 – Bats",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-10-10T10:00:00-07:00",
+   "date_end": "2026-10-10T13:00:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Mission Trails Regional Park Visitor Center (1 Father Junipero Serra Trl, San Diego, CA 92119, United States)",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "discovery_table_spiders_20261011",
+   "title": "Discovery Table - Spiders",
+   "partner_name": "Mission Trails Regional Park Foundation",
+   "partner_id": 732,
+   "description": "Stop by the special Discovery Table at the Kumeyaay Lake Campground shade structure anytime between 5 p.m. and 7 p.m. to learn about spiders from MTRP Trail Guides.  Discover why they are a critical member of the ecosystem.  Learn their interesting anatomy and how it differs from insects.  Make a spiderweb to take home.\n\nDiscovery tables are set up on the second Saturday of every month and some holidays at the Visitor Center and on selected Saturdays during the summer at Kumeyaay Lake Campground.  Tables feature hands-on activities and take-home materials for kids and adults.  Topics vary month-to-month.\n\nUpcoming Topics:\n\n  *   September 7 – Plant Parts\n  *   September 12 – Animal Skulls\n  *   September 19 – Kumeyaay Games (at Kumeyaay Lake Campground)",
+   "link": "",
+   "availability": "Repeats 3 times through 2026-10-11",
+   "date_start": "2026-10-11T10:00:00-07:00",
+   "date_end": "2026-10-11T13:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Kumeyaay Lake Campground (2 Father Junipero Serra Trail, San Diego, CA 92119, United States)",
+   "latitude": "32.8347",
+   "longitude": "-117.0392",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "mission_trails_regional_park.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "guided_bird_walk_kumeyaay_lake_20261016",
+   "title": "Guided Bird Walk - Kumeyaay Lake",
+   "partner_name": "Mission Trails Regional Park Foundation",
+   "partner_id": 732,
+   "description": "Description:\n\nJoin MTRP bird walk leaders for a guided bird walk along the shore of Kumeyaay Lake.  The fall months may yield some migratory warblers, sparrows, and waterfowl. Kumeyaay Lake often surprises us if we take the time to stop, look, and listen. This bird walk is designed for beginning or newer birdwatchers, but all skill levels are welcome to attend.\nMeet in the Kumeyaay Lake Campground day use parking lot.\nBring binoculars if you have them.  Wear sturdy, closed-toe shoes, and bring along water.  A hat and sunscreen are also recommended.  Walks are canceled if raining.\nUpcoming Bird Walks:\n\n  *   November 20 – Oak Grove Loop. Meet in front of the Visitor Center.\n  *   November 21 – Oak Grove Loop. Meet in front of the Visitor Center.",
+   "link": "",
+   "availability": "Repeats 7 times through 2026-10-17",
+   "date_start": "2026-10-16T15:00:00-07:00",
+   "date_end": "2026-10-17T17:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Kumeyaay Lake Campground (2 Father Junipero Serra Trail, San Diego, CA 92119, United States)",
+   "latitude": "32.8347",
+   "longitude": "-117.0392",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "mission_trails_regional_park.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "family_discovery_walk_kumeyaay_kids_20261017",
+   "title": "Family Discovery Walk - Kumeyaay Kids",
+   "partner_name": "Mission Trails Regional Park Foundation",
+   "partner_id": null,
+   "description": "Join MTRP Trail Guides to learn how Kumeyaay children lived and played in Mission Trails before the arrival of the Spanish.  The games they played were not only fun but also taught them important life skills.  Have fun completing a nature journal while on the walk and get a nature sticker afterwards.\nThis FREE adventure is ideal for families with children ages 5–12 years, but all ages are welcome.\nMeet at the Kumeyaay Lake Campground shade structure (near the east restrooms).\nWear sturdy, closed-toe shoes, and bring along water.  A hat and sunscreen are also recommended.  Walks are canceled if raining.\nUpcoming Topics:\n\n  *   November 15 – Trees & Shrubs\n  *   December 20 – Wildlife Habitats\n  *   January 17 – Sensing Nature",
+   "link": "",
+   "availability": "Repeats 2 times through 2026-10-17",
+   "date_start": "2026-10-17T20:00:00-07:00",
+   "date_end": "2026-10-17T21:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K",
+    "Grades 6-8"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Mission Trails Regional Park, Kumeyaay Lake Campground shade structure",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "discovery_table_mountain_lions_20261108",
+   "title": "Discovery Table - Mountain Lions",
+   "partner_name": "Mission Trails Regional Park Foundation",
+   "partner_id": 732,
+   "description": "Stop by the Discovery Table in the lobby of the Visitor Center anytime between 10 a.m. and 1 p.m. to learn about mountain lions' size, range, lifestyle, and place in the food chain from MTRP Trail Guides.  See if you can correctly answer questions about their behavior.  Learn about sightings in MTRP and create your own full-size mountain lion track stamp to take home.\n\nDiscovery tables are set up on the second Saturday of every month and some holidays.  Tables feature hands-on activities and take-home materials for kids and adults.  Topics vary month-to-month.\n\nUpcoming Topics:\n\n  *   November 10 – Kumeyaay Children’s Games and Toys\n  *   December 13 – Animal Tracks\n  *   January 10, 2026 – Creatures in Camouflage\n  *   January 19 – Lichens",
+   "link": "",
+   "availability": "Repeats 5 times through 2026-11-08",
+   "date_start": "2026-11-08T10:00:00-08:00",
+   "date_end": "2026-11-08T13:00:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8",
+    "Grades 9-12"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Visitor Center, MTRP",
+   "latitude": "32.8347",
+   "longitude": "-117.0392",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "mission_trails_regional_park.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "guided_bird_walk_oak_grove_loop_20261121",
+   "title": "Guided Bird Walk - Oak Grove Loop",
+   "partner_name": "Mission Trails Regional Park Foundation",
+   "partner_id": 732,
+   "description": "Join MTRP bird walk leaders for a guided bird walk on the Oak Grove Loop Trail.  A variety of habitats gives us the opportunity to see resident and migratory birds. We’ll stay alert for hawks that like to frequent this area. This bird walk is designed for beginning or newer birdwatchers, but all skill levels are welcome to attend.\nMeet in front of the Visitor Center.\nBring binoculars if you have them.  Wear sturdy, closed-toe shoes, and bring along water.  A hat and sunscreen are also recommended.  Walks are canceled if raining.\nUpcoming Bird Walks:.\n\n  *   December 18 – Lake Murray, Northwest Side. Meet on the northwest side of the lake. After entering at Murray Park Dr. and Belle Glade Ave., proceed along the driveway past a set of ballfields on your right and turn into the paved parking lot on your right.\n  *   December 19 – Lake Murray, Northwest Side. Meet on the northwest side of the lake. After entering at Murray Park Dr. and Belle Glade Ave., proceed along the driveway past a set of ballfields on your right and turn into the paved parking lot on your right.",
+   "link": "",
+   "availability": "Repeats 3 times through 2026-11-21",
+   "date_start": "2026-11-21T08:00:00-08:00",
+   "date_end": "2026-11-21T18:30:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon",
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Mission Trails Regional Park Visitor Center (1 Father Junipero Serra Trl, San Diego, CA 92119, United States)",
+   "latitude": "32.8347",
+   "longitude": "-117.0392",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "mission_trails_regional_park.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "family_discovery_walk_trees_shrubs_20261121",
+   "title": "Family Discovery Walk - Trees & Shrubs",
+   "partner_name": "Mission Trails Regional Park Foundation",
+   "partner_id": null,
+   "description": "Join MTRP Trail Guides to learn the fascinating stories of the trees and shrubs in Mission Trails.  Find out how to identify some trees by their leaves.  Have fun completing a nature journal while on the walk and get a nature sticker afterwards.\nThis FREE adventure is ideal for families with children ages 5–12 years, but all ages are welcome.\nMeet at the Kumeyaay Lake Campground shade structure (near the east restrooms).\nWear sturdy, closed-toe shoes, and bring along water.  A hat and sunscreen are also recommended.  Walks are canceled if raining.\nUpcoming Topics:\n\n  *   December 20 – Wildlife Habitats\n  *   January 17 – Sensing Nature\n  *   February 21 – Animals & Tracks",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-11-21T21:00:00-08:00",
+   "date_end": "2026-11-21T22:30:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Kumeyaay Lake Campground (2 Father Junipero Serra Trail, San Diego, CA 92119, United States)",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "discovery_table_animal_tracks_20261212",
+   "title": "Discovery Table - Animal Tracks",
+   "partner_name": "Mission Trails Regional Park Foundation",
+   "partner_id": null,
+   "description": "Stop by the Discovery Table in the lobby of the Visitor Center anytime between 10 a.m. and 1 p.m. and learn about animal tracks from MTRP Trail Guides. See if you can match each animal with its correct track!\n\nDiscovery tables are set up on the second Saturday of every month and some holidays at the Visitor Center and on selected Saturdays during the summer at Kumeyaay Lake Campground.  Tables feature hands-on activities and take-home materials for kids and adults.  Topics vary month-to-month.\n\nUpcoming Topics:\n\n  *   January 9, 2027 – TBD",
+   "link": "",
+   "availability": "Repeats 2 times through 2026-12-12",
+   "date_start": "2026-12-12T10:00:00-08:00",
+   "date_end": "2026-12-12T13:00:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Mission Trails Regional Park Visitor Center (1 Father Junipero Serra Trl, San Diego, CA 92119, United States)",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "guided_bird_walk_lake_murray_northwest_side_20261219",
+   "title": "Guided Bird Walk - Lake Murray, Northwest Side",
+   "partner_name": "Mission Trails Regional Park Foundation",
+   "partner_id": null,
+   "description": "Join MTRP bird walk leaders for a guided bird walk along the scenic shore of Lake Murray.  In winter, Lake Murray reliably provides an abundance of waterfowl as well as land birds. We’ll look for Tri-colored Blackbirds that are found year-round only in California.\n\nMeet on the northwest side of the lake. After entering at Murray Park Drive and Belle Glade Avenue, proceed along the driveway past a set of ballfields on your right and turn into the paved parking lot on your right.\n\nBring binoculars if you have them.  Wear sturdy, closed-toe shoes, and bring along water.  A hat and sunscreen are also recommended.  Walks are canceled if raining.\n\nUpcoming Bird Walks:\n\n  *   December 20 – Lake Murray, Northwest Side. Meet on the northwest side of the lake. After entering at Murray Park Dr. and Belle Glade Ave., proceed along the driveway past a set of ballfields on your right and turn into the paved parking lot on your right.\n  *   January 16 – Grasslands & Spring Canyon.  Meet in front of the Ranger Field Station in the East Fortuna Staging Area off Hwy. 52 and Mast Blvd. in Santee.\n  *   January 17 – Grasslands & Spring Canyon.  Meet in front of the Ranger Field Station in the East Fortuna Staging Area off Hwy. 52 and Mast Blvd. in Santee.",
+   "link": "",
+   "availability": "Repeats 4 times through 2026-12-19",
+   "date_start": "2026-12-19T08:00:00-08:00",
+   "date_end": "2026-12-19T18:30:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Lake Murray, Northwest Side - Murray Park Drive and Belle Glade Avenue, San Diego, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "family_discovery_walk_wildlife_habitats_20261219",
+   "title": "Family Discovery Walk - Wildlife Habitats",
+   "partner_name": "Mission Trails Regional Park Foundation",
+   "partner_id": null,
+   "description": "Join MTRP Trail Guides to learn how the habitats in Mission Trails support a diversity of wildlife.  Discover the particular importance of water for their survival.  Have fun completing a nature journal while on the walk and get a nature sticker afterwards.\nThis FREE adventure is ideal for families with children ages 5–12 years, but all ages are welcome.\nMeet at the Kumeyaay Lake Campground shade structure (near the east restrooms).\nWear sturdy, closed-toe shoes, and bring along water.  A hat and sunscreen are also recommended.  Walks are canceled if raining.\nUpcoming Topics:\n\n  *   January 17 – Sensing Nature\n  *   February 21 – Animals & Tracks\n  *   March 21 – Birds & Nests",
+   "link": "",
+   "availability": "Repeats 2 times through 2026-12-19",
+   "date_start": "2026-12-19T21:00:00-08:00",
+   "date_end": "2026-12-19T22:30:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Kumeyaay Lake Campground (2 Father Junipero Serra Trail, San Diego, CA 92119, United States)",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  }
+ ]
+}

@@ -35,10 +35,12 @@ def _cache_dir(tmp_path, tmp_path_factory, monkeypatch):
     `run_teams()` -- even in wiring tests that monkeypatch `cli.run_teams`
     itself -- and `PoliteFetcher()`'s default `cache_dir` reads
     `SCRAPE_CACHE_DIR` eagerly (see `config.get_scrape_cache_dir`'s "no
-    sane default" `RuntimeError`). `SITE_DIR` is pinned too so any test
-    that omits `--site-dir` can never reach the real sibling
-    `../stem-ecosystem` checkout, matching `test_cli.py`'s own `_cache_dir`
-    fixture. `TBA_KEY` is unset unconditionally too (ticket 011-003):
+    sane default" `RuntimeError`). `SITE_DIR` is pinned too, matching
+    `test_cli.py`'s own `_cache_dir` fixture, even though the `teams`
+    subcommand this file tests no longer reads it at all (sprint 025
+    ticket 004 removed its `--site-dir` flag along with every
+    `SITE_DIR`-adjacent write `run_teams()` used to make). `TBA_KEY` is
+    unset unconditionally too (ticket 011-003):
     the real seeded registry this class runs against now also loads
     `frc-sd.toml`, and `TBA_KEY` is a real, working credential in this
     project's own `.env` -- without this, a run on a machine with that
@@ -104,11 +106,6 @@ def _ftcscout_fixture_fetcher() -> _FixtureFetcher:
     return _FixtureFetcher({SEARCH_URL: FetchResponse(url="", status=200, headers={}, body=body)})
 
 
-def _make_site(root: Path) -> Path:
-    (root / "src" / "data").mkdir(parents=True)
-    return root
-
-
 class TestArgumentWiring:
     def test_defaults_pass_none_through_and_construct_a_polite_fetcher(self, monkeypatch):
         captured = {}
@@ -123,12 +120,12 @@ class TestArgumentWiring:
 
         assert exit_code == 0
         assert captured["source"] is None
-        assert captured["site_dir"] is None
+        assert "site_dir" not in captured
         assert captured["dry_run"] is False
         assert captured["no_sponsors"] is False
         assert isinstance(captured["fetcher"], PoliteFetcher)
 
-    def test_flags_are_parsed_and_forwarded(self, monkeypatch, tmp_path):
+    def test_flags_are_parsed_and_forwarded(self, monkeypatch):
         captured = {}
 
         def fake_run_teams(**kwargs):
@@ -137,15 +134,12 @@ class TestArgumentWiring:
 
         monkeypatch.setattr(cli, "run_teams", fake_run_teams)
 
-        site_dir = tmp_path / "site"
         exit_code = cli.main(
             [
                 "teams",
                 "--dry-run",
                 "--source",
                 "ftcscout",
-                "--site-dir",
-                str(site_dir),
                 "--no-sponsors",
             ]
         )
@@ -153,7 +147,7 @@ class TestArgumentWiring:
         assert exit_code == 0
         assert captured["dry_run"] is True
         assert captured["source"] == "ftcscout"
-        assert captured["site_dir"] == site_dir
+        assert "site_dir" not in captured
         assert captured["no_sponsors"] is True
 
     def test_prints_a_summary_including_the_written_team_count(self, monkeypatch, capsys):
@@ -191,8 +185,11 @@ class TestArgumentWiring:
         out = capsys.readouterr().out
         assert "--dry-run" in out
         assert "--source" in out
-        assert "--site-dir" in out
         assert "--no-sponsors" in out
+        # Sprint 025 ticket 004: inverted from this test's pre-ticket
+        # form -- the teams subcommand no longer defines a --site-dir
+        # flag at all.
+        assert "--site-dir" not in out
 
     def test_top_level_help_text_mentions_the_teams_subcommand(self, capsys):
         with pytest.raises(SystemExit):
@@ -255,10 +252,7 @@ class TestTeamsEndToEnd:
         fetcher = _ftcscout_fixture_fetcher()
         monkeypatch.setattr(cli, "PoliteFetcher", lambda: fetcher)
 
-        site_dir = tmp_path / "site"
-        exit_code = cli.main(
-            ["teams", "--source", "ftcscout", "--dry-run", "-v", "--site-dir", str(site_dir)]
-        )
+        exit_code = cli.main(["teams", "--source", "ftcscout", "--dry-run", "-v"])
 
         assert exit_code == 0
         # No live network call: the fetcher is a fixture, never a real
@@ -281,18 +275,28 @@ class TestTeamsEndToEnd:
         out = capsys.readouterr().out
         assert "152" in out
         assert "dry run" in out.lower()
-        assert not site_dir.exists()
+        # Sprint 025 ticket 004: run_teams() no longer accepts a
+        # site_dir at all, and export_teams()'s own_data_dir default
+        # (pinned by the _cache_dir fixture above) resolves elsewhere
+        # entirely -- nothing is ever written under this test's own
+        # tmp_path.
+        assert list(tmp_path.iterdir()) == []
 
     def test_real_run_writes_teams_json(self, monkeypatch, tmp_path):
         fetcher = _ftcscout_fixture_fetcher()
         monkeypatch.setattr(cli, "PoliteFetcher", lambda: fetcher)
 
-        site_dir = _make_site(tmp_path / "site")
+        # Sprint 025 ticket 004: own_data_dir is the sole write target
+        # now -- pin it directly here (overriding the module-level
+        # _cache_dir fixture's own pin) so this test can read the
+        # written teams.json back.
+        own_data_dir = tmp_path / "own-data"
+        monkeypatch.setattr(teams_export, "get_own_data_dir", lambda: own_data_dir)
 
-        exit_code = cli.main(["teams", "--source", "ftcscout", "--site-dir", str(site_dir)])
+        exit_code = cli.main(["teams", "--source", "ftcscout"])
 
         assert exit_code == 0
-        primary_teams = json.loads((site_dir / "src" / "data" / "teams.json").read_text())
+        primary_teams = json.loads((own_data_dir / "teams.json").read_text())
         assert primary_teams["meta"]["total"] == 152
 
     def test_never_writes_opportunities_json_or_scrape_meta_anywhere(
@@ -301,8 +305,9 @@ class TestTeamsEndToEnd:
         fetcher = _ftcscout_fixture_fetcher()
         monkeypatch.setattr(cli, "PoliteFetcher", lambda: fetcher)
 
-        site_dir = _make_site(tmp_path / "site")
-        cli.main(["teams", "--site-dir", str(site_dir)])
+        own_data_dir = tmp_path / "own-data"
+        monkeypatch.setattr(teams_export, "get_own_data_dir", lambda: own_data_dir)
+        cli.main(["teams"])
 
         assert not list(tmp_path.rglob("opportunities.json"))
         assert not list(tmp_path.rglob("scrape-meta.json"))

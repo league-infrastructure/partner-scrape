@@ -1,0 +1,76 @@
+{
+ "generated_at": "2026-09-01T08:27:52Z",
+ "partner_slug": "ymca_of_san_diego_county",
+ "kind": "current",
+ "event_count": 2,
+ "events": [
+  {
+   "slug": "https_www_ymcasd_org_events_womens_wellness_weekend",
+   "title": "Womens Wellness Weekend",
+   "partner_name": "YMCA of San Diego County",
+   "partner_id": null,
+   "description": "YMCA Camp Marston Women's Wellness Weekend 2026 Join us in the beautiful mountains of Julian at Camp Marston It's time to get ready for the YMCA of San Diego's annual Women's Wellness Weekend, happening September 11-13, 2026 . This weekend is the perfect opportunity to come together and celebrate the power of self-care and wellness among women. Whether you're a returning member or new to the YMCA, this weekend offers something for everyone. Get ready to be inspired, empowered and connected with yourself and others. Creating meaningful memories starts here! Please note: Registration is separate from your MY Y Account Portal. Please click below to create a profile or log in to CampInTouch. Secure Your Spot Today AREAS OF FOCUS Wellness Mindfulness Yoga Meditation Nutrition Friendship ACTIVITIES Relax and renew in a fun, supportive environment. Join classes focusing on strength, cardio and holistic mind/body wellness. Participate in classic camp activities like crafts, archery, hiking and campfires. Enjoy meals specifically prepared with your health and wellness in mind. LODGING YMCA Camp Marston offers 10 lodges that are 1700 square-foot each, 24 beds, 2 large bathrooms (four toilets, four showers, four sinks), forced air heat, a community living room with wood burning stove and four bunk rooms. Guests provide their own linens, toiletries and towels. Just bring a twin-size bottom sheet and sleeping bag/pillow for that true camping feel! MEALS As part of Women's Wellness Weekend, our focus is to provide a health-based menu for the weekend. Please note that vegetarian and gluten-free options are available. PRICING Pricing begins at $269/nonmembers (Up to 15% off with select Y memberships) CONTACT For questions or more information, please contact Sharnaye Neale, sneale@ymcasd.org.",
+   "link": "https://www.ymcasd.org/events/womens-wellness-weekend",
+   "availability": "",
+   "date_start": "2026-09-11T00:00:00-07:00",
+   "date_end": "2026-09-13T23:59:59-07:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Less than $300",
+   "time_of_day": [
+    "All Day"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Physical Science",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Camp Marston, 4761 Pine Hills Rd, Julian, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "8c86894797d3c085.jpg"
+  },
+  {
+   "slug": "https_www_ymcasd_org_events_hired_and_inspired",
+   "title": "Hired and Inspired",
+   "partner_name": "YMCA of San Diego County",
+   "partner_id": null,
+   "description": "Career, education & Resource Fair September 22, 2026 | 2:00 PM - 4:00 PM FOR ENTRY-LEVEL JOB SEEKERS BETWEEN AGES 16-28 Join us at the Escondido YMCA for a chance to discover employment opportunities and learn about various educational/trade school programs with our community partners! This event is open to youth and young adults between ages 16-28. Whether you’re exploring your first internship, looking for career advancement, or hoping to gain further education, this event is for you. Come for the food and music, and leave feeling more inspired! Be sure to bring your resume to make a great first impression! Register now Questions? Email Brenna Johnson at bjohnson1@ymcasd.org or call 858-776-7120 ABOUT THIS EVENT Hired and Inspired is collectively hosted by YMCA Independent Living Skills, 3E's, and Fast Track Futures Programs, as part of an ongoing effort to connect transition-aged youth with meaningful career opportunities and supportive resources. Interested in being a vendor? If your company is hiring and would like to have a booth at this event, we'd love to have you! Please complete the registration form below by August 21, 2026. SEE PARTICIPATING Employers CFS Transportation Children’s Paradise Goodwill Industries Inter-Con Security OneWell Health Care Public Authority San Diego Metropolitan Transit System San Diego Zoo Safari Park San Ysidro Health TERI, Inc. Toward Maximum Independence YMCA Expanded Learning Programs CFS Transportation Children’s Paradise Goodwill Industries Inter-Con Security OneWell Health Care Public Authority San Diego Metropolitan Transit System San Diego Zoo Safari Park San Ysidro Health TERI, Inc. Toward Maximum Independence YMCA Expanded Learning Programs SEE COMMUNITY PARTNERS Access Inc. Casa de Amparo Educational Enrichment Systems Escondido Education COMPACT Family Health Centers of San Diego MiraCosta TCI Operation HOPE – North County Port of San Diego Ship Repair Association San Diego Job Corps Serene Health Tri-City Hospital Volunteer Auxiliary Victor Community Support Services County of San Diego, Health and Human Services Agency – Department of Strategy and Community Engagement, Live Well on Wheels Access Inc. Casa de Amparo Educational Enrichment Systems Escondido Education COMPACT Family Health Centers of San Diego MiraCosta TCI Operation HOPE – North County Port of San Diego Ship Repair Association San Diego Job Corps Serene Health Tri-City Hospital Volunteer Auxiliary Victor Community Support Services County of San Diego, Health and Human Services Agency – Department of Strategy and Community Engagement, Live Well on Wheels SEE PARTICIPATING SCHOOLS MiraCosta College Palomar College California State University San Marcos Local Trade Schools MiraCosta College Palomar College California State University San Marcos Local Trade Schools Register as a Vendor The ILS program is funded by the County of San Diego Health & Human Services Agency. Made available by SBCS.",
+   "link": "https://www.ymcasd.org/events/hired-and-inspired/",
+   "availability": "",
+   "date_start": "2026-09-22T14:00:00-07:00",
+   "date_end": "2026-09-22T16:00:00-07:00",
+   "age_grade_level": [
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Career Connections",
+   "areas_of_interest": [],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Escondido YMCA, 1050 N Broadway, Escondido, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "169bb84d17c538dc.png"
+  }
+ ]
+}

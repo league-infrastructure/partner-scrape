@@ -25,7 +25,20 @@ from partner_scrape import cli
 from partner_scrape.enrich.enricher import LLMEnricher
 from partner_scrape.enrich.llm_client import AnthropicLLMClient
 from partner_scrape.fetch.fetcher import FetchResponse
+from partner_scrape.model import Event
 from partner_scrape.observability.reporter import YieldReporter
+
+
+@dataclass
+class _FakeOpportunity:
+    """A minimal stand-in for `normalize.run.Opportunity` -- only
+    ``.slug``/``.sources`` matter to `yield_report.py`'s comparison
+    logic (duck-typed, matching `pipeline.Reporter.record_opportunities`'s
+    own `list[Any]` signature), mirroring
+    `test_observability_yield_report.py`'s identical `FakeOpportunity`."""
+
+    slug: str
+    sources: frozenset[str]
 
 
 @pytest.fixture(autouse=True)
@@ -64,23 +77,26 @@ def _cache_dir(tmp_path, tmp_path_factory, monkeypatch):
     need to know about this later pipeline step at all.
     `TestPublishWiring` below un-stubs it to test the wiring itself.
 
-    As of sprint 020 ticket 007, `cli.main()` also writes
+    As of sprint 020 ticket 007, `cli.main()` also wrote
     `yield-history.json` a second time into `config.get_own_data_dir()`
     (this repo's own `data/` directory) for any non-`--dry-run`,
-    reporting-enabled invocation. Unlike `own_data_dir` on the export
-    modules (tickets 003-006), there is no CLI flag or `run()`
-    parameter to override this -- `get_own_data_dir()` always resolves
-    to this repo's real `data/` directory (no environment-variable
-    override, by design). Several tests in `TestYieldReportWiring`
-    below (e.g. the default-path and explicit-`--yield-history` tests)
-    already exercise a real, non-dry-run, reporting-enabled `cli.main()`
-    call; without pinning `cli.get_own_data_dir` here too, those would
-    write a real `yield-history.json` into this repo's actual `data/`
-    directory on every test run. Resolved via `tmp_path_factory` (a
-    directory outside this test's own `tmp_path` tree, matching
-    `test_cli_teams.py`'s identical fixture) rather than `tmp_path`
-    itself, so it never inflates any test's own `tmp_path`-scoped file
-    count assertions.
+    reporting-enabled invocation, alongside the `SITE_DIR`/
+    `--yield-history` copy. Sprint 025 ticket 006 consolidated the
+    read *and* write onto `own_data_dir` as the sole location (the
+    site-dir copy is gone) -- see `TestYieldReportWiring` and
+    `TestYieldHistoryOwnDataDirDefault` below. Unlike `own_data_dir` on
+    the export modules (tickets 003-006), there is no CLI flag or
+    `run()` parameter to override this default -- `get_own_data_dir()`
+    always resolves to this repo's real `data/` directory (no
+    environment-variable override, by design). Several tests below
+    already exercise a real, non-dry-run, reporting-enabled
+    `cli.main()` call; without pinning `cli.get_own_data_dir` here too,
+    those would write a real `yield-history.json` into this repo's
+    actual `data/` directory on every test run. Resolved via
+    `tmp_path_factory` (a directory outside this test's own `tmp_path`
+    tree, matching `test_cli_teams.py`'s identical fixture) rather than
+    `tmp_path` itself, so it never inflates any test's own
+    `tmp_path`-scoped file count assertions.
     """
     monkeypatch.setenv("SCRAPE_CACHE_DIR", str(tmp_path))
     monkeypatch.setenv("SITE_DIR", str(tmp_path))
@@ -283,16 +299,21 @@ class TestYieldReportWiring:
 
         assert exit_code == 0
 
-    def test_default_yield_history_path_resolves_under_the_site_dir(
+    def test_default_yield_history_path_resolves_under_own_data_dir(
         self, monkeypatch, tmp_path
     ):
+        """Ticket 006 (sprint 025): the default (no `--yield-history`)
+        location is `own_data_dir/yield-history.json`, not
+        `{site-dir}/src/data/yield-history.json` -- and the site-dir
+        location is no longer written at all."""
         monkeypatch.setattr(cli, "run", lambda **kwargs: [])
 
         site_dir = tmp_path / "site"
         cli.main(["--no-enrich", "--site-dir", str(site_dir)])
 
-        expected = site_dir / "src" / "data" / "yield-history.json"
+        expected = cli.get_own_data_dir() / "yield-history.json"
         assert expected.exists()
+        assert not (site_dir / "src" / "data" / "yield-history.json").exists()
 
     def test_explicit_yield_history_flag_overrides_the_default_path(
         self, monkeypatch, tmp_path
@@ -313,6 +334,9 @@ class TestYieldReportWiring:
 
         assert history_path.exists()
         assert not (site_dir / "src" / "data" / "yield-history.json").exists()
+        # The own_data_dir default is bypassed entirely by an explicit
+        # --yield-history override, same as before ticket 006.
+        assert not (cli.get_own_data_dir() / "yield-history.json").exists()
 
     def test_report_text_prints_after_the_existing_summary_line_by_default(
         self, monkeypatch, capsys, tmp_path
@@ -339,6 +363,7 @@ class TestYieldReportWiring:
         out = capsys.readouterr().out
         assert "ALERTS" not in out
         assert "Per-source detail" not in out
+        assert not (cli.get_own_data_dir() / "yield-history.json").exists()
         assert not (site_dir / "src" / "data" / "yield-history.json").exists()
 
     def test_dry_run_prints_the_report_but_does_not_persist_history(
@@ -351,6 +376,7 @@ class TestYieldReportWiring:
 
         out = capsys.readouterr().out
         assert "ALERTS" in out
+        assert not (cli.get_own_data_dir() / "yield-history.json").exists()
         assert not (site_dir / "src" / "data" / "yield-history.json").exists()
 
     def test_no_report_and_yield_history_flags_appear_in_help_text(self, capsys):
@@ -362,18 +388,22 @@ class TestYieldReportWiring:
         assert "--yield-history" in out
 
 
-class TestOwnDataDirYieldHistoryPublish:
-    """Sprint 020 ticket 007 (issue 60): `cli.main()` also writes
-    `yield-history.json` into `config.get_own_data_dir()` (this repo's
-    own `data/` directory), a second, independent copy of the same
-    report alongside the existing `SITE_DIR`/`--yield-history` write.
-    The `_cache_dir` autouse fixture pins `cli.get_own_data_dir` to a
+class TestYieldHistoryOwnDataDirDefault:
+    """Sprint 025 ticket 006: `cli.main()`'s yield-history snapshot read
+    (before `run()`) and write (after `run()`) are consolidated onto a
+    single default location, `config.get_own_data_dir()` (this repo's
+    own `data/` directory) -- replacing sprint 020 ticket 007's second,
+    independent `own_data_dir` write that used to sit alongside a
+    `SITE_DIR`/`--yield-history` write of the same report. The
+    `_cache_dir` autouse fixture pins `cli.get_own_data_dir` to a
     throwaway `tmp_path_factory` directory for every test in this file,
     so these tests read that same stand-in rather than the real repo
     `data/` directory.
     """
 
-    def test_normal_run_writes_yield_history_into_own_data_dir(self, monkeypatch, tmp_path):
+    def test_normal_run_writes_yield_history_only_into_own_data_dir(
+        self, monkeypatch, tmp_path
+    ):
         monkeypatch.setattr(cli, "run", lambda **kwargs: [])
 
         site_dir = tmp_path / "site"
@@ -382,8 +412,9 @@ class TestOwnDataDirYieldHistoryPublish:
         own_data_history_path = cli.get_own_data_dir() / "yield-history.json"
         site_history_path = site_dir / "src" / "data" / "yield-history.json"
         assert own_data_history_path.exists()
-        assert site_history_path.exists()
-        assert own_data_history_path.read_text() == site_history_path.read_text()
+        # The old site-dir copy (sprint 020 ticket 007's dual-write) is
+        # gone -- own_data_dir is now the sole location.
+        assert not site_history_path.exists()
 
     def test_dry_run_writes_nothing_into_own_data_dir(self, monkeypatch, tmp_path):
         monkeypatch.setattr(cli, "run", lambda **kwargs: [{"slug": "a"}])
@@ -418,6 +449,80 @@ class TestOwnDataDirYieldHistoryPublish:
 
         assert exit_code == 0
         assert (own_data_dir / "yield-history.json").exists()
+
+    def test_save_snapshot_is_called_exactly_once(self, monkeypatch, tmp_path):
+        """Sprint 020 ticket 007's second, independent `save_snapshot()`
+        call is gone -- exactly one call now, not two."""
+        calls = []
+        real_save_snapshot = cli.save_snapshot
+
+        def counting_save_snapshot(path, report):
+            calls.append(path)
+            return real_save_snapshot(path, report)
+
+        monkeypatch.setattr(cli, "save_snapshot", counting_save_snapshot)
+        monkeypatch.setattr(cli, "run", lambda **kwargs: [])
+
+        site_dir = tmp_path / "site"
+        cli.main(["--no-enrich", "--site-dir", str(site_dir)])
+
+        assert len(calls) == 1
+        assert calls[0] == cli.get_own_data_dir() / "yield-history.json"
+
+    def test_previous_run_snapshot_is_picked_up_by_the_next_runs_delta(
+        self, monkeypatch, tmp_path
+    ):
+        """The actual bug this ticket prevents: the pre-run
+        `load_snapshot()` read and the post-run `save_snapshot()` write
+        must agree on the same file. A snapshot written by one run at
+        the new own_data_dir default must be picked up as the *previous*
+        snapshot by the very next run's found/dropped delta computation
+        -- if the read were still pointed at the old (no-longer-written)
+        site-dir location, `previous_found`/`delta` would stay `None`
+        forever, exactly the "frozen against a stale snapshot" failure
+        mode the ticket describes.
+        """
+        captured_reports = []
+        monkeypatch.setattr(
+            cli, "render_text", lambda report: captured_reports.append(report) or ""
+        )
+
+        def fake_run_first(**kwargs):
+            reporter = kwargs["reporter"]
+            reporter.record_source(
+                "acme", "Acme Org", [Event(title="E1"), Event(title="E2")]
+            )
+            reporter.record_opportunities(
+                [
+                    _FakeOpportunity(slug="e1", sources=frozenset({"acme"})),
+                    _FakeOpportunity(slug="e2", sources=frozenset({"acme"})),
+                ]
+            )
+            return []
+
+        monkeypatch.setattr(cli, "run", fake_run_first)
+        site_dir = tmp_path / "site"
+        cli.main(["--no-enrich", "--site-dir", str(site_dir)])
+
+        def fake_run_second(**kwargs):
+            reporter = kwargs["reporter"]
+            reporter.record_source("acme", "Acme Org", [Event(title="E1")])
+            reporter.record_opportunities(
+                [_FakeOpportunity(slug="e1", sources=frozenset({"acme"}))]
+            )
+            return []
+
+        monkeypatch.setattr(cli, "run", fake_run_second)
+        cli.main(["--no-enrich", "--site-dir", str(site_dir)])
+
+        assert len(captured_reports) == 2
+        [first_source] = captured_reports[0].sources
+        assert first_source.previous_found is None  # first-ever-run baseline
+
+        [second_source] = captured_reports[1].sources
+        assert second_source.found == 1
+        assert second_source.previous_found == 2
+        assert second_source.delta == -1
 
 
 class TestPublishWiring:

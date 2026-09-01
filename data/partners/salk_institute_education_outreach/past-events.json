@@ -1,0 +1,113 @@
+{
+ "generated_at": "2026-09-01T08:27:52Z",
+ "partner_slug": "salk_institute_education_outreach",
+ "kind": "past",
+ "event_count": 3,
+ "events": [
+  {
+   "slug": "https_www_salk_edu_public_event_joan_jacobs_science_and_music_series",
+   "title": "Joan Jacobs Science and Music Series – Salk Institute",
+   "partner_name": "Salk Institute Education Outreach",
+   "partner_id": 23,
+   "description": "Founded by polio vaccine developer Jonas Salk, the Salk Institute is an independent, nonprofit organization. We drive foundational, risk-taking research that addresses society’s most pressing challenges, including cancer, Alzheimer’s, and agricultural resilience.",
+   "link": "https://www.salk.edu/public-event/joan-jacobs-science-and-music-series/",
+   "availability": "",
+   "date_start": "2026-01-27T00:00:00-08:00",
+   "date_end": "",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Salk Institute, San Diego, CA",
+   "latitude": "32.887047",
+   "longitude": "-117.244785",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "salk_institute_education_outreach.jpg",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_www_salk_edu_public_event_equinox_sunset_for_discovery_society",
+   "title": "Equinox Sunset for Discovery Society – Salk Institute",
+   "partner_name": "Salk Institute Education Outreach",
+   "partner_id": 23,
+   "description": "Founded by polio vaccine developer Jonas Salk, the Salk Institute is an independent, nonprofit organization. We drive foundational, risk-taking research that addresses society’s most pressing challenges, including cancer, Alzheimer’s, and agricultural resilience.",
+   "link": "https://www.salk.edu/public-event/equinox-sunset-for-discovery-society/",
+   "availability": "",
+   "date_start": "2026-06-29T00:00:00-07:00",
+   "date_end": "",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Salk Institute, La Jolla, San Diego, CA",
+   "latitude": "32.887047",
+   "longitude": "-117.244785",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "salk_institute_education_outreach.jpg",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_www_salk_edu_science_event_march_19_2026_la_jolla_aging_meeting",
+   "title": "ThePowerofScience",
+   "partner_name": "Salk Institute Education Outreach",
+   "partner_id": 23,
+   "description": "Founded by polio vaccine developer Jonas Salk, the Salk Institute is an independent, nonprofit organization. We drive foundational, risk-taking research that addresses society’s most pressing challenges, including cancer, Alzheimer’s, and agricultural resilience.",
+   "link": "https://www.salk.edu/science-event/march-19-2026-la-jolla-aging-meeting/",
+   "availability": "Repeats 3 times through 2026-08-27",
+   "date_start": "2026-08-27T00:00:00-07:00",
+   "date_end": "",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "All Day"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Salk Institute, San Diego, CA",
+   "latitude": "32.887047",
+   "longitude": "-117.244785",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "salk_institute_education_outreach.jpg",
+   "eligibility": "",
+   "image_src": ""
+  }
+ ]
+}

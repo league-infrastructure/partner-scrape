@@ -1,0 +1,1441 @@
+{
+ "generated_at": "2026-09-01T08:27:52Z",
+ "partner_slug": "coronado_public_library",
+ "kind": "current",
+ "event_count": 41,
+ "events": [
+  {
+   "slug": "baby_storytime_20260831",
+   "title": "Baby Storytime",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "Join the Library for Baby Storytime followed by baby play time! Baby Storytime is for babies and their caregivers to develop early literacy skills through songs, rhymes and repetition. Mondays @ 11am in person either in the Children's Area or the Winn Room. Perfect for ages infants-2 but all children and adults are welcome.",
+   "link": "",
+   "availability": "Repeats 151 times through 2029-07-30",
+   "date_start": "2026-08-31T11:00:00-07:00",
+   "date_end": "2029-07-30T11:45:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "tinker_tuesday_pizza_math_20260901",
+   "title": "Tinker Tuesday: Pizza Math",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "September 5th is National Cheese Pizza Day! Use paper shapes to build a tasty pizza with all your favorite toppings while practicing math at the same time.\n\nTinker Tuesday is a hands-on educational program that allows children to explore, create, design, and problem solve focusing on STEAM (Science, Technology, Engineering, Art and Math) concepts.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-09-01T22:30:00-07:00",
+   "date_end": "2026-09-01T23:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Mathematics",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "teen_clay_day_20260902",
+   "title": "Teen Clay Day",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "Teens: come get creative with clay. Follow along with projects from art books or make something completely unique.\n\nSnacks provided!\n\nFor students in 6th-12th grade. Program made possible by the Bette Sherman Fund.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-09-02T22:30:00-07:00",
+   "date_end": "2026-09-02T23:30:00-07:00",
+   "age_grade_level": [
+    "Grades 6-8",
+    "Grades 9-12"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "tinker_tuesday_aluminum_foil_boat_challenge_20260908",
+   "title": "Tinker Tuesday: Aluminum Foil Boat Challenge",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "Let's learn about buoyancy by experimenting with aluminum foil! Build an aluminum foil boat and see how many marbles it can hold before it sinks.\n\nTinker Tuesday is a hands-on educational program that allows children to explore, create, design, and problem solve focusing on STEAM (Science, Technology, Engineering, Art and Math) concepts.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-09-08T22:30:00-07:00",
+   "date_end": "2026-09-08T23:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Physical Science",
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "teens_create_hydro_dipped_notebooks_20260909",
+   "title": "Teens Create: Hydro-Dipped Notebooks",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "Construct, craft, and create at our twice-monthly S.T.E.A.M. activity for teens! This in-person program takes place on the 2nd and 4th Wednesday of the month at 3:30 pm.\n\nToday's Activity: Hydro-Dipped Notebooks. Use marbling paints and water surface tension to create a unique design on the cover of a notebook.\n\nSnacks provided!\n\nFor students in 6th-12th grade. Program made possible by the Bette Sherman Fund.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-09-09T15:30:00-07:00",
+   "date_end": "2026-09-09T16:30:00-07:00",
+   "age_grade_level": [
+    "Grades 6-8",
+    "Grades 9-12"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering",
+    "Physical Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "little_explorers_pumpkin_play_20260910",
+   "title": "Little Explorers: Pumpkin Play",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "Come join the Library every second Thursday at 11am! Little Explorers will provide hands on activities to promote early childhood development and sensory skills. Geared towards babies- 4 years old with a parent or caregiver. No registration required.\n\nThis month.... it's time for pumpkin play! Your child will get a slice of pumpkin to explore with all five of their senses, baby wipes will be provided!",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-09-10T11:00:00-07:00",
+   "date_end": "2026-09-10T12:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "drop_in_tech_help_20260911",
+   "title": "Drop-In Tech Help",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "Drop-In to get tech help from a librarian. Don't forget your device!",
+   "link": "",
+   "availability": "Repeats 59 times through 2028-10-02",
+   "date_start": "2026-09-11T01:00:00-07:00",
+   "date_end": "2028-10-02T21:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "tween_takeover_paint_and_sip_a_rainbow_galaxy_20260911",
+   "title": "Tween Takeover: Paint and Sip a Rainbow Galaxy",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "Event Details\n\nIt's Tween Takeover at the library!* Drop by the second Friday of the month for a tween takeover including but not limited to... crafts, snacks, flicks, games, and more! Each month Tween Takeover will change, so check in to see what is to come!\n\nThis Month...\n\nTween Paint and Sip class with Art Beat San Diego! For patrons ages 8-13*, come follow along with an instructor to paint a fun work of art and sip some sparkling apple cider. This month's painting will be shared soon!\n\nRegistration is required for this class. If you will not be attending, please cancel your registration to allow those on the waitlist to register.\n\n*This program is heavily geared for kids aged 8-13, if your child is below this age the class will be challenging for them.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-09-11T22:30:00-07:00",
+   "date_end": "2026-09-12T00:00:00-07:00",
+   "age_grade_level": [
+    "Grades 6-8",
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "baby_storytime_20260914",
+   "title": "Baby Storytime",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "Join the Library for Baby Storytime followed by baby play time! Baby Storytime is for babies and their caregivers to develop early literacy skills through songs, rhymes and repetition. Mondays @ 11am in person either in the Children's Area or the Winn Room. Perfect for ages infants-2 but all children and adults are welcome.",
+   "link": "",
+   "availability": "Repeats 150 times through 2029-07-30",
+   "date_start": "2026-09-14T11:00:00-07:00",
+   "date_end": "2029-07-30T11:45:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "makers_monday_sculpt_a_pi_ata_20260914",
+   "title": "Makers Monday: Sculpt a Piñata",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "Come play with some clay! This bimonthly program provides two chances to create a work of art using quick dry clay. This month, Ms. Wendy will be guiding you in creating a Piñata. Register today!*\n\n*This program is geared towards kids aged 7 and up. Kids under 7 may require additional parental assistance.\n\nRegistration for kids is encouraged but not required*. Each class is limited to 20 kids, register to secure your spot but don't hesitate to drop by day of instead! Parents/caregivers do not need to register. Please register each child separately.\n\n*There is a 10 minute grace period for registrants. After that, unless noted in registration that you will be late, your spot may be given to a walk-up.\n\nAll children under 8 years old must be accompanied by an adult.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-09-14T22:30:00-07:00",
+   "date_end": "2026-09-14T23:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "toddler_storytime_hispanic_heritage_20260915",
+   "title": "Toddler Storytime: Hispanic Heritage",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "Join Ms. Natalie for Toddler Storytime Tuesday at 11 am. Enjoy finger plays, stories, and songs in this engaging storytime with a weekly theme. Perfect for ages 2-4 but all children and adults are welcome.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-09-15T11:00:00-07:00",
+   "date_end": "2026-09-15T11:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "tinker_tuesday_jaime_dominguez_art_20260915",
+   "title": "Tinker Tuesday: Jaime Dominguez Art",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "Celebrate Hispanic Heritage Month by creating your own masterpiece inspired by the work of contemporary Mexican artist Jaime Dominguez!\n\nTinker Tuesday is a hands-on educational program that allows children to explore, create, design, and problem solve focusing on STEAM (Science, Technology, Engineering, Art and Math) concepts.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-09-15T22:30:00-07:00",
+   "date_end": "2026-09-15T23:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering",
+    "Mathematics",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "sound_bath_baby_storytime_20260921",
+   "title": "Sound Bath Baby Storytime",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "Babies and their caregivers are invited to a special Sound Bath Baby Storytime Takeover.\n\nBring your little ones and join us for a special 30-minute calming sound bath experience to nurture connection, soothe the senses, and support early development. This heart-centered session invites you to slow down, connect, and share in calming moments together with your little one. Gentle sound healing elements like soft crystal bowls, chimes, drum and gong sounds; create a soothing space for both you and your little one to relax and recharge. Sound healing can\nsupport babies' sensory development, nervous system regulation, promote better sleep and emotional bonding. All caregivers welcome! Perfect for ages infants-2 but all children and adults are welcome.\n\nBaby Storytime will resume it's normally scheduled programming on Monday, September 28th.\n\n---------------------------------------------------------------\n\nFor this special takeover:\n\nDress comfortable\n• Wear shoes that are easy to remove.\n• Bring props (blankets, bolsters) to lie down comfortably\n• Eat a light meal and hydrate beforehand.\n• Listen to Your Body: If a sound is too loud or uncomfortable, it is okay to leave or move around.\n\nKey Precautions & Contraindications\n• Medical Devices: Those with pacemakers, defibrillators, or shunts should consult a doctor due to potential vibrational interference.\n• Implants/Surgery: Metal pins, screws, or artificial joints might vibrate and cause discomfort. Post-surgical patients should wait.\n• Pregnancy: Consult with and follow advise of medical professional/doctor\n• Neurological Conditions: People with epilepsy or seizure disorders should exercise caution, as certain frequencies may trigger seizures.\n• Mental Health: Individuals with severe, unstable mental health conditions or those prone to severe emotional triggers should consult a professional.\n• Sound Sensitivity: Those with tinnitus or extreme sensitivities should use earplugs or sit further away from instruments.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-09-21T18:00:00-07:00",
+   "date_end": "2026-09-21T18:45:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "drop_in_tech_help_20260921",
+   "title": "Drop-In Tech Help",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "Drop-In to get tech help from a librarian. Don't forget your device!",
+   "link": "",
+   "availability": "Repeats 54 times through 2028-10-02",
+   "date_start": "2026-09-21T20:00:00-07:00",
+   "date_end": "2028-10-02T21:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "tinker_tuesday_lego_engineering_challenge_20260922",
+   "title": "Tinker Tuesday: LEGO Engineering Challenge",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "Put your creativity and engineering skills to the test in our LEGO engineering challenge! Build your own creation or try to beat this month's challenge: marble mazes. Design a maze and get your marble from start to finish. Then switch with a friend and see if you can complete their maze, too! Creations are displayed in our library exhibit every month.\n\nTinker Tuesday is a hands-on educational program that allows children to explore, create, design, and problem solve focusing on STEAM (Science, Technology, Engineering, Art and Math) concepts.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-09-22T22:30:00-07:00",
+   "date_end": "2026-09-22T23:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "teens_create_pony_bead_tapestry_20260923",
+   "title": "Teens Create: Pony Bead Tapestry",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "Construct, craft, and create at our twice-monthly S.T.E.A.M. activity for teens! This in-person program takes place on the 2nd and 4th Wednesday of the month at 3:30 pm.\n\nToday's Activity: Pony Bead Tapestry. Make your own pixelated picture using pony beads. Use a provided pattern or create something unique.\n\nSnacks provided!\n\nFor students in 6th-12th grade. Program made possible by the Bette Sherman Fund.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-09-23T22:30:00-07:00",
+   "date_end": "2026-09-23T23:30:00-07:00",
+   "age_grade_level": [
+    "Grades 6-8",
+    "Grades 9-12"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "saturday_sculpting_sculpt_a_pi_ata_20260926",
+   "title": "Saturday Sculpting: Sculpt a Piñata",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "Come play with some clay! This bimonthly program provides two chances to create a work of art using quick dry clay. This month, Ms. Wendy will be guiding you in creating a Piñata. Register today!*\n\n*This program is geared towards kids aged 7 and up. Kids under 7 may require additional parental assistance.\n\nRegistration for kids is encouraged but not required*. Each class is limited to 20 kids, register to secure your spot but don't hesitate to drop by day of instead! Parents/caregivers do not need to register. Please register each child separately.\n\n*There is a 10 minute grace period for registrants. After that, unless noted in registration that you will be late, your spot may be given to a walk-up.\n\nAll children under 8 years old must be accompanied by an adu",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-09-26T18:00:00-07:00",
+   "date_end": "2026-09-26T19:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "makers_monday_melty_dinosaur_art_20260928",
+   "title": "Makers Monday: Melty Dinosaur Art",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "October is more than just Spooky Season, it's also National Dinosaur Month! Make your own dinos to take home using grated crayon, wax paper, and an iron and get ready to celebrate!",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-09-28T22:30:00-07:00",
+   "date_end": "2026-09-28T23:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "toddler_storytime_dinosaurs_20260929",
+   "title": "Toddler Storytime: Dinosaurs",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "Join Ms. Natalie for Toddler Storytime Tuesday at 11 am. Enjoy finger plays, stories, and songs in this engaging storytime with a weekly theme. Perfect for ages 2-4 but all children and adults are welcome.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-09-29T11:00:00-07:00",
+   "date_end": "2026-09-29T11:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "tinker_tuesday_crayon_leaf_art_20260929",
+   "title": "Tinker Tuesday: Crayon Leaf Art",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "Make artwork with leaves and crayons to get an up-close view of a leaf's anatomy. Compare your art with a friend's to see how different leaves may have different shapes and structures!\n\nTinker Tuesday is a hands-on educational program that allows children to explore, create, design, and problem solve focusing on STEAM (Science, Technology, Engineering, Art and Math) concepts.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-09-29T22:30:00-07:00",
+   "date_end": "2026-09-29T23:30:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "preschool_storytime_dinosaurs_20261002",
+   "title": "Preschool Storytime: Dinosaurs",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "Come enjoy a fun Preschool story time with Ms. Natalie! Enjoy songs, stories, and yoga in the Children's area. This story time has a rotating weekly theme and is geared towards children aged 3-5 years old.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-10-02T18:00:00-07:00",
+   "date_end": "2026-10-02T18:30:00-07:00",
+   "age_grade_level": [
+    "Pre-K",
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "toddler_storytime_outer_space_20261006",
+   "title": "Toddler Storytime: Outer Space",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "Join Ms. Natalie for Toddler Storytime Tuesday at 11 am. Enjoy finger plays, stories, and songs in this engaging storytime with a weekly theme. Perfect for ages 2-4 but all children and adults are welcome.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-10-06T11:00:00-07:00",
+   "date_end": "2026-10-06T11:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "tinker_tuesday_20261006",
+   "title": "Tinker Tuesday",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "Tinker Tuesday is a hands-on educational program that allows children to explore, create, design, and problem solve focusing on STEAM (Science, Technology, Engineering, Art and Math) concepts.",
+   "link": "",
+   "availability": "Repeats 42 times through 2027-07-20",
+   "date_start": "2026-10-06T22:30:00-07:00",
+   "date_end": "2027-07-20T23:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering",
+    "General Science",
+    "Mathematics"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "little_explorers_20261008",
+   "title": "Little Explorers",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "Come join the Library every second Thursday at 11am! Little Explorers will provide hands on activities to promote early childhood development and sensory skills. Geared towards babies- 4 years old with a parent or caregiver. No registration required.",
+   "link": "",
+   "availability": "Repeats 27 times through 2028-12-14",
+   "date_start": "2026-10-08T11:00:00-07:00",
+   "date_end": "2028-12-14T12:00:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "preschool_storytime_outer_space_20261009",
+   "title": "Preschool Storytime: Outer Space",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "Come enjoy a fun Preschool story time with Ms. Natalie! Enjoy songs, stories, and yoga in the Children's area. This story time has a rotating weekly theme and is geared towards children aged 3-5 years old.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-10-09T18:00:00-07:00",
+   "date_end": "2026-10-09T18:30:00-07:00",
+   "age_grade_level": [
+    "Pre-K",
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "toddler_storytime_pumpkins_20261020",
+   "title": "Toddler Storytime: Pumpkins",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "Join Ms. Natalie for Toddler Storytime Tuesday at 11 am. Enjoy finger plays, stories, and songs in this engaging storytime with a weekly theme. Perfect for ages 2-4 but all children and adults are welcome.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-10-20T11:00:00-07:00",
+   "date_end": "2026-10-20T11:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "crown_garden_club_natural_rose_gardening_presented_by_rita_perwich_20261022",
+   "title": "Crown Garden Club: Natural Rose Gardening presented by Rita Perwich",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-10-22T16:30:00-07:00",
+   "date_end": "2026-10-22T18:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "preschool_storytime_pumpkins_20261023",
+   "title": "Preschool Storytime: Pumpkins",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "Come enjoy a fun Preschool story time with Ms. Natalie! Enjoy songs, stories, and yoga in the Children's area. This story time has a rotating weekly theme and is geared towards children aged 3-5 years old.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-10-23T18:00:00-07:00",
+   "date_end": "2026-10-23T18:30:00-07:00",
+   "age_grade_level": [
+    "Pre-K",
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "toddler_storytime_happy_halloween_20261027",
+   "title": "Toddler Storytime:Happy Halloween!",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "Join Ms. Natalie for Toddler Storytime Tuesday at 11 am. Enjoy finger plays, stories, and songs in this engaging storytime with a weekly theme. Perfect for ages 2-4 but all children and adults are welcome.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-10-27T11:00:00-07:00",
+   "date_end": "2026-10-27T11:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "preschool_storytime_happy_halloween_20261030",
+   "title": "Preschool Storytime: Happy Halloween!",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "Come enjoy a fun Preschool story time with Ms. Natalie! Enjoy songs, stories, and yoga in the Children's area. This story time has a rotating weekly theme and is geared towards children aged 3-5 years old.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-10-30T18:00:00-07:00",
+   "date_end": "2026-10-30T18:30:00-07:00",
+   "age_grade_level": [
+    "Pre-K"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "junior_volunteer_meeting_20261112",
+   "title": "Junior Volunteer Meeting",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "Junior Volunteers meet every week to plan and prepare for events that they would like to put on for the community. This is your chance to decide what kind of community service you would like to do and how you would like to get involved.\n\nNew volunteers are always welcome! Please fill out a Junior Volunteer application available at the reference desk in the Library. The form must be signed by a parent. Teens must be in 6th - 12th grade to volunteer.",
+   "link": "",
+   "availability": "Repeats 8 times through 2027-04-22",
+   "date_start": "2026-11-12T23:30:00-08:00",
+   "date_end": "2027-04-22T23:30:00-07:00",
+   "age_grade_level": [
+    "Grades 6-8",
+    "Grades 9-12"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening",
+    "Morning"
+   ],
+   "opportunity_type": "Volunteering",
+   "areas_of_interest": [],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "preschool_storytime_family_and_friends_20261113",
+   "title": "Preschool Storytime: Family and Friends",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "Come enjoy a fun Preschool story time with Ms. Natalie! Enjoy songs, stories, and yoga in the Children's area. This story time has a rotating weekly theme and is geared towards children aged 3-5 years old.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-11-13T19:00:00-08:00",
+   "date_end": "2026-11-13T19:30:00-08:00",
+   "age_grade_level": [
+    "Pre-K",
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "toddler_storytime_cooking_20261117",
+   "title": "Toddler Storytime: Cooking",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "Join Ms. Natalie for Toddler Storytime Tuesday at 11 am. Enjoy finger plays, stories, and songs in this engaging storytime with a weekly theme. Perfect for ages 2-4 but all children and adults are welcome.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-11-17T11:00:00-08:00",
+   "date_end": "2026-11-17T11:30:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "preschool_storytime_20261225",
+   "title": "Preschool Storytime",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "Come enjoy a fun Preschool story time with Ms. Natalie! Enjoy songs, stories, and yoga in the Children's area. This story time has a rotating weekly theme and is geared towards children aged 3-5 years old.\n\nBooks:\n\nThe Trouble with Time Travel by Stephen W. Martin\n\nA Book for Bear by Ellen Ramsey\n\nHow do Dinosaurs Pick their Pets by Jane Yolen\n\nNo David! by David Shannon\n\nWhere The Wild Things Are by Maurice Sendak",
+   "link": "",
+   "availability": "Repeats 24 times through 2029-04-20",
+   "date_start": "2026-12-25T19:00:00-08:00",
+   "date_end": "2029-04-20T18:30:00-07:00",
+   "age_grade_level": [
+    "Pre-K"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "toddler_storytime_20270105",
+   "title": "Toddler Storytime",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "Join Ms. Natalie for Toddler Storytime Tuesday at 11 am. Enjoy finger plays, stories, and songs in this engaging storytime with a weekly theme. Perfect for ages 2-4 but all children and adults are welcome.",
+   "link": "",
+   "availability": "Repeats 5 times through 2027-06-01",
+   "date_start": "2027-01-05T11:00:00-08:00",
+   "date_end": "2027-06-01T11:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "toddler_storytime_20270119",
+   "title": "Toddler Storytime",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "Join Ms. Natalie for Toddler Storytime Tuesday at 11 am. Enjoy finger plays, stories, and songs in this engaging storytime with a weekly theme. Perfect for ages 2-4 but all children and adults are welcome.",
+   "link": "",
+   "availability": "",
+   "date_start": "2027-01-19T11:00:00-08:00",
+   "date_end": "2027-01-19T11:30:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "crown_garden_club_planting_for_pollinators_presented_by_sharon_reeve_20270128",
+   "title": "Crown Garden Club: Planting for Pollinators presented by Sharon Reeve",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "",
+   "link": "",
+   "availability": "",
+   "date_start": "2027-01-28T17:30:00-08:00",
+   "date_end": "2027-01-28T19:30:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "junior_volunteer_meeting_20270204",
+   "title": "Junior Volunteer Meeting",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "Junior Volunteers meet every week to plan and prepare for events that they would like to put on for the community. This is your chance to decide what kind of community service you would like to do and how you would like to get involved.\n\nNew volunteers are always welcome! Please fill out a Junior Volunteer application available at the reference desk in the Library. The form must be signed by a parent. Teens must be in 6th - 12th grade to volunteer.",
+   "link": "",
+   "availability": "Repeats 2 times through 2027-05-20",
+   "date_start": "2027-02-04T23:30:00-08:00",
+   "date_end": "2027-05-20T23:30:00-07:00",
+   "age_grade_level": [
+    "Grades 6-8",
+    "Grades 9-12"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Volunteering",
+   "areas_of_interest": [],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "crown_garden_club_preventing_plant_extinction_in_san_diego_county_presented_by_maggie_reinbold_20270422",
+   "title": "Crown Garden Club: Preventing Plant Extinction in San Diego County presented by Maggie Reinbold",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "",
+   "link": "",
+   "availability": "",
+   "date_start": "2027-04-22T16:30:00-07:00",
+   "date_end": "2027-04-22T18:30:00-07:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "bridge_bay_garden_club_discover_the_intricacies_of_horticulture_therapy_presented_by_mattie_dufresne_20270524",
+   "title": "Bridge & Bay Garden Club: Discover the Intricacies of Horticulture Therapy presented by Mattie Dufresne",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "",
+   "link": "",
+   "availability": "",
+   "date_start": "2027-05-24T16:30:00-07:00",
+   "date_end": "2027-05-24T18:00:00-07:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "preschool_storytime_20280107",
+   "title": "Preschool Storytime",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "Come enjoy a fun Preschool story time with Ms. Natalie! Enjoy songs, stories, and yoga in the Children's area. This story time has a rotating weekly theme and is geared towards children aged 3-5 years old.",
+   "link": "",
+   "availability": "Repeats 9 times through 2029-04-13",
+   "date_start": "2028-01-07T19:00:00-08:00",
+   "date_end": "2029-04-13T18:30:00-07:00",
+   "age_grade_level": [
+    "Pre-K",
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  }
+ ]
+}

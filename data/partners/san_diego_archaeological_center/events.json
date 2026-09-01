@@ -1,0 +1,253 @@
+{
+ "generated_at": "2026-09-01T08:27:52Z",
+ "partner_slug": "san_diego_archaeological_center",
+ "kind": "current",
+ "event_count": 7,
+ "events": [
+  {
+   "slug": "https_sandiegoarchaeology_org_event_blue_star_museums_2026_09_02",
+   "title": "Blue Star Museums",
+   "partner_name": "San Diego Archaeological Center",
+   "partner_id": 754,
+   "description": "As part of the Blue Star Museums program, the San Diego Archaeological Center offers free admission to active-duty military personnel and their families from Armed Forces Day through Labor Day. The free admission program is available for those currently serving in the United States Military–Army, Navy, Air Force, Marine Corps, Space Force, Coast Guard–including Reservists, National Guardsman (regardless of status), U.S. Public Health Commissioned Corps, NOAA Commissioned Corps, and up to five family members. The military ID holder can be either active duty service member or other dependent family member with the appropriate ID card. The active duty member does not have to be present for family members to use the program. Just bring your DD Form 1173 ID Card, or DD Form 1173-1 ID Card, for active duty military family members. About Blue Star Museums: Blue Star Museums is a collaboration among the National Endowment for the Arts, Blue Star Families, the Department of War, and museums across America to offer free admission to the nation’s active duty military personnel including National Guard and Reserve and their families each summer. The program begins on Armed Forces Day in mid-May and ends on Labor Day at the beginning of September. For more information, including a full list of participating museums, visit the Blue Star Families website .",
+   "link": "https://sandiegoarchaeology.org/event/blue-star-museums/2026-09-02/",
+   "availability": "Repeats 3 times through 2026-09-06",
+   "date_start": "2026-09-01T00:00:00-07:00",
+   "date_end": "2026-09-06T16:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "All Day"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego Archaeological Center, 16666 San Pasqual Valley Road, Escondido, CA",
+   "latitude": "33.0929",
+   "longitude": "-117.0573",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_sandiegoarchaeology_org_event_senior_wednesdays_2_2026_09_02",
+   "title": "Senior Wednesdays",
+   "partner_name": "San Diego Archaeological Center",
+   "partner_id": null,
+   "description": "Seniors 65+ can enjoy free admission to the Center on Wednesdays. Discover the science of archaeology through our interactive Archaeology 101 exhibit, explore the cultural periods of San Diego, and uncover the Lives and Lifestyles on Block 112: The Untold Story of San Diego’s Working Class.",
+   "link": "https://sandiegoarchaeology.org/event/senior-wednesdays-2/2026-09-02/",
+   "availability": "Repeats 105 times through 2028-08-30",
+   "date_start": "2026-09-02T10:00:00-07:00",
+   "date_end": "2028-08-30T16:00:00-07:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning",
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego Archaeological Center, 16666 San Pasqual Valley Road, Escondido, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_sandiegoarchaeology_org_event_story_time_with_an_archaeologist_2_2026_09_03",
+   "title": "Story Time with an Archaeologist",
+   "partner_name": "San Diego Archaeological Center",
+   "partner_id": null,
+   "description": "Join us on select Thursday mornings for archaeology-themed story time at the Center. Stay afterwards to explore the museum with family-friendly activities like our Archaeology Quest and Field Lab. This activity is funded in part by City of San Diego Cultural Affairs.",
+   "link": "https://sandiegoarchaeology.org/event/story-time-with-an-archaeologist-2/2026-09-03/",
+   "availability": "Repeats 105 times through 2028-08-31",
+   "date_start": "2026-09-03T10:00:00-07:00",
+   "date_end": "2028-08-31T11:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K",
+    "Grades 6-8"
+   ],
+   "cost_range": "Less than $25",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego Archaeological Center, 16666 San Pasqual Valley Road, Escondido, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_sandiegoarchaeology_org_event_blue_star_museums_2026_09_03",
+   "title": "Blue Star Museums",
+   "partner_name": "San Diego Archaeological Center",
+   "partner_id": null,
+   "description": "As part of the Blue Star Museums program, the San Diego Archaeological Center offers free admission to active-duty military personnel and their families from Armed Forces Day through Labor Day. The free admission program is available for those currently serving in the United States Military–Army, Navy, Air Force, Marine Corps, Space Force, Coast Guard–including Reservists, National Guardsman (regardless of status), U.S. Public Health Commissioned Corps, NOAA Commissioned Corps, and up to five family members. The military ID holder can be either active duty service member or other dependent family member with the appropriate ID card. The active duty member does not have to be present for family members to use the program. Just bring your DD Form 1173 ID Card, or DD Form 1173-1 ID Card, for active duty military family members. About Blue Star Museums: Blue Star Museums is a collaboration among the National Endowment for the Arts, Blue Star Families, the Department of War, and museums across America to offer free admission to the nation’s active duty military personnel including National Guard and Reserve and their families each summer. The program begins on Armed Forces Day in mid-May and ends on Labor Day at the beginning of September. For more information, including a full list of participating museums, visit the Blue Star Families website .",
+   "link": "https://sandiegoarchaeology.org/event/blue-star-museums/2026-09-03/",
+   "availability": "Repeats 2 times through 2026-09-06",
+   "date_start": "2026-09-03T10:00:00-07:00",
+   "date_end": "2026-09-06T16:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning",
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego Archaeological Center, 16666 San Pasqual Valley Road, Escondido, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_sandiegoarchaeology_org_event_grape_day_festival_2026_09_05",
+   "title": "Grape Day Festival",
+   "partner_name": "San Diego Archaeological Center",
+   "partner_id": null,
+   "description": "Join us at the Escondido Grape Day Festival, presented by the Escondido History Center, The Rincon Band of Luiseno Indians, and Brothers of 6 Charities. This year’s event features activities for all ages including grape stomping, live music, children’s activities and games, antique farm equipment, food vendors, local arts and crafts, wine and beer garden, and more. Visit the SDAC’s booth to step into the fascinating world of archaeology. Assemble plate puzzles, and explore historic artifacts from Escondido. This event is hosted by the Escondido History Center and the Brothers of 6. For more information, visit the Escondido Grape Day Festival website .",
+   "link": "https://sandiegoarchaeology.org/event/grape-day-festival/2026-09-05/",
+   "availability": "",
+   "date_start": "2026-09-05T12:00:00-07:00",
+   "date_end": "2026-09-05T17:00:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Grape Day Park, 321 N Broadway, Escondido, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_sandiegoarchaeology_org_event_kids_free_san_diego_2026",
+   "title": "Kids Free San Diego  – Free Pottery Kits for Kids",
+   "partner_name": "San Diego Archaeological Center",
+   "partner_id": null,
+   "description": "Calling all Junior Archaeologists! This October, present your Kids Free San Diego coupon to receive free admission to the Center and a take-home pottery kit for kids 12 and under. Journey through the museum on a family-friendly Archaeology Quest. Then continue the fun at home with a pinch pot kit. Pottery kits are free for children 12 and under with Kids Free San Diego Coupon plus paid adult admission. To participate, visit the San Diego Museum Council website to download your coupon. Then present it when you visit the Center to receive free pottery kits for up to two children (12 and under) with one full-price paid adult ($5+). Limit 1 pottery kit per child. Organized by the San Diego Tourism Authority with support from the San Diego Museum Council (SDMC), Kids Free San Diego is an opportunity for thousands of families to enjoy museum experiences each year. Visit SanDiego.org to view participating museums and terms. A full directory of participating venues can also be found on the SDMC website .",
+   "link": "https://sandiegoarchaeology.org/event/kids-free-san-diego-2026/",
+   "availability": "",
+   "date_start": "2026-10-01T00:00:00-07:00",
+   "date_end": "2026-10-31T23:59:59-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "All Day"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego Archaeological Center, 16666 San Pasqual Valley Road, Escondido, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_sandiegoarchaeology_org_event_art_with_an_archaeologist_3_2026_10_10",
+   "title": "Art with an Archaeologist",
+   "partner_name": "San Diego Archaeological Center",
+   "partner_id": null,
+   "description": "Free admission for kids on select Saturdays! Join us for family-friendly activities in our classroom, where you can create your own art with an archaeologist, become a junior archaeologist with our miniature excavation units, and curl up with a book on our cozy reading rug. Families can also explore the museum on an Archaeology Quest and check out our Excavation Station and Field Lab. Kids 12 & under: Free; Adults: $5 (includes museum admission)",
+   "link": "https://sandiegoarchaeology.org/event/art-with-an-archaeologist-3/2026-10-10/",
+   "availability": "Repeats 22 times through 2028-08-12",
+   "date_start": "2026-10-10T10:00:00-07:00",
+   "date_end": "2028-08-12T13:00:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Diego Archaeological Center, 16666 San Pasqual Valley Road, Escondido, CA",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  }
+ ]
+}

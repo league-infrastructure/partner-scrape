@@ -1,0 +1,185 @@
+{
+ "generated_at": "2026-09-01T08:27:52Z",
+ "partner_slug": "san_diego_county_library",
+ "kind": "past",
+ "event_count": 5,
+ "events": [
+  {
+   "slug": "https_sdcl_bibliocommons_com_events_6a1de8bf40f528ac04dfbade",
+   "title": "Under the Sea I SPY",
+   "partner_name": "San Diego County Library",
+   "partner_id": 251,
+   "description": "Can you \"sea\" some of your favorite underwater characters and creatures on our I SPY wall? Try to find them all! Earn one prize a day while supplies last. Recommended for kids ages 10 and under.",
+   "link": "https://sdcl.bibliocommons.com/events/6a1de8bf40f528ac04dfbade",
+   "availability": "",
+   "date_start": "2026-08-30T00:00:00-07:00",
+   "date_end": "2026-08-31T18:00:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning",
+    "Afternoon",
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Solana Beach",
+   "latitude": "32.834727",
+   "longitude": "-117.1306115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "aef91e6f3c89bfb8.png"
+  },
+  {
+   "slug": "https_sdcl_bibliocommons_com_events_6a6e589224cc9f017dda3d6e",
+   "title": "August Explore, Learn, and Play",
+   "partner_name": "San Diego County Library",
+   "partner_id": 251,
+   "description": "Bring your young children to explore, learn, and play at the Crest branch in the children's area free play space. We provide a variety of sensory and educational toys and activities.",
+   "link": "https://sdcl.bibliocommons.com/events/6a6e589224cc9f017dda3d6e",
+   "availability": "",
+   "date_start": "2026-08-31T00:00:00-07:00",
+   "date_end": "2026-08-31T23:59:59-07:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "All Day"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Crest",
+   "latitude": "32.834727",
+   "longitude": "-117.1306115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_sdcl_bibliocommons_com_events_69fbb0a8703c33630025eb58",
+   "title": "Summer Scavenger Hunt: Kids Trivia",
+   "partner_name": "San Diego County Library",
+   "partner_id": 251,
+   "description": "Enjoy a special themed scavenger hunt in the children's area! August's theme will be kids trivia. Complete the scavenger hunt to win a small prize. For children ages 4-12. While supplies last; one prize per day.",
+   "link": "https://sdcl.bibliocommons.com/events/69fbb0a8703c33630025eb58",
+   "availability": "",
+   "date_start": "2026-08-31T00:00:00-07:00",
+   "date_end": "2026-08-31T23:59:59-07:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K",
+    "Grades 6-8"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "All Day"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Imperial Beach, Children's Area",
+   "latitude": "32.834727",
+   "longitude": "-117.1306115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "6a79a10497a5d22b.png"
+  },
+  {
+   "slug": "https_sdcl_bibliocommons_com_events_6a7634484523092f00358844",
+   "title": "Toddler & Me Music Class",
+   "partner_name": "San Diego County Library",
+   "partner_id": 251,
+   "description": "Join us for a morning of music, movements, and fun with Miss Lisa! *Please note that this is an off-site program during library closure. This program is designed for ages 2-5 years old. Caregivers must attend and be engaged. Sponsored by the Friends of the Fallbrook Library and the Fallbrook Music Society. ",
+   "link": "https://sdcl.bibliocommons.com/events/6a7634484523092f00358844",
+   "availability": "",
+   "date_start": "2026-08-31T10:30:00-07:00",
+   "date_end": "2026-08-31T11:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Fallbrook Library (off-site location)",
+   "latitude": "32.834727",
+   "longitude": "-117.1306115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_sdcl_bibliocommons_com_events_69fcd2918e677a28001a83f1",
+   "title": "Family Free Play",
+   "partner_name": "San Diego County Library",
+   "partner_id": 251,
+   "description": "Storytime is on break during August. During the break, join us for Family Free Play! Kids and caregivers are invited to play with educational and creative play items while socializing with other attendees. All Ages Storytime returns on Thursday, September 3. Baby Storytime returns on Monday, September 7.",
+   "link": "https://sdcl.bibliocommons.com/events/69fcd2918e677a28001a83f1",
+   "availability": "",
+   "date_start": "2026-08-31T10:30:00-07:00",
+   "date_end": "2026-08-31T12:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "La Mesa, Kids area",
+   "latitude": "32.834727",
+   "longitude": "-117.1306115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": "db9f4bacede39a3b.jpg"
+  }
+ ]
+}

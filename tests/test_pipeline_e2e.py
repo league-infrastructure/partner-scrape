@@ -33,6 +33,7 @@ from pathlib import Path
 
 import pytest
 
+from partner_scrape import pipeline
 from partner_scrape.export import ads, writer
 from partner_scrape.fetch import PlaywrightFetcher, PoliteFetcher, Throttle
 from partner_scrape.fetch.fetcher import FetchResponse
@@ -86,8 +87,9 @@ def _scrape_cache_dir(tmp_path, monkeypatch):
 @pytest.fixture(autouse=True)
 def _own_data_dir_default(tmp_path_factory, monkeypatch):
     """Pin `writer.get_own_data_dir()`'s (and, sprint 020 ticket 004,
-    `ads.get_own_data_dir()`'s) resolution to a throwaway directory for
-    every test in this file (sprint 020 ticket 003).
+    `ads.get_own_data_dir()`'s, and, sprint 025 ticket 002,
+    `pipeline.get_own_data_dir()`'s) resolution to a throwaway directory
+    for every test in this file (sprint 020 ticket 003).
 
     `export_opportunities()`'s (and `export_ads()`'s) `own_data_dir`
     parameter defaults to `config.get_own_data_dir()` -- a real repo
@@ -98,12 +100,21 @@ def _own_data_dir_default(tmp_path_factory, monkeypatch):
     directory on every test run. Mirrors this file's own
     `_scrape_cache_dir` fixture and `tests/test_export.py`'s identical
     `_own_data_dir_default` fixture, for the same underlying reason.
-    `writer` and `ads` each import `get_own_data_dir` separately, so
-    both must be patched.
+    `writer`, `ads`, and (since sprint 025 ticket 002 redirected the
+    default `EventImageDownloader`'s write target there too) `pipeline`
+    each import `get_own_data_dir` separately, so all three must be
+    patched.
+
+    Returns `fake_own_data_dir` so tests that need to assert against the
+    default `EventImageDownloader`'s write target (e.g.
+    `TestEventImageDownloaderWiring`) can build the expected path
+    without duplicating this fixture's own throwaway directory.
     """
     fake_own_data_dir = tmp_path_factory.mktemp("own-data-default")
     monkeypatch.setattr(writer, "get_own_data_dir", lambda: fake_own_data_dir)
     monkeypatch.setattr(ads, "get_own_data_dir", lambda: fake_own_data_dir)
+    monkeypatch.setattr(pipeline, "get_own_data_dir", lambda: fake_own_data_dir)
+    return fake_own_data_dir
 
 
 class NoFixtureResponse(RuntimeError):
@@ -192,7 +203,9 @@ _SITE_SCHEMA_FIELDS = {
 
 
 class TestWalkingSkeletonEndToEnd:
-    def test_produces_valid_opportunities_and_scrape_meta_json(self, tmp_path):
+    def test_produces_valid_opportunities_and_scrape_meta_json(
+        self, tmp_path, _own_data_dir_default
+    ):
         site_dir = _site_dir(tmp_path)
         fetcher = _fixture_fetcher()
 
@@ -203,8 +216,11 @@ class TestWalkingSkeletonEndToEnd:
             today=TODAY,
         )
 
-        opportunities_path = site_dir / "src" / "data" / "opportunities.json"
-        meta_path = site_dir / "src" / "data" / "scrape-meta.json"
+        # Sprint 025 ticket 003: export_opportunities() no longer writes
+        # into {site_dir}/src/data/... -- own_data_dir (here, this
+        # file's autouse fixture default) is the sole write target.
+        opportunities_path = _own_data_dir_default / "opportunities.json"
+        meta_path = _own_data_dir_default / "scrape-meta.json"
         assert opportunities_path.exists()
         assert meta_path.exists()
 
@@ -362,7 +378,9 @@ class TestRosterValidationWiring:
     """
 
     @pytest.mark.parametrize("dry_run", [False, True])
-    def test_bad_roster_raises_and_writes_nothing(self, tmp_path, dry_run):
+    def test_bad_roster_raises_and_writes_nothing(
+        self, tmp_path, dry_run, _own_data_dir_default
+    ):
         site_dir = _site_dir(tmp_path)
         partners_path = site_dir / "src" / "data" / "partners.json"
         partners = json.loads(partners_path.read_text())
@@ -386,12 +404,18 @@ class TestRosterValidationWiring:
 
         # Both dry_run=True and dry_run=False must raise before writing
         # anything -- unconditional, no `--dry-run` exemption (this
-        # ticket's Acceptance Criteria).
-        assert not (site_dir / "src" / "data" / "opportunities.json").exists()
-        assert not (site_dir / "src" / "data" / "scrape-meta.json").exists()
+        # ticket's Acceptance Criteria). Sprint 025 ticket 003:
+        # export_opportunities() no longer writes into
+        # {site_dir}/src/data/... at all -- own_data_dir (this file's
+        # autouse fixture default) is the sole write target, so it's the
+        # one that must stay untouched here.
+        assert not (_own_data_dir_default / "opportunities.json").exists()
+        assert not (_own_data_dir_default / "scrape-meta.json").exists()
         assert not (tmp_path / "scrape_cache" / "partner_log").exists()
 
-    def test_unresolved_active_source_logs_warning_and_does_not_raise(self, tmp_path, caplog):
+    def test_unresolved_active_source_logs_warning_and_does_not_raise(
+        self, tmp_path, caplog, _own_data_dir_default
+    ):
         # brokensource.toml's org_name, "Broken Fixture Org", has no
         # match in tests/fixtures/partners.json (Coastal Roots Farm /
         # The Living Coast Discovery Center / Ocean Connectors) -- an
@@ -410,10 +434,10 @@ class TestRosterValidationWiring:
 
         # Never raises -- the run completes normally, output intact.
         assert len(payload) == 2
-        assert (site_dir / "src" / "data" / "opportunities.json").exists()
+        assert (_own_data_dir_default / "opportunities.json").exists()
         assert "Broken Fixture Org" in caplog.text
 
-    def test_clean_roster_run_is_unaffected(self, tmp_path):
+    def test_clean_roster_run_is_unaffected(self, tmp_path, _own_data_dir_default):
         """A roster with no offenders and no unresolved active source
         behaves identically to before this ticket -- same payload shape
         `TestWalkingSkeletonEndToEnd` already proves in detail; this
@@ -429,7 +453,7 @@ class TestRosterValidationWiring:
         assert len(payload) == 2
         titles = {record["title"] for record in payload}
         assert titles == {"Tide Pool Exploration", "Weekly Story Time"}
-        assert (site_dir / "src" / "data" / "opportunities.json").exists()
+        assert (_own_data_dir_default / "opportunities.json").exists()
 
 
 class TestEnricherHook:
@@ -698,7 +722,7 @@ class TestNoNetworkAccess:
 
 
 class TestDryRun:
-    def test_dry_run_computes_payload_but_writes_nothing(self, tmp_path):
+    def test_dry_run_computes_payload_but_writes_nothing(self, tmp_path, _own_data_dir_default):
         site_dir = _site_dir(tmp_path)
         fetcher = _fixture_fetcher()
 
@@ -711,13 +735,19 @@ class TestDryRun:
         )
 
         assert len(payload) == 2
-        assert not (site_dir / "src" / "data" / "opportunities.json").exists()
-        assert not (site_dir / "src" / "data" / "scrape-meta.json").exists()
+        # Sprint 025 ticket 003: own_data_dir (this file's autouse
+        # fixture default) is export_opportunities()'s sole write
+        # target -- the removed {site_dir}/src/data/... write no longer
+        # exists to assert against.
+        assert not (_own_data_dir_default / "opportunities.json").exists()
+        assert not (_own_data_dir_default / "scrape-meta.json").exists()
 
-    def test_dry_run_never_creates_the_images_directory(self, tmp_path):
+    def test_dry_run_never_creates_the_images_directory(self, tmp_path, _own_data_dir_default):
         """Sprint 008 ticket 008: `run()`'s default `EventImageDownloader`
-        construction (and thus any disk write under `public/images/
-        opportunities/`) is skipped entirely under `--dry-run`, matching
+        construction (and thus any disk write under `data/images/
+        opportunities/` -- sprint 025 ticket 002's `own_data_dir`-relative
+        write target, née `public/images/opportunities/`) is skipped
+        entirely under `--dry-run`, matching
         `export_opportunities`'/`export_ads`'s own "computes without
         touching disk" contract."""
         site_dir = _site_dir(tmp_path)
@@ -731,7 +761,7 @@ class TestDryRun:
             dry_run=True,
         )
 
-        assert not (site_dir / "public" / "images" / "opportunities").exists()
+        assert not (_own_data_dir_default / "images" / "opportunities").exists()
 
 
 class TestEventImageDownloaderWiring:
@@ -765,7 +795,7 @@ class TestEventImageDownloaderWiring:
         assert all(record["image_src"] == "" for record in payload)
 
     def test_default_downloader_construction_does_not_crash_or_touch_disk_when_no_event_has_an_image_url(
-        self, tmp_path
+        self, tmp_path, _own_data_dir_default
     ):
         """The production default path (`image_resolver` omitted,
         `dry_run=False`) constructs a real `EventImageDownloader` -- this
@@ -773,7 +803,8 @@ class TestEventImageDownloaderWiring:
         registry's fixture Events set `image_url`,
         `EventImageDownloader.download()` never performs any I/O (see
         that method's own "no fetch for an empty image_url" contract),
-        so no `public/images/opportunities/` directory is ever created."""
+        so no `data/images/opportunities/` directory (sprint 025 ticket
+        002's `own_data_dir`-relative write target) is ever created."""
         site_dir = _site_dir(tmp_path)
         fetcher = _fixture_fetcher()
 
@@ -783,7 +814,7 @@ class TestEventImageDownloaderWiring:
 
         assert len(payload) == 2
         assert all(record["image_src"] == "" for record in payload)
-        assert not (site_dir / "public" / "images" / "opportunities").exists()
+        assert not (_own_data_dir_default / "images" / "opportunities").exists()
 
 
 class TestLimitAndSourceFilters:

@@ -14,6 +14,15 @@ edit rather than a code change. It owns the schemas those files must satisfy and
 loaders that turn them into typed objects, and it owns the *physical separation* between
 catalogs that must never be confused with one another.
 
+**(Sprint 025 ticket 001)** This document lives at `partner_scrape/registry/` alongside
+the schema/loader code, but the four TOML data directories it describes (§2) do not: they
+were relocated to a root-level `registry/` directory, sibling to `partner_scrape/` and
+`data/`, so that config-as-data is not nested inside the Python package. Only the data
+moved — the code (`schema.py`, `loader.py`, `hub_schema.py`, `candidates.py`,
+`validate_roster.py`, this file) stays here. Each loader's `DEFAULT_*_DIR` constant now
+resolves via `config.REPO_ROOT / "registry" / "<subdir>"` rather than a path relative to
+this module's own `__file__`.
+
 **(Sprint 014)** This sprint is squarely an exercise of that "onboarding is a data
 edit" design point, at higher volume than any prior sprint: roughly 33 existing
 `sources/` entries get a triage disposition (fixed / re-typed / flagged headless /
@@ -62,7 +71,9 @@ per-source isolation instead, unaffected by this file being present).
 
 ## 2. Orientation
 
-Four data directories, three schema/loader pairs:
+Four data directories, three schema/loader pairs. The directories below live at the
+repo-root `registry/` (sibling to `partner_scrape/`), not inside this subsystem's own
+`partner_scrape/registry/` — see §1's sprint 025 ticket 001 note.
 
 | Directory | Schema | Loader | Contents |
 |---|---|---|---|
