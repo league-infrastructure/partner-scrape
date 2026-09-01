@@ -1,7 +1,7 @@
 ---
 id: '004'
 title: Publish ads.json into data/ from export_ads()
-status: in-progress
+status: done
 use-cases:
 - SUC-019
 depends-on:
