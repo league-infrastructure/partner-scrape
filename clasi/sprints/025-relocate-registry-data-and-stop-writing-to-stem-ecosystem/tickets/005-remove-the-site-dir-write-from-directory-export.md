@@ -1,8 +1,9 @@
 ---
 id: '005'
 title: Remove the site_dir write from Directory export
-status: open
-use-cases: [SUC-029]
+status: in-progress
+use-cases:
+- SUC-029
 depends-on: []
 github-issue: ''
 issue: stop-writing-to-stem-ecosystem-checkout.md

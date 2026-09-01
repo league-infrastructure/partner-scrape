@@ -1,7 +1,7 @@
 ---
 id: '004'
 title: Remove the site_dir write from Teams export
-status: in-progress
+status: done
 use-cases:
 - SUC-029
 depends-on: []
