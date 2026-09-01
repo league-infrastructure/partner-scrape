@@ -128,6 +128,14 @@ Confirm, for that run:
 - If a commit landed, `stem-ecosystem`'s existing `deploy.yml` fired on
   that push (check its own Actions tab) and the live site's "last
   updated" stamp reflects the new run.
+- **(Sprint 020 ticket 008 / SUC-019)** `partner-scrape`'s own `master`
+  also received a new commit to `data/` (check its commit history) — or,
+  if the run happened to produce no data changes, the job log shows the
+  same "No data changes this run -- nothing to publish." message for
+  the "Publish refreshed data to partner-scrape's own data/" step. This
+  publish uses the workflow's own default `GITHUB_TOKEN`
+  (`permissions.contents: write`, scoped to `partner-scrape` only) — no
+  additional secret or operator setup is required for it.
 
 Only after a real end-to-end run like this succeeds should the weekly
 cron be trusted to run unattended.

@@ -44,10 +44,15 @@ concurrency:
   group: scheduled-run
   cancel-in-progress: false
 
-# The default GITHUB_TOKEN only needs to read this repo; all writes to
-# stem-ecosystem go through SITE_REPO_TOKEN instead.
+# (Sprint 020 ticket 008 / SUC-019) `contents: write` on the default
+# GITHUB_TOKEN, scoped to THIS repo only, so the "Publish refreshed data
+# to partner-scrape's own data/" step below can commit and push its own
+# data/ changes back to this repo's master. This is unrelated to, and
+# does not widen, SITE_REPO_TOKEN's separate cross-repo contents:write
+# scope on stem-ecosystem, used below for the stem-ecosystem checkout
+# and publish steps.
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   scrape-and-publish:
@@ -190,5 +195,28 @@ jobs:
             echo "No data changes this run -- nothing to publish."
           else
             git commit -m "chore: scheduled partner-scrape data refresh"
+            git push origin HEAD:master
+          fi
+
+      # (Sprint 020 ticket 008 / SUC-019 / issue 60) Structurally
+      # independent of the stem-ecosystem publish step above -- ordered
+      # after it, never blocking or blocked by it. Publishes this same
+      # run's output back to partner-scrape's OWN data/ directory on its
+      # own master, so the weekly cron keeps data/ current in git
+      # without operator intervention. `git add data/`, not `-A`: scoped
+      # to only the directory tickets 002-007 write into, never picking
+      # up an unrelated stray file the runner happened to leave behind
+      # elsewhere in this checkout. Uses only the workflow's own default
+      # GITHUB_TOKEN (contents: write, granted above) -- no new secret.
+      - name: Publish refreshed data to partner-scrape's own data/
+        working-directory: partner-scrape
+        run: |
+          git config user.name "partner-scrape-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/
+          if git diff --cached --quiet; then
+            echo "No data changes this run -- nothing to publish."
+          else
+            git commit -m "chore: scheduled pipeline data refresh"
             git push origin HEAD:master
           fi

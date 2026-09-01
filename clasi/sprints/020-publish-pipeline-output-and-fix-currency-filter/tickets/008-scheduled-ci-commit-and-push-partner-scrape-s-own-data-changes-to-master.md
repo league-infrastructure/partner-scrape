@@ -70,21 +70,21 @@ Strategy).
 
 ## Acceptance Criteria
 
-- [ ] `scheduled-run.yml`'s `permissions.contents` is `write`.
-- [ ] A new step, ordered after "Publish refreshed site data to
+- [x] `scheduled-run.yml`'s `permissions.contents` is `write`.
+- [x] A new step, ordered after "Publish refreshed site data to
       stem-ecosystem", runs `git add data/` (not `-A`) /
       `git diff --cached --quiet` skip-if-empty / commit / `push origin
       HEAD:master` in the `partner-scrape` working directory, using no
       token beyond the workflow's own default (no new secret
       referenced).
-- [ ] The existing "Verify SITE_REPO_TOKEN is configured" step and the
+- [x] The existing "Verify SITE_REPO_TOKEN is configured" step and the
       "Publish refreshed site data to stem-ecosystem" step are
       unmodified — this ticket is purely additive to the file.
-- [ ] `docs/deploy/scheduled-run.md` is updated if it documents the
+- [x] `docs/deploy/scheduled-run.md` is updated if it documents the
       permissions model or the publish steps (read it first to confirm
       whether an update is warranted).
-- [ ] No `git push --force` anywhere in the new step.
-- [ ] This ticket's own execution does not run `git push` against
+- [x] No `git push --force` anywhere in the new step.
+- [x] This ticket's own execution does not run `git push` against
       `origin` (workflow YAML changes only, verified by inspection/
       diff review — this is not something a hermetic test can assert).
 
