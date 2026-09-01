@@ -1,7 +1,7 @@
 ---
 id: '002'
 title: Deterministic description content gathering
-status: open
+status: in-progress
 use-cases:
 - SUC-022
 depends-on: []
