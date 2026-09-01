@@ -1,7 +1,7 @@
 ---
 id: 008
 title: 'Scheduled CI: commit and push partner-scrape''s own data/ changes to master'
-status: in-progress
+status: done
 use-cases:
 - SUC-019
 depends-on:
