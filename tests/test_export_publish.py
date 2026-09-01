@@ -23,7 +23,7 @@ from typing import Any
 
 import pytest
 
-from partner_scrape.export import partner_log, publish
+from partner_scrape.export import partner_log, publish, writer
 from partner_scrape.export.partner_log import _to_log_dict, published_content_hash
 from partner_scrape.export.publish import _to_opportunity, project
 from partner_scrape.export.writer import SITE_SCHEMA_FIELDS, export_opportunities
@@ -31,6 +31,24 @@ from partner_scrape.normalize.run import WORK_BASED_LEARNING_TYPE, Opportunity
 
 FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures"
 PARTNERS_PATH = FIXTURES_DIR / "partners.json"
+
+
+@pytest.fixture(autouse=True)
+def _own_data_dir_default(tmp_path_factory, monkeypatch):
+    """Pin `writer.get_own_data_dir()`'s resolution to a throwaway
+    directory for every test in this file (sprint 020 ticket 003).
+
+    `export_opportunities()`'s new `own_data_dir` parameter defaults to
+    `config.get_own_data_dir()` -- a real repo path with no
+    environment-variable override -- when a caller doesn't pass one
+    explicitly. `TestLegacyExportUnaffected` below calls the real
+    `export_opportunities()` directly without it, which would otherwise
+    write real files into this repo's actual `data/` directory on every
+    test run. Mirrors `tests/test_export.py`'s identical
+    `_own_data_dir_default` fixture, for the same underlying reason.
+    """
+    fake_own_data_dir = tmp_path_factory.mktemp("own-data-default")
+    monkeypatch.setattr(writer, "get_own_data_dir", lambda: fake_own_data_dir)
 
 
 def _opportunity(

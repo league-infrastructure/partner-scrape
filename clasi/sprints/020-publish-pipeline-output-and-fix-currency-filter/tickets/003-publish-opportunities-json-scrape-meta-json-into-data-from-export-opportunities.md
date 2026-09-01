@@ -51,20 +51,20 @@ so a fresh clone may have no `data/` at all. This mirrors how
 
 ## Acceptance Criteria
 
-- [ ] `export_opportunities(..., own_data_dir=<tmp_path>)` writes
+- [x] `export_opportunities(..., own_data_dir=<tmp_path>)` writes
       `opportunities.json` and `scrape-meta.json` into `own_data_dir`,
       byte-identical in content to the `SITE_DIR` copies (same payload,
       same timestamp).
-- [ ] Omitting `own_data_dir` resolves via `config.get_own_data_dir()`
+- [x] Omitting `own_data_dir` resolves via `config.get_own_data_dir()`
       (verified the same way this file's existing
       `test_omitted_site_dir_resolves_via_config_get_site_dir` test
       verifies `site_dir`'s own default — monkeypatch the config
       function, don't touch the real repo `data/`).
-- [ ] `dry_run=True` writes nothing to `own_data_dir` (nor `site_dir`,
+- [x] `dry_run=True` writes nothing to `own_data_dir` (nor `site_dir`,
       unchanged).
-- [ ] A missing `own_data_dir` is created automatically
+- [x] A missing `own_data_dir` is created automatically
       (`mkdir(parents=True, exist_ok=True)`), never raises.
-- [ ] Every existing `TestCurrentUpcomingFilter`,
+- [x] Every existing `TestCurrentUpcomingFilter`,
       `TestDSTBoundaryPartitioning`, `TestInternshipCurrentUpcomingFilter`,
       `TestDeadlineFirstCurrentUpcomingFilterGeneralization`,
       `TestExportSortOrder`, `TestSlugDedup`, `TestSiteSchemaShape`,
@@ -72,7 +72,7 @@ so a fresh clone may have no `data/` at all. This mirrors how
       `TestSiteDirErrors` test continues to pass unmodified (this
       ticket is additive to `export_opportunities()`'s signature and
       behavior, not a replacement of any existing path).
-- [ ] `export_opportunities()`'s module/function docstrings are updated
+- [x] `export_opportunities()`'s module/function docstrings are updated
       to describe the new third write path.
 
 ## Implementation Plan
