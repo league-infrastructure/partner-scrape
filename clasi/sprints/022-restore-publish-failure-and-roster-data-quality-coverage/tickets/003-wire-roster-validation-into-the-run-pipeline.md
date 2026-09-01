@@ -70,20 +70,20 @@ if `pipeline.run()` raises, `main()` never reaches the
 
 ## Acceptance Criteria
 
-- [ ] `pipeline.run()` calls `validate_roster.validate_roster()` on the
+- [x] `pipeline.run()` calls `validate_roster.validate_roster()` on the
       raw partner list, immediately after `resolved_partners_path` is
       computed and before `normalize_run()`/`partner_log.record()` are
       called.
-- [ ] A `RosterValidationError` from that call propagates uncaught out
+- [x] A `RosterValidationError` from that call propagates uncaught out
       of `run()` — no output (`opportunities.json`, the per-partner
       `.jsonl` log, etc.) is written for a run whose roster fails
       validation.
-- [ ] `pipeline.run()` calls `validate_roster.find_unresolved_active_
+- [x] `pipeline.run()` calls `validate_roster.find_unresolved_active_
       sources()` and logs a warning (never raises) listing any
       unresolved `org_name`s, without aborting the run.
-- [ ] Both calls run regardless of `--dry-run` (no exemption added).
-- [ ] `cli.py` is unmodified by this ticket.
-- [ ] **Required pre-close live validation**: run `partner-scrape run
+- [x] Both calls run regardless of `--dry-run` (no exemption added).
+- [x] `cli.py` is unmodified by this ticket.
+- [x] **Required pre-close live validation**: run `partner-scrape run
       --dry-run -v --site-dir ../stem-ecosystem` (or the resolved
       default `--site-dir` if this machine's sibling checkout has moved)
       against the real sibling `stem-ecosystem` checkout, confirm it
@@ -117,3 +117,31 @@ if `pipeline.run()` raises, `main()` never reaches the
 - **Verification command**: `uv run pytest`, plus the required pre-close
   live-run command above (record its actual output in this ticket's
   Notes before moving it to done).
+
+
+## Notes
+
+**Live-run validation** (2026-08-31): ran
+`partner-scrape --dry-run -v --no-enrich --site-dir ../stem-ecosystem`
+(`--no-enrich` added beyond the ticket's literal example command --
+proves the roster-validation wiring against real data and gets the
+unresolved-source count without an unnecessary live Anthropic API cost
+against ~350 real opportunities, same reasoning sprint 021 ticket 001
+applied with `--no-sponsors`) against the real sibling `stem-ecosystem`
+checkout at `../stem-ecosystem` (present on disk at its documented
+default path -- no path resolution issue). Completed with exit code 0,
+no `RosterValidationError`, no unhandled exception -- `validate_roster()`
+passed on the real `partners.json` and the run produced its normal
+per-source yield report.
+
+`find_unresolved_active_sources()` reported **9 of 93** active sources
+with no `partners.json` match -- identical to sprint.md's planning-time
+count, unchanged at execution time:
+
+```
+9 active source(s) have no partners.json match (org_name): Birch
+Aquarium at Scripps, Boundless Bio, Element Biosciences, Gossamer Bio,
+VEX Robotics Competition -- San Diego/Imperial (CA Region 4), City of
+San Diego, Shield AI, UC San Diego Department of Physics, Qualcomm
+Institute
+```

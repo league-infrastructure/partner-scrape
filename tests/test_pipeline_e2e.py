@@ -39,6 +39,7 @@ from partner_scrape.fetch.fetcher import FetchResponse
 from partner_scrape.model import Event
 from partner_scrape.observability import YieldReporter, load_snapshot, save_snapshot
 from partner_scrape.pipeline import run
+from partner_scrape.registry.validate_roster import RosterValidationError
 
 FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures"
 E2E_REGISTRY_DIR = FIXTURES_DIR / "e2e_registry"
@@ -347,6 +348,88 @@ class TestPerSourceErrorIsolation:
         assert TEC_PROBE_URL in fetcher.calls
         assert TEC_PAGE1_URL in fetcher.calls
         assert ICAL_FEED_URL in fetcher.calls
+
+
+class TestRosterValidationWiring:
+    """Ticket 003 (issue 48): `pipeline.run()` wires `validate_roster.py`'s
+    (ticket 002) content and join-integrity checks in at the point
+    `resolved_partners_path` is computed -- before it's used by
+    `normalize_run()`/`partner_log.record()`. Every check itself is
+    already proven to fire in isolation by
+    `tests/test_registry_validate_roster.py`; this class only proves the
+    *wiring*: one bad-data case is enough to prove `pipeline.run()`
+    actually calls through, not that every check does.
+    """
+
+    @pytest.mark.parametrize("dry_run", [False, True])
+    def test_bad_roster_raises_and_writes_nothing(self, tmp_path, dry_run):
+        site_dir = _site_dir(tmp_path)
+        partners_path = site_dir / "src" / "data" / "partners.json"
+        partners = json.loads(partners_path.read_text())
+        # Bare-California geocoder centroid (validate_roster.py's
+        # BARE_CALIFORNIA_CENTROID) -- one offending row is enough to
+        # prove the wiring; ticket 002's own tests already prove every
+        # check fires in isolation.
+        partners[0]["latitude"] = 36.778261
+        partners[0]["longitude"] = -119.417932
+        partners_path.write_text(json.dumps(partners))
+        fetcher = _fixture_fetcher()
+
+        with pytest.raises(RosterValidationError):
+            run(
+                registry_dir=E2E_REGISTRY_DIR,
+                site_dir=site_dir,
+                fetcher=fetcher,
+                today=TODAY,
+                dry_run=dry_run,
+            )
+
+        # Both dry_run=True and dry_run=False must raise before writing
+        # anything -- unconditional, no `--dry-run` exemption (this
+        # ticket's Acceptance Criteria).
+        assert not (site_dir / "src" / "data" / "opportunities.json").exists()
+        assert not (site_dir / "src" / "data" / "scrape-meta.json").exists()
+        assert not (tmp_path / "scrape_cache" / "partner_log").exists()
+
+    def test_unresolved_active_source_logs_warning_and_does_not_raise(self, tmp_path, caplog):
+        # brokensource.toml's org_name, "Broken Fixture Org", has no
+        # match in tests/fixtures/partners.json (Coastal Roots Farm /
+        # The Living Coast Discovery Center / Ocean Connectors) -- an
+        # existing, deliberate gap (see test_pipeline_e2e_companies.py's
+        # module docstring for the same documented error flow), reused
+        # here rather than adding a new fixture registry.
+        site_dir = _site_dir(tmp_path)
+        fetcher = _fixture_fetcher()
+
+        import logging
+
+        with caplog.at_level(logging.WARNING, logger="partner_scrape.pipeline"):
+            payload = run(
+                registry_dir=E2E_REGISTRY_DIR, site_dir=site_dir, fetcher=fetcher, today=TODAY
+            )
+
+        # Never raises -- the run completes normally, output intact.
+        assert len(payload) == 2
+        assert (site_dir / "src" / "data" / "opportunities.json").exists()
+        assert "Broken Fixture Org" in caplog.text
+
+    def test_clean_roster_run_is_unaffected(self, tmp_path):
+        """A roster with no offenders and no unresolved active source
+        behaves identically to before this ticket -- same payload shape
+        `TestWalkingSkeletonEndToEnd` already proves in detail; this
+        test exists to pin that the roster-validation wiring itself
+        introduces no side effect on the happy path."""
+        site_dir = _site_dir(tmp_path)
+        fetcher = _fixture_fetcher()
+
+        payload = run(
+            registry_dir=E2E_REGISTRY_DIR, site_dir=site_dir, fetcher=fetcher, today=TODAY
+        )
+
+        assert len(payload) == 2
+        titles = {record["title"] for record in payload}
+        assert titles == {"Tide Pool Exploration", "Weekly Story Time"}
+        assert (site_dir / "src" / "data" / "opportunities.json").exists()
 
 
 class TestEnricherHook:
