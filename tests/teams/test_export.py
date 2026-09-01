@@ -24,6 +24,13 @@ by this helper -- exercises output that includes a scraped sponsor name
 and ``sponsor_provenance``, not just the two structured sources' own
 fields.
 
+Sprint 021 ticket 004: ``_real_fixture_teams()`` was extended a third
+time to also run that same team's fetched page through the real
+``teams.description_extract.extract_descriptions()`` (a fixture LLM
+client, no network) so the privacy regression -- and every other
+assertion driven by this helper -- exercises output that includes a
+generated ``description``, not just sponsor/roster fields.
+
 Sprint 020 ticket 005 adds a third, similarly-defaulting ``own_data_dir``
 parameter to ``export_teams()``. Every test written before that ticket
 predates the parameter and never passes it explicitly -- the
@@ -51,6 +58,10 @@ from partner_scrape.teams.export import (
     export_teams,
     to_json_dict,
 )
+from partner_scrape.teams.description_cache import content_hash as description_content_hash
+from partner_scrape.teams.description_candidates import gather_description_content
+from partner_scrape.teams.description_extract import extract_descriptions
+from partner_scrape.teams.description_llm import DescriptionExtractionResult, FixtureDescriptionLLMClient
 from partner_scrape.teams.model import Team
 from partner_scrape.teams.sources.base import run as run_source
 from partner_scrape.teams.sources.ftcscout import DEFAULT_API_BASE, DEFAULT_REGION, FTCScoutSource, _search_url
@@ -159,6 +170,32 @@ _SCRAPED_SPONSOR_HTML = (
     "</body></html>"
 )
 
+#: A synthetic description-shaped page for the same team
+#: `_real_fixture_teams()` runs through `extract_descriptions()` (sprint
+#: 021 ticket 004) -- see that function's own docstring for why.
+_DESCRIPTION_HTML = (
+    '<html><head><meta name="description" '
+    'content="Team Spyder is a FIRST Tech Challenge robotics team."></head>'
+    "<body><h1>Team Spyder</h1>"
+    "<p>We build robots and love STEM outreach.</p></body></html>"
+)
+
+
+@dataclass
+class _InMemoryDescriptionCache:
+    """A `DescriptionCache`-shaped double (`.lookup`/`.store`, keyed the
+    same way) that never touches disk -- used only by
+    `_real_fixture_teams()` below, mirroring `_InMemorySponsorCache`'s
+    own precedent exactly."""
+
+    _store: dict[tuple[str, str], DescriptionExtractionResult] = field(default_factory=dict)
+
+    def lookup(self, team_id: str, content: str) -> DescriptionExtractionResult | None:
+        return self._store.get((team_id, description_content_hash(content)))
+
+    def store(self, team_id: str, content: str, result: DescriptionExtractionResult) -> None:
+        self._store[(team_id, description_content_hash(content))] = result
+
 
 def _real_fixture_teams() -> list[Team]:
     """All 152 San Diego FTC teams (from the live-captured fixture,
@@ -174,6 +211,12 @@ def _real_fixture_teams() -> list[Team]:
     carries a real scraped sponsor name and populated
     `sponsor_provenance` too -- not just the two structured sources'
     own fields.
+
+    Sprint 021 ticket 004: also runs the same "Team Spyder" through
+    `extract_descriptions()` with a synthetic, description-shaped
+    fetched page and a `FixtureDescriptionLLMClient` (no network), so
+    the returned corpus carries a real generated `description` too --
+    not just sponsor/roster fields.
     """
     body = (FIXTURES_DIR / "ftcscout_search.json").read_text()
     fetcher = FixtureFetcher({SEARCH_URL: FetchResponse(url="", status=200, headers={}, body=body)})
@@ -195,6 +238,21 @@ def _real_fixture_teams() -> list[Team]:
         }
     )
     extract_sponsors([spyder], {spyder.team_id: _SCRAPED_SPONSOR_HTML}, llm_client, _InMemorySponsorCache())
+
+    description_content = gather_description_content(_DESCRIPTION_HTML, spyder.website)
+    description_llm_client = FixtureDescriptionLLMClient(
+        responses={
+            description_content: DescriptionExtractionResult(
+                description="Team Spyder is a FIRST Tech Challenge robotics team."
+            ),
+        }
+    )
+    extract_descriptions(
+        [spyder],
+        {spyder.team_id: _DESCRIPTION_HTML},
+        description_llm_client,
+        _InMemoryDescriptionCache(),
+    )
 
     return teams
 
@@ -650,3 +708,22 @@ class TestSponsorExtractionFixtureIsWired:
         spyder = next(t for t in payload["teams"] if t["team_id"] == "ftc-1622")
         assert "Scraped Sponsor Co" in spyder["sponsors"]
         assert spyder["sponsor_provenance"]["Scraped Sponsor Co"] == "scraped"
+
+
+class TestDescriptionExtractionFixtureIsWired:
+    """Sanity check that `_real_fixture_teams()`'s description-extraction
+    step (sprint 021 ticket 004, added to this file's own corpus so
+    `TestNoEmailInExport` exercises description-extraction output too)
+    is actually producing output -- so a silent regression there could
+    not hide behind the privacy regression test still passing
+    vacuously."""
+
+    def test_team_spyder_carries_the_generated_description(self, tmp_path):
+        site = _make_site(tmp_path)
+        payload = export_teams(_real_fixture_teams(), site_dir=site)
+
+        spyder = next(t for t in payload["teams"] if t["team_id"] == "ftc-1622")
+        assert spyder["description"] == "Team Spyder is a FIRST Tech Challenge robotics team."
+        assert spyder["description_status"] == "generated"
+        assert spyder["description_provenance"] == "team_website"
+        assert spyder["description_fetched_at"] != ""

@@ -17,6 +17,7 @@ Description), not invented strings.
 
 from __future__ import annotations
 
+import tomllib
 from pathlib import Path
 
 import pytest
@@ -307,3 +308,44 @@ class TestMutatesAndReturnsSameList:
         result = apply_website_overrides(teams, data_dir=overlay_dir)
 
         assert result is teams
+
+
+class TestRealCommittedOverlayFileParity:
+    """AC (sprint 021 ticket 001, issue 44): verify -- not assume --
+    that the real, committed `teams/data/discovered-websites.toml`
+    still carries exactly the 31 website entries + 21 social-only
+    entries sprint 013's web-search discovery pass found, an exact
+    match to that sprint's own `research/discovered-websites.json`
+    `meta.websites: 31` / `meta.social_only: 21` counts (52 total).
+
+    Parses the real file directly via `tomllib`, never through
+    `apply_website_overrides()` (which discards the website/
+    social-only distinction the moment it populates a `Team` --
+    `_OverlayEntry.website` is `""` for a social-only entry either
+    way) and never a fixture copy -- `TestHostPathUniquenessGuard.
+    test_real_committed_overlay_file_loads_with_no_collision` above
+    already proves the real file loads cleanly; this test proves its
+    *content* still matches sprint 013's own counts, so a future edit
+    to this file (accidental or not) is caught here."""
+
+    def test_exactly_31_website_and_21_social_only_entries(self):
+        path = DEFAULT_DATA_DIR / "discovered-websites.toml"
+        with path.open("rb") as f:
+            raw_data = tomllib.load(f)
+
+        website_entries = [
+            team_id for team_id, entry in raw_data.items() if entry.get("website")
+        ]
+        social_only_entries = [
+            team_id
+            for team_id, entry in raw_data.items()
+            if not entry.get("website") and entry.get("social")
+        ]
+
+        assert len(raw_data) == 52
+        assert len(website_entries) == 31
+        assert len(social_only_entries) == 21
+        # Every entry is one or the other, never neither and never both
+        # miscounted (e.g. a `website = ""` entry with no `social`).
+        assert set(website_entries) | set(social_only_entries) == set(raw_data)
+        assert set(website_entries).isdisjoint(social_only_entries)

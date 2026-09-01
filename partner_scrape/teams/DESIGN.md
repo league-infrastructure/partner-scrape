@@ -204,6 +204,65 @@ existing per-source isolation is what makes this source's absence
 degrade the pipeline to non-VEX-only output rather than aborting the
 run, exactly as it already does for a missing `TBA_KEY`.
 
+**Sprint 021 audits sprint 013's discovered-website import, then adds
+description extraction -- the first stage in this subsystem that turns
+a fetched page's *unstructured text* into a new published field.**
+Ticket 001's audit confirmed, directly against the repository rather
+than the issue's own framing, that the import already happened cleanly:
+`teams/data/discovered-websites.toml`'s 52 entries (31 with a `website`
+key, 21 social-only) exactly match sprint 013 research's own
+`meta.websites: 31`/`meta.social_only: 21` counts, and
+`teams.pipeline.run_teams()`'s stage order (`apply_website_overrides()`
+immediately before `verify_team_websites()`, unconditionally, every
+run) architecturally guarantees `Team.website_status` is set for every
+overlay-sourced website -- no code change, one closed test-coverage gap
+(an overlay-*only*-sourced website through the full `run_teams()`
+chain). Ticket 004 then adds four new modules, mirroring sprint 013's
+sponsor-extraction module set in shape but never by import:
+`description_candidates.gather_description_content()` (pure, offline --
+`<meta name="description">` content, `<title>` text, and every
+`<h1>`-`<h3>`/`<p>` element's own text, concatenated and capped at 2000
+characters, from the same fetched homepage `verify_team_websites()`/
+`extract_sponsors()` already produced -- no second fetch), a
+`description_llm.DescriptionLLMClient` protocol whose only contract is
+*summarizing* that bounded text (never generating from open context,
+mirroring `sponsor_llm.py`'s classify-don't-generate contract, adapted
+to summarize-don't-generate), `description_cache.DescriptionCache`
+(content-hash cache, mirrors `sponsor_cache.py`), and
+`description_extract.extract_descriptions()` (orchestration: gather ->
+cache -> summarize -> no-email/length guard -> publish, fail-open per
+team, sequenced after `canonicalize_sponsors()` and before
+`export_teams()`). The no-email guard is layered three independent
+ways -- a regex strip at gathering time (layer 1), a system-prompt
+instruction (layer 2), and a code-level rejection of the LLM's raw
+response before it can ever be published (layer 3, mirroring
+`sponsor_extract._is_denylisted()`'s own "never trust the model's
+compliance with its own instructions alone" role) -- plus a length cap
+mirroring `sponsor_extract._MAX_SPONSOR_NAME_LENGTH`'s own
+defense-in-depth precedent. Four new flat fields land on `Team`
+(`description`, `description_status`, `description_provenance`,
+`description_fetched_at`); `teams/export.py` needed no code change at
+all -- `TEAMS_SCHEMA_FIELDS` already auto-derives from
+`dataclasses.fields(Team)`. Per a stem-ecosystem peer's planning-time
+refinement, `description_status` (`"generated"`/`"unavailable"`/
+`"none"`) is deliberately independent of the existing `website_status`
+-- the latter still answers "was the site reachable," the former "did
+we find anything worth showing," since a reachable site can still have
+nothing extractable. `run_teams()` gains
+`description_llm_client`/`description_cache`/`no_descriptions`
+parameters, lazily constructing a real
+`AnthropicDescriptionLLMClient()`/`DescriptionCache()` only when the
+stage actually has at least one confirmed page to look at -- the same
+`llm_client`/`sponsor_cache`/`no_sponsors` pattern sprint 013 ticket 005
+established, applied a second time; `cli.py` gains a
+`--no-descriptions` flag mirroring `--no-sponsors` exactly. None of
+this touches `enrich/`, `adapters/`, `normalize.run()`, or
+`pipeline.run()`, and description extraction has the same standing
+"mirror, never import" relationship to sponsor extraction that sponsor
+extraction itself has to `enrich/`. See
+`clasi/sprints/021-team-website-verification-and-description-extraction/
+sprint.md` for the sprint-level plan this section elaborates.
+
 ```
 BUILT (ticket 011-001):
   registry.load_active_sources(teams/registry/)   reused verbatim
@@ -321,6 +380,50 @@ BUILT (sprint 016 ticket 005):
   (feeds into merge_teams()/geocode_teams()/export_teams(), all
    unchanged -- a fourth source needed zero change to any of the three,
    exactly as sprint 012's static_roster addition already confirmed)
+
+BUILT (sprint 021, ticket 001 -- audit only, no production code):
+  teams/data/discovered-websites.toml   52 entries (31 website + 21
+     ↓                                  social-only) confirmed to match
+     ↓                                  sprint 013 research's own
+     ↓                                  meta.websites/meta.social_only
+     ↓                                  counts exactly
+  (closed one test-coverage gap: an overlay-only-sourced website
+   reaches website_status confirmed/unverified through the real
+   run_teams() chain end to end -- no other change)
+
+BUILT (sprint 021, ticket 004):
+  teams.description_candidates.              pure, offline: meta
+    gather_description_content()             description + title +
+     ↓                                       h1-h3/p text, concatenated,
+     ↓                                       capped at 2000 chars, or ""
+     ↓                                       (no LLM call) -- no-email
+     ↓                                       guard layer 1 of 3
+  teams.description_llm.DescriptionLLMClient  summarizes (never
+     ↓                                       generates) the gathered
+     ↓                                       text via a dataclass-
+     ↓                                       derived JSON schema;
+     ↓                                       no-email guard layer 2 of 3
+     ↓                                       (system prompt); mirrors
+     ↓                                       but never imports
+     ↓                                       sponsor_llm.py
+  teams.description_cache.DescriptionCache   content-hash cache, mirrors
+     ↓                                       but never imports
+     ↓                                       sponsor_cache.py
+  teams.description_extract.                 orchestrates the above;
+    extract_descriptions()                   no-email guard layer 3 of 3
+     ↓                                       (code-level rejection of
+     ↓                                       the LLM's raw response) +
+     ↓                                       length cap; fail-open per
+     ↓                                       team; sets Team.description/
+     ↓                                       description_status/
+     ↓                                       description_provenance/
+     ↓                                       description_fetched_at
+  cli.py `teams --no-descriptions`           skips this stage only;
+                                              website verification and
+                                              sponsor extraction still run
+  (feeds into teams.export.export_teams(), unchanged -- TEAMS_SCHEMA_FIELDS
+   auto-derives the four new fields with no export.py change, same as
+   every prior sprint's new Team field)
 
 REMOVED (sprint 019, ticket 001): the `[--no-mirror]`-gated
 `export.mirror_site_data()` call ticket 011-002 (above) added after

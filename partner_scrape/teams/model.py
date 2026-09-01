@@ -141,6 +141,38 @@ class Team:
     # committed teams/data/discovered-websites.toml overlay -- empty for
     # any team absent from that overlay. Never derived from website_status
     # or any live fetch; this is curated, offline data only.
+    description: str = ""  # sprint 021 ticket 004: an LLM-summarized,
+    # 1-2 sentence "about this team" blurb, set by
+    # teams.description_extract.extract_descriptions() from this team's
+    # own confirmed website content (never invented, never carrying a
+    # fact absent from the gathered page text). "" whenever
+    # description_status != "generated".
+    description_status: str = "none"  # "generated" (summarized
+    # successfully) | "unavailable" (a confirmed fetch existed but this
+    # stage could not produce a publishable description -- empty
+    # gathered content, an empty LLM response, a no-email/length guard
+    # rejection, or a caught cache/LLM failure; see
+    # teams.description_extract's own module docstring for the full
+    # per-case breakdown) | "none" (no confirmed fetch to extract from
+    # at all -- this stage never even looked at this team; mirrors
+    # website_status's own "none" vocabulary for "nothing attempted").
+    # Deliberately independent of website_status above -- a
+    # stem-ecosystem peer's planning-time refinement (sprint 021
+    # sprint.md's Solution/Design Rationale): website_status answers
+    # "was the site reachable" (the existing dead-link-guard concern,
+    # unchanged by this sprint); description_status answers "did we
+    # find anything worth showing," a genuinely different,
+    # separately-true fact -- a reachable site can still have nothing
+    # extractable. Do not collapse the two into one signal.
+    description_provenance: str = ""  # "team_website" when
+    # description_status == "generated", else "" -- a single scalar
+    # (not a per-name dict like sponsor_provenance) since a Team has at
+    # most one description.
+    description_fetched_at: str = ""  # ISO-8601 UTC timestamp of when
+    # `description` was generated, via an injectable `clock` parameter
+    # to extract_descriptions() (matching EnrichmentCache's/
+    # SponsorCache's own testable-clock convention). "" whenever no
+    # description was generated.
 
     # Program metadata
     rookie_year: int | None = None

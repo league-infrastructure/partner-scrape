@@ -51,6 +51,12 @@ from partner_scrape.teams.sources.ftcscout import DEFAULT_API_BASE, DEFAULT_REGI
 from partner_scrape.teams.sources.robotevents import DEFAULT_PER_PAGE as ROBOTEVENTS_PER_PAGE
 from partner_scrape.teams.sources.robotevents import _teams_url as _robotevents_teams_url
 from partner_scrape.teams.sources.tba import _status_url, _teams_page_url
+from partner_scrape.teams.description_cache import DescriptionCache
+from partner_scrape.teams.description_candidates import gather_description_content
+from partner_scrape.teams.description_llm import (
+    DescriptionExtractionResult,
+    FixtureDescriptionLLMClient,
+)
 from partner_scrape.teams.sponsor_cache import SponsorCache
 from partner_scrape.teams.sponsor_llm import FixtureSponsorLLMClient, SponsorExtractionResult
 
@@ -751,6 +757,14 @@ class TestSponsorExtractionWiring:
             dry_run=True,
             llm_client=llm_client,
             sponsor_cache=sponsor_cache,
+            # Sprint 021 ticket 004: this test's confirmed fetch_results
+            # entry would otherwise also reach description extraction's
+            # own lazy AnthropicDescriptionLLMClient()/DescriptionCache()
+            # construction (a second, unrelated real-service dependency
+            # this sponsor-only test has no reason to configure) -- see
+            # TestDescriptionExtractionWiring below for that stage's own
+            # dedicated coverage.
+            no_descriptions=True,
         )
 
         [published] = payload["teams"]
@@ -791,6 +805,11 @@ class TestSponsorExtractionWiring:
             fetcher=fetcher,
             dry_run=True,
             no_sponsors=True,
+            # See the sibling test above -- this confirmed fetch_results
+            # entry would otherwise also reach description extraction's
+            # own default construction, unrelated to what this test
+            # covers.
+            no_descriptions=True,
         )
 
         [published] = payload["teams"]
@@ -814,6 +833,15 @@ class TestSponsorExtractionWiring:
         # without raising, even with no ANTHROPIC_API_KEY configured for
         # this test (SCRAPE_CACHE_DIR is set below -- SponsorCache()'s
         # own construction requires it, same as PoliteFetcher()'s does).
+        # Sprint 021 ticket 004: the page text below ("Nothing
+        # sponsor-shaped here.") is a `<p>` element -- description
+        # extraction's own content gatherer has no sponsor-specific
+        # exclusion, so it *would* gather this as summarizable content
+        # and reach a real AnthropicDescriptionLLMClient() call. This
+        # test's own point is proving sponsor default-construction only,
+        # so `no_descriptions=True` keeps that unrelated stage out of
+        # scope here (see TestDescriptionExtractionWiring below for its
+        # own, equivalent default-construction test).
         website = "https://www.teamspyder.org/"
         team = Team(
             team_id="ftc-1622",
@@ -839,11 +867,134 @@ class TestSponsorExtractionWiring:
             site_dir=tmp_path,
             fetcher=fetcher,
             dry_run=True,
+            no_descriptions=True,
         )
 
         [published] = payload["teams"]
         assert published["website_status"] == "confirmed"
         assert published["sponsors"] == []
+
+
+class TestWebsiteOverlayToVerificationWiring:
+    """Sprint 021 ticket 001 (issue 44): proves `apply_website_overrides()`
+    -> `verify_team_websites()` end to end inside `run_teams()` for a
+    team whose `website` is **empty from its own (stubbed) source** --
+    the one real test-coverage gap the ticket's audit found. Every
+    `TestSponsorExtractionWiring` test above sets `website=` directly
+    on the stub `Team` it constructs, which never exercises
+    `apply_website_overrides()` populating that field from the overlay
+    at all; `teams.pipeline.run_teams()`'s stage order (confirmed by
+    reading the module directly, not just trusting its docstring)
+    sequences `apply_website_overrides()` immediately before
+    `verify_team_websites()`, unconditionally, every run.
+
+    Uses a small, dedicated fixture overlay --
+    `tests/fixtures/teams/discovered_websites_sample.toml`, the same
+    one `tests/teams/test_website_overrides.py`'s own `overlay_dir`
+    fixture copies -- passed via `website_data_dir`, never the real
+    52-entry `teams/data/discovered-websites.toml`."""
+
+    def test_overlay_sourced_website_reaches_confirmed_via_run_teams(
+        self, monkeypatch, tmp_path
+    ):
+        # ftc-1622's website is empty from its own (stubbed) source --
+        # only the fixture overlay's "https://teamspyder.org" entry can
+        # supply it, so a "confirmed" website_status here can only have
+        # come from the real apply_website_overrides() ->
+        # verify_team_websites() chain, not from a website the stub
+        # Team already carried.
+        team = Team(
+            team_id="ftc-1622",
+            league="FTC",
+            program="FIRST Tech Challenge",
+            number=1622,
+            name="Team Spyder",
+            organization="Poway High School",
+            website="",
+        )
+        monkeypatch.setattr(teams_pipeline, "_TEAM_SOURCES", {"ftcscout": _StubTeamSource([team])})
+
+        overlay_dir = tmp_path / "overlay-data"
+        overlay_dir.mkdir()
+        (overlay_dir / "discovered-websites.toml").write_text(
+            (FIXTURES_DIR / "discovered_websites_sample.toml").read_text()
+        )
+
+        overlay_website = "https://teamspyder.org"
+        fetcher = FixtureFetcher(
+            {
+                robots_txt_url(overlay_website): FetchResponse(
+                    url="", status=200, headers={}, body=_ALLOW_ALL_ROBOTS
+                ),
+                overlay_website: FetchResponse(
+                    url="", status=200, headers={}, body="<html><body>Team Spyder</body></html>"
+                ),
+            }
+        )
+
+        payload = run_teams(
+            registry_dir=_one_team_registry(tmp_path),
+            site_dir=tmp_path,
+            fetcher=fetcher,
+            dry_run=True,
+            website_data_dir=overlay_dir,
+            no_sponsors=True,
+            # Sprint 021 ticket 004: this test's confirmed fetch_results
+            # entry would otherwise also reach description extraction's
+            # own lazy default construction, unrelated to what this
+            # test covers (verify_team_websites()/apply_website_overrides()
+            # wiring only).
+            no_descriptions=True,
+        )
+
+        [published] = payload["teams"]
+        assert published["website"] == overlay_website
+        assert published["website_status"] == "confirmed"
+        # Social ingestion (website_overrides.py's step 3) rode along in
+        # the same overlay pass -- confirms the whole overlay entry was
+        # applied, not just its `website` field in isolation.
+        assert published["social"] == [
+            "https://www.instagram.com/spyder1622",
+            "https://www.youtube.com/@spyder1622",
+            "https://twitter.com/team1622",
+            "https://twitter.com/frc1622",
+        ]
+
+    def test_a_team_with_no_overlay_entry_and_no_source_website_is_never_verified(
+        self, monkeypatch, tmp_path
+    ):
+        # Control case: a team absent from the overlay and with no
+        # source-reported website stays at website_status == "none" --
+        # confirms the test above's "confirmed" result is actually
+        # caused by the overlay entry, not some other default behavior.
+        team = Team(
+            team_id="ftc-99999999",
+            league="FTC",
+            program="FIRST Tech Challenge",
+            number=99999999,
+            name="No Website Team",
+            website="",
+        )
+        monkeypatch.setattr(teams_pipeline, "_TEAM_SOURCES", {"ftcscout": _StubTeamSource([team])})
+
+        overlay_dir = tmp_path / "overlay-data"
+        overlay_dir.mkdir()
+        (overlay_dir / "discovered-websites.toml").write_text(
+            (FIXTURES_DIR / "discovered_websites_sample.toml").read_text()
+        )
+
+        payload = run_teams(
+            registry_dir=_one_team_registry(tmp_path),
+            site_dir=tmp_path,
+            fetcher=FixtureFetcher({}),
+            dry_run=True,
+            website_data_dir=overlay_dir,
+            no_sponsors=True,
+        )
+
+        [published] = payload["teams"]
+        assert published["website"] == ""
+        assert published["website_status"] == "none"
 
 
 class TestCanonicalizeSponsorsWiring:
@@ -905,6 +1056,170 @@ class TestCanonicalizeSponsorsWiring:
         assert published["ftc-2"]["sponsors"] == ["Qualcomm"]
         assert published["ftc-3"]["sponsors"] == ["Qualcomm"]
         assert published["ftc-1"]["sponsor_provenance"] == {"Qualcomm": "structured"}
+
+
+class TestDescriptionExtractionWiring:
+    """Sprint 021 ticket 004: `extract_descriptions()` sequenced after
+    `canonicalize_sponsors()` and before `export_teams()`, with
+    injectable `description_llm_client`/`description_cache` and a
+    `no_descriptions` escape hatch (the CLI's `--no-descriptions`
+    flag) -- mirrors `TestSponsorExtractionWiring` exactly."""
+
+    _DESCRIPTION_HTML = (
+        '<html><head><meta name="description" content="Team Spyder builds robots.">'
+        "</head><body><h1>Team Spyder</h1>"
+        "<p>We build robots and love STEM outreach.</p></body></html>"
+    )
+
+    def test_a_confirmed_team_gets_a_generated_description_via_the_injected_llm_client(
+        self, monkeypatch, tmp_path
+    ):
+        website = "https://www.teamspyder.org/"
+        team = Team(
+            team_id="ftc-1622",
+            league="FTC",
+            program="FIRST Tech Challenge",
+            number=1622,
+            name="Team Spyder",
+            organization="Poway High School",
+            website=website,
+        )
+        monkeypatch.setattr(teams_pipeline, "_TEAM_SOURCES", {"ftcscout": _StubTeamSource([team])})
+
+        fetcher = FixtureFetcher(
+            {
+                robots_txt_url(website): FetchResponse(url="", status=200, headers={}, body=_ALLOW_ALL_ROBOTS),
+                website: FetchResponse(url="", status=200, headers={}, body=self._DESCRIPTION_HTML),
+            }
+        )
+        content = gather_description_content(self._DESCRIPTION_HTML, website)
+        llm_client = FixtureDescriptionLLMClient(
+            responses={
+                content: DescriptionExtractionResult(description="Team Spyder builds robots."),
+            }
+        )
+        description_cache = DescriptionCache(cache_dir=tmp_path / "description-cache")
+
+        payload = run_teams(
+            registry_dir=_one_team_registry(tmp_path),
+            site_dir=tmp_path,
+            fetcher=fetcher,
+            dry_run=True,
+            description_llm_client=llm_client,
+            description_cache=description_cache,
+            # This test's confirmed fetch_results entry would otherwise
+            # also reach sponsor extraction's own lazy
+            # AnthropicSponsorLLMClient()/SponsorCache() construction (a
+            # second, unrelated real-service dependency this
+            # description-only test has no reason to configure) --
+            # mirrors TestSponsorExtractionWiring's own
+            # no_descriptions=True additions above, in the opposite
+            # direction.
+            no_sponsors=True,
+        )
+
+        [published] = payload["teams"]
+        assert published["description"] == "Team Spyder builds robots."
+        assert published["description_status"] == "generated"
+        assert published["description_provenance"] == "team_website"
+        assert published["description_fetched_at"] != ""
+        assert len(llm_client.calls) == 1
+
+    def test_no_descriptions_skips_extraction_but_website_verification_still_runs(
+        self, monkeypatch, tmp_path
+    ):
+        website = "https://www.teamspyder.org/"
+        team = Team(
+            team_id="ftc-1622",
+            league="FTC",
+            program="FIRST Tech Challenge",
+            number=1622,
+            name="Team Spyder",
+            organization="Poway High School",
+            website=website,
+        )
+        monkeypatch.setattr(teams_pipeline, "_TEAM_SOURCES", {"ftcscout": _StubTeamSource([team])})
+
+        fetcher = FixtureFetcher(
+            {
+                robots_txt_url(website): FetchResponse(url="", status=200, headers={}, body=_ALLOW_ALL_ROBOTS),
+                website: FetchResponse(url="", status=200, headers={}, body=self._DESCRIPTION_HTML),
+            }
+        )
+
+        def _boom_llm_client():
+            raise AssertionError(
+                "AnthropicDescriptionLLMClient must not be constructed under no_descriptions"
+            )
+
+        monkeypatch.setattr(teams_pipeline, "AnthropicDescriptionLLMClient", _boom_llm_client)
+
+        payload = run_teams(
+            registry_dir=_one_team_registry(tmp_path),
+            site_dir=tmp_path,
+            fetcher=fetcher,
+            dry_run=True,
+            no_descriptions=True,
+            # See the sibling test above -- this confirmed fetch_results
+            # entry would otherwise also reach sponsor extraction's own
+            # default construction, unrelated to what this test covers.
+            no_sponsors=True,
+        )
+
+        [published] = payload["teams"]
+        # verify_team_websites() (the cheap, certain half) still ran.
+        assert published["website_status"] == "confirmed"
+        # extract_descriptions() (the skippable half) never ran.
+        assert published["description"] == ""
+        assert published["description_status"] == "none"
+
+    def test_description_llm_client_and_cache_default_to_real_implementations_when_omitted(
+        self, monkeypatch, tmp_path
+    ):
+        # A confirmed website whose page has no description-shaped
+        # content at all -- fetch_results is non-empty (so run_teams()
+        # actually reaches the default-construction line below), but
+        # gather_description_content() returns "" for this team, so
+        # extract_descriptions() never calls summarize_description() and
+        # no real network/API call is ever made. This proves
+        # run_teams() can default-construct
+        # AnthropicDescriptionLLMClient()/DescriptionCache() (matching
+        # fetcher's own default-to-production convention) without
+        # raising, even with no ANTHROPIC_API_KEY configured for this
+        # test (SCRAPE_CACHE_DIR is set below -- DescriptionCache()'s
+        # own construction requires it, same as SponsorCache()'s does).
+        website = "https://www.teamspyder.org/"
+        team = Team(
+            team_id="ftc-1622",
+            league="FTC",
+            program="FIRST Tech Challenge",
+            number=1622,
+            name="Team Spyder",
+            website=website,
+        )
+        monkeypatch.setattr(teams_pipeline, "_TEAM_SOURCES", {"ftcscout": _StubTeamSource([team])})
+        monkeypatch.setenv("SCRAPE_CACHE_DIR", str(tmp_path / "cache"))
+
+        no_description_content_html = "<html><body><div></div></body></html>"
+        fetcher = FixtureFetcher(
+            {
+                robots_txt_url(website): FetchResponse(url="", status=200, headers={}, body=_ALLOW_ALL_ROBOTS),
+                website: FetchResponse(
+                    url="", status=200, headers={}, body=no_description_content_html
+                ),
+            }
+        )
+
+        payload = run_teams(
+            registry_dir=_one_team_registry(tmp_path),
+            site_dir=tmp_path,
+            fetcher=fetcher,
+            dry_run=True,
+        )
+
+        [published] = payload["teams"]
+        assert published["website_status"] == "confirmed"
+        assert published["description_status"] == "unavailable"
 
 
 class TestParseSunsetSeason:
