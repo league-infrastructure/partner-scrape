@@ -115,37 +115,37 @@ pipeline code and changes no runtime import graph.
 
 ## Acceptance Criteria
 
-- [ ] `dev/backfill_missing_images.py` exists, is stdlib-only (no import
+- [x] `dev/backfill_missing_images.py` exists, is stdlib-only (no import
       of `partner_scrape.*`), and is never imported by anything under
       `partner_scrape/` or `tests/`.
-- [ ] Running the script with no `--source-dir` (check-only mode)
+- [x] Running the script with no `--source-dir` (check-only mode)
       against the real `data/` tree correctly reports the current
       referenced/existing/missing counts for both the
       `data/partners/*` check and the `data/opportunities.json` check,
       and exits non-zero while any missing filename remains.
-- [ ] Running the script with `--source-dir
+- [x] Running the script with `--source-dir
       ../stem-ecosystem/public/images/opportunities` performs a real,
       non-dry-run backfill: every one of the 172 referenced-but-missing
       filenames present in that source directory is copied byte-
       identically into `data/images/opportunities/`.
-- [ ] Any referenced filename missing from *both* `data/images/opportunities/`
+- [x] Any referenced filename missing from *both* `data/images/opportunities/`
       and `--source-dir` is reported clearly and does not silently pass
       as success (expected count: zero, based on this sprint's planning-
       time verification, but the script must not assume that holds at
       execution time).
-- [ ] After the backfill, re-running the script in check-only mode shows
+- [x] After the backfill, re-running the script in check-only mode shows
       **zero** missing for both checks.
-- [ ] `data/opportunities.json`'s referenced-image check remains
+- [x] `data/opportunities.json`'s referenced-image check remains
       unchanged at 143/143 present after the backfill (confirms the copy
       didn't disturb this already-passing contract).
-- [ ] `git status` shows exactly 172 new files added under
+- [x] `git status` shows exactly 172 new files added under
       `data/images/opportunities/`, and no existing file under that
       directory (or anywhere else under `data/` or `partner_scrape/`)
       modified or removed.
-- [ ] This ticket's Notes section records the exact before/after counts
+- [x] This ticket's Notes section records the exact before/after counts
       from the live run (referenced/existing/missing, before and after
       the copy).
-- [ ] `uv run pytest -q` is green.
+- [x] `uv run pytest -q` is green.
 
 ## Testing
 
@@ -170,6 +170,38 @@ pipeline code and changes no runtime import graph.
 
 ## Notes
 
-(To be filled in by the ticket executor after the live run: exact
-before/after referenced/existing/missing counts for both checks, and the
-count of files actually copied.)
+Live run: `uv run python dev/backfill_missing_images.py --source-dir
+../stem-ecosystem/public/images/opportunities` (real, non-dry-run,
+against the actual `data/` tree and the actual sibling checkout).
+
+**Before:**
+- `data/partners/*/{events,past-events}.json` check: 449 referenced,
+  277 present, **172 missing**.
+- `data/opportunities.json` check: 143 referenced, 143 present, 0
+  missing (already-passing control, as expected).
+
+**Backfill:** 172 missing filenames considered; 172 found in
+`../stem-ecosystem/public/images/opportunities` and copied via
+`shutil.copy2()`; 0 not found in source (matches sprint-planning-time
+verification — all 172 existed there, confirmed independently at
+execution time rather than assumed).
+
+**After:**
+- `data/partners/*/{events,past-events}.json` check: 449 referenced,
+  449 present, **0 missing**.
+- `data/opportunities.json` check: 143 referenced, 143 present, 0
+  missing — unchanged, confirming the backfill didn't disturb this
+  already-passing contract.
+
+Post-copy re-run of the script in check-only mode confirmed both
+checks at 0 missing and exit code 0.
+
+`git status data/images/opportunities/` showed exactly 172 new (`??`)
+files, nothing modified or removed. No files under `partner_scrape/`
+were touched. Spot-checked 3 copied files (`.jpg`, `.png`, `.webp`)
+via SHA-256 against their source-dir originals — identical hashes,
+confirming byte-exact `copy2()` (no re-encode).
+
+`uv run pytest -q`: 1941 passed.
+
+No deviations from the implementation plan.
