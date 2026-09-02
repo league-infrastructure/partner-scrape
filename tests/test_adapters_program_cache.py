@@ -242,3 +242,59 @@ class TestCacheSchemaVersion:
         cache.store(url, body, _sample_result(program_name="fresh"))
 
         assert cache.lookup(url, body).program_name == "fresh"
+
+
+# ---------------------------------------------------------------------
+# Sprint 029 ticket 006: _CACHE_SCHEMA_VERSION bumps 2 -> 3 for
+# registration_deadline's addition to ProgramExtractionResult.
+# ---------------------------------------------------------------------
+
+
+class TestSchemaVersionBumpForRegistrationDeadline:
+    """AC: ``_CACHE_SCHEMA_VERSION`` is 3; a pre-bump (``schema_version:
+    2``) cache entry -- written before ``registration_deadline`` existed
+    on ``ProgramExtractionResult``, so its stored ``result`` has no such
+    key -- is treated as a cache miss, not a deserialization error. This
+    is load-bearing, not only tidy: tickets 001/002's real dry-runs
+    already populated cache entries for this revision's affected
+    competition sources under the old, now-corrected prompt; without
+    this bump, a re-verification run would read those stale entries back
+    and never invoke the corrected prompt at all.
+    """
+
+    def test_current_schema_version_is_3(self):
+        assert _CACHE_SCHEMA_VERSION == 3
+
+    def test_schema_version_2_entry_missing_registration_deadline_is_a_miss(self, tmp_path):
+        cache = ProgramExtractionCache(cache_dir=tmp_path)
+        url = "https://example.org/fre-hs"
+        body = "body"
+        cache.store(url, body, _sample_result())
+
+        [written] = list((tmp_path / "program_extraction_cache").glob("*.json"))
+        entry = json.loads(written.read_text())
+        entry["schema_version"] = 2
+        # The pre-bump on-disk shape: no registration_deadline key at
+        # all in the stored result (not even an empty string).
+        del entry["result"]["registration_deadline"]
+        written.write_text(json.dumps(entry))
+
+        # A clean miss -- not a KeyError from _result_from_jsonable, since
+        # the version check short-circuits before deserialization is
+        # ever attempted.
+        assert cache.lookup(url, body) is None
+
+    def test_schema_version_2_entry_is_a_miss_for_lookup_many_too(self, tmp_path):
+        cache = ProgramExtractionCache(cache_dir=tmp_path)
+        url = "https://example.org/sio-internships"
+        body = "body"
+        cache.store_many(url, body, [_sample_result()])
+
+        [written] = list((tmp_path / "program_extraction_cache").glob("*.json"))
+        entry = json.loads(written.read_text())
+        entry["schema_version"] = 2
+        for result in entry["results"]:
+            del result["registration_deadline"]
+        written.write_text(json.dumps(entry))
+
+        assert cache.lookup_many(url, body) is None

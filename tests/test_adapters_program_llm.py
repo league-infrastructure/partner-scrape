@@ -13,6 +13,7 @@ from __future__ import annotations
 import dataclasses
 import json
 from dataclasses import dataclass, field
+from datetime import date
 from pathlib import Path
 from typing import Any
 
@@ -23,7 +24,10 @@ from partner_scrape.adapters.program_llm import (
     PROGRAM_LIST_EXTRACTION_JSON_SCHEMA,
     MODEL_ID,
     _FIELD_EXTRACTION_RULES,
+    _FIELD_EXTRACTION_RULES_COMPETITION,
     _SYSTEM_PROMPT,
+    _SYSTEM_PROMPT_COMPETITION,
+    _SYSTEM_PROMPT_COMPETITION_MULTI,
     _SYSTEM_PROMPT_MULTI,
     AnthropicProgramLLMClient,
     FixtureProgramLLMClient,
@@ -93,6 +97,7 @@ _FULL_RESULT_PAYLOAD = {
     "eligibility": "San Diego County residents in grades 10-12.",
     "is_open": True,
     "opportunity_type": "Work-based Learning",
+    "registration_deadline": "",
 }
 
 
@@ -113,6 +118,7 @@ class TestProgramExtractionResult:
         assert result.eligibility == ""
         assert result.is_open is True
         assert result.opportunity_type == ""
+        assert result.registration_deadline == ""
 
     def test_default_list_fields_are_not_shared_between_instances(self):
         a = ProgramExtractionResult()
@@ -433,6 +439,212 @@ class TestEmptyProgramsListIsExplicitlyValid:
         # The single-record prompt has no list-valued response to be
         # empty -- this instruction is multi-prompt-only.
         assert "return an empty list" not in _SYSTEM_PROMPT
+
+
+# ---------------------------------------------------------------------
+# Sprint 029 ticket 006: competition-genre extraction profile fix --
+# date-vs-deadline framing, "Event Date"-style phrasing, and the
+# reference-date-based year-inference rule.
+# ---------------------------------------------------------------------
+
+
+class TestBaseFieldRulesSpecifyRegistrationDeadline:
+    """AC: the base (unchanged) ``_FIELD_EXTRACTION_RULES`` explicitly
+    says ``registration_deadline`` is always ``""`` for that profile,
+    rather than leaving the new required field to unstated
+    structured-output defaulting.
+    """
+
+    def test_base_field_rules_say_registration_deadline_is_always_empty(self):
+        assert 'registration_deadline: always ""' in _FIELD_EXTRACTION_RULES
+
+
+class TestCompetitionFieldRulesSeparateDateFromDeadline:
+    """AC: ``_FIELD_EXTRACTION_RULES_COMPETITION`` redefines
+    date_start/date_end as the event's own date (never a registration
+    deadline), names the "Event Date"-style phrasing patterns tickets
+    001/002 found the model missing, and specifies the reference-date
+    year-inference rule.
+    """
+
+    def test_date_end_is_explicitly_not_a_registration_deadline(self):
+        assert "NOT a registration, sign-up, or paperwork deadline" in (
+            _FIELD_EXTRACTION_RULES_COMPETITION
+        )
+
+    def test_registration_deadline_field_is_defined_as_a_separate_deadline(self):
+        assert "registration_deadline: a registration, team-signup, or paperwork deadline" in (
+            _FIELD_EXTRACTION_RULES_COMPETITION
+        )
+
+    def test_names_event_date_style_phrasing_patterns(self):
+        for phrase in ('"Event Date,"', '"Competition Date,"', '"Tournament Date,"', '"Save the Date,"'):
+            assert phrase in _FIELD_EXTRACTION_RULES_COMPETITION
+
+    def test_year_inference_rule_references_the_reference_date(self):
+        assert "Page fetched on" in _FIELD_EXTRACTION_RULES_COMPETITION
+        assert "infer the soonest year" in _FIELD_EXTRACTION_RULES_COMPETITION
+
+    def test_shared_by_both_competition_prompts(self):
+        assert _FIELD_EXTRACTION_RULES_COMPETITION in _SYSTEM_PROMPT_COMPETITION
+        assert _FIELD_EXTRACTION_RULES_COMPETITION in _SYSTEM_PROMPT_COMPETITION_MULTI
+
+    def test_competition_prompts_are_distinct_from_the_base_prompts(self):
+        assert _SYSTEM_PROMPT_COMPETITION != _SYSTEM_PROMPT
+        assert _SYSTEM_PROMPT_COMPETITION_MULTI != _SYSTEM_PROMPT_MULTI
+
+
+class TestProfileSelectsSystemPrompt:
+    """AC: ``profile="competition"`` selects
+    ``_SYSTEM_PROMPT_COMPETITION``/``_SYSTEM_PROMPT_COMPETITION_MULTI``;
+    every call that omits ``profile`` (or passes the default
+    ``"program"``) is byte-for-byte unaffected -- proving sprint 027/028
+    call sites' backward compatibility.
+    """
+
+    def test_default_profile_uses_the_unchanged_single_record_prompt(self, monkeypatch):
+        fake_messages = _install_fake_anthropic(monkeypatch, response_text=json.dumps(_FULL_RESULT_PAYLOAD))
+        client = AnthropicProgramLLMClient()
+
+        client.extract_program("https://example.org/x", "body")
+
+        assert fake_messages.calls[0]["system"] == _SYSTEM_PROMPT
+
+    def test_omitted_profile_and_reference_date_produce_the_pre_revision_prompt_byte_for_byte(
+        self, monkeypatch
+    ):
+        fake_messages = _install_fake_anthropic(monkeypatch, response_text=json.dumps(_FULL_RESULT_PAYLOAD))
+        client = AnthropicProgramLLMClient()
+
+        client.extract_program("https://example.org/x", "body text")
+
+        user_message = fake_messages.calls[0]["messages"][0]["content"]
+        assert user_message == (
+            "Program page URL: https://example.org/x\n\n"
+            "Here is the page's raw text. Extract the fields the response "
+            "format requires.\n\nbody text"
+        )
+        assert "Page fetched on" not in user_message
+
+    def test_competition_profile_uses_the_competition_single_record_prompt(self, monkeypatch):
+        fake_messages = _install_fake_anthropic(monkeypatch, response_text=json.dumps(_FULL_RESULT_PAYLOAD))
+        client = AnthropicProgramLLMClient()
+
+        client.extract_program("https://example.org/x", "body", profile="competition")
+
+        assert fake_messages.calls[0]["system"] == _SYSTEM_PROMPT_COMPETITION
+
+    def test_competition_profile_uses_the_competition_multi_record_prompt(self, monkeypatch):
+        fake_messages = _install_fake_anthropic(
+            monkeypatch, response_text=json.dumps({"programs": [_FULL_RESULT_PAYLOAD]})
+        )
+        client = AnthropicProgramLLMClient()
+
+        client.extract_programs("https://example.org/x", "body", profile="competition")
+
+        assert fake_messages.calls[0]["system"] == _SYSTEM_PROMPT_COMPETITION_MULTI
+
+
+class TestReferenceDateInjectedIntoUserPromptOnly:
+    """AC: ``reference_date`` is injected into the *user* prompt as
+    "Page fetched on: ``<ISO date>``", never the system prompt.
+    """
+
+    def test_reference_date_appears_in_the_user_prompt(self, monkeypatch):
+        fake_messages = _install_fake_anthropic(monkeypatch, response_text=json.dumps(_FULL_RESULT_PAYLOAD))
+        client = AnthropicProgramLLMClient()
+
+        client.extract_program(
+            "https://example.org/x", "body", profile="competition", reference_date=date(2026, 3, 1)
+        )
+
+        user_message = fake_messages.calls[0]["messages"][0]["content"]
+        assert "Page fetched on: 2026-03-01" in user_message
+        # The literal reference date value is user-prompt-only -- the
+        # system prompt's own year-inference rule refers to "Page fetched
+        # on" generically (static text), never embeds a per-call date.
+        assert "2026-03-01" not in fake_messages.calls[0]["system"]
+
+    def test_no_reference_date_line_when_reference_date_is_none(self, monkeypatch):
+        fake_messages = _install_fake_anthropic(monkeypatch, response_text=json.dumps(_FULL_RESULT_PAYLOAD))
+        client = AnthropicProgramLLMClient()
+
+        client.extract_program("https://example.org/x", "body", profile="competition")
+
+        user_message = fake_messages.calls[0]["messages"][0]["content"]
+        assert "Page fetched on" not in user_message
+
+
+class TestYearInferenceMechanismWiring:
+    """AC: a fixture test proving the year-inference mechanism -- a
+    synthetic page stating a month/day with no adjacent year, extracted
+    with a fixed ``reference_date``, yields the expected inferred year.
+
+    Since every test in this file drives a fake (never real) Anthropic
+    client, this proves the *mechanism* is correctly wired -- the
+    competition prompt is selected, the reference date reaches the user
+    prompt, and a response already reflecting the year-inference rule
+    (what the corrected prompt directs the real model to produce, per
+    ``adapters/DESIGN.md``'s Revision section) round-trips through
+    unchanged -- not that the real model reasons correctly, which is
+    outside this hermetic suite's reach (no live network/API, per this
+    project's testing convention).
+    """
+
+    def test_tritonhacks_shaped_page_with_a_fixed_reference_date_yields_the_inferred_year(
+        self, monkeypatch
+    ):
+        # TritonHacks' live-measured failure: "May 16 & 17" with no
+        # adjacent year anywhere near the dates; the pre-revision prompt
+        # guessed an already-past year (2025-05-08). A reference date of
+        # 2026-03-01 makes 2026-05-16 the correctly-inferred soonest year.
+        inferred_payload = dict(_FULL_RESULT_PAYLOAD, date_start="2026-05-16", date_end="2026-05-17")
+        fake_messages = _install_fake_anthropic(monkeypatch, response_text=json.dumps(inferred_payload))
+        client = AnthropicProgramLLMClient()
+
+        result = client.extract_program(
+            "https://example.org/tritonhacks",
+            "TritonHacks -- May 16 & 17. Save the Date!",
+            profile="competition",
+            reference_date=date(2026, 3, 1),
+        )
+
+        assert result.date_start == "2026-05-16"
+        assert result.date_end == "2026-05-17"
+        call_kwargs = fake_messages.calls[0]
+        assert call_kwargs["system"] == _SYSTEM_PROMPT_COMPETITION
+        assert "Page fetched on: 2026-03-01" in call_kwargs["messages"][0]["content"]
+        assert "May 16 & 17" in call_kwargs["messages"][0]["content"]
+
+
+class TestFixtureProgramLLMClientAcceptsAndIgnoresNewParameters:
+    """AC: ``FixtureProgramLLMClient`` accepts the same ``profile``/
+    ``reference_date`` keyword-only parameters, ignoring them -- no
+    existing fixture-test call site needs to change.
+    """
+
+    def test_extract_program_accepts_profile_and_reference_date(self):
+        canned = ProgramExtractionResult(program_name="Fixture Program")
+        client = FixtureProgramLLMClient(responses={"https://example.org/p": canned})
+
+        result = client.extract_program(
+            "https://example.org/p", "body", profile="competition", reference_date=date(2026, 3, 1)
+        )
+
+        assert result is canned
+        # calls still records only (url, body) -- unchanged shape.
+        assert client.calls == [("https://example.org/p", "body")]
+
+    def test_extract_programs_accepts_profile_and_reference_date(self):
+        canned = [ProgramExtractionResult(program_name="A")]
+        client = FixtureProgramLLMClient(list_responses={"https://example.org/p": canned})
+
+        result = client.extract_programs(
+            "https://example.org/p", "body", profile="competition", reference_date=date(2026, 3, 1)
+        )
+
+        assert result is canned
+        assert client.list_calls == [("https://example.org/p", "body")]
 
 
 class TestFixtureProgramLLMClient:

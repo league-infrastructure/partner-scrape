@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 
 from partner_scrape.adapters import ADAPTERS, get_adapter
@@ -502,6 +502,159 @@ class TestCompetitionSourceExtraction:
         assert event.field_provenance["opportunity_type"] == Provenance(
             source="program_page", confidence=1.0
         )
+
+
+@dataclass
+class _RecordingLLMClient:
+    """(Sprint 029 ticket 006) A ``ProgramLLMClient`` test double that
+    records the ``profile``/``reference_date`` it was called with --
+    unlike ``FixtureProgramLLMClient``, which deliberately ignores both
+    (see its own docstring). Used only to prove
+    ``program_page.py``'s own profile-selection logic
+    (``_resolve_extraction_profile``), not to exercise the LLM client
+    contract itself (already covered by ``test_adapters_program_llm.py``).
+    """
+
+    result: ProgramExtractionResult
+    profile_calls: list[str] = field(default_factory=list)
+    reference_date_calls: list[date | None] = field(default_factory=list)
+
+    def extract_program(
+        self, url: str, body: str, *, profile: str = "program", reference_date: date | None = None
+    ) -> ProgramExtractionResult:
+        self.profile_calls.append(profile)
+        self.reference_date_calls.append(reference_date)
+        return self.result
+
+    def extract_programs(
+        self, url: str, body: str, *, profile: str = "program", reference_date: date | None = None
+    ) -> list[ProgramExtractionResult]:
+        raise NotImplementedError("not exercised by these tests")
+
+
+class TestExtractionProfileSelection:
+    """AC (029-006): ``_extract_one_program`` selects ``profile=
+    "competition"`` from ``source.config.get("opportunity_type") ==
+    "Competitions"`` -- no new registry ``config`` key -- and threads a
+    non-``None`` ``reference_date`` through on every call. Every other
+    ``opportunity_type`` (including none at all) keeps the default
+    ``profile="program"``, matching pre-ticket behavior exactly.
+    """
+
+    def test_competitions_opportunity_type_selects_the_competition_profile(self, tmp_path):
+        llm_client = _RecordingLLMClient(result=_extraction_result(opportunity_type="Competitions"))
+        adapter = ProgramPageAdapter(llm_client=llm_client, cache=ProgramExtractionCache(tmp_path))
+        source = _source(program_kind="program", opportunity_type="Competitions")
+        raw = RawResponse(ref=EventRef(url=PAGE_URL), status=200, body=_page_body())
+
+        list(adapter.extract(raw, source))
+
+        assert llm_client.profile_calls == ["competition"]
+        assert llm_client.reference_date_calls[0] is not None
+
+    def test_non_competitions_opportunity_type_keeps_the_default_program_profile(self, tmp_path):
+        llm_client = _RecordingLLMClient(result=_extraction_result(opportunity_type="Camps"))
+        adapter = ProgramPageAdapter(llm_client=llm_client, cache=ProgramExtractionCache(tmp_path))
+        source = _source(program_kind="program", opportunity_type="Camps")
+        raw = RawResponse(ref=EventRef(url=PAGE_URL), status=200, body=_page_body())
+
+        list(adapter.extract(raw, source))
+
+        assert llm_client.profile_calls == ["program"]
+
+    def test_no_opportunity_type_override_keeps_the_default_program_profile(self, tmp_path):
+        llm_client = _RecordingLLMClient(result=_extraction_result())
+        adapter = ProgramPageAdapter(llm_client=llm_client, cache=ProgramExtractionCache(tmp_path))
+        source = _source(program_kind="internship")
+        raw = RawResponse(ref=EventRef(url=PAGE_URL), status=200, body=_page_body())
+
+        list(adapter.extract(raw, source))
+
+        assert llm_client.profile_calls == ["program"]
+
+
+class TestCompetitionRegistrationDeadlineSeparation:
+    """AC (029-006): a ``FixtureProgramLLMClient``-based fixture test
+    proving the competition profile correctly separates an event date
+    from a distinct registration deadline on one synthetic,
+    SeaPerch-shaped page: one page whose text carries both an event date
+    and an earlier "TDR due" deadline. The resulting ``Event`` has
+    ``start`` == the event date, ``description`` carrying the
+    registration deadline note, and no wrong-field collision -- directly
+    reproducing (and proving fixed) live-verification's
+    ``seaperch-sd-regional`` finding, where the pre-revision prompt
+    mapped only the TDR deadline into ``date_end`` and left ``date_start``
+    empty.
+    """
+
+    def test_event_date_and_registration_deadline_map_to_distinct_fields(self, tmp_path):
+        result = _extraction_result(
+            program_name="SeaPerch San Diego Regional",
+            date_start="2026-04-04",
+            date_end="2026-04-04",
+            registration_deadline="2026-03-27",
+            opportunity_type="Competitions",
+        )
+        adapter = ProgramPageAdapter(
+            llm_client=FixtureProgramLLMClient(responses={PAGE_URL: result}),
+            cache=ProgramExtractionCache(tmp_path),
+        )
+        source = _source(program_kind="program", opportunity_type="Competitions")
+        raw = RawResponse(ref=EventRef(url=PAGE_URL), status=200, body=_page_body())
+
+        events = list(adapter.extract(raw, source))
+
+        assert len(events) == 1
+        event = events[0]
+        # The event's own date -- never the registration deadline.
+        assert event.start == datetime.fromisoformat("2026-04-04")
+        assert event.end == datetime.fromisoformat("2026-04-04")
+        # The registration deadline surfaces via description, not
+        # start/end -- no wrong-field collision.
+        assert event.description == "Registration deadline: 2026-03-27"
+        assert event.start != datetime.fromisoformat("2026-03-27")
+        assert event.end != datetime.fromisoformat("2026-03-27")
+        assert event.field_provenance["description"] == Provenance(
+            source=PROGRAM_LLM_SOURCE, confidence=PROGRAM_LLM_CONFIDENCE
+        )
+
+    def test_no_registration_deadline_leaves_description_unset_for_a_competition(self, tmp_path):
+        result = _extraction_result(
+            date_start="2026-04-04",
+            date_end="",
+            registration_deadline="",
+            opportunity_type="Competitions",
+        )
+        adapter = ProgramPageAdapter(
+            llm_client=FixtureProgramLLMClient(responses={PAGE_URL: result}),
+            cache=ProgramExtractionCache(tmp_path),
+        )
+        source = _source(program_kind="program", opportunity_type="Competitions")
+        raw = RawResponse(ref=EventRef(url=PAGE_URL), status=200, body=_page_body())
+
+        events = list(adapter.extract(raw, source))
+
+        assert len(events) == 1
+        assert events[0].description == ""
+
+    def test_registration_deadline_on_a_non_competition_record_leaves_description_unset(self, tmp_path):
+        # A registration_deadline can only be non-empty via the
+        # competition profile in production, but _map_result_to_event's
+        # own gate is on the *resolved opportunity_type*, not on whether
+        # the field happens to be set -- proven directly here.
+        result = _extraction_result(
+            registration_deadline="2026-03-27", opportunity_type="Out-of-school Programs"
+        )
+        adapter = ProgramPageAdapter(
+            llm_client=FixtureProgramLLMClient(responses={PAGE_URL: result}),
+            cache=ProgramExtractionCache(tmp_path),
+        )
+        raw = RawResponse(ref=EventRef(url=PAGE_URL), status=200, body=_page_body())
+
+        events = list(adapter.extract(raw, _source(program_kind="program")))
+
+        assert len(events) == 1
+        assert events[0].description == ""
 
 
 class TestOversizedPageExtractsSuccessfullyAfterReduction:

@@ -45,8 +45,14 @@ _CACHE_SUBDIR = "program_extraction_cache"
 #: (``"results"`` alongside the existing ``"result"`` key) -- forces
 #: exactly one harmless re-extraction of any pre-revision cache entry, a
 #: cache being a pure optimization (see ``adapters/DESIGN.md``'s Revision
-#: note).
-_CACHE_SCHEMA_VERSION = 2
+#: note). **(Sprint 029 ticket 006)** bumped 2 -> 3 for
+#: ``registration_deadline``'s addition to ``ProgramExtractionResult`` --
+#: load-bearing here, not only tidy: tickets 001/002's real dry-runs
+#: already populated cache entries for this revision's affected
+#: competition sources under the old, now-corrected prompt; without this
+#: bump, ticket 007's re-verification would read those stale entries
+#: back and never invoke the corrected prompt at all.
+_CACHE_SCHEMA_VERSION = 3
 
 
 def content_hash(body: str) -> str:
@@ -88,6 +94,7 @@ def _result_from_jsonable(data: dict[str, Any]) -> ProgramExtractionResult:
         eligibility=data["eligibility"],
         is_open=data["is_open"],
         opportunity_type=data["opportunity_type"],
+        registration_deadline=data["registration_deadline"],
     )
 
 
