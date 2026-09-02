@@ -1,0 +1,35 @@
+# Sony Interactive Entertainment -- San Diego studio presence (PlayStation
+# development, including a San Diego, CA office), Greenhouse-backed
+# careers board. Board token "sonyinteractiveentertainmentglobal" was
+# confirmed live during issue 31's 2026-08-30 census (HTTP 200, valid
+# JSON) and re-verified live during this ticket's own execution
+# (2026-09-02): still HTTP 200, valid JSON, 197 raw postings.
+#
+# ats_filters.classify_posting result (2026-09-02 live re-check): 19 of
+# the 197 raw postings are located "United States, San Diego, CA"; 0 of
+# those 19 (or of the other 178) match classify_posting's internship
+# signal -- every San Diego-located posting observed is a
+# Senior/Staff/Director/Manager-level full-time role (e.g. "Senior
+# Software Engineer", "Staff Program Manager", "Director, Program
+# Management"), none carrying an intern/co-op/apprentice/early-career
+# title or commitment signal. Per this sprint's own Success Criteria,
+# this zero-match result is a pass, not a failure -- the adapter reaches
+# the API, parses the real response, and applies ats_filters correctly;
+# there is simply no current San Diego STEM internship posting on this
+# board. Kept enabled=true, matching every other Greenhouse source's
+# convention (e.g. gossamerbio.toml) for a working-but-zero-yield board.
+#
+# No location_keywords override: San Diego-located postings already use
+# the exact "San Diego" substring the default ["San Diego"] match needs.
+
+org_name = "Sony Interactive Entertainment"
+adapter_type = "greenhouse"
+enabled = true
+
+[config]
+board_token = "sonyinteractiveentertainmentglobal"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 31 ATS census (2026-08-30), re-verified live 2026-09-02 (sprint 031 ticket 001)"

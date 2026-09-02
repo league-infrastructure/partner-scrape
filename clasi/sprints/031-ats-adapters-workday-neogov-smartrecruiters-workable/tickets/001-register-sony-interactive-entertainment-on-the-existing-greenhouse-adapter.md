@@ -1,10 +1,11 @@
 ---
-id: "001"
-title: "Register Sony Interactive Entertainment on the existing Greenhouse adapter"
-status: open
-use-cases: [SUC-054]
+id: '001'
+title: Register Sony Interactive Entertainment on the existing Greenhouse adapter
+status: done
+use-cases:
+- SUC-054
 depends-on: []
-github-issue: ""
+github-issue: ''
 issue: 31-ats-adapters-workday-neogov-smartrecruiters.md
 completes_issue: true
 ---
@@ -24,22 +25,22 @@ header comment" pattern the rest of the sprint's tickets follow.
 
 ## Acceptance Criteria
 
-- [ ] `curl -s https://boards-api.greenhouse.io/v1/boards/sonyinteractiveentertainmentglobal/jobs`
+- [x] `curl -s https://boards-api.greenhouse.io/v1/boards/sonyinteractiveentertainmentglobal/jobs`
       is re-verified live (HTTP 200, valid JSON) before registering —
       do not trust the 2026-08-30 census without a fresh check.
-- [ ] A new `registry/sources/*.toml` file registers Sony with
+- [x] A new `registry/sources/*.toml` file registers Sony with
       `adapter_type = "greenhouse"`, `config.board_token =
       "sonyinteractiveentertainmentglobal"`, following
       `registry/sources/gossamerbio.toml`'s existing header-comment
       convention (live-verification date, raw posting count, whether
       any posting currently survives `ats_filters.classify_posting`).
-  - [ ] `enabled = true` regardless of whether any posting currently
+  - [x] `enabled = true` regardless of whether any posting currently
         matches — a zero-match result is a pass per this sprint's own
         Success Criteria, not a reason to disable.
-- [ ] `partner_scrape/adapters/greenhouse.py` has zero diff.
-- [ ] A dry run (`uv run partner-scrape --source <sony-source-id>
+- [x] `partner_scrape/adapters/greenhouse.py` has zero diff.
+- [x] A dry run (`uv run partner-scrape --source <sony-source-id>
       --dry-run -v`) completes with no error.
-- [ ] Full test suite (`uv run pytest`) stays green — 2316+ passing,
+- [x] Full test suite (`uv run pytest`) stays green — 2316+ passing,
       no regressions.
 
 ## Implementation Plan
@@ -66,3 +67,22 @@ Sony's own values and live-verification findings.
 **Documentation updates**: None beyond the TOML file's own header
 comment — this sprint's `design/` overlay already documents the
 mechanism (`adapters-DESIGN.md`, `registry-DESIGN.md`).
+
+## Notes
+
+Live re-verified 2026-09-02: `curl -s -o /dev/null -w '%{http_code}'
+https://boards-api.greenhouse.io/v1/boards/
+sonyinteractiveentertainmentglobal/jobs` → 200. Fetched the full body
+and ran it through the real `ats_filters.classify_posting` (via `uv run
+python3`, imported directly, not fixture-simulated): 197 raw postings,
+19 located "United States, San Diego, CA", 0 of the 197 match
+`classify_posting` (internship + STEM + San Diego). Every San
+Diego-located posting is a Senior/Staff/Director/Manager-level
+full-time role (e.g. "Senior Software Engineer", "Staff Program
+Manager") — none carries an intern/co-op/apprentice/early-career
+signal. Registered `enabled = true` per this sprint's explicit
+zero-match-is-a-pass standard. `partner_scrape/adapters/greenhouse.py`
+was not touched. Dry run (`uv run partner-scrape --source
+sony-interactive-entertainment --dry-run -v`) completed with no error,
+0 events, matching the live-verification finding exactly. Full suite:
+2316 passed.
