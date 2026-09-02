@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Login | Fixture Camp Org</title>
+</head>
+<body>
+  <!-- Reproduces the shape of a CampBrain (campbrainregistration.com)
+       org's real, fully-rendered DOM (confirmed live 2026-09-02, via a
+       headless browser render of both Coastal Roots Farm's and The
+       Watersports Camp's real CampBrain registration portals -- every
+       client-side route probed rendered to this same login/sign-up
+       shape). This is the actual page any current campbrain
+       registration's fetch() call receives: a family account login
+       form and a new-account sign-up form, never camp session data --
+       see campbrain.py's module docstring's Live Verification note. -->
+  <div id="app">
+    <div class="login-page">
+      <img src="https://campbrain.blob.core.windows.net/fixture/logo.png" alt="Fixture Camp Org logo">
+      <div class="header-wording">
+        <p>We're excited to have you joining us as part of our camp family!</p>
+      </div>
+      <div class="sign-in">
+        <h2>Sign-In</h2>
+        <label>Email</label>
+        <input type="email">
+        <label>Password</label>
+        <input type="password">
+        <a href="/ForgotPassword">Forgot your password?</a>
+        <button>Login</button>
+      </div>
+      <div class="new-user-sign-up">
+        <h2>New User Sign-Up</h2>
+        <label>First Name</label>
+        <input type="text">
+        <label>Last Name</label>
+        <input type="text">
+        <label>Email</label>
+        <input type="email">
+        <label>Password</label>
+        <input type="password">
+        <button>Create Account</button>
+      </div>
+      <p class="footer">&copy; 2026 BrainRunner Inc. | 2026.8.0.0 | By clicking the Create Account button, you agree to our Terms and Privacy Policy</p>
+    </div>
+  </div>
+</body>
+</html>

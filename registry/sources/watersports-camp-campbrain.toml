@@ -1,0 +1,68 @@
+# The Watersports Camp (Mission Bay Aquatic Center) -- registered via
+# the new campbrain platform adapter (sprint 028 ticket 006, issue 29).
+# Not covered by any marketing-page registration this sprint -- issue 29
+# names Watersports Camp as one of CampBrain's two hosted organizations,
+# with no equivalent program_page_multi entry to avoid dual-registering.
+#
+# Live-verified 2026-09-02. watersportscamp.com's own "Register Now!"
+# button (and its account-login link) both point to
+# https://watersportscamp.campbrainregistration.com/ -- confirmed via a
+# live fetch of watersportscamp.com. A plain static GET of that URL
+# returns only a ~1KB Vite bootstrap shell (campbrainregistration.com is
+# a client-side Vue/Vite SPA, BrainRunner Inc.'s "CampBrain" product --
+# see campbrain.py's module docstring); fetch_strategy = "headless" is
+# set below, matching every other camp-platform registration's
+# convention.
+#
+# However, a full headless render (wait_until="networkidle" plus a
+# multi-second settle wait -- sufficient to reach real content on
+# ActiveNet's own SPA, per activenet_camps.py's precedent) of this exact
+# URL, and of every other client-side route probed (/programs, /catalog,
+# /sessions, /camps, /register, /session-select, /select-camper), all
+# render to the identical page: a family account login form (title
+# "Login | The Watersports Camp at Mission Bay Aquatic Center", backed
+# by api.campbrainregistration.com/api/Home/LoginScreen plus a reCAPTCHA
+# challenge). No camp name, date, price, or availability field is
+# present anywhere in the rendered DOM or in any JSON response captured
+# during that render. Coastal Roots Farm's own CampBrain portal
+# (coastalrootsfarm.campbrainregistration.com) was checked in parallel
+# and found identically login-gated -- this is CampBrain's platform-wide
+# behavior, not specific to this org.
+#
+# Unlike ActiveNet (campscui.active.com), where the gate is a JS
+# fingerprint/cookie challenge that headless rendering can clear once
+# fetch/headless.py's own wait strategy is fixed, CampBrain requires a
+# real family user account (email + password) before any session data
+# is served at all, for every route -- an authentication wall, not a
+# bot-detection challenge. The League has no CampBrain family account
+# for this organization, and no institutional API-key equivalent exists
+# for this consumer-facing product (unlike leaguesync's/robotevents'
+# config.py accessor-pair credential shape) -- provisioning one is out
+# of this ticket's scope. See campbrain.py's module docstring for the
+# full write-up.
+#
+# Disabled rather than registered enabled = true, following the sprint
+# 027 tickets 005/006 and this sprint's own ticket 005 precedent for
+# "design against the best available evidence, register enabled = false
+# with a documented reason" when live verification finds a source
+# blocked. The adapter itself is complete and fixture-tested
+# (tests/test_adapters_campbrain.py). Re-verify and flip to
+# enabled = true only if a future integration provisions a legitimate,
+# non-family-specific way to read this platform's session data (e.g. an
+# institutional API partnership with CampBrain/BrainRunner Inc.), not
+# built speculatively here.
+
+org_name = "The Watersports Camp"
+adapter_type = "campbrain"
+enabled = false  # disabled: campbrainregistration.com requires a family user account (email+password) before any session data is served, for every route probed (confirmed live 2026-09-02) -- an authentication wall, not a bot-detection challenge; no institutional credential equivalent exists. See campbrain.py's module docstring.
+
+[config]
+url = "https://watersportscamp.campbrainregistration.com/"
+program_kind = "program"
+opportunity_type = "Camps"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+fetch_strategy = "headless"
+discovered_via = "issue 29 (2026-08-30 camp session extraction); sprint 028 ticket 006 live verification (2026-09-02)"
