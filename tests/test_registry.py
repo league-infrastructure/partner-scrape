@@ -257,6 +257,43 @@ class TestRealFleetScienceCenterSource:
         assert fleet.config["listing_urls"] == ["/events"]
 
 
+class TestRealSdnhmSource:
+    """The real sdnhm.toml generic_html source (sprint 033 ticket 003,
+    issue 34): San Diego Natural History Museum (The Nat) had no
+    registry entry at all before this ticket -- confirmed live to be
+    the reason its ASD Mornings didn't surface. sdnhm.org (Concrete5)
+    has a real, working root sitemap at /sitemap.xml (verified live
+    2026-09-02), unlike Fleet Science Center's site -- generic_html
+    (sitemap discovery), not listing_html, and no adapter code needed.
+    """
+
+    def test_loads_as_enabled_generic_html_source(self):
+        sources = {s.source_id: s for s in load_active_sources()}
+
+        sdnhm = sources["sdnhm"]
+        assert sdnhm.org_name == "San Diego Natural History Museum"
+        assert sdnhm.adapter_type == "generic_html"
+        assert sdnhm.enabled is True
+
+    def test_config_matches_live_confirmed_values(self):
+        sources = {s.source_id: s for s in load_active_sources()}
+
+        sdnhm = sources["sdnhm"]
+        assert sdnhm.config["site_url"] == "https://www.sdnhm.org"
+
+    def test_org_name_matches_the_curated_partners_json_entry(self):
+        """The partner join (normalize/partners.py) matches on org_name
+        -- data/partners.json already carries "San Diego Natural
+        History Museum" verbatim, so this source's org_name must match
+        exactly for the join to resolve (not this test's job to prove
+        the join works, only that the two names agree, matching the
+        established `discovered_via`/`org_name` registration
+        convention)."""
+        sources = {s.source_id: s for s in load_active_sources()}
+
+        assert sources["sdnhm"].org_name == "San Diego Natural History Museum"
+
+
 class TestRealJoinTheLeagueSource:
     """The real jointheleague.toml generic_html source (sprint 005 ticket 002).
 

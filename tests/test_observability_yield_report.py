@@ -14,6 +14,7 @@ from datetime import datetime, timezone
 from partner_scrape.model import Event
 from partner_scrape.observability.yield_report import (
     CLIFF_DROP_THRESHOLD,
+    REGIONS_SNAPSHOT_KEY,
     SourceRecord,
     compute_yield_report,
 )
@@ -24,12 +25,17 @@ NOW = datetime(2026, 7, 19, 12, 0, tzinfo=timezone.utc)
 @dataclass
 class FakeOpportunity:
     """A minimal stand-in for `normalize.run.Opportunity` -- only
-    ``.slug``/``.sources`` matter to this module's comparison logic
-    (duck-typed, matching `pipeline.Reporter.record_opportunities`'s own
-    `list[Any]` signature), so a full `Opportunity` is unnecessary."""
+    ``.slug``/``.sources``/``.region`` matter to this module's
+    comparison logic (duck-typed, matching
+    `pipeline.Reporter.record_opportunities`'s own `list[Any]`
+    signature), so a full `Opportunity` is unnecessary. ``region``
+    defaults to ``""`` (unclassified), matching `Opportunity.region`'s
+    own default (sprint 033, issue 34) -- every pre-sprint-033 test
+    fixture that omits it is unaffected."""
 
     slug: str
     sources: frozenset[str]
+    region: str = ""
 
 
 def _event(start: datetime | None = None) -> Event:
@@ -224,6 +230,157 @@ class TestFirstEverRun:
 
         assert all(not source.zero_yield and not source.cliff for source in report.sources)
         assert report.alerts == []
+
+
+class TestRegionTallying:
+    """Sprint 033, issue 34: `RegionYield` mirrors `SourceYield`'s
+    first-run-baseline/delta/zero-flag shape, but tallies the final
+    `Opportunity` list by `.region` rather than per-source raw events."""
+
+    def test_counts_opportunities_by_region(self):
+        opportunities = [
+            FakeOpportunity(slug="a", sources=frozenset({"acme"}), region="South Bay"),
+            FakeOpportunity(slug="b", sources=frozenset({"acme"}), region="South Bay"),
+            FakeOpportunity(slug="c", sources=frozenset({"acme"}), region="East County"),
+        ]
+
+        report = compute_yield_report([], opportunities, {}, now=NOW)
+
+        by_region = {r.region: r.count for r in report.regions}
+        assert by_region["South Bay"] == 2
+        assert by_region["East County"] == 1
+
+    def test_empty_region_is_bucketed_as_unclassified_not_dropped(self):
+        opportunities = [
+            FakeOpportunity(slug="a", sources=frozenset({"acme"}), region=""),
+        ]
+
+        report = compute_yield_report([], opportunities, {}, now=NOW)
+
+        by_region = {r.region: r.count for r in report.regions}
+        assert by_region["unclassified"] == 1
+
+    def test_unclassified_entry_always_present_even_with_zero_unclassified_records(self):
+        opportunities = [
+            FakeOpportunity(slug="a", sources=frozenset({"acme"}), region="South Bay"),
+        ]
+
+        report = compute_yield_report([], opportunities, {}, now=NOW)
+
+        by_region = {r.region: r.count for r in report.regions}
+        assert by_region["unclassified"] == 0
+
+    def test_regions_from_opportunities_without_the_region_attribute_default_to_unclassified(
+        self,
+    ):
+        # Duck-typed via getattr, mirroring .slug/.sources -- an object
+        # with no .region attribute at all (e.g. a pre-sprint-033 fixture
+        # in some other test module) reads as unclassified, not an error.
+        @dataclass
+        class LegacyFakeOpportunity:
+            slug: str
+            sources: frozenset[str]
+
+        opportunities = [LegacyFakeOpportunity(slug="a", sources=frozenset({"acme"}))]
+
+        report = compute_yield_report([], opportunities, {}, now=NOW)
+
+        by_region = {r.region: r.count for r in report.regions}
+        assert by_region["unclassified"] == 1
+
+    def test_regions_appear_in_first_encountered_order_unclassified_last(self):
+        opportunities = [
+            FakeOpportunity(slug="a", sources=frozenset(), region=""),
+            FakeOpportunity(slug="b", sources=frozenset(), region="East County"),
+            FakeOpportunity(slug="c", sources=frozenset(), region="South Bay"),
+            FakeOpportunity(slug="d", sources=frozenset(), region="East County"),
+        ]
+
+        report = compute_yield_report([], opportunities, {}, now=NOW)
+
+        assert [r.region for r in report.regions] == [
+            "East County",
+            "South Bay",
+            "unclassified",
+        ]
+
+
+class TestRegionDeltaComputation:
+    def test_delta_is_this_run_count_minus_previous_count(self):
+        opportunities = [
+            FakeOpportunity(slug="a", sources=frozenset(), region="South Bay"),
+            FakeOpportunity(slug="b", sources=frozenset(), region="South Bay"),
+        ]
+        previous_snapshot = {REGIONS_SNAPSHOT_KEY: {"South Bay": {"count": 8}}}
+
+        report = compute_yield_report([], opportunities, previous_snapshot, now=NOW)
+
+        south_bay = next(r for r in report.regions if r.region == "South Bay")
+        assert south_bay.previous_count == 8
+        assert south_bay.delta == 2 - 8
+
+    def test_previous_count_and_delta_are_none_with_no_prior_snapshot_entry(self):
+        opportunities = [FakeOpportunity(slug="a", sources=frozenset(), region="South Bay")]
+
+        report = compute_yield_report([], opportunities, {}, now=NOW)
+
+        south_bay = next(r for r in report.regions if r.region == "South Bay")
+        assert south_bay.previous_count is None
+        assert south_bay.delta is None
+
+    def test_a_region_absent_from_this_run_but_present_in_the_previous_snapshot_still_gets_an_entry(
+        self,
+    ):
+        # The exact regression signal this measurement exists to catch:
+        # East County had 8 last run, 0 (i.e. no opportunities at all)
+        # this run.
+        previous_snapshot = {REGIONS_SNAPSHOT_KEY: {"East County": {"count": 8}}}
+
+        report = compute_yield_report([], [], previous_snapshot, now=NOW)
+
+        east_county = next(r for r in report.regions if r.region == "East County")
+        assert east_county.count == 0
+        assert east_county.previous_count == 8
+        assert east_county.delta == -8
+
+
+class TestRegionZeroFlag:
+    def test_fires_when_a_previously_populated_region_has_zero_this_run(self):
+        previous_snapshot = {REGIONS_SNAPSHOT_KEY: {"East County": {"count": 8}}}
+
+        report = compute_yield_report([], [], previous_snapshot, now=NOW)
+
+        east_county = next(r for r in report.regions if r.region == "East County")
+        assert east_county.zero is True
+
+    def test_does_not_fire_without_a_previous_snapshot_entry_for_the_region(self):
+        opportunities = [FakeOpportunity(slug="a", sources=frozenset(), region="South Bay")]
+
+        report = compute_yield_report([], [], {}, now=NOW)
+
+        # South Bay never appears (no opportunities this run, no prior
+        # baseline) -- first-ever run for every region is not itself an
+        # alert.
+        assert all(not r.zero for r in report.regions)
+
+    def test_does_not_fire_when_the_previous_run_was_already_zero(self):
+        previous_snapshot = {REGIONS_SNAPSHOT_KEY: {"East County": {"count": 0}}}
+
+        report = compute_yield_report([], [], previous_snapshot, now=NOW)
+
+        east_county = next(r for r in report.regions if r.region == "East County")
+        assert east_county.zero is False
+
+    def test_does_not_fire_when_the_region_still_has_records(self):
+        opportunities = [
+            FakeOpportunity(slug="a", sources=frozenset(), region="South Bay"),
+        ]
+        previous_snapshot = {REGIONS_SNAPSHOT_KEY: {"South Bay": {"count": 8}}}
+
+        report = compute_yield_report([], opportunities, previous_snapshot, now=NOW)
+
+        south_bay = next(r for r in report.regions if r.region == "South Bay")
+        assert south_bay.zero is False
 
 
 class TestErrorDistinguishability:

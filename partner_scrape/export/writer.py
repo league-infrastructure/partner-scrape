@@ -38,6 +38,7 @@ silently skip the export."
 from __future__ import annotations
 
 import json
+from collections import Counter
 from dataclasses import fields
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
@@ -45,6 +46,16 @@ from typing import Any, Iterable
 
 from partner_scrape.config import get_own_data_dir
 from partner_scrape.normalize.run import DEADLINE_FIRST_TYPES, Opportunity
+
+#: The bucket label an unclassified (``region == ""``) `Opportunity` is
+#: tallied under in `scrape-meta.json`'s `"regions"` key (sprint 033,
+#: issue 34) -- matches `observability/yield_report.py`'s own
+#: `_UNCLASSIFIED_REGION_LABEL`, kept as a separate constant here rather
+#: than a shared import: this is a plain aggregation of an already-
+#: finished field, not a shared computation, and `export/` and
+#: `observability/` are independently decoupled subsystems by design
+#: (see each module's own DESIGN.md).
+_UNCLASSIFIED_REGION_LABEL = "unclassified"
 
 #: The exact field set written to `opportunities.json` -- every
 #: `Opportunity` field except `sources`, which is normalize's internal
@@ -56,8 +67,15 @@ from partner_scrape.normalize.run import DEADLINE_FIRST_TYPES, Opportunity
 #: Sprint 009: promoted from `_SITE_SCHEMA_FIELDS` (non-underscore, no
 #: behavior change) so `export/publish.py` reuses the exact same field
 #: set for its own per-partner event files instead of re-deriving it.
+#:
+#: Sprint 033: also excludes `region` -- a second internal-bookkeeping
+#: field (this sprint's regional-coverage classification), not part of
+#: the site's Opportunities table, the same treatment `sources` already
+#: gets. `region`'s *aggregate* (a per-region count, not the per-record
+#: value) is written into `scrape-meta.json` instead -- see
+#: `export_opportunities`'s `"regions"` key.
 SITE_SCHEMA_FIELDS: tuple[str, ...] = tuple(
-    f.name for f in fields(Opportunity) if f.name != "sources"
+    f.name for f in fields(Opportunity) if f.name not in ("sources", "region")
 )
 
 #: Sprint 020 ticket 001 (issue 61): bounds the `DEADLINE_FIRST_TYPES`
@@ -160,6 +178,20 @@ def _export_sort_key(opportunity: Opportunity) -> str:
     return opportunity.date_start
 
 
+def _region_counts(current: list[Opportunity]) -> dict[str, int]:
+    """Tally ``current`` (the exported current/upcoming `Opportunity`
+    list) by `.region` (sprint 033, issue 34) -- a plain `Counter`, not a
+    re-derivation: `region` already arrived finished from `normalize/`
+    (see this module's "`export/` re-derives nothing" constraint).
+    Unclassified (``region == ""``) is tallied under
+    `_UNCLASSIFIED_REGION_LABEL`, never silently dropped.
+    """
+    counter: Counter[str] = Counter(
+        opportunity.region or _UNCLASSIFIED_REGION_LABEL for opportunity in current
+    )
+    return dict(counter)
+
+
 def _now_iso() -> str:
     """Current UTC time as the `scrape-meta.json` timestamp format,
     matching `dev/export_site.py`'s `datetime.now(timezone.utc)...`
@@ -215,7 +247,9 @@ def export_opportunities(
         return payload
 
     serialized_opportunities = json.dumps(payload, indent=1, ensure_ascii=False)
-    serialized_meta = json.dumps({"last_updated": _now_iso()})
+    serialized_meta = json.dumps(
+        {"last_updated": _now_iso(), "regions": _region_counts(current)}
+    )
 
     # Sprint 020 ticket 003 (issue 60) added this write, into
     # partner-scrape's own data/ directory, alongside a since-removed

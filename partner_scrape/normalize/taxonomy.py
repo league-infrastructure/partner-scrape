@@ -132,6 +132,70 @@ OPPORTUNITY_TYPE_KEYWORDS: list[tuple[str, str]] = [
 #: blindly stamped before this classifier existed.
 DEFAULT_OPPORTUNITY_TYPE = "Out-of-school Programs"
 
+#: (Sprint 033, issue 34) `(pattern, label)` rules for
+#: `Opportunity.specific_attention`, matched against the same
+#: title+description+categories+tags blob `derive_areas_of_interest`
+#: already uses via `tag_by_keywords` -- not title-only, unlike
+#: `OPPORTUNITY_TYPE_KEYWORDS`: these are proper-noun program names and
+#: specific compound phrases (CMOD's own "Bilingual" category tag,
+#: "Noche de Ciencias", "Sensory Friendly Mornings") with no plausible
+#: false-positive collision in this codebase's fixtures, unlike
+#: `opportunity_type`'s description-prose false-positive risk. Values
+#: are the site's own already-documented `specific_attention` vocabulary
+#: (`stem-ecosystem/docs/site-implementation-spec.md`), not new labels
+#: invented here. No fallback -- see `derive_specific_attention`.
+SPECIFIC_ATTENTION_KEYWORDS: list[tuple[str, str]] = [
+    (
+        r"\bbilingual\b|\bnoche de ciencias\b|\bsan ysidro stem fair\b|en espa[nñ]ol",
+        "Programs in Spanish",
+    ),
+    (
+        r"\bsensory[\s-]?friendly\b|\baccessibility mornings\b|\basd mornings\b",
+        "Programs for students with disabilities",
+    ),
+]
+
+#: (Sprint 033, issue 34) `(pattern, label)` rules for the new, internal
+#: `Opportunity.region` field -- a San Diego sub-region vocabulary this
+#: sprint invents purely for regional-coverage measurement
+#: (`observability/DESIGN.md`'s sprint 033 addition), not part of the
+#: site schema. Matched against an already-resolved `location` string.
+#: Ordered specific-before-generic, same convention
+#: `OPPORTUNITY_TYPE_KEYWORDS` documents elsewhere in this module: a
+#: South Bay or East County address's `location` text routinely also
+#: contains "San Diego" or "CA" as a state/city suffix, so the generic
+#: "Central San Diego" patterns are checked last. First match wins; see
+#: `derive_region` for the no-match behavior.
+REGION_KEYWORDS: list[tuple[str, str]] = [
+    (
+        r"\b(chula vista|national city|imperial beach|san ysidro|otay mesa|"
+        r"bonita|nestor|south bay)\b",
+        "South Bay",
+    ),
+    (
+        r"\b(el cajon|santee|la mesa|lemon grove|alpine|jamul|lakeside|"
+        r"ramona|julian|descanso|pine valley|east county)\b",
+        "East County",
+    ),
+    (
+        r"\b(oceanside|carlsbad|encinitas|solana beach|del mar|leucadia|"
+        r"cardiff)\b",
+        "North County Coastal",
+    ),
+    (
+        r"\b(escondido|san marcos|vista|poway|valley center|fallbrook|"
+        r"rancho bernardo|rancho santa fe)\b",
+        "North County Inland",
+    ),
+    (
+        r"\b(san diego|downtown|balboa park|hillcrest|north park|"
+        r"la jolla|point loma|mission valley|clairemont|kearny mesa|"
+        r"pacific beach|ocean beach|golden hill|university heights|"
+        r"linda vista|serra mesa|tierrasanta|mira mesa|scripps ranch)\b",
+        "Central San Diego",
+    ),
+]
+
 _COST_AMOUNT_RE = re.compile(r"\$\s*(\d+(?:\.\d{1,2})?)")
 
 
@@ -184,6 +248,34 @@ def derive_age_grade_level(text: str) -> list[str]:
     matching `dev/export_site.py` (which applies no default here).
     """
     return tag_by_keywords(text, AGE_KEYWORDS)
+
+
+def derive_specific_attention(text: str) -> list[str]:
+    """Derive `specific_attention` tags from ``text`` (sprint 033, issue 34).
+
+    Matches `SPECIFIC_ATTENTION_KEYWORDS` against the same
+    title+description+categories+tags blob `derive_areas_of_interest`
+    uses. No fallback -- an unmatched record returns ``[]``, matching
+    `derive_age_grade_level`'s no-fallback precedent: a wrong guess here
+    is worse than an honest empty list, since this field is a coverage
+    signal for underserved communities, not a discovery convenience.
+    """
+    return tag_by_keywords(text, SPECIFIC_ATTENTION_KEYWORDS)
+
+
+def derive_region(location: str) -> str:
+    """Derive a coarse San Diego sub-region from ``location`` (sprint 033, issue 34).
+
+    Matches `REGION_KEYWORDS`, ordered specific-before-generic, against
+    the already-resolved `Opportunity.location` text. First match wins.
+    No match returns ``""`` (unclassified) -- never a forced guess,
+    matching `derive_age_grade_level`'s no-fallback precedent rather than
+    `derive_areas_of_interest`'s `DEFAULT_AREA` fallback: a wrong region
+    assignment would corrupt the very regional-coverage regression signal
+    this field exists to provide.
+    """
+    matches = tag_by_keywords(location, REGION_KEYWORDS)
+    return matches[0] if matches else ""
 
 
 def map_cost(cost_text: str) -> str:

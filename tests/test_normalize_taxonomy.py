@@ -18,6 +18,8 @@ from partner_scrape.normalize.taxonomy import (
     build_taxonomy_text,
     derive_age_grade_level,
     derive_areas_of_interest,
+    derive_region,
+    derive_specific_attention,
     derive_time_of_day,
     map_cost,
     tag_by_keywords,
@@ -65,6 +67,110 @@ class TestDeriveAgeGradeLevel:
 
     def test_grades_6_8_keyword_matches(self):
         assert derive_age_grade_level("For middle school students") == ["Grades 6-8"]
+
+
+class TestDeriveSpecificAttention:
+    """Sprint 033, issue 34: bilingual/Spanish and accessibility signals,
+    populating the site schema's own previously-hardcoded-[] field."""
+
+    def test_bilingual_keyword_matches(self):
+        assert derive_specific_attention("Bilingual Storytime") == ["Programs in Spanish"]
+
+    def test_bilingual_category_tag_matches(self):
+        # CMOD's tec_rest adapter populates Event.categories from the
+        # TEC API's own category list -- matched via build_taxonomy_text,
+        # not title-only.
+        text = build_taxonomy_text("Family Science Day", "", ["Bilingual"], [])
+        assert derive_specific_attention(text) == ["Programs in Spanish"]
+
+    def test_noche_de_ciencias_matches(self):
+        assert derive_specific_attention("Noche de Ciencias") == ["Programs in Spanish"]
+
+    def test_san_ysidro_stem_fair_matches(self):
+        assert derive_specific_attention("San Ysidro STEM Fair") == ["Programs in Spanish"]
+
+    def test_en_espanol_with_accent_matches(self):
+        assert derive_specific_attention("Ciencia en español para niños") == [
+            "Programs in Spanish"
+        ]
+
+    def test_en_espanol_without_accent_matches(self):
+        assert derive_specific_attention("Ciencia en espanol para ninos") == [
+            "Programs in Spanish"
+        ]
+
+    def test_sensory_friendly_matches(self):
+        assert derive_specific_attention("Sensory Friendly Mornings") == [
+            "Programs for students with disabilities"
+        ]
+
+    def test_sensory_friendly_hyphenated_matches(self):
+        assert derive_specific_attention("Sensory-Friendly Morning") == [
+            "Programs for students with disabilities"
+        ]
+
+    def test_accessibility_mornings_matches(self):
+        assert derive_specific_attention("Accessibility Mornings") == [
+            "Programs for students with disabilities"
+        ]
+
+    def test_asd_mornings_matches(self):
+        assert derive_specific_attention("ASD Mornings at the Nat") == [
+            "Programs for students with disabilities"
+        ]
+
+    def test_both_signals_can_match_together(self):
+        text = "Bilingual Sensory Friendly Family Day"
+        assert derive_specific_attention(text) == [
+            "Programs in Spanish",
+            "Programs for students with disabilities",
+        ]
+
+    def test_unmatched_text_returns_empty_list_no_default(self):
+        assert derive_specific_attention("Tide pool exploration") == []
+
+
+class TestDeriveRegion:
+    """Sprint 033, issue 34: internal-only San Diego sub-region classification."""
+
+    def test_south_bay_city_matches(self):
+        assert derive_region("Chula Vista, CA") == "South Bay"
+
+    def test_south_bay_generic_keyword_matches(self):
+        assert derive_region("Somewhere in the South Bay") == "South Bay"
+
+    def test_east_county_city_matches(self):
+        assert derive_region("El Cajon, CA") == "East County"
+
+    def test_north_county_coastal_city_matches(self):
+        assert derive_region("Oceanside, CA") == "North County Coastal"
+
+    def test_north_county_inland_city_matches(self):
+        assert derive_region("Escondido, CA") == "North County Inland"
+
+    def test_central_san_diego_generic_matches(self):
+        assert derive_region("Balboa Park, San Diego, CA 92101") == "Central San Diego"
+
+    def test_south_bay_address_does_not_fall_through_to_central(self):
+        # A South Bay address's location string routinely also contains
+        # "San Diego" or "CA" -- specific-before-generic ordering must
+        # win, not the generic "San Diego" pattern.
+        assert derive_region("1 Main St, Chula Vista, San Diego County, CA") == "South Bay"
+
+    def test_east_county_address_does_not_fall_through_to_central(self):
+        assert derive_region("100 Fletcher Pkwy, El Cajon, San Diego, CA 92020") == "East County"
+
+    def test_unmatched_location_returns_empty_string_no_default(self):
+        assert derive_region("A generic venue with no recognizable city") == ""
+
+    def test_empty_location_returns_empty_string(self):
+        assert derive_region("") == ""
+
+    def test_first_match_wins_south_bay_before_east_county(self):
+        # If a location string somehow carried both a South Bay and an
+        # East County keyword, South Bay's rule is checked first
+        # (REGION_KEYWORDS order).
+        assert derive_region("Chula Vista and El Cajon") == "South Bay"
 
 
 class TestMapCost:

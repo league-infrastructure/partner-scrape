@@ -11,7 +11,7 @@ is ticket 003/004's job, not this module's either.
 
 from __future__ import annotations
 
-from partner_scrape.observability.yield_report import SourceYield, YieldReport
+from partner_scrape.observability.yield_report import RegionYield, SourceYield, YieldReport
 
 
 def _alert_label(source: SourceYield) -> str:
@@ -43,6 +43,12 @@ def _detail_line(source: SourceYield) -> str:
     )
 
 
+def _region_line(region: RegionYield) -> str:
+    delta = f"{region.delta:+d}" if region.delta is not None else "n/a"
+    marker = " [ZERO]" if region.zero else ""
+    return f"  {region.region}: count={region.count} (delta {delta}){marker}"
+
+
 def render_text(report: YieldReport) -> str:
     """Render ``report`` as plain text.
 
@@ -63,5 +69,12 @@ def render_text(report: YieldReport) -> str:
 
     lines.append("Per-source detail:")
     lines.extend(_detail_line(source) for source in report.sources)
+
+    # Sprint 033, issue 34: after the per-source detail, not before --
+    # per-source yield is this subsystem's primary, longer-established
+    # signal.
+    lines.append("")
+    lines.append("Regional coverage:")
+    lines.extend(_region_line(region) for region in report.regions)
 
     return "\n".join(lines)

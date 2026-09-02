@@ -8,7 +8,7 @@ from __future__ import annotations
 from datetime import datetime, timezone
 
 from partner_scrape.observability.render import render_text
-from partner_scrape.observability.yield_report import SourceYield, YieldReport
+from partner_scrape.observability.yield_report import RegionYield, SourceYield, YieldReport
 
 NOW = datetime(2026, 7, 19, 12, 0, tzinfo=timezone.utc)
 
@@ -32,6 +32,18 @@ def _source(**overrides: object) -> SourceYield:
     return SourceYield(**defaults)  # type: ignore[arg-type]
 
 
+def _region(**overrides: object) -> RegionYield:
+    defaults: dict[str, object] = dict(
+        region="South Bay",
+        count=8,
+        previous_count=8,
+        delta=0,
+        zero=False,
+    )
+    defaults.update(overrides)
+    return RegionYield(**defaults)  # type: ignore[arg-type]
+
+
 class TestAlertOrdering:
     def test_alert_lines_appear_before_the_per_source_detail_section(self):
         healthy = _source(source_id="healthy")
@@ -43,7 +55,7 @@ class TestAlertOrdering:
             delta=-12,
             zero_yield=True,
         )
-        report = YieldReport(sources=[healthy, zero_yield], generated_at=NOW)
+        report = YieldReport(sources=[healthy, zero_yield], regions=[], generated_at=NOW)
 
         text = render_text(report)
 
@@ -59,7 +71,7 @@ class TestAlertOrdering:
         zero_yield = _source(
             source_id="fleet", found=0, previous_found=12, delta=-12, zero_yield=True
         )
-        report = YieldReport(sources=[zero_yield], generated_at=NOW)
+        report = YieldReport(sources=[zero_yield], regions=[], generated_at=NOW)
 
         text = render_text(report)
 
@@ -68,7 +80,7 @@ class TestAlertOrdering:
 
     def test_cliff_alert_is_labeled_distinctly_from_zero_yield(self):
         cliff = _source(source_id="acme", found=4, previous_found=10, delta=-6, cliff=True)
-        report = YieldReport(sources=[cliff], generated_at=NOW)
+        report = YieldReport(sources=[cliff], regions=[], generated_at=NOW)
 
         text = render_text(report)
 
@@ -81,7 +93,7 @@ class TestAlertOrdering:
         )
         cliff = _source(source_id="birch", found=3, previous_found=10, delta=-7, cliff=True)
         healthy = _source(source_id="coastal")
-        report = YieldReport(sources=[healthy, zero_yield, cliff], generated_at=NOW)
+        report = YieldReport(sources=[healthy, zero_yield, cliff], regions=[], generated_at=NOW)
 
         text = render_text(report)
 
@@ -94,7 +106,7 @@ class TestAlertOrdering:
 class TestNoAlertRun:
     def test_plain_per_source_output_with_no_alerts(self):
         healthy = _source()
-        report = YieldReport(sources=[healthy], generated_at=NOW)
+        report = YieldReport(sources=[healthy], regions=[], generated_at=NOW)
 
         text = render_text(report)
 
@@ -107,9 +119,77 @@ class TestNoAlertRun:
 
     def test_first_ever_run_shows_no_alerts_and_an_na_delta(self):
         first_run_source = _source(previous_found=None, delta=None)
-        report = YieldReport(sources=[first_run_source], generated_at=NOW)
+        report = YieldReport(sources=[first_run_source], regions=[], generated_at=NOW)
 
         text = render_text(report)
 
         assert "ALERTS: none" in text
         assert "delta n/a" in text
+
+
+class TestRegionalCoverageSection:
+    """Sprint 033, issue 34: a "Regional coverage" section after the
+    existing per-source detail."""
+
+    def test_regional_coverage_section_appears_after_per_source_detail(self):
+        report = YieldReport(
+            sources=[_source()],
+            regions=[_region(region="South Bay", count=8, previous_count=8, delta=0)],
+            generated_at=NOW,
+        )
+
+        text = render_text(report)
+
+        detail_index = text.index("Per-source detail:")
+        regional_index = text.index("Regional coverage:")
+        assert detail_index < regional_index
+
+    def test_each_region_shows_count_and_delta(self):
+        report = YieldReport(
+            sources=[],
+            regions=[_region(region="East County", count=0, previous_count=0, delta=0)],
+            generated_at=NOW,
+        )
+
+        text = render_text(report)
+
+        assert "East County: count=0 (delta +0)" in text
+
+    def test_zero_marker_shown_when_zero_flag_is_set(self):
+        report = YieldReport(
+            sources=[],
+            regions=[
+                _region(
+                    region="East County", count=0, previous_count=8, delta=-8, zero=True
+                )
+            ],
+            generated_at=NOW,
+        )
+
+        text = render_text(report)
+
+        assert "East County: count=0 (delta -8) [ZERO]" in text
+
+    def test_no_zero_marker_when_zero_flag_is_not_set(self):
+        report = YieldReport(
+            sources=[],
+            regions=[_region(region="South Bay", count=8, previous_count=8, delta=0)],
+            generated_at=NOW,
+        )
+
+        text = render_text(report)
+
+        assert "[ZERO]" not in text
+
+    def test_first_run_region_shows_na_delta(self):
+        report = YieldReport(
+            sources=[],
+            regions=[
+                _region(region="unclassified", count=2, previous_count=None, delta=None)
+            ],
+            generated_at=NOW,
+        )
+
+        text = render_text(report)
+
+        assert "unclassified: count=2 (delta n/a)" in text

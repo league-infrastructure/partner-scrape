@@ -683,6 +683,67 @@ class TestScrapeMeta:
         assert first_meta["last_updated"] != second_meta["last_updated"]
 
 
+class TestScrapeMetaRegions:
+    """Sprint 033, issue 34: `scrape-meta.json` gains a `"regions"` key
+    -- a per-region count over the exported current/upcoming payload,
+    computed from `Opportunity.region` (already finished, not
+    re-derived)."""
+
+    def test_regions_key_counts_by_region(self, tmp_path):
+        own_data_dir = tmp_path / "own-data"
+        opportunities = [
+            _opportunity(slug="a", region="South Bay"),
+            _opportunity(slug="b", region="South Bay"),
+            _opportunity(slug="c", region="East County"),
+            _opportunity(slug="d", region=""),
+        ]
+
+        export_opportunities(
+            opportunities, today=date(2026, 7, 19), own_data_dir=own_data_dir
+        )
+
+        meta = json.loads((own_data_dir / "scrape-meta.json").read_text())
+        assert meta["regions"] == {"South Bay": 2, "East County": 1, "unclassified": 1}
+
+    def test_unclassified_bucket_for_empty_region_not_dropped(self, tmp_path):
+        own_data_dir = tmp_path / "own-data"
+        opportunities = [_opportunity(slug="a", region="")]
+
+        export_opportunities(
+            opportunities, today=date(2026, 7, 19), own_data_dir=own_data_dir
+        )
+
+        meta = json.loads((own_data_dir / "scrape-meta.json").read_text())
+        assert meta["regions"] == {"unclassified": 1}
+
+    def test_regions_only_counts_current_upcoming_opportunities(self, tmp_path):
+        own_data_dir = tmp_path / "own-data"
+        current = _opportunity(
+            slug="current", region="South Bay", date_start="2026-07-19T09:00:00-07:00"
+        )
+        past = _opportunity(
+            slug="past", region="East County", date_start="2026-01-01T09:00:00-07:00"
+        )
+
+        export_opportunities(
+            [current, past], today=date(2026, 7, 19), own_data_dir=own_data_dir
+        )
+
+        meta = json.loads((own_data_dir / "scrape-meta.json").read_text())
+        assert meta["regions"] == {"South Bay": 1}
+
+    def test_last_updated_key_unaffected_by_the_regions_addition(self, tmp_path):
+        own_data_dir = tmp_path / "own-data"
+
+        export_opportunities(
+            [_opportunity(region="South Bay")], today=date(2026, 7, 19), own_data_dir=own_data_dir
+        )
+
+        meta = json.loads((own_data_dir / "scrape-meta.json").read_text())
+        assert "last_updated" in meta
+        assert isinstance(meta["last_updated"], str)
+
+
 class TestDryRun:
     def test_dry_run_writes_nothing_but_returns_the_payload(self):
         opp = _opportunity()
@@ -698,6 +759,26 @@ class TestDryRun:
         real_payload = export_opportunities([opp], today=date(2026, 7, 19))
 
         assert dry_payload == real_payload
+
+    def test_dry_run_computes_without_error_for_region_bearing_opportunities(self, tmp_path):
+        """Sprint 033, issue 34: `region` (an internal, non-schema field)
+        must not break `dry_run` -- no `scrape-meta.json`/`"regions"`
+        computation is exposed by `dry_run`'s return value today (it
+        stays the opportunities-only payload, unchanged), but computing
+        it must not raise, and no file is written."""
+        own_data_dir = tmp_path / "own-data"
+        opportunities = [
+            _opportunity(slug="a", region="South Bay"),
+            _opportunity(slug="b", region=""),
+        ]
+
+        payload = export_opportunities(
+            opportunities, today=date(2026, 7, 19), dry_run=True, own_data_dir=own_data_dir
+        )
+
+        assert len(payload) == 2
+        assert "region" not in payload[0]
+        assert not (own_data_dir / "scrape-meta.json").exists()
 
 
 class TestOwnDataDirIsolation:
