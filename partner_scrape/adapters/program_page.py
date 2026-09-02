@@ -40,11 +40,17 @@ results are always mapped onto an ``Event`` identically.
 produces a fully-working production instance -- the defaults construct a
 real ``AnthropicProgramLLMClient``/``ProgramExtractionCache``.
 
-**No ``description`` field.** ``ProgramExtractionResult`` (ticket 002)
-carries no ``description`` output -- only ``program_name``,
-``audience_grades``, ``date_start``, ``date_end``, ``cost``,
-``eligibility``, ``is_open``, and ``opportunity_type``. Neither adapter
-invents one; ``Event.description`` is simply left unset for these records.
+**No ``description`` field, with one sprint-028 exception.**
+``ProgramExtractionResult`` (ticket 002) carries no ``description``
+output -- only ``program_name``, ``audience_grades``, ``date_start``,
+``date_end``, ``cost``, ``eligibility``, ``is_open``, and
+``opportunity_type``. Neither adapter invents a description, with one
+narrow exception: (sprint 028) when the *resolved* ``opportunity_type``
+is ``"Camps"`` and ``result.is_open`` is ``False``, :func:`_map_result_to_event`
+sets ``Event.description`` to a sold-out note -- see that function's
+docstring and ``adapters/DESIGN.md``'s sprint 028 section. Every other
+``program_kind``/``opportunity_type`` combination still leaves
+``Event.description`` unset.
 
 **A closed page is still emitted.** ``result.is_open is False`` is not
 checked here -- filtering "is this program still current" happens at
@@ -164,6 +170,14 @@ def _map_result_to_event(
     per result, so ``ProgramPageMultiAdapter``'s N results become N
     independently-mapped ``Event``s via the exact same field logic
     ``ProgramPageAdapter``/``ProgramListingAdapter`` already use.
+
+    **(Sprint 028)** Once ``opportunity_type`` is resolved (the config
+    override or the LLM's own classification -- whichever wins below),
+    a resolved ``"Camps"`` record with ``result.is_open is False`` gets
+    ``Event.description`` set to a sold-out note -- see this module's
+    docstring's "No description field" note and ``adapters/DESIGN.md``'s
+    sprint 028 section for the full rationale. Every other
+    ``program_kind``/``opportunity_type`` combination is unaffected.
     """
     event = Event(kind=program_kind, source_id=source.source_id, url=url)
 
@@ -201,18 +215,33 @@ def _map_result_to_event(
     # downstream by normalize/run.py, unconditionally.
     opportunity_type_override = source.config.get("opportunity_type")
     if opportunity_type_override:
+        resolved_opportunity_type = opportunity_type_override
         event.set(
             "opportunity_type",
             opportunity_type_override,
             source=SOURCE_NAME,
             confidence=CONFIDENCE_CONFIG_OVERRIDE,
         )
-    elif result.opportunity_type:
+    else:
+        resolved_opportunity_type = result.opportunity_type
+        if result.opportunity_type:
+            event.set(
+                "opportunity_type",
+                result.opportunity_type,
+                source=PROGRAM_LLM_SOURCE,
+                confidence=PROGRAM_LLM_CONFIDENCE,
+            )
+
+    # (Sprint 028) Sold-out camp sessions surface via Event.description --
+    # the one field this mechanism otherwise leaves unset (see this
+    # module's docstring's "No description field" note). Computed from
+    # the *resolved* opportunity_type (the config override or the LLM's
+    # own classification, whichever won above), so this only fires for
+    # camp records -- no other program_kind/opportunity_type combination's
+    # Event.description changes from its pre-sprint-028 unset state.
+    if resolved_opportunity_type == "Camps" and result.is_open is False:
         event.set(
-            "opportunity_type",
-            result.opportunity_type,
-            source=PROGRAM_LLM_SOURCE,
-            confidence=PROGRAM_LLM_CONFIDENCE,
+            "description", "Sold out", source=PROGRAM_LLM_SOURCE, confidence=PROGRAM_LLM_CONFIDENCE
         )
 
     # registration_url: an explicit config.apply_url override (a

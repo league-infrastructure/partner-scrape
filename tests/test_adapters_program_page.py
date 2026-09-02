@@ -310,6 +310,78 @@ class TestClosedPageStillEmitted:
         assert events[0].end is None
 
 
+class TestSoldOutCampDescription:
+    """AC (028-003): a resolved ``"Camps"`` record with ``is_open=False``
+    gets ``Event.description`` set to a sold-out note; every other
+    ``opportunity_type`` leaves it unset, exactly matching pre-ticket
+    behavior.
+    """
+
+    def test_sold_out_camp_record_gets_a_sold_out_description(self, tmp_path):
+        result = _extraction_result(is_open=False, opportunity_type="Camps")
+        adapter = ProgramPageAdapter(
+            llm_client=FixtureProgramLLMClient(responses={PAGE_URL: result}),
+            cache=ProgramExtractionCache(tmp_path),
+        )
+        raw = RawResponse(ref=EventRef(url=PAGE_URL), status=200, body=_page_body())
+
+        events = list(adapter.extract(raw, _source(program_kind="program")))
+
+        assert len(events) == 1
+        assert events[0].description == "Sold out"
+        assert events[0].field_provenance["description"] == Provenance(
+            source=PROGRAM_LLM_SOURCE, confidence=PROGRAM_LLM_CONFIDENCE
+        )
+
+    def test_sold_out_camp_via_config_opportunity_type_override_still_gets_description(self, tmp_path):
+        # opportunity_type resolved via the config override, not the
+        # LLM's own classification -- the branch must fire on the
+        # *resolved* value either way.
+        result = _extraction_result(is_open=False, opportunity_type="Out-of-school Programs")
+        adapter = ProgramPageAdapter(
+            llm_client=FixtureProgramLLMClient(responses={PAGE_URL: result}),
+            cache=ProgramExtractionCache(tmp_path),
+        )
+        raw = RawResponse(ref=EventRef(url=PAGE_URL), status=200, body=_page_body())
+
+        events = list(
+            adapter.extract(raw, _source(program_kind="program", opportunity_type="Camps"))
+        )
+
+        assert len(events) == 1
+        assert events[0].description == "Sold out"
+
+    def test_non_camps_is_open_false_leaves_description_unset(self, tmp_path):
+        # AC: a fixture record with is_open=False and a non-"Camps"
+        # opportunity_type (an internship) leaves Event.description
+        # unset, exactly matching pre-ticket behavior.
+        result = _extraction_result(is_open=False, opportunity_type="Out-of-school Programs")
+        adapter = ProgramPageAdapter(
+            llm_client=FixtureProgramLLMClient(responses={PAGE_URL: result}),
+            cache=ProgramExtractionCache(tmp_path),
+        )
+        raw = RawResponse(ref=EventRef(url=PAGE_URL), status=200, body=_page_body())
+
+        events = list(adapter.extract(raw, _source(program_kind="internship")))
+
+        assert len(events) == 1
+        assert events[0].description == ""
+        assert "description" not in events[0].field_provenance
+
+    def test_open_camp_record_leaves_description_unset(self, tmp_path):
+        result = _extraction_result(is_open=True, opportunity_type="Camps")
+        adapter = ProgramPageAdapter(
+            llm_client=FixtureProgramLLMClient(responses={PAGE_URL: result}),
+            cache=ProgramExtractionCache(tmp_path),
+        )
+        raw = RawResponse(ref=EventRef(url=PAGE_URL), status=200, body=_page_body())
+
+        events = list(adapter.extract(raw, _source(program_kind="program")))
+
+        assert len(events) == 1
+        assert events[0].description == ""
+
+
 class TestDispatchRegistration:
     def test_program_page_resolves_via_get_adapter_to_a_working_instance(self, tmp_path, monkeypatch):
         monkeypatch.setenv("SCRAPE_CACHE_DIR", str(tmp_path))

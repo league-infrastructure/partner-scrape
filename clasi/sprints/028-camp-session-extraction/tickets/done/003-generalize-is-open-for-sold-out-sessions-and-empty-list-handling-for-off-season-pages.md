@@ -2,7 +2,7 @@
 id: '003'
 title: Generalize is_open for sold-out sessions and empty-list handling for off-season
   pages
-status: open
+status: done
 use-cases:
 - SUC-039
 - SUC-040
@@ -62,21 +62,21 @@ marketing-page and platform-adapter tickets both depend on.
 
 ## Acceptance Criteria
 
-- [ ] `_FIELD_EXTRACTION_RULES`'s `is_open` description is generalized as
+- [x] `_FIELD_EXTRACTION_RULES`'s `is_open` description is generalized as
       above, applied identically to both `_SYSTEM_PROMPT` and
       `_SYSTEM_PROMPT_MULTI` (they already share this text).
-- [ ] `_map_result_to_event` sets `Event.description` to a sold-out note
+- [x] `_map_result_to_event` sets `Event.description` to a sold-out note
       when `opportunity_type == "Camps"` and `result.is_open is False`.
-- [ ] A fixture record with `is_open=False` and a non-`"Camps"`
+- [x] A fixture record with `is_open=False` and a non-`"Camps"`
       `opportunity_type` (e.g. an internship) leaves `Event.description`
       unset, exactly matching pre-ticket behavior.
-- [ ] `_SYSTEM_PROMPT_MULTI` explicitly instructs the model that an empty
+- [x] `_SYSTEM_PROMPT_MULTI` explicitly instructs the model that an empty
       `programs` list is a valid response for a page with no distinct
       programs/sessions.
-- [ ] A fixture test proves `_extract_many_programs` maps a
+- [x] A fixture test proves `_extract_many_programs` maps a
       `FixtureProgramLLMClient` empty-list response to zero `Event`s with
       no exception.
-- [ ] Every existing `program_page`/`program_listing`/`program_page_multi`
+- [x] Every existing `program_page`/`program_listing`/`program_page_multi`
       fixture test continues to pass unmodified.
 
 ## Testing

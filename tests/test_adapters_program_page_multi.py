@@ -339,6 +339,33 @@ class TestExtractRobustness:
         assert "extract_programs" in caplog.text
 
 
+class TestOffSeasonPageYieldsEmptyList:
+    """AC (028-003): an in-season-only camp marketing page (e.g. Fleet's,
+    registration opens Feb) that currently has nothing to describe must
+    yield zero Events -- not a hallucinated session, not a parse error.
+    ``_extract_many_programs`` already maps a zero-length
+    ``extract_programs()`` result to zero Events with no special-casing;
+    this fixture proves that path end-to-end via
+    ``ProgramPageMultiAdapter.extract()``, standing in for an off-season
+    page (``_SYSTEM_PROMPT_MULTI`` now explicitly tells the model an
+    empty list is a valid response for such a page -- see
+    ``program_llm.py``).
+    """
+
+    OFF_SEASON_URL = "https://example.org/camps/fleet-off-season"
+
+    def test_off_season_page_yields_zero_events_with_no_exception(self, tmp_path):
+        llm_client = FixtureProgramLLMClient(list_responses={self.OFF_SEASON_URL: []})
+        adapter = ProgramPageMultiAdapter(llm_client=llm_client, cache=ProgramExtractionCache(tmp_path))
+        source = _source(program_kind="program", url=self.OFF_SEASON_URL)
+        raw = RawResponse(ref=EventRef(url=self.OFF_SEASON_URL), status=200, body=_page_body())
+
+        events = list(adapter.extract(raw, source))
+
+        assert events == []
+        assert llm_client.list_calls == [(self.OFF_SEASON_URL, reduce_html_to_text(_page_body()))]
+
+
 class TestDispatchRegistration:
     def test_program_page_multi_is_registered_in_adapters_table(self):
         assert ADAPTERS["program_page_multi"] is ProgramPageMultiAdapter
