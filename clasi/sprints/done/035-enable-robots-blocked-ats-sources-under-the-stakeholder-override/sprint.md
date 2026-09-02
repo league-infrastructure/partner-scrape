@@ -1,7 +1,7 @@
 ---
 id: '035'
 title: Enable robots-blocked ATS sources under the stakeholder override
-status: executing
+status: done
 branch: sprint/035-enable-robots-blocked-ats-sources-under-the-stakeholder-override
 use-cases:
 - SUC-066
