@@ -1,7 +1,7 @@
 ---
 id: 028
 title: Camp session extraction
-status: executing
+status: done
 branch: sprint/028-camp-session-extraction
 use-cases:
 - SUC-036
