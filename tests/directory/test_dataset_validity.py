@@ -1,5 +1,7 @@
 """Dataset-validity regression tests for the curated Places roster
-(`partner_scrape/directory/data/places.toml`).
+(`partner_scrape/directory/data/places.toml`), plus (sprint 032 ticket
+001) a `Club`-side id-uniqueness check that spans every active
+`club_static_roster` registry entry combined.
 
 Data-only-ticket tests, matching sprint.md's Test Strategy precedent
 for a curated dataset (ticket 003's own registry-source-name tests):
@@ -16,6 +18,17 @@ join-integrity check that used to verify each hand-copied
 as pipeline-level validation in issue 48, not reproduced here against a
 re-copied fixture (that would recreate the exact two-copies-of-the-
 same-file problem the site consolidation exists to eliminate).
+
+**`TestClubUniqueIds`, added by sprint 032 ticket 001**, deliberately
+lives in this Place-focused module rather than
+`test_club_dataset_validity.py` (per that ticket's own AC: "extending
+the existing Place-only `TestUniqueIds` pattern"). Unlike
+`test_club_dataset_validity.py`'s own `TestUniqueIds` (scoped to the
+single `hack-club-sd` registry entry), this class aggregates *every*
+active `club_static_roster` registry entry -- the property that
+matters once issue 35b's six new club-type rosters (sprint 032 tickets
+002-007) each add their own TSV/registry entry is uniqueness *across*
+files, not just within one.
 """
 
 from __future__ import annotations
@@ -23,7 +36,8 @@ from __future__ import annotations
 from pathlib import Path
 
 from partner_scrape.directory.model import VALID_CATEGORIES
-from partner_scrape.directory.sources.base import run
+from partner_scrape.directory.sources.base import run, run_club_source
+from partner_scrape.directory.sources.club_static_roster import ClubStaticRosterSource
 from partner_scrape.directory.sources.static_roster import StaticRosterSource
 from partner_scrape.registry.loader import load_active_sources
 
@@ -52,6 +66,20 @@ def _real_places():
     return run(static_roster, StaticRosterSource(), _NeverCalledFetcher())
 
 
+def _real_clubs():
+    """Every `Club` from every active `club_static_roster` registry
+    entry, combined -- not just Hack Club's own single entry. This
+    guards every subsequent club-type-population ticket's new
+    `club_id`s, including uniqueness *across* different TSV files, not
+    just within one (sprint 032 ticket 001)."""
+    sources = load_active_sources(DIRECTORY_REGISTRY_DIR)
+    club_sources = [s for s in sources if s.adapter_type == "club_static_roster"]
+    clubs = []
+    for source_config in club_sources:
+        clubs.extend(run_club_source(source_config, ClubStaticRosterSource(), _NeverCalledFetcher()))
+    return clubs
+
+
 class TestUniqueIds:
     def test_every_place_id_is_unique(self):
         ids = [p.place_id for p in _real_places()]
@@ -59,6 +87,20 @@ class TestUniqueIds:
 
     def test_no_place_id_is_blank(self):
         assert all(p.place_id for p in _real_places())
+
+
+class TestClubUniqueIds:
+    """AC: a `Club`-side `club_id` uniqueness/non-blank check,
+    structurally mirroring `TestUniqueIds` above exactly (same shape,
+    run against the accumulated `Club` list rather than `Place`) --
+    sprint 032 ticket 001."""
+
+    def test_every_club_id_is_unique(self):
+        ids = [c.club_id for c in _real_clubs()]
+        assert len(ids) == len(set(ids))
+
+    def test_no_club_id_is_blank(self):
+        assert all(c.club_id for c in _real_clubs())
 
 
 class TestCategoryCoverage:

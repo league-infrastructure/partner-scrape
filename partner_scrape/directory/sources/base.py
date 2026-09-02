@@ -3,7 +3,7 @@ contracts -- parallel to, and structurally disjoint from,
 ``teams.sources.base.TeamSource`` and ``adapters.base.Adapter``.
 
 ``sources/static_roster.py`` (ticket 018-007),
-``sources/hack_club_static_roster.py`` (ticket 018-008), and
+``sources/club_static_roster.py`` (ticket 018-008), and
 ``sources/offering_static_roster.py`` (sprint 030) each implement
 ``discover -> fetch -> extract``, the same three-method shape
 ``TeamSource``/``Adapter`` use -- reusing that mental model is
@@ -130,7 +130,7 @@ class ClubRef:
 
     Parallel to :class:`PlaceRef` above (and to
     ``teams.sources.base.TeamRef``). This ticket's
-    ``sources/hack_club_static_roster.py`` returns exactly one
+    ``sources/club_static_roster.py`` returns exactly one
     ``ClubRef`` (the committed roster file).
     """
 

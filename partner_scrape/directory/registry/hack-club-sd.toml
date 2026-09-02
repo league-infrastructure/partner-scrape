@@ -10,13 +10,16 @@
 # teams/registry/ (see directory/DESIGN.md's Constraints).
 #
 # `adapter_type` is read by directory.pipeline to select the matching
-# ClubSource ("hack_club_static_roster" ->
-# directory.sources.hack_club_static_roster.HackClubStaticRosterSource),
-# not by adapters.base.ADAPTERS. This source is never registered
-# there, and it never calls the injected Fetcher -- see
-# sources/hack_club_static_roster.py's own module docstring.
+# ClubSource ("club_static_roster" ->
+# directory.sources.club_static_roster.ClubStaticRosterSource), not by
+# adapters.base.ADAPTERS. This source is never registered there, and
+# it never calls the injected Fetcher -- see
+# sources/club_static_roster.py's own module docstring. Sprint 032
+# ticket 001 generalized this adapter_type from
+# "hack_club_static_roster" (Hack-Club-only) to "club_static_roster"
+# (any club type) -- see directory/DESIGN.md's sprint 032 Revision.
 #
-# No [acquisition_policy] section: HackClubStaticRosterSource reads
+# No [acquisition_policy] section: ClubStaticRosterSource reads
 # config.roster_path straight off disk, so a rate limit / robots-respect
 # policy has no meaning here -- matching places-sd.toml's own
 # precedent exactly. The registry loader's own defaults
@@ -24,10 +27,10 @@
 # unused values when the section is omitted.
 
 org_name = "Hack Club San Diego chapters (curated static roster)"
-adapter_type = "hack_club_static_roster"
+adapter_type = "club_static_roster"
 enabled = true
 
 [config]
 # Resolved relative to directory/data/ when not already an absolute
-# path (sources/hack_club_static_roster.py's discover()).
+# path (sources/club_static_roster.py's discover()).
 roster_path = "hack-club-sd.tsv"

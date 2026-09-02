@@ -171,20 +171,30 @@ class Place:
     sources: list[str] = field(default_factory=list)
 
 
-#: Program/type this club chapter belongs to. Only ``"hack-club"`` is
-#: populated this ticket (ticket 018-008) -- issue 35b's remaining six
-#: club types (CyberPatriot, Science Olympiad, 4-H, Girls Who Code,
-#: Civil Air Patrol, Sea Cadets) are a future sprint's data-only
-#: addition to this same Literal, never a model change (ticket
-#: 018-008's own scope: "kept general enough that issue 35b's future
-#: club types fit without a model change"). Kept a plain ``str`` on the
+#: Program/type this club chapter belongs to. Ticket 018-008 populated
+#: only ``"hack-club"``; sprint 032 ticket 001 widened this Literal to
+#: also include issue 35b's six remaining club types --
+#: ``"cyberpatriot"``, ``"science-olympiad"``, ``"4-h"``,
+#: ``"girls-who-code"``, ``"civil-air-patrol"``, and ``"sea-cadets"`` --
+#: a data-only addition, never a model change (ticket 018-008's own
+#: scope: "kept general enough that issue 35b's future club types fit
+#: without a model change"; see ``directory/DESIGN.md``'s sprint 032
+#: Revision for the full rationale). Kept a plain ``str`` on the
 #: dataclass itself, matching ``Place.category``'s/``Team.org_type``'s
 #: own "don't over-type a field a small, hand-curated dataset already
 #: controls tightly" convention -- this Literal exists for
 #: documentation and for :data:`VALID_CLUB_TYPES`'s drift-proof
 #: derivation, consulted by
-#: ``sources/hack_club_static_roster.py``'s per-entry validation.
-ClubType = Literal["hack-club"]
+#: ``sources/club_static_roster.py``'s per-entry validation.
+ClubType = Literal[
+    "hack-club",
+    "cyberpatriot",
+    "science-olympiad",
+    "4-h",
+    "girls-who-code",
+    "civil-air-patrol",
+    "sea-cadets",
+]
 
 #: Derived from :data:`ClubType`, the same drift-proof pattern
 #: :data:`VALID_CATEGORIES` uses for :data:`Category`.
@@ -225,8 +235,8 @@ class Club:
     """One curated San Diego club chapter, from any program, any
     source.
 
-    Populated directly by a ``ClubSource``'s ``extract()`` (this
-    ticket: ``sources/hack_club_static_roster.py``) for every field
+    Populated directly by a ``ClubSource``'s ``extract()`` (e.g.
+    ``sources/club_static_roster.py``) for every field
     except the geocoding-time fields (``latitude``/``longitude``/
     ``location_precision``/``matched_name``/``needs_review``/
     ``host_school_website``), which
@@ -300,9 +310,9 @@ class Club:
 
     meeting_note: str = ""  # human-readable meeting cadence, when the
     # source states one, e.g. "Meets Thursdays after school." Left ""
-    # when the source doesn't say one -- never guessed. This ticket's
-    # curated Hack Club roster does not carry a meeting schedule; see
-    # sources/hack_club_static_roster.py's own docstring.
+    # when the source doesn't say one -- never guessed. The curated
+    # Hack Club roster does not carry a meeting schedule; see
+    # sources/club_static_roster.py's own docstring.
 
     status: str = "active"  # ClubStatus
     status_note: str = ""  # Required (non-empty) whenever status !=
@@ -310,8 +320,8 @@ class Club:
     # convention -- never left blank for a non-"active" status.
 
     # Provenance: which source(s) contributed to this record, e.g.
-    # ["hack_club_static_roster"] -- matches Place.sources's / Team.sources's
-    # existing convention.
+    # ["hack-club-sd"] (the registering SourceConfig.source_id) --
+    # matches Place.sources's / Team.sources's existing convention.
     sources: list[str] = field(default_factory=list)
 
 

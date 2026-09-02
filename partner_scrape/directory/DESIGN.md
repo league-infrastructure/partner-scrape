@@ -1,8 +1,472 @@
 # directory
 
-**Owner:** Eric Busboom · **Last reviewed:** 2026-09-02 (sprint 030 — Offerings standing-entity type added) · **Status:** Places, Clubs (Hack Club chapters), and Offerings (volunteer org profiles + free/Title I school programs) complete; issue 35b's remaining six club types and issue 33's educator-PD program pages (routed through `adapters/`, not this module — see this doc's sprint 030 Revision) deferred/tracked elsewhere
+**Owner:** Eric Busboom · **Last reviewed:** 2026-09-02 (sprint 032 ticket 007 — Girls Who Code clubs roster curated and registered; sprint 032 complete) · **Status:** Places, Clubs (Hack Club chapters + CyberPatriot teams + Civil Air Patrol squadrons + Naval Sea Cadet Corps units + San Diego County 4-H community clubs + Science Olympiad school teams + Girls Who Code clubs — all six of issue 35b's remaining club types now populated, five with multi-entry rosters and one (Girls Who Code) an honest single-entry starter roster; the curated static-roster source generalized to serve any club type), and Offerings (volunteer org profiles + free/Title I school programs) complete; issue 33's educator-PD program pages (routed through `adapters/`, not this module — see this doc's sprint 030 Revision) deferred/tracked elsewhere
 
 ---
+
+## Revision (2026-09-02 — sprint 032 ticket 007: Girls Who Code clubs roster curated and registered; sprint 032 complete)
+
+Populates the sixth and final of issue 35b's six remaining club types
+against the generalized `club_static_roster` source (ticket 001): one
+confirmed San Diego-area Girls Who Code (GWC) club, registered via a
+new `directory/registry/girls-who-code-sd.toml` entry pointing at a new
+`directory/data/girls-who-code-sd.tsv` (same ten-column shape as
+`hack-club-sd.tsv`). No code change — content-only. This ticket closes
+out sprint 032: all six of issue 35b's remaining club types now have
+either a real curated roster or an honest documented finding, and
+every ticket's own AC is satisfied.
+
+**Sources checked** (live-verified 2026-09-02), in the order this
+ticket's own Description prescribes:
+
+1. **GWC's official club locator** (girlswhocode.com/locations) —
+   directly tested, per this ticket's explicit instruction not to
+   assume the gate away. Returns **HTTP 404**: no public, browsable
+   San Diego-area listing exists at that URL today. This confirms, for
+   San Diego specifically, the "least likely of the six" expectation
+   `sprint.md`'s own ticket ordering rationale anticipated.
+2. **San Diego Public Library's GWC programming** — real and
+   institutionally documented (a named library coordinator, Melissa
+   Giffen, and multiple past event listings referencing a Scripps
+   Miramar Ranch Library-hosted club), but **not independently
+   confirmable live at ticket-execution time**: the specific events
+   platform (`sandiego.librarymarket.com`) that hosted every past
+   listing search results surfaced has been fully decommissioned (every
+   page there now returns "404 - Unknown site," confirmed via a direct
+   `curl` bypassing that domain's own broken TLS certificate) — the
+   library has since migrated to a new events platform
+   (`sandiego.events.mylibrary.digital`) that blocks automated fetches
+   (403). Separately, the one specific branch named in search results,
+   Scripps Miramar Ranch Library, is itself **currently closed**
+   (reopening Winter 2026) per the City of San Diego's own library
+   locations page. Rather than transcribing a stale, dead-link listing
+   or guessing that programming continues unchanged at a closed branch,
+   this lead is recorded here as a documented, plausible-but-unverifiable
+   finding and **not** included as a roster entry.
+3. **Canyon Crest Academy's Girls Who Code club** — confirmed via two
+   independent CCA sources: the club's own site
+   (ccagirlswhocode.weebly.com, though its most recent dated content is
+   from 2023-2024 and not itself sufficient current-year evidence) and,
+   decisively, **CCA ASB's own current school-published approved-clubs
+   roster** (a Google Sheet CCA ASB's own club-list page links live
+   today, exported and searched directly): row 422 lists "Girls Who
+   Code" as a **School Sponsored** club (requiring regular on-campus
+   meetings per CCA's own club-category rules), meeting
+   "Weekly-Thursdays-Lunch-F101," with a `@sduhsd.net` district-email
+   faculty advisor (dvora.celniker@sduhsd.net) and a named student
+   president. One honest caveat: the sheet's own internal tab title
+   reads "Approved Clubs 2024-2025," not "2025-2026" — CCA ASB's own
+   page frames this same linked sheet as "the 2025-2026 Approved Clubs
+   List... out now," and by this ticket's live-verification date
+   (2026-09-02) the 2026-2027 school year has itself already begun, so
+   this is the most current school-published list found, not
+   necessarily a same-week-current one. Recorded honestly rather than
+   silently upgraded to "confirmed for the current school year."
+
+A targeted search for GWC clubs at several other well-known San Diego
+high schools (Torrey Pines, Scripps Ranch, Del Norte, La Jolla High)
+found none — consistent with GWC's real San Diego footprint being
+genuinely small, not an artifact of under-searching.
+
+**Geocoding outcome**: the one entry (Canyon Crest Academy, already a
+known-good CDE school match from tickets 002 and 006's own rosters)
+resolves at `"school"` precision, `needs_review = False`.
+
+**Test-suite impact**: no new parsing-shape test file — the data
+reused `hack-club-sd.tsv`'s exact column shape. A new
+`TestRealGirlsWhoCodeGeocoding` class in `test_pipeline.py` pins the
+real roster's single school-precision entry end-to-end. Full-registry
+`clubs_meta.total` assertions across `test_pipeline.py` now expect
+`57`, not `56` (4 Hack Club + 3 CyberPatriot + 7 Civil Air Patrol + 4
+Sea Cadets + 14 4-H + 24 Science Olympiad + 1 Girls Who Code) — the
+sprint's final combined club count.
+
+---
+
+## Revision (2026-09-02 — sprint 032 ticket 006: Science Olympiad school teams roster curated and registered)
+
+Populates the fifth of issue 35b's six remaining club types against
+the generalized `club_static_roster` source (ticket 001): twenty-four
+San Diego County high schools that fielded a Division C (high school)
+team at the 2026 San Diego Regional Science Olympiad Tournament,
+registered via a new `directory/registry/science-olympiad-sd.toml`
+entry pointing at a new `directory/data/science-olympiad-sd.tsv` (same
+ten-column shape as `hack-club-sd.tsv`). No code change — content-only.
+
+**Sources checked** (live-verified 2026-09-02). Issue 35b names no
+starting teams; per this ticket's own research approach (competition
+results rather than a member directory — Science Olympiad has none),
+the roster is built from Duosmium Results' archived official tournament
+results for the 2026 San Diego Regional Tournament, Division C
+(duosmium.org/results/2026-02-28_sCA_san_diego_regional_c/, held
+February 28, 2026 at the University of San Diego). Every one of the 62
+competing teams' host school was extracted and deduplicated to 24
+unique San Diego County high schools (several schools, e.g. Canyon
+Crest Academy and Scripps Ranch High School, fielded multiple named
+teams — one `Club` record per *school*, not per named team, matching
+this module's existing one-record-per-organization convention).
+
+The official tournament site itself
+(scilympiad.com/sdso) was also live-checked and confirmed reachable
+(HTTP 200) today, describing the San Diego Regional's eligible counties
+(San Diego and Imperial) and its three-division structure — **an
+update to sprint 029's own finding that this same URL was unreachable
+(curl returning 000) at that time**, consistent with this project's own
+verification standard: record what a source says today, not what an
+earlier sprint's research found.
+
+**Geocoding outcome**: 23 of the 24 entries resolve at `"school"`
+precision through the shared ladder's CDE/NCES school-matching rungs —
+Science Olympiad teams are explicitly school-based, so this behaves
+like Hack Club/CyberPatriot. One of those 23, **San Dieguito High
+School Academy**, is a legitimate rung-3 same-city fuzzy match (CDE's
+own record is named "San Dieguito HS Academy") and is correctly flagged
+`needs_review`, the same Helix Charter precedent Hack Club's own roster
+already hits — this sprint's second such flag, not a defect. One entry,
+**The Preuss School UC San Diego**, matches no CDE/NCES school record
+at all (a small charter school co-located on the UCSD campus with an
+unusual address format) and falls through honestly to the ladder's
+non-school rungs rather than a forced/guessed school match.
+
+**Test-suite impact**: no new parsing-shape test file — the data reused
+`hack-club-sd.tsv`'s exact column shape. A new
+`TestRealScienceOlympiadGeocoding` class in `test_pipeline.py` pins the
+real roster's 23-school/1-fallthrough outcome end-to-end, including the
+San Dieguito Academy `needs_review` flag. The existing
+`test_helix_charter_is_the_one_real_chapter_flagged_needs_review` test
+is renamed/widened (now
+`test_two_real_chapters_are_flagged_needs_review`) since San Dieguito
+Academy is now a second, real, independently-flagged entry across the
+whole registry. Full-registry `clubs_meta.total` assertions across
+`test_pipeline.py` now expect `56`, not `32` (4 Hack Club + 3
+CyberPatriot + 7 Civil Air Patrol + 4 Sea Cadets + 14 4-H + 24 Science
+Olympiad).
+
+---
+
+## Revision (2026-09-02 — sprint 032 ticket 005: 4-H clubs roster curated and registered)
+
+Populates the fourth of issue 35b's six remaining club types against
+the generalized `club_static_roster` source (ticket 001): fourteen San
+Diego County 4-H community clubs, registered via a new
+`directory/registry/4-h-sd.toml` entry pointing at a new
+`directory/data/4-h-sd.tsv` (same ten-column shape as
+`hack-club-sd.tsv`). No code change — content-only.
+
+**Sources checked** (live-verified 2026-09-02): UC ANR's own San Diego
+County 4-H "Community Clubs" directory
+(ucanr.edu/site/4-h-san-diego-county/community-clubs), cross-checked
+against its four Area sub-pages (Area 1, 2, 4, and 5 — no Area 3 page
+exists; the four sub-pages' club lists sum to the same fourteen clubs
+the top-level page lists, confirming completeness). Individual club
+detail — meeting location, program focus — was live-verified where a
+club maintains its own site: **Surfside 4-H** (surfside4h.net, meets at
+the Vista Antique Steam Engine Museum, 2040 N Santa Fe Ave, Vista CA
+92083), **San Dieguito 4-H** (sandieguito4h.com, meets at the Olivenhain
+Meeting Hall, 620 Melba Rd, Encinitas CA 92024, first Thursday of the
+month; over 70 years serving San Diego County), and **Ramona Stars
+4-H** (ramonastars4h.org, meets 2nd Wednesday of the month at the
+Ramona Junior Fairgrounds). The other eleven clubs (Fallbrook, Valley
+Center, Valley Center Country, 56 Ranchers, Poway, Ramona Paisanos,
+Ramona Wranglers, Santa Ysabel/Julian, Manzanita, Sagebrush, Japatul)
+were confirmed present and active on UC ANR's own current directory
+(with a named club leader/contact for each) but have no independent
+public site providing a specific street address — their `host_school`
+column is left blank and only `city`/`postal_code` (the region's
+principal town) are recorded, an honest "we know the club exists and
+roughly where, not its exact meeting address" signal, not a guess at a
+precise location.
+
+**Honest finding: no San Diego-specific robotics/drone/AI-branded 4-H
+club was found.** Issue 35b names "robotics/drones/AI" as one of this
+club type's program areas; live research found San Diego County 4-H's
+own materials describe "hundreds of projects" (including robotics,
+STEM, and animal science) as options *within* each general community
+club, not as separately branded clubs. The one specifically-named
+"4-H Area14 Robotics Club" found in search results
+(4histops.org/area14-robotics-club) is confirmed, on live fetch, to
+meet at the Ted Blum 4-H Center in Bridgewater Township, **New
+Jersey** — an entirely different county 4-H program that happens to
+share the generic "Area 14" naming convention — and is deliberately
+excluded, not included under a false San Diego attribution. The
+fourteen real San Diego County clubs are general, multi-project
+community clubs; several club names (56 Ranchers, Ramona Wranglers,
+Surfside, Sagebrush) suggest a livestock/animal-science lean typical of
+rural and semi-rural San Diego County 4-H, and Poway 4-H's own site
+confirms animal science/livestock, STEM/veterinary science, archery,
+and gardening projects — a real, county-supported program-area spread,
+just not one that maps onto issue 35b's per-club "robotics/drones/AI"
+framing. This is recorded as a finding per this sprint's own
+calibration, not padded with a fabricated specialty club.
+
+Also confirmed: **sandiegocounty4h.com does not resolve** (DNS
+failure on both `WebFetch` and a direct `curl`) — an apparently
+unofficial/lapsed third-party domain search results still surface;
+UC ANR's own `ucanr.edu` pages are the only source actually used.
+
+**Geocoding outcome**: all fourteen entries resolve at `"zip"`
+precision — every one of the fourteen clubs' zip codes is covered by
+the real, committed `zip-centroids.toml`, so none falls through further
+to city precision, and (as expected — none of these are school-hosted)
+no school-matching rung ever fires. `needs_review = False` for all
+fourteen.
+
+**Test-suite impact**: no new parsing-shape test file — the data
+reused `hack-club-sd.tsv`'s exact column shape. A new
+`TestReal4HGeocoding` class in `test_pipeline.py` (mirroring ticket
+004's own `TestRealSeaCadetsGeocoding`) pins the real 4-H roster's
+all-zip-precision outcome end-to-end. Full-registry `clubs_meta.total`
+assertions across `test_pipeline.py` now expect `32`, not `18` (4 Hack
+Club + 3 CyberPatriot + 7 Civil Air Patrol + 4 Sea Cadets + 14 4-H).
+
+---
+
+## Revision (2026-09-02 — sprint 032 ticket 004: Sea Cadets units roster curated and registered)
+
+Populates the third of issue 35b's six remaining club types against
+the generalized `club_static_roster` source (ticket 001): four
+San Diego/North County U.S. Naval Sea Cadet Corps (NSCC) units,
+registered via a new `directory/registry/sea-cadets-sd.toml` entry
+pointing at a new `directory/data/sea-cadets-sd.tsv` (same ten-column
+shape as `hack-club-sd.tsv`). No code change — content-only. Unlike
+tickets 002/003, issue 35b named no starting units for this type — all
+four were found via this ticket's own research.
+
+**Sources checked** (live-verified 2026-09-02):
+
+- **Escondido Battalion & Training Ship Kit Carson**
+  (escondidobattalion.org) — founded 2011, drills two weekend days a
+  month during the school year at Escondido Police & Fire HQ, 1163 N.
+  Centre City Pkwy, Escondido, CA 92026. Strongest verification of the
+  four: a live, working, currently-maintained unit site.
+- **Gunfighter Squadron & Training Ship TopGun**
+  (sites.google.com/site/gunfightertopgun) — aviation-oriented unit
+  formed 1973, based at MCAS Miramar; its own site lists an upcoming
+  drill dated August 29, 2026, directly confirming current activity.
+- **Michael A. Monsoor Battalion** — construction-battalion-oriented
+  unit at Marine Corps Base Camp Pendleton; confirmed active via a
+  November 13, 2023 NBC 7 San Diego news report on equipment stolen
+  from the unit ("Thief steals gear and uniforms from youth military
+  group at Camp Pendleton"). No dedicated unit website found; listed
+  on Navy League San Diego's own current youth-programs page
+  (navyleague-sd.com/sea-cadets/).
+- **Chief MCM-14 Division** — named for the former mine-countermeasures
+  ship USS Chief (MCM-14, now homeported in Japan), based at Naval
+  Base San Diego; listed on Navy League San Diego's own current
+  youth-programs page. **Weakest verification of the four**: no
+  independent unit website, no dated recent activity found beyond the
+  sponsor listing itself — included on the strength of a live,
+  currently-published sponsor page naming it without any inactive/
+  defunct indication, not a dedicated source of its own.
+
+**Found but deliberately excluded** (an honest finding, not a gap in
+research): **Challenger Division / TS Columbia** and **Coronado
+Battalion**, both cited in older secondary sources (a 2019 Cadet-of-
+the-Year award for Challenger; general San Diego Sea Cadets
+overviews), show clear signs of current inactivity at live-verification
+time — Challenger's own domain (`challenger-seacadets.org`) no longer
+resolves (DNS failure), and Coronado's own domain
+(`coronadoseacadets.org`) serves a broken/mismatched TLS certificate;
+independent search results describe on-base Sea Cadet activities at
+Naval Amphibious Base Coronado as "currently suspended until further
+notice." Recording their prior existence here rather than including
+them as active entries follows this module's own "flag it, don't force
+it" convention (Helix Charter's own precedent) applied to a whole
+entry rather than a single geocoding match.
+
+**Geocoding outcome**: one entry (Escondido Battalion, zip 92026)
+resolves at `"zip"` precision — the real, committed
+`zip-centroids.toml` covers that code. The other three (Gunfighter
+Squadron/MCAS Miramar, Michael Monsoor Battalion/Camp Pendleton, Chief
+MCM-14 Division/Naval Base San Diego) have zip codes not present in
+that same file, so they fall one rung further to `"city"` precision
+(San Diego/Oceanside city centroids) — still a real, non-guessed
+ladder rung per sprint.md's Architecture "Geocoding note," never a
+fabricated coordinate. `needs_review = False` for all four; no
+school-matching rung ever fires (none of these organizations' names
+share meaningful tokens with a CDE/NCES school name).
+
+**Test-suite impact**: no new parsing-shape test file — the data
+reused `hack-club-sd.tsv`'s exact column shape. A new
+`TestRealSeaCadetsGeocoding` class in `test_pipeline.py` (mirroring
+ticket 003's own `TestRealCivilAirPatrolGeocoding`) pins the real Sea
+Cadets roster's mixed zip/city outcome end-to-end. Full-registry
+`clubs_meta.total` assertions across `test_pipeline.py` now expect
+`18` (4 Hack Club + 3 CyberPatriot + 7 Civil Air Patrol + 4 Sea
+Cadets), not `14`.
+
+## Revision (2026-09-02 — sprint 032 ticket 003: Civil Air Patrol squadrons roster curated and registered)
+
+Populates the second of issue 35b's six remaining club types against
+the generalized `club_static_roster` source (ticket 001): San Diego
+Group 8's own headquarters plus its six subordinate squadrons (seven
+`Club` entries), registered via a new
+`directory/registry/civil-air-patrol-sd.toml` entry pointing at a new
+`directory/data/civil-air-patrol-sd.tsv` (same ten-column shape as
+`hack-club-sd.tsv`). No code change — content-only.
+
+**Sources checked** (live-verified 2026-09-02, not transcribed from
+issue 35b's own wording): California Wing's own Group 8 "Find a
+Squadron" locator (`group8ca.cap.gov/join-cap/find-a-squadron`) names
+six subordinate squadrons; each squadron's own `*.cap.gov` site gives
+its current meeting address. Issue 35b named Squadrons 144, 201, and
+Group 8 as a starting point — all three found and verified — plus four
+more squadrons found via the same live locator: Skyhawk Composite
+Squadron 47 (Carlsbad), San Diego Senior Squadron 57 (El Cajon,
+Gillespie Field), Fallbrook Senior Squadron 87 (Fallbrook Airpark),
+and Escondido Cadet Squadron 714 (Escondido).
+
+**Geocoding outcome — matches sprint.md's own prediction exactly.**
+Six of the seven entries (Group 8's own HQ office and five of the six
+squadrons) meet at non-school facilities — an Air National Guard base,
+a VFW post, airports, an administrative office — and fall through
+honestly to `"zip"` precision, `needs_review = False`, per sprint.md's
+Architecture "Geocoding note." One genuine exception: **Escondido
+Cadet Squadron 714 meets in a classroom on Escondido Charter High
+School's own campus**, live-verified via the squadron's own site
+(1868 E Valley Pkwy, Classroom F-203 — Escondido Charter High School's
+address), so it correctly resolves at `"school"` precision through the
+shared ladder's exact CDE match, `needs_review = False` — an honest
+match on the real data, not a forced correction and not suppressed to
+force the "CAP is non-school" pattern where the real world disagrees.
+
+**Test-suite impact**: no new parsing-shape test file — the data
+reused `hack-club-sd.tsv`'s exact column shape. Two more pre-existing
+tests turned out to hard-code the "every real Club is school-hosted"
+assumption ticket 002 didn't trip (CyberPatriot happens to be entirely
+school-hosted too) but this ticket's non-school CAP majority does:
+`test_pipeline.py`'s `test_every_real_hack_club_chapter_resolves_to_
+school_precision_never_a_guess` (renamed, now scoped to
+`club_type in {"hack-club", "cyberpatriot"}`) and
+`test_club_dataset_validity.py`'s
+`TestRealPipelineGeocodingResolvesEveryChapterHonestly._real_geocoded_clubs()`
+(now scoped to `club_type == "hack-club"`, matching that whole
+module's own documented scope). A new `TestRealCivilAirPatrolGeocoding`
+class in `test_pipeline.py` pins the real CAP roster's own mixed
+zip/school outcome end-to-end. Full-registry `clubs_meta.total`
+assertions across `test_pipeline.py` now expect `14` (4 Hack Club + 3
+CyberPatriot + 7 Civil Air Patrol), not `7`.
+
+## Revision (2026-09-02 — sprint 032 ticket 002: CyberPatriot teams roster curated and registered)
+
+Populates the first of issue 35b's six remaining club types against the
+generalized `club_static_roster` source (ticket 001): three San Diego
+County CyberPatriot teams, registered via a new
+`directory/registry/cyberpatriot-sd.toml` entry pointing at a new
+`directory/data/cyberpatriot-sd.tsv` (same ten-column shape as
+`hack-club-sd.tsv`). No code change — content-only, exactly as ticket
+001's generalization anticipated.
+
+**Sources checked** (live-verified 2026-09-02, not transcribed from
+issue 35b's own wording):
+
+- **Del Norte High School** — CyberPatriot XV Open Division National
+  Champion ("CyberAegis Tempest," March 2023) and CyberPatriot XVI
+  Open Division runner-up/third place ("CyberAegis Triton"/"CyberAegis
+  Aegir," 2024), per AFA's own CyberPatriot XV/XVI announcement pages
+  and Poway Unified School District's own news article. The program
+  operates as "CyberAegis San Diego" (`cyberaegis.tech`), a student-led
+  effort spanning Oak Valley Middle School, Design39Campus, and Del
+  Norte High School — Del Norte is its home/flagship school, hence
+  `host_school`. Not found among CyberPatriot 18's (the current,
+  concluded-March-2026 season) national finalists, per AFA's own CP18
+  finalist announcement — recorded here on the strength of its
+  multi-season finalist/champion history, not a current-season
+  placement; a future curation pass should re-check whether the
+  program is still active before the next refresh.
+- **Scripps Ranch High School** — CyberPatriot 18 (2025-2026 season,
+  concluded March 2026) All Service Division **National Champion**,
+  Air Force JROTC "Terabyte Falcons" team, per AFA's own CyberPatriot
+  18 national finalist announcement — the most current season
+  available at curation time.
+- **Canyon Crest Academy** — CyberPatriot 18 Open Division national
+  finalist (team ":3"), per AFA's own CP18 finalist announcement, the
+  San Dieguito Union High School District's own social posts, and the
+  team's own "CCA CyberPatriot" site (`sites.google.com/view/cca-cyberpatriot/`).
+
+Also found but **not** included: Scouting America Exploring Posts 2927
+and 2928 (San Diego-based "CyberAegis Hydra"/"CyberAegis
+Perseus"/"CyberAegis Corvus" teams, CP18 finalists) — excluded because
+they are Scouting Explorer posts, not school-hosted clubs with a single
+confidently locatable meeting site, unlike this roster's three
+school-hosted entries. A future ticket could add them with an
+appropriately non-school geocoding expectation (see sprint.md's
+Geocoding note) if a stakeholder wants Scouting-sponsored teams
+covered too.
+
+**Geocoding outcome**: all three entries resolve at `"school"`
+precision through the shared ladder's rung-2 exact CDE match — Del
+Norte High, Scripps Ranch High, and Canyon Crest Academy are all exact
+normalized-name hits against `sd-schools-public.tsv`, with
+`needs_review = False` for all three (no fuzzy rung-3/4 match
+involved). No entry required `needs_review` flagging.
+
+**Test-suite impact**: no new parsing-shape test file — the data
+reused `hack-club-sd.tsv`'s exact column shape, so existing
+registry-loader/dataset-validity coverage applies unchanged (per
+sprint.md's Test Strategy). Several existing pipeline/dataset-validity
+tests hard-coded assumptions that only ever held while exactly one
+`club_static_roster` registry entry existed — a `next(...)` lookup
+scoped by `adapter_type` alone, and full-registry `clubs_meta.total`
+assertions pinned at `4` — both updated in this ticket:
+`test_club_dataset_validity.py`'s and
+`test_sources_club_static_roster.py`'s own `_real_source_config()`/
+`_real_clubs()` helpers now scope by `source_id == "hack-club-sd"`
+(they test the Hack Club roster specifically), and
+`test_pipeline.py`'s full-registry club-count assertions now expect
+`7` (4 Hack Club + 3 CyberPatriot), matching the real registry's
+current content.
+
+## Revision (2026-09-02 — sprint 032 ticket 001: club static-roster source generalized)
+
+Resolves §5's own Open Question ("Should issue 35b's remaining six
+club types each get their own `ClubSource` ... reusing `ClubType`'s
+Literal (widened) and the existing `_CLUB_SOURCES` dispatch table?")
+in favor of the "reuse, don't duplicate" answer that question always
+anticipated as the likely one. Two changes, landed together in one
+ticket/commit:
+
+1. **`ClubType` widens** from `Literal["hack-club"]` to also include
+   `"cyberpatriot"`, `"science-olympiad"`, `"4-h"`,
+   `"girls-who-code"`, `"civil-air-patrol"`, and `"sea-cadets"` —
+   `VALID_CLUB_TYPES` (already derived via `get_args()`) picks up all
+   six with no further change. No new field, no new dataclass — see
+   sprint.md's Scope Correction for the "no *new* field/schema, not
+   'the Literal never needs another value'" distinction this widening
+   makes concrete.
+2. **`sources/hack_club_static_roster.py` renamed and generalized to
+   `sources/club_static_roster.py`.** The module's `discover()`/
+   `fetch()`/`extract()` logic was already generic — nothing in it was
+   Hack-Club-specific except the file/class name, the hard-coded
+   `SOURCE_NAME` module constant, and the default roster path (naming
+   and defaults, not logic). `HackClubStaticRosterSource` becomes
+   `ClubStaticRosterSource`; the one real behavioral change is that
+   provenance (`Club.sources`) is now derived per registry entry from
+   `SourceConfig.source_id` rather than one hard-coded literal, so a
+   CyberPatriot or Sea Cadets `Club` never carries the misleading
+   string `"hack_club_static_roster"` as its source. `directory/
+   pipeline.py`'s `_CLUB_SOURCES` dispatch key and
+   `hack-club-sd.toml`'s `adapter_type` both change from
+   `"hack_club_static_roster"` to `"club_static_roster"`, landed in the
+   same commit so `run_directory()` never sees a dangling dispatch-table
+   key for the one existing Hack Club registry entry (see sprint.md's
+   Migration Concerns).
+
+**Why one rename rather than six new near-duplicate modules, and why
+now rather than deferred further** — see sprint.md's own Design
+Rationale (Decision/Context/Alternatives/Consequences) for sprint 032;
+not re-derived here beyond the one-line summary: the code was already
+general enough, so writing six copies would have been pure
+duplication, and leaving the module's own name permanently
+Hack-Club-specific would have misdescribed what it now serves.
+
+**This ticket adds no roster content.** The four existing Hack Club
+chapters are unchanged in data and geocoding outcome — only their
+registry entry's `adapter_type` string and `Club.sources` provenance
+value change. Curating and registering the six new club types'
+rosters themselves is tickets 002-007's own work, each a data-only
+addition (new TSV + new registry entry, `adapter_type =
+"club_static_roster"`) requiring no further Python change.
 
 ## Revision (2026-09-02 — sprint 030 Offerings standing-entity type)
 
@@ -662,14 +1126,18 @@ non-trivial problem this addition has no need to solve.
   per-chapter URL/meeting schedule against `finder.hackclub.com` or the
   school's own site? Both fields exist on the model and the roster's
   own TSV schema; this ticket leaves them blank rather than guess (see
-  `sources/hack_club_static_roster.py`'s own docstring).
-- Should issue 35b's remaining six club types (CyberPatriot, Science
+  `sources/club_static_roster.py`'s own docstring).
+- ~~Should issue 35b's remaining six club types (CyberPatriot, Science
   Olympiad, 4-H, Girls Who Code, Civil Air Patrol, Sea Cadets) each get
   their own `ClubSource` (e.g. `cyberpatriot_static_roster.py`) reusing
   `ClubType`'s Literal (widened to include the new value) and the
   existing `_CLUB_SOURCES` dispatch table, or would any of them need a
   structurally different source shape (e.g. a live feed, if one is ever
-  found)? Left to that future sprint's own research and implementation
-  judgment — the `Club` model and `ClubSource` protocol were kept
-  general enough (per sprint.md's Design Rationale) not to block on the
-  answer.
+  found)?~~ **Resolved by sprint 032 ticket 001** (see this doc's
+  sprint 032 Revision, above): one generalized `ClubStaticRosterSource`
+  (`sources/club_static_roster.py`) serves all seven club types
+  through the existing `_CLUB_SOURCES` dispatch table, keyed by
+  `adapter_type = "club_static_roster"` — no per-type source module.
+  Curating each of the six new types' actual roster content is left to
+  sprint 032 tickets 002-007, in descending order of how likely a
+  public roster exists.

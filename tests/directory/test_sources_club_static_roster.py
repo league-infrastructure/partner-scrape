@@ -1,8 +1,13 @@
-"""Tests for partner_scrape.directory.sources.hack_club_static_roster:
-the Hack Club chapters static-roster ClubSource (ticket 018-008).
+"""Tests for partner_scrape.directory.sources.club_static_roster: the
+generalized curated club static-roster ClubSource.
+
+Originally ticket 018-008's Hack-Club-only test module
+(`test_sources_hack_club_static_roster.py`), renamed and extended by
+sprint 032 ticket 001 alongside the module's own generalization -- see
+`directory/DESIGN.md`'s sprint 032 Revision.
 
 Like `tests/directory/test_sources_static_roster.py`'s own precedent,
-most of this module drives `HackClubStaticRosterSource` against the
+most of this module drives `ClubStaticRosterSource` against the
 **real, committed roster** (`partner_scrape/directory/data/
 hack-club-sd.tsv`, exposed here as `DEFAULT_ROSTER_PATH`) rather than a
 copied-in fixture -- this *is* the file, not a copy that could silently
@@ -19,10 +24,10 @@ import pytest
 
 from partner_scrape.directory.model import VALID_CLUB_TYPES
 from partner_scrape.directory.sources.base import ClubRef, RawClubResponse, run_club_source
-from partner_scrape.directory.sources.hack_club_static_roster import (
+from partner_scrape.directory.sources.club_static_roster import (
     DEFAULT_DATA_DIR,
     DEFAULT_ROSTER_PATH,
-    HackClubStaticRosterSource,
+    ClubStaticRosterSource,
     _extract_one,
 )
 from partner_scrape.fetch.fetcher import FetchResponse
@@ -43,35 +48,40 @@ _HACK_CLUB_HOST_SCHOOLS = {
 
 
 def _real_source_config() -> SourceConfig:
+    # Scoped by source_id, not adapter_type: sprint 032 ticket 002
+    # registers a second real club_static_roster entry
+    # (cyberpatriot-sd.toml) alongside this module's own Hack-Club-only
+    # fixtures (DEFAULT_ROSTER_PATH == hack-club-sd.tsv), so matching on
+    # adapter_type alone is no longer unique. See
+    # test_club_dataset_validity.py's own _real_clubs() for the
+    # identical fix, made for the identical reason.
     sources = load_active_sources(DIRECTORY_REGISTRY_DIR)
-    matches = [s for s in sources if s.adapter_type == "hack_club_static_roster"]
-    assert len(matches) == 1, "expected exactly one hack_club_static_roster registry entry"
+    matches = [s for s in sources if s.source_id == "hack-club-sd"]
+    assert len(matches) == 1, "expected exactly one hack-club-sd registry entry"
     return matches[0]
 
 
 class _NeverCalledFetcher:
     """`Fetcher` double that raises on any call -- proves
-    `HackClubStaticRosterSource` never touches it, exercised through
-    the full `sources.base.run_club_source()` chain, matching
+    `ClubStaticRosterSource` never touches it, exercised through the
+    full `sources.base.run_club_source()` chain, matching
     `teams/sources/static_roster.py`'s own test precedent."""
 
     def get(self, url: str, headers: dict[str, str] | None = None) -> FetchResponse:
-        raise AssertionError(
-            "HackClubStaticRosterSource must never call the injected Fetcher"
-        )
+        raise AssertionError("ClubStaticRosterSource must never call the injected Fetcher")
 
 
 class TestNeverTouchesFetcher:
     def test_run_club_source_never_calls_fetcher_get(self):
         clubs = run_club_source(
-            _real_source_config(), HackClubStaticRosterSource(), _NeverCalledFetcher()
+            _real_source_config(), ClubStaticRosterSource(), _NeverCalledFetcher()
         )
         assert len(clubs) == 4
 
 
 class TestDiscover:
     def test_discover_returns_a_local_path_not_a_url(self):
-        refs = HackClubStaticRosterSource().discover(_real_source_config(), _NeverCalledFetcher())
+        refs = ClubStaticRosterSource().discover(_real_source_config(), _NeverCalledFetcher())
 
         assert len(refs) == 1
         assert refs[0].url == str(DEFAULT_ROSTER_PATH)
@@ -81,11 +91,11 @@ class TestDiscover:
         source = SourceConfig(
             source_id="hack-club-sd",
             org_name="Hack Club",
-            adapter_type="hack_club_static_roster",
+            adapter_type="club_static_roster",
             config={},
         )
 
-        refs = HackClubStaticRosterSource().discover(source, _NeverCalledFetcher())
+        refs = ClubStaticRosterSource().discover(source, _NeverCalledFetcher())
 
         assert refs[0].url == str(DEFAULT_ROSTER_PATH)
 
@@ -93,11 +103,11 @@ class TestDiscover:
         source = SourceConfig(
             source_id="hack-club-sd",
             org_name="Hack Club",
-            adapter_type="hack_club_static_roster",
+            adapter_type="club_static_roster",
             config={"roster_path": "hack-club-sd.tsv"},
         )
 
-        refs = HackClubStaticRosterSource().discover(source, _NeverCalledFetcher())
+        refs = ClubStaticRosterSource().discover(source, _NeverCalledFetcher())
 
         assert refs[0].url == str(DEFAULT_DATA_DIR / "hack-club-sd.tsv")
 
@@ -106,11 +116,11 @@ class TestDiscover:
         source = SourceConfig(
             source_id="hack-club-sd",
             org_name="Hack Club",
-            adapter_type="hack_club_static_roster",
+            adapter_type="club_static_roster",
             config={"roster_path": str(absolute)},
         )
 
-        refs = HackClubStaticRosterSource().discover(source, _NeverCalledFetcher())
+        refs = ClubStaticRosterSource().discover(source, _NeverCalledFetcher())
 
         assert refs[0].url == str(absolute)
 
@@ -119,7 +129,7 @@ class TestFetch:
     def test_fetch_reads_the_file_directly_ignoring_fetcher(self):
         ref = ClubRef(url=str(DEFAULT_ROSTER_PATH))
 
-        raw = HackClubStaticRosterSource().fetch(ref, _NeverCalledFetcher())
+        raw = ClubStaticRosterSource().fetch(ref, _NeverCalledFetcher())
 
         assert raw.status == 200
         assert "hack-club-university-city-high" in raw.body
@@ -128,7 +138,7 @@ class TestFetch:
         ref = ClubRef(url=str(tmp_path / "does-not-exist.tsv"))
 
         with pytest.raises(OSError):
-            HackClubStaticRosterSource().fetch(ref, _NeverCalledFetcher())
+            ClubStaticRosterSource().fetch(ref, _NeverCalledFetcher())
 
 
 class TestExtractAgainstTheRealRoster:
@@ -140,7 +150,7 @@ class TestExtractAgainstTheRealRoster:
 
     def _real_clubs(self):
         return run_club_source(
-            _real_source_config(), HackClubStaticRosterSource(), _NeverCalledFetcher()
+            _real_source_config(), ClubStaticRosterSource(), _NeverCalledFetcher()
         )
 
     def test_extracts_exactly_four_clubs(self):
@@ -160,11 +170,17 @@ class TestExtractAgainstTheRealRoster:
     def test_every_club_type_is_hack_club(self):
         for club in self._real_clubs():
             assert club.club_type == "hack-club"
-        assert {c.club_type for c in self._real_clubs()} == VALID_CLUB_TYPES
+        assert {c.club_type for c in self._real_clubs()} == {"hack-club"}
+        assert {c.club_type for c in self._real_clubs()} <= VALID_CLUB_TYPES
 
-    def test_sources_field_records_hack_club_static_roster_provenance(self):
+    def test_sources_field_records_the_registry_entrys_own_source_id_as_provenance(self):
+        # Sprint 032 ticket 001: provenance is derived per registry
+        # entry (SourceConfig.source_id), not a hard-coded literal --
+        # this real entry's source_id is "hack-club-sd" (the toml
+        # file's own stem), never the old "hack_club_static_roster"
+        # module-name literal.
         for club in self._real_clubs():
-            assert club.sources == ["hack_club_static_roster"]
+            assert club.sources == ["hack-club-sd"]
 
     def test_every_club_is_active_with_no_status_note(self):
         for club in self._real_clubs():
@@ -187,6 +203,44 @@ class TestExtractAgainstTheRealRoster:
             assert club.host_school_website == ""
 
 
+class TestProvenance:
+    """AC: a unit test asserts two different registry entries produce
+    two different `Club.sources` values -- SOURCE_NAME is no longer a
+    single hard-coded module-level literal, it is derived per
+    registry entry from `SourceConfig.source_id`."""
+
+    def test_two_different_registry_entries_produce_two_different_provenance_values(
+        self, tmp_path
+    ):
+        roster_body = (
+            "club_id\tname\tclub_type\thost_school\tcity\tpostal_code\t"
+            "website\tmeeting_note\tstatus\tstatus_note\n"
+            "some-club\tSome Club\thack-club\tSome High\tSan Diego\t92101\t\t\tactive\t\n"
+        )
+        ref = ClubRef(url="fixture://roster")
+        raw = RawClubResponse(ref=ref, status=200, body=roster_body)
+
+        source_a = SourceConfig(
+            source_id="cyberpatriot-sd",
+            org_name="CyberPatriot teams",
+            adapter_type="club_static_roster",
+            config={},
+        )
+        source_b = SourceConfig(
+            source_id="sea-cadets-sd",
+            org_name="Sea Cadets units",
+            adapter_type="club_static_roster",
+            config={},
+        )
+
+        clubs_a = list(ClubStaticRosterSource().extract(raw, source_a))
+        clubs_b = list(ClubStaticRosterSource().extract(raw, source_b))
+
+        assert clubs_a[0].sources == ["cyberpatriot-sd"]
+        assert clubs_b[0].sources == ["sea-cadets-sd"]
+        assert clubs_a[0].sources != clubs_b[0].sources
+
+
 class TestMalformedEntryIsolation:
     """`hack_club_malformed.tsv` (hand-authored -- the real roster has
     no malformed entries) carries five broken rows plus one good row,
@@ -198,7 +252,7 @@ class TestMalformedEntryIsolation:
         ref = ClubRef(url="hack_club_malformed.tsv")
         raw = RawClubResponse(ref=ref, status=200, body=body)
 
-        clubs = HackClubStaticRosterSource().extract(raw, _real_source_config())
+        clubs = ClubStaticRosterSource().extract(raw, _real_source_config())
 
         assert len(clubs) == 1
         assert clubs[0].club_id == "hack-club-good-club"
@@ -208,30 +262,34 @@ class TestMalformedEntryIsolation:
 class TestExtractOne:
     def test_missing_club_id_raises_value_error(self):
         with pytest.raises(ValueError, match="no usable club_id or name"):
-            _extract_one({"name": "X", "club_type": "hack-club"})
+            _extract_one({"name": "X", "club_type": "hack-club"}, "test-source")
 
     def test_missing_name_raises_value_error(self):
         with pytest.raises(ValueError, match="no usable club_id or name"):
-            _extract_one({"club_id": "x", "club_type": "hack-club"})
+            _extract_one({"club_id": "x", "club_type": "hack-club"}, "test-source")
 
     def test_unrecognized_club_type_raises_value_error(self):
         with pytest.raises(ValueError, match="unrecognized club_type"):
-            _extract_one({"club_id": "x", "name": "X", "club_type": "robotics-club"})
+            _extract_one(
+                {"club_id": "x", "name": "X", "club_type": "robotics-club"}, "test-source"
+            )
 
     def test_unrecognized_status_raises_value_error(self):
         with pytest.raises(ValueError, match="unrecognized status"):
             _extract_one(
-                {"club_id": "x", "name": "X", "club_type": "hack-club", "status": "retired"}
+                {"club_id": "x", "name": "X", "club_type": "hack-club", "status": "retired"},
+                "test-source",
             )
 
     def test_non_active_status_without_a_status_note_raises_value_error(self):
         with pytest.raises(ValueError, match="status_note"):
             _extract_one(
-                {"club_id": "x", "name": "X", "club_type": "hack-club", "status": "inactive"}
+                {"club_id": "x", "name": "X", "club_type": "hack-club", "status": "inactive"},
+                "test-source",
             )
 
     def test_defaults_to_active_status_when_omitted(self):
-        club = _extract_one({"club_id": "x", "name": "X", "club_type": "hack-club"})
+        club = _extract_one({"club_id": "x", "name": "X", "club_type": "hack-club"}, "test-source")
 
         assert club.status == "active"
         assert club.status_note == ""
@@ -245,7 +303,8 @@ class TestExtractOne:
                 "host_school": "Some High School",
                 "city": "San Diego",
                 "postal_code": "92101",
-            }
+            },
+            "test-source",
         )
 
         assert club.host_school == "Some High School"
@@ -256,16 +315,23 @@ class TestExtractOne:
         # Mirrors sources/static_roster.py's own "acquisition never
         # geocodes" convention -- _extract_one() has no lat/lon/
         # precision fields to set at all, structurally.
-        club = _extract_one({"club_id": "x", "name": "X", "club_type": "hack-club"})
+        club = _extract_one({"club_id": "x", "name": "X", "club_type": "hack-club"}, "test-source")
 
         assert club.latitude is None
         assert club.longitude is None
         assert club.location_precision == "none"
 
+    def test_sources_field_carries_the_given_source_name(self):
+        club = _extract_one(
+            {"club_id": "x", "name": "X", "club_type": "cyberpatriot"}, "cyberpatriot-sd"
+        )
+
+        assert club.sources == ["cyberpatriot-sd"]
+
 
 class TestRegistryConfig:
     """AC: partner_scrape/directory/registry/hack-club-sd.toml
-    registers the hack_club_static_roster source, reusing
+    registers the club_static_roster source, reusing
     registry.schema.SourceConfig / registry.loader.load_active_sources
     verbatim (no new schema)."""
 
@@ -273,12 +339,12 @@ class TestRegistryConfig:
         source = _real_source_config()
 
         assert source.source_id == "hack-club-sd"
-        assert source.adapter_type == "hack_club_static_roster"
+        assert source.adapter_type == "club_static_roster"
         assert source.enabled is True
 
     def test_loaded_source_config_drives_discover_to_the_real_roster_file(self):
         source = _real_source_config()
 
-        refs = HackClubStaticRosterSource().discover(source, _NeverCalledFetcher())
+        refs = ClubStaticRosterSource().discover(source, _NeverCalledFetcher())
 
         assert refs == [ClubRef(url=str(DEFAULT_ROSTER_PATH))]

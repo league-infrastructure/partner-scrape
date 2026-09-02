@@ -22,7 +22,7 @@ from pathlib import Path
 from partner_scrape.directory.model import VALID_CLUB_TYPES
 from partner_scrape.directory.pipeline import DEFAULT_GEO_DATA_DIR, run_directory
 from partner_scrape.directory.sources.base import run_club_source
-from partner_scrape.directory.sources.hack_club_static_roster import HackClubStaticRosterSource
+from partner_scrape.directory.sources.club_static_roster import ClubStaticRosterSource
 from partner_scrape.registry.loader import load_active_sources
 
 # -- ticket 004 (issue 48): the real, committed places.toml carries 17
@@ -74,9 +74,21 @@ class _NeverCalledFetcher:
 
 
 def _real_clubs():
+    # Scoped by source_id, not just adapter_type=="club_static_roster":
+    # sprint 032 ticket 002 registers a second club_static_roster
+    # registry entry (cyberpatriot-sd.toml), and sorted-glob load order
+    # is alphabetical (registry/loader.py's load_sources), so
+    # "cyberpatriot-sd" now sorts before "hack-club-sd" -- a bare
+    # `next(... adapter_type == "club_static_roster")` would silently
+    # start returning the wrong roster to this module's Hack-Club-only
+    # assertions. This module's own docstring scopes it to the curated
+    # Hack Club chapters roster specifically; test_dataset_validity.py's
+    # own `_real_clubs()` (added by ticket 001) is the one that
+    # aggregates every club_static_roster entry for the cross-file
+    # club_id-uniqueness check.
     sources = load_active_sources(DIRECTORY_REGISTRY_DIR)
-    hack_club_source = next(s for s in sources if s.adapter_type == "hack_club_static_roster")
-    return run_club_source(hack_club_source, HackClubStaticRosterSource(), _NeverCalledFetcher())
+    hack_club_source = next(s for s in sources if s.source_id == "hack-club-sd")
+    return run_club_source(hack_club_source, ClubStaticRosterSource(), _NeverCalledFetcher())
 
 
 class TestUniqueIds:
@@ -125,7 +137,7 @@ class TestNoLiveGeocodedCoordinate:
     """AC: each chapter's location precision comes from the shared
     geo-ladder, including a real attempt at the school-matching rung --
     never a guessed coordinate. The static-roster source itself never
-    sets a coordinate at all (see sources/hack_club_static_roster.py's
+    sets a coordinate at all (see sources/club_static_roster.py's
     own docstring); this is the dataset-level half of that guarantee,
     the pipeline-level half is tests/directory/test_pipeline.py's
     TestApplyClubGeocoding / TestRunDirectoryRealFixtureData."""
@@ -144,11 +156,21 @@ class TestRealPipelineGeocodingResolvesEveryChapterHonestly:
     fixture stand-in."""
 
     def _real_geocoded_clubs(self, tmp_path):
+        # Scoped to club_type == "hack-club": this class's own docstring
+        # ("every real curated chapter") means the Hack Club roster
+        # specifically, matching this whole module's scope. Sprint 032
+        # registers more club_static_roster entries alongside Hack
+        # Club's own (ticket 002's CyberPatriot teams, ticket 003's
+        # Civil Air Patrol squadrons) -- CAP in particular is expected
+        # to fall through to zip precision for most entries (see
+        # sprint.md's Architecture "Geocoding note"), so an unscoped
+        # `run_directory()` payload would no longer be "every chapter
+        # resolves at school precision."
         _write_real_partners_fixture(tmp_path / "unused")
         payload = run_directory(
             fetcher=_NeverCalledFetcher(), dry_run=True, site_dir=tmp_path / "unused"
         )
-        return payload["clubs"]
+        return [c for c in payload["clubs"] if c["club_type"] == "hack-club"]
 
     def test_every_chapter_gets_school_precision(self, tmp_path):
         for club in self._real_geocoded_clubs(tmp_path):

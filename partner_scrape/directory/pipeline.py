@@ -72,7 +72,7 @@ from partner_scrape.directory.sources.base import (
     run_club_source,
     run_offering_source,
 )
-from partner_scrape.directory.sources.hack_club_static_roster import HackClubStaticRosterSource
+from partner_scrape.directory.sources.club_static_roster import ClubStaticRosterSource
 from partner_scrape.directory.sources.offering_static_roster import OfferingStaticRosterSource
 from partner_scrape.directory.sources.static_roster import StaticRosterSource
 from partner_scrape.fetch import Fetcher, PoliteFetcher
@@ -121,12 +121,14 @@ _PLACE_SOURCES: dict[str, PlaceSource] = {
 }
 
 #: `adapter_type` (a Club Registry TOML file's own field, e.g.
-#: `hack-club-sd.toml`'s `adapter_type = "hack_club_static_roster"`) ->
-#: the `ClubSource` instance that handles it. Same "plain lookup, not a
+#: `hack-club-sd.toml`'s `adapter_type = "club_static_roster"`) -> the
+#: `ClubSource` instance that handles it. Same "plain lookup, not a
 #: public extension point" rationale as `_PLACE_SOURCES` above --
-#: ticket 018-008's own addition.
+#: ticket 018-008's own addition, generalized to serve any club type by
+#: sprint 032 ticket 001 (see `directory/DESIGN.md`'s sprint 032
+#: Revision).
 _CLUB_SOURCES: dict[str, ClubSource] = {
-    "hack_club_static_roster": HackClubStaticRosterSource(),
+    "club_static_roster": ClubStaticRosterSource(),
 }
 
 #: `adapter_type` (an Offering Registry TOML file's own field, e.g.
@@ -329,7 +331,7 @@ def run_directory(
             `partner_scrape/directory/registry/`) when omitted.
         source: when given, restricts the run to the single acquisition
             source whose `adapter_type` matches (e.g.
-            `"static_roster"`, `"hack_club_static_roster"`, or
+            `"static_roster"`, `"club_static_roster"`, or
             `"offering_static_roster"`) -- mirrors
             `teams.pipeline.run_teams()`'s own `source` parameter.
         site_dir: sibling `stem-ecosystem` checkout. No longer forwarded
@@ -344,7 +346,7 @@ def run_directory(
             content through. Defaults to a real `PoliteFetcher()` when
             omitted -- the production path, even though every source
             this subsystem has as of this ticket (`static_roster`,
-            `hack_club_static_roster`, `offering_static_roster`) never
+            `club_static_roster`, `offering_static_roster`) never
             calls it. Tests inject a fixture `Fetcher` here so the whole
             run touches no sockets.
         dry_run: when `True`, compute and return the would-be-written

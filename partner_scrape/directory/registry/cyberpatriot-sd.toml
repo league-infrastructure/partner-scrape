@@ -1,0 +1,28 @@
+# CyberPatriot teams static roster -- a committed, hand-curated roster,
+# not a live acquisition source, matching hack-club-sd.toml's own
+# precedent exactly (issue 35's "Do NOT design live scrapers" + issue
+# 35b's own "curated, static-roster datasets by design" instruction).
+# Sprint 032 ticket 002: San Diego County CyberPatriot teams,
+# live-verified against AFA/uscyberpatriot.org's own current
+# announcements and each program's own site -- see
+# directory/DESIGN.md's sprint 032 ticket 002 Revision for sources
+# checked.
+#
+# `adapter_type` is read by directory.pipeline to select the matching
+# ClubSource ("club_static_roster" ->
+# directory.sources.club_static_roster.ClubStaticRosterSource), not by
+# adapters.base.ADAPTERS -- see sources/club_static_roster.py's own
+# module docstring.
+#
+# No [acquisition_policy] section: ClubStaticRosterSource reads
+# config.roster_path straight off disk, matching hack-club-sd.toml's
+# own precedent exactly.
+
+org_name = "San Diego County CyberPatriot teams (curated static roster)"
+adapter_type = "club_static_roster"
+enabled = true
+
+[config]
+# Resolved relative to directory/data/ when not already an absolute
+# path (sources/club_static_roster.py's discover()).
+roster_path = "cyberpatriot-sd.tsv"
