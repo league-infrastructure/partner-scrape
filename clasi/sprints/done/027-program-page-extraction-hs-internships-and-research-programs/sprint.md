@@ -1,7 +1,7 @@
 ---
 id: '027'
 title: 'Program-page extraction: HS internships and research programs'
-status: executing
+status: done
 branch: sprint/027-program-page-extraction-hs-internships-and-research-programs
 use-cases:
 - SUC-031
