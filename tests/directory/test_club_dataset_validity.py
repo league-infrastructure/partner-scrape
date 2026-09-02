@@ -156,11 +156,21 @@ class TestRealPipelineGeocodingResolvesEveryChapterHonestly:
     fixture stand-in."""
 
     def _real_geocoded_clubs(self, tmp_path):
+        # Scoped to club_type == "hack-club": this class's own docstring
+        # ("every real curated chapter") means the Hack Club roster
+        # specifically, matching this whole module's scope. Sprint 032
+        # registers more club_static_roster entries alongside Hack
+        # Club's own (ticket 002's CyberPatriot teams, ticket 003's
+        # Civil Air Patrol squadrons) -- CAP in particular is expected
+        # to fall through to zip precision for most entries (see
+        # sprint.md's Architecture "Geocoding note"), so an unscoped
+        # `run_directory()` payload would no longer be "every chapter
+        # resolves at school precision."
         _write_real_partners_fixture(tmp_path / "unused")
         payload = run_directory(
             fetcher=_NeverCalledFetcher(), dry_run=True, site_dir=tmp_path / "unused"
         )
-        return payload["clubs"]
+        return [c for c in payload["clubs"] if c["club_type"] == "hack-club"]
 
     def test_every_chapter_gets_school_precision(self, tmp_path):
         for club in self._real_geocoded_clubs(tmp_path):

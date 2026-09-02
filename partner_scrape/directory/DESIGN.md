@@ -1,8 +1,60 @@
 # directory
 
-**Owner:** Eric Busboom · **Last reviewed:** 2026-09-02 (sprint 032 ticket 002 — CyberPatriot teams roster curated and registered) · **Status:** Places, Clubs (Hack Club chapters + CyberPatriot teams; the curated static-roster source generalized to serve any club type), and Offerings (volunteer org profiles + free/Title I school programs) complete; issue 35b's remaining five club types' curated content (tickets 003-007) and issue 33's educator-PD program pages (routed through `adapters/`, not this module — see this doc's sprint 030 Revision) deferred/tracked elsewhere
+**Owner:** Eric Busboom · **Last reviewed:** 2026-09-02 (sprint 032 ticket 003 — Civil Air Patrol squadrons roster curated and registered) · **Status:** Places, Clubs (Hack Club chapters + CyberPatriot teams + Civil Air Patrol squadrons; the curated static-roster source generalized to serve any club type), and Offerings (volunteer org profiles + free/Title I school programs) complete; issue 35b's remaining four club types' curated content (tickets 004-007) and issue 33's educator-PD program pages (routed through `adapters/`, not this module — see this doc's sprint 030 Revision) deferred/tracked elsewhere
 
 ---
+
+## Revision (2026-09-02 — sprint 032 ticket 003: Civil Air Patrol squadrons roster curated and registered)
+
+Populates the second of issue 35b's six remaining club types against
+the generalized `club_static_roster` source (ticket 001): San Diego
+Group 8's own headquarters plus its six subordinate squadrons (seven
+`Club` entries), registered via a new
+`directory/registry/civil-air-patrol-sd.toml` entry pointing at a new
+`directory/data/civil-air-patrol-sd.tsv` (same ten-column shape as
+`hack-club-sd.tsv`). No code change — content-only.
+
+**Sources checked** (live-verified 2026-09-02, not transcribed from
+issue 35b's own wording): California Wing's own Group 8 "Find a
+Squadron" locator (`group8ca.cap.gov/join-cap/find-a-squadron`) names
+six subordinate squadrons; each squadron's own `*.cap.gov` site gives
+its current meeting address. Issue 35b named Squadrons 144, 201, and
+Group 8 as a starting point — all three found and verified — plus four
+more squadrons found via the same live locator: Skyhawk Composite
+Squadron 47 (Carlsbad), San Diego Senior Squadron 57 (El Cajon,
+Gillespie Field), Fallbrook Senior Squadron 87 (Fallbrook Airpark),
+and Escondido Cadet Squadron 714 (Escondido).
+
+**Geocoding outcome — matches sprint.md's own prediction exactly.**
+Six of the seven entries (Group 8's own HQ office and five of the six
+squadrons) meet at non-school facilities — an Air National Guard base,
+a VFW post, airports, an administrative office — and fall through
+honestly to `"zip"` precision, `needs_review = False`, per sprint.md's
+Architecture "Geocoding note." One genuine exception: **Escondido
+Cadet Squadron 714 meets in a classroom on Escondido Charter High
+School's own campus**, live-verified via the squadron's own site
+(1868 E Valley Pkwy, Classroom F-203 — Escondido Charter High School's
+address), so it correctly resolves at `"school"` precision through the
+shared ladder's exact CDE match, `needs_review = False` — an honest
+match on the real data, not a forced correction and not suppressed to
+force the "CAP is non-school" pattern where the real world disagrees.
+
+**Test-suite impact**: no new parsing-shape test file — the data
+reused `hack-club-sd.tsv`'s exact column shape. Two more pre-existing
+tests turned out to hard-code the "every real Club is school-hosted"
+assumption ticket 002 didn't trip (CyberPatriot happens to be entirely
+school-hosted too) but this ticket's non-school CAP majority does:
+`test_pipeline.py`'s `test_every_real_hack_club_chapter_resolves_to_
+school_precision_never_a_guess` (renamed, now scoped to
+`club_type in {"hack-club", "cyberpatriot"}`) and
+`test_club_dataset_validity.py`'s
+`TestRealPipelineGeocodingResolvesEveryChapterHonestly._real_geocoded_clubs()`
+(now scoped to `club_type == "hack-club"`, matching that whole
+module's own documented scope). A new `TestRealCivilAirPatrolGeocoding`
+class in `test_pipeline.py` pins the real CAP roster's own mixed
+zip/school outcome end-to-end. Full-registry `clubs_meta.total`
+assertions across `test_pipeline.py` now expect `14` (4 Hack Club + 3
+CyberPatriot + 7 Civil Air Patrol), not `7`.
 
 ## Revision (2026-09-02 — sprint 032 ticket 002: CyberPatriot teams roster curated and registered)
 
