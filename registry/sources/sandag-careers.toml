@@ -37,15 +37,22 @@
 # -- flipping this source to enabled=true needs no further adapter
 # code, only a registry edit plus a stakeholder decision to override
 # respect_robots for this vendor.
+#
+# STAKEHOLDER DECISION, issue 44, 2026-09-02: Eric ruled "go ahead and
+# scrape them." Enabled with a per-source respect_robots=false override
+# (same mechanism as the iCal respect_robots=false precedent, issue
+# 38/sprint 015); the project's global respect_robots default is
+# unchanged. Scope and reasoning recorded in
+# partner_scrape/registry/DO_NOT_SCRAPE.md's new Exceptions section.
 
 org_name = "San Diego Association of Governments (SANDAG)"
 adapter_type = "neogov"
-enabled = false  # disabled: www.governmentjobs.com/robots.txt blocks all bots except a named allow-list (Disallow: / for User-agent: *); no stakeholder decision yet to override respect_robots for this vendor (see header comment)
+enabled = true  # enabled 2026-09-02 per issue 44 stakeholder decision (see header comment); genuine robots block remains, overridden via acquisition_policy.respect_robots below
 
 [config]
 agency = "sandag"
 
 [acquisition_policy]
 rate_limit_seconds = 1.0
-respect_robots = true
+respect_robots = false  # per-source override, issue 44, 2026-09-02 -- see header comment; global default unchanged
 discovered_via = "issue 31 ATS census (2026-08-30), live-discovered and verified 2026-09-02 (sprint 031 ticket 006)"

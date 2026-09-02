@@ -39,15 +39,22 @@
 # this source to enabled=true (with or without a respect_robots
 # override) needs no further adapter code, only a registry edit, once a
 # stakeholder decision is made.
+#
+# STAKEHOLDER DECISION, issue 44, 2026-09-02: Eric ruled "go ahead and
+# scrape them." Enabled with a per-source respect_robots=false override
+# (same mechanism as the iCal respect_robots=false precedent, issue
+# 38/sprint 015); the project's global respect_robots default is
+# unchanged. Scope and reasoning recorded in
+# partner_scrape/registry/DO_NOT_SCRAPE.md's new Exceptions section.
 
 org_name = "ServiceNow"
 adapter_type = "smartrecruiters"
-enabled = false  # disabled: api.smartrecruiters.com/robots.txt blocks all bots except LinkedInBot (Disallow: / for User-agent: *); no stakeholder decision yet to override respect_robots for this vendor (see header comment)
+enabled = true  # enabled 2026-09-02 per issue 44 stakeholder decision (see header comment); genuine robots block remains, overridden via acquisition_policy.respect_robots below
 
 [config]
 company = "ServiceNow"
 
 [acquisition_policy]
 rate_limit_seconds = 1.0
-respect_robots = true
+respect_robots = false  # per-source override, issue 44, 2026-09-02 -- see header comment; global default unchanged
 discovered_via = "issue 31 ATS census (2026-08-30), re-verified live 2026-09-02 (sprint 031 ticket 002)"

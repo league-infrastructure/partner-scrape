@@ -1,7 +1,7 @@
 ---
 id: '002'
 title: Enable and live-verify the five named-allowlist ATS sources
-status: open
+status: done
 use-cases:
 - SUC-066
 depends-on:
@@ -72,44 +72,44 @@ hermetic test may make a live call.
 
 ## Acceptance Criteria
 
-- [ ] Each of the five named TOML files has `enabled = true`.
-- [ ] Each of the five named TOML files has
+- [x] Each of the five named TOML files has `enabled = true`.
+- [x] Each of the five named TOML files has
       `acquisition_policy.respect_robots = false` added (as a
       per-source override — the file's other existing
       `acquisition_policy` keys, e.g. `rate_limit_seconds`,
       `discovered_via`, are preserved unchanged).
-- [ ] Each of the five files gets a new comment (alongside, not
+- [x] Each of the five files gets a new comment (alongside, not
       replacing, the sprint 031 header comment already documenting the
       live-verified endpoint shape and the genuine robots block) naming
       this stakeholder decision: issue 44, date 2026-09-02.
-- [ ] No other `registry/sources/*.toml` file's `respect_robots`
+- [x] No other `registry/sources/*.toml` file's `respect_robots`
       setting or global default changes. Confirm by checking that no
       project-wide default (e.g. in `registry/schema.py` or
       `config.py`) was touched — only these five files' per-source
       `acquisition_policy` blocks.
-- [ ] `adapters/smartrecruiters.py` and `adapters/neogov.py` are not
+- [x] `adapters/smartrecruiters.py` and `adapters/neogov.py` are not
       modified.
-- [ ] A real, live `uv run partner-scrape --source servicenow
+- [x] A real, live `uv run partner-scrape --source servicenow
       --dry-run -v` completes with no `RobotsDisallowed` error (or any
       other exception) — record the actual result (posting count,
       match count) in this ticket's notes.
-- [ ] A real, live `uv run partner-scrape --source
+- [x] A real, live `uv run partner-scrape --source
       city-of-san-diego-careers --dry-run -v` completes with no
       `RobotsDisallowed` error — record the result.
-- [ ] A real, live `uv run partner-scrape --source
+- [x] A real, live `uv run partner-scrape --source
       county-of-san-diego-careers --dry-run -v` completes with no
       `RobotsDisallowed` error — record the result.
-- [ ] A real, live `uv run partner-scrape --source sandag-careers
+- [x] A real, live `uv run partner-scrape --source sandag-careers
       --dry-run -v` completes with no `RobotsDisallowed` error —
       record the result.
-- [ ] A real, live `uv run partner-scrape --source
+- [x] A real, live `uv run partner-scrape --source
       port-of-san-diego-careers --dry-run -v` completes with no
       `RobotsDisallowed` error — record the result.
-- [ ] Zero matching postings on any (or all) of the five live-verified
+- [x] Zero matching postings on any (or all) of the five live-verified
       sources is treated as a pass and is explicitly noted as such in
       this ticket's notes — not as a reason to revert `enabled` to
       `false` or to flag the source as broken.
-- [ ] The full hermetic test suite (2508-test baseline) passes
+- [x] The full hermetic test suite (2508-test baseline) passes
       unchanged, with no live network call in any test.
 
 ## Testing
@@ -131,3 +131,42 @@ hermetic test may make a live call.
   above (each with `dangerouslyDisableSandbox: true`) for live
   verification — these are deliberately outside the hermetic suite and
   must not be added as automated tests (no live network in tests).
+
+## Notes
+
+**Hermetic suite**: `uv run pytest` — 2508 passed, unchanged from
+baseline (no test asserted any of these five sources as disabled).
+`tests/test_adapters_smartrecruiters.py` and
+`tests/test_adapters_neogov.py` run individually — 45 passed.
+
+**Live verification** (2026-09-02, real network,
+`dangerouslyDisableSandbox: true`, `SCRAPE_CACHE_DIR` set to a scratch
+dir, `ANTHROPIC_API_KEY` present so the literal acceptance-criteria
+command ran unmodified): all five completed with no `RobotsDisallowed`
+error and no other exception. A companion instrumented run (same
+registry config, same real `PoliteFetcher` with
+`respect_robots=False`, calling each adapter's `discover`/`fetch`/
+`extract` directly) recorded raw posting counts alongside the pipeline's
+own matched-event counts:
+
+| source | raw postings | matched events | result |
+|---|---|---|---|
+| servicenow | 585 (6 pages) | 0 | PASS |
+| city-of-san-diego-careers | 32 | 0 | PASS |
+| county-of-san-diego-careers | 73 | 0 | PASS |
+| sandag-careers | 1 | 0 | PASS |
+| port-of-san-diego-careers | 5 | 0 | PASS |
+
+Raw counts are close to (servicenow +8, county +1) or identical to the
+sprint 031 header-comment figures recorded from the 2026-09-02
+re-verification — expected day-to-day drift on a live job board, not a
+parse regression. **Zero matched events on all five is an accepted
+pass**, per issue 31/sprint 031's standard (Sony/Greenhouse 197→0,
+Workable/Airport Authority 5→0, Workday's five tenants 55–3715→0 each —
+all passes): none of these sources is broken, re-disabled, or flagged.
+`uv run partner-scrape --source <id> --dry-run -v` for all five printed
+`found=0` in the yield report with `ALERTS: none` and no traceback.
+
+The one-off instrumentation script used for the raw-posting-count table
+was a scratch file outside the repo (not committed, not added to the
+test suite) and has been deleted after use.
