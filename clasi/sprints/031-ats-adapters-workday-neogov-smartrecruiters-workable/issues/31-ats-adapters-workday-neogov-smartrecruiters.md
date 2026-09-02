@@ -1,6 +1,14 @@
 ---
-status: pending
+status: in-progress
 sprint: '031'
+tickets:
+- 031-001
+- 031-002
+- 031-003
+- 031-004
+- 031-005
+- 031-006
+- 031-007
 ---
 
 # ATS adapters: Workday, NEOGOV, SmartRecruiters, Workable
