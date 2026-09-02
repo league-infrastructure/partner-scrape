@@ -1,0 +1,84 @@
+{
+  "offset": 0,
+  "limit": 100,
+  "totalFound": 150,
+  "content": [
+    {
+      "id": "744000100000001",
+      "name": "Software Engineering Intern",
+      "releasedDate": "2026-06-01T09:30:00.000Z",
+      "location": {
+        "city": "San Diego",
+        "region": "California",
+        "country": "us",
+        "fullLocation": "San Diego, California, United States"
+      },
+      "department": {"id": "d1", "label": "Engineering"},
+      "typeOfEmployment": {"id": "intern", "label": "Intern"}
+    },
+    {
+      "id": "744000100000002",
+      "name": "Senior Software Engineer",
+      "releasedDate": "2026-06-02T09:30:00.000Z",
+      "location": {
+        "city": "San Diego",
+        "region": "California",
+        "country": "us",
+        "fullLocation": "San Diego, California, United States"
+      },
+      "department": {"id": "d1", "label": "Engineering"},
+      "typeOfEmployment": {"id": "permanent", "label": "Full-time"}
+    },
+    {
+      "id": "744000100000003",
+      "name": "Data Science Intern",
+      "releasedDate": "2026-06-03T09:30:00.000Z",
+      "location": {
+        "city": "Austin",
+        "region": "Texas",
+        "country": "us",
+        "fullLocation": "Austin, Texas, United States"
+      },
+      "department": {"id": "d1", "label": "Engineering"},
+      "typeOfEmployment": {"id": "intern", "label": "Intern"}
+    },
+    {
+      "id": "744000100000004",
+      "name": "Marketing Intern",
+      "releasedDate": "2026-06-04T09:30:00.000Z",
+      "location": {
+        "city": "San Diego",
+        "region": "California",
+        "country": "us",
+        "fullLocation": "San Diego, California, United States"
+      },
+      "department": {"id": "d2", "label": "Marketing"},
+      "typeOfEmployment": {"id": "intern", "label": "Intern"}
+    },
+    {
+      "id": "744000100000005",
+      "releasedDate": "2026-06-05T09:30:00.000Z",
+      "location": {
+        "city": "San Diego",
+        "region": "California",
+        "country": "us",
+        "fullLocation": "San Diego, California, United States"
+      },
+      "department": {"id": "d1", "label": "Engineering"},
+      "typeOfEmployment": {"id": "intern", "label": "Intern"}
+    },
+    {
+      "id": "744000100000006",
+      "name": "Bioinformatics Intern",
+      "releasedDate": "2026-06-06T09:30:00.000Z",
+      "location": {
+        "city": "La Jolla",
+        "region": "California",
+        "country": "us",
+        "fullLocation": "La Jolla, California, United States"
+      },
+      "department": {"id": "d1", "label": "Engineering"},
+      "typeOfEmployment": {"id": "intern", "label": "Intern"}
+    }
+  ]
+}

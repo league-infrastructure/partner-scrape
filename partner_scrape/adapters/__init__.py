@@ -35,6 +35,7 @@ from partner_scrape.adapters.program_page import (
     ProgramPageMultiAdapter,
 )
 from partner_scrape.adapters.robotevents import RobotEventsAdapter
+from partner_scrape.adapters.smartrecruiters import SmartRecruitersAdapter
 from partner_scrape.adapters.tec import TecRestAdapter
 from partner_scrape.adapters.wordpress import WordPressRestAdapter
 
@@ -54,6 +55,7 @@ ADAPTERS["program_listing"] = ProgramListingAdapter
 ADAPTERS["program_page_multi"] = ProgramPageMultiAdapter
 ADAPTERS["activenet_camps"] = ActiveNetCampsAdapter
 ADAPTERS["campbrain"] = CampBrainAdapter
+ADAPTERS["smartrecruiters"] = SmartRecruitersAdapter
 
 __all__ = [
     "Adapter",
@@ -79,4 +81,5 @@ __all__ = [
     "ProgramPageMultiAdapter",
     "ActiveNetCampsAdapter",
     "CampBrainAdapter",
+    "SmartRecruitersAdapter",
 ]
