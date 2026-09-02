@@ -1,5 +1,9 @@
 ---
-status: pending
+status: in-progress
+sprint: '035'
+tickets:
+- 035-001
+- 035-002
 ---
 
 # Policy decision: ATS sites whose robots.txt allows only named bots
