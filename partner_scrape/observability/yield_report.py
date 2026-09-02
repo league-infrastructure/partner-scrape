@@ -88,11 +88,38 @@ class SourceYield:
 
 
 @dataclass
+class RegionYield:
+    """One region's this-run opportunity count, delta vs. the previous
+    run's snapshot (if any), and zero-flag state (sprint 033, issue 34).
+
+    Lighter than `SourceYield`: region counting has no adapter-level
+    "raw events" to distinguish from "dated" -- just a count of the
+    final, already-deduplicated `Opportunity` list bucketed by
+    `.region`, so there is no `found`/`dated` split and no cliff-
+    percentage alert (regional counts are small at this sprint's scale,
+    where a percentage-drop threshold would be noisy -- see
+    `observability/DESIGN.md`'s sprint 033 addition). ``previous_count``/
+    ``delta`` are `None` when this region has no entry in the previous
+    snapshot's ``"__regions__"`` key (first-ever run for that region) --
+    an expected baseline, not an error, mirroring `SourceYield`'s own
+    first-run convention.
+    """
+
+    region: str
+    count: int
+    previous_count: int | None
+    delta: int | None
+    zero: bool
+
+
+@dataclass
 class YieldReport:
     """One run's full yield report: every reported source's
-    `SourceYield`, plus a generated timestamp."""
+    `SourceYield`, every region's `RegionYield` (sprint 033), plus a
+    generated timestamp."""
 
     sources: list[SourceYield]
+    regions: list[RegionYield]
     generated_at: datetime
 
     @property
@@ -167,6 +194,89 @@ def _compute_source_yield(
     )
 
 
+#: Reserved top-level key `snapshot.py` persists this run's region
+#: counts under, alongside the flat per-`source_id` entries (sprint 033,
+#: issue 34). Double-underscore-wrapped so it cannot collide with a real
+#: `source_id`, which is always a bare TOML-filename-derived slug with
+#: no underscore-wrapping convention (`observability/DESIGN.md`'s
+#: sprint 033 addition).
+REGIONS_SNAPSHOT_KEY = "__regions__"
+
+#: The bucket label a `""` (unclassified) `Opportunity.region` value is
+#: reported under -- never silently folded into a named region.
+_UNCLASSIFIED_REGION_LABEL = "unclassified"
+
+
+def _tally_regions(opportunities: list[Any]) -> dict[str, int]:
+    """Count ``opportunities`` by `.region` (duck-typed via `getattr`,
+    same convention as `.slug`/`.sources` -- no new import of
+    `normalize.run.Opportunity`), in first-encountered order. An empty/
+    missing region is bucketed under `_UNCLASSIFIED_REGION_LABEL`, not
+    silently dropped."""
+    counts: dict[str, int] = {}
+    for opportunity in opportunities:
+        region = getattr(opportunity, "region", "") or _UNCLASSIFIED_REGION_LABEL
+        counts[region] = counts.get(region, 0) + 1
+    return counts
+
+
+def _compute_region_yield(
+    region: str,
+    count: int,
+    previous_entry: dict[str, Any] | None,
+) -> RegionYield:
+    previous_count = previous_entry["count"] if previous_entry else None
+    delta = count - previous_count if previous_count is not None else None
+    # Mirrors _compute_source_yield's zero_yield convention: requires a
+    # real previous-snapshot entry with a positive count -- no entry
+    # means "first-ever run for this region" (an expected baseline, not
+    # a regression), and a previous count of 0 means there is nothing to
+    # regress *from*.
+    zero = previous_count is not None and previous_count > 0 and count == 0
+    return RegionYield(
+        region=region,
+        count=count,
+        previous_count=previous_count,
+        delta=delta,
+        zero=zero,
+    )
+
+
+def _compute_region_yields(
+    opportunities: list[Any],
+    previous_regions: dict[str, Any] | None,
+) -> list[RegionYield]:
+    """One `RegionYield` per region, in the order regions are first
+    encountered in ``opportunities``, plus any region absent from this
+    run's opportunities but present in the previous snapshot (so a
+    region that regressed to zero this run -- the exact signal this
+    measurement exists to surface, e.g. East County dropping back to 0
+    -- still gets an entry, not silent omission), plus a final
+    `_UNCLASSIFIED_REGION_LABEL` entry regardless of whether any record
+    this run is unclassified.
+    """
+    previous_regions = previous_regions or {}
+    counts = _tally_regions(opportunities)
+
+    ordered_regions = [r for r in counts if r != _UNCLASSIFIED_REGION_LABEL]
+    for region in previous_regions:
+        if region != _UNCLASSIFIED_REGION_LABEL and region not in counts:
+            ordered_regions.append(region)
+
+    regions = [
+        _compute_region_yield(region, counts.get(region, 0), previous_regions.get(region))
+        for region in ordered_regions
+    ]
+    regions.append(
+        _compute_region_yield(
+            _UNCLASSIFIED_REGION_LABEL,
+            counts.get(_UNCLASSIFIED_REGION_LABEL, 0),
+            previous_regions.get(_UNCLASSIFIED_REGION_LABEL),
+        )
+    )
+    return regions
+
+
 def compute_yield_report(
     source_records: list[SourceRecord],
     opportunities: list[Any],
@@ -191,7 +301,8 @@ def compute_yield_report(
 
     Returns:
         A `YieldReport` with one `SourceYield` per `source_records`
-        entry, in the same order.
+        entry, in the same order, plus one `RegionYield` per region
+        (sprint 033, issue 34).
     """
     previous_snapshot = previous_snapshot or {}
     slugs_by_source = _opportunity_slugs_by_source(opportunities)
@@ -203,7 +314,11 @@ def compute_yield_report(
         )
         for record in source_records
     ]
+    regions = _compute_region_yields(
+        opportunities, previous_snapshot.get(REGIONS_SNAPSHOT_KEY)
+    )
     return YieldReport(
         sources=sources,
+        regions=regions,
         generated_at=now if now is not None else datetime.now(timezone.utc),
     )

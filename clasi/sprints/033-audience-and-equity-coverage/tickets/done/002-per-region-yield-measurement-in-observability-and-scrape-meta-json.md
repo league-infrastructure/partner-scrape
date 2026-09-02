@@ -1,9 +1,11 @@
 ---
 id: '002'
 title: Per-region yield measurement in observability and scrape-meta.json
-status: open
-use-cases: [SUC-064]
-depends-on: ['001']
+status: done
+use-cases:
+- SUC-064
+depends-on:
+- '001'
 github-issue: ''
 issue: 34-audience-gaps-spanish-regional-accessibility.md
 completes_issue: true
@@ -54,26 +56,26 @@ restructuring instead of the reserved key).
 
 ## Acceptance Criteria
 
-- [ ] `observability/yield_report.py` gains `RegionYield` (`region: str`,
+- [x] `observability/yield_report.py` gains `RegionYield` (`region: str`,
       `count: int`, `previous_count: int | None`, `delta: int | None`,
       `zero: bool`) and a region-tallying function, called from
       `compute_yield_report()`. `YieldReport.regions` is populated in the
       same order regions are first encountered, plus a final
       `"unclassified"` entry for `region == ""`.
-- [ ] `zero` is set when a region had a positive `previous_count` and this
+- [x] `zero` is set when a region had a positive `previous_count` and this
       run's `count` is 0 — the direct per-region analogue of
       `SourceYield.zero_yield`. No `previous_count` entry (first-ever run
       for that region) is not itself flagged `zero`, matching
       `_compute_source_yield`'s existing first-run-is-baseline convention.
-- [ ] `snapshot.py`'s `save_snapshot()` writes this run's region counts
+- [x] `snapshot.py`'s `save_snapshot()` writes this run's region counts
       under `"__regions__"`; `load_snapshot()` requires no change (it
       already returns whatever top-level keys are present). An old
       snapshot file with no `"__regions__"` key is read as "no previous
       region baseline" for every region, not an error.
-- [ ] `render.py`'s `render_text()` gains a "Regional coverage" section
+- [x] `render.py`'s `render_text()` gains a "Regional coverage" section
       (after the existing "Per-source detail" section) listing each
       region's count, delta, and a `[ZERO]` marker when `zero` is set.
-- [ ] `export/writer.py`'s `export_opportunities()` writes a `"regions"`
+- [x] `export/writer.py`'s `export_opportunities()` writes a `"regions"`
       key into `scrape-meta.json` — `dict[str, int]`, one entry per region
       (including `"unclassified"`) — computed over the same `current`
       list already used for `opportunities.json`, after dedup/slug
@@ -82,7 +84,7 @@ restructuring instead of the reserved key).
       refactored to expose it — check current signature before deciding
       whether `dry_run` needs to also return the meta payload, or only the
       opportunities payload as today).
-- [ ] Existing `scrape-meta.json` consumers (tests asserting its exact
+- [x] Existing `scrape-meta.json` consumers (tests asserting its exact
       shape) are updated to expect the new key; the addition does not
       change `last_updated`'s existing behavior.
 
@@ -99,4 +101,28 @@ restructuring instead of the reserved key).
   section, and an `export/writer.py` test asserting `scrape-meta.json`'s
   `"regions"` key and counts for a small fixture `Opportunity` list
   spanning multiple regions plus one unclassified record.
+
+## Notes
+
+Live-verified against the real corpus (`pipeline.run(dry_run=True)`,
+2026-09-02, same run as ticket 001's — see that ticket's Notes for the
+full methodology). `_region_counts()`/`RegionYield` computed against the
+same live `Opportunity` list confirms:
+
+- `scrape-meta.json`'s would-be `"regions"` key, over the 1020
+  current/upcoming records: Central San Diego 346, unclassified 223,
+  North County Coastal 153, North County Inland 140, East County 117,
+  South Bay 41 — every one of the 6 buckets present, none silently
+  dropped.
+- `yield_report`'s region tally over the full 4235-record list (all
+  opportunities, not only current/upcoming — a different, intentionally
+  broader set than `scrape-meta.json`'s, per the design): Central San
+  Diego 2210, unclassified 1111, North County Coastal 429, North County
+  Inland 221, East County 174, South Bay 90.
+- No `"__regions__"` snapshot existed yet in `data/yield-history.json`
+  before this sprint (the repo's real snapshot file predates this
+  ticket), so the first real scheduled run after this ticket lands will
+  be every region's first-ever baseline (no `zero`/`delta` alerts can
+  fire that run) — expected, matching `SourceYield`'s own established
+  first-run convention, not a gap in this ticket's coverage.
 - **Verification command**: `uv run pytest`
