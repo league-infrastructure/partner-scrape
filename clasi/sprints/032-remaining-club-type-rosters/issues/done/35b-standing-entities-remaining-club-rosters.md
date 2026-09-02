@@ -1,5 +1,5 @@
 ---
-status: in-progress
+status: done
 split_from: 35-standing-entities-clubs-and-places.md
 sprint: '032'
 tickets:

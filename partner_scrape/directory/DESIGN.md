@@ -1,6 +1,85 @@
 # directory
 
-**Owner:** Eric Busboom · **Last reviewed:** 2026-09-02 (sprint 032 ticket 006 — Science Olympiad school teams roster curated and registered) · **Status:** Places, Clubs (Hack Club chapters + CyberPatriot teams + Civil Air Patrol squadrons + Naval Sea Cadet Corps units + San Diego County 4-H community clubs + Science Olympiad school teams; the curated static-roster source generalized to serve any club type), and Offerings (volunteer org profiles + free/Title I school programs) complete; issue 35b's remaining club type's curated content (ticket 007) and issue 33's educator-PD program pages (routed through `adapters/`, not this module — see this doc's sprint 030 Revision) deferred/tracked elsewhere
+**Owner:** Eric Busboom · **Last reviewed:** 2026-09-02 (sprint 032 ticket 007 — Girls Who Code clubs roster curated and registered; sprint 032 complete) · **Status:** Places, Clubs (Hack Club chapters + CyberPatriot teams + Civil Air Patrol squadrons + Naval Sea Cadet Corps units + San Diego County 4-H community clubs + Science Olympiad school teams + Girls Who Code clubs — all six of issue 35b's remaining club types now populated, five with multi-entry rosters and one (Girls Who Code) an honest single-entry starter roster; the curated static-roster source generalized to serve any club type), and Offerings (volunteer org profiles + free/Title I school programs) complete; issue 33's educator-PD program pages (routed through `adapters/`, not this module — see this doc's sprint 030 Revision) deferred/tracked elsewhere
+
+---
+
+## Revision (2026-09-02 — sprint 032 ticket 007: Girls Who Code clubs roster curated and registered; sprint 032 complete)
+
+Populates the sixth and final of issue 35b's six remaining club types
+against the generalized `club_static_roster` source (ticket 001): one
+confirmed San Diego-area Girls Who Code (GWC) club, registered via a
+new `directory/registry/girls-who-code-sd.toml` entry pointing at a new
+`directory/data/girls-who-code-sd.tsv` (same ten-column shape as
+`hack-club-sd.tsv`). No code change — content-only. This ticket closes
+out sprint 032: all six of issue 35b's remaining club types now have
+either a real curated roster or an honest documented finding, and
+every ticket's own AC is satisfied.
+
+**Sources checked** (live-verified 2026-09-02), in the order this
+ticket's own Description prescribes:
+
+1. **GWC's official club locator** (girlswhocode.com/locations) —
+   directly tested, per this ticket's explicit instruction not to
+   assume the gate away. Returns **HTTP 404**: no public, browsable
+   San Diego-area listing exists at that URL today. This confirms, for
+   San Diego specifically, the "least likely of the six" expectation
+   `sprint.md`'s own ticket ordering rationale anticipated.
+2. **San Diego Public Library's GWC programming** — real and
+   institutionally documented (a named library coordinator, Melissa
+   Giffen, and multiple past event listings referencing a Scripps
+   Miramar Ranch Library-hosted club), but **not independently
+   confirmable live at ticket-execution time**: the specific events
+   platform (`sandiego.librarymarket.com`) that hosted every past
+   listing search results surfaced has been fully decommissioned (every
+   page there now returns "404 - Unknown site," confirmed via a direct
+   `curl` bypassing that domain's own broken TLS certificate) — the
+   library has since migrated to a new events platform
+   (`sandiego.events.mylibrary.digital`) that blocks automated fetches
+   (403). Separately, the one specific branch named in search results,
+   Scripps Miramar Ranch Library, is itself **currently closed**
+   (reopening Winter 2026) per the City of San Diego's own library
+   locations page. Rather than transcribing a stale, dead-link listing
+   or guessing that programming continues unchanged at a closed branch,
+   this lead is recorded here as a documented, plausible-but-unverifiable
+   finding and **not** included as a roster entry.
+3. **Canyon Crest Academy's Girls Who Code club** — confirmed via two
+   independent CCA sources: the club's own site
+   (ccagirlswhocode.weebly.com, though its most recent dated content is
+   from 2023-2024 and not itself sufficient current-year evidence) and,
+   decisively, **CCA ASB's own current school-published approved-clubs
+   roster** (a Google Sheet CCA ASB's own club-list page links live
+   today, exported and searched directly): row 422 lists "Girls Who
+   Code" as a **School Sponsored** club (requiring regular on-campus
+   meetings per CCA's own club-category rules), meeting
+   "Weekly-Thursdays-Lunch-F101," with a `@sduhsd.net` district-email
+   faculty advisor (dvora.celniker@sduhsd.net) and a named student
+   president. One honest caveat: the sheet's own internal tab title
+   reads "Approved Clubs 2024-2025," not "2025-2026" — CCA ASB's own
+   page frames this same linked sheet as "the 2025-2026 Approved Clubs
+   List... out now," and by this ticket's live-verification date
+   (2026-09-02) the 2026-2027 school year has itself already begun, so
+   this is the most current school-published list found, not
+   necessarily a same-week-current one. Recorded honestly rather than
+   silently upgraded to "confirmed for the current school year."
+
+A targeted search for GWC clubs at several other well-known San Diego
+high schools (Torrey Pines, Scripps Ranch, Del Norte, La Jolla High)
+found none — consistent with GWC's real San Diego footprint being
+genuinely small, not an artifact of under-searching.
+
+**Geocoding outcome**: the one entry (Canyon Crest Academy, already a
+known-good CDE school match from tickets 002 and 006's own rosters)
+resolves at `"school"` precision, `needs_review = False`.
+
+**Test-suite impact**: no new parsing-shape test file — the data
+reused `hack-club-sd.tsv`'s exact column shape. A new
+`TestRealGirlsWhoCodeGeocoding` class in `test_pipeline.py` pins the
+real roster's single school-precision entry end-to-end. Full-registry
+`clubs_meta.total` assertions across `test_pipeline.py` now expect
+`57`, not `56` (4 Hack Club + 3 CyberPatriot + 7 Civil Air Patrol + 4
+Sea Cadets + 14 4-H + 24 Science Olympiad + 1 Girls Who Code) — the
+sprint's final combined club count.
 
 ---
 
