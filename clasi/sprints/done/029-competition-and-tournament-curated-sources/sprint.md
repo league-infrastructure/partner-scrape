@@ -1,7 +1,7 @@
 ---
 id: 029
 title: Competition and tournament curated sources
-status: executing
+status: done
 branch: sprint/029-competition-and-tournament-curated-sources
 use-cases:
 - SUC-044
