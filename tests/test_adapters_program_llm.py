@@ -22,6 +22,9 @@ from partner_scrape.adapters.program_llm import (
     PROGRAM_EXTRACTION_JSON_SCHEMA,
     PROGRAM_LIST_EXTRACTION_JSON_SCHEMA,
     MODEL_ID,
+    _FIELD_EXTRACTION_RULES,
+    _SYSTEM_PROMPT,
+    _SYSTEM_PROMPT_MULTI,
     AnthropicProgramLLMClient,
     FixtureProgramLLMClient,
     ProgramExtractionResult,
@@ -389,6 +392,47 @@ class TestAnthropicProgramLLMClientExtractPrograms:
 
         with pytest.raises(ProgramLLMExtractionError):
             client.extract_programs("https://example.org/x", "body")
+
+
+class TestIsOpenPromptGeneralization:
+    """AC (028-003): ``is_open``'s field description generalizes from
+    "applications are open" to also cover a sold-out camp session,
+    identically in both the single- and multi-record system prompts
+    (they already share ``_FIELD_EXTRACTION_RULES`` verbatim).
+    """
+
+    def test_field_rules_describe_is_open_generically_covering_sold_out(self):
+        assert "sold out" in _FIELD_EXTRACTION_RULES
+        assert "is_open: true if open for enrollment/application" in _FIELD_EXTRACTION_RULES
+
+    def test_field_rules_no_longer_scope_is_open_to_applications_only(self):
+        # The old, narrower wording ("applications are currently open")
+        # is gone -- this is a broadening, not an addition alongside it.
+        assert "applications are currently open" not in _FIELD_EXTRACTION_RULES
+
+    def test_single_and_multi_prompts_share_the_identical_is_open_wording(self):
+        assert _FIELD_EXTRACTION_RULES in _SYSTEM_PROMPT
+        assert _FIELD_EXTRACTION_RULES in _SYSTEM_PROMPT_MULTI
+
+
+class TestEmptyProgramsListIsExplicitlyValid:
+    """AC (028-003): ``_SYSTEM_PROMPT_MULTI`` explicitly instructs the
+    model that an empty ``programs`` list is a valid response for a page
+    with no distinct programs/sessions -- closing the gap that would
+    otherwise let an off-season page (e.g. Fleet's) hallucinate a
+    session or raise a parse error instead of legitimately returning
+    nothing.
+    """
+
+    def test_multi_prompt_tells_the_model_an_empty_list_is_valid(self):
+        assert "If no distinct programs are described on the page, return an empty list." in (
+            _SYSTEM_PROMPT_MULTI
+        )
+
+    def test_single_prompt_carries_no_such_instruction(self):
+        # The single-record prompt has no list-valued response to be
+        # empty -- this instruction is multi-prompt-only.
+        assert "return an empty list" not in _SYSTEM_PROMPT
 
 
 class TestFixtureProgramLLMClient:

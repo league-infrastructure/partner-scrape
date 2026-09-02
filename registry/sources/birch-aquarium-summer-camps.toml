@@ -1,0 +1,37 @@
+# Birch Aquarium at Scripps -- summer camps newsroom article. Sprint
+# 028 ticket 004 (issue 29). The main site's dedicated camps page is
+# not the registered URL here: issue 29 specifically calls out this
+# organization's *newsroom* page as the scrapable one carrying explicit
+# dates and prices in prose (a press-release write-up), matching this
+# ticket's "Birch's newsroom page (dates/prices; the main site 403s per
+# issue 23, out of scope here)" instruction.
+#
+# Live-verified 2026-09-01: GET
+# https://aquarium.ucsd.edu/newsroom/birch-aquariums-summer-camps-2026
+# returns HTTP 200. Body reads "Registration is now open for the
+# weeklong camps, which run from June 15 to August 7 and range in price
+# from $270 to $620," followed by named camps grouped by age band
+# (Half-Day Camps ages 4-5: Sea Slugs, Sea Squirts; Full-Day Camps ages
+# 6-7: Only One Ocean, Underwater Playground; and further age-band
+# camps later in the article) -- program_page_multi's target shape, one
+# record per named camp.
+#
+# Live dry-run confirmed (`--source birch-aquarium-summer-camps
+# --dry-run -v`): found=8 dated=8 -- eight distinct named camps (Sea
+# Slugs, Only One Ocean, Underwater Playground, Ocean Adventures, and
+# four more), each dated 2026-06-15/08-07 and priced within the
+# article's stated $270-$620 range, all `is_open=true`.
+
+org_name = "Birch Aquarium at Scripps"
+adapter_type = "program_page_multi"
+enabled = true
+
+[config]
+url = "https://aquarium.ucsd.edu/newsroom/birch-aquariums-summer-camps-2026"
+program_kind = "program"
+opportunity_type = "Camps"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 29 (2026-08-30 camp session extraction); sprint 028 ticket 004 live verification (2026-09-01)"

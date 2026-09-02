@@ -1,0 +1,59 @@
+# Fleet Science Center -- STEM Camps page. Sprint 028 ticket 004
+# (issue 29). Registered `enabled = true` year-round per SUC-040/the
+# sprint's Design Rationale: this page is in-season-only (registration
+# opens February), and the existing weekly scheduled run
+# (.github/workflows/scheduled-run.yml) plus ticket 003's
+# empty-list-is-valid prompt handling is the sprint's deliberate
+# substitute for a seasonal-recheck subsystem -- do NOT gate this
+# behind `enabled = false` pending "season".
+#
+# Live-verified 2026-09-01: GET
+# https://www.fleetscience.org/events/camps returns HTTP 200. Body
+# currently reads "Thank you for another wonderful summer camp season!
+# Details for Spring and Summer Camp 2027 will be available in January.
+# Registration will open in February." and "Upcoming Camps are
+# currently being scheduled. Check back soon!" -- zero sessions
+# published right now, the exact off-season case SUC-040 exists for.
+# Live dry-run confirmed (`uv run partner-scrape --source
+# fleet-science-center-camps --dry-run -v`): found=0, no exception --
+# exactly SUC-040's off-season empty-list case. Sessions will appear
+# the first week the site publishes them, picked up by the existing
+# weekly cron, no code change needed.
+#
+# NOTE on coexistence with `fleet-science-center.toml` (pre-existing,
+# sprint 007, `listing_html`, scraping Fleet's general `/events` Views
+# listing including this exact `/events/camps` URL): this is a
+# *different* kind of overlap than the Air & Space Museum/Helen
+# Woodward dual-registration the sprint's Design Rationale forbids --
+# that case is two *camp-specific* adapters (marketing page vs
+# ActiveNet) both intentionally covering the same camp sessions, which
+# this sprint deliberately avoids. Here, one source is Fleet's
+# general-purpose event listing (any Fleet event, one generic
+# ladder-extracted record per detail page, not forced to
+# `opportunity_type = "Camps"`) and the other is this ticket's
+# camp-specific, per-session, LLM-extracted, `opportunity_type =
+# "Camps"`-forced source -- the same pre-existing pattern already in
+# use for e.g. Scripps Institution of Oceanography (multiple
+# specialized `program_page`/`program_page_multi` sources coexist with
+# that org's other sources). Not registry-duplicated by this ticket's
+# own convention, but flagged here since `/events/camps` is a literal
+# URL match between the two: if `fleet-science-center.toml`'s ladder
+# ever recovers a generic "STEM Camps" event from this same URL once it
+# is back in season, both sources would publish for the same page under
+# different source_ids/titles, uncaught by `identity_key()` dedup --
+# worth a future architecture pass, not resolved in this data-only
+# ticket.
+
+org_name = "Fleet Science Center"
+adapter_type = "program_page_multi"
+enabled = true
+
+[config]
+url = "https://www.fleetscience.org/events/camps"
+program_kind = "program"
+opportunity_type = "Camps"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 29 (2026-08-30 camp session extraction); sprint 028 ticket 004 live verification (2026-09-01)"

@@ -469,3 +469,82 @@ def extract_fields(html: str, url: str) -> dict[str, tuple[Any, float]]:
                 continue
             fields[name] = (value, confidence)
     return fields
+
+
+#: Element tags dropped from the tree entirely before
+#: :func:`reduce_html_to_text` walks it for visible text -- boilerplate
+#: that is never the program/session prose an LLM extraction call needs
+#: (sprint 028, issue 36). Distinct from :data:`_HIDDEN_TEXT_TAGS`:
+#: ``<script>``/``<style>`` content is already excluded by
+#: :func:`_visible_text_parts` itself (reused unchanged below), so only
+#: the three additional structural sections need stripping from the tree
+#: first.
+_REDUCTION_STRIPPED_TAGS = ("nav", "header", "footer")
+
+#: Default character cap for :func:`reduce_html_to_text` -- deliberately
+#: separate from :data:`_BODY_SCAN_LIMIT` (extract/DESIGN.md's sprint 028
+#: invariant: the two bounds exist for different reasons and must not be
+#: unified). Comfortably under the ~200K-token context window
+#: (``adapters/program_llm.py``'s ``MODEL_ID``) for ordinary English
+#: prose at ~4 chars/token, with wide headroom -- sized against the two
+#: sprint-027 live failures (sdfoundation.org's 840KB-965KB pages,
+#: rmtlacademy.org's 612KB card) that motivated this function.
+_DEFAULT_REDUCE_MAX_CHARS = 100_000
+
+#: Collapses any run of whitespace (including newlines/tabs) to a single
+#: space, so a reduced page's word boundaries survive but its original
+#: markup-driven line breaks and indentation don't inflate the character
+#: budget with formatting noise.
+_WHITESPACE_RE = re.compile(r"\s+")
+
+
+def reduce_html_to_text(html: str, max_chars: int = _DEFAULT_REDUCE_MAX_CHARS) -> str:
+    """Reduce one arbitrary HTML page to bounded, readable plain text.
+
+    For a caller (``adapters/program_page.py``'s LLM-extraction family)
+    that needs a page's prose content but not its markup, script, or
+    boilerplate, and cannot safely hand an LLM an unbounded page --
+    issue 36's two live failures (SD Foundation Community Scholarship's
+    840KB-965KB pages, a 612KB UCSD card) both raised
+    ``anthropic.BadRequestError: prompt is too long`` from sending
+    ``raw.body`` to the LLM verbatim.
+
+    Parses ``html`` with the same ``lxml.html.fromstring`` parser
+    :func:`extract_fields` uses, drops ``<nav>``/``<header>``/``<footer>``
+    elements from the tree entirely, then walks what remains for visible
+    text via :func:`_visible_text_parts` -- the same helper the
+    body-regex rung already uses, which already excludes ``<script>``/
+    ``<style>`` element text (see :data:`_HIDDEN_TEXT_TAGS`) -- so no
+    second HTML-to-text implementation is written here. Text is scoped to
+    the parsed ``<body>`` when one is present (excluding ``<head>``/
+    ``<title>`` noise on an ordinary full page); a fragment with no
+    ``<body>`` element (e.g. a bare string) falls back to the whole
+    parsed tree, so this never returns ``""`` merely for lacking a
+    ``<body>`` tag.
+
+    Whitespace is collapsed to single spaces and the result is truncated
+    to the leading ``max_chars`` characters -- a program/camp page states
+    its key facts (name, dates, price, eligibility) in prose near the
+    top, not buried at the end, the same publisher-authoring assumption
+    the body-regex rung's own bound already accepts.
+
+    Returns ``""`` for unparseable/empty HTML, with a logged warning --
+    never raises, matching :func:`extract_fields`'s own contract exactly.
+    """
+    try:
+        tree = lxml_html.fromstring(html)
+    except Exception:
+        logger.warning("Could not parse HTML for text reduction; no text extracted")
+        return ""
+
+    for tag in _REDUCTION_STRIPPED_TAGS:
+        for el in list(tree.iter(tag)):
+            el.drop_tree()
+
+    root = tree.find(".//body")
+    if root is None:
+        root = tree
+
+    text = "".join(_visible_text_parts(root))
+    collapsed = _WHITESPACE_RE.sub(" ", text).strip()
+    return collapsed[:max_chars]

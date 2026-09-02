@@ -1,0 +1,50 @@
+# Camp Invention (National Inventors Hall of Fame) -- Morning Creek
+# Elementary, San Diego, CA 92128. Sprint 028 ticket 004 (issue 29).
+# DISABLED -- see below.
+#
+# invent.org's program-search widget is a client-rendered search over a
+# nationwide location catalog with no browsable static listing; the
+# only San Diego County location page confirmed by live search
+# (`invent.org/program-search/camp-invention/ca13/16935`) was found by
+# following indexed search-result links, not by crawling the search
+# page itself. Two other candidate result URLs sharing similar-looking
+# region codes ("sd35/21002", "ca37/11485") turned out on inspection to
+# be Rapid City, SD and Rancho Santa Margarita, CA (Orange County)
+# respectively -- outside San Diego County, so not registered here;
+# this is the reason a nationwide franchise like this one needs
+# per-location live verification, not just a URL pattern guess.
+#
+# Live-verified 2026-09-01: GET
+# https://www.invent.org/program-search/camp-invention/ca13/16935
+# returns HTTP 200 and confirms the San Diego, CA 92128 address, an
+# eligibility statement ("For children entering grades K-6"), and a
+# camper price ("$405*"). However the page reads "Preregister for
+# Summer 2027 -- This site has not locked in all the site details" with
+# no session dates published for any year -- unlike
+# `invent.org/program-search/camp-invention/sd35/21002` (Rapid City,
+# SD), which *does* show locked "2027 Program Dates: 6/7/2027 -
+# 6/11/2027" for its own location, proving dates get published on a
+# per-location schedule, not a fixed calendar date, and this specific
+# San Diego location has not reached that point yet.
+#
+# DISABLED: no session dates are available for this org's one confirmed
+# San Diego County location as of live verification, so this source
+# cannot presently satisfy this ticket's "correctly-dated,
+# correctly-priced" acceptance bar (sprint 027 tickets 005/006
+# disabled-with-reason precedent). Re-verify once National Inventors
+# Hall of Fame locks in 2027 dates for this location (their own site
+# text suggests this happens on a rolling basis, not all at once).
+
+org_name = "Camp Invention -- Morning Creek Elementary (San Diego, CA)"
+adapter_type = "program_page"
+enabled = false  # disabled: no session dates published for this location as of 2026-09-01 verification (price/eligibility only)
+
+[config]
+url = "https://www.invent.org/program-search/camp-invention/ca13/16935"
+program_kind = "program"
+opportunity_type = "Camps"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 29 (2026-08-30 camp session extraction); sprint 028 ticket 004 live verification (2026-09-01)"

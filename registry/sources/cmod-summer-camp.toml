@@ -1,0 +1,49 @@
+# Children's Museum of Discovery (CMOD, formerly New Children's
+# Museum) -- summer camp page. Sprint 028 ticket 004 (issue 29).
+#
+# NOTE: a plain unauthenticated-looking User-Agent (bare `curl`) gets
+# HTTP 406 from this host; this project's own declared
+# `STEM-Calendar-Bot/1.0 (educational research)` User-Agent -- what the
+# real fetcher sends -- gets HTTP 200, and visitcmod.org's robots.txt
+# (Disallow: <empty>, all user-agents) permits it. Not a blocked source.
+#
+# Live-verified 2026-09-01: GET https://visitcmod.org/summercamp/
+# returns HTTP 200 with the declared bot User-Agent. Body's "WEEKLY
+# THEMES" table lists eight named weekly themes (June 15-19 "Tiny
+# Robots" through August 10-14 "Kindergarten Readiness") for two
+# per-week camps -- "Little Explorers" (ages 4-5, $350 member/$385
+# non-member) and "Big Explorers" (ages 6-8, same pricing) --
+# program_page_multi's target shape. Every week currently reads
+# "Registration Closed" for both camps (this season has ended), which
+# should resolve to `is_open=False` under ticket 003's generalized rule
+# -- a second live example of the sold-out/closed mapping alongside the
+# SD Model Railroad Museum's explicit "SOLD OUT!" flags.
+#
+# Live dry-run confirmed (`--source cmod-summer-camp --dry-run -v`):
+# found=2 dated=2 -- "Little Explorers Camp" and "Big Explorers Camp"
+# (both 2026-06-15/08-14, $350 member/$385 non-member per week), both
+# `is_open=false` per the page's "Registration Closed" status on every
+# week.
+#
+# NOTE on coexistence with `visitcmod.toml` (pre-existing, `tec_rest`,
+# org_name "San Diego Children's Discovery Museum" -- this org's older
+# name -- WordPress "The Events Calendar" feed): a different content
+# stream (general museum events, not the dedicated /summercamp/
+# registration page this source targets), the same non-blocking
+# multi-source-per-org pattern already noted on
+# `living-coast-camps.toml`/`fleet-science-center-camps.toml`/
+# `eisca-camps.toml`.
+
+org_name = "Children's Museum of Discovery (CMOD)"
+adapter_type = "program_page_multi"
+enabled = true
+
+[config]
+url = "https://visitcmod.org/summercamp/"
+program_kind = "program"
+opportunity_type = "Camps"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 29 (2026-08-30 camp session extraction); sprint 028 ticket 004 live verification (2026-09-01)"

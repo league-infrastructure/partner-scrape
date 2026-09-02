@@ -1,0 +1,73 @@
+# Helen Woodward Animal Center -- registered via the new activenet_camps
+# platform adapter (sprint 028 ticket 005, issue 29). NOT registered via
+# a program_page/program_page_multi marketing page (animalcenter.org's
+# own camp pages are scrapable, per issue 29's own list) -- this org is
+# explicitly ActiveNet-only, to avoid the dual-registration risk
+# adapters/DESIGN.md's sprint 028 section names for this exact org.
+#
+# Live-verified 2026-09-01. animalcenter.org/critter-camp/ links to
+# https://campscui.active.com/orgs/HelenWoodwardAnimalCenter?season=3861936
+# ("Register Now: Fall Camp"). A plain static GET of that URL returns only
+# a content-free JS bootstrap shell (campscui.active.com is a client-side
+# SPA gated by a JS fingerprint/cookie challenge -- see
+# activenet_camps.py's module docstring); fetch_strategy = "headless" is
+# necessary but, as verified below, not currently sufficient with this
+# project's existing PlaywrightFetcher.
+#
+# A custom, longer-running headless script (page.goto(wait_until=
+# "networkidle") plus several extra seconds of settle time before reading
+# page.content()) confirms the platform itself IS reachable and does
+# expose real data once fully rendered: this exact URL resolves to season
+# 3861936, "Fall Critter Camp 2026" (registrationStartDateTime
+# 2026-08-13, firstStartDateTime 2026-10-26), with a genuine, currently-
+# open, dated/priced session list (in part):
+#   Monday - Survival - Fall    10/26/2026 - 10/26/2026   $103.02
+#   Tuesday - Shelter - Fall    10/27/2026 - 10/27/2026   $103.02
+#   Wednesday - Signals - Fall  10/28/2026 - 10/28/2026   $103.02
+#   Thursday - Predator or Prey - Fall 10/29/2026         $103.02
+#   Friday - Coexistance - Fall 10/30/2026 - 10/30/2026   $103.02
+#
+# However, a real end-to-end dry run through this project's OWN
+# fetch/headless.py (`PlaywrightFetcher.get()`, whose fixed
+# `wait_until="load"` + immediate `page.content()` -- no additional
+# settle wait -- is shared by every headless-flagged source, not
+# something this ticket owns or may change) returns 0 events
+# (`--source helen-woodward-camps --dry-run -v`, 2026-09-02): the body
+# captured is still the pre-render loading-spinner shell ("You need to
+# enable JavaScript to run this app."), confirmed by direct comparison
+# (immediate `page.content()` after `wait_until="load"` is ~4KB and
+# spinner-only; the same page after ~4 more seconds is ~167KB and holds
+# the real session list above). campscui.active.com's RequireJS bundle
+# evidently needs more time to finish its async render than the
+# `"load"` event (or this project's fixed 15s timeout without an
+# additional settle wait) accounts for.
+#
+# Disabled rather than registered enabled = true: the adapter itself is
+# complete and fixture-tested (tests/test_adapters_activenet_camps.py),
+# and fetch_strategy = "headless" is the correct disposition (a plain
+# static fetch is confirmed strictly worse), but the shared
+# PlaywrightFetcher does not currently render this specific heavy SPA to
+# completion -- matching techadventurecamp.toml's own precedent for a
+# real, evidenced fetch/headless.py timing limitation left as a disabled
+# (there: zero-yield-but-enabled) registration rather than worked around
+# inside one ticket's adapter code. Fixing fetch/headless.py's wait
+# strategy (e.g. a longer or per-source-configurable settle time) is out
+# of this ticket's scope -- it is shared by every one of this project's
+# other headless-flagged sources, not owned by adapters/ -- and is
+# flagged here as a follow-up. Re-verify and flip to enabled = true once
+# that fetcher-level fix lands.
+
+org_name = "Helen Woodward Animal Center"
+adapter_type = "activenet_camps"
+enabled = false  # disabled: shared PlaywrightFetcher.get() (fetch/headless.py) does not wait long enough for campscui.active.com's SPA to finish rendering -- confirmed live 2026-09-02 (0 events; captured body is the pre-render loading shell). Platform itself is confirmed reachable and camp-shaped once fully rendered (see comment above). Flip to enabled = true once fetch/headless.py's wait strategy is fixed in a follow-up ticket.
+
+[config]
+url = "https://campscui.active.com/orgs/HelenWoodwardAnimalCenter?season=3861936"
+program_kind = "program"
+opportunity_type = "Camps"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+fetch_strategy = "headless"
+discovered_via = "issue 29 (2026-08-30 camp session extraction); sprint 028 ticket 005 live verification (2026-09-01/02)"

@@ -1,0 +1,74 @@
+# San Diego Air & Space Museum -- registered via the new activenet_camps
+# platform adapter (sprint 028 ticket 005, issue 29). NOT the same source
+# as sandiego-air-space.toml (that entry is a pre-existing, unrelated
+# listing_html registration of the museum's general /calendar events
+# page, sprint 007). NOT registered via a program_page/program_page_multi
+# marketing page for camps -- this org is explicitly ActiveNet-only, to
+# avoid the dual-registration risk adapters/DESIGN.md's sprint 028
+# section names for this exact org.
+#
+# Live-verified 2026-09-01/02. sandiegoairandspace.org/education/summer-camps
+# links to
+# https://campscui.active.com/orgs/SanDiegoAirSpaceMuseum?orglink=camps-registration
+# ("Click Here to Sign Up!"). A plain static GET returns only a
+# content-free JS bootstrap shell (campscui.active.com is a client-side
+# SPA gated by a JS fingerprint/cookie challenge -- see
+# activenet_camps.py's module docstring); fetch_strategy = "headless" is
+# necessary but not currently sufficient -- see below.
+#
+# Two independent findings, either one alone sufficient to disable this
+# registration for now:
+#
+# 1. Fetcher-timing (same finding as helen-woodward-camps.toml, confirmed
+#    live 2026-09-02): this project's shared PlaywrightFetcher.get()
+#    (fetch/headless.py, `wait_until="load"` with no extra settle wait --
+#    shared by every headless source, not owned by adapters/) reads
+#    `page.content()` before campscui.active.com's RequireJS bundle
+#    finishes its async render for this org's page too. A direct fetch
+#    through this project's own PoliteFetcher(PlaywrightFetcher()) at
+#    this exact URL returned only the platform's "You have JavaScript
+#    turned off in your browser" noscript fallback text -- zero usable
+#    session content, regardless of season.
+# 2. Off-season (a custom, longer-running headless script -- networkidle
+#    wait plus extra settle time, sufficient to reach real rendered
+#    content on Helen Woodward's page -- was also used against this
+#    org's page): the only season currently live for this org is
+#    "Birthday Parties 2026 - 2027" (`GET /external/json/seasons`
+#    returned exactly this one entry) -- every session listed (e.g. "Wu
+#    Birthday Party", "Kenyon Birthday Party") is a room-rental booking,
+#    not a camp. Summer Camp 2026 has already concluded (today is
+#    2026-09-01) and Summer Camp 2027 registration has evidently not yet
+#    opened. Even with finding 1 fixed, this sprint's
+#    config.opportunity_type = "Camps" override convention
+#    (adapters/DESIGN.md's sprint 028 section) would unconditionally
+#    relabel every currently-listed birthday-party booking as a "Camps"
+#    opportunity -- a materially different, worse risk than Fleet
+#    Science Center's own off-season page (SUC-040), which yields zero
+#    sessions off-season rather than a wrong-category non-empty list.
+#
+# Disabled rather than registered enabled = true, following the sprint
+# 027 tickets 005/006 precedent (cited directly in this ticket's own
+# dispatch) for "design against the best available evidence, register
+# enabled = false with a documented reason" when live verification finds
+# a source blocked. The adapter itself is complete and fixture-tested
+# (tests/test_adapters_activenet_camps.py). Re-verify and flip to
+# enabled = true once BOTH: (a) fetch/headless.py's wait-strategy
+# limitation is fixed in a follow-up ticket, and (b) a fresh
+# `/external/json/seasons` check (or equivalent live re-check) confirms
+# a camp-named season, not Birthday Parties, is current -- matching
+# Summer Camp 2027's expected registration-open window.
+
+org_name = "San Diego Air & Space Museum"
+adapter_type = "activenet_camps"
+enabled = false  # disabled: (1) shared PlaywrightFetcher.get() does not render campscui.active.com's SPA in time (confirmed live 2026-09-02 -- see comment above), and (2) even once fixed, no live camp season exists as of 2026-09-01 (current ActiveNet season is "Birthday Parties 2026 - 2027", not camps) -- re-verify near Summer Camp 2027's registration open date
+
+[config]
+url = "https://campscui.active.com/orgs/SanDiegoAirSpaceMuseum?orglink=camps-registration"
+program_kind = "program"
+opportunity_type = "Camps"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+fetch_strategy = "headless"
+discovered_via = "issue 29 (2026-08-30 camp session extraction); sprint 028 ticket 005 live verification (2026-09-01/02)"

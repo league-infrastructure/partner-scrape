@@ -19,9 +19,16 @@ from partner_scrape.extract.ladder import (
     CONFIDENCE_TITLE_FALLBACK,
     CONFIDENCE_URL_DATE,
     extract_fields,
+    reduce_html_to_text,
 )
 
 FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures" / "html"
+
+#: Shared with tests/test_adapters_program_page.py -- the ~900KB bloated
+#: fixture representative of the SD Foundation site's own live-measured
+#: template bloat (issue 36) lives here, not under fixtures/html/, since
+#: it is also fetched as a program page fixture body.
+PROGRAM_PAGES_FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures" / "program_pages"
 
 #: Confidence must strictly decrease down the ladder -- the ordering
 #: itself is a fact worth asserting, not just each tier's individual
@@ -217,3 +224,126 @@ class TestNoTitleAnywhere:
         fields = extract_fields(html, "https://example.org/events/mystery/")
 
         assert "title" not in fields
+
+
+# ---------------------------------------------------------------------
+# reduce_html_to_text (sprint 028, issue 36)
+# ---------------------------------------------------------------------
+
+
+class TestReduceHtmlToTextOversizedPage:
+    """AC: a saved ~900KB fixture page (representative of the SD
+    Foundation site's own live-measured template bloat -- a large
+    repeated nav menu plus an inline script payload on every page)
+    reduces to well under the 200K-token model context limit.
+    """
+
+    def test_bloated_page_reduces_well_under_the_token_limit(self):
+        html = (PROGRAM_PAGES_FIXTURES_DIR / "sd_foundation_bloated_page.html").read_text()
+        # The two live sprint-027 failures measured 840KB-965KB
+        # (sdfoundation.org) and 612KB (rmtlacademy.org) raw HTML; this
+        # fixture reproduces that shape.
+        assert len(html) > 800_000
+
+        reduced = reduce_html_to_text(html)
+
+        # Comfortably under the default 100_000-char cap, and therefore
+        # comfortably under the ~200K-token (≈800K-char) model limit that
+        # motivated this function -- the nav/header/footer/script bloat
+        # that made up nearly the entire raw page is gone, leaving only
+        # the page's actual program content.
+        assert len(reduced) < 100_000
+        assert len(reduced) < len(html) / 100
+
+    def test_bloated_page_still_contains_the_real_program_content(self):
+        html = (PROGRAM_PAGES_FIXTURES_DIR / "sd_foundation_bloated_page.html").read_text()
+
+        reduced = reduce_html_to_text(html)
+
+        assert "Fixture SD Foundation Community Scholarship" in reduced
+        assert "November 1, 2026" in reduced
+        assert "$5,000 scholarship" in reduced
+
+    def test_bloated_page_s_nav_header_footer_script_bloat_is_gone(self):
+        html = (PROGRAM_PAGES_FIXTURES_DIR / "sd_foundation_bloated_page.html").read_text()
+
+        reduced = reduce_html_to_text(html)
+
+        assert "Program Category" not in reduced  # <nav> mega-menu
+        assert "Footer Section" not in reduced  # <footer>
+        assert "trackingConfig" not in reduced  # <script>
+
+
+class TestReduceHtmlToTextOrdinaryPageIsANoOp:
+    """AC: reducing an already-small page is a no-op on its extracted
+    fields -- the ordinary program-page fixture's real content survives
+    reduction unchanged in substance (only markup/whitespace differs).
+    """
+
+    def test_small_ordinary_page_keeps_its_content_and_stays_small(self):
+        html = (PROGRAM_PAGES_FIXTURES_DIR / "prose_program_page.html").read_text()
+
+        reduced = reduce_html_to_text(html)
+
+        assert len(reduced) < len(html)
+        assert len(reduced) < 1_000
+        assert "Fixture Research Experience for High School Students" in reduced
+        assert "$2,500 stipend" in reduced
+        assert "February 15" in reduced
+
+
+class TestReduceHtmlToTextTruncation:
+    """AC/design: truncation keeps the *leading* max_chars characters of
+    reduced text, never the whole page -- a program page states its key
+    facts near the top (extract/DESIGN.md's sprint 028 invariant).
+    """
+
+    def test_truncates_to_the_leading_max_chars_characters(self):
+        html = "<body><p>" + ("word " * 50) + "</p></body>"
+
+        reduced = reduce_html_to_text(html, max_chars=20)
+
+        assert reduced == ("word " * 50).strip()[:20]
+        assert len(reduced) == 20
+
+    def test_a_page_under_max_chars_is_not_padded_or_altered(self):
+        html = "<body><p>short page content</p></body>"
+
+        reduced = reduce_html_to_text(html, max_chars=100_000)
+
+        assert reduced == "short page content"
+
+
+class TestReduceHtmlToTextMalformedOrEmpty:
+    """AC: returns "" for unparseable/empty HTML, with a logged warning,
+    never raising -- matching extract_fields()'s own contract exactly.
+    """
+
+    def test_empty_string_returns_empty_string_without_raising(self, caplog):
+        with caplog.at_level("WARNING"):
+            result = reduce_html_to_text("")
+
+        assert result == ""
+
+    def test_whitespace_only_returns_empty_string_without_raising(self):
+        assert reduce_html_to_text("   \n\t  ") == ""
+
+
+class TestReduceHtmlToTextStripsBoilerplateBeforeTruncating:
+    """Design: stripping nav/header/footer/script happens before the
+    character cap applies -- otherwise a small max_chars budget would be
+    entirely consumed by boilerplate that a real caller never wants.
+    """
+
+    def test_leading_nav_does_not_consume_the_truncation_budget(self):
+        html = (
+            "<body>"
+            "<nav>" + ("nav link " * 50) + "</nav>"
+            "<main>real program content</main>"
+            "</body>"
+        )
+
+        reduced = reduce_html_to_text(html, max_chars=10)
+
+        assert reduced == "real progr"
+        assert "nav link" not in reduced

@@ -10,6 +10,7 @@ below -- never a change to ``base.py``'s dispatch mechanism, as ticket
 
 from __future__ import annotations
 
+from partner_scrape.adapters.activenet_camps import ActiveNetCampsAdapter
 from partner_scrape.adapters.base import (
     ADAPTERS,
     Adapter,
@@ -20,6 +21,7 @@ from partner_scrape.adapters.base import (
     run,
 )
 from partner_scrape.adapters.bibliocommons import BiblioCommonsAdapter
+from partner_scrape.adapters.campbrain import CampBrainAdapter
 from partner_scrape.adapters.generic_html import GenericHtmlAdapter
 from partner_scrape.adapters.greenhouse import GreenhouseAdapter
 from partner_scrape.adapters.ical import ICalAdapter
@@ -50,6 +52,8 @@ ADAPTERS["robotevents"] = RobotEventsAdapter
 ADAPTERS["program_page"] = ProgramPageAdapter
 ADAPTERS["program_listing"] = ProgramListingAdapter
 ADAPTERS["program_page_multi"] = ProgramPageMultiAdapter
+ADAPTERS["activenet_camps"] = ActiveNetCampsAdapter
+ADAPTERS["campbrain"] = CampBrainAdapter
 
 __all__ = [
     "Adapter",
@@ -73,4 +77,6 @@ __all__ = [
     "ProgramPageAdapter",
     "ProgramListingAdapter",
     "ProgramPageMultiAdapter",
+    "ActiveNetCampsAdapter",
+    "CampBrainAdapter",
 ]

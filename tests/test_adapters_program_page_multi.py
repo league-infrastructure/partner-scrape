@@ -24,6 +24,7 @@ from partner_scrape.adapters.base import EventRef, RawResponse
 from partner_scrape.adapters.program_cache import ProgramExtractionCache
 from partner_scrape.adapters.program_llm import FixtureProgramLLMClient, ProgramExtractionResult
 from partner_scrape.adapters.program_page import ProgramPageMultiAdapter
+from partner_scrape.extract.ladder import reduce_html_to_text
 from partner_scrape.fetch.fetcher import FetchResponse
 from partner_scrape.registry.schema import SourceConfig
 
@@ -188,13 +189,23 @@ class TestEndToEndExtraction:
         assert cw3e.eligibility == "Current undergraduate students."
 
     def test_llm_client_called_once_for_the_whole_page(self, tmp_path):
+        # (Sprint 028, issue 36) the LLM call now receives raw.body only
+        # after extract.reduce_html_to_text() has reduced it -- see
+        # test_extract_ladder.py / test_adapters_program_page.py's own
+        # sprint 028 tests for the reduction step itself. This assertion
+        # was updated (not "unmodified" -- see ticket 028-001's own
+        # commit) because it inspects the literal body forwarded to the
+        # LLM client, an implementation detail this ticket's required
+        # wiring necessarily changes; the *behavior* under test --
+        # exactly one extract_programs() call for the whole page, never
+        # the singular extract_program() -- is unaffected.
         llm_client = _llm_client()
         adapter = ProgramPageMultiAdapter(llm_client=llm_client, cache=ProgramExtractionCache(tmp_path))
         raw = RawResponse(ref=EventRef(url=PAGE_URL), status=200, body=_page_body())
 
         list(adapter.extract(raw, _source()))
 
-        assert llm_client.list_calls == [(PAGE_URL, _page_body())]
+        assert llm_client.list_calls == [(PAGE_URL, reduce_html_to_text(_page_body()))]
         assert llm_client.calls == []  # never calls the singular extract_program
 
 
@@ -328,6 +339,33 @@ class TestExtractRobustness:
         assert "extract_programs" in caplog.text
 
 
+class TestOffSeasonPageYieldsEmptyList:
+    """AC (028-003): an in-season-only camp marketing page (e.g. Fleet's,
+    registration opens Feb) that currently has nothing to describe must
+    yield zero Events -- not a hallucinated session, not a parse error.
+    ``_extract_many_programs`` already maps a zero-length
+    ``extract_programs()`` result to zero Events with no special-casing;
+    this fixture proves that path end-to-end via
+    ``ProgramPageMultiAdapter.extract()``, standing in for an off-season
+    page (``_SYSTEM_PROMPT_MULTI`` now explicitly tells the model an
+    empty list is a valid response for such a page -- see
+    ``program_llm.py``).
+    """
+
+    OFF_SEASON_URL = "https://example.org/camps/fleet-off-season"
+
+    def test_off_season_page_yields_zero_events_with_no_exception(self, tmp_path):
+        llm_client = FixtureProgramLLMClient(list_responses={self.OFF_SEASON_URL: []})
+        adapter = ProgramPageMultiAdapter(llm_client=llm_client, cache=ProgramExtractionCache(tmp_path))
+        source = _source(program_kind="program", url=self.OFF_SEASON_URL)
+        raw = RawResponse(ref=EventRef(url=self.OFF_SEASON_URL), status=200, body=_page_body())
+
+        events = list(adapter.extract(raw, source))
+
+        assert events == []
+        assert llm_client.list_calls == [(self.OFF_SEASON_URL, reduce_html_to_text(_page_body()))]
+
+
 class TestDispatchRegistration:
     def test_program_page_multi_is_registered_in_adapters_table(self):
         assert ADAPTERS["program_page_multi"] is ProgramPageMultiAdapter
@@ -342,3 +380,173 @@ class TestDispatchRegistration:
         # in as defaults (adapters/DESIGN.md's documented deviation).
         refs = adapter.discover(_source(), FixtureFetcher({}))
         assert [r.url for r in refs] == [PAGE_URL]
+
+
+class TestSDMRMSoldOutCampSessions:
+    """Sprint 028 ticket 004's own Testing requirement: a fixture-based
+    test exercising a sold-out row, standing in for the San Diego Model
+    Railroad Museum's real registered page
+    (registry/sources/sd-model-railroad-museum-camps.toml), this
+    sprint's designated live target for ticket 003's
+    sold-out-via-``Event.description`` mapping (adapters/DESIGN.md's
+    sprint 028 section). Fixture body is
+    ``tests/fixtures/program_pages/sdmrm_camp_sessions_page.html``, a
+    small fixture reproducing the real page's shape: a weekly-sessions
+    table with one open week and two "SOLD OUT!" weeks.
+    """
+
+    SDMRM_URL = "https://example.org/camps/sdmrm-summer-camps"
+
+    _SDMRM_RESULTS = [
+        ProgramExtractionResult(
+            program_name="Fixture Model Railroading Camp -- Grades K-2 Beginner (June 15-18)",
+            audience_grades=["Grades K-2"],
+            date_start="2026-06-15",
+            date_end="2026-06-18",
+            cost="$200 ($180 member)",
+            eligibility="Grades K-2, no prior experience required",
+            is_open=True,
+            opportunity_type="Camps",
+        ),
+        ProgramExtractionResult(
+            program_name="Fixture Model Railroading Camp -- Grades K-2 Beginner (June 22-26)",
+            audience_grades=["Grades K-2"],
+            date_start="2026-06-22",
+            date_end="2026-06-26",
+            cost="$250 ($225 member)",
+            eligibility="Grades K-2, no prior experience required",
+            is_open=False,
+            opportunity_type="Camps",
+        ),
+        ProgramExtractionResult(
+            program_name="Fixture Model Railroading Camp -- Grades 3-5 Apprentice (July 6-10)",
+            audience_grades=["Grades 3-5"],
+            date_start="2026-07-06",
+            date_end="2026-07-10",
+            cost="$250 ($225 member)",
+            eligibility="Grades 3-5, no prior experience required",
+            is_open=False,
+            opportunity_type="Camps",
+        ),
+    ]
+
+    def _sdmrm_body(self) -> str:
+        return (FIXTURES_DIR / "sdmrm_camp_sessions_page.html").read_text()
+
+    def _sdmrm_source(self) -> SourceConfig:
+        return SourceConfig(
+            source_id="fixture_sdmrm_camps",
+            org_name="Fixture SD Model Railroad Museum",
+            adapter_type="program_page_multi",
+            config={
+                "url": self.SDMRM_URL,
+                "program_kind": "program",
+                "opportunity_type": "Camps",
+            },
+        )
+
+    def test_three_weekly_sessions_extract_with_two_sold_out(self, tmp_path):
+        llm_client = FixtureProgramLLMClient(list_responses={self.SDMRM_URL: self._SDMRM_RESULTS})
+        adapter = ProgramPageMultiAdapter(llm_client=llm_client, cache=ProgramExtractionCache(tmp_path))
+        raw = RawResponse(ref=EventRef(url=self.SDMRM_URL), status=200, body=self._sdmrm_body())
+
+        events = list(adapter.extract(raw, self._sdmrm_source()))
+
+        assert len(events) == 3
+        assert all(e.opportunity_type == "Camps" for e in events)
+
+        open_week, sold_out_week_1, sold_out_week_2 = events
+        assert open_week.start == datetime.fromisoformat("2026-06-15")
+        assert open_week.cost == "$200 ($180 member)"
+        assert open_week.description == ""
+
+        assert sold_out_week_1.start == datetime.fromisoformat("2026-06-22")
+        assert sold_out_week_1.description == "Sold out"
+        assert sold_out_week_2.start == datetime.fromisoformat("2026-07-06")
+        assert sold_out_week_2.description == "Sold out"
+
+        # Distinct identity keys despite sharing source_id and
+        # opportunity_type -- each week's own start date and title
+        # still distinguish it (TestDistinctIdentityKeys's own AC,
+        # exercised here against this ticket's real sold-out shape).
+        assert len({e.identity_key() for e in events}) == 3
+
+
+class TestMultiWeekThemedCampPage:
+    """Sprint 028 ticket 004's own Testing requirement: a fixture-based
+    test exercising a multi-session page (N week-rows), standing in for
+    the San Diego Zoo's registered per-program pages (e.g.
+    registry/sources/sd-zoo-classic-camp-kindergarten.toml), each of
+    which offers two named four-week themes at one shared price.
+    Fixture body is
+    ``tests/fixtures/program_pages/multi_week_camp_page.html``.
+    """
+
+    ZOO_URL = "https://example.org/camps/fixture-wildlife-camp"
+
+    _ZOO_RESULTS = [
+        ProgramExtractionResult(
+            program_name="Fixture Wildlife Camp -- Wonderful Wildlife Discoveries (June 8-12)",
+            audience_grades=["K-5th grade"],
+            date_start="2026-06-08",
+            date_end="2026-06-12",
+            cost="$525 per person",
+            eligibility="Entering K-5th grade in fall 2026",
+            is_open=True,
+            opportunity_type="Camps",
+        ),
+        ProgramExtractionResult(
+            program_name="Fixture Wildlife Camp -- Wonderful Wildlife Discoveries (June 15-19)",
+            audience_grades=["K-5th grade"],
+            date_start="2026-06-15",
+            date_end="2026-06-19",
+            cost="$525 per person",
+            eligibility="Entering K-5th grade in fall 2026",
+            is_open=True,
+            opportunity_type="Camps",
+        ),
+        ProgramExtractionResult(
+            program_name="Fixture Wildlife Camp -- Wildlife on the Move! (July 13-17)",
+            audience_grades=["K-5th grade"],
+            date_start="2026-07-13",
+            date_end="2026-07-17",
+            cost="$525 per person",
+            eligibility="Entering K-5th grade in fall 2026",
+            is_open=True,
+            opportunity_type="Camps",
+        ),
+    ]
+
+    def _zoo_body(self) -> str:
+        return (FIXTURES_DIR / "multi_week_camp_page.html").read_text()
+
+    def _zoo_source(self) -> SourceConfig:
+        return SourceConfig(
+            source_id="fixture_zoo_camp",
+            org_name="Fixture Wildlife Camp",
+            adapter_type="program_page_multi",
+            config={
+                "url": self.ZOO_URL,
+                "program_kind": "program",
+                "opportunity_type": "Camps",
+            },
+        )
+
+    def test_n_week_rows_yield_n_distinct_dated_priced_camps_events(self, tmp_path):
+        llm_client = FixtureProgramLLMClient(list_responses={self.ZOO_URL: self._ZOO_RESULTS})
+        adapter = ProgramPageMultiAdapter(llm_client=llm_client, cache=ProgramExtractionCache(tmp_path))
+        raw = RawResponse(ref=EventRef(url=self.ZOO_URL), status=200, body=self._zoo_body())
+
+        events = list(adapter.extract(raw, self._zoo_source()))
+
+        assert len(events) == 3
+        assert all(e.opportunity_type == "Camps" for e in events)
+        assert all(e.cost == "$525 per person" for e in events)
+        assert all(e.description == "" for e in events)  # none sold out
+
+        starts = [e.start.date().isoformat() for e in events]
+        assert starts == ["2026-06-08", "2026-06-15", "2026-07-13"]
+        # Distinct end dates too -- each is its own independent week,
+        # not one blended date range applied to all three.
+        ends = {e.end.date().isoformat() for e in events}
+        assert len(ends) == 3

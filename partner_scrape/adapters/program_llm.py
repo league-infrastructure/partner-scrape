@@ -233,10 +233,9 @@ if not stated.
 "Paid stipend", "$500 fee"), or "" if not stated.
 - eligibility: a short free-text summary of eligibility requirements \
 (grade level, residency, citizenship, GPA, etc.), or "" if not stated.
-- is_open: true if the page indicates applications are currently open or \
-the program is accepting applicants, false if the page indicates the \
-application window is closed for the current cycle. Default to true when \
-the page gives no clear signal either way.
+- is_open: true if open for enrollment/application; false if closed, \
+full, or sold out. Default to true when the page gives no clear signal \
+either way.
 - opportunity_type: exactly one of {_OPPORTUNITY_TYPE_VALUES}, based on \
 what kind of opportunity this is. Use "Out-of-school Programs" as the \
 general default whenever nothing more specific clearly applies -- this \
@@ -276,6 +275,8 @@ for that program, and never blend two distinct programs' details into \
 one record.
 
 {_FIELD_EXTRACTION_RULES}
+
+If no distinct programs are described on the page, return an empty list.
 
 Respond only with the structured JSON the response format requires: a \
 single object with one key, "programs", whose value is a list with \

@@ -1,0 +1,43 @@
+# Southwestern College Y.E.S. Academy -- youth summer program,
+# registered via the college's XenDirect (Xenegrade) course-catalog
+# portal. Sprint 028 ticket 004 (issue 29). DISABLED -- see below.
+#
+# XenDirect's course search
+# (registration.xendirect.com/swccd/search.cfm) is a POST-only form
+# (`<form ... action="searchResults.cfm" method="post">`); a plain GET
+# against the landing page returns only the search-form shell (category
+# and session dropdowns, no course listing), and a direct GET against
+# `searchResults.cfm` with the Y.E.S. Academy session's own query
+# parameters (`sesID=1045` = "SU26 YESAcademy", the most recent Y.E.S.
+# session offered) returns the same empty shell -- this backend does
+# not serve results to a plain unauthenticated GET the way a
+# server-rendered listing page would, despite issue 29 describing this
+# platform generically as "server-rendered."
+#
+# Separately, and independent of the GET-vs-POST blocker: the session
+# dropdown's own option list tops out at "SU26 YESAcademy" (summer
+# 2026, already past as of this 2026-09-01 verification) and "SU27 CE
+# Course" (a non-Y.E.S. category) -- no "SU27 YESAcademy" option exists
+# yet, so even a working search would currently have no upcoming Y.E.S.
+# Academy session to return.
+#
+# DISABLED: no live-scrapable session listing is reachable for this
+# source as of verification (sprint 027 tickets 005/006
+# disabled-with-reason precedent). Re-verify once either XenDirect
+# begins serving search results to a plain GET, or Southwestern College
+# publishes a directly-crawlable Y.E.S. Academy schedule/pricing page
+# outside the XenDirect portal.
+
+org_name = "Southwestern College -- Y.E.S. Academy"
+adapter_type = "program_page_multi"
+enabled = false  # disabled: XenDirect course search is POST-only and returns no session data to a plain GET; no upcoming Y.E.S. Academy session is posted as of verification (2026-09-01)
+
+[config]
+url = "https://registration.xendirect.com/swccd/search.cfm"
+program_kind = "program"
+opportunity_type = "Camps"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 29 (2026-08-30 camp session extraction); sprint 028 ticket 004 live verification (2026-09-01)"
