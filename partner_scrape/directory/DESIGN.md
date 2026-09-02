@@ -1,8 +1,82 @@
 # directory
 
-**Owner:** Eric Busboom · **Last reviewed:** 2026-09-02 (sprint 032 ticket 003 — Civil Air Patrol squadrons roster curated and registered) · **Status:** Places, Clubs (Hack Club chapters + CyberPatriot teams + Civil Air Patrol squadrons; the curated static-roster source generalized to serve any club type), and Offerings (volunteer org profiles + free/Title I school programs) complete; issue 35b's remaining four club types' curated content (tickets 004-007) and issue 33's educator-PD program pages (routed through `adapters/`, not this module — see this doc's sprint 030 Revision) deferred/tracked elsewhere
+**Owner:** Eric Busboom · **Last reviewed:** 2026-09-02 (sprint 032 ticket 004 — Sea Cadets units roster curated and registered) · **Status:** Places, Clubs (Hack Club chapters + CyberPatriot teams + Civil Air Patrol squadrons + Naval Sea Cadet Corps units; the curated static-roster source generalized to serve any club type), and Offerings (volunteer org profiles + free/Title I school programs) complete; issue 35b's remaining three club types' curated content (tickets 005-007) and issue 33's educator-PD program pages (routed through `adapters/`, not this module — see this doc's sprint 030 Revision) deferred/tracked elsewhere
 
 ---
+
+## Revision (2026-09-02 — sprint 032 ticket 004: Sea Cadets units roster curated and registered)
+
+Populates the third of issue 35b's six remaining club types against
+the generalized `club_static_roster` source (ticket 001): four
+San Diego/North County U.S. Naval Sea Cadet Corps (NSCC) units,
+registered via a new `directory/registry/sea-cadets-sd.toml` entry
+pointing at a new `directory/data/sea-cadets-sd.tsv` (same ten-column
+shape as `hack-club-sd.tsv`). No code change — content-only. Unlike
+tickets 002/003, issue 35b named no starting units for this type — all
+four were found via this ticket's own research.
+
+**Sources checked** (live-verified 2026-09-02):
+
+- **Escondido Battalion & Training Ship Kit Carson**
+  (escondidobattalion.org) — founded 2011, drills two weekend days a
+  month during the school year at Escondido Police & Fire HQ, 1163 N.
+  Centre City Pkwy, Escondido, CA 92026. Strongest verification of the
+  four: a live, working, currently-maintained unit site.
+- **Gunfighter Squadron & Training Ship TopGun**
+  (sites.google.com/site/gunfightertopgun) — aviation-oriented unit
+  formed 1973, based at MCAS Miramar; its own site lists an upcoming
+  drill dated August 29, 2026, directly confirming current activity.
+- **Michael A. Monsoor Battalion** — construction-battalion-oriented
+  unit at Marine Corps Base Camp Pendleton; confirmed active via a
+  November 13, 2023 NBC 7 San Diego news report on equipment stolen
+  from the unit ("Thief steals gear and uniforms from youth military
+  group at Camp Pendleton"). No dedicated unit website found; listed
+  on Navy League San Diego's own current youth-programs page
+  (navyleague-sd.com/sea-cadets/).
+- **Chief MCM-14 Division** — named for the former mine-countermeasures
+  ship USS Chief (MCM-14, now homeported in Japan), based at Naval
+  Base San Diego; listed on Navy League San Diego's own current
+  youth-programs page. **Weakest verification of the four**: no
+  independent unit website, no dated recent activity found beyond the
+  sponsor listing itself — included on the strength of a live,
+  currently-published sponsor page naming it without any inactive/
+  defunct indication, not a dedicated source of its own.
+
+**Found but deliberately excluded** (an honest finding, not a gap in
+research): **Challenger Division / TS Columbia** and **Coronado
+Battalion**, both cited in older secondary sources (a 2019 Cadet-of-
+the-Year award for Challenger; general San Diego Sea Cadets
+overviews), show clear signs of current inactivity at live-verification
+time — Challenger's own domain (`challenger-seacadets.org`) no longer
+resolves (DNS failure), and Coronado's own domain
+(`coronadoseacadets.org`) serves a broken/mismatched TLS certificate;
+independent search results describe on-base Sea Cadet activities at
+Naval Amphibious Base Coronado as "currently suspended until further
+notice." Recording their prior existence here rather than including
+them as active entries follows this module's own "flag it, don't force
+it" convention (Helix Charter's own precedent) applied to a whole
+entry rather than a single geocoding match.
+
+**Geocoding outcome**: one entry (Escondido Battalion, zip 92026)
+resolves at `"zip"` precision — the real, committed
+`zip-centroids.toml` covers that code. The other three (Gunfighter
+Squadron/MCAS Miramar, Michael Monsoor Battalion/Camp Pendleton, Chief
+MCM-14 Division/Naval Base San Diego) have zip codes not present in
+that same file, so they fall one rung further to `"city"` precision
+(San Diego/Oceanside city centroids) — still a real, non-guessed
+ladder rung per sprint.md's Architecture "Geocoding note," never a
+fabricated coordinate. `needs_review = False` for all four; no
+school-matching rung ever fires (none of these organizations' names
+share meaningful tokens with a CDE/NCES school name).
+
+**Test-suite impact**: no new parsing-shape test file — the data
+reused `hack-club-sd.tsv`'s exact column shape. A new
+`TestRealSeaCadetsGeocoding` class in `test_pipeline.py` (mirroring
+ticket 003's own `TestRealCivilAirPatrolGeocoding`) pins the real Sea
+Cadets roster's mixed zip/city outcome end-to-end. Full-registry
+`clubs_meta.total` assertions across `test_pipeline.py` now expect
+`18` (4 Hack Club + 3 CyberPatriot + 7 Civil Air Patrol + 4 Sea
+Cadets), not `14`.
 
 ## Revision (2026-09-02 — sprint 032 ticket 003: Civil Air Patrol squadrons roster curated and registered)
 
