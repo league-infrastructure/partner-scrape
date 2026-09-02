@@ -1,6 +1,10 @@
 ---
-status: pending
+status: in-progress
 sprint: '033'
+tickets:
+- 033-001
+- 033-002
+- 033-003
 ---
 
 # Audience gaps: Spanish-language, South Bay/East County, accessibility
