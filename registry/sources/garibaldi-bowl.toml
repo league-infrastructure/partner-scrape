@@ -1,0 +1,39 @@
+# Garibaldi Bowl -- the San Diego regional of the National Ocean
+# Sciences Bowl (NOSB), hosted by the University of San Diego. Sprint
+# 029 ticket 001 (issue 30's single-event program_page competition
+# batch), `program_page` adapter, `config.opportunity_type =
+# "Competitions"` per the sprint's operator-curated-override mechanism
+# decision (registry/DESIGN.md's sprint 029 addendum).
+#
+# Live-verification failure (2026-09-01, WebFetch; see
+# sd-science-olympiad.toml's comment for this ticket's network-access
+# caveat). The one dedicated page every search result still points to,
+# `http://home.sandiego.edu/~jcprairie/nosb.html` (a USD faculty
+# homepage-server page for regional coordinator Jenny Prairie), returns
+# a genuine HTTP 404 -- confirmed on two separate fetch attempts. No
+# other current, dedicated Garibaldi Bowl page could be found:
+# `nosb.org`'s national site has no per-region page (only a national
+# "2026 Regional Bowl Winning Teams" results roundup, which names the
+# Garibaldi Bowl's past winner but carries no future date or
+# registration information), and a live web search corroborates this:
+# the Garibaldi Bowl's own 2026 competition date is reported as "TBD"
+# with only an organizer email (NOSB@sandiego.edu, or coordinators
+# darbiberry@sandiego.edu / jcprairie@sandiego.edu) as contact -- no
+# live page to fetch. Registered disabled rather than silently
+# dropped, per this ticket's own Acceptance Criteria. Re-verify if USD
+# stands up a current Garibaldi Bowl page (or migrates the coordinator
+# page off the legacy `home.sandiego.edu` faculty-homepage server).
+
+org_name = "University of San Diego (Garibaldi Bowl, National Ocean Sciences Bowl)"
+adapter_type = "program_page"
+enabled = false  # disabled: the only known dedicated page (home.sandiego.edu/~jcprairie/nosb.html) returns HTTP 404, and no other live dedicated page could be found -- see comment above
+
+[config]
+url = "http://home.sandiego.edu/~jcprairie/nosb.html"
+program_kind = "program"
+opportunity_type = "Competitions"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 30 (2026-08-30 competition sources without feeds); sprint 029 ticket 001 live verification (2026-09-01)"

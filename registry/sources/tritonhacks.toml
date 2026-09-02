@@ -1,0 +1,32 @@
+# TritonHacks -- a UCSD student-run, weekend-long hackathon for high
+# school students. Sprint 029 ticket 001 (issue 30's single-event
+# program_page competition batch), `program_page` adapter,
+# `config.opportunity_type = "Competitions"` per the sprint's
+# operator-curated-override mechanism decision (registry/DESIGN.md's
+# sprint 029 addendum). Registered directly against the event's own
+# official page (`tritonhacks.org`), not
+# `hackathons.hackclub.com`'s aggregator -- per issue 30's explicit
+# instruction to register each hackathon's own page.
+#
+# Live-verified 2026-09-01 (WebFetch; see sd-science-olympiad.toml's
+# comment for this ticket's network-access caveat).
+# `https://www.tritonhacks.org/` returns HTTP 200 with real,
+# correctly-dated content: the event is scheduled for "May 16 & 17"
+# (2026), with applications closing "May 8th 11:59pm"; eligibility is
+# explicitly high-school students of all skill levels, teams of up to
+# 4. A correctly-dated Competitions record is expected from this page
+# as-is.
+
+org_name = "TritonHacks (UC San Diego)"
+adapter_type = "program_page"
+enabled = true
+
+[config]
+url = "https://www.tritonhacks.org/"
+program_kind = "program"
+opportunity_type = "Competitions"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 30 (2026-08-30 competition sources without feeds); sprint 029 ticket 001 live verification (2026-09-01)"

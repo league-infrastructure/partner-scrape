@@ -1,0 +1,43 @@
+# SDFTC (San Diego FIRST Tech Challenge) league play -- sdftc.org, a
+# Weebly site. Sprint 029 ticket 001 (issue 30's single-event
+# program_page competition batch), `program_page` adapter,
+# `config.opportunity_type = "Competitions"` per the sprint's
+# operator-curated-override mechanism decision (registry/DESIGN.md's
+# sprint 029 addendum). Distinct from cafirst.org's own TEC-backed FRC
+# registration (issue 25, out of scope for this sprint) -- this is
+# sdftc.org itself, the regional FTC organizing body's own site.
+#
+# Live-verified 2026-09-01 (WebFetch; see sd-science-olympiad.toml's
+# comment for this ticket's network-access caveat). `https://www.sdftc.org/`
+# returns real, current content describing the organization and its
+# season structure, with nav references to a "2026-27 Kick Off" and
+# "2026-27 Registration" -- confirming the site is live and
+# season-current -- but the homepage itself carries no specific
+# tournament/league-meet dates in its visible body text.
+# `https://www.sdftc.org/2025-26registration.html` (page last updated
+# 2025-09-24) has real current-season dates, but only for team
+# registration mechanics (Oct 20 2025 registration deadline, Oct 23
+# league-selection notification), not tournament dates.
+# `https://www.sdftc.org/league-meets.html` returned real date content
+# but for the 2016-17 season (last updated 2017-02-07) -- nine years
+# stale; deliberately NOT used as `config.url` to avoid the LLM
+# extracting a wrong-year date as if current. The homepage is used
+# instead: no specific date recovered at verification time is an
+# accepted gap for a rolling/not-yet-updated-for-the-season page (the
+# `sd-foundation-community-scholarship.toml` precedent: "no
+# start/end date recovered ... not a reduction-step gap"), not
+# evidence of a block -- the org and site are genuinely live.
+
+org_name = "San Diego FIRST Tech Challenge"
+adapter_type = "program_page"
+enabled = true
+
+[config]
+url = "https://www.sdftc.org/"
+program_kind = "program"
+opportunity_type = "Competitions"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 30 (2026-08-30 competition sources without feeds); sprint 029 ticket 001 live verification (2026-09-01)"

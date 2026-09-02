@@ -812,3 +812,113 @@ class TestCampMarketingPageProviders:
                 assert not is_marketing_page, (
                     f"{source.source_id} registers Helen Woodward via a marketing page"
                 )
+
+
+class TestCompetitionSourceConfig:
+    """Sprint 029 ticket 001 (issue 30's single-event program_page
+    competition batch, SUC-044): every source reuses the existing
+    ``program_page`` adapter_type with ``config.opportunity_type =
+    "Competitions"`` -- the same operator-curated-override convention
+    ``sd-foundation-community-scholarship.toml`` established for
+    ``"Funding Opportunities"`` (registry/DESIGN.md's sprint 029
+    addendum). No new loader code is expected -- this verifies the
+    existing untyped-``config``-dict mechanism already handles this
+    reuse, exactly like the sprint 027/028 precedents above.
+    """
+
+    #: (source_id, org_name substring) for every enabled=true
+    #: competition source this ticket registers.
+    _ENABLED_COMPETITION_SOURCES = [
+        "sdftc-league-play",
+        "seaperch-sd-regional",
+        "mathcounts-sd-chapter",
+        "doe-science-bowl-sd",
+        "sd-brain-bee",
+        "botball-greater-sd",
+        "congressional-app-challenge-sd",
+        "tritonhacks",
+    ]
+
+    #: (source_id, reason substring expected in the file's disabled
+    #: comment) for every enabled=false competition source this ticket
+    #: registers -- sprint 027 tickets 005/006's disabled-with-reason
+    #: precedent.
+    _DISABLED_COMPETITION_SOURCES = [
+        ("sd-science-olympiad", "ECONNREFUSED"),
+        ("garibaldi-bowl", "404"),
+        ("cipherhacks", "403"),
+    ]
+
+    def test_every_enabled_competition_source_is_program_page_with_competitions_override(self):
+        sources = {s.source_id: s for s in load_sources()}
+
+        for source_id in self._ENABLED_COMPETITION_SOURCES:
+            assert source_id in sources, f"{source_id} is not registered"
+            source = sources[source_id]
+            assert source.adapter_type == "program_page"
+            assert source.enabled is True
+            assert source.config["program_kind"] == "program"
+            assert source.config["opportunity_type"] == "Competitions"
+            assert source.config["url"].startswith("https://")
+
+    def test_disabled_competition_sources_carry_a_reason_comment(self):
+        for source_id, reason_substring in self._DISABLED_COMPETITION_SOURCES:
+            path = DEFAULT_SOURCES_DIR / f"{source_id}.toml"
+            assert path.exists(), f"{source_id}.toml does not exist"
+            text = path.read_text()
+            assert "disabled:" in text
+            assert reason_substring in text
+
+        sources = {s.source_id: s for s in load_sources()}
+        for source_id, _ in self._DISABLED_COMPETITION_SOURCES:
+            assert sources[source_id].enabled is False
+            assert sources[source_id].adapter_type == "program_page"
+            assert sources[source_id].config["opportunity_type"] == "Competitions"
+
+    def test_cyberpatriot_sd_is_disabled_referencing_issue_38(self):
+        # AC: CyberPatriot SD / SoCal Mayor's Cyber Cup is registered
+        # enabled=false with a reason comment referencing issue 38 (the
+        # headless-fetcher settle-wait gap ndia-sd.org's JS-rendering
+        # needs) -- the sprint's own architecture decision, not
+        # re-derived by this ticket.
+        sources = {s.source_id: s for s in load_sources()}
+
+        assert "cyberpatriot-sd" in sources
+        source = sources["cyberpatriot-sd"]
+        assert source.adapter_type == "program_page"
+        assert source.enabled is False
+        assert source.config["opportunity_type"] == "Competitions"
+        assert source.acquisition_policy.get("fetch_strategy") == "headless"
+
+        path = DEFAULT_SOURCES_DIR / "cyberpatriot-sd.toml"
+        text = path.read_text()
+        assert "issue 38" in text
+
+    def test_no_new_adapter_type_or_config_key_introduced(self):
+        # AC: no registered source in this ticket introduces a new
+        # adapter_type value or a new conventional config key --
+        # program_page with program_kind/opportunity_type only.
+        all_ids = [source_id for source_id, _ in self._DISABLED_COMPETITION_SOURCES] + [
+            "cyberpatriot-sd"
+        ] + self._ENABLED_COMPETITION_SOURCES
+        sources = {s.source_id: s for s in load_sources()}
+
+        for source_id in all_ids:
+            source = sources[source_id]
+            assert source.adapter_type == "program_page"
+            assert set(source.config.keys()) <= {"url", "program_kind", "opportunity_type"}
+
+    def test_congressional_app_challenge_does_not_register_house_gov(self):
+        # Issue 30: "house.gov 403s; do not register that domain."
+        sources = load_sources()
+
+        for source in sources:
+            assert "house.gov" not in source.config.get("url", "")
+
+    def test_hackathons_registered_directly_not_via_hackclub_aggregator(self):
+        # Issue 30: register each hackathon's own official page
+        # directly, not hackathons.hackclub.com's aggregator.
+        sources = {s.source_id: s for s in load_sources()}
+
+        for source_id in ("tritonhacks", "cipherhacks"):
+            assert "hackclub.com" not in sources[source_id].config["url"]

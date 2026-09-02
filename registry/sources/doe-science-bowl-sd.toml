@@ -1,0 +1,38 @@
+# DOE National Science Bowl -- San Diego High School Regional, run by
+# UCSD Student Organizations under the U.S. DOE Office of Science's
+# National Science Bowl program. Sprint 029 ticket 001 (issue 30's
+# single-event program_page competition batch), `program_page`
+# adapter, `config.opportunity_type = "Competitions"` per the sprint's
+# operator-curated-override mechanism decision (registry/DESIGN.md's
+# sprint 029 addendum).
+#
+# Live-verified 2026-09-01 (WebFetch; see sd-science-olympiad.toml's
+# comment for this ticket's network-access caveat).
+# `https://science.osti.gov/wdts/nsb/Regional-Competitions/High-School-Regionals/California/CA_San-Diego-High-School-Regional-Science-Bowl`
+# (a federal .gov page) returns HTTP 200 with real competition-shaped
+# content: venue (UCSD Applied Physics & Mathematics Building, room
+# 7409), $100/team registration fee, a 12-team cap (2 per school), and
+# a registration-deadline of "before November 24, 2025" with
+# preregistration opening October 6, 2025. The displayed event date
+# itself ("February, 28, 2025") is stale by one season -- the page has
+# evidently not yet been updated for the 2026-27 cycle at
+# verification time. Registered enabled anyway, matching this
+# sprint's accepted "an annual page whose organizer hasn't yet posted
+# next year's dates is handled the same way an off-season camp page is
+# ... not an error" design rationale (registry/DESIGN.md's sprint 029
+# addendum) -- the org, page, and season structure are all genuinely
+# live; only the specific date field lags.
+
+org_name = "UCSD Student Organizations (DOE National Science Bowl, San Diego Regional)"
+adapter_type = "program_page"
+enabled = true
+
+[config]
+url = "https://science.osti.gov/wdts/nsb/Regional-Competitions/High-School-Regionals/California/CA_San-Diego-High-School-Regional-Science-Bowl"
+program_kind = "program"
+opportunity_type = "Competitions"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 30 (2026-08-30 competition sources without feeds); sprint 029 ticket 001 live verification (2026-09-01)"

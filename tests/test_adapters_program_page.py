@@ -458,6 +458,52 @@ class TestCacheKeyIsDerivedFromReducedTextNotRawBody:
         assert events_a[0].title == events_b[0].title
 
 
+class TestCompetitionSourceExtraction:
+    """Sprint 029 ticket 001's own Testing requirement (SUC-044's own
+    Acceptance Criteria): a ``FixtureProgramLLMClient``-based fixture
+    test proving one of this ticket's registered competition pages maps
+    to a correctly-dated, ``"Competitions"``-typed ``Event`` via the
+    existing ``_extract_one_program`` mapping -- the identical
+    ``program_page`` mechanism sprint 027/028 already ship and test
+    above, exercised here with ``config.opportunity_type =
+    "Competitions"`` instead of ``"Funding Opportunities"``/``"Camps"``.
+    No new adapter code: one representative fixture is sufficient, per
+    the ticket's own Testing note, since the mapping logic itself is
+    unchanged and already covered by the tests above.
+    """
+
+    def test_competition_page_maps_to_a_correctly_dated_competitions_event(self, tmp_path):
+        result = _extraction_result(
+            program_name="SeaPerch San Diego Regional",
+            audience_grades=["6th grade", "7th grade", "8th grade", "9th grade", "10th grade"],
+            date_start="2026-04-04",
+            date_end="2026-04-04",
+            cost="",
+            eligibility="San Diego County student teams building an underwater ROV.",
+            is_open=True,
+            opportunity_type="Out-of-school Programs",  # LLM's own guess -- must lose to the config override
+        )
+        llm_client = FixtureProgramLLMClient(responses={PAGE_URL: result})
+        adapter = ProgramPageAdapter(llm_client=llm_client, cache=ProgramExtractionCache(tmp_path))
+        source = _source(program_kind="program", opportunity_type="Competitions")
+        fetcher = _fetcher()
+
+        refs = adapter.discover(source, fetcher)
+        raw = adapter.fetch(refs[0], fetcher, source)
+        events = list(adapter.extract(raw, source))
+
+        assert len(events) == 1
+        event = events[0]
+        assert event.kind == "program"
+        assert event.title == "SeaPerch San Diego Regional"
+        assert event.start == datetime.fromisoformat("2026-04-04")
+        assert event.end == datetime.fromisoformat("2026-04-04")
+        assert event.opportunity_type == "Competitions"
+        assert event.field_provenance["opportunity_type"] == Provenance(
+            source="program_page", confidence=1.0
+        )
+
+
 class TestOversizedPageExtractsSuccessfullyAfterReduction:
     """AC: a ``FixtureProgramLLMClient``-based fixture test proves the
     reduced ~900KB fixture page (representative of the SD Foundation

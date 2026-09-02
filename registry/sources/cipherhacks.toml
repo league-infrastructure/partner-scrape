@@ -1,0 +1,41 @@
+# CipherHacks -- a free, student-led high school cybersecurity
+# hackathon held at the San Diego Central Library. Sprint 029 ticket
+# 001 (issue 30's single-event program_page competition batch),
+# `program_page` adapter, `config.opportunity_type = "Competitions"`
+# per the sprint's operator-curated-override mechanism decision
+# (registry/DESIGN.md's sprint 029 addendum). Registered directly
+# against the event's own official page (`cipherhacks.tech`), not
+# `hackathons.hackclub.com`'s aggregator -- per issue 30's explicit
+# instruction to register each hackathon's own page.
+#
+# Live-verification failure (2026-09-01, WebFetch; see
+# sd-science-olympiad.toml's comment for this ticket's network-access
+# caveat). `https://cipherhacks.tech/` returned HTTP 403 Forbidden on
+# two separate fetch attempts -- a real server-side response (not a
+# connection-level failure, contrast `sd-science-olympiad.toml`'s
+# ECONNREFUSED), consistent with a WAF/bot-protection block, the same
+# category of finding that disabled `noaa-hutton.toml` and
+# `sdzwa-internquest.toml` in sprint 027. A web search independently
+# confirms the event is real and current (KPBS coverage, a public
+# Instagram announcement, and the site's own indexed title all agree:
+# CipherHacks 2026, June 17-18, San Diego Central Library, free and
+# open to all HS skill levels), so this is registered disabled with
+# the known expected dates recorded here rather than silently
+# dropped. Re-verify with a differently-sourced fetch path (or once
+# this project's own fetcher is exercised directly, which this
+# execution environment's sandboxed bash tool could not do) before
+# enabling.
+
+org_name = "CipherHacks"
+adapter_type = "program_page"
+enabled = false  # disabled: cipherhacks.tech returned HTTP 403 Forbidden (WAF/bot block) on two live-verification attempts, 2026-09-01 -- see comment above
+
+[config]
+url = "https://cipherhacks.tech/"
+program_kind = "program"
+opportunity_type = "Competitions"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 30 (2026-08-30 competition sources without feeds); sprint 029 ticket 001 live verification (2026-09-01)"

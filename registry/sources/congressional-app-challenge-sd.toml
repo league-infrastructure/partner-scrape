@@ -1,0 +1,38 @@
+# Congressional App Challenge -- San Diego-area districts (CA-49, CA-50,
+# CA-51, CA-52 confirmed participating; CA-48 not, per live check
+# below). Sprint 029 ticket 001 (issue 30's single-event program_page
+# competition batch), `program_page` adapter, `config.opportunity_type
+# = "Competitions"` per the sprint's operator-curated-override
+# mechanism decision (registry/DESIGN.md's sprint 029 addendum). One
+# registration covers all participating local districts via the
+# challenge's own participating-districts page, per issue 30's
+# instruction to register the org's own official page directly.
+# `house.gov` is deliberately NOT used as `config.url` -- issue 30
+# itself records "house.gov 403s; do not register that domain",
+# confirmed again during this ticket's own verification pass (a
+# district's own `*.house.gov/AppChallenge` page 403s the same way).
+#
+# Live-verified 2026-09-01 (WebFetch; see sd-science-olympiad.toml's
+# comment for this ticket's network-access caveat).
+# `https://www.congressionalappchallenge.us/participating-districts/`
+# returns HTTP 200 and lists all five San Diego-area districts by
+# number and representative, with CA-49 (Mike Levin), CA-50 (Scott
+# Peters), CA-51 (Sara Jacobs), and CA-52 (Juan Vargas) marked signed
+# up for the current cycle (CA-48/Darrell Issa is not); the page also
+# states "The 2026 Congressional App Challenge runs from May 1 to
+# October 26, 2026" -- a correctly-dated Competitions record (an open
+# application window) is expected from this page as-is.
+
+org_name = "Congressional App Challenge"
+adapter_type = "program_page"
+enabled = true
+
+[config]
+url = "https://www.congressionalappchallenge.us/participating-districts/"
+program_kind = "program"
+opportunity_type = "Competitions"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 30 (2026-08-30 competition sources without feeds); sprint 029 ticket 001 live verification (2026-09-01)"

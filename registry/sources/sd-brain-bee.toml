@@ -1,0 +1,31 @@
+# San Diego Brain Bee -- hosted by UC San Diego's neuroscience graduate
+# program (neurograd.ucsd.edu). Sprint 029 ticket 001 (issue 30's
+# single-event program_page competition batch), `program_page`
+# adapter, `config.opportunity_type = "Competitions"` per the sprint's
+# operator-curated-override mechanism decision (registry/DESIGN.md's
+# sprint 029 addendum).
+#
+# Live-verified 2026-09-01 (WebFetch; see sd-science-olympiad.toml's
+# comment for this ticket's network-access caveat).
+# `https://neurograd.ucsd.edu/neuro-events/outreach/brain-bee.html`
+# returns HTTP 200 with real, correctly-dated content: the 16th Annual
+# San Diego Brain Bee is "February 14, 2026 at 10:00AM - 2:00 PM",
+# eligibility is HS students ages 14-18 / grades 9-12 in the San Diego
+# area, and the page notes "Nominations are closed for 2026 Brain
+# Bee" (registration-closed status for the 2026 running, expected to
+# reopen for the following cycle). A correctly-dated Competitions
+# record is expected from this page as-is.
+
+org_name = "UC San Diego Neurograd (San Diego Brain Bee)"
+adapter_type = "program_page"
+enabled = true
+
+[config]
+url = "https://neurograd.ucsd.edu/neuro-events/outreach/brain-bee.html"
+program_kind = "program"
+opportunity_type = "Competitions"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 30 (2026-08-30 competition sources without feeds); sprint 029 ticket 001 live verification (2026-09-01)"
