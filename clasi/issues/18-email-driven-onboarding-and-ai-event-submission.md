@@ -1,6 +1,6 @@
 ---
 status: pending
-sprint: '034'
+sprint: null
 ---
 
 # Email-driven partner onboarding + AI event submission
@@ -144,3 +144,25 @@ the LLM enrichment path touched by **issue 13**.
 - End-to-end: POST a sample webhook payload to the receiver, then run
   `ingest-mail` against the queue with a dry-run that never writes to the
   real `stem-ecosystem`.
+
+## PARKED (2026-09-02, stakeholder decision)
+
+Eric: "we're going to skip 34. I don't want to implement this yet, so
+just park the issue and don't implement Sprint 34."
+
+Sprint 034 was roadmapped for this issue during the 027-034 arc and
+reached roadmap phase only — `clasi/sprints/034-email-driven-partner-onboarding/sprint.md`
+exists, no detail planning, no tickets, no code. Nothing was built.
+
+Unblock before restarting: the two open questions this issue already
+carries are still open and are stakeholder calls, not engineering ones.
+(1) Webhook provider and hosting for the always-on receiver — SendGrid
+Inbound Parse vs. Mailgun Routes vs. SES→Lambda — and the dedicated
+inbound address. (2) Phase 2 depends on the append-only per-partner
+store; verify what actually exists today before assuming it does.
+
+Worth re-reading the issue's own "How it harmonizes" section when it
+restarts: it was written against the codebase as of mid-2026, and
+sprints 027-033 have since changed the extraction path substantially
+(`adapters/program_llm.py` now carries three genre profiles, and
+`extract.reduce_html_to_text()` sits in front of every LLM call).
