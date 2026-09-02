@@ -38,6 +38,8 @@ from partner_scrape.normalize.taxonomy import (
     classify_opportunity_type,
     derive_age_grade_level,
     derive_areas_of_interest,
+    derive_region,
+    derive_specific_attention,
     derive_time_of_day,
     map_cost,
 )
@@ -144,6 +146,16 @@ class Opportunity:
     eligibility: str = ""
     image_src: str = ""
     sources: frozenset[str] = field(default_factory=frozenset)
+    # Sprint 033, issue 34: internal bookkeeping only -- a coarse San
+    # Diego sub-region classification (South Bay, East County, North
+    # County Coastal, North County Inland, Central San Diego, or ""
+    # unclassified) derived from `location` by `taxonomy.derive_region`,
+    # feeding `observability/`'s per-region yield measurement and
+    # `scrape-meta.json`'s `"regions"` key. Not part of the site schema
+    # -- the same "internal bookkeeping, not the site's Opportunities
+    # table" treatment `sources` already gets; `export/writer.py`'s
+    # `SITE_SCHEMA_FIELDS` excludes both.
+    region: str = ""
 
 
 def _iso(dt: datetime | None) -> str:
@@ -276,6 +288,17 @@ def _to_opportunity(
     latitude = str(event.latitude) if event.latitude is not None else str(partner.get("latitude", ""))
     longitude = str(event.longitude) if event.longitude is not None else str(partner.get("longitude", ""))
 
+    # Sprint 033, issue 34: both pure keyword/text derivations, computed
+    # unconditionally (no field_provenance/LLM-wins precedence check like
+    # the four fields below -- neither value is ever LLM-set this sprint;
+    # see normalize/DESIGN.md's sprint 033 addition). `specific_attention`
+    # matches the same taxonomy text blob `areas_of_interest` uses;
+    # `region` matches the already-resolved `location` string computed
+    # below.
+    specific_attention = derive_specific_attention(text)
+    location = event.location or partner.get("location", "")
+    region = derive_region(location)
+
     # Prefer an Event's own LLM-set classification fields (sprint 002,
     # issue 04) over taxonomy.py's keyword fallback, checked
     # independently per field via field_provenance -- an Event can have
@@ -376,10 +399,10 @@ def _to_opportunity(
         time_of_day=time_of_day,
         opportunity_type=opportunity_type,
         areas_of_interest=areas_of_interest,
-        specific_attention=[],
+        specific_attention=specific_attention,
         financial_support="No",
         ngss_aligned="No",
-        location=event.location or partner.get("location", ""),
+        location=location,
         latitude=latitude,
         longitude=longitude,
         contact_name="",
@@ -389,6 +412,7 @@ def _to_opportunity(
         eligibility=eligibility,
         image_src=image_src,
         sources=instance.sources,
+        region=region,
     )
 
 

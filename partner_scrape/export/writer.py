@@ -56,8 +56,15 @@ from partner_scrape.normalize.run import DEADLINE_FIRST_TYPES, Opportunity
 #: Sprint 009: promoted from `_SITE_SCHEMA_FIELDS` (non-underscore, no
 #: behavior change) so `export/publish.py` reuses the exact same field
 #: set for its own per-partner event files instead of re-deriving it.
+#:
+#: Sprint 033: also excludes `region` -- a second internal-bookkeeping
+#: field (this sprint's regional-coverage classification), not part of
+#: the site's Opportunities table, the same treatment `sources` already
+#: gets. `region`'s *aggregate* (a per-region count, not the per-record
+#: value) is written into `scrape-meta.json` instead -- see
+#: `export_opportunities`'s `"regions"` key.
 SITE_SCHEMA_FIELDS: tuple[str, ...] = tuple(
-    f.name for f in fields(Opportunity) if f.name != "sources"
+    f.name for f in fields(Opportunity) if f.name not in ("sources", "region")
 )
 
 #: Sprint 020 ticket 001 (issue 61): bounds the `DEADLINE_FIRST_TYPES`

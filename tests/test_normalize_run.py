@@ -269,6 +269,54 @@ class TestTaxonomyDerivation:
         assert opportunity.cost_range == "Free"
 
 
+class TestSpecificAttentionAndRegionDerivation:
+    """Sprint 033, issue 34: `_to_opportunity()` derives both
+    `specific_attention` and the new internal `region` field, and
+    `region` never leaks into the site-schema serialization."""
+
+    def test_bilingual_signal_lands_on_specific_attention(self):
+        event = _event(title="Bilingual Storytime", location="Chula Vista, CA")
+
+        [opportunity] = run([event], PARTNERS_PATH)
+
+        assert opportunity.specific_attention == ["Programs in Spanish"]
+
+    def test_accessibility_signal_lands_on_specific_attention(self):
+        event = _event(title="Sensory Friendly Mornings")
+
+        [opportunity] = run([event], PARTNERS_PATH)
+
+        assert opportunity.specific_attention == ["Programs for students with disabilities"]
+
+    def test_region_is_derived_from_location(self):
+        event = _event(title="Farm Tour", location="El Cajon, CA")
+
+        [opportunity] = run([event], PARTNERS_PATH)
+
+        assert opportunity.region == "East County"
+
+    def test_unmatched_record_gets_empty_specific_attention_and_region(self):
+        """Regression check: a record matching neither keyword set exports
+        specific_attention=[] and region="", unchanged from today's stub
+        behavior."""
+        event = _event(title="Farm Tour", location="A venue with no known city")
+
+        [opportunity] = run([event], PARTNERS_PATH)
+
+        assert opportunity.specific_attention == []
+        assert opportunity.region == ""
+
+    def test_region_is_not_part_of_the_site_schema_serialization(self):
+        from partner_scrape.export.writer import SITE_SCHEMA_FIELDS, to_json_dict
+
+        event = _event(title="Farm Tour", location="Chula Vista, CA")
+
+        [opportunity] = run([event], PARTNERS_PATH)
+
+        assert "region" not in SITE_SCHEMA_FIELDS
+        assert "region" not in to_json_dict(opportunity)
+
+
 class TestLLMClassificationOverride:
     """`_to_opportunity` prefers an Event's own LLM-set classification
     fields over taxonomy.py's keyword derivation, checked independently
