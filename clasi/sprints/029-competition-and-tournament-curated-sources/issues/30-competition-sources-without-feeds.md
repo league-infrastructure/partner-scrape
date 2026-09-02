@@ -1,6 +1,12 @@
 ---
-status: pending
+status: in-progress
 sprint: 029
+tickets:
+- 029-001
+- 029-002
+- 029-003
+- 029-004
+- 029-005
 ---
 
 # Competition & tournament sources without feeds
