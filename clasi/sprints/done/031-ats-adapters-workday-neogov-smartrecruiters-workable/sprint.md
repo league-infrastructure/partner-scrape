@@ -1,7 +1,7 @@
 ---
 id: '031'
 title: 'ATS adapters: Workday, NEOGOV, SmartRecruiters, Workable'
-status: executing
+status: done
 branch: sprint/031-ats-adapters-workday-neogov-smartrecruiters-workable
 use-cases:
 - SUC-054
