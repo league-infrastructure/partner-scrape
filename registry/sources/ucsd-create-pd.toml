@@ -1,0 +1,45 @@
+# UCSD CREATE (Center for Research on Educational Equity, Assessment &
+# Teaching Excellence) -- sprint 030 ticket 005 (issue 33 part 1's
+# curated educator-PD registry, `profile="pd"` extraction). CREATE's
+# own Teacher Professional Development hub page names its constituent
+# programs (California Reading & Literature Project, San Diego Area
+# Writing Project, San Diego Science Project, UC San Diego Mathematics
+# Project, Code.org Regional Partnership, CSTA San Diego) -- four of
+# which (SD Science Project, UCSD Math Project, Code.org regional
+# partner, CSTA-SD) are separately registered per this same ticket
+# (sd-science-project.toml, ucsd-math-project.toml,
+# codeorg-sd-regional-partner.toml, csta-sd.toml); this file covers
+# CREATE's own hub page as the ticket's "UCSD CREATE" entry, not a
+# duplicate registration of any of the four.
+#
+# LIVE-VERIFIED 2026-09-02, real network + real
+# `AnthropicProgramLLMClient` via `uv run partner-scrape --source
+# ucsd-create-pd --dry-run -v`:
+#
+#   GET https://create.ucsd.edu/programs/professional-development/index.html
+#   -> HTTP 200. `found=0 dated=0` -- real, successful extraction call
+#   (confirmed via httpx 200 to the Anthropic API), correctly returning
+#   zero programs: this page is purely a hub of program-name cards each
+#   linking to a separate program's own site (confirmed by direct
+#   inspection -- "Teacher Professional Development Programs" lists six
+#   program names and contact emails, with zero inline dates, deadlines,
+#   or workshop details of its own). CONTENT-AVAILABILITY GAP, not an
+#   extraction or site-block failure: there is no PD event content on
+#   this specific URL for `profile="pd"` to recover -- the four programs
+#   it names with any recoverable dated content are registered under
+#   their own dedicated URLs by this same ticket instead. No
+#   instruction-shaped content found on the fetched page.
+
+org_name = "UCSD CREATE"
+adapter_type = "program_page_multi"
+enabled = false  # disabled: content-availability gap -- hub page names 6 constituent PD programs but carries zero inline dates/deadlines of its own; live-verified 2026-09-02 (found=0 dated=0)
+
+[config]
+url = "https://create.ucsd.edu/programs/professional-development/index.html"
+program_kind = "program"
+opportunity_type = "Professional Development / Conferences"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 33 part 1 (educator-PD program pages); sprint 030 ticket 005, live-verified via real dry-run (2026-09-02)"

@@ -1,0 +1,33 @@
+# Fleet Science Center -- Educator Workshops page (Fleet Inquiry
+# Institute), distinct from the general fleet-science-center.toml
+# public-events registration (`listing_html` against `/events`) -- this
+# entry targets the dedicated educator-PD catalog page instead. Sprint
+# 030 ticket 005 (issue 33 part 1).
+#
+# LIVE-VERIFIED 2026-09-02, real network + real
+# `AnthropicProgramLLMClient` via `uv run partner-scrape --source
+# fleet-educator-workshops --dry-run -v`:
+#
+#   GET https://www.fleetscience.org/events/educator-workshops -> HTTP
+#   200. `found=0 dated=0` -- the page states "Events are currently
+#   being scheduled. Thank you for your patience..." and lists five
+#   workshop *categories* (Future Scientist, Like A Scientist, Science
+#   Inquiry, Make Take & Teach, Around the Park) with no scheduled
+#   dates, directing inquiries to a human contact
+#   (schoolprograms@rhfleet.org) instead. CONTENT-AVAILABILITY GAP, not
+#   an extraction or site-block failure. No instruction-shaped content
+#   found on the fetched page.
+
+org_name = "Fleet Science Center (Educator Workshops)"
+adapter_type = "program_page_multi"
+enabled = false  # disabled: content-availability gap -- page states workshops are "currently being scheduled" with no dates published; live-verified 2026-09-02 (found=0 dated=0)
+
+[config]
+url = "https://www.fleetscience.org/events/educator-workshops"
+program_kind = "program"
+opportunity_type = "Professional Development / Conferences"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 33 part 1 (educator-PD program pages); sprint 030 ticket 005, live-verified via real dry-run (2026-09-02)"

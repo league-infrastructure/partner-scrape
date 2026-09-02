@@ -1225,3 +1225,132 @@ class TestMathCircleSourceConfig:
 
         assert source.adapter_type == "program_page_multi"
         assert set(source.config.keys()) <= {"url", "program_kind", "opportunity_type"}
+
+
+class TestEducatorPDSourceConfig:
+    """Sprint 030 ticket 005 (issue 33 part 1, SUC-049): nine curated
+    educator-PD program pages, each registered with
+    ``config.opportunity_type = "Professional Development / Conferences"``
+    -- the operator-curated-override mechanism that selects
+    ``adapters/program_llm.py``'s new ``profile="pd"`` extraction prompt
+    (ticket 004), reusing the existing ``program_page``/
+    ``program_page_multi`` ``adapter_type`` family exactly like sprint
+    029's competition batch. No new loader code, no new conventional
+    ``config`` key.
+
+    Real, live end-to-end verification (2026-09-02, real network + real
+    ``AnthropicProgramLLMClient``, via ``uv run partner-scrape --source
+    <id> --dry-run -v`` plus direct ``adapter.extract()`` calls for
+    field-level inspection) found four of the nine sources produce at
+    least one correctly-dated record (three of the four only past-dated
+    for the current cycle, filtered downstream by the existing currency
+    rule -- a pass, matching ``doe-science-bowl-sd.toml``'s precedent;
+    one, the Salk STEM Educators Summit, actually survives the currency
+    filter and writes a real upcoming opportunity). The other five are
+    genuine content-availability gaps (the page names or describes a
+    program but publishes no date anywhere), not extraction or
+    site-block failures -- registered ``enabled = false`` with a dated
+    reason comment each, per this file's own precedent.
+    """
+
+    #: (source_id, org_name substring) for every enabled=true educator-PD
+    #: source this ticket registers.
+    _ENABLED_PD_SOURCES = [
+        "sd-science-project",
+        "sdsu-crmse-math-project",
+        "salk-stem-educators-summit",
+        "sdzwa-teacher-workshops",
+    ]
+
+    #: (source_id, reason substring expected in the file's disabled
+    #: comment) for every enabled=false educator-PD source this ticket
+    #: registers.
+    _DISABLED_PD_SOURCES = [
+        ("ucsd-create-pd", "content-availability gap"),
+        ("ucsd-math-project", "content-availability gap"),
+        ("codeorg-sd-regional-partner", "content-availability gap"),
+        ("csta-sd", "content-availability gap"),
+        ("fleet-educator-workshops", "content-availability gap"),
+    ]
+
+    def test_every_educator_pd_source_uses_the_pd_opportunity_type_override(self):
+        sources = {s.source_id: s for s in load_sources()}
+
+        for source_id in self._ENABLED_PD_SOURCES + [
+            sid for sid, _ in self._DISABLED_PD_SOURCES
+        ]:
+            assert source_id in sources, f"{source_id} is not registered"
+            source = sources[source_id]
+            assert source.adapter_type in ("program_page", "program_page_multi")
+            assert source.config["program_kind"] == "program"
+            assert (
+                source.config["opportunity_type"]
+                == "Professional Development / Conferences"
+            )
+            assert source.config["url"].startswith("https://")
+
+    def test_enabled_sources_are_live_verified_and_enabled(self):
+        sources = {s.source_id: s for s in load_sources()}
+
+        for source_id in self._ENABLED_PD_SOURCES:
+            source = sources[source_id]
+            assert source.enabled is True
+
+            path = DEFAULT_SOURCES_DIR / f"{source_id}.toml"
+            text = path.read_text()
+            assert "LIVE-VERIFIED" in text
+
+    def test_disabled_sources_carry_a_dated_reason_comment(self):
+        sources = {s.source_id: s for s in load_sources()}
+
+        for source_id, reason_substring in self._DISABLED_PD_SOURCES:
+            source = sources[source_id]
+            assert source.enabled is False
+
+            path = DEFAULT_SOURCES_DIR / f"{source_id}.toml"
+            assert path.exists(), f"{source_id}.toml does not exist"
+            text = path.read_text()
+            assert "disabled:" in text
+            assert reason_substring in text
+            assert "LIVE-VERIFIED" in text
+
+    def test_k12oms_is_not_registered(self):
+        # AC: SDCOE's own PD registration system (k12oms.org) is
+        # confirmed excluded, not registered -- robots.txt Disallow: /,
+        # already on registry/DO_NOT_SCRAPE.md before this ticket.
+        sources = load_sources()
+
+        for source in sources:
+            assert "k12oms.org" not in source.config.get("url", "")
+
+    def test_no_existing_source_state_changed(self):
+        # AC: no existing source's enabled state, adapter_type, or
+        # config changes as a side effect of this ticket -- spot-check a
+        # handful of unrelated, previously-registered sources this
+        # ticket's live-verification work touched adjacent domains of
+        # (UCSD Localist, Fleet, Salk, San Diego Zoo).
+        sources = {s.source_id: s for s in load_sources()}
+
+        fleet = sources["fleet-science-center"]
+        assert fleet.adapter_type == "listing_html"
+        assert fleet.enabled is True
+        assert fleet.config["site_url"] == "https://www.fleetscience.org"
+
+        salk = sources["salk"]
+        assert salk.adapter_type == "generic_html"
+        assert salk.enabled is True
+        assert salk.config["site_url"] == "https://www.salk.edu"
+
+        zoo = sources["sandiegozoowildlifealliance"]
+        assert zoo.adapter_type == "generic_html"
+        assert zoo.enabled is False
+
+    def test_no_new_adapter_type_or_config_key_introduced(self):
+        sources = {s.source_id: s for s in load_sources()}
+
+        for source_id in self._ENABLED_PD_SOURCES + [
+            sid for sid, _ in self._DISABLED_PD_SOURCES
+        ]:
+            source = sources[source_id]
+            assert source.adapter_type in ("program_page", "program_page_multi")
+            assert set(source.config.keys()) <= {"url", "program_kind", "opportunity_type"}

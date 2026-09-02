@@ -1,9 +1,11 @@
 ---
 id: '005'
 title: Register and live-verify curated educator-PD program pages (issue 33 part 1)
-status: open
-use-cases: [SUC-049]
-depends-on: ['004']
+status: done
+use-cases:
+- SUC-049
+depends-on:
+- '004'
 github-issue: ''
 issue: 33-educator-programs-layer.md
 completes_issue: true
@@ -55,7 +57,7 @@ ticket.
 
 ## Acceptance Criteria
 
-- [ ] Each of the nine named sources is either registered
+- [x] Each of the nine named sources is either registered
       `enabled = true` and live-verified (real `--dry-run -v` run) to
       yield at least one correctly-dated `Professional Development /
       Conferences` record, or registered `enabled = false` with a
@@ -63,17 +65,17 @@ ticket.
       extraction failure even under `profile="pd"`, issue 39/40
       blocker, etc.) — matching sprint 027/028/029's disabled-source
       comment precedent exactly.
-- [ ] Each `enabled = true` source's chosen `adapter_type`
+- [x] Each `enabled = true` source's chosen `adapter_type`
       (`program_page`/`program_page_multi`/`program_listing`, with
       `config.link_selector` where needed) matches that page's actual
       observed markup, decided during this ticket's own live
       verification, not assumed from the source's description.
-- [ ] Every registered source's TOML records the live-verification
+- [x] Every registered source's TOML records the live-verification
       result (found/dated/wrote counts, date verified) in a header
       comment, matching sprint 029 ticket 007's own Notes-in-TOML
       precedent.
-- [ ] k12oms.org is confirmed excluded, not registered.
-- [ ] No existing source's `enabled` state, `adapter_type`, or config
+- [x] k12oms.org is confirmed excluded, not registered.
+- [x] No existing source's `enabled` state, `adapter_type`, or config
       changes as a side effect of this ticket.
 
 ## Testing
@@ -94,3 +96,62 @@ ticket.
   <source-id> --dry-run -v`, `dangerouslyDisableSandbox: true`) is a
   manual step recorded in each TOML's own header comment, not a
   pytest test.
+
+## Notes
+
+Real, live end-to-end verification (2026-09-02, real network + real
+`AnthropicProgramLLMClient`) of all nine named sources:
+
+**Enabled (4)** — real, correctly-dated `Professional Development /
+Conferences` records recovered:
+- `sd-science-project` (`program_page_multi`,
+  sdscienceproject.org/sdspevents) — found=3 dated=2, both past-cycle
+  (RET @ Penn State, BASP Wildfire Workshops).
+- `sdsu-crmse-math-project` (`program_page_multi`, crmse.sdsu.edu/mathproject)
+  — found=5 dated=2 (pipeline count; 3 correctly-dated records
+  confirmed by direct inspection), all past-cycle.
+- `salk-stem-educators-summit` (`program_page`,
+  salk.edu/.../salk-stem-educators-summit) — found=1 dated=1,
+  **wrote 1 opportunity** (2026-09-23, still upcoming) — the one
+  source that actually survives the export currency filter in this
+  run.
+- `sdzwa-teacher-workshops` (`program_page_multi`,
+  science.sandiegozoo.org/teacherworkshops) — found=5 dated=5,
+  all five past-cycle 2026 sessions.
+
+All four's past-cycle dates are filtered by the existing currency rule
+at export time, matching `doe-science-bowl-sd.toml`'s accepted
+precedent — the extraction itself is correct in every case; next
+year's dates will be picked up automatically by the existing weekly
+cron.
+
+**Disabled (5)** — genuine content-availability gaps (the extraction
+call succeeded; the page itself has no current dated content), not
+site blocks or extraction bugs:
+- `ucsd-create-pd` — hub page names 6 constituent programs, zero
+  inline dates.
+- `ucsd-math-project` — Summer Academies subpage names 4 real (2025-
+  cycle) programs, zero recoverable dates for any of them.
+- `codeorg-sd-regional-partner` — program description page, no
+  specific date published anywhere.
+- `csta-sd` — chapter's own Events page states no events are
+  currently scheduled.
+- `fleet-educator-workshops` — page explicitly states workshops are
+  "currently being scheduled."
+
+k12oms.org (SDCOE's own PD registration system) was re-confirmed
+excluded via the existing `registry/DO_NOT_SCRAPE.md` entry — not
+registered, no new `DO_NOT_SCRAPE.md` entry needed since no additional
+site's ToS/robots.txt was found to warrant one during this ticket.
+
+No page (of the 9 registered plus the two intermediate URLs checked
+for UCSD Math Project) carried any instruction-shaped text directed at
+an automated crawler or AI agent — each TOML's own header comment
+records this explicitly.
+
+New test class `TestEducatorPDSourceConfig` in `tests/test_registry.py`
+covers all nine sources' `adapter_type`/`config` shape, the
+enabled/disabled split, the dated reason comments, the k12oms.org
+exclusion, and a spot-check that no pre-existing source (Fleet, Salk,
+San Diego Zoo) was touched. Full suite: 2312 passed (baseline 2306 + 6
+new tests).

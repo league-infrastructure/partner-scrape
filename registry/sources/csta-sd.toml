@@ -1,0 +1,34 @@
+# CSTA San Diego (Computer Science Teachers Association, San Diego
+# chapter) -- sandiego.csteachers.org, the chapter's official site
+# (csta.ucsd.edu does not resolve -- DNS lookup failure confirmed live
+# 2026-09-02). Sprint 030 ticket 005 (issue 33 part 1). Registered
+# against the chapter's own Events page.
+#
+# LIVE-VERIFIED 2026-09-02, real network + real
+# `AnthropicProgramLLMClient` via `uv run partner-scrape --source
+# csta-sd --dry-run -v`:
+#
+#   GET https://sandiego.csteachers.org/events -> HTTP 200. `found=0
+#   dated=0` -- the page itself states "There are no events currently
+#   scheduled for CSTA San Diego (CA)." CONTENT-AVAILABILITY GAP, not an
+#   extraction or site-block failure: the page loads and the extraction
+#   call correctly returns an empty list because the page genuinely has
+#   no events posted right now, matching `program_llm.py`'s own explicit
+#   "if no distinct programs are described on the page, return an empty
+#   list" instruction. No instruction-shaped content found on the
+#   fetched page (the "Community Tags" character-restriction note is a
+#   standard chapter-site UI hint, not directed at a crawler).
+
+org_name = "CSTA San Diego"
+adapter_type = "program_page_multi"
+enabled = false  # disabled: content-availability gap -- chapter's own events page states no events are currently scheduled; live-verified 2026-09-02 (found=0 dated=0)
+
+[config]
+url = "https://sandiego.csteachers.org/events"
+program_kind = "program"
+opportunity_type = "Professional Development / Conferences"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 33 part 1 (educator-PD program pages); sprint 030 ticket 005, live-verified via real dry-run (2026-09-02)"
