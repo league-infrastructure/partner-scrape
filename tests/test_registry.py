@@ -738,6 +738,74 @@ class TestSDFestivalOfScienceEngineeringRegistration:
         assert sd_festival.config["site_url"] != gsdsef.config["site_url"]
 
 
+class TestSDCECRegistration:
+    """Sprint 029 ticket 004 (SUC-047, issue 30): SDCEC is registered as
+    an actual org source (``program_page_multi`` against the same
+    ``/stem`` page ``registry/hubs/sdcec-stem.toml`` already reads as a
+    discovery-only hub) -- a hub and a source for the same org are two
+    different, already-separate catalogs (``registry/DESIGN.md``'s §3
+    physical-separation invariant), not the same-org-registered-twice
+    risk this sprint avoids for GSDSEF/the SD Festival.
+    """
+
+    def test_registered_as_program_page_multi_no_opportunity_type_override(self):
+        sources = {s.source_id: s for s in load_sources()}
+
+        assert "sdcec" in sources
+        source = sources["sdcec"]
+        assert source.adapter_type == "program_page_multi"
+        assert source.config["url"] == "https://www.sandiegoengineers.org/stem"
+        assert source.config["program_kind"] == "program"
+        # Deliberately no override -- SDCEC's curated list mixes
+        # competitions with other opportunity types, so each item keeps
+        # the LLM's own per-record classification (this ticket's
+        # Description, matching ticket 003's identical reasoning).
+        assert "opportunity_type" not in source.config
+
+    def test_disabled_with_a_reason_pending_a_reliable_extraction(self):
+        # This ticket's own required live-verification (real
+        # end-to-end dry-run plus direct extract_programs() calls, not
+        # just a WebFetch check) found real extraction on this page is
+        # non-deterministic across repeated calls (0/17/21/32 distinct
+        # result sets on identical fetched text) and that the "Feb 20
+        # 2026 Engineers Week awards" record this ticket's Description
+        # named is not published anywhere on the live site today -- see
+        # the TOML file's own header comment for the full live evidence.
+        sources = {s.source_id: s for s in load_sources()}
+        source = sources["sdcec"]
+
+        assert source.enabled is False
+        path = DEFAULT_SOURCES_DIR / "sdcec.toml"
+        text = path.read_text()
+        assert "disabled:" in text
+        assert "extraction-reliability failure" in text
+
+    def test_the_existing_discovery_only_hub_is_unmodified(self):
+        # AC: registry/hubs/sdcec-stem.toml is unmodified by this
+        # ticket -- it stays a discovery-only hub with no adapter_type
+        # and no acquisition_policy (HubConfig's own shape), a
+        # physically separate catalog from the new sources/sdcec.toml
+        # entry above (registry/DESIGN.md's §3 invariant).
+        from partner_scrape.registry.hub_schema import DEFAULT_HUBS_DIR, load_hubs
+
+        hubs = {h.hub_id: h for h in load_hubs()}
+        assert "sdcec-stem" in hubs
+        hub = hubs["sdcec-stem"]
+        assert hub.page_urls == ["https://www.sandiegoengineers.org/stem"]
+
+        path = DEFAULT_HUBS_DIR / "sdcec-stem.toml"
+        text = path.read_text()
+        assert "adapter_type" not in text
+        assert "[acquisition_policy]" not in text
+
+    def test_no_new_adapter_type_or_config_key_introduced(self):
+        sources = {s.source_id: s for s in load_sources()}
+        source = sources["sdcec"]
+
+        assert source.adapter_type == "program_page_multi"
+        assert set(source.config.keys()) <= {"url", "program_kind", "opportunity_type"}
+
+
 class TestCampMarketingPageProviders:
     """Sprint 028 ticket 004 (issue 29, SUC-038/SUC-041): the verified
     nonprofit/institutional camp marketing-page providers, each

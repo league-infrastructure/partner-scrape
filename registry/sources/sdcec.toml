@@ -1,0 +1,98 @@
+# San Diego County Engineering Council (SDCEC) -- sandiegoengineers.org/stem.
+# Sprint 029 ticket 004 (issue 30, SUC-047): registers SDCEC as an actual
+# org source, `program_page_multi` against the same `/stem` page
+# `registry/hubs/sdcec-stem.toml` (a discovery-only hub, sprint 024)
+# already reads -- a hub and a source for the same org are two different,
+# already-separate catalogs (`registry/DESIGN.md`'s §3 physical-separation
+# invariant), not the same-org-registered-twice-*within*-`sources/` risk
+# this sprint avoids elsewhere (GSDSEF, SD Festival). No
+# `config.opportunity_type` override -- this page's hand-curated list
+# mixes competitions with other opportunity types, so each item keeps
+# the LLM's own per-record classification, matching ticket 003's
+# identical reasoning for the SD Festival listing.
+#
+# LIVE-VERIFIED 2026-09-02, real network, real end-to-end
+# `uv run partner-scrape --source sdcec --dry-run -v` runs plus direct
+# `AnthropicProgramLLMClient.extract_programs()` calls (matching the
+# sprint 027/028/029 standard):
+#   GET https://www.sandiegoengineers.org/stem -> HTTP 200 (`www.` is
+#   required -- the bare domain fails TLS, per the existing hub file's
+#   own header comment, re-confirmed here with a fresh curl).
+#
+# CURRENT FAILURE MODE: a real extraction-reliability failure, not a
+# fetch/site block -- four independent calls against the identical
+# fetched/reduced text (one via the real pipeline dry-run, three direct
+# `extract_programs()` calls) returned 0, 17, 21, and ~32 raw results
+# respectively -- four genuinely different program sets, not minor
+# field-level noise. Root cause: this Google Sites page concatenates an
+# unlabeled "current cycle" curated list with a decade-plus "Prior sTEm
+# Events" historical archive on the *same* fetched page (26KB of reduced
+# text), with no markup boundary `reduce_html_to_text()` preserves for
+# the LLM to tell "this cycle" from "an old archived year" apart --
+# `extract_programs()`'s "identify every distinct program described on
+# the page" framing has no stable anchor on a page this unstructured, so
+# the model samples a different subset of items each call. This is the
+# same *class* of problem `sd-math-circle.toml`'s already-accepted
+# "wrong axis of extraction" disabled disposition names (a page shape
+# `extract_programs()`'s per-section framing does not fit), not the
+# deadline-vs-event-date framing bug ticket 006 fixed -- fixing it would
+# mean a materially different extraction mechanism (e.g. structural
+# splitting of "current" vs "archive" sections before the LLM call),
+# out of this registry-only ticket's scope, matching
+# `adapters/DESIGN.md`'s identical "explicitly deferred" ruling for
+# `sd-math-circle`.
+#
+# Separately, and independent of the reliability problem above: this
+# ticket's own Description names "the Feb 20 2026 Engineers Week
+# awards" as an expected record. That specific dated record is NOT
+# present anywhere in the live page's fetched text today -- checked
+# directly (grep over the full reduced text): the only "Engineers Week"
+# mention near a date is "Nov 3 - STEM Grant deadline to support K12
+# activities and events during or around Engineers Week (Feb 2026)" (a
+# grant *deadline*, no day-of-month for the week itself), and "San Diego
+# Engineers Awards Celebration" appears once with no date attached at
+# all. SDCEC's own dedicated `/awards` subpage (linked from `/stem`,
+# fetched and checked directly) states only that "Awards Nominations are
+# open October 1 - December 8" via the annual "San Diego Engineers Week
+# Awards Banquet" -- no banquet date is published anywhere on the live
+# site as of this verification. So even a perfectly reliable extraction
+# could not currently produce this ticket's own named target record from
+# the live site's current content -- the org has not yet published this
+# cycle's banquet date, distinct from (and additional to) the
+# reliability problem above.
+#
+# Cross-check against tickets 001-003's registrations (this ticket's own
+# required step, SUC-047 AC): SDCEC's curated list includes items
+# textually matching two organizations already separately registered
+# this sprint -- "Congressional App Challenge" (== `congressional-
+# app-challenge-sd.toml`, `enabled = true`) and "MATHCOUNTS" (==
+# `mathcounts-sd-chapter.toml`, `enabled = false`, WAF-blocked) -- both
+# observed across the extraction runs above. This is the same
+# cross-registration shape `adapters/DESIGN.md`'s sprint 027
+# COSMOS/OPTIMUS/ENLACE Open Question names as a residual, undetected-
+# by-tooling risk *if both sources are live at once* (`kind in
+# PROGRAM_EXTRACTION_KINDS` records bypass cross-source dedup by
+# design). No reconciliation action is needed *right now* because this
+# file is `enabled = false` (see above) -- SDCEC's own copies of these
+# two items cannot publish today. Recorded here as a residual risk for
+# whoever revisits SDCEC's extraction reliability in a future ticket:
+# re-check for this exact overlap before ever flipping this file to
+# `enabled = true`, since `congressional-app-challenge-sd.toml` is
+# already the authoritative direct-org registration for that program and
+# should stay the sole source for it.
+#
+# No instruction-shaped content was found anywhere on the fetched
+# `/stem` or `/awards` pages.
+
+org_name = "San Diego County Engineering Council"
+adapter_type = "program_page_multi"
+enabled = false  # disabled: real extraction-reliability failure, live-verified 2026-09-02 (4 real calls on identical text returned 0/17/21/32 distinct result sets) -- this page concatenates an unlabeled current-cycle list with a decade of undated "Prior sTEm Events" archive on one page, a wrong-axis-of-extraction problem no config change fixes; separately, the Feb 20 2026 Engineers Week awards date this ticket named is not published anywhere on the live site today -- see file header
+
+[config]
+url = "https://www.sandiegoengineers.org/stem"
+program_kind = "program"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 30 (2026-08-30 competition sources without feeds); sprint 029 ticket 004, live-verified end-to-end via real dry-run and direct extract_programs() calls (2026-09-02)"

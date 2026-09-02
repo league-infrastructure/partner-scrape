@@ -688,3 +688,119 @@ class TestSDMathCircleFixtureExtraction:
 
         arml = events[-1]
         assert arml.end.date().isoformat() == "2026-05-30"
+
+
+class TestSDCECFixtureExtraction:
+    """Sprint 029 ticket 004 (issue 30, SUC-047): SDCEC's hand-curated
+    youth STEM event list, registered as ``program_page_multi``
+    (``registry/sources/sdcec.toml``), with no ``opportunity_type``
+    override -- the list mixes competitions with other opportunity
+    types, so each item keeps the LLM's own per-record classification
+    (matching ``TestSDFestivalOfScienceEngineeringRegistration``'s/
+    ticket 003's identical no-override reasoning).
+
+    This proves the *mechanism* SUC-047's Main Flow describes -- one
+    fetched page, run through ``extract_programs()``, with N
+    independently-typed inline records (including the Engineers Week
+    Awards Banquet) each mapped to its own ``Event`` -- using a canned
+    ``FixtureProgramLLMClient`` result list, the same "mechanism is
+    fixture-proven instead" approach ticket 003 used
+    (``TestSDFestivalOfScienceEngineeringListingSource``) once its own
+    live verification found the real page's content did not exercise
+    the happy path. ``sdcec.toml``'s own live-verified finding is that
+    the real ``AnthropicProgramLLMClient`` call is non-deterministic on
+    the real ``/stem`` page (0/17/21/32 distinct result sets across four
+    real calls) and that no live Feb 20 2026 Engineers Week awards
+    record currently exists on the site at all -- the real source is
+    registered ``enabled = false`` for exactly those reasons (see that
+    file's own header comment). This test demonstrates the adapter's
+    N-results-to-N-Events mapping itself is sound, the same code path
+    every other ``program_page_multi`` source already relies on.
+
+    Fixture body is
+    ``tests/fixtures/program_pages/sdcec_stem_page.html`` -- a small
+    fixture reproducing the real page's shape: an unlabeled "current"
+    curated list followed by an undated-by-item "Prior sTEm Events"
+    archive section on the same page.
+    """
+
+    URL = "https://www.sandiegoengineers.org/stem"
+
+    #: Three distinct items from the "current" section, standing in for
+    #: a correct extraction of this page's curated list -- deliberately
+    #: independently typed (Competitions, Camps, Out-of-school
+    #: Programs), per SUC-047's own "no override, let the LLM classify
+    #: each record independently" design.
+    _RESULTS = [
+        ProgramExtractionResult(
+            program_name="San Diego Engineers Week Awards Banquet",
+            audience_grades=[],
+            date_start="2026-02-20",
+            date_end="",
+            cost="",
+            eligibility="K-12 and professional honorees",
+            is_open=True,
+            opportunity_type="Competitions",
+        ),
+        ProgramExtractionResult(
+            program_name="Optics Workshop",
+            audience_grades=["3rd grade", "4th grade", "5th grade", "6th grade", "7th grade", "8th grade"],
+            date_start="2026-09-12",
+            date_end="",
+            cost="",
+            eligibility="girls grade 3-8",
+            is_open=True,
+            opportunity_type="Camps",
+        ),
+        ProgramExtractionResult(
+            program_name="Congressional App Challenge",
+            audience_grades=["8th grade", "9th grade", "10th grade", "11th grade", "12th grade"],
+            date_start="2026-06-01",
+            date_end="2026-10-28",
+            cost="",
+            eligibility="teens 13-18",
+            is_open=True,
+            opportunity_type="Competitions",
+        ),
+    ]
+
+    def _body(self) -> str:
+        return (FIXTURES_DIR / "sdcec_stem_page.html").read_text()
+
+    def _source(self) -> SourceConfig:
+        return SourceConfig(
+            source_id="fixture_sdcec",
+            org_name="Fixture San Diego County Engineering Council",
+            adapter_type="program_page_multi",
+            config={
+                "url": self.URL,
+                "program_kind": "program",
+                # Deliberately no opportunity_type override -- see class
+                # docstring.
+            },
+        )
+
+    def test_n_curated_items_yield_n_independently_typed_events(self, tmp_path):
+        llm_client = FixtureProgramLLMClient(list_responses={self.URL: self._RESULTS})
+        adapter = ProgramPageMultiAdapter(llm_client=llm_client, cache=ProgramExtractionCache(tmp_path))
+        raw = RawResponse(ref=EventRef(url=self.URL), status=200, body=self._body())
+
+        events = list(adapter.extract(raw, self._source()))
+
+        assert len(events) == 3
+        assert all(e.url == self.URL for e in events)
+        assert all(e.source_id == "fixture_sdcec" for e in events)
+
+        awards, optics, cac = events
+        assert awards.title == "San Diego Engineers Week Awards Banquet"
+        assert awards.start == datetime.fromisoformat("2026-02-20")
+        assert awards.opportunity_type == "Competitions"
+
+        assert optics.opportunity_type == "Camps"
+        assert cac.opportunity_type == "Competitions"
+
+        # Independently classified -- no config override forced a
+        # single shared opportunity_type onto all three (SUC-047's own
+        # "no override" design point).
+        assert len({e.opportunity_type for e in events}) == 2
+        assert len({e.identity_key() for e in events}) == 3
