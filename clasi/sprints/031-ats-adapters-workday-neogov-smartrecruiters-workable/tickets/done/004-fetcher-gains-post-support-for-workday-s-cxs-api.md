@@ -1,10 +1,11 @@
 ---
-id: "004"
-title: "Fetcher gains POST support for Workday's CXS API"
-status: open
-use-cases: [SUC-057]
+id: '004'
+title: Fetcher gains POST support for Workday's CXS API
+status: done
+use-cases:
+- SUC-057
 depends-on: []
-github-issue: ""
+github-issue: ''
 issue: 31-ats-adapters-workday-neogov-smartrecruiters.md
 completes_issue: true
 ---
@@ -32,28 +33,40 @@ independently of Workday's own field-mapping/classification code
 
 ## Acceptance Criteria
 
-- [ ] `Fetcher` Protocol (`fetch/fetcher.py`) gains
+- [x] `Fetcher` Protocol (`fetch/fetcher.py`) gains
       `post(url: str, body: dict, headers: dict[str, str] | None =
       None) -> FetchResponse`.
-- [ ] `UrllibFetcher.post()` sends `body` JSON-encoded
+- [x] `UrllibFetcher.post()` sends `body` JSON-encoded
       (`Content-Type: application/json`), reusing `get()`'s exact
       transport-error handling: an `HTTPError` normalizes into a
       `FetchResponse` with that status; a connection-level failure
       (`OSError`/`http.client.HTTPException`/`UnicodeError`) returns
       `TRANSPORT_ERROR_STATUS` rather than raising.
-- [ ] `PoliteFetcher.post()` (`fetch/cache.py`) applies the same
+- [x] `PoliteFetcher.post()` (`fetch/cache.py`) applies the same
       robots.txt check and per-domain `Throttle.wait()` call `get()`
       already applies, then delegates to `self.fetcher.post(...)`.
-- [ ] `PoliteFetcher.post()` never reads from or writes to the on-disk
+- [x] `PoliteFetcher.post()` never reads from or writes to the on-disk
       response cache — confirmed by a test asserting no cache file is
       created for a POST call, and that two POSTs to the same URL with
       different bodies both reach the underlying `Fetcher` (never
       served from a stale cached entry).
-- [ ] `get()`'s signature, behavior, and every existing caller/test
+- [x] `get()`'s signature, behavior, and every existing caller/test
       double are unaffected — no existing `Fetcher` double is required
       to implement `post()` unless its own test exercises it.
-- [ ] Hermetic unit tests only — no live network call.
-- [ ] Full test suite (2316+ baseline) stays green.
+- [x] Hermetic unit tests only — no live network call.
+- [x] Full test suite (2316+ baseline) stays green.
+
+## Notes
+
+Implemented as planned, no deviations. `UrllibFetcher.get()`/`post()`
+now share a small `_execute(url, request)` helper carrying the exact
+try/except transport-error handling (kept the diff smaller than two
+fully parallel methods, per the Implementation Plan's own "either is
+acceptable" note). `PoliteFetcher.post()` composes
+`is_allowed()`/`self.throttle.wait()` exactly like `get()` and skips
+the cache entirely. New tests: `tests/test_fetch_fetcher.py::TestPost`
+(9 tests) and `tests/test_fetch_cache.py::TestPost` (9 tests). Full
+suite: 2376 passed (baseline 2358 + 18 new).
 
 ## Implementation Plan
 
