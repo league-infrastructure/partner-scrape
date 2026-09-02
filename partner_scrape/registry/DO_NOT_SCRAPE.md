@@ -123,6 +123,58 @@ and the option this sprint deliberately did not take.
   our content without permission."
 - **Live-verified**: 2026-08-31 (sprint 024 planning).
 
+## Exceptions
+
+Unlike the Excluded groups above, an entry here is not a site this
+project avoids — it is a narrow, precisely-scoped stakeholder override
+of the bright-line rule for a specific, already-identified shape of
+site. It exists so a future session does not read the bright-line rule
+as absolute and re-litigate a case that has already been decided, and
+— just as importantly — does not read it as a general license to
+override robots.txt elsewhere. An exception here covers only the exact
+scope stated; any other robots.txt- or ToS-blocked candidate, including
+one that superficially resembles this shape, still falls under the
+bright-line rule and needs its own stakeholder decision.
+
+### Named-allowlist robots.txt on ATS/job-board vendors — per issue 44, 2026-09-02
+
+- **Scope**: applies only to a **named-allowlist robots.txt** (robots.txt
+  disallows all bots except a short, explicit named list — e.g.
+  Googlebot, bingbot, LinkedInBot) on an **ATS/job-board vendor**, for
+  **low-volume, non-republishing, link-out-only** fetching of **public
+  job postings**. This is not a general robots-override license — it
+  does not extend to any other vendor shape, any higher-volume or
+  republishing use, or any non-job-board site, even one blocked by an
+  identically-worded named-allowlist robots.txt. A new candidate outside
+  this exact scope needs its own stakeholder decision.
+- **Sources covered**: `servicenow` (api.smartrecruiters.com, whose
+  robots.txt allows LinkedInBot only), `city-of-san-diego-careers`,
+  `county-of-san-diego-careers`, `sandag-careers`, and
+  `port-of-san-diego-careers` (the latter four all hosted on
+  www.governmentjobs.com, whose robots.txt allows only Googlebot,
+  bingbot, yahoobot, msnbot, gsa-crawler-www, NHN, Twitterbot, and
+  facebookexternalhit).
+- **Reasoning**: the four public-sector agencies behind these boards
+  (County of San Diego, City of San Diego, SANDAG, and the Port of San
+  Diego) want their job postings found by job-seekers — the robots
+  block is the ATS vendor's (SmartRecruiters' or governmentjobs.com's)
+  own blanket crawler policy, not a choice made by the agency whose
+  postings are being fetched.
+- **Decision**: Eric, 2026-09-02, verbatim: "for number one, issue 44,
+  go ahead and scrape them." Recorded per issue 44
+  (`issues/44-robots-named-allowlist-policy-decision.md`, sprint 035).
+  Implemented via the existing per-source
+  `acquisition_policy.respect_robots = false` override (the same
+  mechanism as the iCal `respect_robots = false` precedent from issue
+  38/sprint 015) on each of the five sources' TOML files — the
+  project's global `respect_robots` default is unchanged.
+- **Does not reopen sprint-024's hub exclusions**: KidsOutAndAbout,
+  sandiegostemsummercamps.com, sandiegomoms.com, and San Diego Reader
+  (see "Excluded — found during sprint 024 planning" above) remain
+  excluded. Those were blocked by an actual ToS clause forbidding
+  scraping — a different and unrelated grounds from a robots.txt
+  named-allowlist — and this decision does not touch them.
+
 ## Deferred
 
 Not excluded, not registered — open questions this sprint surfaced but
