@@ -938,3 +938,77 @@ class TestCompetitionSourceConfig:
 
         for source_id in ("tritonhacks", "cipherhacks"):
             assert "hackclub.com" not in sources[source_id].config["url"]
+
+
+class TestMathCircleSourceConfig:
+    """Sprint 029 ticket 002 (issue 30, SUC-045): San Diego Math
+    Circle's public master-calendar Google Sheet, registered as
+    ``program_page_multi`` — the identical mechanism sprint 027/028's
+    ``ProgramPageMultiAdapter`` already provides for one page/N inline
+    dated records, reused here verbatim (no new adapter code, no new
+    ``config`` key).
+
+    Live re-verification (2026-09-02, real network + real
+    ``AnthropicProgramLLMClient``, matching the ticket 001b standard)
+    found the sheet itself fetches and parses cleanly as text (the
+    AMC/AIME/ARML dated rows survive ``reduce_html_to_text()`` intact),
+    but the real LLM extraction locks onto the wrong axis of this
+    particular grid-shaped sheet — it returns the 5 recurring
+    grade-level class-group columns (Fermat/Euler/Gauss/Cauchy/AI),
+    each dated identically to the shared "Opening Day" row, not the
+    scattered one-off AMC/AIME/ARML competition rows. Registered
+    ``enabled = false`` with a reason comment (the ticket's own
+    AC3 escape hatch: "If the sheet is not cleanly fetchable/parseable
+    at ticket time, the source is registered enabled = false with a
+    reason comment instead of silently dropped") rather than shipped
+    with mislabeled/misdated records.
+    """
+
+    def test_is_registered_program_page_multi_with_competitions_override(self):
+        sources = {s.source_id: s for s in load_sources()}
+
+        assert "sd-math-circle" in sources
+        source = sources["sd-math-circle"]
+        assert source.adapter_type == "program_page_multi"
+        assert source.config["program_kind"] == "program"
+        assert source.config["opportunity_type"] == "Competitions"
+        assert source.config["url"].startswith("https://docs.google.com/spreadsheets/")
+
+    def test_url_points_at_the_csv_export_not_the_edit_or_htmlview_form(self):
+        # Ticket AC: config.url must point at whichever export form
+        # live-verification confirms works -- verification found the
+        # CSV export (/export?format=csv) fetches and parses cleanly,
+        # while /htmlview returns no usable static row data (JS-only)
+        # and /edit is auth-gated.
+        sources = {s.source_id: s for s in load_sources()}
+        url = sources["sd-math-circle"].config["url"]
+
+        assert "export?format=csv" in url
+        assert "/edit" not in url
+        assert "htmlview" not in url
+
+    def test_is_disabled_with_an_extraction_failure_reason_comment(self):
+        # Real extraction failure, not a fetch/site block -- the
+        # source fetches and parses fine, but the real LLM extraction
+        # returns the wrong records (regular class groups, not
+        # competition dates). Must not be silently enabled with
+        # mislabeled/misdated output, and must not be silently dropped
+        # (AC3).
+        sources = {s.source_id: s for s in load_sources()}
+        source = sources["sd-math-circle"]
+
+        assert source.enabled is False
+
+        path = DEFAULT_SOURCES_DIR / "sd-math-circle.toml"
+        assert path.exists()
+        text = path.read_text()
+        assert "disabled:" in text
+        assert "extraction failure" in text
+        assert "Opening Day" in text  # the specific wrong shared date found
+
+    def test_no_new_adapter_type_or_config_key_introduced(self):
+        sources = {s.source_id: s for s in load_sources()}
+        source = sources["sd-math-circle"]
+
+        assert source.adapter_type == "program_page_multi"
+        assert set(source.config.keys()) <= {"url", "program_kind", "opportunity_type"}

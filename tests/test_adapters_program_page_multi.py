@@ -550,3 +550,141 @@ class TestMultiWeekThemedCampPage:
         # not one blended date range applied to all three.
         ends = {e.end.date().isoformat() for e in events}
         assert len(ends) == 3
+
+
+class TestSDMathCircleFixtureExtraction:
+    """Sprint 029 ticket 002 (issue 30, SUC-045): San Diego Math
+    Circle's public master-calendar Google Sheet, registered as
+    ``program_page_multi`` (``registry/sources/sd-math-circle.toml``).
+
+    This proves the *mechanism* SUC-045's Main Flow describes -- one
+    fetched sheet export, reduced via ``reduce_html_to_text()``, run
+    through ``extract_programs()``, with each of its N distinct dated
+    items mapped to its own independent ``Event`` -- using a canned
+    ``FixtureProgramLLMClient`` result list standing in for what a
+    correct extraction of this page's AMC/AIME dated rows would look
+    like. This is independent of, and does not contradict,
+    ``sd-math-circle.toml``'s own live-verified finding that the real
+    ``AnthropicProgramLLMClient`` does not currently produce this
+    correct result on this specific grid-shaped sheet (it extracts the
+    page's recurring class-group columns instead) -- the real source
+    is registered ``enabled = false`` for exactly that reason. This
+    test demonstrates the adapter's N-results-to-N-Events mapping
+    itself is sound, the same code path every other ``program_page_multi``
+    source already relies on.
+
+    Fixture body is ``tests/fixtures/program_pages/
+    sd_math_circle_calendar.csv`` -- a trimmed, real excerpt of the
+    live 2025-2026 Master Calendar sheet's actual CSV export (real
+    row/column shape: recurring class-group columns interleaved with
+    one-off competition-dated rows), matching the CSV export form
+    actually registered in ``config.url``.
+    """
+
+    URL = (
+        "https://docs.google.com/spreadsheets/d/18u6y_7MGD3ZQCIBh7fqE5TZTK0qzP0Ns6z1A9_5W0oA"
+        "/export?format=csv&gid=28676418"
+    )
+
+    #: Five distinct dated competition items, standing in for a correct
+    #: extraction of the fixture CSV's AMC/AIME rows -- deliberately
+    #: not the wrong "class group" results the real live LLM call
+    #: currently returns for this page (see class docstring).
+    _RESULTS = [
+        ProgramExtractionResult(
+            program_name="AMC 10 A and AMC 12 A",
+            audience_grades=["9th grade", "10th grade", "11th grade", "12th grade"],
+            date_start="2025-11-05",
+            date_end="",
+            cost="",
+            eligibility="",
+            is_open=True,
+            opportunity_type="Competitions",
+        ),
+        ProgramExtractionResult(
+            program_name="AMC 10 B and AMC 12 B",
+            audience_grades=["9th grade", "10th grade", "11th grade", "12th grade"],
+            date_start="2025-11-13",
+            date_end="",
+            cost="",
+            eligibility="",
+            is_open=True,
+            opportunity_type="Competitions",
+        ),
+        ProgramExtractionResult(
+            program_name="AMC 8",
+            audience_grades=["6th grade", "7th grade", "8th grade"],
+            date_start="2026-01-25",
+            date_end="",
+            cost="",
+            eligibility="",
+            is_open=True,
+            opportunity_type="Competitions",
+        ),
+        ProgramExtractionResult(
+            program_name="AIME I",
+            audience_grades=["9th grade", "10th grade", "11th grade", "12th grade"],
+            date_start="2026-02-05",
+            date_end="",
+            cost="",
+            eligibility="AMC 10/12 qualifiers only",
+            is_open=True,
+            opportunity_type="Competitions",
+        ),
+        ProgramExtractionResult(
+            program_name="American Regions Math League (ARML)",
+            audience_grades=["9th grade", "10th grade", "11th grade", "12th grade"],
+            date_start="2026-05-29",
+            date_end="2026-05-30",
+            cost="",
+            eligibility="By evaluation and invitation",
+            is_open=True,
+            opportunity_type="Competitions",
+        ),
+    ]
+
+    def _body(self) -> str:
+        return (FIXTURES_DIR / "sd_math_circle_calendar.csv").read_text()
+
+    def _source(self) -> SourceConfig:
+        return SourceConfig(
+            source_id="fixture_sd_math_circle",
+            org_name="Fixture San Diego Math Circle",
+            adapter_type="program_page_multi",
+            config={
+                "url": self.URL,
+                "program_kind": "program",
+                "opportunity_type": "Competitions",
+            },
+        )
+
+    def test_n_dated_rows_yield_n_distinct_competitions_events(self, tmp_path):
+        llm_client = FixtureProgramLLMClient(list_responses={self.URL: self._RESULTS})
+        adapter = ProgramPageMultiAdapter(llm_client=llm_client, cache=ProgramExtractionCache(tmp_path))
+        raw = RawResponse(ref=EventRef(url=self.URL), status=200, body=self._body())
+
+        events = list(adapter.extract(raw, self._source()))
+
+        assert len(events) == 5
+        assert all(e.opportunity_type == "Competitions" for e in events)
+        assert all(e.url == self.URL for e in events)
+        assert all(e.source_id == "fixture_sd_math_circle" for e in events)
+
+        titles = [e.title for e in events]
+        assert titles == [
+            "AMC 10 A and AMC 12 A",
+            "AMC 10 B and AMC 12 B",
+            "AMC 8",
+            "AIME I",
+            "American Regions Math League (ARML)",
+        ]
+        # Each record keeps its own distinct start date -- proves
+        # independent per-record mapping, not one shared date (the
+        # real live LLM call's actual, wrong failure mode for this
+        # page -- see class docstring) applied to every result.
+        starts = [e.start.date().isoformat() for e in events]
+        assert starts == ["2025-11-05", "2025-11-13", "2026-01-25", "2026-02-05", "2026-05-29"]
+        assert len(set(starts)) == 5
+
+        arml = events[-1]
+        assert arml.end.date().isoformat() == "2026-05-30"
