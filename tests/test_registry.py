@@ -554,6 +554,40 @@ class TestProgramPageSourceConfig:
             assert "illumina" not in lowered
             assert "sd2" not in lowered
 
+    def test_sd_foundation_community_scholarship_registered_as_funding_opportunities(
+        self,
+    ):
+        # Sprint 027 ticket 007 (SUC-035): the SD Foundation Community
+        # Scholarship is this sprint's one deliberate non-internship
+        # program_kind="program" registration, with opportunity_type
+        # fixed to "Funding Opportunities" via a config override (an
+        # operator-curated known fact, not left to LLM classification --
+        # see adapters/program_page.py's opportunity_type_override
+        # handling, generically fixture-tested by ticket 003's
+        # test_program_kind_program_with_opportunity_type_override).
+        #
+        # Live verification (this ticket's own dry-run) found every page
+        # probed on sdfoundation.org -- including this registered URL --
+        # measures 840KB-965KB of raw HTML, which alone exceeds the LLM's
+        # 200K-token context window (600K+ tokens measured), so
+        # extract_program() always raises BadRequestError and the source
+        # always yields zero events. Registered enabled=false with a
+        # reason comment (this registry's disabled-with-reason
+        # convention) rather than left disabled with no explanation, so
+        # the config (program_kind/opportunity_type) is preserved for a
+        # future HTML-reduction capability to pick back up.
+        sources = {s.source_id: s for s in load_sources()}
+
+        assert "sd-foundation-community-scholarship" in sources
+        source = sources["sd-foundation-community-scholarship"]
+        assert source.adapter_type == "program_page"
+        assert source.config["program_kind"] == "program"
+        assert source.config["opportunity_type"] == "Funding Opportunities"
+        assert source.enabled is False
+
+        path = DEFAULT_SOURCES_DIR / "sd-foundation-community-scholarship.toml"
+        assert "disabled:" in path.read_text()
+
 
 class TestProgramListingAndMultiSourceConfig:
     """Sprint 027 ticket 006's own Testing requirement: prove a

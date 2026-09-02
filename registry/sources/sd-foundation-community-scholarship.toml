@@ -1,0 +1,48 @@
+# San Diego Foundation Community Scholarship -- the Foundation's Common
+# Scholarship Application, giving access to 150+ individual scholarships
+# through one common application (awards $1,000-$5,000+, ~1,400
+# students funded in 2025). Sprint 027 ticket 007 (issue 28's SD
+# Foundation Community Scholarship, this sprint's one deliberate
+# non-internship `program_kind = "program"` registration, and the
+# mechanism's one `opportunity_type` config override -- an
+# operator-curated, known fact about this source, not left to the LLM
+# extraction's own classification). `program_kind = "program"` (not
+# `"internship"`) and `opportunity_type = "Funding Opportunities"` per
+# SUC-035.
+#
+# DISABLED 2026-09-01 (sprint 027 ticket 007 live verification):
+# `uv run partner-scrape --source sd-foundation-community-scholarship
+# --dry-run -v` against this page returned HTTP 200 but
+# `extract_program()` raised `anthropic.BadRequestError: prompt is too
+# long: 600199 tokens > 200000 maximum` -- the site's raw page HTML
+# alone (~880KB, no JS rendering needed) blows the LLM's context
+# window by 3x. This is not specific to this one URL: every page
+# probed on sdfoundation.org during this ticket's live verification
+# (this Common Scholarship Application page, the Community Scholarship
+# Program overview page, the FAQs page, the students landing page, and
+# a news article) measured 840KB-965KB of raw HTML -- a site-wide
+# template-bloat characteristic (a large repeated mega-menu/inline
+# script payload on every page), not a page-specific outlier. No page
+# on this domain is small enough for `program_page`'s single-page
+# fetch+LLM-extract flow as it exists today; that flow has no
+# HTML-to-text reduction step (`adapters/program_page.py`'s docstring:
+# `raw.body` is passed to the LLM verbatim), and adding one is outside
+# this registration-only ticket's scope -- see this ticket's Notes for
+# the full recorded finding. Left `enabled = false` with `config`
+# populated (correct `program_kind`/`opportunity_type`) so a future
+# preprocessing capability can flip this on without re-deriving the
+# registration.
+
+org_name = "San Diego Foundation"
+adapter_type = "program_page"
+enabled = false  # disabled: page HTML site-wide on sdfoundation.org exceeds the LLM's 200K-token context window (600K+ tokens measured) -- confirmed live 2026-09-01
+
+[config]
+url = "https://www.sdfoundation.org/students/common-scholarship-application/"
+program_kind = "program"
+opportunity_type = "Funding Opportunities"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 28 (2026-08-30 seed source catalog); sprint 027 ticket 007"
