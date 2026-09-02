@@ -342,21 +342,23 @@ class TestRunDirectoryRealFixtureData:
         # names has a Club record, geocoded through the real, now
         # populated directory/data/ school directories -- not a fixture
         # copy, the same "trust the real data" precedent this class
-        # already applies to Places. Sprint 032 registers three more
+        # already applies to Places. Sprint 032 registers four more
         # real club_static_roster entries: ticket 002's
         # cyberpatriot-sd.toml (3 curated CyberPatriot teams), ticket
         # 003's civil-air-patrol-sd.toml (7 curated CAP entries:
-        # Group 8's own HQ plus its six subordinate squadrons), and
-        # ticket 004's sea-cadets-sd.toml (4 curated NSCC units), so
-        # the real full-registry total is now 4 Hack Club + 3
-        # CyberPatriot + 7 Civil Air Patrol + 4 Sea Cadets = 18, not 4.
+        # Group 8's own HQ plus its six subordinate squadrons), ticket
+        # 004's sea-cadets-sd.toml (4 curated NSCC units), and ticket
+        # 005's 4-h-sd.toml (14 curated San Diego County 4-H community
+        # clubs), so the real full-registry total is now 4 Hack Club +
+        # 3 CyberPatriot + 7 Civil Air Patrol + 4 Sea Cadets + 14 4-H =
+        # 32, not 4.
         _write_real_partners_fixture(tmp_path / "unused")
         payload = run_directory(
             fetcher=_NeverCalledFetcher(), dry_run=True, site_dir=tmp_path / "unused"
         )
 
-        assert payload["clubs_meta"]["total"] == 18
-        assert len(payload["clubs"]) == 18
+        assert payload["clubs_meta"]["total"] == 32
+        assert len(payload["clubs"]) == 32
 
     def test_every_real_school_hosted_club_resolves_to_school_precision_never_a_guess(
         self, tmp_path
@@ -521,6 +523,41 @@ class TestRealSeaCadetsGeocoding:
         assert not any(c["needs_review"] for c in by_id.values())
 
 
+class TestReal4HGeocoding:
+    """Sprint 032 ticket 005: pins the real, committed 4-h-sd.tsv
+    roster's geocoding outcome end-to-end. Every one of the fourteen
+    curated San Diego County 4-H community clubs meets at a non-school
+    facility (a museum, a fairgrounds, a community hall) or has no
+    specific facility name recorded at all -- per sprint.md's
+    Architecture "Geocoding note," the shared ladder's school-matching
+    rungs 1-4 are expected to miss for every entry, and every entry's
+    zip code is covered by the real, committed zip-centroids.toml, so
+    every entry resolves at zip precision, none falling through further
+    to city precision and none needing a school-matching rung at all."""
+
+    def _real_clubs_by_id(self, tmp_path):
+        _write_real_partners_fixture(tmp_path / "unused")
+        payload = run_directory(
+            fetcher=_NeverCalledFetcher(), dry_run=True, site_dir=tmp_path / "unused"
+        )
+        return {c["club_id"]: c for c in payload["clubs"] if c["club_type"] == "4-h"}
+
+    def test_fourteen_4h_entries_are_present(self, tmp_path):
+        assert len(self._real_clubs_by_id(tmp_path)) == 14
+
+    def test_every_4h_entry_resolves_at_zip_precision_honestly(self, tmp_path):
+        by_id = self._real_clubs_by_id(tmp_path)
+        for cid, club in by_id.items():
+            assert club["location_precision"] == "zip", cid
+            assert club["needs_review"] is False, cid
+            assert club["latitude"] is not None, cid
+            assert club["longitude"] is not None, cid
+
+    def test_no_4h_entry_is_ever_flagged_needs_review(self, tmp_path):
+        by_id = self._real_clubs_by_id(tmp_path)
+        assert not any(c["needs_review"] for c in by_id.values())
+
+
 class TestSourceFilter:
     def test_source_filter_by_adapter_type_matches_the_real_registry(self, tmp_path):
         _write_real_partners_fixture(tmp_path / "unused")
@@ -543,8 +580,8 @@ class TestSourceFilter:
         )
 
         # 4 Hack Club + 3 CyberPatriot + 7 Civil Air Patrol + 4 Sea
-        # Cadets (sprint 032 ticket 004) = 18.
-        assert payload["clubs_meta"]["total"] == 18
+        # Cadets + 14 4-H (sprint 032 ticket 005) = 32.
+        assert payload["clubs_meta"]["total"] == 32
         assert payload["meta"]["total"] == 0
 
     def test_source_filter_for_an_unregistered_adapter_type_yields_nothing(self, tmp_path):
@@ -637,8 +674,8 @@ class TestPerSourceErrorIsolation:
 
         assert payload["meta"]["total"] == 0
         # 4 Hack Club + 3 CyberPatriot + 7 Civil Air Patrol + 4 Sea
-        # Cadets (sprint 032 ticket 004) = 18.
-        assert payload["clubs_meta"]["total"] == 18
+        # Cadets + 14 4-H (sprint 032 ticket 005) = 32.
+        assert payload["clubs_meta"]["total"] == 32
 
     def test_combined_dispatch_never_logs_a_spurious_place_warning_for_a_real_club_entry(
         self, tmp_path, caplog
@@ -864,8 +901,8 @@ class TestRunDirectoryOfferingDispatch:
 
         assert payload["meta"]["total"] == 19
         # 4 Hack Club + 3 CyberPatriot + 7 Civil Air Patrol + 4 Sea
-        # Cadets (sprint 032 ticket 004) = 18.
-        assert payload["clubs_meta"]["total"] == 18
+        # Cadets + 14 4-H (sprint 032 ticket 005) = 32.
+        assert payload["clubs_meta"]["total"] == 32
         assert payload["offerings_meta"]["total"] == 13
 
 
@@ -986,8 +1023,8 @@ class TestOfferingPerSourceErrorIsolation:
         # isolation, not "one broken source kills the whole run".
         assert payload["meta"]["total"] == 19
         # 4 Hack Club + 3 CyberPatriot + 7 Civil Air Patrol + 4 Sea
-        # Cadets (sprint 032 ticket 004) = 18.
-        assert payload["clubs_meta"]["total"] == 18
+        # Cadets + 14 4-H (sprint 032 ticket 005) = 32.
+        assert payload["clubs_meta"]["total"] == 32
 
 
 class TestOfferingRelatedPartnerIdJoinIntegrity:

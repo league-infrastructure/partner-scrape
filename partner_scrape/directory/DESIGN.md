@@ -1,6 +1,83 @@
 # directory
 
-**Owner:** Eric Busboom · **Last reviewed:** 2026-09-02 (sprint 032 ticket 004 — Sea Cadets units roster curated and registered) · **Status:** Places, Clubs (Hack Club chapters + CyberPatriot teams + Civil Air Patrol squadrons + Naval Sea Cadet Corps units; the curated static-roster source generalized to serve any club type), and Offerings (volunteer org profiles + free/Title I school programs) complete; issue 35b's remaining three club types' curated content (tickets 005-007) and issue 33's educator-PD program pages (routed through `adapters/`, not this module — see this doc's sprint 030 Revision) deferred/tracked elsewhere
+**Owner:** Eric Busboom · **Last reviewed:** 2026-09-02 (sprint 032 ticket 005 — 4-H clubs roster curated and registered) · **Status:** Places, Clubs (Hack Club chapters + CyberPatriot teams + Civil Air Patrol squadrons + Naval Sea Cadet Corps units + San Diego County 4-H community clubs; the curated static-roster source generalized to serve any club type), and Offerings (volunteer org profiles + free/Title I school programs) complete; issue 35b's remaining two club types' curated content (tickets 006-007) and issue 33's educator-PD program pages (routed through `adapters/`, not this module — see this doc's sprint 030 Revision) deferred/tracked elsewhere
+
+---
+
+## Revision (2026-09-02 — sprint 032 ticket 005: 4-H clubs roster curated and registered)
+
+Populates the fourth of issue 35b's six remaining club types against
+the generalized `club_static_roster` source (ticket 001): fourteen San
+Diego County 4-H community clubs, registered via a new
+`directory/registry/4-h-sd.toml` entry pointing at a new
+`directory/data/4-h-sd.tsv` (same ten-column shape as
+`hack-club-sd.tsv`). No code change — content-only.
+
+**Sources checked** (live-verified 2026-09-02): UC ANR's own San Diego
+County 4-H "Community Clubs" directory
+(ucanr.edu/site/4-h-san-diego-county/community-clubs), cross-checked
+against its four Area sub-pages (Area 1, 2, 4, and 5 — no Area 3 page
+exists; the four sub-pages' club lists sum to the same fourteen clubs
+the top-level page lists, confirming completeness). Individual club
+detail — meeting location, program focus — was live-verified where a
+club maintains its own site: **Surfside 4-H** (surfside4h.net, meets at
+the Vista Antique Steam Engine Museum, 2040 N Santa Fe Ave, Vista CA
+92083), **San Dieguito 4-H** (sandieguito4h.com, meets at the Olivenhain
+Meeting Hall, 620 Melba Rd, Encinitas CA 92024, first Thursday of the
+month; over 70 years serving San Diego County), and **Ramona Stars
+4-H** (ramonastars4h.org, meets 2nd Wednesday of the month at the
+Ramona Junior Fairgrounds). The other eleven clubs (Fallbrook, Valley
+Center, Valley Center Country, 56 Ranchers, Poway, Ramona Paisanos,
+Ramona Wranglers, Santa Ysabel/Julian, Manzanita, Sagebrush, Japatul)
+were confirmed present and active on UC ANR's own current directory
+(with a named club leader/contact for each) but have no independent
+public site providing a specific street address — their `host_school`
+column is left blank and only `city`/`postal_code` (the region's
+principal town) are recorded, an honest "we know the club exists and
+roughly where, not its exact meeting address" signal, not a guess at a
+precise location.
+
+**Honest finding: no San Diego-specific robotics/drone/AI-branded 4-H
+club was found.** Issue 35b names "robotics/drones/AI" as one of this
+club type's program areas; live research found San Diego County 4-H's
+own materials describe "hundreds of projects" (including robotics,
+STEM, and animal science) as options *within* each general community
+club, not as separately branded clubs. The one specifically-named
+"4-H Area14 Robotics Club" found in search results
+(4histops.org/area14-robotics-club) is confirmed, on live fetch, to
+meet at the Ted Blum 4-H Center in Bridgewater Township, **New
+Jersey** — an entirely different county 4-H program that happens to
+share the generic "Area 14" naming convention — and is deliberately
+excluded, not included under a false San Diego attribution. The
+fourteen real San Diego County clubs are general, multi-project
+community clubs; several club names (56 Ranchers, Ramona Wranglers,
+Surfside, Sagebrush) suggest a livestock/animal-science lean typical of
+rural and semi-rural San Diego County 4-H, and Poway 4-H's own site
+confirms animal science/livestock, STEM/veterinary science, archery,
+and gardening projects — a real, county-supported program-area spread,
+just not one that maps onto issue 35b's per-club "robotics/drones/AI"
+framing. This is recorded as a finding per this sprint's own
+calibration, not padded with a fabricated specialty club.
+
+Also confirmed: **sandiegocounty4h.com does not resolve** (DNS
+failure on both `WebFetch` and a direct `curl`) — an apparently
+unofficial/lapsed third-party domain search results still surface;
+UC ANR's own `ucanr.edu` pages are the only source actually used.
+
+**Geocoding outcome**: all fourteen entries resolve at `"zip"`
+precision — every one of the fourteen clubs' zip codes is covered by
+the real, committed `zip-centroids.toml`, so none falls through further
+to city precision, and (as expected — none of these are school-hosted)
+no school-matching rung ever fires. `needs_review = False` for all
+fourteen.
+
+**Test-suite impact**: no new parsing-shape test file — the data
+reused `hack-club-sd.tsv`'s exact column shape. A new
+`TestReal4HGeocoding` class in `test_pipeline.py` (mirroring ticket
+004's own `TestRealSeaCadetsGeocoding`) pins the real 4-H roster's
+all-zip-precision outcome end-to-end. Full-registry `clubs_meta.total`
+assertions across `test_pipeline.py` now expect `32`, not `18` (4 Hack
+Club + 3 CyberPatriot + 7 Civil Air Patrol + 4 Sea Cadets + 14 4-H).
 
 ---
 
