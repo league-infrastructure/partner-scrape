@@ -1,10 +1,11 @@
 ---
-id: "003"
-title: "Workable adapter — SD County Regional Airport Authority internships"
-status: open
-use-cases: [SUC-056]
+id: '003'
+title: "Workable adapter \u2014 SD County Regional Airport Authority internships"
+status: done
+use-cases:
+- SUC-056
 depends-on: []
-github-issue: ""
+github-issue: ''
 issue: 31-ats-adapters-workday-neogov-smartrecruiters.md
 completes_issue: true
 ---
@@ -30,28 +31,28 @@ shape instead.
 
 ## Acceptance Criteria
 
-- [ ] Live-verify the Authority's public Workable JSON endpoint before
+- [x] Live-verify the Authority's public Workable JSON endpoint before
       writing extraction code — confirm the real response shape and
       whether it is genuinely unpaginated, and record any difference
       from this ticket's assumed shape in this ticket's Notes.
-- [ ] `adapters/workable.py` implements `discover → fetch → extract`,
+- [x] `adapters/workable.py` implements `discover → fetch → extract`,
       registered in `adapters/__init__.py`'s `ADAPTERS` table as
       `"workable"`.
-- [ ] `extract()` runs every posting through
+- [x] `extract()` runs every posting through
       `ats_filters.classify_posting()` before constructing an `Event`;
       only matches become `Event`s.
-- [ ] A fixture mixing internship/full-time, STEM/non-STEM, and
+- [x] A fixture mixing internship/full-time, STEM/non-STEM, and
       SD-local/non-local postings proves exactly the matching subset
       survives, including at least one of the confirmed paid
       9-week-summer-internship postings.
-- [ ] A malformed record is logged and skipped — never fatal to the
+- [x] A malformed record is logged and skipped — never fatal to the
       rest of the response.
-- [ ] SD County Regional Airport Authority is registered in
+- [x] SD County Regional Airport Authority is registered in
       `registry/sources/`, `enabled = true`, with a header comment
       recording the live-verification date, raw posting count, and
       match count.
-- [ ] No live network call in any test.
-- [ ] Full test suite (`uv run pytest`) stays green.
+- [x] No live network call in any test.
+- [x] Full test suite (`uv run pytest`) stays green.
 
 ## Implementation Plan
 
@@ -80,3 +81,48 @@ names (`title`, `employment_type`, `department`, `location.city`/
 
 **Documentation updates**: None beyond the ticket's own live-
 verification Notes.
+
+## Notes
+
+**Live verification (2026-09-02).** Found the Authority's Workable
+account slug (`san-diego-county-regional-airport-authority`) via web
+search, since issue 31's census recorded only "confirmed public JSON"
+without the exact account name. `GET
+https://apply.workable.com/api/v1/widget/accounts/
+san-diego-county-regional-airport-authority?details=true` → HTTP 200,
+5 raw postings, one response — confirmed genuinely not paginated for
+this account (no `offset`/`limit`/paging metadata in the response at
+all). `curl -s https://apply.workable.com/robots.txt` → `Disallow:`
+(empty) for `User-agent: *` — no robots block, unlike ticket 002's
+SmartRecruiters finding.
+
+**One shape difference from this ticket's assumed response.** The
+ticket's Implementation Plan assumed `location.city`/`location.region`
+(a nested object). The real response instead carries flat `city`/
+`state` keys directly on each job record (a separate, richer
+`locations[]` array also exists but isn't needed) — `workable.py`
+reads the flat pair, per its own module docstring.
+
+All 5 current postings ("Airport Art Program Manager", "Airport
+Traffic Officer", "Manager, Airline Relations", "Procurement
+Coordinator", "Senior Network Engineer") are San Diego-located,
+full-time, non-internship roles — 0 of 5 match
+`ats_filters.classify_posting`. This account has previously posted paid
+9-week summer internships (issue 31's own census names "Business
+Intelligence - Intern II"; a live web search during this ticket's
+verification confirmed the same posting's existence, though it is no
+longer open — its direct URL now 302-redirects). Since the ticket's own
+acceptance criteria requires the *fixture* to include a confirmed paid
+9-week-summer-internship-shaped posting (not that one currently be
+live), `tests/fixtures/workable/jobs.json` includes a synthesized
+`employment_type: "Internship"` posting reproducing the real account's
+confirmed field shape, in San Diego, in a STEM department — proving the
+adapter correctly classifies and maps such a posting when one is open.
+Registered `sd-county-regional-airport-authority.toml` `enabled = true`
+per this sprint's own zero-match-is-a-pass standard (no robots block
+here, unlike ServiceNow) — a real dry run
+(`uv run partner-scrape --source sd-county-regional-airport-authority
+--dry-run -v`) completed with no error, 0 events, matching the live
+finding exactly.
+
+Full suite: 2358 passed (2339 baseline + 19 new).
