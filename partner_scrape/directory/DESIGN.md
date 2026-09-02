@@ -1,6 +1,67 @@
 # directory
 
-**Owner:** Eric Busboom · **Last reviewed:** 2026-09-02 (sprint 032 ticket 005 — 4-H clubs roster curated and registered) · **Status:** Places, Clubs (Hack Club chapters + CyberPatriot teams + Civil Air Patrol squadrons + Naval Sea Cadet Corps units + San Diego County 4-H community clubs; the curated static-roster source generalized to serve any club type), and Offerings (volunteer org profiles + free/Title I school programs) complete; issue 35b's remaining two club types' curated content (tickets 006-007) and issue 33's educator-PD program pages (routed through `adapters/`, not this module — see this doc's sprint 030 Revision) deferred/tracked elsewhere
+**Owner:** Eric Busboom · **Last reviewed:** 2026-09-02 (sprint 032 ticket 006 — Science Olympiad school teams roster curated and registered) · **Status:** Places, Clubs (Hack Club chapters + CyberPatriot teams + Civil Air Patrol squadrons + Naval Sea Cadet Corps units + San Diego County 4-H community clubs + Science Olympiad school teams; the curated static-roster source generalized to serve any club type), and Offerings (volunteer org profiles + free/Title I school programs) complete; issue 35b's remaining club type's curated content (ticket 007) and issue 33's educator-PD program pages (routed through `adapters/`, not this module — see this doc's sprint 030 Revision) deferred/tracked elsewhere
+
+---
+
+## Revision (2026-09-02 — sprint 032 ticket 006: Science Olympiad school teams roster curated and registered)
+
+Populates the fifth of issue 35b's six remaining club types against
+the generalized `club_static_roster` source (ticket 001): twenty-four
+San Diego County high schools that fielded a Division C (high school)
+team at the 2026 San Diego Regional Science Olympiad Tournament,
+registered via a new `directory/registry/science-olympiad-sd.toml`
+entry pointing at a new `directory/data/science-olympiad-sd.tsv` (same
+ten-column shape as `hack-club-sd.tsv`). No code change — content-only.
+
+**Sources checked** (live-verified 2026-09-02). Issue 35b names no
+starting teams; per this ticket's own research approach (competition
+results rather than a member directory — Science Olympiad has none),
+the roster is built from Duosmium Results' archived official tournament
+results for the 2026 San Diego Regional Tournament, Division C
+(duosmium.org/results/2026-02-28_sCA_san_diego_regional_c/, held
+February 28, 2026 at the University of San Diego). Every one of the 62
+competing teams' host school was extracted and deduplicated to 24
+unique San Diego County high schools (several schools, e.g. Canyon
+Crest Academy and Scripps Ranch High School, fielded multiple named
+teams — one `Club` record per *school*, not per named team, matching
+this module's existing one-record-per-organization convention).
+
+The official tournament site itself
+(scilympiad.com/sdso) was also live-checked and confirmed reachable
+(HTTP 200) today, describing the San Diego Regional's eligible counties
+(San Diego and Imperial) and its three-division structure — **an
+update to sprint 029's own finding that this same URL was unreachable
+(curl returning 000) at that time**, consistent with this project's own
+verification standard: record what a source says today, not what an
+earlier sprint's research found.
+
+**Geocoding outcome**: 23 of the 24 entries resolve at `"school"`
+precision through the shared ladder's CDE/NCES school-matching rungs —
+Science Olympiad teams are explicitly school-based, so this behaves
+like Hack Club/CyberPatriot. One of those 23, **San Dieguito High
+School Academy**, is a legitimate rung-3 same-city fuzzy match (CDE's
+own record is named "San Dieguito HS Academy") and is correctly flagged
+`needs_review`, the same Helix Charter precedent Hack Club's own roster
+already hits — this sprint's second such flag, not a defect. One entry,
+**The Preuss School UC San Diego**, matches no CDE/NCES school record
+at all (a small charter school co-located on the UCSD campus with an
+unusual address format) and falls through honestly to the ladder's
+non-school rungs rather than a forced/guessed school match.
+
+**Test-suite impact**: no new parsing-shape test file — the data reused
+`hack-club-sd.tsv`'s exact column shape. A new
+`TestRealScienceOlympiadGeocoding` class in `test_pipeline.py` pins the
+real roster's 23-school/1-fallthrough outcome end-to-end, including the
+San Dieguito Academy `needs_review` flag. The existing
+`test_helix_charter_is_the_one_real_chapter_flagged_needs_review` test
+is renamed/widened (now
+`test_two_real_chapters_are_flagged_needs_review`) since San Dieguito
+Academy is now a second, real, independently-flagged entry across the
+whole registry. Full-registry `clubs_meta.total` assertions across
+`test_pipeline.py` now expect `56`, not `32` (4 Hack Club + 3
+CyberPatriot + 7 Civil Air Patrol + 4 Sea Cadets + 14 4-H + 24 Science
+Olympiad).
 
 ---
 
