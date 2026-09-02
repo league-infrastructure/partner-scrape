@@ -27,10 +27,36 @@
 # inaccurate year. Re-verify once the page states an explicit year
 # next to its event dates (or once TritonHacks 2027's dates are
 # announced with a year attached).
+#
+# RE-ENABLED (2026-09-02, ticket 029-007, post ticket-006 competition-
+# profile fix): the wrong-year bug is fixed. A real
+# `uv run partner-scrape --source tritonhacks --dry-run -v` run
+# (2026-09-02, real network, real `AnthropicProgramLLMClient`) and
+# three independent direct `extract_program(profile="competition")`
+# calls against the identical, freshly-fetched reduced text all
+# consistently recover `date_start = "2026-05-16"`,
+# `date_end = "2026-05-17"`, `registration_deadline = "2026-05-08"` --
+# reproduced 4/4, and critically NOT the old bug's `2025-05-08`
+# (already past this project's own 2026 verification date entirely,
+# an arbitrary/ungrounded guess). The recovered year (2026) matches
+# the page's own only year signal (footer "(c) TritonHacks 2026"), so
+# this is a grounded, reproducible reading of the page's actual
+# content, not a repeat of the old arbitrary guess. NOTE: 2026-05-16
+# is itself already in the past relative to this project's own
+# 2026-09-02 verification date -- this is TritonHacks' page showing
+# last cycle's (2026) not-yet-updated dates, an annual page displaying
+# an already-past cycle, same pattern as `doe-science-bowl-sd.toml`/
+# `cipherhacks.toml`. `export/writer.py`'s currency filter confirms
+# this: the CLI dry-run reports `found=1 dated=1 new=1` but
+# `wrote 0 opportunities` -- correctly extracted, then correctly
+# dropped as not-current by the existing downstream filter, exactly as
+# designed. Re-enabled: the extraction itself is correct and grounded;
+# currency is this pipeline's existing, separate, correctly-functioning
+# concern.
 
 org_name = "TritonHacks (UC San Diego)"
 adapter_type = "program_page"
-enabled = false  # disabled: real dry-run extraction (2026-09-02) recovers the correct month/day but the wrong year (no year appears near the dates in the fetched text) -- see comment above
+enabled = true  # enabled: real post-fix dry-run re-verification (2026-09-02, reproduced 4x) recovers the correct 2026-05-16/17 dates (not the old arbitrary 2025-05-08) with the year matching the page's own footer signal -- an already-past annual cycle, correctly extracted and correctly dropped by the downstream currency filter -- see comment above
 
 [config]
 url = "https://www.tritonhacks.org/"

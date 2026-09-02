@@ -840,6 +840,29 @@ class TestCompetitionSourceConfig:
     real extraction recovers the wrong year). ``sd-science-olympiad``
     and ``garibaldi-bowl`` stayed disabled, independently reconfirmed
     with real ``curl``.
+
+    **029-006/007**: ticket 006 fixed the shared deadline-vs-event-date
+    extraction framing bug (a new ``profile="competition"`` prompt pair,
+    selected via the source's existing ``config.opportunity_type ==
+    "Competitions"`` override, plus a year-inference rule and a
+    ``registration_deadline`` field). Ticket 007 re-verified all five of
+    029-001b's genuinely-disabled sources end-to-end, live, against the
+    corrected mechanism (real network, real
+    ``AnthropicProgramLLMClient``, reproduced 3-4x per source):
+    ``sd-brain-bee`` (now recovers "Event Date: February 14, 2026"),
+    ``seaperch-sd-regional`` (now recovers the April 4 2026 competition
+    date in ``date_start``, with the TDR paperwork deadline correctly
+    separated into ``registration_deadline``/``Event.description``
+    rather than swallowing ``date_end``), and ``tritonhacks`` (now
+    recovers the correct 2026-05-16/17 dates, not the old arbitrary
+    2025-05-08 guess) all flipped disabled->enabled. ``sdftc-league-play``
+    and ``botball-greater-sd`` stayed disabled -- both were traced to a
+    different root cause (no calendar date reaches the model at all, a
+    fetch/content-availability gap ticket 006's framing fix has no
+    mechanism to recover), re-confirmed unchanged post-fix. ``sd-math-circle``
+    (a distinct grid/tabular extraction gap, deferred) and
+    ``mathcounts-sd-chapter`` (an unrelated WAF block) are untouched by
+    ticket 007 and not part of either list below.
     """
 
     #: (source_id, org_name substring) for every enabled=true
@@ -848,6 +871,9 @@ class TestCompetitionSourceConfig:
         "doe-science-bowl-sd",
         "congressional-app-challenge-sd",
         "cipherhacks",
+        "sd-brain-bee",
+        "seaperch-sd-regional",
+        "tritonhacks",
     ]
 
     #: (source_id, reason substring expected in the file's disabled
@@ -858,11 +884,8 @@ class TestCompetitionSourceConfig:
         ("sd-science-olympiad", "curl HTTP:000"),
         ("garibaldi-bowl", "404"),
         ("mathcounts-sd-chapter", "403"),
-        ("sdftc-league-play", "no date at all"),
-        ("seaperch-sd-regional", "TDR submission deadline"),
-        ("sd-brain-bee", "no date at all"),
+        ("sdftc-league-play", "no calendar date"),
         ("botball-greater-sd", "no calendar date"),
-        ("tritonhacks", "wrong year"),
     ]
 
     def test_every_enabled_competition_source_is_program_page_with_competitions_override(self):

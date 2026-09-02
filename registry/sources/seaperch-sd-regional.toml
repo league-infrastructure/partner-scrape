@@ -28,10 +28,27 @@
 # scope -- flagged here as a follow-up. Re-verify once that lands, or
 # if the page's own copy is reworded to make the competition date more
 # prominent than the TDR deadline.
+#
+# RE-ENABLED (2026-09-02, ticket 029-007, post ticket-006 competition-
+# profile fix): the fix landed and directly addresses this source's
+# exact failure -- the new `registration_deadline` field gives the
+# model somewhere to put the TDR deadline other than `date_start`/
+# `date_end`. A real
+# `uv run partner-scrape --source seaperch-sd-regional --dry-run -v`
+# run (2026-09-02, real network, real `AnthropicProgramLLMClient`) and
+# three independent direct `extract_program(profile="competition")`
+# calls against the identical, freshly-fetched reduced text all
+# consistently recover `date_start = "2026-04-04"` (the actual
+# competition date), `date_end = ""` (single-day event, correct), and
+# `registration_deadline = "2026-03-27"` (the TDR deadline, correctly
+# separated) -- reproduced 4/4. The exported record's own
+# `Event.description` reads "Registration deadline: 2026-03-27", per
+# `_map_result_to_event`'s new mapping -- confirmed the TDR deadline
+# lands there, never in `date_end`. Re-enabled.
 
 org_name = "Classroom of the Future Foundation"
 adapter_type = "program_page"
-enabled = false  # disabled: real dry-run extraction (2026-09-02, reproduced twice) consistently recovers only the TDR submission deadline, not the actual April 4 2026 competition date -- see comment above
+enabled = true  # enabled: real post-fix dry-run re-verification (2026-09-02, reproduced 4x) recovers the correct 2026-04-04 competition date, with the TDR deadline correctly separated into registration_deadline/description -- see comment above
 
 [config]
 url = "https://classroomofthefuture.org/seaperch-san-diego-regional-competition/"

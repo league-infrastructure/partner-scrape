@@ -179,21 +179,41 @@ Parent: UC-011 (Discover STEM company events and internships (extension))
 - **Postconditions**: One `Event` per registered competition page,
   dated and typed `Competitions`, with zero new mapping code.
 - **Acceptance Criteria**:
-  - [ ] Each of San Diego Regional Science Olympiad, SDFTC league play,
+  - [x] Each of San Diego Regional Science Olympiad, SDFTC league play,
         SeaPerch San Diego Regional, MATHCOUNTS SD chapter, DOE National
         Science Bowl SD regionals, Garibaldi Bowl, San Diego Brain Bee,
         Botball Greater SD, Congressional App Challenge, TritonHacks,
         and CipherHacks is either registered `enabled = true` and
         live-verified to yield a correctly-dated `Competitions` record,
         or registered `enabled = false` with a reason comment (sprint
-        027/028 precedent) if blocked.
-  - [ ] CyberPatriot SD / SoCal Mayor's Cyber Cup is registered
+        027/028 precedent) if blocked. **(ticket 007, 2026-09-02)**
+        Re-verified against the corrected extraction mechanism:
+        `doe-science-bowl-sd`, `congressional-app-challenge-sd`,
+        `cipherhacks` (from tickets 001/001b), plus `sd-brain-bee`,
+        `seaperch-sd-regional`, `tritonhacks` (newly fixed by ticket
+        006, re-enabled by ticket 007) are `enabled = true` and
+        live-verified. `sd-science-olympiad`, `garibaldi-bowl`,
+        `mathcounts-sd-chapter` (unrelated fetch/WAF blocks, unchanged),
+        `sdftc-league-play`, and `botball-greater-sd` (re-verified
+        post-fix by ticket 007; still no calendar date reaches the
+        model at all -- a fetch/content-availability gap distinct from
+        the framing bug ticket 006 fixed) stay `enabled = false` with an
+        evidenced reason comment. Note: `tritonhacks`' correctly-dated
+        record (2026-05-16/17) is itself an already-past annual cycle
+        relative to this ticket's 2026-09-02 verification date -- a
+        correct extraction of a not-yet-updated page, dropped from
+        export by the existing, unrelated currency filter, not an
+        extraction failure.
+  - [x] CyberPatriot SD / SoCal Mayor's Cyber Cup is registered
         `enabled = false` with a reason comment referencing issue 38
         (the headless-fetcher settle-wait gap `ndia-sd.org`'s
         JS-rendering needs), not silently omitted.
-  - [ ] A `FixtureProgramLLMClient` test proves at least one of these
+  - [x] A `FixtureProgramLLMClient` test proves at least one of these
         sources' pages maps to a correctly-dated, `Competitions`-typed
         `Event` via the existing `_extract_one_program` mapping.
+        (`tests/test_adapters_program_page.py`'s
+        `TestCompetitionSourceExtraction`/
+        `TestCompetitionRegistrationDeadlineSeparation`.)
 
 ### SUC-045: San Diego Math Circle's public calendar sheet yields its distinct annual dates as separate records
 Parent: UC-011

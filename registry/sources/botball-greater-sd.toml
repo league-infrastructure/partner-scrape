@@ -24,10 +24,28 @@
 # static fetch, not a stale-cycle one. Re-verify with a headless fetch
 # strategy in a future ticket if the actual date is confirmed to be
 # client-side-rendered.
+#
+# RE-VERIFIED (2026-09-02, ticket 029-007, post ticket-006 competition-
+# profile fix): still disabled, as `adapters/DESIGN.md`'s Revision
+# predicted -- `botball-greater-sd` was traced to a fetch/content-
+# availability gap (no calendar date reaches the model at all), a
+# different root cause than the deadline-vs-event-date framing bug
+# ticket 006 fixes. The page's reduced text is unchanged: still only
+# bare "Saturday"/"Sunday"/"All day" labels, no calendar date. A real
+# `uv run partner-scrape --source botball-greater-sd --dry-run -v` run
+# and three independent direct `profile="competition"`
+# `AnthropicProgramLLMClient.extract_program()` calls against that
+# identical, freshly-fetched text (hash-verified) all consistently
+# return `date_start=""`/`date_end=""` -- `found=1 dated=0`,
+# `wrote 0 opportunities`, reproduced 4/4. Ticket 006's fix has no
+# mechanism to recover a date that never reaches the model; not flipped
+# to `enabled = true`. Re-verify with a headless fetch strategy in a
+# future ticket if the actual date is confirmed to be client-side-
+# rendered.
 
 org_name = "KISS Institute for Practical Robotics (Botball -- Greater San Diego)"
 adapter_type = "program_page"
-enabled = false  # disabled: real dry-run extraction (2026-09-02) recovers no date -- the fetched page's visible text has only bare day-of-week labels ("Saturday"/"Sunday"), no calendar date -- see comment above
+enabled = false  # disabled: real post-fix dry-run re-verification (2026-09-02, reproduced 4x) still recovers no date -- see comment above
 
 [config]
 url = "https://www.kipr.org/botball/regions/greater-san-diego"
