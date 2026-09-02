@@ -1,8 +1,9 @@
 ---
 id: '004'
 title: Add pd extraction profile for educator-PD pages to program_llm.py and program_page.py
-status: open
-use-cases: [SUC-049]
+status: done
+use-cases:
+- SUC-049
 depends-on: []
 github-issue: ''
 issue: 33-educator-programs-layer.md
@@ -40,7 +41,7 @@ writing the prompt.
 
 ## Acceptance Criteria
 
-- [ ] `partner_scrape/adapters/program_llm.py` gains
+- [x] `partner_scrape/adapters/program_llm.py` gains
       `_FIELD_EXTRACTION_RULES_PD` and `_SYSTEM_PROMPT_PD`/
       `_SYSTEM_PROMPT_PD_MULTI`, following the exact structural pattern
       `_FIELD_EXTRACTION_RULES_COMPETITION`/`_SYSTEM_PROMPT_COMPETITION`/
@@ -59,22 +60,22 @@ writing the prompt.
       coordinators") for this profile. Reuse the same narrow
       year-inference rule the competition profile already has
       (scoped only to a bare month/day with no year).
-- [ ] **No `ProgramExtractionResult` field is added.** The existing
+- [x] **No `ProgramExtractionResult` field is added.** The existing
       `date_start`/`date_end`/`registration_deadline`/`cost`/
       `eligibility`/`is_open`/`opportunity_type`/`audience_grades`
       fields already cover a PD event's shape — confirm this by
       re-reading the dataclass before writing the prompt, don't add a
       field speculatively.
-- [ ] **No `ProgramExtractionCache._CACHE_SCHEMA_VERSION` bump.** The
+- [x] **No `ProgramExtractionCache._CACHE_SCHEMA_VERSION` bump.** The
       stored-entry shape is unchanged; only which prompt variant
       produced it changes, and no `"pd"`-profile URL has ever been
       cached under a different profile (nothing to invalidate).
-- [ ] `ProgramLLMClient.extract_program`/`extract_programs`'s `profile`
+- [x] `ProgramLLMClient.extract_program`/`extract_programs`'s `profile`
       parameter accepts `"pd"` as a third value alongside `"program"`/
       `"competition"` — still a plain string, not a typed enum
       (matching this module's existing convention for this kind of
       small hand-curated set).
-- [ ] `partner_scrape/adapters/program_page.py`'s
+- [x] `partner_scrape/adapters/program_page.py`'s
       `_resolve_extraction_profile()` extends to a three-way check:
       `"Competitions"` → `"competition"`, `"Professional Development /
       Conferences"` → `"pd"`, else → `"program"` — still driven
@@ -83,10 +84,10 @@ writing the prompt.
       `"competition"`-profile source's behavior must be byte-for-byte
       unchanged (write a test proving this, not just eyeballing the
       diff).
-- [ ] `AnthropicProgramLLMClient`'s real dispatch (whatever internal
+- [x] `AnthropicProgramLLMClient`'s real dispatch (whatever internal
       mapping selects a system prompt by `profile` value) is extended
       for `"pd"`, mirroring exactly how `"competition"` was added.
-- [ ] `FixtureProgramLLMClient` (the test double) is extended so tests
+- [x] `FixtureProgramLLMClient` (the test double) is extended so tests
       can register a `profile="pd"` fixture result distinctly from
       `"program"`/`"competition"` fixtures.
 

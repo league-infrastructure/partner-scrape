@@ -25,10 +25,13 @@ from partner_scrape.adapters.program_llm import (
     MODEL_ID,
     _FIELD_EXTRACTION_RULES,
     _FIELD_EXTRACTION_RULES_COMPETITION,
+    _FIELD_EXTRACTION_RULES_PD,
     _SYSTEM_PROMPT,
     _SYSTEM_PROMPT_COMPETITION,
     _SYSTEM_PROMPT_COMPETITION_MULTI,
     _SYSTEM_PROMPT_MULTI,
+    _SYSTEM_PROMPT_PD,
+    _SYSTEM_PROMPT_PD_MULTI,
     AnthropicProgramLLMClient,
     FixtureProgramLLMClient,
     ProgramExtractionResult,
@@ -545,6 +548,120 @@ class TestProfileSelectsSystemPrompt:
         assert fake_messages.calls[0]["system"] == _SYSTEM_PROMPT_COMPETITION_MULTI
 
 
+class TestPdFieldRulesUseEducatorFramingNotCompetitionVocabulary:
+    """AC (030-004): ``_FIELD_EXTRACTION_RULES_PD`` redefines
+    date_start/date_end as the workshop/session/summit's own date (never
+    a registration deadline), names the PD-appropriate phrasing patterns
+    ("Workshop Date," "Session Date," "Registration closes," "RSVP by"),
+    reframes ``eligibility``/``audience_grades`` around the educator
+    audience, and carries none of the competition profile's
+    competition/tournament vocabulary -- proving a PD page never gets
+    labeled "a competition or tournament."
+    """
+
+    def test_date_end_is_explicitly_not_a_registration_deadline(self):
+        assert "NOT a registration, RSVP, or sign-up deadline" in _FIELD_EXTRACTION_RULES_PD
+
+    def test_registration_deadline_field_is_defined_as_a_separate_deadline(self):
+        assert "registration_deadline: a registration, RSVP, or sign-up deadline" in (
+            _FIELD_EXTRACTION_RULES_PD
+        )
+
+    def test_names_pd_style_phrasing_patterns(self):
+        for phrase in ('"Workshop Date,"', '"Session Date,"', "Registration closes", "RSVP by"):
+            assert phrase in _FIELD_EXTRACTION_RULES_PD
+
+    def test_year_inference_rule_references_the_reference_date(self):
+        assert "Page fetched on" in _FIELD_EXTRACTION_RULES_PD
+        assert "infer the soonest year" in _FIELD_EXTRACTION_RULES_PD
+
+    def test_eligibility_and_audience_grades_describe_the_educator_not_a_student(self):
+        assert "educator" in _FIELD_EXTRACTION_RULES_PD
+        assert "never a student" in _FIELD_EXTRACTION_RULES_PD
+
+    def test_shared_by_both_pd_prompts(self):
+        assert _FIELD_EXTRACTION_RULES_PD in _SYSTEM_PROMPT_PD
+        assert _FIELD_EXTRACTION_RULES_PD in _SYSTEM_PROMPT_PD_MULTI
+
+    def test_pd_prompts_are_distinct_from_the_base_and_competition_prompts(self):
+        assert _SYSTEM_PROMPT_PD != _SYSTEM_PROMPT
+        assert _SYSTEM_PROMPT_PD != _SYSTEM_PROMPT_COMPETITION
+        assert _SYSTEM_PROMPT_PD_MULTI != _SYSTEM_PROMPT_MULTI
+        assert _SYSTEM_PROMPT_PD_MULTI != _SYSTEM_PROMPT_COMPETITION_MULTI
+
+    def test_pd_field_rules_carry_no_competition_tournament_vocabulary(self):
+        # The competition profile's own steering vocabulary must never
+        # leak into the pd profile's rules -- a PD workshop page is not
+        # "a competition or tournament" (this ticket's own reasoning for
+        # why pd is a third genre, not a competition-profile reuse).
+        # Note: "Competitions" (capitalized, plural) legitimately appears
+        # in both profiles' shared _OPPORTUNITY_TYPE_VALUES classification
+        # list -- that's a real category value, not competition-genre
+        # framing, so these checks are for the competition profile's own
+        # lowercase/date-label vocabulary specifically, not that shared
+        # list entry.
+        for phrase in ("competition or tournament", "tournament", "Competition Date,", "Tournament Date,"):
+            assert phrase not in _FIELD_EXTRACTION_RULES_PD
+
+    def test_pd_system_prompt_never_calls_the_page_a_competition_or_tournament(self):
+        # Same caveat as above: _OPPORTUNITY_TYPE_VALUES' "Competitions"
+        # entry legitimately appears in every profile's prompt, so this
+        # checks the competition profile's specific framing phrase, not
+        # a bare "competition" substring.
+        assert "competition or tournament" not in _SYSTEM_PROMPT_PD
+        assert "tournament" not in _SYSTEM_PROMPT_PD.lower()
+
+
+class TestPdProfileSelectsSystemPrompt:
+    """AC (030-004): ``profile="pd"`` selects
+    ``_SYSTEM_PROMPT_PD``/``_SYSTEM_PROMPT_PD_MULTI`` -- the third value
+    alongside ``"program"``/``"competition"``, proving all three
+    profiles select independently.
+    """
+
+    def test_pd_profile_uses_the_pd_single_record_prompt(self, monkeypatch):
+        fake_messages = _install_fake_anthropic(monkeypatch, response_text=json.dumps(_FULL_RESULT_PAYLOAD))
+        client = AnthropicProgramLLMClient()
+
+        client.extract_program("https://example.org/x", "body", profile="pd")
+
+        assert fake_messages.calls[0]["system"] == _SYSTEM_PROMPT_PD
+
+    def test_pd_profile_uses_the_pd_multi_record_prompt(self, monkeypatch):
+        fake_messages = _install_fake_anthropic(
+            monkeypatch, response_text=json.dumps({"programs": [_FULL_RESULT_PAYLOAD]})
+        )
+        client = AnthropicProgramLLMClient()
+
+        client.extract_programs("https://example.org/x", "body", profile="pd")
+
+        assert fake_messages.calls[0]["system"] == _SYSTEM_PROMPT_PD_MULTI
+
+    def test_three_profiles_select_three_distinct_system_prompts(self, monkeypatch):
+        for profile, expected_prompt in [
+            ("program", _SYSTEM_PROMPT),
+            ("competition", _SYSTEM_PROMPT_COMPETITION),
+            ("pd", _SYSTEM_PROMPT_PD),
+        ]:
+            fake_messages = _install_fake_anthropic(
+                monkeypatch, response_text=json.dumps(_FULL_RESULT_PAYLOAD)
+            )
+            client = AnthropicProgramLLMClient()
+
+            client.extract_program("https://example.org/x", "body", profile=profile)
+
+            assert fake_messages.calls[0]["system"] == expected_prompt
+
+    def test_pd_profile_call_never_returns_a_competition_framed_system_prompt(self, monkeypatch):
+        fake_messages = _install_fake_anthropic(monkeypatch, response_text=json.dumps(_FULL_RESULT_PAYLOAD))
+        client = AnthropicProgramLLMClient()
+
+        client.extract_program("https://example.org/x", "body", profile="pd")
+
+        assert fake_messages.calls[0]["system"] != _SYSTEM_PROMPT_COMPETITION
+        assert fake_messages.calls[0]["system"] != _SYSTEM_PROMPT_COMPETITION_MULTI
+
+
 class TestReferenceDateInjectedIntoUserPromptOnly:
     """AC: ``reference_date`` is injected into the *user* prompt as
     "Page fetched on: ``<ISO date>``", never the system prompt.
@@ -645,6 +762,93 @@ class TestFixtureProgramLLMClientAcceptsAndIgnoresNewParameters:
 
         assert result is canned
         assert client.list_calls == [("https://example.org/p", "body")]
+
+
+class TestFixtureProgramLLMClientRegistersProfileDistinctResults:
+    """AC (030-004): ``FixtureProgramLLMClient`` is extended so tests can
+    register a ``profile="pd"`` fixture result distinctly from
+    ``"program"``/``"competition"`` fixtures for the *same* ``(url,
+    body)`` pair -- via the ``(key_fn(url, body), profile)`` tuple key,
+    which takes precedence over the plain ``key_fn(url, body)`` key when
+    present.
+    """
+
+    def test_registers_a_pd_specific_response_distinct_from_the_plain_one(self):
+        default_result = ProgramExtractionResult(program_name="Program-framed view")
+        pd_result = ProgramExtractionResult(program_name="PD-framed view")
+        client = FixtureProgramLLMClient(
+            responses={
+                "https://example.org/p": default_result,
+                ("https://example.org/p", "pd"): pd_result,
+            }
+        )
+
+        assert client.extract_program("https://example.org/p", "body") is default_result
+        assert (
+            client.extract_program("https://example.org/p", "body", profile="pd") is pd_result
+        )
+
+    def test_registers_three_profile_distinct_responses_for_the_same_url(self):
+        program_result = ProgramExtractionResult(program_name="Program view")
+        competition_result = ProgramExtractionResult(program_name="Competition view")
+        pd_result = ProgramExtractionResult(program_name="PD view")
+        client = FixtureProgramLLMClient(
+            responses={
+                ("https://example.org/p", "program"): program_result,
+                ("https://example.org/p", "competition"): competition_result,
+                ("https://example.org/p", "pd"): pd_result,
+            }
+        )
+
+        assert client.extract_program("https://example.org/p", "body", profile="program") is (
+            program_result
+        )
+        assert client.extract_program(
+            "https://example.org/p", "body", profile="competition"
+        ) is competition_result
+        assert client.extract_program("https://example.org/p", "body", profile="pd") is pd_result
+
+    def test_pd_profile_call_never_returns_the_competition_or_program_fixture(self):
+        program_result = ProgramExtractionResult(program_name="Program view")
+        pd_result = ProgramExtractionResult(program_name="PD view")
+        client = FixtureProgramLLMClient(
+            responses={
+                "https://example.org/p": program_result,
+                ("https://example.org/p", "pd"): pd_result,
+            }
+        )
+
+        result = client.extract_program("https://example.org/p", "body", profile="pd")
+
+        assert result is pd_result
+        assert result is not program_result
+
+    def test_extract_programs_registers_a_pd_specific_list_response(self):
+        default_list = [ProgramExtractionResult(program_name="Program view")]
+        pd_list = [ProgramExtractionResult(program_name="PD view")]
+        client = FixtureProgramLLMClient(
+            list_responses={
+                "https://example.org/p": default_list,
+                ("https://example.org/p", "pd"): pd_list,
+            }
+        )
+
+        assert client.extract_programs("https://example.org/p", "body") is default_list
+        assert (
+            client.extract_programs("https://example.org/p", "body", profile="pd") is pd_list
+        )
+
+    def test_pre_existing_plain_key_registrations_are_unaffected_by_this_extension(self):
+        # Every existing test in this file registers under the plain
+        # key_fn(url, body) key with no profile-qualified sibling entry
+        # -- this proves that shape still resolves exactly as before,
+        # regardless of which profile is passed.
+        canned = ProgramExtractionResult(program_name="Fixture Program")
+        client = FixtureProgramLLMClient(responses={"https://example.org/p": canned})
+
+        assert client.extract_program("https://example.org/p", "body") is canned
+        assert client.extract_program("https://example.org/p", "body", profile="competition") is canned
+        assert client.extract_program("https://example.org/p", "body", profile="pd") is canned
 
 
 class TestFixtureProgramLLMClient:
