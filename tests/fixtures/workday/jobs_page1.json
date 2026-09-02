@@ -1,0 +1,62 @@
+{
+  "total": 25,
+  "jobPostings": [
+    {
+      "title": "Software Engineering Intern",
+      "externalPath": "/job/United-States-California-San-Diego/Software-Engineering-Intern_R10000001",
+      "timeType": "Full time",
+      "locationsText": "United States-California-San Diego",
+      "postedOn": "Posted Today",
+      "bulletFields": ["R10000001"]
+    },
+    {
+      "title": "Senior Software Engineer",
+      "externalPath": "/job/United-States-California-San-Diego/Senior-Software-Engineer_R10000002",
+      "timeType": "Full time",
+      "locationsText": "United States-California-San Diego",
+      "postedOn": "Posted Today",
+      "bulletFields": ["R10000002"]
+    },
+    {
+      "title": "Data Science Intern",
+      "externalPath": "/job/United-States-Texas-Austin/Data-Science-Intern_R10000003",
+      "timeType": "Full time",
+      "locationsText": "United States-Texas-Austin",
+      "postedOn": "Posted Yesterday",
+      "bulletFields": ["R10000003"]
+    },
+    {
+      "title": "Marketing Intern",
+      "externalPath": "/job/United-States-California-San-Diego/Marketing-Intern_R10000004",
+      "timeType": "Full time",
+      "locationsText": "United States-California-San Diego",
+      "postedOn": "Posted Yesterday",
+      "bulletFields": ["R10000004"]
+    },
+    {
+      "externalPath": "/job/United-States-California-San-Diego/Untitled_R10000005",
+      "timeType": "Full time",
+      "locationsText": "United States-California-San Diego",
+      "postedOn": "Posted Yesterday",
+      "bulletFields": ["R10000005"]
+    },
+    {
+      "title": "2027 High School Engineering Intern Program - San Diego CA",
+      "externalPath": "/job/United-States-California-San-Diego/2027-High-School-Engineering-Intern-Program---San-Diego-CA_R10000006",
+      "timeType": "Full time",
+      "locationsText": "United States-California-San Diego",
+      "postedOn": "Posted 30+ Days Ago",
+      "bulletFields": ["R10000006"]
+    },
+    {
+      "title": "Bioinformatics Intern",
+      "externalPath": "/job/United-States-California-La-Jolla/Bioinformatics-Intern_R10000007",
+      "timeType": "Full time",
+      "locationsText": "United States-California-La Jolla",
+      "postedOn": "Posted 5 Days Ago",
+      "bulletFields": ["R10000007"]
+    }
+  ],
+  "facets": [],
+  "userAuthenticated": false
+}

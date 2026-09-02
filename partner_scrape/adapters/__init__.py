@@ -39,6 +39,7 @@ from partner_scrape.adapters.smartrecruiters import SmartRecruitersAdapter
 from partner_scrape.adapters.tec import TecRestAdapter
 from partner_scrape.adapters.wordpress import WordPressRestAdapter
 from partner_scrape.adapters.workable import WorkableAdapter
+from partner_scrape.adapters.workday import WorkdayAdapter
 
 ADAPTERS["tec_rest"] = TecRestAdapter
 ADAPTERS["wp_rest"] = WordPressRestAdapter
@@ -58,6 +59,7 @@ ADAPTERS["activenet_camps"] = ActiveNetCampsAdapter
 ADAPTERS["campbrain"] = CampBrainAdapter
 ADAPTERS["smartrecruiters"] = SmartRecruitersAdapter
 ADAPTERS["workable"] = WorkableAdapter
+ADAPTERS["workday"] = WorkdayAdapter
 
 __all__ = [
     "Adapter",
@@ -85,4 +87,5 @@ __all__ = [
     "CampBrainAdapter",
     "SmartRecruitersAdapter",
     "WorkableAdapter",
+    "WorkdayAdapter",
 ]

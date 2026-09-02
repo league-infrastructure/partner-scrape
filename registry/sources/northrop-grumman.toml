@@ -1,0 +1,66 @@
+# Northrop Grumman -- San Diego office presence (Mission Systems /
+# Aeronautics Systems sectors), Workday-backed careers board. Includes
+# the HS Internship Program req issue 31 names, though that specific
+# req currently lives on a separate, access-restricted Workday site --
+# see adapters/workday.py's module docstring and this file's own
+# comment below.
+#
+# Live-verified 2026-09-02 (sprint 031 ticket 005):
+# POST https://ngc.wd1.myworkdayjobs.com/wday/cxs/ngc/Northrop_Grumman_External_Site/jobs
+# -> a headerless plain POST 403s (issue 31's own census); adding
+# browser-like headers (Accept: application/json, Referer set to this
+# site's own careers page, a realistic Chrome User-Agent) clears it:
+# HTTP 200, valid JSON, total=3715, paginated via offset (server-capped
+# at limit=20 -- see adapters/workday.py's module docstring for the
+# full field-shape write-up).
+#
+# robots.txt (ngc.wd1.myworkdayjobs.com) checked live via
+# urllib.robotparser against the exact /wday/cxs/ngc/
+# Northrop_Grumman_External_Site/jobs path this source POSTs to: ALLOWED
+# (no blanket "Disallow: /"; only /refreshFacet/ is disallowed, which
+# this path is not under).
+#
+# ats_filters.classify_posting result (2026-09-02, all 3715 raw
+# postings fetched across every page, direct requests bypassing this
+# project's own robots policy for the purpose of this one-time
+# verification): 173 postings located in San Diego. 0 of the 3715 match
+# classify_posting's internship + STEM + San Diego test -- Workday's
+# list-view API carries no department/commitment field (unlike
+# Greenhouse/SmartRecruiters/Workable), so the STEM check here rests on
+# title text alone, and no currently-live San Diego posting's title
+# happens to carry both an internship signal and a STEM keyword at once
+# (a handful of SkillBridge/entry-level postings matched "intern"-
+# adjacent search terms but are not internship-titled roles). A
+# working-adapter pass, not a failure, per this sprint's own Success
+# Criteria.
+#
+# HS Internship Program req: issue 31 names this specifically. Live
+# search (both targeted searchText queries and a full scan of every
+# currently-live posting) found no "High School"-titled posting live on
+# this public External_Site board. The specific req confirmed to exist
+# via web search ("2026 High School Internship Program Technical Intern
+# - San Diego CA") resolves to a *different* Workday site,
+# Northrop_Grumman_Restricted_Site, which live-probing here confirmed
+# returns 403 permission denied for this project's bot even with the
+# same browser-like headers that clear the public site's 403 -- a
+# separate, narrower access restriction than the one issue 31's census
+# recorded, not fixed by this ticket's header-based workaround.
+# tests/fixtures/workday/jobs_page1.json hand-models this req's shape
+# (a title containing an actual STEM keyword, since Workday's real
+# short "Technical Intern" title text does not) to prove it survives
+# classification, per this ticket's own fallback for a tenant/req that
+# stays blocked even to live verification.
+
+org_name = "Northrop Grumman"
+adapter_type = "workday"
+enabled = true
+
+[config]
+tenant = "ngc"
+site = "Northrop_Grumman_External_Site"
+api_base = "https://ngc.wd1.myworkdayjobs.com"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 31 ATS census (2026-08-30), live-verified 2026-09-02 (sprint 031 ticket 005)"

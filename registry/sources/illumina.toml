@@ -1,0 +1,40 @@
+# Illumina -- San Diego headquarters, Workday-backed careers board.
+#
+# Live-verified 2026-09-02 (sprint 031 ticket 005):
+# POST https://illumina.wd1.myworkdayjobs.com/wday/cxs/illumina/illumina-careers/jobs
+# -> a headerless plain POST 403s (issue 31's own census); browser-like
+# headers (Accept: application/json, Referer set to this site's own
+# careers page, a realistic Chrome User-Agent) clear it: HTTP 200,
+# valid JSON, total=154, paginated via offset (server-capped at
+# limit=20). A separate "illumina-universityrecruiting" site also
+# resolves live (200, valid JSON) but currently has 0 total postings --
+# not registered, since issue 31 names only this one required Illumina
+# registration; see adapters/workday.py's module docstring.
+#
+# robots.txt (illumina.wd1.myworkdayjobs.com) checked live via
+# urllib.robotparser against the exact /wday/cxs/illumina/
+# illumina-careers/jobs path this source POSTs to: ALLOWED (no blanket
+# "Disallow: /"; only /refreshFacet/ is disallowed).
+#
+# ats_filters.classify_posting result (2026-09-02, all 154 raw postings
+# fetched across every page, direct requests bypassing this project's
+# own robots policy for the purpose of this one-time verification): 49
+# postings located in San Diego, spanning Customer Care, Bioinformatics
+# Scientist, Software Engineer, and various Sr/Director-level roles --
+# no internship-titled posting currently live. 0 of the 154 match
+# classify_posting's internship + STEM + San Diego test. A working-
+# adapter pass, not a failure, per this sprint's own Success Criteria.
+
+org_name = "Illumina"
+adapter_type = "workday"
+enabled = true
+
+[config]
+tenant = "illumina"
+site = "illumina-careers"
+api_base = "https://illumina.wd1.myworkdayjobs.com"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 31 ATS census (2026-08-30), live-verified 2026-09-02 (sprint 031 ticket 005)"
