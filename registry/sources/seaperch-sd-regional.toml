@@ -5,20 +5,33 @@
 # operator-curated-override mechanism decision (registry/DESIGN.md's
 # sprint 029 addendum).
 #
-# Live-verified 2026-09-01 (WebFetch; see sd-science-olympiad.toml's
-# comment for this ticket's network-access caveat).
-# `https://classroomofthefuture.org/seaperch-san-diego-regional-competition/`
-# returns HTTP 200 with a genuinely dated, current-season page:
-# competition date "Saturday, April 4th, 2026" at Kearny Mesa Pool,
-# 9am-3pm; a Technical Design Report deadline of March 27 2026 for
-# teams pursuing international qualification; a team-registration
-# Google Form; and organizer contact
-# (seaperchsandiego@gmail.com). A correctly-dated Competitions record
-# is expected from this page as-is.
+# CORRECTION (2026-09-02): this ticket's first pass (2026-09-01)
+# registered this source `enabled = true` claiming a "correctly-dated"
+# WebFetch summary of "Saturday, April 4th, 2026" -- never confirmed
+# against the real adapter. A real end-to-end
+# `uv run partner-scrape --source seaperch-sd-regional --dry-run -v`
+# run (2026-09-02, real network, real `AnthropicProgramLLMClient`,
+# reproduced twice for consistency) shows the page DOES fetch cleanly
+# and DOES contain the April 4 2026 competition date in its reduced
+# text ("Location: Kearny Mesa Pool Date: Saturday, April 4th, 2026"),
+# but the LLM extraction consistently maps only the *Technical Design
+# Report submission deadline* ("Friday March 27, 2026") into
+# `date_end`, leaving `date_start` empty and never recovering the
+# actual competition date -- reproduced identically across two
+# independent extraction calls against the same fetched text, so this
+# is a systematic extraction-mapping miss, not one-off model noise.
+# `found=1 dated=0`, `wrote 0 opportunities`. A record built from the
+# TDR deadline alone would misrepresent the actual event date if it
+# were later shown as "the competition," so this is registered
+# disabled rather than accepted as partially usable. Fixing the
+# extraction prompt/mapping is out of this registry-only ticket's
+# scope -- flagged here as a follow-up. Re-verify once that lands, or
+# if the page's own copy is reworded to make the competition date more
+# prominent than the TDR deadline.
 
 org_name = "Classroom of the Future Foundation"
 adapter_type = "program_page"
-enabled = true
+enabled = false  # disabled: real dry-run extraction (2026-09-02, reproduced twice) consistently recovers only the TDR submission deadline, not the actual April 4 2026 competition date -- see comment above
 
 [config]
 url = "https://classroomofthefuture.org/seaperch-san-diego-regional-competition/"
@@ -28,4 +41,4 @@ opportunity_type = "Competitions"
 [acquisition_policy]
 rate_limit_seconds = 1.0
 respect_robots = true
-discovered_via = "issue 30 (2026-08-30 competition sources without feeds); sprint 029 ticket 001 live verification (2026-09-01)"
+discovered_via = "issue 30 (2026-08-30 competition sources without feeds); sprint 029 ticket 001 (corrected 2026-09-02 after a WebFetch-only check that never exercised the real extraction pipeline)"

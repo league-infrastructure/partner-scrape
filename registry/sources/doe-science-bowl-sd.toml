@@ -6,22 +6,33 @@
 # operator-curated-override mechanism decision (registry/DESIGN.md's
 # sprint 029 addendum).
 #
-# Live-verified 2026-09-01 (WebFetch; see sd-science-olympiad.toml's
-# comment for this ticket's network-access caveat).
-# `https://science.osti.gov/wdts/nsb/Regional-Competitions/High-School-Regionals/California/CA_San-Diego-High-School-Regional-Science-Bowl`
-# (a federal .gov page) returns HTTP 200 with real competition-shaped
-# content: venue (UCSD Applied Physics & Mathematics Building, room
-# 7409), $100/team registration fee, a 12-team cap (2 per school), and
-# a registration-deadline of "before November 24, 2025" with
-# preregistration opening October 6, 2025. The displayed event date
-# itself ("February, 28, 2025") is stale by one season -- the page has
-# evidently not yet been updated for the 2026-27 cycle at
-# verification time. Registered enabled anyway, matching this
-# sprint's accepted "an annual page whose organizer hasn't yet posted
-# next year's dates is handled the same way an off-season camp page is
-# ... not an error" design rationale (registry/DESIGN.md's sprint 029
-# addendum) -- the org, page, and season structure are all genuinely
-# live; only the specific date field lags.
+# Live-verified end-to-end 2026-09-02 via a real
+# `uv run partner-scrape --source doe-science-bowl-sd --dry-run -v`
+# run (real network, real `AnthropicProgramLLMClient`, matching the
+# sprint 027/028 standard -- this ticket's original 2026-09-01
+# WebFetch-only pass is superseded by this real run, per a team-lead
+# correction that the first pass never exercised the actual adapter).
+# The federal .gov page (`science.osti.gov`) fetches cleanly (HTTP
+# 200) and extraction succeeds: program_name "San Diego High School
+# Regional Science Bowl", `date_start = "2025-10-06"` (preregistration
+# opens), `date_end = "2025-11-24"` (team registration deadline),
+# venue/fee/eligibility all correctly recovered. `found=1 dated=1`.
+#
+# These are the *registration-window* dates for the 2025-26 season
+# (not the Feb competition date itself, which the page shows as stale
+# from a still-earlier cycle) -- both are already in the past relative
+# to this verification date, so `wrote 0 opportunities` in this dry
+# run: the existing currency filter
+# (`export.writer.is_current_or_upcoming`) correctly excludes an
+# already-past record, not a sign of a broken extraction. This is
+# exactly the sprint's own pre-accepted "annual page whose organizer
+# hasn't yet posted next year's dates" gap (registry/DESIGN.md's
+# sprint 029 addendum, Design Rationale: "...filtered at export time
+# ... not solved here") -- a reliable federal site with a real,
+# correctly-parsed (if last-cycle) date pair, expected to self-correct
+# once UCSD Student Organizations post the 2026-27 cycle's dates,
+# picked up automatically by the existing weekly cron with no further
+# registry change needed. Registered enabled on that basis.
 
 org_name = "UCSD Student Organizations (DOE National Science Bowl, San Diego Regional)"
 adapter_type = "program_page"
@@ -35,4 +46,4 @@ opportunity_type = "Competitions"
 [acquisition_policy]
 rate_limit_seconds = 1.0
 respect_robots = true
-discovered_via = "issue 30 (2026-08-30 competition sources without feeds); sprint 029 ticket 001 live verification (2026-09-01)"
+discovered_via = "issue 30 (2026-08-30 competition sources without feeds); sprint 029 ticket 001 live-verified end-to-end via real dry-run (2026-09-02)"

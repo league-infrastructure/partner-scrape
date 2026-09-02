@@ -7,30 +7,33 @@
 # registration (issue 25, out of scope for this sprint) -- this is
 # sdftc.org itself, the regional FTC organizing body's own site.
 #
-# Live-verified 2026-09-01 (WebFetch; see sd-science-olympiad.toml's
-# comment for this ticket's network-access caveat). `https://www.sdftc.org/`
-# returns real, current content describing the organization and its
-# season structure, with nav references to a "2026-27 Kick Off" and
-# "2026-27 Registration" -- confirming the site is live and
-# season-current -- but the homepage itself carries no specific
-# tournament/league-meet dates in its visible body text.
-# `https://www.sdftc.org/2025-26registration.html` (page last updated
-# 2025-09-24) has real current-season dates, but only for team
-# registration mechanics (Oct 20 2025 registration deadline, Oct 23
-# league-selection notification), not tournament dates.
-# `https://www.sdftc.org/league-meets.html` returned real date content
-# but for the 2016-17 season (last updated 2017-02-07) -- nine years
-# stale; deliberately NOT used as `config.url` to avoid the LLM
-# extracting a wrong-year date as if current. The homepage is used
-# instead: no specific date recovered at verification time is an
-# accepted gap for a rolling/not-yet-updated-for-the-season page (the
-# `sd-foundation-community-scholarship.toml` precedent: "no
-# start/end date recovered ... not a reduction-step gap"), not
-# evidence of a block -- the org and site are genuinely live.
+# CORRECTION (2026-09-02): this ticket's first pass (2026-09-01)
+# registered this source `enabled = true` on a WebFetch-only check,
+# reasoning that a live-but-dateless page was an acceptable "annual
+# page not yet updated" gap -- never confirmed against the real
+# adapter. A real end-to-end
+# `uv run partner-scrape --source sdftc-league-play --dry-run -v` run
+# (2026-09-02, real network, real `AnthropicProgramLLMClient`)
+# confirms the page fetches fine (HTTP 200) but the LLM extraction
+# genuinely recovers NO date at all: `date_start=""`, `date_end=""`.
+# Inspecting the actual reduced text sent to the LLM confirms why --
+# it is nav/mission-statement content only ("2026-27 Kick Off",
+# "2026-27 Registration" as bare menu labels, no adjacent calendar
+# date anywhere in the visible body). `found=1 dated=0`,
+# `wrote 0 opportunities`. This is a genuine "does not yield a usable
+# record" case, not merely a stale-cycle one (contrast
+# `doe-science-bowl-sd.toml`/`cipherhacks.toml`, which both DO recover
+# real dates, just for an already-past cycle) -- registered disabled
+# per the sprint 027/028 live-verification standard. Re-verify once
+# SDFTC's own site publishes specific league-meet/tournament dates
+# (their `2025-26registration.html` and `league-meets.html` subpages
+# were checked too during this ticket's research and are, respectively,
+# registration-mechanics-only and nine seasons stale -- neither is a
+# better `config.url` than the homepage).
 
 org_name = "San Diego FIRST Tech Challenge"
 adapter_type = "program_page"
-enabled = true
+enabled = false  # disabled: real dry-run extraction (2026-09-02) recovers no date at all (date_start/date_end both empty) -- the page's visible content has no calendar date -- see comment above
 
 [config]
 url = "https://www.sdftc.org/"
@@ -40,4 +43,4 @@ opportunity_type = "Competitions"
 [acquisition_policy]
 rate_limit_seconds = 1.0
 respect_robots = true
-discovered_via = "issue 30 (2026-08-30 competition sources without feeds); sprint 029 ticket 001 live verification (2026-09-01)"
+discovered_via = "issue 30 (2026-08-30 competition sources without feeds); sprint 029 ticket 001 (corrected 2026-09-02 after a WebFetch-only check that never exercised the real extraction pipeline)"

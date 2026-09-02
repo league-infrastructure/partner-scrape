@@ -138,3 +138,93 @@ passed (baseline 2140 + 7 new tests: 6 in `test_registry.py`'s new
 `TestCompetitionSourceConfig`, 1 in
 `test_adapters_program_page.py`'s new
 `TestCompetitionSourceExtraction`).
+
+
+## Notes (029-001b correction, 2026-09-02)
+
+The first pass's live-verification (above) turned out to be
+insufficiently rigorous: it relied on the WebFetch tool's own
+AI-summarized page content, never the real
+`discover()->fetch()->extract()` adapter chain or the real
+`AnthropicProgramLLMClient` -- the sprint 027/028 standard. A
+team-lead correction identified this and confirmed that this
+execution environment's Bash tool *does* have outbound network access
+when run unsandboxed (`dangerouslyDisableSandbox: true`), unlike the
+sandboxed pass used originally. Re-verification was redone with real
+`curl` and real `uv run partner-scrape --source <id> --dry-run -v`
+runs against the live network with a real Anthropic API key.
+
+**Findings, corrected**:
+
+- **`cipherhacks`** -- WRONG in the first pass. The original 403
+  finding (WebFetch) did not reproduce: real `curl` returns HTTP 200,
+  and a real dry-run extracts a fully correct record (`CipherHacks
+  2026`, 2026-06-17/18, `Competitions`, `found=1 dated=1`). Flipped
+  **disabled -> enabled**. (The fetched page also contains an embedded
+  prompt-injection string aimed at AI fetchers -- not acted on; noted
+  in the file's own comment for future maintainers.)
+- **`mathcounts-sd-chapter`** -- WRONG in the first pass. WebFetch saw
+  HTTP 200; this project's own `PoliteFetcher` gets a real HTTP 403
+  (WAF/bot block) in a real dry-run (`found=0`). Flipped **enabled ->
+  disabled**.
+- **`sdftc-league-play`**, **`sd-brain-bee`**, **`botball-greater-sd`**
+  -- WRONG in the first pass. Each fetches fine for real, but the real
+  LLM extraction recovers no date at all (`dated=0`) -- for
+  `sd-brain-bee` this is a genuine extraction miss (the page's reduced
+  text plainly states "Event Date: February 14, 2026", reproduced
+  across two retries), for the other two the fetched text itself has
+  no calendar date. Flipped **enabled -> disabled** each.
+- **`seaperch-sd-regional`** -- WRONG in the first pass. Real
+  extraction (reproduced twice) consistently recovers the Technical
+  Design Report *submission deadline* (Mar 27 2026), not the actual
+  Apr 4 2026 competition date, even though the competition date is
+  clearly present in the fetched text. Flipped **enabled -> disabled**
+  rather than ship a record keyed to the wrong date.
+- **`tritonhacks`** -- WRONG in the first pass. Real extraction
+  recovers the correct month/day but the wrong year (`2025-05-08` --
+  already past even at verification time) because no year appears
+  near the dates in the fetched text; the only "2026" on the page is
+  an unrelated footer copyright line. Flipped **enabled -> disabled**.
+- **`sd-science-olympiad`** -- reconfirmed correct. Real `curl` also
+  returns `HTTP:000` (connection-level failure) against
+  scilympiad.com, independently of the WebFetch tool. Stays
+  **disabled**.
+- **`garibaldi-bowl`** -- reconfirmed correct, with a fuller picture:
+  the `http://` URL 302-redirects to `https://`, which then genuinely
+  404s (not a bare 404 on the http URL as first recorded). Stays
+  **disabled**.
+- **`cyberpatriot-sd`** -- not re-litigated, per explicit instruction:
+  stays **disabled** referencing issue 38.
+- **`doe-science-bowl-sd`** -- reconfirmed correct, with a fuller and
+  more honest picture: the real extraction recovers a genuine date
+  pair, but it is the *registration-window* dates for the already-past
+  2025-26 season (`2025-10-06`/`2025-11-24`), not the event date
+  itself, so `wrote 0 opportunities` in the dry run (correctly
+  filtered by the currency rule). Kept **enabled** -- this matches the
+  sprint's own pre-accepted "annual page not yet updated for the new
+  cycle" gap (registry/DESIGN.md's sprint 029 addendum), a real
+  correctly-parsed date on a reliable federal site expected to
+  self-correct via the existing weekly cron, unlike the "no date at
+  all" or "wrong date/year" cases above.
+- **`congressional-app-challenge-sd`** -- reconfirmed correct and is
+  the strongest result in the batch: `found=1 dated=1`, and the ONLY
+  source in this whole ticket that currently `wrote 1 opportunity` in
+  a live dry run (a genuinely open, correctly-dated, currently-current
+  record as of 2026-09-02). Kept **enabled**.
+
+**Final state**: 3 enabled (`doe-science-bowl-sd`,
+`congressional-app-challenge-sd`, `cipherhacks`), 9 disabled
+(`sd-science-olympiad`, `sdftc-league-play`, `seaperch-sd-regional`,
+`mathcounts-sd-chapter`, `garibaldi-bowl`, `sd-brain-bee`,
+`botball-greater-sd`, `tritonhacks`, `cyberpatriot-sd`). Every disabled
+file carries an accurate reason comment reflecting a real, reproduced
+dry-run/curl result, not a WebFetch impression. `tests/test_registry.py`'s
+`TestCompetitionSourceConfig._ENABLED_COMPETITION_SOURCES`/
+`_DISABLED_COMPETITION_SOURCES` updated to match.
+
+**Test suite**: `uv run pytest tests/test_adapters_program_page.py
+tests/test_registry.py` -> 83 passed (unchanged count; only file
+content in the reason-substring assertions changed).
+Full suite `uv run pytest` -> 2147 passed (matches the ticket's prior
+baseline of 2147 -- no tests added or removed by this correction, only
+corrected).

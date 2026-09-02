@@ -824,19 +824,30 @@ class TestCompetitionSourceConfig:
     addendum). No new loader code is expected -- this verifies the
     existing untyped-``config``-dict mechanism already handles this
     reuse, exactly like the sprint 027/028 precedents above.
+
+    **029-001b correction**: this ticket's first pass (2026-09-01)
+    verified sources via the WebFetch tool only, never the real
+    adapter/pipeline -- several of its enable/disable calls turned out
+    wrong once re-verified end-to-end with real
+    ``uv run partner-scrape --source <id> --dry-run -v`` runs
+    (2026-09-02), matching the sprint 027/028 live-verification
+    standard. ``cipherhacks`` flipped disabled->enabled (its 403
+    finding did not reproduce against a real fetch); ``mathcounts-sd-chapter``,
+    ``sdftc-league-play``, ``seaperch-sd-regional``, ``sd-brain-bee``,
+    and ``botball-greater-sd`` flipped enabled->disabled (each fetches
+    fine but the real extraction yields no correctly-dated record);
+    ``tritonhacks`` flipped enabled->disabled (fetches fine but the
+    real extraction recovers the wrong year). ``sd-science-olympiad``
+    and ``garibaldi-bowl`` stayed disabled, independently reconfirmed
+    with real ``curl``.
     """
 
     #: (source_id, org_name substring) for every enabled=true
     #: competition source this ticket registers.
     _ENABLED_COMPETITION_SOURCES = [
-        "sdftc-league-play",
-        "seaperch-sd-regional",
-        "mathcounts-sd-chapter",
         "doe-science-bowl-sd",
-        "sd-brain-bee",
-        "botball-greater-sd",
         "congressional-app-challenge-sd",
-        "tritonhacks",
+        "cipherhacks",
     ]
 
     #: (source_id, reason substring expected in the file's disabled
@@ -844,9 +855,14 @@ class TestCompetitionSourceConfig:
     #: registers -- sprint 027 tickets 005/006's disabled-with-reason
     #: precedent.
     _DISABLED_COMPETITION_SOURCES = [
-        ("sd-science-olympiad", "ECONNREFUSED"),
+        ("sd-science-olympiad", "curl HTTP:000"),
         ("garibaldi-bowl", "404"),
-        ("cipherhacks", "403"),
+        ("mathcounts-sd-chapter", "403"),
+        ("sdftc-league-play", "no date at all"),
+        ("seaperch-sd-regional", "TDR submission deadline"),
+        ("sd-brain-bee", "no date at all"),
+        ("botball-greater-sd", "no calendar date"),
+        ("tritonhacks", "wrong year"),
     ]
 
     def test_every_enabled_competition_source_is_program_page_with_competitions_override(self):

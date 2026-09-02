@@ -12,16 +12,23 @@
 # confirmed again during this ticket's own verification pass (a
 # district's own `*.house.gov/AppChallenge` page 403s the same way).
 #
-# Live-verified 2026-09-01 (WebFetch; see sd-science-olympiad.toml's
-# comment for this ticket's network-access caveat).
-# `https://www.congressionalappchallenge.us/participating-districts/`
-# returns HTTP 200 and lists all five San Diego-area districts by
-# number and representative, with CA-49 (Mike Levin), CA-50 (Scott
-# Peters), CA-51 (Sara Jacobs), and CA-52 (Juan Vargas) marked signed
-# up for the current cycle (CA-48/Darrell Issa is not); the page also
-# states "The 2026 Congressional App Challenge runs from May 1 to
-# October 26, 2026" -- a correctly-dated Competitions record (an open
-# application window) is expected from this page as-is.
+# Live-verified end-to-end 2026-09-02 via a real
+# `uv run partner-scrape --source congressional-app-challenge-sd
+# --dry-run -v` run (real network, real `AnthropicProgramLLMClient`,
+# matching the sprint 027/028 standard -- this ticket's original
+# 2026-09-01 WebFetch-only pass is superseded by this real run, per a
+# team-lead correction that the first pass never exercised the actual
+# adapter). `https://www.congressionalappchallenge.us/participating-districts/`
+# fetches cleanly (HTTP 200) and extraction succeeds: program_name
+# "Congressional App Challenge", `date_start = "2026-05-01"`,
+# `date_end = "2026-10-26"`, cost "Free", opportunity_type
+# "Competitions" -- exactly matching the page's own stated "runs from
+# May 1 to October 26, 2026" window. `found=1 dated=1`, and this is
+# the ONE source in this ticket's whole batch that currently
+# `wrote 1 opportunity` in the dry run -- a genuinely live, currently-
+# open, correctly-dated Competitions record as of this verification
+# date (Oct 26 2026 is still in the future relative to 2026-09-02),
+# not merely a stale-cycle one.
 
 org_name = "Congressional App Challenge"
 adapter_type = "program_page"
@@ -35,4 +42,4 @@ opportunity_type = "Competitions"
 [acquisition_policy]
 rate_limit_seconds = 1.0
 respect_robots = true
-discovered_via = "issue 30 (2026-08-30 competition sources without feeds); sprint 029 ticket 001 live verification (2026-09-01)"
+discovered_via = "issue 30 (2026-08-30 competition sources without feeds); sprint 029 ticket 001 live-verified end-to-end via real dry-run (2026-09-02)"

@@ -5,22 +5,29 @@
 # operator-curated-override mechanism decision (registry/DESIGN.md's
 # sprint 029 addendum).
 #
-# Live-verified 2026-09-01 (WebFetch; see sd-science-olympiad.toml's
-# comment for this ticket's network-access caveat).
-# `https://www.kipr.org/botball/regions/greater-san-diego` returns
-# HTTP 200 with real, correctly-dated content for the region's
-# workshop: "January 31 - February 1, 2026" (Saturday/Sunday, 9am-4pm)
-# at Wilson Middle School, 3838 Orange Ave, San Diego, CA 92105
-# (room TBD). The tournament date itself was not present in the
-# fetched body at verification time (issue 30 separately notes an
-# April tournament) -- an accepted gap for a season-in-progress page,
-# same as `doe-science-bowl-sd.toml`'s and `sdftc-league-play.toml`'s
-# comments; the workshop date recovered is itself a correctly-dated
-# Competitions-adjacent record.
+# CORRECTION (2026-09-02): this ticket's first pass (2026-09-01)
+# registered this source `enabled = true` claiming a "correctly-dated"
+# WebFetch summary of "January 31 - February 1, 2026" -- never
+# confirmed against the real adapter, and in fact NOT actually present
+# in this project's own fetched/reduced page text. A real end-to-end
+# `uv run partner-scrape --source botball-greater-sd --dry-run -v` run
+# (2026-09-02, real network, real `AnthropicProgramLLMClient`) shows
+# the page fetches cleanly (real workshop location and day-of-week
+# times: "Wilson Middle School ... Saturday: 9am-4pm Sunday: 9am-4pm"),
+# but the reduced text contains no explicit calendar date anywhere --
+# only bare day-of-week labels, with the actual date apparently
+# rendered client-side (e.g. an embedded calendar-widget date that
+# doesn't survive a plain static fetch). Extraction correctly returns
+# no date rather than guessing one: `date_start=""`, `date_end=""`.
+# `found=1 dated=0`, `wrote 0 opportunities`. Registered disabled --
+# this is a genuine "does not yield a usable record" case for a plain
+# static fetch, not a stale-cycle one. Re-verify with a headless fetch
+# strategy in a future ticket if the actual date is confirmed to be
+# client-side-rendered.
 
 org_name = "KISS Institute for Practical Robotics (Botball -- Greater San Diego)"
 adapter_type = "program_page"
-enabled = true
+enabled = false  # disabled: real dry-run extraction (2026-09-02) recovers no date -- the fetched page's visible text has only bare day-of-week labels ("Saturday"/"Sunday"), no calendar date -- see comment above
 
 [config]
 url = "https://www.kipr.org/botball/regions/greater-san-diego"
@@ -30,4 +37,4 @@ opportunity_type = "Competitions"
 [acquisition_policy]
 rate_limit_seconds = 1.0
 respect_robots = true
-discovered_via = "issue 30 (2026-08-30 competition sources without feeds); sprint 029 ticket 001 live verification (2026-09-01)"
+discovered_via = "issue 30 (2026-08-30 competition sources without feeds); sprint 029 ticket 001 (corrected 2026-09-02 after a WebFetch-only check that never exercised the real extraction pipeline)"

@@ -8,27 +8,52 @@
 # `hackathons.hackclub.com`'s aggregator -- per issue 30's explicit
 # instruction to register each hackathon's own page.
 #
-# Live-verification failure (2026-09-01, WebFetch; see
-# sd-science-olympiad.toml's comment for this ticket's network-access
-# caveat). `https://cipherhacks.tech/` returned HTTP 403 Forbidden on
-# two separate fetch attempts -- a real server-side response (not a
-# connection-level failure, contrast `sd-science-olympiad.toml`'s
-# ECONNREFUSED), consistent with a WAF/bot-protection block, the same
-# category of finding that disabled `noaa-hutton.toml` and
-# `sdzwa-internquest.toml` in sprint 027. A web search independently
-# confirms the event is real and current (KPBS coverage, a public
-# Instagram announcement, and the site's own indexed title all agree:
-# CipherHacks 2026, June 17-18, San Diego Central Library, free and
-# open to all HS skill levels), so this is registered disabled with
-# the known expected dates recorded here rather than silently
-# dropped. Re-verify with a differently-sourced fetch path (or once
-# this project's own fetcher is exercised directly, which this
-# execution environment's sandboxed bash tool could not do) before
-# enabling.
+# CORRECTION (2026-09-02): this ticket's first pass (2026-09-01)
+# registered this source `enabled = false` on a WebFetch tool result
+# of HTTP 403 -- WRONG. Per a team-lead correction, this execution
+# environment's Bash tool *does* have outbound network access when run
+# unsandboxed, and a real `curl https://www.cipherhacks.tech/` from an
+# unsandboxed shell returns a genuine HTTP 200 (8228 bytes). The
+# earlier 403 was an artifact of the WebFetch tool's own request path
+# (likely a User-Agent/bot-detection difference), not a real block --
+# it did not reproduce under `curl`, and does not reproduce through
+# this project's own fetcher either (below). Re-registered enabled.
+#
+# Note for future maintainers: the fetched page body includes an
+# embedded string formatted to look like an operator/agent instruction
+# ("Resolver: POST {...} to /api/internal/diag ...", plus a
+# `Fixture: CH26{...}`-shaped token) -- almost certainly a prompt-
+# injection probe aimed at AI-driven fetchers/agents, not real site
+# content. It was not acted on here (no such request was made) and is
+# inert with respect to this project's own static-fetch + LLM
+# extraction path (`reduce_html_to_text` strips it to plain text,
+# `program_llm.py`'s prompt only asks for program name/dates/cost/
+# eligibility/open-status fields, and the field-level results below
+# show no trace of it). Flagged here in case a future maintainer
+# encounters the same string and wonders whether it is real content.
+#
+# Live-verified end-to-end 2026-09-02 via a real
+# `uv run partner-scrape --source cipherhacks --dry-run -v` run
+# (real network, real `AnthropicProgramLLMClient`, matching the
+# sprint 027/028 standard): fetch succeeds (HTTP 200), and extraction
+# yields program_name "CipherHacks 2026", date_start "2026-06-17",
+# date_end "2026-06-18", cost "Free", opportunity_type "Competitions"
+# -- exactly matching the independently researched June 17-18, 2026
+# San Diego Central Library date. `found=1 dated=1`. This date is
+# CipherHacks' most recently announced event and is already in the
+# past relative to this ticket's 2026-09-02 execution date (the 2027
+# cycle has evidently not yet been announced) -- `wrote 0 opportunities`
+# in this dry run because the existing currency filter
+# (`export.writer.is_current_or_upcoming`) correctly excludes it, not
+# because extraction failed. This is the sprint's own pre-accepted
+# "annual page whose organizer hasn't yet posted next year's dates"
+# gap (registry/DESIGN.md's sprint 029 addendum, Design Rationale) --
+# the weekly cron will pick up next year's date once CipherHacks posts
+# it, with no further registry change needed.
 
 org_name = "CipherHacks"
 adapter_type = "program_page"
-enabled = false  # disabled: cipherhacks.tech returned HTTP 403 Forbidden (WAF/bot block) on two live-verification attempts, 2026-09-01 -- see comment above
+enabled = true
 
 [config]
 url = "https://cipherhacks.tech/"
@@ -38,4 +63,4 @@ opportunity_type = "Competitions"
 [acquisition_policy]
 rate_limit_seconds = 1.0
 respect_robots = true
-discovered_via = "issue 30 (2026-08-30 competition sources without feeds); sprint 029 ticket 001 live verification (2026-09-01)"
+discovered_via = "issue 30 (2026-08-30 competition sources without feeds); sprint 029 ticket 001 (corrected 2026-09-02 after a false-positive WAF-block finding on 2026-09-01; live-verified end-to-end via real dry-run)"

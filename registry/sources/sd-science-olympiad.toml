@@ -8,32 +8,27 @@
 # Division A/B on Feb 7 2026 (Miramar College), Division C on Feb 28
 # 2026 (University of San Diego); registration window Sept 2-Dec 15.
 #
-# This ticket's own live re-verification (2026-09-01, WebFetch --
-# this execution environment's bash tool has no outbound network
-# access at all, so the pipeline's own PoliteFetcher could not be
-# exercised directly here): both `https://scilympiad.com/` (bare
-# domain root) and `https://scilympiad.com/sdso` (and the `www.`
-# variant of the latter) returned `connect ECONNREFUSED` on every one
-# of three attempts across two URL paths -- a TCP-level connection
-# refusal, not an HTTP-level block (contrast `cipherhacks.toml`'s
-# HTTP 403, a real server response). Every *other* domain checked in
-# this same ticket's verification pass (sdftc.org, cspeef.org,
-# science.osti.gov, classroomofthefuture.org, neurograd.ucsd.edu,
-# kipr.org, tritonhacks.org, congressionalappchallenge.us, nosb.org)
-# fetched successfully via the identical tool in the identical
-# session, so this is not a general tool-side outage -- the pattern
-# (domain-wide, repeated, TCP-level refusal) is consistent with
-# scilympiad.com actively refusing connections from this class of
-# automated fetcher, which is exactly the risk category the
-# production PoliteFetcher would also fall into. Registered disabled
-# rather than trusting the issue's now-two-day-stale verification.
-# Re-verify with a real `--dry-run` pipeline run (or a differently
-#-sourced fetch path) once one is available; the org and its expected
-# dates are well-documented above if/when this is re-enabled.
+# Live re-verification, twice: 2026-09-01 via WebFetch (this ticket's
+# initial pass, run from a sandboxed environment with no direct
+# outbound network access) and again 2026-09-02 with a real `curl`
+# from an unsandboxed shell on the same machine, per a team-lead
+# correction that this execution environment's Bash tool *does* have
+# outbound network access when unsandboxed and that the first pass's
+# disable decisions needed independent reproduction. Both checks agree:
+# `curl -m 20 https://scilympiad.com/sdso` (and the bare
+# `https://scilympiad.com/` domain root) return `HTTP:000` -- a
+# connection-level failure, not an HTTP response -- on every attempt.
+# This is a genuine, reproducible, machine-level connection failure to
+# this specific domain (contrast `cipherhacks.toml`, whose original
+# WebFetch-based 403 finding did NOT reproduce under real `curl` and
+# was corrected to enabled = true this same pass). Registered disabled.
+# Re-verify with a real `--dry-run` pipeline run once connectivity to
+# scilympiad.com is confirmed; the org and its expected dates are
+# well-documented above if/when this is re-enabled.
 
 org_name = "San Diego Regional Science Olympiad"
 adapter_type = "program_page"
-enabled = false  # disabled: scilympiad.com refused every connection attempt (ECONNREFUSED, TCP-level, 3 attempts/2 paths) during this ticket's 2026-09-01 live re-verification, despite issue 30's own 2026-08-30 verification -- see comment above
+enabled = false  # disabled: scilympiad.com returns a connection-level failure (curl HTTP:000) on every attempt, confirmed independently on both 2026-09-01 (WebFetch) and 2026-09-02 (real curl) -- see comment above
 
 [config]
 url = "https://scilympiad.com/sdso"
@@ -43,4 +38,4 @@ opportunity_type = "Competitions"
 [acquisition_policy]
 rate_limit_seconds = 1.0
 respect_robots = true
-discovered_via = "issue 30 (2026-08-30 competition sources without feeds); sprint 029 ticket 001 live re-verification (2026-09-01)"
+discovered_via = "issue 30 (2026-08-30 competition sources without feeds); sprint 029 ticket 001 live re-verification (2026-09-01/02)"
