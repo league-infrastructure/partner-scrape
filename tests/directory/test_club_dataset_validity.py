@@ -74,8 +74,20 @@ class _NeverCalledFetcher:
 
 
 def _real_clubs():
+    # Scoped by source_id, not just adapter_type=="club_static_roster":
+    # sprint 032 ticket 002 registers a second club_static_roster
+    # registry entry (cyberpatriot-sd.toml), and sorted-glob load order
+    # is alphabetical (registry/loader.py's load_sources), so
+    # "cyberpatriot-sd" now sorts before "hack-club-sd" -- a bare
+    # `next(... adapter_type == "club_static_roster")` would silently
+    # start returning the wrong roster to this module's Hack-Club-only
+    # assertions. This module's own docstring scopes it to the curated
+    # Hack Club chapters roster specifically; test_dataset_validity.py's
+    # own `_real_clubs()` (added by ticket 001) is the one that
+    # aggregates every club_static_roster entry for the cross-file
+    # club_id-uniqueness check.
     sources = load_active_sources(DIRECTORY_REGISTRY_DIR)
-    hack_club_source = next(s for s in sources if s.adapter_type == "club_static_roster")
+    hack_club_source = next(s for s in sources if s.source_id == "hack-club-sd")
     return run_club_source(hack_club_source, ClubStaticRosterSource(), _NeverCalledFetcher())
 
 

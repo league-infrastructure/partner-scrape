@@ -1,8 +1,78 @@
 # directory
 
-**Owner:** Eric Busboom · **Last reviewed:** 2026-09-02 (sprint 032 ticket 001 — club static-roster source generalized to any club type) · **Status:** Places, Clubs (Hack Club chapters; the curated static-roster source now generalized to serve any club type), and Offerings (volunteer org profiles + free/Title I school programs) complete; issue 35b's remaining six club types' curated content (tickets 002-007) and issue 33's educator-PD program pages (routed through `adapters/`, not this module — see this doc's sprint 030 Revision) deferred/tracked elsewhere
+**Owner:** Eric Busboom · **Last reviewed:** 2026-09-02 (sprint 032 ticket 002 — CyberPatriot teams roster curated and registered) · **Status:** Places, Clubs (Hack Club chapters + CyberPatriot teams; the curated static-roster source generalized to serve any club type), and Offerings (volunteer org profiles + free/Title I school programs) complete; issue 35b's remaining five club types' curated content (tickets 003-007) and issue 33's educator-PD program pages (routed through `adapters/`, not this module — see this doc's sprint 030 Revision) deferred/tracked elsewhere
 
 ---
+
+## Revision (2026-09-02 — sprint 032 ticket 002: CyberPatriot teams roster curated and registered)
+
+Populates the first of issue 35b's six remaining club types against the
+generalized `club_static_roster` source (ticket 001): three San Diego
+County CyberPatriot teams, registered via a new
+`directory/registry/cyberpatriot-sd.toml` entry pointing at a new
+`directory/data/cyberpatriot-sd.tsv` (same ten-column shape as
+`hack-club-sd.tsv`). No code change — content-only, exactly as ticket
+001's generalization anticipated.
+
+**Sources checked** (live-verified 2026-09-02, not transcribed from
+issue 35b's own wording):
+
+- **Del Norte High School** — CyberPatriot XV Open Division National
+  Champion ("CyberAegis Tempest," March 2023) and CyberPatriot XVI
+  Open Division runner-up/third place ("CyberAegis Triton"/"CyberAegis
+  Aegir," 2024), per AFA's own CyberPatriot XV/XVI announcement pages
+  and Poway Unified School District's own news article. The program
+  operates as "CyberAegis San Diego" (`cyberaegis.tech`), a student-led
+  effort spanning Oak Valley Middle School, Design39Campus, and Del
+  Norte High School — Del Norte is its home/flagship school, hence
+  `host_school`. Not found among CyberPatriot 18's (the current,
+  concluded-March-2026 season) national finalists, per AFA's own CP18
+  finalist announcement — recorded here on the strength of its
+  multi-season finalist/champion history, not a current-season
+  placement; a future curation pass should re-check whether the
+  program is still active before the next refresh.
+- **Scripps Ranch High School** — CyberPatriot 18 (2025-2026 season,
+  concluded March 2026) All Service Division **National Champion**,
+  Air Force JROTC "Terabyte Falcons" team, per AFA's own CyberPatriot
+  18 national finalist announcement — the most current season
+  available at curation time.
+- **Canyon Crest Academy** — CyberPatriot 18 Open Division national
+  finalist (team ":3"), per AFA's own CP18 finalist announcement, the
+  San Dieguito Union High School District's own social posts, and the
+  team's own "CCA CyberPatriot" site (`sites.google.com/view/cca-cyberpatriot/`).
+
+Also found but **not** included: Scouting America Exploring Posts 2927
+and 2928 (San Diego-based "CyberAegis Hydra"/"CyberAegis
+Perseus"/"CyberAegis Corvus" teams, CP18 finalists) — excluded because
+they are Scouting Explorer posts, not school-hosted clubs with a single
+confidently locatable meeting site, unlike this roster's three
+school-hosted entries. A future ticket could add them with an
+appropriately non-school geocoding expectation (see sprint.md's
+Geocoding note) if a stakeholder wants Scouting-sponsored teams
+covered too.
+
+**Geocoding outcome**: all three entries resolve at `"school"`
+precision through the shared ladder's rung-2 exact CDE match — Del
+Norte High, Scripps Ranch High, and Canyon Crest Academy are all exact
+normalized-name hits against `sd-schools-public.tsv`, with
+`needs_review = False` for all three (no fuzzy rung-3/4 match
+involved). No entry required `needs_review` flagging.
+
+**Test-suite impact**: no new parsing-shape test file — the data
+reused `hack-club-sd.tsv`'s exact column shape, so existing
+registry-loader/dataset-validity coverage applies unchanged (per
+sprint.md's Test Strategy). Several existing pipeline/dataset-validity
+tests hard-coded assumptions that only ever held while exactly one
+`club_static_roster` registry entry existed — a `next(...)` lookup
+scoped by `adapter_type` alone, and full-registry `clubs_meta.total`
+assertions pinned at `4` — both updated in this ticket:
+`test_club_dataset_validity.py`'s and
+`test_sources_club_static_roster.py`'s own `_real_source_config()`/
+`_real_clubs()` helpers now scope by `source_id == "hack-club-sd"`
+(they test the Hack Club roster specifically), and
+`test_pipeline.py`'s full-registry club-count assertions now expect
+`7` (4 Hack Club + 3 CyberPatriot), matching the real registry's
+current content.
 
 ## Revision (2026-09-02 — sprint 032 ticket 001: club static-roster source generalized)
 

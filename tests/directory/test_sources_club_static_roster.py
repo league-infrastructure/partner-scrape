@@ -48,9 +48,16 @@ _HACK_CLUB_HOST_SCHOOLS = {
 
 
 def _real_source_config() -> SourceConfig:
+    # Scoped by source_id, not adapter_type: sprint 032 ticket 002
+    # registers a second real club_static_roster entry
+    # (cyberpatriot-sd.toml) alongside this module's own Hack-Club-only
+    # fixtures (DEFAULT_ROSTER_PATH == hack-club-sd.tsv), so matching on
+    # adapter_type alone is no longer unique. See
+    # test_club_dataset_validity.py's own _real_clubs() for the
+    # identical fix, made for the identical reason.
     sources = load_active_sources(DIRECTORY_REGISTRY_DIR)
-    matches = [s for s in sources if s.adapter_type == "club_static_roster"]
-    assert len(matches) == 1, "expected exactly one club_static_roster registry entry"
+    matches = [s for s in sources if s.source_id == "hack-club-sd"]
+    assert len(matches) == 1, "expected exactly one hack-club-sd registry entry"
     return matches[0]
 
 

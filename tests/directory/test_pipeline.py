@@ -337,19 +337,23 @@ class TestRunDirectoryRealFixtureData:
         assert atlas["latitude"] is not None
         assert atlas["longitude"] is not None
 
-    def test_dry_run_reports_four_clubs_with_no_network(self, tmp_path):
+    def test_dry_run_reports_seven_clubs_with_no_network(self, tmp_path):
         # Ticket 018-008's own AC: every Hack Club chapter issue 35
         # names has a Club record, geocoded through the real, now
         # populated directory/data/ school directories -- not a fixture
         # copy, the same "trust the real data" precedent this class
-        # already applies to Places.
+        # already applies to Places. Sprint 032 ticket 002 adds a
+        # second real club_static_roster registry entry
+        # (cyberpatriot-sd.toml, 3 curated CyberPatriot teams), so the
+        # real full-registry total is now 4 Hack Club + 3 CyberPatriot
+        # = 7, not 4.
         _write_real_partners_fixture(tmp_path / "unused")
         payload = run_directory(
             fetcher=_NeverCalledFetcher(), dry_run=True, site_dir=tmp_path / "unused"
         )
 
-        assert payload["clubs_meta"]["total"] == 4
-        assert len(payload["clubs"]) == 4
+        assert payload["clubs_meta"]["total"] == 7
+        assert len(payload["clubs"]) == 7
 
     def test_every_real_hack_club_chapter_resolves_to_school_precision_never_a_guess(
         self, tmp_path
@@ -417,7 +421,8 @@ class TestSourceFilter:
             site_dir=tmp_path / "unused",
         )
 
-        assert payload["clubs_meta"]["total"] == 4
+        # 4 Hack Club + 3 CyberPatriot (sprint 032 ticket 002) = 7.
+        assert payload["clubs_meta"]["total"] == 7
         assert payload["meta"]["total"] == 0
 
     def test_source_filter_for_an_unregistered_adapter_type_yields_nothing(self, tmp_path):
@@ -509,7 +514,8 @@ class TestPerSourceErrorIsolation:
         )
 
         assert payload["meta"]["total"] == 0
-        assert payload["clubs_meta"]["total"] == 4
+        # 4 Hack Club + 3 CyberPatriot (sprint 032 ticket 002) = 7.
+        assert payload["clubs_meta"]["total"] == 7
 
     def test_combined_dispatch_never_logs_a_spurious_place_warning_for_a_real_club_entry(
         self, tmp_path, caplog
@@ -734,7 +740,8 @@ class TestRunDirectoryOfferingDispatch:
         )
 
         assert payload["meta"]["total"] == 19
-        assert payload["clubs_meta"]["total"] == 4
+        # 4 Hack Club + 3 CyberPatriot (sprint 032 ticket 002) = 7.
+        assert payload["clubs_meta"]["total"] == 7
         assert payload["offerings_meta"]["total"] == 13
 
 
@@ -854,7 +861,8 @@ class TestOfferingPerSourceErrorIsolation:
         # The unrelated Place/Club sources are unaffected -- per-source
         # isolation, not "one broken source kills the whole run".
         assert payload["meta"]["total"] == 19
-        assert payload["clubs_meta"]["total"] == 4
+        # 4 Hack Club + 3 CyberPatriot (sprint 032 ticket 002) = 7.
+        assert payload["clubs_meta"]["total"] == 7
 
 
 class TestOfferingRelatedPartnerIdJoinIntegrity:
