@@ -19,10 +19,30 @@
 # See cleansd.toml's addendum for the separate reason headless would
 # not help even if the challenge were somehow passed (this is a JSON
 # API response, not an HTML page).
+#
+# RE-VERIFIED LIVE 2026-09-02 (sprint 030 ticket 006, issue 14
+# verification pass) -- the blocking mechanism has changed since the
+# 2026-08-30 finding above, reported here rather than left stale
+# (matching this ticket's own "report what you actually find" mandate):
+# `www.ilacsd.org`'s TEC REST endpoint no longer returns the SiteGround
+# `sg-captcha` challenge; it now returns a plain `HTTP 301` redirect to
+# `cleansd.org`'s own endpoint (`bare ilacsd.org` also 301s the same
+# way -- the two historically-split domains have consolidated onto one).
+# Following the redirect lands on `cleansd.toml`'s already-documented
+# Cloudflare bot-management block (`HTTP 403`, `cf-ray`/`__cf_bm`
+# headers, `server: cloudflare`) -- re-confirmed live today via `curl -L`.
+# End state is unchanged (still blocked, still not headless-fixable per
+# `cleansd.toml`'s own JSON-endpoint reasoning), but the actual current
+# failure mode is a Cloudflare 403 via redirect to `cleansd.org`, not a
+# SiteGround CAPTCHA on `ilacsd.org` directly -- this ticket's own
+# `directory/registry/offerings-sd.toml` volunteer-profile entry for
+# this org (sprint 030 ticket 002) independently hit the identical
+# `HTTP 403` on both domains the same day, confirming this is not a
+# one-off transient block.
 
 org_name = "I Love A Clean San Diego"
 adapter_type = "tec_rest"
-enabled = false  # disabled: www.ilacsd.org behind a SiteGround CAPTCHA challenge (sg-captcha, HTTP 202) -- confirmed live 2026-08-30
+enabled = false  # disabled: www.ilacsd.org now 301-redirects to cleansd.org's endpoint, which is Cloudflare-bot-management-blocked (HTTP 403) -- re-verified live 2026-09-02 (sprint 030 ticket 006); originally disabled 2026-08-30 for a since-superseded SiteGround CAPTCHA finding
 
 [config]
 api_base = "https://www.ilacsd.org/wp-json/tribe/events/v1/events/"

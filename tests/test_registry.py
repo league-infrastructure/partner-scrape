@@ -1354,3 +1354,79 @@ class TestEducatorPDSourceConfig:
             source = sources[source_id]
             assert source.adapter_type in ("program_page", "program_page_multi")
             assert set(source.config.keys()) <= {"url", "program_kind", "opportunity_type"}
+
+
+class TestVolunteerEventSourceVerification:
+    """Sprint 030 ticket 006 (issue 14, SUC-053): verification-only pass
+    over the four already-registered dated volunteer-event sources
+    issue 14's own 2026-08-30 research names as the scrapable remainder
+    of Strategy A (UCSD Localist's Volunteer event type, Coastkeeper
+    TEC, Surfrider SD Google Calendar, ILACSD) -- no new source is
+    registered by this ticket. Live re-verification (2026-09-02, real
+    network, real `AnthropicProgramLLMClient` where applicable) findings
+    are pinned here so a future drift (an org disabling their feed, a
+    site changing its block mechanism) is caught by a real assertion
+    rather than only by re-reading a TOML comment.
+    """
+
+    def test_coastkeeper_tec_is_registered_and_enabled(self):
+        sources = {s.source_id: s for s in load_sources()}
+
+        coastkeeper = sources["sdcoastkeeper"]
+        assert coastkeeper.org_name == "San Diego Coastkeeper"
+        assert coastkeeper.adapter_type == "tec_rest"
+        assert coastkeeper.enabled is True
+
+    def test_surfrider_sd_ical_is_registered_and_enabled(self):
+        sources = {s.source_id: s for s in load_sources()}
+
+        surfrider = sources["surfrider-sd"]
+        assert surfrider.org_name == "Surfrider Foundation San Diego County Chapter"
+        assert surfrider.adapter_type == "ical"
+        assert surfrider.enabled is True
+
+    def test_ilacsd_stays_disabled_with_a_re_verified_dated_reason(self):
+        # AC: a config-level fix is applied only where feasible -- ILACSD
+        # is not fixable with a config edit (still a real site block,
+        # just a different mechanism than the 2026-08-30 finding), so
+        # this ticket documents the current state with a dated comment
+        # rather than flipping enabled or attempting new adapter work.
+        sources = {s.source_id: s for s in load_sources()}
+
+        ilacsd = sources["ilacsd"]
+        assert ilacsd.adapter_type == "tec_rest"
+        assert ilacsd.enabled is False
+
+        path = DEFAULT_SOURCES_DIR / "ilacsd.toml"
+        text = path.read_text()
+        assert "RE-VERIFIED LIVE 2026-09-02" in text
+        assert "cleansd.org" in text
+        assert "403" in text
+
+    def test_ucsd_localist_volunteer_type_is_not_registered(self):
+        # AC: no new source registration is created by this ticket.
+        # UCSD Localist's Volunteer event type (calendar.ucsd.edu's
+        # `type=Volunteer` query param -- confirmed live 2026-09-02 to
+        # return real records, e.g. "Weed Warriors", issue 14's own
+        # named example) has no existing registration: every UCSD
+        # Localist source registered so far filters by `group_id` (a
+        # department -- Birch Aquarium, Extended Studies, Qualcomm
+        # Institute, Jacobs School, Physics), never `type` (an event
+        # category), and `LocalistAdapter.discover()` hard-requires
+        # `config["group_id"]` with no `type`-filter support at all --
+        # registering this feed would need adapter code, out of this
+        # verification-only ticket's scope. This test pins that current
+        # gap: none of the five already-registered UCSD Localist sources
+        # cover it.
+        sources = {s.source_id: s for s in load_sources()}
+
+        ucsd_localist_sources = [
+            s
+            for s in sources.values()
+            if s.adapter_type == "localist"
+            and "calendar.ucsd.edu" in s.config.get("api_base", "")
+        ]
+        assert len(ucsd_localist_sources) == 5
+        for source in ucsd_localist_sources:
+            assert "group_id" in source.config
+            assert "type" not in source.config
