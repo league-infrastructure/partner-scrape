@@ -1,7 +1,7 @@
 ---
 id: '032'
 title: Remaining club-type rosters
-status: executing
+status: done
 branch: sprint/032-remaining-club-type-rosters
 use-cases:
 - SUC-061
