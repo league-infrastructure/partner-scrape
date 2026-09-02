@@ -84,12 +84,20 @@ class _NeverCalledFetcher:
 # straight out of the real places.toml text rather than hand-listed, so
 # this fixture can never drift from the data it stands in for -- and
 # never a duplicate committed copy of the real partners.json itself
-# (sprint.md Scope > Out of Scope). --------------------------------
+# (sprint.md Scope > Out of Scope). Sprint 030 ticket 002 extends this
+# to also parse offerings.toml's own related_partner_id references
+# (six real ones, added by ticket 002's curated volunteer org profiles)
+# -- _check_related_partner_references() joins Place and Offering
+# references in one combined check, so a fixture built from places.toml
+# alone now under-covers a real, unfiltered run_directory() call. -----
 
 
 def _real_related_partner_ids() -> list[int]:
-    text = (DEFAULT_GEO_DATA_DIR / "places.toml").read_text(encoding="utf-8")
-    return sorted({int(m) for m in re.findall(r"related_partner_id\s*=\s*(\d+)", text)})
+    places_text = (DEFAULT_GEO_DATA_DIR / "places.toml").read_text(encoding="utf-8")
+    offerings_text = (DEFAULT_GEO_DATA_DIR / "offerings.toml").read_text(encoding="utf-8")
+    ids = {int(m) for m in re.findall(r"related_partner_id\s*=\s*(\d+)", places_text)}
+    ids |= {int(m) for m in re.findall(r"related_partner_id\s*=\s*(\d+)", offerings_text)}
+    return sorted(ids)
 
 
 def _write_real_partners_fixture(site_dir: Path) -> None:
@@ -458,6 +466,11 @@ class TestPerSourceErrorIsolation:
 
         monkeypatch.setitem(pipeline_module._PLACE_SOURCES, "static_roster", _BoomingSource())
 
+        # The Place source raises, but the real Offering source still
+        # runs unfiltered and its six curated volunteer rows carry real
+        # related_partner_id references -- the fixture is needed even
+        # though this test's own assertion is about Places.
+        _write_real_partners_fixture(tmp_path / "unused")
         payload = run_directory(
             fetcher=_NeverCalledFetcher(), dry_run=True, site_dir=tmp_path / "unused"
         )
@@ -486,6 +499,10 @@ class TestPerSourceErrorIsolation:
 
         monkeypatch.setitem(pipeline_module._PLACE_SOURCES, "static_roster", _BoomingSource())
 
+        # The real Offering source still runs unfiltered alongside
+        # Clubs -- its six curated volunteer rows carry real
+        # related_partner_id references, so the fixture is needed.
+        _write_real_partners_fixture(tmp_path / "unused")
         payload = run_directory(
             fetcher=_NeverCalledFetcher(), dry_run=True, site_dir=tmp_path / "unused"
         )
@@ -668,21 +685,23 @@ class TestRelatedPartnerIdJoinIntegrity:
 
 # ---------------------------------------------------------------------
 # Sprint 030 ticket 001: Offering, the third standing-entity dispatch.
-# Against the real, committed Offering Registry and its two-row
-# placeholder roster -- no fixture copy, matching this ticket's other
-# "trust the real data" tests.
+# Against the real, committed Offering Registry -- no fixture copy,
+# matching this ticket's other "trust the real data" tests. As of
+# ticket 002 (issue 14 Strategy B), the real roster carries seven rows:
+# six curated volunteer org profiles plus ticket 001's original
+# free_program placeholder (replaced by ticket 003).
 # ---------------------------------------------------------------------
 
 
 class TestRunDirectoryOfferingDispatch:
-    def test_dry_run_reports_two_offerings_with_no_network(self, tmp_path):
+    def test_dry_run_reports_seven_offerings_with_no_network(self, tmp_path):
         _write_real_partners_fixture(tmp_path / "unused")
         payload = run_directory(
             fetcher=_NeverCalledFetcher(), dry_run=True, site_dir=tmp_path / "unused"
         )
 
-        assert payload["offerings_meta"]["total"] == 2
-        assert len(payload["offerings"]) == 2
+        assert payload["offerings_meta"]["total"] == 7
+        assert len(payload["offerings"]) == 7
 
     def test_a_real_offering_registry_entry_never_trips_place_or_club_warnings(
         self, tmp_path, caplog
@@ -714,7 +733,7 @@ class TestRunDirectoryOfferingDispatch:
 
         assert payload["meta"]["total"] == 19
         assert payload["clubs_meta"]["total"] == 4
-        assert payload["offerings_meta"]["total"] == 2
+        assert payload["offerings_meta"]["total"] == 7
 
 
 class TestOfferingHasNoGeocodingStage:
@@ -742,6 +761,7 @@ class TestOfferingHasNoGeocodingStage:
 
         monkeypatch.setattr(pipeline_module, "GeoLadder", _boom)
 
+        _write_real_partners_fixture(tmp_path / "unused")
         payload = run_directory(
             source="offering_static_roster",
             fetcher=_NeverCalledFetcher(),
@@ -749,7 +769,7 @@ class TestOfferingHasNoGeocodingStage:
             site_dir=tmp_path / "unused",
         )
 
-        assert payload["offerings_meta"]["total"] == 2
+        assert payload["offerings_meta"]["total"] == 7
         assert payload["meta"]["total"] == 0
         assert payload["clubs_meta"]["total"] == 0
 
@@ -767,6 +787,7 @@ class TestOfferingHasNoGeocodingStage:
 
 class TestOfferingSourceFilter:
     def test_source_filter_by_adapter_type_matches_the_real_registry(self, tmp_path):
+        _write_real_partners_fixture(tmp_path / "unused")
         payload = run_directory(
             source="offering_static_roster",
             fetcher=_NeverCalledFetcher(),
@@ -774,7 +795,7 @@ class TestOfferingSourceFilter:
             site_dir=tmp_path / "unused",
         )
 
-        assert payload["offerings_meta"]["total"] == 2
+        assert payload["offerings_meta"]["total"] == 7
         assert payload["meta"]["total"] == 0
         assert payload["clubs_meta"]["total"] == 0
 

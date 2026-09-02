@@ -31,12 +31,21 @@ from partner_scrape.registry.loader import load_active_sources
 # pattern needs a partners.json fixture with a matching `id` for each
 # one. Parsed straight out of the real places.toml text rather than
 # hand-listed, so this can never drift from the data it stands in for
-# -- mirrors tests/directory/test_pipeline.py's identical fixture. ----
+# -- mirrors tests/directory/test_pipeline.py's identical fixture.
+# Sprint 030 ticket 002 extends this to also parse offerings.toml's own
+# related_partner_id references (six real ones, added by ticket 002's
+# curated volunteer org profiles) -- run_directory()'s join-integrity
+# check joins Place and Offering references together, so a fixture
+# built from places.toml alone now under-covers a real, unfiltered
+# run_directory() call. ------------------------------------------------
 
 
 def _write_real_partners_fixture(site_dir: Path) -> None:
-    text = (DEFAULT_GEO_DATA_DIR / "places.toml").read_text(encoding="utf-8")
-    ids = sorted({int(m) for m in re.findall(r"related_partner_id\s*=\s*(\d+)", text)})
+    places_text = (DEFAULT_GEO_DATA_DIR / "places.toml").read_text(encoding="utf-8")
+    offerings_text = (DEFAULT_GEO_DATA_DIR / "offerings.toml").read_text(encoding="utf-8")
+    ids = {int(m) for m in re.findall(r"related_partner_id\s*=\s*(\d+)", places_text)}
+    ids |= {int(m) for m in re.findall(r"related_partner_id\s*=\s*(\d+)", offerings_text)}
+    ids = sorted(ids)
     data_dir = site_dir / "src" / "data"
     data_dir.mkdir(parents=True, exist_ok=True)
     partners = [{"id": pid, "name": f"Fixture Partner {pid}"} for pid in ids]

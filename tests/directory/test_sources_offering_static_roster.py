@@ -6,11 +6,12 @@ most of this module drives `OfferingStaticRosterSource` against the
 **real, committed roster** (`partner_scrape/directory/data/
 offerings.toml`, exposed here as `DEFAULT_ROSTER_PATH`) rather than a
 copied-in fixture -- this *is* the file, not a copy that could silently
-drift from it. This ticket's real roster carries two placeholder rows
-(the mechanism's own proof, not real curated data -- see that module's
-own docstring); `offerings_malformed.toml` under
-`tests/fixtures/directory/` is hand-authored to exercise per-entry
-error isolation.
+drift from it. As of ticket 002 (issue 14 Strategy B), the real roster
+carries six curated `"volunteer"` rows plus ticket 001's original
+`"free_program"` placeholder row (seven total) -- ticket 003 replaces
+that placeholder with seven real `"free_program"` rows (thirteen
+total); `offerings_malformed.toml` under `tests/fixtures/directory/` is
+hand-authored to exercise per-entry error isolation.
 """
 
 from __future__ import annotations
@@ -61,7 +62,7 @@ class TestNeverTouchesFetcher:
         offerings = run_offering_source(
             _real_source_config(), OfferingStaticRosterSource(), _NeverCalledFetcher()
         )
-        assert len(offerings) == 2
+        assert len(offerings) == 7
 
 
 class TestDiscover:
@@ -135,8 +136,8 @@ class TestExtractAgainstTheRealRoster:
             _real_source_config(), OfferingStaticRosterSource(), _NeverCalledFetcher()
         )
 
-    def test_extracts_exactly_two_offerings(self):
-        assert len(self._real_offerings()) == 2
+    def test_extracts_exactly_seven_offerings(self):
+        assert len(self._real_offerings()) == 7
 
     def test_both_offering_types_are_represented(self):
         offerings = self._real_offerings()

@@ -6,36 +6,102 @@
 # for the full rationale). Never a live scrape (issue 35's original
 # instruction, extended to Offerings by sprint 030).
 #
-# This ticket (sprint 030, ticket 001) ships the mechanism only, with
-# the two placeholder rows below sufficient to prove discover -> fetch
-# -> extract -> pipeline dispatch -> export end to end. The real
-# curated rosters -- six volunteer org profiles (Fleet, SDZWA, Birch,
-# the Nat, ILACSD, San Diego River Park Foundation) and seven
-# free/Title I school-program records (Zoo FREE field trips, the Nat's
-# Museum Access Fund, Living Coast Title 1 + CVESD free transport,
-# Birch financial aid, Fleet discounted trips/Science to Go/Family
-# Science Nights, Qualcomm Thinkabit Lab, Biocom Life Science
-# Station/Innov8Ed) -- are tickets 002 and 003's job, not this one (see
-# sprint.md's Tickets table). Both rows below are clearly marked
-# PLACEHOLDER and are expected to be replaced, not merely added to.
-#
 # `related_partner_id` is a deliberate, hand-verified join against
-# `site/src/data/partners.json`'s own `id` field -- never auto-derived,
-# reusing `places.toml`'s existing convention exactly. Omitted entirely
-# where no confident partner-roster match exists.
+# `data/partners.json`'s own `id` field -- never auto-derived, reusing
+# `places.toml`'s existing convention exactly (the design docs' own
+# `site/src/data/partners.json` path predates sprint 019's `site/`
+# removal -- see `tests/directory/test_dataset_validity.py`'s own note
+# on this). Omitted entirely where no confident partner-roster match
+# exists.
+#
+# Six volunteer org profiles below (ticket 002, issue 14 Strategy B),
+# live-verified 2026-09-02 against each org's own current volunteer
+# page. Age minimums: Fleet 18, SDZWA 18, Birch 16 -- matching issue
+# 14's 2026-08-30 research verbatim. The Nat, I Love A Clean San Diego
+# (ILACSD), and San Diego River Park Foundation each publish no general
+# numeric age minimum as of this verification -- age_minimum left
+# unset (None) rather than guessed, per this ticket's own instruction.
 
 [[offering]]
-offering_id = "placeholder-volunteer-offering"
-org_name = "PLACEHOLDER Volunteer Org"
-title = "PLACEHOLDER Volunteer Program"
+offering_id = "fleet-science-center-volunteer"
+org_name = "Fleet Science Center"
+title = "Volunteer Program"
 offering_type = "volunteer"
-description = "Fixture row proving the volunteer offering_type end to end -- replace with a real curated row in ticket 002 (issue 14 Strategy B)."
-eligibility = "Ages 18 and up."
+description = "Fleet volunteers serve as Gallery Ambassadors facilitating science demonstrations and greeting visitors, support Community Engagement events (Family Science Night, Educator Open House, Junior Science Club), help with Special Events (IMAX premieres, the annual gala), assist at monthly Accessibility Mornings (sensory-friendly hours, third Saturday), and support seasonal STEM camps."
+eligibility = "Must be 18 years of age or older. No short-term or community-service-only placements are offered."
 age_minimum = 18
-how_to_book = "Apply through the organization's volunteer portal."
-link_url = "https://example.org/volunteer"
+how_to_book = "Apply online through the Fleet's VolunteerMatters portal (fleetscience.volunteermatters.org). Volunteers must commit to a minimum of six months and complete quarterly onboarding (orientation and training). Questions: 619-238-1233 x835 or volunteerservices@rhfleet.org."
+link_url = "https://www.fleetscience.org/volunteer"
 last_verified = "2026-09-02"
 status = "active"
+related_partner_id = 121
+
+[[offering]]
+offering_id = "sdzwa-volunteer"
+org_name = "San Diego Zoo Wildlife Alliance"
+title = "Conservation & Information Ambassador Volunteer Program"
+offering_type = "volunteer"
+description = "Volunteers serve as Conservation Ambassadors and Information Ambassadors at the San Diego Zoo and Safari Park -- greeting guests, helping with visit planning, and inspiring conservation support. No animal handling or direct animal contact is involved in any volunteer role."
+eligibility = "Must be 18 years or older; the general volunteer program does not currently accept teens under 18 (interested youth can look into the Education department's separate Youth Programs). Expects a minimum annual commitment of roughly 60-100 hours."
+age_minimum = 18
+how_to_book = "Apply and manage scheduling through Volgistics (volgistics.com/vicnet/14407). As of this record's verification date, the Zoo's own volunteer page states recruitment is temporarily closed (\"check back late 2025\") -- check the page directly for the current application window before applying."
+link_url = "https://sandiegozoowildlifealliance.org/volunteer"
+last_verified = "2026-09-02"
+status = "active"
+related_partner_id = 241
+
+[[offering]]
+offering_id = "birch-aquarium-volunteer"
+org_name = "Birch Aquarium at Scripps Institution of Oceanography"
+title = "Volunteer Program"
+offering_type = "volunteer"
+description = "Volunteers guide guests through exhibits and facilitate educational encounters as Tide Pool Interpreters, Greeters, Aquarist Assistants (supporting husbandry tasks), or School Programs Assistants (assisting with classroom curriculum)."
+eligibility = "Minimum age to volunteer is 16 years old. Requires a minimum six-month commitment with one 4-hour shift weekly, plus two reference letters at application; short-term or summer-only placements are not available."
+age_minimum = 16
+how_to_book = "Apply online through Birch Aquarium's Volgistics-based volunteer application. New-volunteer onboarding cycles run four times a year, each starting with a virtual information session -- check the page for the next intake date."
+link_url = "https://aquarium.ucsd.edu/about/volunteer"
+last_verified = "2026-09-02"
+status = "active"
+related_partner_id = 238
+
+[[offering]]
+offering_id = "sdnhm-volunteer"
+org_name = "San Diego Natural History Museum (The Nat)"
+title = "Volunteer Program"
+offering_type = "volunteer"
+description = "The Nat's 500+ volunteers serve as Canyoneers (leading hikes), Docents (school tours and outreach), NATuralists (museum-floor activities), and Whalers (whale-watching interpretation), plus occasional behind-the-scenes science/administrative roles. High school students can volunteer specifically through the Nat's summer camp volunteer positions."
+eligibility = "General roles: no minimum age is published on the Nat's own volunteer page. A high-school-specific opening exists: summer camp volunteer positions for current high school students."
+how_to_book = "Submit the Volunteer Application linked from the Nat's volunteer page; current volunteers manage scheduling through Volgistics (volgistics.com/vicnet). Questions: 619-232-3821 or 877-946-7797."
+link_url = "https://www.sdnhm.org/join-and-give/volunteer/"
+last_verified = "2026-09-02"
+status = "active"
+related_partner_id = 24
+
+[[offering]]
+offering_id = "ilacsd-volunteer"
+org_name = "I Love A Clean San Diego"
+title = "Volunteer Program"
+offering_type = "volunteer"
+description = "ILACSD runs community cleanups (creek/beach/canyon), an Adopt-A-Beach-or-Canyon self-led program (completing 3 cleanups in a year qualifies a group for a named adoption sign), and cigarette-litter-reduction infrastructure work across San Diego County."
+eligibility = "\"Volunteers of all ages are invited to participate\" in cleanups, per the organization's own volunteer page; no numeric minimum age is published."
+how_to_book = "Sign in through ILACSD's Samaritan-powered Volunteer Portal linked from the org's volunteer page, or browse current cleanup and group opportunities there directly. Office: 619-291-0103."
+link_url = "https://www.cleansd.org/volunteer/"
+last_verified = "2026-09-02"
+status = "active"
+related_partner_id = 361
+
+[[offering]]
+offering_id = "san-diego-river-park-foundation-volunteer"
+org_name = "San Diego River Park Foundation"
+title = "Volunteer Program"
+offering_type = "volunteer"
+description = "Volunteers support river clean-ups (including kayak-based cleanups), native-plant garden maintenance, water-quality monitoring, habitat restoration and invasive-plant removal, trail maintenance, wildlife camera network upkeep, and event/administrative support."
+eligibility = "No numeric minimum age is published on the Foundation's own volunteer page."
+how_to_book = "Sign up through the Foundation's Galaxy Digital events & activities portal (sandiegoriver.galaxydigital.com): find an opportunity that interests you, then click Sign Up. Alternatively, call 619-297-7380 or email volunteer@sandiegoriver.org."
+link_url = "https://sandiegoriver.org/get-involved/volunteer/"
+last_verified = "2026-09-02"
+status = "active"
+related_partner_id = 323
 
 [[offering]]
 offering_id = "placeholder-free-program-offering"
