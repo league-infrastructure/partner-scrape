@@ -1,7 +1,7 @@
 ---
 id: '033'
 title: Audience and equity coverage
-status: executing
+status: done
 branch: sprint/033-audience-and-equity-coverage
 use-cases:
 - SUC-063
