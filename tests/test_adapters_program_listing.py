@@ -424,3 +424,154 @@ class TestSharesExtractionLogicWithProgramPageAdapter:
 
         assert len(page_events) == len(listing_events) == 1
         assert page_events[0] == listing_events[0]
+
+
+#: Sprint 029 ticket 003 (SUC-046, issue 30): the SD Festival of Science
+#: & Engineering / EXPO Day's registered ``program_listing`` source
+#: (``registry/sources/sd-festival-of-science-engineering.toml``). This
+#: ticket's own required live-verification found the real
+#: ``lovestemsd.org`` "Festival Week" listing currently has zero event
+#: cards to discover (a content-availability gap between annual cycles --
+#: see that TOML file's own header comment and this ticket's Notes), so
+#: the source is registered ``enabled = false`` rather than live-proven
+#: end-to-end. This fixture test instead proves the *mechanism* SUC-046
+#: describes is correctly wired -- discovery via plain ``EVENT_PATH_RE``
+#: matching (no ``config.link_selector`` is registered, since there is
+#: currently no live card markup to justify one), one independent LLM
+#: extraction call per discovered festival-week event, and each record
+#: keeping its *own* LLM-classified ``opportunity_type`` (no
+#: ``config.opportunity_type`` override, since festival-week events span
+#: more than one type) -- so the mechanism is ready the moment the org
+#: repopulates the listing.
+_SD_FESTIVAL_SITE_URL = "https://lovestemsd.org"
+_SD_FESTIVAL_LISTING_URL = f"{_SD_FESTIVAL_SITE_URL}/stem-week-events-2020"
+
+_SD_FESTIVAL_CARD_URLS = [
+    f"{_SD_FESTIVAL_SITE_URL}/events/expo-day-2026",
+    f"{_SD_FESTIVAL_SITE_URL}/events/steam-design-contest-2026",
+    f"{_SD_FESTIVAL_SITE_URL}/events/educator-workshop-2026",
+]
+
+_SD_FESTIVAL_DETAIL_FIXTURES = {
+    _SD_FESTIVAL_CARD_URLS[0]: "sd_festival_detail_expo_day.html",
+    _SD_FESTIVAL_CARD_URLS[1]: "sd_festival_detail_steam_design_contest.html",
+    _SD_FESTIVAL_CARD_URLS[2]: "sd_festival_detail_educator_workshop.html",
+}
+
+#: One independently-classified ``ProgramExtractionResult`` per
+#: festival-week event -- three distinct ``opportunity_type`` values,
+#: proving no single override is collapsing them (SUC-046's Main Flow:
+#: "each record's type is the LLM's own per-page classification").
+_SD_FESTIVAL_RESULTS: dict[str, ProgramExtractionResult] = {
+    _SD_FESTIVAL_CARD_URLS[0]: ProgramExtractionResult(
+        program_name="EXPO Day",
+        audience_grades=["Pre-K", "Families"],
+        date_start="2026-03-07",
+        date_end="2026-03-07",
+        cost="Free",
+        eligibility="Open to the public, all ages.",
+        is_open=True,
+        opportunity_type="Out-of-school Programs",
+    ),
+    _SD_FESTIVAL_CARD_URLS[1]: ProgramExtractionResult(
+        program_name="STEAM Design Contest",
+        audience_grades=["6th grade", "7th grade", "8th grade", "9th grade", "10th grade"],
+        date_start="2026-03-04",
+        date_end="2026-03-04",
+        cost="",
+        eligibility="K-12 students enrolled in a San Diego County school.",
+        is_open=True,
+        opportunity_type="Competitions",
+    ),
+    _SD_FESTIVAL_CARD_URLS[2]: ProgramExtractionResult(
+        program_name="Educator Workshop",
+        audience_grades=["Educator Specific"],
+        date_start="2026-03-05",
+        date_end="2026-03-05",
+        cost="Free",
+        eligibility="K-12 classroom educators.",
+        is_open=True,
+        opportunity_type="Educator Resources",
+    ),
+}
+
+
+def _sd_festival_source() -> SourceConfig:
+    # No config.opportunity_type override -- matching the real
+    # registered TOML exactly (see this ticket's Description: festival-
+    # week events span more than one type, so the override is
+    # deliberately left unset).
+    return SourceConfig(
+        source_id="sd-festival-of-science-engineering",
+        org_name="San Diego Festival of Science & Engineering (lovestemsd.org)",
+        adapter_type="program_listing",
+        config={
+            "site_url": _SD_FESTIVAL_SITE_URL,
+            "listing_urls": ["/stem-week-events-2020"],
+            "program_kind": "program",
+        },
+    )
+
+
+def _sd_festival_llm_client() -> FixtureProgramLLMClient:
+    return FixtureProgramLLMClient(responses=dict(_SD_FESTIVAL_RESULTS))
+
+
+class TestSDFestivalOfScienceEngineeringListingSource:
+    """Sprint 029 ticket 003 (SUC-046)."""
+
+    def test_discover_matches_festival_week_event_cards_via_event_path_re(self, tmp_path):
+        # No config.link_selector is set (see _sd_festival_source()), so
+        # this must resolve via plain EVENT_PATH_RE path matching --
+        # exactly like the ticket 002 fixture_program_listing cards
+        # above, and unlike ucsd-summer-program-finder's link_selector
+        # escape hatch, which this source has no live evidence to need.
+        adapter = ProgramListingAdapter(
+            llm_client=_sd_festival_llm_client(), cache=ProgramExtractionCache(tmp_path)
+        )
+        fetcher = FixtureFetcher(
+            {_SD_FESTIVAL_LISTING_URL: _response(_read("sd_festival_listing_page.html"))}
+        )
+
+        refs = adapter.discover(_sd_festival_source(), fetcher)
+
+        assert [r.url for r in refs] == _SD_FESTIVAL_CARD_URLS
+
+    def test_n_festival_week_events_yield_n_distinct_independently_typed_events(self, tmp_path):
+        responses = {
+            _SD_FESTIVAL_LISTING_URL: _response(_read("sd_festival_listing_page.html")),
+            **{
+                url: _response(_read(fixture_name))
+                for url, fixture_name in _SD_FESTIVAL_DETAIL_FIXTURES.items()
+            },
+        }
+        fetcher = FixtureFetcher(responses)
+        adapter = ProgramListingAdapter(
+            llm_client=_sd_festival_llm_client(), cache=ProgramExtractionCache(tmp_path)
+        )
+
+        events = _run(adapter, _sd_festival_source(), fetcher)
+
+        assert len(events) == 3
+        assert {e.url for e in events} == set(_SD_FESTIVAL_CARD_URLS)
+        # No two events share an opportunity_type -- proves each record
+        # kept its own LLM classification rather than being collapsed by
+        # a config override (there is none registered for this source).
+        assert {e.opportunity_type for e in events} == {
+            "Out-of-school Programs",
+            "Competitions",
+            "Educator Resources",
+        }
+
+        by_url = {e.url: e for e in events}
+
+        expo_day = by_url[_SD_FESTIVAL_CARD_URLS[0]]
+        assert expo_day.title == "EXPO Day"
+        assert expo_day.start == datetime.fromisoformat("2026-03-07")
+        assert expo_day.end == datetime.fromisoformat("2026-03-07")
+        assert expo_day.opportunity_type == "Out-of-school Programs"
+
+        design_contest = by_url[_SD_FESTIVAL_CARD_URLS[1]]
+        assert design_contest.title == "STEAM Design Contest"
+        assert design_contest.start == datetime.fromisoformat("2026-03-04")
+        assert design_contest.opportunity_type == "Competitions"

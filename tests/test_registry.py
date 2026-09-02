@@ -665,6 +665,79 @@ class TestProgramListingAndMultiSourceConfig:
         assert sio.config["url"] == "https://scripps.ucsd.edu/education/research-internships"
 
 
+class TestSDFestivalOfScienceEngineeringRegistration:
+    """Sprint 029 ticket 003 (SUC-046, issue 30): the SD Festival of
+    Science & Engineering / EXPO Day -- an existing partner, previously
+    registered under no source_id at all -- is registered as a
+    ``program_listing`` source for ``lovestemsd.org``'s DB-driven
+    "Festival Week" per-event listing.
+    """
+
+    def test_registered_as_program_listing_no_opportunity_type_override(self):
+        sources = {s.source_id: s for s in load_sources()}
+
+        assert "sd-festival-of-science-engineering" in sources
+        source = sources["sd-festival-of-science-engineering"]
+        assert source.adapter_type == "program_listing"
+        assert source.config["site_url"] == "https://lovestemsd.org"
+        assert source.config["listing_urls"] == ["/stem-week-events-2020"]
+        assert source.config["program_kind"] == "program"
+        # Deliberately no override -- festival-week events span more
+        # than one type (workshops, the EXPO Day showcase,
+        # competitions), so each record keeps the LLM's own
+        # classification (this ticket's Description).
+        assert "opportunity_type" not in source.config
+
+    def test_disabled_with_a_reason_pending_the_next_annual_cycles_content(self):
+        # This ticket's own required live-verification (a real
+        # --dry-run pipeline run, not just a WebFetch check) found
+        # lovestemsd.org's "Festival Week" listing reachable (HTTP 200)
+        # but currently carrying zero event cards -- a content-
+        # availability gap between the site's own annual cycles, not a
+        # fetch/WAF block and not an extraction-framing bug. See the
+        # TOML file's own header comment for the full live evidence.
+        sources = {s.source_id: s for s in load_sources()}
+        source = sources["sd-festival-of-science-engineering"]
+
+        assert source.enabled is False
+        path = DEFAULT_SOURCES_DIR / "sd-festival-of-science-engineering.toml"
+        text = path.read_text()
+        assert "disabled:" in text
+        assert "content-availability gap" in text
+
+    def test_does_not_touch_or_conflict_with_the_unrelated_usasciencefestival_registration(self):
+        # usasciencefestival.toml is a distinct, already-disabled
+        # *national* org (USA Science & Engineering Festival, WAF-
+        # blocked) -- confirmed by a registry-wide grep before adding
+        # this ticket's new file, per the ticket's own Description. This
+        # test guards against ever conflating the two again.
+        sources = {s.source_id: s for s in load_sources()}
+
+        assert "usasciencefestival" in sources
+        usa_sef = sources["usasciencefestival"]
+        assert usa_sef.org_name == "USA Science & Engineering Festival"
+        assert usa_sef.enabled is False
+        assert usa_sef.config["site_url"] == "https://usasciencefestival.org"
+
+        sd_festival = sources["sd-festival-of-science-engineering"]
+        assert sd_festival.org_name != usa_sef.org_name
+        assert sd_festival.config["site_url"] != usa_sef.config["site_url"]
+
+    def test_does_not_conflict_with_the_unrelated_gsdsef_registration(self):
+        # gsdsef.toml is the Greater San Diego Science and Engineering
+        # Fair -- a different STEM fair organization entirely, not
+        # touched by this ticket.
+        sources = {s.source_id: s for s in load_sources()}
+
+        assert "gsdsef" in sources
+        gsdsef = sources["gsdsef"]
+        assert gsdsef.org_name == "Greater San Diego Science and Engineering Fair"
+
+        sd_festival = sources["sd-festival-of-science-engineering"]
+        assert sd_festival.source_id != gsdsef.source_id
+        assert sd_festival.config["site_url"] != gsdsef.config["site_url"]
+
+
 class TestCampMarketingPageProviders:
     """Sprint 028 ticket 004 (issue 29, SUC-038/SUC-041): the verified
     nonprofit/institutional camp marketing-page providers, each
