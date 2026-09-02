@@ -1,0 +1,32 @@
+# NOAA Hutton -- the Hutton Junior Fisheries Biology Program, an
+# 8-week paid ($3,000 scholarship) fisheries/marine-biology mentorship
+# for HS juniors/seniors, run by the American Fisheries Society (AFS)
+# with NOAA sponsorship (issue 28's own naming, "NOAA Hutton", follows
+# the seed research's shorthand for this AFS-administered program).
+# Sprint 027 ticket 005 (issue 28's individually-named HS internship
+# pages), `program_page` adapter.
+#
+# Live-verification note (2026-09-01): hutton.fisheries.org returns
+# HTTP 403 to both this project's `STEM-Calendar-Bot/1.0` User-Agent
+# and a plain browser User-Agent via `curl` -- a WAF/bot-protection
+# block, not a robots.txt disallow or a dead page (the page itself is
+# real and current per web search results). Per this ticket's Fix
+# shape step 3 ("a page that fails to yield a correctly-shaped record
+# after live verification is registered enabled = false with a reason
+# comment, not silently dropped"), registered disabled rather than
+# omitted. Re-check with a headless fetch strategy
+# (`acquisition_policy.fetch_strategy = "headless"`) in a future
+# ticket if this program should ship.
+
+org_name = "American Fisheries Society"
+adapter_type = "program_page"
+enabled = false  # disabled: hutton.fisheries.org returns HTTP 403 (WAF/bot block) to both this project's UA and a plain browser UA, live-verified 2026-09-01 -- see comment above
+
+[config]
+url = "https://hutton.fisheries.org/"
+program_kind = "internship"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 28 (2026-08-30 seed source catalog); sprint 027 ticket 005"

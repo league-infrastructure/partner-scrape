@@ -1,0 +1,38 @@
+# Salk Institute Heithoff-Brody High School Summer Scholars Program --
+# sprint 027 ticket 005 (issue 28's individually-named HS internship
+# pages). An eight-week paid research placement mentored by Salk
+# scientists, open to San Diego County residents/students 16+.
+# Distinct source_id from the pre-existing generic_html `salk.toml`
+# (Salk Institute Education Outreach's broader site) -- this is the
+# single named program page, registered as `program_page` per this
+# sprint's new adapter family, not a listing crawl.
+#
+# Live-verified 2026-09-01 (sprint 027 ticket 005):
+#   GET https://www.salk.edu/about/education-outreach/programs/high-school-scholars/
+# returns HTTP 200. `uv run partner-scrape --source salk-heithoff-brody
+# --dry-run -v` yielded one Event: title "Heithoff-Brody High School
+# Summer Scholars Program", eligibility a detailed San Diego
+# County/16+/GPA/transportation paragraph. Note: the LLM extraction
+# mapped `date_start`=2026-06-15 (the program's own start) and
+# `date_end`=2026-03-01 (the actual application deadline) -- i.e. it
+# put the application deadline in `date_end` but the *program* start,
+# not the *application* open date, in `date_start`, so the pair reads
+# as end-before-start. `date_end` is still a real date (satisfying
+# this ticket's Event-shape acceptance criterion); this is a
+# data-quality observation about ticket 002's extraction mechanism
+# (also seen on `scripps-srti.toml`/NIWC sources), not something this
+# registration-only ticket's file scope can fix. See this ticket's
+# Notes.
+
+org_name = "Salk Institute Heithoff-Brody High School Summer Scholars Program"
+adapter_type = "program_page"
+enabled = true
+
+[config]
+url = "https://www.salk.edu/about/education-outreach/programs/high-school-scholars/"
+program_kind = "internship"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 28 (2026-08-30 seed source catalog); sprint 027 ticket 005"

@@ -1,0 +1,33 @@
+# SDSU ExpandAI -- the SMILE Lab/Talent Search Robotics Camp, an
+# NSF-funded week-long free summer robotics/AI camp for 8th-12th grade
+# students (application window roughly Feb-May, requires a STEM
+# teacher recommendation). Sprint 027 ticket 005 (issue 28's
+# individually-named HS internship pages), `program_page` adapter.
+# Registered `kind = "internship"` matching this ticket's uniform
+# treatment of all named issue-28 programs, though this one is a
+# free camp rather than a paid research placement.
+#
+# Live-verified 2026-09-01 (sprint 027 ticket 005):
+#   GET https://ite.sdsu.edu/oce/our-programs/robotics-camp
+# returns HTTP 200. `uv run partner-scrape --source
+# sdsu-expandai-robotics --dry-run -v` yielded one Event: title
+# "Robotics Camp", eligibility "8th - 12th grade students", cost
+# "Free". No `date_start`/`date_end` was extracted: the live page
+# states "The application period for the 2025 Robotics Camp has
+# concluded" with no forward-looking 2026 window posted yet at
+# verification time -- treated as rolling/undated for now (explicit
+# determination, ticket 005's own live investigation); re-verify once
+# the camp posts its next cycle's dates.
+
+org_name = "San Diego State University"
+adapter_type = "program_page"
+enabled = true
+
+[config]
+url = "https://ite.sdsu.edu/oce/our-programs/robotics-camp"
+program_kind = "internship"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 28 (2026-08-30 seed source catalog); sprint 027 ticket 005"

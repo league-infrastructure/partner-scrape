@@ -1,0 +1,34 @@
+# Biocom Generation STEAM Pathways -- Life Science Innov8Ed, the
+# specific named internship program under Biocom California's
+# "Generation STEAM" umbrella (roughly 200 HS students serve as
+# biomanufacturing interns; the umbrella `programs/` listing page
+# links out to several distinct programs -- Life Science Innov8Ed,
+# Girls Who Lead, Women Who Inspire -- so this registers the one
+# internship-shaped program page rather than the umbrella listing
+# itself, matching this sprint's one-program-per-page model). Sprint
+# 027 ticket 005 (issue 28's individually-named HS internship pages),
+# `program_page` adapter.
+#
+# Live-verified 2026-09-01 (sprint 027 ticket 005):
+#   GET https://www.biocom.org/generation-steam/programs/life-science-innov8ed/
+# returns HTTP 200. `uv run partner-scrape --source
+# biocom-generation-steam --dry-run -v` yielded one Event: title "Life
+# Science Innov8Ed", cost "Free". No `date_start`/`date_end` was
+# extracted -- this is a year-round in-class biomanufacturing
+# internship program, not a single-cycle-deadline program; treated as
+# rolling (explicit determination, ticket 005's own live investigation)
+# rather than a missing-data defect. See this ticket's Notes for the
+# full recorded yield.
+
+org_name = "Biocom California (Generation STEAM)"
+adapter_type = "program_page"
+enabled = true
+
+[config]
+url = "https://www.biocom.org/generation-steam/programs/life-science-innov8ed/"
+program_kind = "internship"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 28 (2026-08-30 seed source catalog); sprint 027 ticket 005"

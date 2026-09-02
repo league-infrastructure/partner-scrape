@@ -1,0 +1,30 @@
+# Sanford Burnham Prebys SPARK -- CIRM-funded six-week paid stem-cell
+# research internship for California HS students, preference to San
+# Diego/Imperial County residents. Sprint 027 ticket 005 (issue 28's
+# individually-named HS internship pages), `program_page` adapter.
+#
+# Live-verified 2026-09-01 (sprint 027 ticket 005):
+#   GET https://sbpdiscovery.org/education/internships/
+# returns HTTP 200. `uv run partner-scrape --source sbp-spark --dry-run
+# -v` yielded one Event: title "Internships and Training Programs"
+# (the page's own generic title -- it covers both SPARK, for HS
+# students, and COMPASS, for undergrads -- eligibility correctly
+# distinguishes the two). No date_start/date_end was extracted: issue
+# 28 itself characterizes this program as "email apply", and neither
+# this page nor Sanford Burnham Prebys' CIRM grant page publishes a
+# fixed public deadline -- treated as rolling (explicit determination,
+# ticket 005's own live investigation) rather than a missing-data
+# defect. See this ticket's Notes for the full recorded yield.
+
+org_name = "Sanford Burnham Prebys"
+adapter_type = "program_page"
+enabled = true
+
+[config]
+url = "https://sbpdiscovery.org/education/internships/"
+program_kind = "internship"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 28 (2026-08-30 seed source catalog); sprint 027 ticket 005"

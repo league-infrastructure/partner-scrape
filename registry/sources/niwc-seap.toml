@@ -1,0 +1,33 @@
+# NIWC Pacific SEAP -- Science and Engineering Apprenticeship Program,
+# an eight-week Department of Navy lab placement for HS sophomores/
+# juniors/seniors (16+, US citizens), $4,000-$4,500 paid. Registered
+# against the national navalsteminterns.us SEAP page (the page NIWC
+# Pacific itself points to for applicants; no NIWC-Pacific-specific
+# SEAP subpage exists) -- confirmed live 2026-09-01: applications open
+# Aug 1-Nov 1. Sprint 027 ticket 005 (issue 28's individually-named HS
+# internship pages), `program_page` adapter.
+#
+# Live-verified 2026-09-01 (sprint 027 ticket 005):
+#   GET https://www.navalsteminterns.us/seap/
+# returns HTTP 200. `uv run partner-scrape --source niwc-seap --dry-run
+# -v` yielded one Event: title "Science and Engineering Apprenticeship
+# Program (SEAP)", `date_start` unset, `date_end`=2025-11-01 (the
+# page's evergreen "Applications Open August 1st-November 1st" text,
+# with the LLM resolving the year to the most recently-past cycle
+# rather than the next upcoming one). `date_end` is still a real,
+# non-empty date (satisfying this ticket's Event-shape acceptance
+# criterion) -- see this ticket's Notes for the full recorded yield
+# and this stale-year observation.
+
+org_name = "Naval Information Warfare Center Pacific"
+adapter_type = "program_page"
+enabled = true
+
+[config]
+url = "https://www.navalsteminterns.us/seap/"
+program_kind = "internship"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 28 (2026-08-30 seed source catalog); sprint 027 ticket 005"

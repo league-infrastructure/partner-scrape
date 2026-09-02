@@ -1,0 +1,31 @@
+# La Jolla Institute for Immunology -- LJIdea, LJI's flagship HS/
+# undergrad biomedical-research internship and mentorship program
+# (6-8 weeks every summer, hourly pay + meal stipend), prioritizing
+# first-generation-college-bound and Title I students from San Diego
+# County. Sprint 027 ticket 005 (issue 28's individually-named HS
+# internship pages), `program_page` adapter.
+#
+# Live-verified 2026-09-01 (sprint 027 ticket 005):
+#   GET https://www.lji.org/careers/internships/
+# returns HTTP 200. `uv run partner-scrape --source lji-ljidea
+# --dry-run -v` yielded one Event: title "LJI Internships". No
+# date_start/date_end was extracted -- the page's own prose states
+# recruitment happens "through school counselors, partner
+# organizations, STEM outreach events, and open applications"
+# year-round, with no stated cyclical deadline; treated as rolling
+# (explicit determination, ticket 005's own live investigation) rather
+# than a missing-data defect. See this ticket's Notes for the full
+# recorded yield.
+
+org_name = "La Jolla Institute for Immunology"
+adapter_type = "program_page"
+enabled = true
+
+[config]
+url = "https://www.lji.org/careers/internships/"
+program_kind = "internship"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 28 (2026-08-30 seed source catalog); sprint 027 ticket 005"

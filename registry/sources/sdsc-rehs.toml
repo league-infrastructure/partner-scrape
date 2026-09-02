@@ -1,0 +1,26 @@
+# SDSC REHS -- Research Experience for High School Students, an
+# eight-week summer program pairing HS students 1:1 with a UCSD/SDSC
+# mentor on live supercomputing/computational-science research.
+# Sprint 027 ticket 005 (issue 28's individually-named HS internship
+# pages), `program_page` adapter.
+#
+# Live-verified 2026-09-01 (sprint 027 ticket 005):
+#   GET https://education.sdsc.edu/studenttech/rehs/
+# returns HTTP 200. `uv run partner-scrape --source sdsc-rehs --dry-run
+# -v` yielded one Event: title "UCSD Research Experience for High
+# School Students", `date_start`=2026-02-15 (applications open),
+# `date_end`=2026-03-15 (deadline). See this ticket's Notes for the
+# full recorded yield.
+
+org_name = "San Diego Supercomputer Center"
+adapter_type = "program_page"
+enabled = true
+
+[config]
+url = "https://education.sdsc.edu/studenttech/rehs/"
+program_kind = "internship"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 28 (2026-08-30 seed source catalog); sprint 027 ticket 005"

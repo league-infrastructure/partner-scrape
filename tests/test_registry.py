@@ -410,3 +410,109 @@ class TestRealCompanySeedSources:
         # anyway -- a legitimate zero-result state, not an error.
         sources = {s.source_id: s for s in load_active_sources()}
         assert sources["boundlessbio"].enabled is True
+
+
+class TestProgramPageSourceConfig:
+    """Sprint 027 ticket 005's own Testing requirement: prove a
+    ``program_page``-typed TOML with ``config.program_kind`` parses into a
+    ``SourceConfig`` correctly. No new loader code is expected -- this
+    verifies the existing untyped-``config``-dict mechanism already
+    handles the new ``adapter_type`` value, per ``registry/DESIGN.md``'s
+    sprint 027 addendum.
+    """
+
+    def test_parses_program_page_fixture(self):
+        # Lives in its own sibling fixtures directory, not FIXTURES_DIR
+        # itself, so it doesn't perturb TestLoadSources's fixed file
+        # count for that directory (matching the existing
+        # registry_fetch_strategy/ subdirectory's precedent).
+        source = SourceConfig.from_toml(
+            FIXTURES_DIR.parent / "registry_program_page" / "program_page_good.toml"
+        )
+
+        assert source.adapter_type == "program_page"
+        assert source.org_name == "Fixture Program Page Org"
+        assert source.enabled is True
+        assert source.config == {
+            "url": "https://example.org/programs/fixture-scholars",
+            "program_kind": "internship",
+        }
+        assert source.taxonomy_defaults == {"eligibility": "Fixture partner schools only"}
+
+    def test_real_registry_registers_program_page_sources_for_issue_28(self):
+        # Sprint 027 ticket 005: at least the majority of issue 28's ~13
+        # individually-named HS internship/research program pages
+        # (excluding the 3 UCSD-listing-covered programs reconciled to
+        # ticket 006, and the Illumina/SD2 "closed pipeline" -- neither
+        # registered here) are live-verified and enabled = true in the
+        # real registry.
+        sources = {s.source_id: s for s in load_sources()}
+
+        enabled_program_pages = [
+            source_id
+            for source_id, source in sources.items()
+            if source.adapter_type == "program_page" and source.enabled
+        ]
+        # 10 of the ~13 named programs are enabled = true (3 disabled
+        # with a live-verification-failure reason: noaa-hutton,
+        # sdzwa-internquest, scripps-reach) -- comfortably a majority.
+        assert len(enabled_program_pages) >= 7
+
+        for source_id in (
+            "salk-heithoff-brody",
+            "sdsc-rehs",
+            "sbp-spark",
+            "lji-ljidea",
+            "scripps-srti",
+            "niwc-seap",
+            "niwc-nreip",
+            "sdzwa-fellowships",
+            "sdsu-expandai-robotics",
+            "biocom-generation-steam",
+        ):
+            assert sources[source_id].adapter_type == "program_page"
+            assert sources[source_id].config["program_kind"] == "internship"
+            assert sources[source_id].enabled is True
+
+    def test_disabled_program_pages_carry_a_reason_comment(self):
+        # This ticket's Fix shape step 3: a page that failed live
+        # verification is registered enabled = false with a reason
+        # comment, not silently dropped.
+        for source_id in ("noaa-hutton", "sdzwa-internquest", "scripps-reach"):
+            path = DEFAULT_SOURCES_DIR / f"{source_id}.toml"
+            source = SourceConfig.from_toml(path)
+            assert source.adapter_type == "program_page"
+            assert source.enabled is False
+            assert "disabled:" in path.read_text()
+
+    def test_scripps_reach_eligibility_override_names_partner_schools(self):
+        # A fixed institutional fact (partner-schools-only) is
+        # hand-authored via taxonomy_defaults.eligibility rather than
+        # left to LLM inference -- this ticket's Fix shape step 1.
+        source = SourceConfig.from_toml(DEFAULT_SOURCES_DIR / "scripps-reach.toml")
+        assert "partner schools only" in source.taxonomy_defaults["eligibility"].lower()
+
+    def test_ucsd_optimus_enlace_cosmos_not_registered_as_individual_program_pages(self):
+        # Reconciliation with ticket 006 (this ticket's Description):
+        # OPTIMUS/ENLACE/COSMOS are registered via the UCSD Summer
+        # Program Finder listing source only, never as individual
+        # program_page sources here, to avoid duplicate-publishing a
+        # kind that bypasses cross-source dedup.
+        sources = {s.source_id: s for s in load_sources()}
+        for source_id in sources:
+            lowered = source_id.lower()
+            assert "optimus" not in lowered
+            assert "enlace" not in lowered
+            assert not (lowered == "cosmos" or lowered.startswith("cosmos-"))
+
+    def test_illumina_sd2_not_registered(self):
+        # Issue 28 names Illumina/SD2 STEM Scholars as a "closed
+        # pipeline" -- this ticket's investigation (see its Notes)
+        # found no live, public application page to register at all,
+        # so it is not registered as a program_page source (or any
+        # other adapter_type).
+        sources = {s.source_id: s for s in load_sources()}
+        for source_id in sources:
+            lowered = source_id.lower()
+            assert "illumina" not in lowered
+            assert "sd2" not in lowered

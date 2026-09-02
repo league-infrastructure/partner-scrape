@@ -1,0 +1,31 @@
+# San Diego Zoo Wildlife Alliance -- Zoo InternQuest, a seven-week HS
+# 11th/12th-grade career-exploration program (3.0+ GPA, two letters of
+# recommendation). Live investigation (2026-09-01) found the program's
+# original URL (zoo.sandiegozoo.org/kids-programs/zoo-internquest) now
+# 301-redirects to /kids-programs/conservation-career-quest -- SDZWA
+# appears to have renamed/merged InternQuest into "Conservation Career
+# Quest" (matching WebSearch results describing that name with
+# identical 11th/12th-grade, GPA, and letters-of-recommendation
+# details). `config.url` targets that current canonical page rather
+# than the stale original name.
+#
+# Live-verification note (2026-09-01): both the redirect target and
+# the original URL return HTTP 403 to this project's
+# `STEM-Calendar-Bot/1.0` User-Agent and to a plain browser User-Agent
+# via `curl` -- a WAF/bot-protection block on zoo.sandiegozoo.org, not
+# a dead page. Per this ticket's Fix shape step 3, registered disabled
+# rather than omitted. Re-check with a headless fetch strategy in a
+# future ticket if this program should ship.
+
+org_name = "San Diego Zoo Wildlife Alliance"
+adapter_type = "program_page"
+enabled = false  # disabled: zoo.sandiegozoo.org returns HTTP 403 (WAF/bot block) to both this project's UA and a plain browser UA, live-verified 2026-09-01 -- see comment above
+
+[config]
+url = "https://zoo.sandiegozoo.org/kids-programs/conservation-career-quest"
+program_kind = "internship"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 28 (2026-08-30 seed source catalog); sprint 027 ticket 005"
