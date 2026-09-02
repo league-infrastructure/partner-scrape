@@ -118,14 +118,44 @@ Because this project has opted into the persistent per-subsystem design
 doc set (`design_docs: enabled`), the write-up lives in this sprint's
 `design/` overlay (`clasi/sprints/029-competition-and-tournament-curated-sources/design/`),
 not in this section — see `architecture-authoring`'s Mode 2a, and
-sprints 027/028's `sprint.md` for the precedent this follows. The one
-affected canonical doc:
+sprints 027/028's `sprint.md` for the precedent this follows. The
+affected canonical docs (updated by the 2026-09-02 revision below):
 
 - `partner_scrape/registry/DESIGN.md` (overlay:
   `design/registry-DESIGN.md`) — a "Sprint 029" addendum documenting
   the new competition/tournament source registrations (every one reusing
   an already-shipped `adapter_type` value), the SDCEC org-plus-hub
   coexistence, and the mechanism decision below.
+- `partner_scrape/adapters/DESIGN.md` (overlay:
+  `design/adapters-DESIGN.md`) — added by the 2026-09-02 revision below;
+  documents the corrected competition-genre extraction mechanism (a
+  `profile`-selected LLM prompt variant, a new `registration_deadline`
+  field, and a `ProgramExtractionCache` schema-version bump), not part
+  of this sprint's original scope.
+
+**Revision (2026-09-02 — competition-genre extraction fix, team-lead
+escalation).** This sprint's original premise — reuse sprint 027/028's
+`program_page`/`program_page_multi`/`program_listing` mechanism
+*verbatim*, zero new code — did not survive tickets 001/002's own
+required live-verification step: of 13 sources registered, only 3
+shipped a usable record, and most of the rest failed on real extraction,
+not a site block. The root cause (`adapters/program_llm.py`'s prompt
+written for sprint 027's application-window *program* genre, wrong for
+single-dated-event *competitions*), the corrected mechanism, and the
+full Design Rationale (including why `normalize/run.py`'s
+`DEADLINE_FIRST_TYPES` is deliberately left unchanged) live in
+`adapters/DESIGN.md`'s own "Revision (2026-09-02 — sprint 029
+competition-genre extraction fix)" section — read that, not a
+restatement here. This revision's own tier, judged in isolation, is
+**substantial** (3 `adapters/` modules touched: `program_llm.py`'s
+prompt/schema, `program_page.py`'s profile-selection call sites,
+`program_cache.py`'s version bump; a real cross-module design decision
+on whether to touch `normalize/run.py`) — it was self-reviewed against
+the full five-category standard and passed (see the sprint's recorded
+`architecture_review` gate history), even though the sprint's *original*
+registry-only scope remains correctly sized Compact. Tickets 006 (the
+fix) and 007 (live re-verification) implement it — see this sprint's
+Tickets table.
 
 ### Architecture Overview
 
@@ -365,15 +395,55 @@ Before tickets can be created, all of the following must be true:
 |---|-------|------------|-------|
 | 001 | Register single-event program_page competition sources | — | 30 |
 | 002 | Register San Diego Math Circle's public calendar sheet as a program_page_multi source | — | 30 |
+| 006 | Fix competition-genre extraction: date-vs-deadline framing, year inference, registration deadline field | — | 30 |
+| 007 | Re-verify and re-enable competition sources under the corrected extraction mechanism | 006 | 30 |
 | 003 | Register the SD Festival of Science & Engineering / EXPO Day as a program_listing source | — | 30 |
 | 004 | Register SDCEC as a source org alongside its existing discovery hub | 001, 002, 003 | 30 |
 | 005 | Verify GSDSEF's existing registration surfaces its judging and public-day dates | — | 30 |
 
-Tickets execute serially in the order listed. 001, 002, 003, and 005
-have no hard dependency on each other — each is an independent batch of
-registry data reusing an already-shipped `adapter_type` (`program_page`,
+Tickets execute serially in the order listed above (superseding the
+original 001-005 ordering below this paragraph, kept for its still-true
+reasoning about 003/004/005's mutual independence).
+
+**(2026-09-02 revision)** Tickets 001/002's real live-verification found
+that most of the batch's registered sources' extraction was
+systematically wrong — not the "reuse verbatim, zero new code" premise
+this sprint's original Architecture assumed — traced to
+`adapters/program_llm.py`'s prompt being written for sprint 027's
+application-window *program* genre, not for single-dated-event
+*competitions*. See `adapters/DESIGN.md`'s "Revision (2026-09-02 —
+sprint 029 competition-genre extraction fix)" section and this sprint's
+`design/adapters-DESIGN.md` overlay for the full finding and the
+corrected mechanism. Tickets 006 (the fix) and 007 (live re-verification
+of the five sources ticket 001 disabled for a genuine extraction
+failure — `sdftc-league-play`, `botball-greater-sd`, `sd-brain-bee`,
+`seaperch-sd-regional`, `tritonhacks`) are inserted between 002 and 003,
+ahead of the remaining original tickets, since 007 needs 006's fix (and
+its cache-schema-version bump) in place first. `sd-math-circle` and
+`mathcounts-sd-chapter` are explicitly **not** re-verified by ticket
+007 — the former is a distinct, deferred grid-extraction problem
+(`adapters/DESIGN.md`'s Design Rationale), the latter a fetch-level WAF
+block unrelated to extraction framing; both stay `enabled = false`.
+Tickets 003, 004, and 005's own scope is **unchanged** by this revision
+— 004's `depends-on` still reads `001, 002, 003` (not `006`/`007`; SDCEC's
+overlap cross-check does not need the extraction fix), and 005 uses an
+entirely different pipeline (`generic_html` + `enrich/`, not
+`program_llm.py`) so this revision does not touch it at all. Ticket 003
+gets a non-scope-changing forward-reference note (see its own file)
+flagging that its festival-week source deliberately sets no
+`config.opportunity_type` override, so this fix's profile selection does
+not reach it — if its own live verification hits the same
+deadline-vs-event-date framing bug, the documented fallback is
+`adapters/DESIGN.md`'s matching Open Question, not a fresh investigation.
+
+Original ordering rationale (001, 002, 003, and 005 have no hard
+dependency on each other — each is an independent batch of registry data
+reusing an already-shipped `adapter_type` (`program_page`,
 `program_page_multi`, `program_listing`, and a config-only edit to an
 existing file, respectively) — and could execute in any order, or in
 parallel if this sprint opts into parallel worktrees. 004 depends on
 001-003 because SDCEC's curated-list cross-check needs this sprint's
-other new registrations to exist first, to check for overlap.
+other new registrations to exist first, to check for overlap) still
+holds for 003/004/005 among themselves; it is superseded only in that
+006/007 are now inserted into the overall serial order as shown in the
+table above.

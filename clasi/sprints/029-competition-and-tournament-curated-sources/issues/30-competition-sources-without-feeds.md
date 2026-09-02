@@ -7,6 +7,8 @@ tickets:
 - 029-003
 - 029-004
 - 029-005
+- 029-006
+- 029-007
 ---
 
 # Competition & tournament sources without feeds

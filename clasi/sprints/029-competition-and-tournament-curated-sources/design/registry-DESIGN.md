@@ -4,6 +4,37 @@
 
 ---
 
+## Revision (2026-09-02 — sprint 029 competition-genre extraction fix)
+
+Tickets 001/002's real (not WebFetch-only) live-verification found that
+most of this sprint's registered competition sources' extraction was
+wrong, not merely site-blocked — traced to `adapters/program_llm.py`'s
+prompt being written for sprint 027's application-window program genre,
+not for single-dated-event competition pages. The full finding, the
+corrected extraction mechanism, and the Design Rationale for why it
+needed no registry-level change are documented in
+`adapters/DESIGN.md`'s own "Revision (2026-09-02 — sprint 029
+competition-genre extraction fix)" section — this file is cross-
+referenced from there rather than duplicated here.
+
+**No change to this document's own content below.** The mechanism
+decision this file's §4 Sprint 029 Design Rationale describes — every
+competition source registers through the existing `program_page`/
+`program_page_multi`/`program_listing` `adapter_type` family, with
+`config.opportunity_type = "Competitions"` where applicable — is
+unchanged and still accurate; the correction lives entirely inside how
+`adapters/` interprets that already-existing `config.opportunity_type`
+value (a new prompt profile, selected by data the registry already
+carries), not in any new registry schema, loader, or conventional
+`config` key. The sources this sprint's ticket 001 registered are
+exactly the files named in this document's existing Sprint 029
+paragraph below; their `enabled` states (3 enabled, 9 disabled as of
+tickets 001/002's correction) are tracked in each TOML file's own header
+comment and in `sprint.md`'s Tickets table, not restated here — this
+document describes the registration *mechanism*, not a live census of
+which sources currently pass verification, and re-verification is
+ticket 007's job (below), not a re-edit of this file.
+
 ## 1. Purpose
 
 `registry/` is the data-driven catalog of *what* the system scrapes and *how to reach it*:

@@ -54,3 +54,25 @@ each record keeps the LLM's own per-page classification.
   N saved detail pages proving N distinct dated `Event`s, per SUC-046's
   acceptance criteria.
 - **Verification command**: `uv run pytest`
+
+## Note (added post-ticket-001/002, no scope change)
+
+Tickets 001/002's live-verification found `adapters/program_llm.py`'s
+pre-existing prompt systematically mis-extracts single-dated-event
+pages (an "Event Date:"-style page reads as having no date at all; a
+page with both an event date and a separate deadline can collide the
+two) — see `adapters/DESIGN.md`'s "Revision (2026-09-02 — sprint 029
+competition-genre extraction fix)" and ticket 006. That fix's profile
+selection is driven by `source.config.get("opportunity_type") ==
+"Competitions"`, which this source deliberately never sets (see this
+ticket's own Description — festival-week events span more than one
+type). **If live verification here finds the Mar 7 2026 EXPO Day date
+(or another festival-week event's date) fails to surface for the same
+reason** — a plainly-stated event date the extraction returns empty, or
+a deadline swallowing the actual event date — do not invent a new fix:
+the documented fallback is `adapters/DESIGN.md`'s own Open Question
+("does ticket 003's SD Festival / EXPO Day listing need the competition
+profile too?"), which sketches widening profile selection to also
+consider the LLM's own self-classified `opportunity_type`. This ticket's
+scope is otherwise unchanged — this note exists so a live-verification
+failure here isn't mistaken for a new, unrelated bug.

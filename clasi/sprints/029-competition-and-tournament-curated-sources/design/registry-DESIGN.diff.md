@@ -1,6 +1,6 @@
 ---
 source_file: registry-DESIGN.md
-source_hash: d5b35a74fe578334ff9e15ff47b7c7ad86b0dabfbe63b63cf9c46b32a654737d
+source_hash: 509fad29a483529711ab48f0723e59135cbea2e758107d6bc74ae87701a65eb6
 ---
 # Diff: registry-DESIGN.md
 
@@ -9,7 +9,45 @@ Comparison of the sprint overlay copy of `registry-DESIGN.md` against its pristi
 ```diff
 --- registry-DESIGN.md (pristine)
 +++ registry-DESIGN.md (current)
-@@ -87,6 +87,43 @@
+@@ -3,6 +3,37 @@
+ **Owner:** Eric Busboom · **Last reviewed:** 2026-08-30 · **Status:** stable
+ 
+ ---
++
++## Revision (2026-09-02 — sprint 029 competition-genre extraction fix)
++
++Tickets 001/002's real (not WebFetch-only) live-verification found that
++most of this sprint's registered competition sources' extraction was
++wrong, not merely site-blocked — traced to `adapters/program_llm.py`'s
++prompt being written for sprint 027's application-window program genre,
++not for single-dated-event competition pages. The full finding, the
++corrected extraction mechanism, and the Design Rationale for why it
++needed no registry-level change are documented in
++`adapters/DESIGN.md`'s own "Revision (2026-09-02 — sprint 029
++competition-genre extraction fix)" section — this file is cross-
++referenced from there rather than duplicated here.
++
++**No change to this document's own content below.** The mechanism
++decision this file's §4 Sprint 029 Design Rationale describes — every
++competition source registers through the existing `program_page`/
++`program_page_multi`/`program_listing` `adapter_type` family, with
++`config.opportunity_type = "Competitions"` where applicable — is
++unchanged and still accurate; the correction lives entirely inside how
++`adapters/` interprets that already-existing `config.opportunity_type`
++value (a new prompt profile, selected by data the registry already
++carries), not in any new registry schema, loader, or conventional
++`config` key. The sources this sprint's ticket 001 registered are
++exactly the files named in this document's existing Sprint 029
++paragraph below; their `enabled` states (3 enabled, 9 disabled as of
++tickets 001/002's correction) are tracked in each TOML file's own header
++comment and in `sprint.md`'s Tickets table, not restated here — this
++document describes the registration *mechanism*, not a live census of
++which sources currently pass verification, and re-verification is
++ticket 007's job (below), not a re-edit of this file.
+ 
+ ## 1. Purpose
+ 
+@@ -87,6 +118,43 @@
  roughly 15-20 new `program_page_multi` camp-marketing-page sources — see §5b's own sprint
  028 addendum for the full data-shape write-up. Same "no registry code change" story as
  sprint 027's addition above: every new value is dispatched entirely inside `adapters/`.
@@ -53,7 +91,7 @@ Comparison of the sprint overlay copy of `registry-DESIGN.md` against its pristi
  
  ## 2. Orientation
  
-@@ -173,6 +210,65 @@
+@@ -173,6 +241,65 @@
  
  **`tomllib`, not a dependency.** Standard library since Python 3.11; the package requires
  3.13.
@@ -119,7 +157,7 @@ Comparison of the sprint overlay copy of `registry-DESIGN.md` against its pristi
  
  ## 5. Interfaces
  
-@@ -286,3 +382,8 @@
+@@ -286,3 +413,8 @@
    "the same organization registered under two source files." Not solved here; caught only
    by author discipline and code review, same as the sprint 027 COSMOS/OPTIMUS/ENLACE risk
    this mirrors.
