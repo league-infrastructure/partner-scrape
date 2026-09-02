@@ -1,7 +1,7 @@
 ---
 id: '005'
 title: Build the activenet_camps adapter for campscui.active.com
-status: open
+status: done
 use-cases:
 - SUC-042
 depends-on:
@@ -60,21 +60,21 @@ pair only if/when a credential is actually confirmed necessary.
 
 ## Acceptance Criteria
 
-- [ ] `adapters/activenet_camps.py` defines `ActiveNetCampsAdapter`
+- [x] `adapters/activenet_camps.py` defines `ActiveNetCampsAdapter`
       (`discover`/`fetch`/`extract`), registered as `"activenet_camps"` in
       `adapters/__init__.py`.
-- [ ] `extract()` supports both the deterministic-parse and LLM-fallback
+- [x] `extract()` supports both the deterministic-parse and LLM-fallback
       paths, both producing `ProgramExtractionResult` and reusing
       `_map_result_to_event` for the final `Event` mapping.
-- [ ] A fixture-based test proves the adapter maps a saved ActiveNet
+- [x] A fixture-based test proves the adapter maps a saved ActiveNet
       response/page into correctly-dated, correctly-priced `Event`s, with
       no live network or LLM call (use `FixtureProgramLLMClient` for the
       fallback path if the platform turns out not to expose clean JSON).
-- [ ] A sold-out session on a fixture page maps to a sold-out
+- [x] A sold-out session on a fixture page maps to a sold-out
       `Event.description` (ticket 003's mechanism).
-- [ ] At least Air & Space Museum and Helen Woodward are registered with
+- [x] At least Air & Space Museum and Helen Woodward are registered with
       `adapter_type = "activenet_camps"` and live-verified.
-- [ ] Neither Air & Space Museum nor Helen Woodward has a
+- [x] Neither Air & Space Museum nor Helen Woodward has a
       `program_page`/`program_page_multi` marketing-page registration.
 
 ## Testing

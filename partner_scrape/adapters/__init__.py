@@ -10,6 +10,7 @@ below -- never a change to ``base.py``'s dispatch mechanism, as ticket
 
 from __future__ import annotations
 
+from partner_scrape.adapters.activenet_camps import ActiveNetCampsAdapter
 from partner_scrape.adapters.base import (
     ADAPTERS,
     Adapter,
@@ -50,6 +51,7 @@ ADAPTERS["robotevents"] = RobotEventsAdapter
 ADAPTERS["program_page"] = ProgramPageAdapter
 ADAPTERS["program_listing"] = ProgramListingAdapter
 ADAPTERS["program_page_multi"] = ProgramPageMultiAdapter
+ADAPTERS["activenet_camps"] = ActiveNetCampsAdapter
 
 __all__ = [
     "Adapter",
@@ -73,4 +75,5 @@ __all__ = [
     "ProgramPageAdapter",
     "ProgramListingAdapter",
     "ProgramPageMultiAdapter",
+    "ActiveNetCampsAdapter",
 ]

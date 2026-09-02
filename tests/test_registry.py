@@ -733,11 +733,20 @@ class TestCampMarketingPageProviders:
     def test_enabled_and_disabled_sets_together_cover_every_registered_camps_source(self):
         # Belt-and-suspenders against a source silently falling through
         # both lists above (neither enabled nor accounted-for-disabled).
+        # Scoped to this ticket's own program_page/program_page_multi
+        # family, matching this class's other two tests -- sprint 028
+        # ticket 005 adds a second family of Camps-typed sources
+        # (adapter_type = "activenet_camps"), which is out of this
+        # ticket's own accounting on purpose (see
+        # tests/test_adapters_activenet_camps.py and
+        # registry/sources/helen-woodward-camps.toml/
+        # sandiego-air-space-camps.toml for that family's own coverage).
         sources = load_sources()
         camps_sources = {
             s.source_id
             for s in sources
             if s.config.get("opportunity_type") == "Camps"
+            and s.adapter_type in ("program_page", "program_page_multi")
         }
 
         assert camps_sources == set(self._ENABLED_CAMPS_SOURCES) | set(

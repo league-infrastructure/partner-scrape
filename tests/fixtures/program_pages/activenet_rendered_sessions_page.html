@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>ACTIVE</title>
+</head>
+<body>
+  <!-- Reproduces the shape of campscui.active.com's real JS-rendered
+       session-selection DOM (confirmed live, 2026-09-01, via a headless
+       browser render of Helen Woodward Animal Center's ActiveNet org
+       page: real session names/dates/prices are baked into the DOM by
+       the platform's own JavaScript, not present in the raw HTTP
+       response body -- see activenet_camps.py's module docstring). -->
+  <div id="app">
+    <h1>Fixture Camp Org</h1>
+    <div class="session-selection">
+      <div class="filter-by">
+        <span>FILTER BY</span>
+        <span>LOCATION</span>
+        <span>All locations</span>
+      </div>
+      <div class="session-list">
+        <div class="session-card">
+          <h3>Monday - Survival - Fall</h3>
+          <p>10/26/2026 - 10/27/2026&nbsp;&nbsp;M, 9:00 AM - 3:00 PM</p>
+          <p>Fixture Camp Location</p>
+          <p>Age 4 - 13</p>
+          <p>Grade Pre-School - 6th</p>
+          <p>Daily - Fall&nbsp;&nbsp;$103.02</p>
+          <button>ADD TO CART</button>
+        </div>
+        <div class="session-card">
+          <h3>Tuesday - Shelter - Fall</h3>
+          <p>10/27/2026 - 10/28/2026&nbsp;&nbsp;TU, 9:00 AM - 3:00 PM</p>
+          <p>Fixture Camp Location</p>
+          <p>Age 4 - 13</p>
+          <p>Grade Pre-School - 6th</p>
+          <p>Daily - Fall&nbsp;&nbsp;$103.02</p>
+          <p class="sold-out-tag">SOLD OUT</p>
+        </div>
+      </div>
+      <div class="cart">
+        <p>YOUR SHOPPING CART</p>
+        <p>You have no sessions selected.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
