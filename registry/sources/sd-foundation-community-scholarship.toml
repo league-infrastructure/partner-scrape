@@ -10,32 +10,48 @@
 # `"internship"`) and `opportunity_type = "Funding Opportunities"` per
 # SUC-035.
 #
-# DISABLED 2026-09-01 (sprint 027 ticket 007 live verification):
+# DISABLED then RE-ENABLED (sprint 027 ticket 007, then sprint 028 ticket
+# 002 -- issue 36):
+#
 # `uv run partner-scrape --source sd-foundation-community-scholarship
-# --dry-run -v` against this page returned HTTP 200 but
-# `extract_program()` raised `anthropic.BadRequestError: prompt is too
-# long: 600199 tokens > 200000 maximum` -- the site's raw page HTML
-# alone (~880KB, no JS rendering needed) blows the LLM's context
-# window by 3x. This is not specific to this one URL: every page
-# probed on sdfoundation.org during this ticket's live verification
-# (this Common Scholarship Application page, the Community Scholarship
-# Program overview page, the FAQs page, the students landing page, and
-# a news article) measured 840KB-965KB of raw HTML -- a site-wide
-# template-bloat characteristic (a large repeated mega-menu/inline
-# script payload on every page), not a page-specific outlier. No page
-# on this domain is small enough for `program_page`'s single-page
-# fetch+LLM-extract flow as it exists today; that flow has no
-# HTML-to-text reduction step (`adapters/program_page.py`'s docstring:
-# `raw.body` is passed to the LLM verbatim), and adding one is outside
-# this registration-only ticket's scope -- see this ticket's Notes for
-# the full recorded finding. Left `enabled = false` with `config`
-# populated (correct `program_kind`/`opportunity_type`) so a future
-# preprocessing capability can flip this on without re-deriving the
-# registration.
+# --dry-run -v` against this page originally (2026-09-01) returned HTTP
+# 200 but `extract_program()` raised `anthropic.BadRequestError: prompt
+# is too long: 600199 tokens > 200000 maximum` -- the site's raw page
+# HTML alone (~880KB, no JS rendering needed) blew the LLM's context
+# window by 3x. This was not specific to this one URL: every page
+# probed on sdfoundation.org during sprint 027 ticket 007's live
+# verification (this Common Scholarship Application page, the
+# Community Scholarship Program overview page, the FAQs page, the
+# students landing page, and a news article) measured 840KB-965KB of
+# raw HTML -- a site-wide template-bloat characteristic (a large
+# repeated mega-menu/inline script payload on every page), not a
+# page-specific outlier. At that time `program_page`'s single-page
+# fetch+LLM-extract flow had no HTML-to-text reduction step
+# (`adapters/program_page.py`'s docstring used to note `raw.body` was
+# passed to the LLM verbatim), so no page on this domain fit.
+#
+# RE-ENABLED 2026-09-01 (sprint 028 ticket 002, issue 36): sprint 028
+# ticket 001 added `extract.reduce_html_to_text()`, now called on
+# `raw.body` before every cache lookup/LLM call in
+# `adapters/program_page.py`. Live re-verification (a direct
+# `ProgramPageAdapter.discover()->fetch()->extract()` call against the
+# real page with a real `AnthropicProgramLLMClient`, mirroring sprint
+# 027 ticket 006's own OPTIMUS live-verification precedent) confirmed:
+# fetch still returns the same ~879KB raw body (`len(raw.body) ==
+# 878910`), reduction+extraction now succeeds with no exception, and
+# yields one `Event` -- title "Common Scholarship Application",
+# eligibility ("Graduating high school seniors, current college
+# students... minimum GPA of 2.0... San Diego County... FAFSA/CA Dream
+# Act... financial need"), cost ("Scholarships ranging from $1,000 to
+# more than $5,000"), `opportunity_type = "Funding Opportunities"` (the
+# `config` override below, confirmed applied). No `start`/`end` date
+# recovered -- the page describes a rolling/annual application with no
+# stated deadline, not a reduction-step gap. `enabled` flipped back to
+# `true`.
 
 org_name = "San Diego Foundation"
 adapter_type = "program_page"
-enabled = false  # disabled: page HTML site-wide on sdfoundation.org exceeds the LLM's 200K-token context window (600K+ tokens measured) -- confirmed live 2026-09-01
+enabled = true
 
 [config]
 url = "https://www.sdfoundation.org/students/common-scholarship-application/"
@@ -45,4 +61,4 @@ opportunity_type = "Funding Opportunities"
 [acquisition_policy]
 rate_limit_seconds = 1.0
 respect_robots = true
-discovered_via = "issue 28 (2026-08-30 seed source catalog); sprint 027 ticket 007"
+discovered_via = "issue 28 (2026-08-30 seed source catalog); sprint 027 ticket 007; re-enabled sprint 028 ticket 002 (issue 36)"

@@ -52,6 +52,20 @@
 # Question on this exact risk). 22 of the 24 HS-eligible cards
 # (everything except COSMOS and OPTIMUS) are discovered via this
 # listing.
+#
+# RE-VERIFIED 2026-09-01 (sprint 028 ticket 002, issue 36): sprint 027
+# ticket 006's live verification found 21 of these 22 cards yielded an
+# `Event`, with the 22nd (`www.rmtlacademy.org`, 612KB) logged and
+# skipped after `extract_program()` raised `anthropic.BadRequestError:
+# prompt is too long: 259984 tokens > 200000 maximum`. With sprint 028
+# ticket 001's `extract.reduce_html_to_text()` now wired into
+# `adapters/program_page.py`, a full live
+# `discover()`->`fetch()`->`extract()` re-run of all 22 cards (a real
+# `AnthropicProgramLLMClient`, no network mocking) yields 22 `Event`s --
+# `www.rmtlacademy.org` (still 612547 bytes raw) now extracts cleanly:
+# title "Research Methodology Training Laboratory Academy", eligibility
+# "Students from economically disadvantaged backgrounds; Title I school
+# partnerships". No card in this listing is still failing.
 
 org_name = "UC San Diego Summer Session -- Summer Program Finder"
 adapter_type = "program_listing"

@@ -566,16 +566,25 @@ class TestProgramPageSourceConfig:
         # handling, generically fixture-tested by ticket 003's
         # test_program_kind_program_with_opportunity_type_override).
         #
-        # Live verification (this ticket's own dry-run) found every page
+        # Sprint 027 ticket 007's live verification found every page
         # probed on sdfoundation.org -- including this registered URL --
-        # measures 840KB-965KB of raw HTML, which alone exceeds the LLM's
-        # 200K-token context window (600K+ tokens measured), so
-        # extract_program() always raises BadRequestError and the source
-        # always yields zero events. Registered enabled=false with a
+        # measures 840KB-965KB of raw HTML, which alone exceeded the
+        # LLM's 200K-token context window (600K+ tokens measured), so
+        # extract_program() always raised BadRequestError and the source
+        # always yielded zero events. Registered enabled=false with a
         # reason comment (this registry's disabled-with-reason
         # convention) rather than left disabled with no explanation, so
-        # the config (program_kind/opportunity_type) is preserved for a
+        # the config (program_kind/opportunity_type) was preserved for a
         # future HTML-reduction capability to pick back up.
+        #
+        # Sprint 028 ticket 002 (issue 36, SUC-037) is that pickup: with
+        # `extract.reduce_html_to_text()` (ticket 001) now wired into
+        # `adapters/program_page.py`, a live
+        # `discover()->fetch()->extract()` re-run against the real page
+        # (a real `AnthropicProgramLLMClient`) succeeded -- one `Event`
+        # with a non-empty title, eligibility, cost, and
+        # `opportunity_type = "Funding Opportunities"`, no exception.
+        # `enabled` flipped back to `true`.
         sources = {s.source_id: s for s in load_sources()}
 
         assert "sd-foundation-community-scholarship" in sources
@@ -583,10 +592,10 @@ class TestProgramPageSourceConfig:
         assert source.adapter_type == "program_page"
         assert source.config["program_kind"] == "program"
         assert source.config["opportunity_type"] == "Funding Opportunities"
-        assert source.enabled is False
+        assert source.enabled is True
 
         path = DEFAULT_SOURCES_DIR / "sd-foundation-community-scholarship.toml"
-        assert "disabled:" in path.read_text()
+        assert "RE-ENABLED" in path.read_text()
 
 
 class TestProgramListingAndMultiSourceConfig:
