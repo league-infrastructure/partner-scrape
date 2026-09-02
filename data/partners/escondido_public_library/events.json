@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-09-01T08:27:52Z",
+ "generated_at": "2026-09-02T22:54:58Z",
  "partner_slug": "escondido_public_library",
  "kind": "current",
- "event_count": 9,
+ "event_count": 10,
  "events": [
   {
    "slug": "little_explorers_20260831",
@@ -188,6 +188,41 @@
    "availability": "Repeats 16 times through 2026-12-14",
    "date_start": "2026-09-14T17:30:00-07:00",
    "date_end": "2026-12-14T19:30:00-08:00",
+   "age_grade_level": [
+    "Pre-K",
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Turrentine Room, Downtown Library Campus",
+   "latitude": "33.1226",
+   "longitude": "-117.0839",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "toddler_tales_20260915",
+   "title": "Toddler Tales",
+   "partner_name": "Escondido Public Library",
+   "partner_id": 760,
+   "description": "Welcome to Toddler Storytime, a special program designed for our walkers to age 3 years old! This weekly series focuses on nurturing your toddler's development and social skills through a mix of books, songs, crafts, and guided play.\n\nEach session includes:\n\n♦Story Adventures: Simple, engaging books that capture young imaginations and foster early literacy.\n\n♦Musical Fun: Interactive songs and rhymes that develop language skills and a sense of rhythm.\n\n♦Creative Crafts: Hands-on crafts that encourage creativity and fine motor development.\n\n♦Playtime Activities: Guided play sessions that promote exploration, problem solving, and social interactions.\n\nJoin us for Toddler Storytime, where your child can grow, learn, and make new friends in a fun and supportive environment!",
+   "link": "",
+   "availability": "Repeats 12 times through 2026-12-15",
+   "date_start": "2026-09-15T17:30:00-07:00",
+   "date_end": "2026-12-15T19:30:00-08:00",
    "age_grade_level": [
     "Pre-K",
     "Family"

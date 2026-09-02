@@ -1,7 +1,40 @@
 {
- "generated_at": "2026-09-01T08:27:52Z",
+ "generated_at": "2026-09-02T22:54:58Z",
  "partner_slug": "classroom_of_the_future_foundation",
  "kind": "current",
- "event_count": 0,
- "events": []
+ "event_count": 1,
+ "events": [
+  {
+   "slug": "https_classroomofthefuture_org_seaperch_san_diego_regional_competition",
+   "title": "SeaPerch San Diego Regional Competition 2026",
+   "partner_name": "Classroom of the Future Foundation",
+   "partner_id": 774,
+   "description": "Registration deadline: 2026-03-27",
+   "link": "https://classroomofthefuture.org/seaperch-san-diego-regional-competition/",
+   "availability": "Rolling — apply anytime",
+   "date_start": "2026-04-04T00:00:00-07:00",
+   "date_end": "",
+   "age_grade_level": [],
+   "cost_range": "",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Competitions",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "6401 Linda Vista Road, San Diego, California, 92111",
+   "latitude": "32.813",
+   "longitude": "-117.1751",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "classroom_of_the_future.png",
+   "eligibility": "",
+   "image_src": ""
+  }
+ ]
 }

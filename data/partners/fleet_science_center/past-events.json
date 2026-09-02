@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-09-01T08:27:52Z",
+ "generated_at": "2026-09-02T22:54:58Z",
  "partner_slug": "fleet_science_center",
  "kind": "past",
- "event_count": 1,
+ "event_count": 2,
  "events": [
   {
    "slug": "https_www_fleetscience_org_events_suds_science",
@@ -11,6 +11,38 @@
    "partner_id": 121,
    "description": "Scientific minds meet in a local bar",
    "link": "https://www.fleetscience.org/events/suds-science",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "1875 El Prado, San Diego, CA 92101",
+   "latitude": "32.7308603",
+   "longitude": "-117.1469718",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "fleet_science_center.jpg",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_www_fleetscience_org_events_two_scientists_walk_bar",
+   "title": "Two Scientists Walk Into a Bar®",
+   "partner_name": "Fleet Science Center",
+   "partner_id": 121,
+   "description": "Join local scientists for a good conversation at a local bar",
+   "link": "https://www.fleetscience.org/events/two-scientists-walk-bar",
    "availability": "",
    "date_start": "",
    "date_end": "",

@@ -1,7 +1,42 @@
 {
- "generated_at": "2026-09-01T08:27:52Z",
+ "generated_at": "2026-09-02T22:54:58Z",
  "partner_slug": "san_diego_supercomputer_center",
  "kind": "past",
- "event_count": 0,
- "events": []
+ "event_count": 1,
+ "events": [
+  {
+   "slug": "https_education_sdsc_edu_studenttech_rehs",
+   "title": "Research Experience for High School Students (REHS)",
+   "partner_name": "San Diego Supercomputer Center",
+   "partner_id": 782,
+   "description": "",
+   "link": "https://education.sdsc.edu/studenttech/rehs/",
+   "availability": "Apply by 2026-03-15",
+   "date_start": "2026-02-15T00:00:00-08:00",
+   "date_end": "2026-03-15T00:00:00-07:00",
+   "age_grade_level": [
+    "Grades 9-12"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Work-based Learning",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "9500 Gilman Drive, La Jolla, California, 92093",
+   "latitude": "32.8801",
+   "longitude": "-117.234",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_diego_supercomputer_center.png",
+   "eligibility": "Southern California residents; completed most recent semester of high school; in grade 10, 11 or 12 at public or private high school or homeschool; at least 16 years old on or before June 15; minimum 3.0 cumulative GPA; college bound; one year high school chemistry or biology recommended; specific project prerequisites vary; mandatory attendance at Poster Session on July 31, 2026",
+   "image_src": ""
+  }
+ ]
 }

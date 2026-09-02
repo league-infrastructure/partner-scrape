@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-09-01T08:27:52Z",
+ "generated_at": "2026-09-02T22:54:58Z",
  "partner_slug": "nature_collective",
  "kind": "current",
- "event_count": 7,
+ "event_count": 10,
  "events": [
   {
    "slug": "https_naturecollective_org_event_discovery_tour_september_5_2026",
@@ -28,6 +28,41 @@
    "financial_support": "No",
    "ngss_aligned": "No",
    "location": "San Elijo Lagoon",
+   "latitude": "32.9817462",
+   "longitude": "-117.2700457",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "nature_collective.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_naturecollective_org_event_discovery_tour_november_7_2026",
+   "title": "San Elijo Lagoon | Discovery Tour | Nature Collective",
+   "partner_name": "Nature Collective",
+   "partner_id": 375,
+   "description": "Learn about your San Elijo Lagoon – where migratory and resident birds share a sanctuary, and where many animals find a home.",
+   "link": "https://naturecollective.org/event/discovery-tour-november-7-2026/",
+   "availability": "Repeats 4 times through 2026-12-05",
+   "date_start": "2026-09-05T00:00:00-07:00",
+   "date_end": "2026-12-05T00:00:00-08:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Elijo Lagoon, Cardiff-by-the-Sea, CA",
    "latitude": "32.9817462",
    "longitude": "-117.2700457",
    "contact_name": "",
@@ -76,9 +111,9 @@
    "partner_id": 375,
    "description": "Join Nature Collective for hands-on fun to help improve coastal sage scrub habitats for plants + animals indigenous to the area.",
    "link": "https://naturecollective.org/event/volunteer-restoration-event-2026-08-05/",
-   "availability": "Repeats 4 times through 2026-09-19",
+   "availability": "Repeats 9 times through 2026-12-19",
    "date_start": "2026-09-09T00:00:00-07:00",
-   "date_end": "2026-09-19T00:00:00-07:00",
+   "date_end": "2026-12-19T00:00:00-08:00",
    "age_grade_level": [
     "Family"
    ],
@@ -173,6 +208,41 @@
    "image_src": ""
   },
   {
+   "slug": "https_naturecollective_org_event_wildlife_tour_november_14_2026",
+   "title": "San Elijo Lagoon | Wildlife Tour | Nature Collective",
+   "partner_name": "Nature Collective",
+   "partner_id": 375,
+   "description": "Learn about your San Elijo Lagoon – where migratory and resident birds share a sanctuary, and where many animals find a home.",
+   "link": "https://naturecollective.org/event/wildlife-tour-november-14-2026/",
+   "availability": "Repeats 11 times through 2026-12-12",
+   "date_start": "2026-09-12T00:00:00-07:00",
+   "date_end": "2026-12-12T00:00:00-08:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "San Elijo Lagoon, San Diego, CA",
+   "latitude": "32.9817462",
+   "longitude": "-117.2700457",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "nature_collective.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
    "slug": "https_naturecollective_org_event_coffee_connections_open_house_2026_10_09",
    "title": "San Elijo Lagoon | Coffee and Connections | | Nature Collective",
    "partner_name": "Nature Collective",
@@ -228,6 +298,40 @@
    "financial_support": "No",
    "ngss_aligned": "No",
    "location": "San Elijo Lagoon",
+   "latitude": "32.9817462",
+   "longitude": "-117.2700457",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "nature_collective.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_naturecollective_org_event_spring_nature_festival_april_19_2026",
+   "title": "San Diego Activities | Family Fun Day | Nature Collective",
+   "partner_name": "Nature Collective",
+   "partner_id": 375,
+   "description": "",
+   "link": "https://naturecollective.org/event/spring-nature-festival-april-19-2026/",
+   "availability": "Repeats 6 times through 2026-12-06",
+   "date_start": "2026-12-06T00:00:00-08:00",
+   "date_end": "",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "All Day"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "777 So. Hwy 101, Suite 112, Solana Beach, California, 92075",
    "latitude": "32.9817462",
    "longitude": "-117.2700457",
    "contact_name": "",

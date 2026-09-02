@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-09-01T08:27:52Z",
+ "generated_at": "2026-09-02T22:54:58Z",
  "partner_slug": "aquillius_corporation",
  "kind": "current",
- "event_count": 30,
+ "event_count": 31,
  "events": [
   {
    "slug": "https_www_aquillius_com_event_125k_international_pitch_competition",
@@ -1003,6 +1003,41 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_www_aquillius_com_event_simbiosyx_matching_startups_with_verified_experts_to_fuel_innovation_31",
+   "title": "SIMBIOSYX: Matching Startups with Verified Experts to Fuel Innovation",
+   "partner_name": "Aquillius Corporation",
+   "partner_id": 631,
+   "description": "Details on Aquillius's upcoming workshops, symposiums, and networking events for San Diego's biotech and startup community.",
+   "link": "https://www.aquillius.com/event/simbiosyx-matching-startups-with-verified-experts-to-fuel-innovation-31",
+   "availability": "Repeats 4 times through 2026-09-02",
+   "date_start": "2026-09-02T00:00:00-07:00",
+   "date_end": "",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "All Day"
+   ],
+   "opportunity_type": "Professional Development / Conferences",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "10918 Technology Place, San Diego, California, 92127",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "aquillius_corporation.svg",
    "eligibility": "",
    "image_src": ""
   }

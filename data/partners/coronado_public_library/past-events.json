@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-09-01T08:27:52Z",
+ "generated_at": "2026-09-02T22:54:58Z",
  "partner_slug": "coronado_public_library",
  "kind": "past",
- "event_count": 1,
+ "event_count": 2,
  "events": [
   {
    "slug": "makers_monday_sculpt_a_giraffe_20260831",
@@ -24,6 +24,42 @@
    ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "",
+   "longitude": "",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "tinker_tuesday_pizza_math_20260901",
+   "title": "Tinker Tuesday: Pizza Math",
+   "partner_name": "Coronado Public Library",
+   "partner_id": null,
+   "description": "September 5th is National Cheese Pizza Day! Use paper shapes to build a tasty pizza with all your favorite toppings while practicing math at the same time.\n\nTinker Tuesday is a hands-on educational program that allows children to explore, create, design, and problem solve focusing on STEAM (Science, Technology, Engineering, Art and Math) concepts.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-09-01T22:30:00-07:00",
+   "date_end": "2026-09-01T23:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Mathematics",
     "General Science"
    ],
    "specific_attention": [],

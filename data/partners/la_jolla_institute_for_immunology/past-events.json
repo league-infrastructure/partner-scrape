@@ -1,7 +1,38 @@
 {
- "generated_at": "2026-09-01T08:27:52Z",
+ "generated_at": "2026-09-02T22:54:58Z",
  "partner_slug": "la_jolla_institute_for_immunology",
  "kind": "past",
- "event_count": 0,
- "events": []
+ "event_count": 1,
+ "events": [
+  {
+   "slug": "https_www_lji_org_careers_internships",
+   "title": "LJI Internships",
+   "partner_name": "La Jolla Institute for Immunology",
+   "partner_id": 785,
+   "description": "",
+   "link": "https://www.lji.org/careers/internships/",
+   "availability": "Rolling — apply anytime",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [],
+   "cost_range": "Paid stipend",
+   "time_of_day": [],
+   "opportunity_type": "Work-based Learning",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "9420 Athena Circle, La Jolla, California, 92037",
+   "latitude": "32.8935",
+   "longitude": "-117.2372",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "la_jolla_institute_for.webp",
+   "eligibility": "Currently enrolled in high school or undergraduate programs; LJIdea program prioritizes students who are first-generation college-bound or attend Title I schools",
+   "image_src": ""
+  }
+ ]
 }

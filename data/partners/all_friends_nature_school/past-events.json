@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-09-01T08:27:52Z",
+ "generated_at": "2026-09-02T22:54:58Z",
  "partner_slug": "all_friends_nature_school",
  "kind": "past",
  "event_count": 1,
@@ -16,7 +16,6 @@
    "date_end": "2024-08-02T00:00:00-07:00",
    "age_grade_level": [
     "Family",
-    "Pre-K",
     "Grades 6-8"
    ],
    "cost_range": "",
@@ -38,7 +37,7 @@
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
-   "logo_src": "",
+   "logo_src": "all_friends_nature_school.png",
    "eligibility": "",
    "image_src": "f99ba3ded6b52468.png"
   }

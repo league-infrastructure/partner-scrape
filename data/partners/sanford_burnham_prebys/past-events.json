@@ -1,7 +1,38 @@
 {
- "generated_at": "2026-09-01T08:27:52Z",
+ "generated_at": "2026-09-02T22:54:58Z",
  "partner_slug": "sanford_burnham_prebys",
  "kind": "past",
- "event_count": 0,
- "events": []
+ "event_count": 1,
+ "events": [
+  {
+   "slug": "https_sbpdiscovery_org_education_internships",
+   "title": "SPARK (Summer Program to Accelerate Regenerative medicine Knowledge)",
+   "partner_name": "Sanford Burnham Prebys",
+   "partner_id": 784,
+   "description": "",
+   "link": "https://sbpdiscovery.org/education/internships/",
+   "availability": "Rolling — apply anytime",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [],
+   "cost_range": "fully paid internship",
+   "time_of_day": [],
+   "opportunity_type": "Work-based Learning",
+   "areas_of_interest": [
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "10901 North Torrey Pines Road, La Jolla, California, 92037",
+   "latitude": "32.8873",
+   "longitude": "-117.24",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "sanford_burnham_prebys.png",
+   "eligibility": "California high school students, must be 16 years or older at start of internship (mid-June), preference to those residing in San Diego or Imperial County, select spots reserved for San Diego MESA Alliance affiliates",
+   "image_src": ""
+  }
+ ]
 }

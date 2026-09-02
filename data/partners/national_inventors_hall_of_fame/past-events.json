@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-09-01T08:27:52Z",
+ "generated_at": "2026-09-02T22:54:58Z",
  "partner_slug": "national_inventors_hall_of_fame",
  "kind": "past",
- "event_count": 11,
+ "event_count": 12,
  "events": [
   {
    "slug": "https_www_invent_org_programs_camp_invention_elevate",
@@ -15,28 +15,27 @@
    "date_start": "",
    "date_end": "",
    "age_grade_level": [
-    "Grades 6-8",
-    "Grades 9-12"
+    "Family"
    ],
    "cost_range": "",
-   "time_of_day": [
-    "Morning",
-    "Afternoon"
-   ],
+   "time_of_day": [],
    "opportunity_type": "Camps",
    "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology",
+    "Coding/Computer Science/Cyber Security",
     "Engineering",
     "Physical Science",
     "Chemistry",
-    "Biology / LifeSciences",
-    "Mathematics"
+    "Physics",
+    "General Science"
    ],
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
    "location": "3701 Highland Park, Ohio, 44720",
-   "latitude": "40.9178286",
-   "longitude": "-81.4136466",
+   "latitude": "None",
+   "longitude": "None",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
@@ -191,7 +190,7 @@
   },
   {
    "slug": "https_www_invent_org_programs_camp_invention",
-   "title": "Camp Invention® 2026",
+   "title": "Camp Invention® 2027",
    "partner_name": "National Inventors Hall of Fame",
    "partner_id": 564,
    "description": "Bringing hands-on, educational fun to children throughout the summer, Camp Invention® is the perfect STEM summer camp for your young innovator.",
@@ -200,34 +199,29 @@
    "date_start": "",
    "date_end": "",
    "age_grade_level": [
-    "Family",
-    "Grades 6-8",
-    "Grades 9-12",
-    "Pre-K"
+    "Family"
    ],
    "cost_range": "",
    "time_of_day": [
-    "Morning",
-    "Afternoon"
+    "All Day"
    ],
    "opportunity_type": "Camps",
    "areas_of_interest": [
     "Engineering",
-    "Coding/Computer Science/Cyber Security",
-    "Physical Science"
+    "General Science"
    ],
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
    "location": "3701 Highland Park, Ohio, 44720",
-   "latitude": "40.9178286",
-   "longitude": "-81.4136466",
+   "latitude": "None",
+   "longitude": "None",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "national_inventors_hall_of.jpg",
    "eligibility": "",
-   "image_src": "ea50155d82727a06.jpg"
+   "image_src": "a3d5f3e7771ddbba.jpg"
   },
   {
    "slug": "https_www_invent_org_nihf_resource_center_camp_wonder",
@@ -296,6 +290,46 @@
    "logo_src": "national_inventors_hall_of.jpg",
    "eligibility": "",
    "image_src": "142c653f83ad0a50.jpg"
+  },
+  {
+   "slug": "https_www_invent_org_camp_social_sharing",
+   "title": "Camp Invention® 2026",
+   "partner_name": "National Inventors Hall of Fame",
+   "partner_id": 564,
+   "description": "Bringing hands-on, educational fun to children throughout the summer, Camp Invention® is the perfect STEM summer camp for your young innovator.",
+   "link": "https://www.invent.org/camp/social-sharing",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8",
+    "Grades 9-12",
+    "Pre-K"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Morning",
+    "Afternoon"
+   ],
+   "opportunity_type": "Camps",
+   "areas_of_interest": [
+    "Engineering",
+    "Coding/Computer Science/Cyber Security",
+    "Physical Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "3701 Highland Park, Ohio, 44720",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "national_inventors_hall_of.jpg",
+   "eligibility": "",
+   "image_src": "ea50155d82727a06.jpg"
   },
   {
    "slug": "https_www_invent_org_camp_press_2022",

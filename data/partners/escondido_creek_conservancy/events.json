@@ -1,7 +1,44 @@
 {
- "generated_at": "2026-09-01T08:27:52Z",
+ "generated_at": "2026-09-02T22:54:58Z",
  "partner_slug": "escondido_creek_conservancy",
  "kind": "current",
- "event_count": 0,
- "events": []
+ "event_count": 1,
+ "events": [
+  {
+   "slug": "https_www_escondidocreek_org_event_details_bill_the_bug_guy_2026_01_24_10_00",
+   "title": "Bill the Bug Guy",
+   "partner_name": "Escondido Creek Conservancy",
+   "partner_id": 171,
+   "description": "",
+   "link": "https://www.escondidocreek.org/event-details/bill-the-bug-guy-2026-01-24-10-00",
+   "availability": "Repeats 4 times through 2026-10-24",
+   "date_start": "2026-10-24T10:00:00-07:00",
+   "date_end": "2026-10-24T11:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Morning",
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "EFRR Interpretive Center, 8833 Harmony Grove Rd, Escondido, CA 92029, USA",
+   "latitude": "33.1216365",
+   "longitude": "-117.0821204",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "escondido_creek_conservancy.jpg",
+   "eligibility": "",
+   "image_src": "07c3c3e1f37e2087.jpg"
+  }
+ ]
 }

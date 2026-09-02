@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-09-01T08:27:52Z",
+ "generated_at": "2026-09-02T22:54:58Z",
  "partner_slug": "balboa_park",
  "kind": "current",
- "event_count": 27,
+ "event_count": 28,
  "events": [
   {
    "slug": "https_balboapark_org_event_a_space_for_all_of_us_2_2026_08_30",
@@ -113,6 +113,43 @@
    "logo_src": "",
    "eligibility": "",
    "image_src": "74927ecc5000a4e0.png"
+  },
+  {
+   "slug": "https_balboapark_org_event_the_traveling_tables_of_amistad_workshops_2026_09_06",
+   "title": "The Traveling Tables of Amistad Workshops",
+   "partner_name": "Balboa Park",
+   "partner_id": 764,
+   "description": "Presented by the Friends of International Friendship Park, 𝘛𝘩𝘦 𝘛𝘳𝘢𝘷𝘦𝘭𝘪𝘯𝘨 𝘛𝘢𝘣𝘭𝘦𝘴 𝘰𝘧 𝘈𝘮𝘪𝘴𝘵𝘢𝘥 will be on view in a two-week pop-up exhibit at the Museum of Us from September 6–19, 2026. Interactive, 90-minute workshops with Friends of International Friendship Park Program Director, Dan Watman, will be offered on select dates to learn more about International Friendship Park. In this workshop, participants will address symbolic or literal walls causing division in their own communities, cities, and countries. They will learn about the divisions at the border in the San Diego/Tijuana region, and then come together around the first converted table to share common themes and explore solutions. Workshops are included with Museum admission. No registration is required. Workshop dates: September 6 at 2 p.m. September 11 at 2 p.m. September 12 at 2 p.m. September 13 at 2 p.m. September 19 at 2 p.m.",
+   "link": "https://balboapark.org/event/the-traveling-tables-of-amistad-workshops/2026-09-06/",
+   "availability": "Repeats 2 times through 2026-09-12",
+   "date_start": "2026-09-06T14:00:00-07:00",
+   "date_end": "2026-09-12T15:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8",
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Museum of Us, 1350 El Prado, Balboa Park, San Diego, CA",
+   "latitude": "32.7314",
+   "longitude": "-117.15",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "balboa_park.svg",
+   "eligibility": "",
+   "image_src": "0e92a84c2a35b711.webp"
   },
   {
    "slug": "https_balboapark_org_event_senior_monday_2_2026_09_07",

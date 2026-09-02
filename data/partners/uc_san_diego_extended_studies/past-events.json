@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-09-01T08:27:52Z",
+ "generated_at": "2026-09-02T22:54:58Z",
  "partner_slug": "uc_san_diego_extended_studies",
  "kind": "past",
- "event_count": 174,
+ "event_count": 175,
  "events": [
   {
    "slug": "https_extendedstudies_ucsd_edu_courses_pe_electrical_review_ames_800_04",
@@ -5608,6 +5608,36 @@
    "logo_src": "uc_san_diego_extended.jpg",
    "eligibility": "",
    "image_src": "76b2ff2b550491a7.jpg"
+  },
+  {
+   "slug": "https_extendedstudies_ucsd_edu_courses_futures_micro_internship_for_high_schoolers_aip_900_02",
+   "title": "Futures: Micro-Internship for High Schoolers",
+   "partner_name": "UC San Diego Extended Studies",
+   "partner_id": 285,
+   "description": "UC San Diego Division of Extended Studies is open to the public and harnesses the power of education to transform lives. Our unique educational formats support lifelong learning and meet the evolving needs of our students, businesses and the larger community.",
+   "link": "https://extendedstudies.ucsd.edu/courses/futures-micro-internship-for-high-schoolers-aip-900-02",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Grades 9-12"
+   ],
+   "cost_range": "",
+   "time_of_day": [],
+   "opportunity_type": "Career Connections",
+   "areas_of_interest": [],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "UC San Diego",
+   "latitude": "32.715738",
+   "longitude": "-117.1610838",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "uc_san_diego_extended.jpg",
+   "eligibility": "",
+   "image_src": "52d7ead0afd97ee1.jpg"
   },
   {
    "slug": "https_extendedstudies_ucsd_edu_courses_human_anatomy_bild_x013",

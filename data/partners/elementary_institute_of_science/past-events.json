@@ -1,7 +1,40 @@
 {
- "generated_at": "2026-09-01T08:27:52Z",
+ "generated_at": "2026-09-02T22:54:58Z",
  "partner_slug": "elementary_institute_of_science",
  "kind": "past",
- "event_count": 0,
- "events": []
+ "event_count": 1,
+ "events": [
+  {
+   "slug": "https_eisca_org_camps",
+   "title": "Spring Nature Explorers Camp",
+   "partner_name": "Elementary Institute of Science",
+   "partner_id": 165,
+   "description": "Sold out",
+   "link": "https://eisca.org/camps",
+   "availability": "Apply by 2026-04-03",
+   "date_start": "2026-03-30T00:00:00-07:00",
+   "date_end": "2026-04-03T00:00:00-07:00",
+   "age_grade_level": [],
+   "cost_range": "Greater than $200",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Camps",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Elementary Institute of Science, 608 51st Street, San Diego, California, 92114",
+   "latitude": "32.7108201",
+   "longitude": "-117.0848245",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "elementary_institute_of_science.png",
+   "eligibility": "Youth in grades 2-6; sibling and military discounts available",
+   "image_src": ""
+  }
+ ]
 }

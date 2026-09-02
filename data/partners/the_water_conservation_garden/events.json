@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-09-01T08:27:52Z",
+ "generated_at": "2026-09-02T22:54:58Z",
  "partner_slug": "the_water_conservation_garden",
  "kind": "current",
- "event_count": 12,
+ "event_count": 13,
  "events": [
   {
    "slug": "https_thegarden_org_public_event_east_county_advanced_water_purification_2026_09_01",
@@ -181,6 +181,41 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_thegarden_org_public_event_east_county_advanced_water_purification_2026_10_22",
+   "title": "East County Advanced Water Purification",
+   "partner_name": "The Water Conservation Garden",
+   "partner_id": 233,
+   "description": "Join Helix Water District at The Water Conservation Garden for an informative presentation on East County Advanced Water Purification, a new drought-proof water supply for East County. Learn how the purification process works, what makes the water safe to drink, and hear directly from Helix Water District experts during a live Q&A. Event Schedule 6:00–6:30 PM: Overview presentation of the project and water quality 6:30–7:00 PM: Live Q&A with Helix Water District staff Limited availability, Register here: https://hwd.fyi/awp !",
+   "link": "https://thegarden.org/public-event/east-county-advanced-water-purification/2026-10-22/",
+   "availability": "",
+   "date_start": "2026-10-22T18:00:00-07:00",
+   "date_end": "2026-10-22T19:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "The Water Conservation Garden",
+   "latitude": "32.7427202",
+   "longitude": "-116.9395318",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "the_water_conservation_garden.svg",
    "eligibility": "",
    "image_src": ""
   },

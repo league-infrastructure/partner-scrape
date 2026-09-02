@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-09-01T08:27:52Z",
+ "generated_at": "2026-09-02T22:54:58Z",
  "partner_slug": "san_diego_astronomy_association",
  "kind": "current",
  "event_count": 1,
@@ -9,25 +9,24 @@
    "title": "TDS Public Night",
    "partner_name": "San Diego Astronomy Association",
    "partner_id": 748,
-   "description": "<span><span><span><span><span><span><span><span><span>Regular public observing sessions--\"star parties\"--are held at our ten-acre site in the east county, and the Club's 22-inch telescope, along with other club telescopes, are available for everyone to use. Members experienced in their use and in the night sky host the club telescopes, and the hosts are always willing to take on the throngs of curious public, school groups, and other civic organizations that visit our site.<br><br>**NOTE: All public viewing sessions are weather dependent and can be cancelled without notice.<br><br><span>**Note: Plan to find your way to our remote site before dark to minimize light intrusion.</span><br></span><br></span></span><span><span><span><span><span><span><span><span>Sunset - </span></span></span></span></span></span></span></span></span></span></span><span><span><span><font>            7:32 PM</font></span></span></span><span><br><span><span><span><span><span><span><span><span><span><span>Astro Twilight - </span></span></span></span></span></span></span></span></span></span></span><span><span><span><font> 9:05 PM</font></span></span></span><br><span><span><span><span><span><span><span><span><span><span><span>Moonrise - </span></span></span></span></span></span></span></span></span></span></span>        2:01<span><span><span><font> AM</font></span></span></span><span><span><span><span><br></span></span></span></span><span><span><span><span><span><span><span><span><span><span><span>Closing - </span></span></span></span></span></span></span></span></span></span></span>           <span><span><span><font>12:00 AM</font></span></span></span></span></span></span>",
+   "description": "<span><span><span><span><span><span><span><span><span>Regular public observing sessions--\"star parties\"--are held at our ten-acre site in the east county, and the Club's 22-inch telescope, along with other club telescopes, are available for everyone to use. Members experienced in their use and in the night sky host the club telescopes, and the hosts are always willing to take on the throngs of curious public, school groups, and other civic organizations that visit our site.<br><br>**NOTE: All public viewing sessions are weather dependent and can be cancelled without notice.<br><br><span>**Note: Plan to find your way to our remote site before dark to minimize light intrusion.</span><br></span><br></span></span><span><span><span><span><span><span><span><span>Sunset - </span></span></span></span></span></span></span></span></span></span></span><span><span><span><font>            7:12 PM</font></span></span></span><span><br><span><span><span><span><span><span><span><span><span><span>Astro Twilight - </span></span></span></span></span></span></span></span></span></span></span><span><span><span><font> 8:37 PM</font></span></span></span><br><span><span><span><span><span><span><span><span><span><span><span>Moonrise - </span></span></span></span></span></span></span></span></span></span></span>        <span><span><span><font>3:32 AM</font></span></span></span><span><span><span><span><br></span></span></span></span><span><span><span><span><span><span><span><span><span><span><span>Closing - </span></span></span></span></span></span></span></span></span></span></span>           <span><span><span><font>11:30 PM</font></span></span></span><span><span><span><span><span><span><span><span><span><span><span> </span></span></span></span></span></span></span></span></span></span></span><br></span></span></span>",
    "link": "",
    "availability": "Repeats 10 times through 2026-12-12",
    "date_start": "2026-09-05T19:04:00-07:00",
    "date_end": "2026-12-12T21:00:00-08:00",
    "age_grade_level": [
     "Family",
-    "Grades 6-8",
     "Grades 9-12",
+    "Grades 6-8",
     "Adult"
    ],
    "cost_range": "Free",
    "time_of_day": [
-    "Evening",
-    "All Day"
+    "Evening"
    ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
-    "Physics",
+    "Physical Science",
     "Earth Science/Ecology"
    ],
    "specific_attention": [],

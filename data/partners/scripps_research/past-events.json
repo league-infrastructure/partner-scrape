@@ -1,7 +1,40 @@
 {
- "generated_at": "2026-09-01T08:27:52Z",
+ "generated_at": "2026-09-02T22:54:58Z",
  "partner_slug": "scripps_research",
  "kind": "past",
- "event_count": 0,
- "events": []
+ "event_count": 1,
+ "events": [
+  {
+   "slug": "https_www_scripps_edu_science_translational_institute_education_training_student_research_internship_program",
+   "title": "Student Research Internship Program",
+   "partner_name": "Scripps Research",
+   "partner_id": 786,
+   "description": "",
+   "link": "https://www.scripps.edu/science/translational-institute/education-training/student-research-internship-program/",
+   "availability": "Apply by 2026-03-30",
+   "date_start": "2026-06-01T00:00:00-07:00",
+   "date_end": "2026-03-30T00:00:00-07:00",
+   "age_grade_level": [],
+   "cost_range": "",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Work-based Learning",
+   "areas_of_interest": [
+    "Coding/Computer Science/Cyber Security"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "10550 North Torrey Pines Road, La Jolla, California, 92037",
+   "latitude": "32.887",
+   "longitude": "-117.2427",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "scripps_research.jpg",
+   "eligibility": "High school students must be at least 16 years old; strong interest in genomics or mHealth translational research; international students must be non-immigrant F-1 or J-1 visa holders currently enrolled in U.S. institutions; interns 18+ matched with clinical mentors must pass background checks and drug screening",
+   "image_src": ""
+  }
+ ]
 }

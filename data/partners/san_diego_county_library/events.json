@@ -1,124 +1,9 @@
 {
- "generated_at": "2026-09-01T08:27:52Z",
+ "generated_at": "2026-09-02T22:54:58Z",
  "partner_slug": "san_diego_county_library",
  "kind": "current",
- "event_count": 139,
+ "event_count": 145,
  "events": [
-  {
-   "slug": "https_sdcl_bibliocommons_com_events_6a739da280e8ce26a954802e",
-   "title": "September Explore, Learn, and Play",
-   "partner_name": "San Diego County Library",
-   "partner_id": 251,
-   "description": "Bring your young children to explore, learn, and play at the Crest branch in the children's area free play space. We provide a variety of sensory and educational toys and activities.",
-   "link": "https://sdcl.bibliocommons.com/events/6a739da280e8ce26a954802e",
-   "availability": "",
-   "date_start": "2026-09-01T00:00:00-07:00",
-   "date_end": "2026-09-30T00:00:00-07:00",
-   "age_grade_level": [
-    "Family",
-    "Pre-K"
-   ],
-   "cost_range": "Free",
-   "time_of_day": [
-    "All Day"
-   ],
-   "opportunity_type": "Out-of-school Programs",
-   "areas_of_interest": [
-    "General Science"
-   ],
-   "specific_attention": [],
-   "financial_support": "No",
-   "ngss_aligned": "No",
-   "location": "Crest",
-   "latitude": "32.834727",
-   "longitude": "-117.1306115",
-   "contact_name": "",
-   "contact_email": "",
-   "contact_phone": "",
-   "logo_src": "",
-   "eligibility": "",
-   "image_src": ""
-  },
-  {
-   "slug": "https_sdcl_bibliocommons_com_events_6a55771df4e5db3d00c18ed1",
-   "title": "STEAM Explorers",
-   "partner_name": "San Diego County Library",
-   "partner_id": 251,
-   "description": "Each week, STEAM Explorers dive into a new and exciting challenge that blends science, technology, engineering, art, and math. These hands-on activities encourage kids to think critically and creatively as they design, build, and problem-solve.",
-   "link": "https://sdcl.bibliocommons.com/events/6a55771df4e5db3d00c18ed1",
-   "availability": "Repeats 15 times through 2026-12-15",
-   "date_start": "2026-09-01T14:30:00-07:00",
-   "date_end": "2026-12-15T15:30:00-08:00",
-   "age_grade_level": [
-    "Family",
-    "Grades 6-8",
-    "Grades 9-12",
-    "Pre-K"
-   ],
-   "cost_range": "",
-   "time_of_day": [
-    "Afternoon"
-   ],
-   "opportunity_type": "Out-of-school Programs",
-   "areas_of_interest": [
-    "Biology / LifeSciences",
-    "Earth Science/Ecology",
-    "Coding/Computer Science/Cyber Security",
-    "Engineering",
-    "Physical Science",
-    "Mathematics",
-    "Chemistry",
-    "Physics"
-   ],
-   "specific_attention": [],
-   "financial_support": "No",
-   "ngss_aligned": "No",
-   "location": "Rancho Santa Fe",
-   "latitude": "32.834727",
-   "longitude": "-117.1306115",
-   "contact_name": "",
-   "contact_email": "",
-   "contact_phone": "",
-   "logo_src": "",
-   "eligibility": "",
-   "image_src": "f7178df63f4b492f.png"
-  },
-  {
-   "slug": "https_sdcl_bibliocommons_com_events_6a57ea6ac7e02e3d00695d73",
-   "title": "Free Play Fun",
-   "partner_name": "San Diego County Library",
-   "partner_id": 251,
-   "description": "Drop In for LEGO & Board Game Fun!",
-   "link": "https://sdcl.bibliocommons.com/events/6a57ea6ac7e02e3d00695d73",
-   "availability": "Repeats 18 times through 2026-12-29",
-   "date_start": "2026-09-01T15:00:00-07:00",
-   "date_end": "2026-12-29T16:00:00-08:00",
-   "age_grade_level": [
-    "Family",
-    "Grades 6-8",
-    "Pre-K"
-   ],
-   "cost_range": "Free",
-   "time_of_day": [
-    "Afternoon"
-   ],
-   "opportunity_type": "Out-of-school Programs",
-   "areas_of_interest": [
-    "General Science"
-   ],
-   "specific_attention": [],
-   "financial_support": "No",
-   "ngss_aligned": "No",
-   "location": "Lemon Grove, Children's Area",
-   "latitude": "32.834727",
-   "longitude": "-117.1306115",
-   "contact_name": "",
-   "contact_email": "",
-   "contact_phone": "",
-   "logo_src": "",
-   "eligibility": "",
-   "image_src": ""
-  },
   {
    "slug": "https_sdcl_bibliocommons_com_events_6a6a72a07b79214226ac39e5",
    "title": "Kids' Crafternoon",
@@ -132,76 +17,6 @@
    "age_grade_level": [
     "Grades 6-8",
     "Family"
-   ],
-   "cost_range": "Free",
-   "time_of_day": [
-    "Afternoon"
-   ],
-   "opportunity_type": "Out-of-school Programs",
-   "areas_of_interest": [
-    "General Science"
-   ],
-   "specific_attention": [],
-   "financial_support": "No",
-   "ngss_aligned": "No",
-   "location": "Solana Beach",
-   "latitude": "32.834727",
-   "longitude": "-117.1306115",
-   "contact_name": "",
-   "contact_email": "",
-   "contact_phone": "",
-   "logo_src": "",
-   "eligibility": "",
-   "image_src": "5185a44578894b1d.jpg"
-  },
-  {
-   "slug": "https_sdcl_bibliocommons_com_events_6a8629dd29a7dd0d67452cf9",
-   "title": "Library Learners",
-   "partner_name": "San Diego County Library",
-   "partner_id": 251,
-   "description": "Children in grades K-5 are invited to join us at the library every Tuesday for a different activity! Supplies are guaranteed for the first 30 participants. 1st Tuesday: Lego challenge 2nd Tuesday: Art 3rd Tuesday: STEAM 4th Tuesday: Bookclub (geared towards grades 2-5) 5th Tuesday: Librarian's Choice",
-   "link": "https://sdcl.bibliocommons.com/events/6a8629dd29a7dd0d67452cf9",
-   "availability": "Repeats 15 times through 2026-12-15",
-   "date_start": "2026-09-01T15:00:00-07:00",
-   "date_end": "2026-12-15T16:00:00-08:00",
-   "age_grade_level": [
-    "Grades 6-8"
-   ],
-   "cost_range": "Free",
-   "time_of_day": [
-    "Afternoon"
-   ],
-   "opportunity_type": "Out-of-school Programs",
-   "areas_of_interest": [
-    "Engineering",
-    "General Science"
-   ],
-   "specific_attention": [],
-   "financial_support": "No",
-   "ngss_aligned": "No",
-   "location": "Santee",
-   "latitude": "32.834727",
-   "longitude": "-117.1306115",
-   "contact_name": "",
-   "contact_email": "",
-   "contact_phone": "",
-   "logo_src": "",
-   "eligibility": "",
-   "image_src": "11f1b15c3ee56d29.png"
-  },
-  {
-   "slug": "https_sdcl_bibliocommons_com_events_6a6a72a07b79214226ac39e9",
-   "title": "Kids' Crafternoon",
-   "partner_name": "San Diego County Library",
-   "partner_id": 251,
-   "description": "Have fun exploring different art processes from printing making to watercolor. Get creative and make an art piece to take home. For ages 5 and up. While supplies last.",
-   "link": "https://sdcl.bibliocommons.com/events/6a6a72a07b79214226ac39e9",
-   "availability": "Repeats 9 times through 2027-05-04",
-   "date_start": "2026-09-01T15:00:00-07:00",
-   "date_end": "2027-05-04T16:00:00-07:00",
-   "age_grade_level": [
-    "Family",
-    "Grades 6-8"
    ],
    "cost_range": "Free",
    "time_of_day": [
@@ -261,43 +76,6 @@
    "image_src": "11f1b15c3ee56d29.png"
   },
   {
-   "slug": "https_sdcl_bibliocommons_com_events_6a592791fa641fe01af3ac47",
-   "title": "Project NexTech: Maker Space Workshop",
-   "partner_name": "San Diego County Library",
-   "partner_id": 251,
-   "description": "On alternating Tuesdays, we'll have Project NexTech teaching basic engineering and natural science in a fun way!  This week, the maker space workshop will cover engineering concepts through fun and simple challenges like popsicle stick bridges, spaghetti and marshmallow towers, wooden cars, and more!  No sign-up required; for ages 6-13.  ",
-   "link": "https://sdcl.bibliocommons.com/events/6a592791fa641fe01af3ac47",
-   "availability": "Repeats 6 times through 2026-11-10",
-   "date_start": "2026-09-01T16:30:00-07:00",
-   "date_end": "2026-11-10T18:00:00-08:00",
-   "age_grade_level": [
-    "Grades 6-8",
-    "Family"
-   ],
-   "cost_range": "Free",
-   "time_of_day": [
-    "Afternoon",
-    "Evening"
-   ],
-   "opportunity_type": "Out-of-school Programs",
-   "areas_of_interest": [
-    "Engineering",
-    "Physical Science"
-   ],
-   "specific_attention": [],
-   "financial_support": "No",
-   "ngss_aligned": "No",
-   "location": "Cardiff-by-the-Sea",
-   "latitude": "32.834727",
-   "longitude": "-117.1306115",
-   "contact_name": "",
-   "contact_email": "",
-   "contact_phone": "",
-   "logo_src": "",
-   "eligibility": "",
-   "image_src": "73ab00cde0a2cbe5.png"
-  },
-  {
    "slug": "https_sdcl_bibliocommons_com_events_68fd4bf39b8793410092a054",
    "title": "Service Learning Orientation",
    "partner_name": "San Diego County Library",
@@ -330,34 +108,37 @@
    "image_src": ""
   },
   {
-   "slug": "https_sdcl_bibliocommons_com_events_68fd4bf39b8793410092a056",
-   "title": "Service Learning Orientation",
+   "slug": "https_sdcl_bibliocommons_com_events_6a739da280e8ce26a954802e",
+   "title": "September Explore, Learn, and Play",
    "partner_name": "San Diego County Library",
    "partner_id": 251,
-   "description": "Earn community service hours and get real work experience! Open to teens ages 13-17.",
-   "link": "https://sdcl.bibliocommons.com/events/68fd4bf39b8793410092a056",
-   "availability": "Repeats 3 times through 2026-12-01",
-   "date_start": "2026-09-01T17:00:00-07:00",
-   "date_end": "2026-12-01T18:00:00-08:00",
+   "description": "Bring your young children to explore, learn, and play at the Crest branch in the children's area free play space. We provide a variety of sensory and educational toys and activities.",
+   "link": "https://sdcl.bibliocommons.com/events/6a739da280e8ce26a954802e",
+   "availability": "",
+   "date_start": "2026-09-02T00:00:00-07:00",
+   "date_end": "2026-09-30T00:00:00-07:00",
    "age_grade_level": [
-    "Grades 9-12"
+    "Family",
+    "Pre-K"
    ],
    "cost_range": "Free",
    "time_of_day": [
-    "Evening"
+    "All Day"
    ],
-   "opportunity_type": "Volunteering",
-   "areas_of_interest": [],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "Spring Valley",
+   "location": "Crest",
    "latitude": "32.834727",
    "longitude": "-117.1306115",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
-   "logo_src": "",
+   "logo_src": "san_diego_county_library.png",
    "eligibility": "",
    "image_src": ""
   },
@@ -393,38 +174,6 @@
    "logo_src": "",
    "eligibility": "",
    "image_src": "3a3389cf3ac70b99.png"
-  },
-  {
-   "slug": "https_sdcl_bibliocommons_com_events_6a03bbdcc7d3cd580058d5b7",
-   "title": "Storytime",
-   "partner_name": "San Diego County Library",
-   "partner_id": 251,
-   "description": "Children actively participate in stories, music, and movement enhancing their social, emotional, and language development with time for socializing afterwards. ",
-   "link": "https://sdcl.bibliocommons.com/events/6a03bbdcc7d3cd580058d5b7",
-   "availability": "Repeats 8 times through 2026-11-18",
-   "date_start": "2026-09-02T10:30:00-07:00",
-   "date_end": "2026-11-18T11:30:00-08:00",
-   "age_grade_level": [
-    "Pre-K"
-   ],
-   "cost_range": "Free",
-   "time_of_day": [
-    "Morning"
-   ],
-   "opportunity_type": "Out-of-school Programs",
-   "areas_of_interest": [],
-   "specific_attention": [],
-   "financial_support": "No",
-   "ngss_aligned": "No",
-   "location": "Alpine",
-   "latitude": "32.834727",
-   "longitude": "-117.1306115",
-   "contact_name": "",
-   "contact_email": "",
-   "contact_phone": "",
-   "logo_src": "",
-   "eligibility": "",
-   "image_src": "d24ceb0367c32901.jpg"
   },
   {
    "slug": "https_sdcl_bibliocommons_com_events_6a6e37473f18b57d523288cb",
@@ -535,41 +284,6 @@
    "image_src": "398c3873e14e2d97.png"
   },
   {
-   "slug": "https_sdcl_bibliocommons_com_events_6a77a191c5fbcf8eb27c9d30",
-   "title": "K-12 Homework Help",
-   "partner_name": "San Diego County Library",
-   "partner_id": 251,
-   "description": "Local Professor here to help your student with all levels of math, and other subjects. Drop in between 1:30—3pm.",
-   "link": "https://sdcl.bibliocommons.com/events/6a77a191c5fbcf8eb27c9d30",
-   "availability": "Repeats 13 times through 2026-12-09",
-   "date_start": "2026-09-02T13:30:00-07:00",
-   "date_end": "2026-12-09T15:00:00-08:00",
-   "age_grade_level": [
-    "Grades 6-8",
-    "Grades 9-12"
-   ],
-   "cost_range": "Free",
-   "time_of_day": [
-    "Afternoon"
-   ],
-   "opportunity_type": "Out-of-school Programs",
-   "areas_of_interest": [
-    "Mathematics"
-   ],
-   "specific_attention": [],
-   "financial_support": "No",
-   "ngss_aligned": "No",
-   "location": "Lakeside, Homework Center",
-   "latitude": "32.834727",
-   "longitude": "-117.1306115",
-   "contact_name": "",
-   "contact_email": "",
-   "contact_phone": "",
-   "logo_src": "",
-   "eligibility": "",
-   "image_src": "398c3873e14e2d97.png"
-  },
-  {
    "slug": "https_sdcl_bibliocommons_com_events_68ddbc303f5e40c7bbc7e747",
    "title": "Summer STEAM Programs",
    "partner_name": "San Diego County Library",
@@ -647,9 +361,9 @@
    "partner_id": 251,
    "description": "Kids, make SLIME every Wednesday in September",
    "link": "https://sdcl.bibliocommons.com/events/6a8f3a4981e9d60947cc9823",
-   "availability": "Repeats 5 times through 2026-09-30",
+   "availability": "Repeats 6 times through 2026-10-21",
    "date_start": "2026-09-02T15:30:00-07:00",
-   "date_end": "2026-09-30T16:30:00-07:00",
+   "date_end": "2026-10-21T16:30:00-07:00",
    "age_grade_level": [
     "Family",
     "Grades 6-8"
@@ -672,7 +386,7 @@
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
-   "logo_src": "",
+   "logo_src": "san_diego_county_library.png",
    "eligibility": "",
    "image_src": "f7178df63f4b492f.png"
   },
@@ -813,6 +527,42 @@
    "logo_src": "",
    "eligibility": "",
    "image_src": "78bb0759e9126bb9.jpg"
+  },
+  {
+   "slug": "https_sdcl_bibliocommons_com_events_6a974666e1fb8f13578b8e32",
+   "title": "Cal Fire and San Diego County CERT Storytime and Station Tour",
+   "partner_name": "San Diego County Library",
+   "partner_id": 251,
+   "description": "Join us for a special Cal Fire and San Diego CERT Storytime at the Pine Valley Library followed by a tour of Pine Valley Fire Station. Families will enjoy an educational and fun experience learning about fire safety, meeting local firefighters, and exploring the local fire station. This is a great opportunity for children to discover how our emergency teams work to keep our community safe.",
+   "link": "https://sdcl.bibliocommons.com/events/6a974666e1fb8f13578b8e32",
+   "availability": "",
+   "date_start": "2026-09-03T10:30:00-07:00",
+   "date_end": "2026-09-03T11:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K",
+    "Grades 6-8"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Pine Valley Library / Pine Valley Fire Station, San Diego, CA",
+   "latitude": "32.834727",
+   "longitude": "-117.1306115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_diego_county_library.png",
+   "eligibility": "",
+   "image_src": "081dcdbe2de096b4.png"
   },
   {
    "slug": "https_sdcl_bibliocommons_com_events_6a91e9032dac6e0037227229",
@@ -1365,6 +1115,38 @@
    "image_src": "081dcdbe2de096b4.png"
   },
   {
+   "slug": "https_sdcl_bibliocommons_com_events_6a03bbdcc7d3cd580058d5b7",
+   "title": "Storytime",
+   "partner_name": "San Diego County Library",
+   "partner_id": 251,
+   "description": "Children actively participate in stories, music, and movement enhancing their social, emotional, and language development with time for socializing afterwards. ",
+   "link": "https://sdcl.bibliocommons.com/events/6a03bbdcc7d3cd580058d5b7",
+   "availability": "Repeats 7 times through 2026-11-18",
+   "date_start": "2026-09-04T10:30:00-07:00",
+   "date_end": "2026-11-18T11:30:00-08:00",
+   "age_grade_level": [
+    "Pre-K"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Alpine",
+   "latitude": "32.834727",
+   "longitude": "-117.1306115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_diego_county_library.png",
+   "eligibility": "",
+   "image_src": "d24ceb0367c32901.jpg"
+  },
+  {
    "slug": "https_sdcl_bibliocommons_com_events_691f703a0d45944c9e679e83",
    "title": "Family Play Time",
    "partner_name": "San Diego County Library",
@@ -1640,6 +1422,121 @@
    "logo_src": "",
    "eligibility": "",
    "image_src": ""
+  },
+  {
+   "slug": "https_sdcl_bibliocommons_com_events_6a55771df4e5db3d00c18ed1",
+   "title": "STEAM Explorers",
+   "partner_name": "San Diego County Library",
+   "partner_id": 251,
+   "description": "Each week, STEAM Explorers dive into a new and exciting challenge that blends science, technology, engineering, art, and math. These hands-on activities encourage kids to think critically and creatively as they design, build, and problem-solve.",
+   "link": "https://sdcl.bibliocommons.com/events/6a55771df4e5db3d00c18ed1",
+   "availability": "Repeats 14 times through 2026-12-15",
+   "date_start": "2026-09-08T14:30:00-07:00",
+   "date_end": "2026-12-15T15:30:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8",
+    "Grades 9-12",
+    "Pre-K"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology",
+    "Coding/Computer Science/Cyber Security",
+    "Engineering",
+    "Physical Science",
+    "Mathematics",
+    "Chemistry",
+    "Physics"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Rancho Santa Fe",
+   "latitude": "32.834727",
+   "longitude": "-117.1306115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_diego_county_library.png",
+   "eligibility": "",
+   "image_src": "f7178df63f4b492f.png"
+  },
+  {
+   "slug": "https_sdcl_bibliocommons_com_events_6a57ea6ac7e02e3d00695d73",
+   "title": "Free Play Fun",
+   "partner_name": "San Diego County Library",
+   "partner_id": 251,
+   "description": "Drop In for LEGO & Board Game Fun!",
+   "link": "https://sdcl.bibliocommons.com/events/6a57ea6ac7e02e3d00695d73",
+   "availability": "Repeats 17 times through 2026-12-29",
+   "date_start": "2026-09-08T15:00:00-07:00",
+   "date_end": "2026-12-29T16:00:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8",
+    "Pre-K"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Lemon Grove, Children's Area",
+   "latitude": "32.834727",
+   "longitude": "-117.1306115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_diego_county_library.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_sdcl_bibliocommons_com_events_6a8629dd29a7dd0d67452cf9",
+   "title": "Library Learners",
+   "partner_name": "San Diego County Library",
+   "partner_id": 251,
+   "description": "Children in grades K-5 are invited to join us at the library every Tuesday for a different activity! Supplies are guaranteed for the first 30 participants. 1st Tuesday: Lego challenge 2nd Tuesday: Art 3rd Tuesday: STEAM 4th Tuesday: Bookclub (geared towards grades 2-5) 5th Tuesday: Librarian's Choice",
+   "link": "https://sdcl.bibliocommons.com/events/6a8629dd29a7dd0d67452cf9",
+   "availability": "Repeats 14 times through 2026-12-15",
+   "date_start": "2026-09-08T15:00:00-07:00",
+   "date_end": "2026-12-15T16:00:00-08:00",
+   "age_grade_level": [
+    "Grades 6-8"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Santee",
+   "latitude": "32.834727",
+   "longitude": "-117.1306115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_diego_county_library.png",
+   "eligibility": "",
+   "image_src": "11f1b15c3ee56d29.png"
   },
   {
    "slug": "https_sdcl_bibliocommons_com_events_6a56b94eaa34e23600ef2b26",
@@ -1952,6 +1849,41 @@
    "logo_src": "",
    "eligibility": "",
    "image_src": "b00597870543a647.png"
+  },
+  {
+   "slug": "https_sdcl_bibliocommons_com_events_6a77a191c5fbcf8eb27c9d30",
+   "title": "K-12 Homework Help",
+   "partner_name": "San Diego County Library",
+   "partner_id": 251,
+   "description": "Local Professor here to help your student with all levels of math, and other subjects. Drop in between 1:30—3pm.",
+   "link": "https://sdcl.bibliocommons.com/events/6a77a191c5fbcf8eb27c9d30",
+   "availability": "Repeats 12 times through 2026-12-09",
+   "date_start": "2026-09-09T13:30:00-07:00",
+   "date_end": "2026-12-09T15:00:00-08:00",
+   "age_grade_level": [
+    "Grades 6-8",
+    "Grades 9-12"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Mathematics"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Lakeside, Homework Center",
+   "latitude": "32.834727",
+   "longitude": "-117.1306115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_diego_county_library.png",
+   "eligibility": "",
+   "image_src": "398c3873e14e2d97.png"
   },
   {
    "slug": "https_sdcl_bibliocommons_com_events_69fa9600f56bd86e00add5c5",
@@ -2687,6 +2619,43 @@
    "image_src": "8112ce01db4d9ba6.jpg"
   },
   {
+   "slug": "https_sdcl_bibliocommons_com_events_6a592791fa641fe01af3ac47",
+   "title": "Project NexTech: Maker Space Workshop",
+   "partner_name": "San Diego County Library",
+   "partner_id": 251,
+   "description": "On alternating Tuesdays, we'll have Project NexTech teaching basic engineering and natural science in a fun way!  This week, the maker space workshop will cover engineering concepts through fun and simple challenges like popsicle stick bridges, spaghetti and marshmallow towers, wooden cars, and more!  No sign-up required; for ages 6-13.  ",
+   "link": "https://sdcl.bibliocommons.com/events/6a592791fa641fe01af3ac47",
+   "availability": "Repeats 5 times through 2026-11-10",
+   "date_start": "2026-09-15T16:30:00-07:00",
+   "date_end": "2026-11-10T18:00:00-08:00",
+   "age_grade_level": [
+    "Grades 6-8",
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon",
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering",
+    "Physical Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Cardiff-by-the-Sea",
+   "latitude": "32.834727",
+   "longitude": "-117.1306115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_diego_county_library.png",
+   "eligibility": "",
+   "image_src": "73ab00cde0a2cbe5.png"
+  },
+  {
    "slug": "https_sdcl_bibliocommons_com_events_6a5951b30d65ac3600403b86",
    "title": "Play to Learn",
    "partner_name": "San Diego County Library",
@@ -3242,6 +3211,41 @@
    "image_src": "11f1b15c3ee56d29.png"
   },
   {
+   "slug": "https_sdcl_bibliocommons_com_events_6a97626d341bb11431ee6e2e",
+   "title": "Raptor Program",
+   "partner_name": "San Diego County Library",
+   "partner_id": 251,
+   "description": "The Raptor program will feature a live bird up close and a fun, hands-on craft that brings the experience to life. ",
+   "link": "https://sdcl.bibliocommons.com/events/6a97626d341bb11431ee6e2e",
+   "availability": "",
+   "date_start": "2026-09-23T16:00:00-07:00",
+   "date_end": "2026-09-23T17:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Pine Valley",
+   "latitude": "32.834727",
+   "longitude": "-117.1306115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_diego_county_library.png",
+   "eligibility": "",
+   "image_src": "11f1b15c3ee56d29.png"
+  },
+  {
    "slug": "https_sdcl_bibliocommons_com_events_69fa9ac4703c33630025b9ae",
    "title": "Nature Tots",
    "partner_name": "San Diego County Library",
@@ -3277,6 +3281,43 @@
    "logo_src": "",
    "eligibility": "",
    "image_src": "7d6222ba6179364b.png"
+  },
+  {
+   "slug": "https_sdcl_bibliocommons_com_events_6a97526de1fb8f13578b9015",
+   "title": "Reading with a Ranger",
+   "partner_name": "San Diego County Library",
+   "partner_id": 251,
+   "description": "Get ready for an outdoor adventure, right inside the Pine Valley library! The Pine Valley Park Ranger will read exciting nature books and share his amazing Discovery Table filled with animal skins, bones, and other cool outdoor treasures. Little adventures can explore, touch, and learn all about the wonders of the natural world. ",
+   "link": "https://sdcl.bibliocommons.com/events/6a97526de1fb8f13578b9015",
+   "availability": "",
+   "date_start": "2026-09-24T10:30:00-07:00",
+   "date_end": "2026-09-24T11:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology",
+    "Biology / LifeSciences",
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Pine Valley Library",
+   "latitude": "32.834727",
+   "longitude": "-117.1306115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_diego_county_library.png",
+   "eligibility": "",
+   "image_src": "081dcdbe2de096b4.png"
   },
   {
    "slug": "https_sdcl_bibliocommons_com_events_69582b26e3e3999b5c0572ad",
@@ -3421,6 +3462,42 @@
    "image_src": "205a6c4b241b60ae.png"
   },
   {
+   "slug": "https_sdcl_bibliocommons_com_events_6a9767ef341bb11431ee6e80",
+   "title": "The Kumeyaay and Native Plants of San Diego County",
+   "partner_name": "San Diego County Library",
+   "partner_id": 251,
+   "description": "Learn about local native plants and how the Kumeyaay used them for medicinal and other purposes.",
+   "link": "https://sdcl.bibliocommons.com/events/6a9767ef341bb11431ee6e80",
+   "availability": "",
+   "date_start": "2026-09-27T14:00:00-07:00",
+   "date_end": "2026-09-27T15:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Poway",
+   "latitude": "32.834727",
+   "longitude": "-117.1306115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_diego_county_library.png",
+   "eligibility": "",
+   "image_src": "d4d16fa67245059d.jpg"
+  },
+  {
    "slug": "https_sdcl_bibliocommons_com_events_68bb57e6af27753600ef5fa3",
    "title": "Chess",
    "partner_name": "San Diego County Library",
@@ -3487,6 +3564,107 @@
    "logo_src": "",
    "eligibility": "",
    "image_src": "c9513d3d7e3b292b.jpg"
+  },
+  {
+   "slug": "https_sdcl_bibliocommons_com_events_6a973c6129a7dd0d674855d4",
+   "title": "Creekside Critters: TBD",
+   "partner_name": "San Diego County Library",
+   "partner_id": 251,
+   "description": "Join us for a series of animal programs presented by the San Dieguito River Valley Conservancy! For the month of November, get up close and personal with TBD! Sign up on: https://www.sdrvc.org/events",
+   "link": "https://sdcl.bibliocommons.com/events/6a973c6129a7dd0d674855d4",
+   "availability": "Repeats 3 times through 2026-12-05",
+   "date_start": "2026-10-03T11:00:00-07:00",
+   "date_end": "2026-12-05T12:00:00-08:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Del Mar",
+   "latitude": "32.834727",
+   "longitude": "-117.1306115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_diego_county_library.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_sdcl_bibliocommons_com_events_6a6a72a07b79214226ac39e9",
+   "title": "Kids' Crafternoon",
+   "partner_name": "San Diego County Library",
+   "partner_id": 251,
+   "description": "Have fun exploring different art processes from printing making to watercolor. Get creative and make an art piece to take home. For ages 5 and up. While supplies last.",
+   "link": "https://sdcl.bibliocommons.com/events/6a6a72a07b79214226ac39e9",
+   "availability": "Repeats 8 times through 2027-05-04",
+   "date_start": "2026-10-06T15:00:00-07:00",
+   "date_end": "2027-05-04T16:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Solana Beach",
+   "latitude": "32.834727",
+   "longitude": "-117.1306115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_diego_county_library.png",
+   "eligibility": "",
+   "image_src": "5185a44578894b1d.jpg"
+  },
+  {
+   "slug": "https_sdcl_bibliocommons_com_events_68fd4bf39b8793410092a056",
+   "title": "Service Learning Orientation",
+   "partner_name": "San Diego County Library",
+   "partner_id": 251,
+   "description": "Earn community service hours and get real work experience! Open to teens ages 13-17.",
+   "link": "https://sdcl.bibliocommons.com/events/68fd4bf39b8793410092a056",
+   "availability": "Repeats 2 times through 2026-12-01",
+   "date_start": "2026-10-06T17:00:00-07:00",
+   "date_end": "2026-12-01T18:00:00-08:00",
+   "age_grade_level": [
+    "Grades 9-12"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Volunteering",
+   "areas_of_interest": [],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Spring Valley",
+   "latitude": "32.834727",
+   "longitude": "-117.1306115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_diego_county_library.png",
+   "eligibility": "",
+   "image_src": ""
   },
   {
    "slug": "https_sdcl_bibliocommons_com_events_69dc11858ddc1caf5f1c79bb",
@@ -3909,42 +4087,6 @@
    "image_src": "70d0dd46d108ab8e.jpg"
   },
   {
-   "slug": "https_sdcl_bibliocommons_com_events_6a8f3a4981e9d60947cc982c",
-   "title": "STEAM Kids",
-   "partner_name": "San Diego County Library",
-   "partner_id": 251,
-   "description": "Kids, enjoy a fun STEAM themed activity every week",
-   "link": "https://sdcl.bibliocommons.com/events/6a8f3a4981e9d60947cc982c",
-   "availability": "Repeats 3 times through 2026-11-04",
-   "date_start": "2026-10-21T15:30:00-07:00",
-   "date_end": "2026-11-04T16:30:00-08:00",
-   "age_grade_level": [
-    "Family"
-   ],
-   "cost_range": "Free",
-   "time_of_day": [
-    "Afternoon"
-   ],
-   "opportunity_type": "Out-of-school Programs",
-   "areas_of_interest": [
-    "General Science",
-    "Engineering",
-    "Mathematics"
-   ],
-   "specific_attention": [],
-   "financial_support": "No",
-   "ngss_aligned": "No",
-   "location": "Poway",
-   "latitude": "32.834727",
-   "longitude": "-117.1306115",
-   "contact_name": "",
-   "contact_email": "",
-   "contact_phone": "",
-   "logo_src": "",
-   "eligibility": "",
-   "image_src": "f7178df63f4b492f.png"
-  },
-  {
    "slug": "https_sdcl_bibliocommons_com_events_6a0b635617731928001a98ef",
    "title": "Teen Craft",
    "partner_name": "San Diego County Library",
@@ -4048,6 +4190,77 @@
    "logo_src": "",
    "eligibility": "",
    "image_src": "11f1b15c3ee56d29.png"
+  },
+  {
+   "slug": "https_sdcl_bibliocommons_com_events_6a8f3a4981e9d60947cc982b",
+   "title": "STEAM Kids: Creepy Crawlies",
+   "partner_name": "San Diego County Library",
+   "partner_id": 251,
+   "description": "Kids, enjoy a fun STEAM themed activity every week",
+   "link": "https://sdcl.bibliocommons.com/events/6a8f3a4981e9d60947cc982b",
+   "availability": "",
+   "date_start": "2026-10-28T15:30:00-07:00",
+   "date_end": "2026-10-28T16:30:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences",
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Poway",
+   "latitude": "32.834727",
+   "longitude": "-117.1306115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_diego_county_library.png",
+   "eligibility": "",
+   "image_src": "f7178df63f4b492f.png"
+  },
+  {
+   "slug": "https_sdcl_bibliocommons_com_events_6a8f3a4981e9d60947cc982c",
+   "title": "STEAM Kids",
+   "partner_name": "San Diego County Library",
+   "partner_id": 251,
+   "description": "Kids, enjoy a fun STEAM themed activity every week",
+   "link": "https://sdcl.bibliocommons.com/events/6a8f3a4981e9d60947cc982c",
+   "availability": "",
+   "date_start": "2026-11-04T15:30:00-08:00",
+   "date_end": "2026-11-04T16:30:00-08:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science",
+    "Engineering",
+    "Mathematics"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Poway",
+   "latitude": "32.834727",
+   "longitude": "-117.1306115",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_diego_county_library.png",
+   "eligibility": "",
+   "image_src": "f7178df63f4b492f.png"
   },
   {
    "slug": "https_sdcl_bibliocommons_com_events_69fcf07cf6bd012f006668ed",

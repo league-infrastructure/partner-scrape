@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-09-01T08:27:52Z",
+ "generated_at": "2026-09-02T22:54:58Z",
  "partner_slug": "coronado_public_library",
  "kind": "current",
  "event_count": 41,
@@ -24,42 +24,6 @@
    ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
-    "General Science"
-   ],
-   "specific_attention": [],
-   "financial_support": "No",
-   "ngss_aligned": "No",
-   "location": "640 Orange Ave., Coronado, CA, 92118, US",
-   "latitude": "",
-   "longitude": "",
-   "contact_name": "",
-   "contact_email": "",
-   "contact_phone": "",
-   "logo_src": "",
-   "eligibility": "",
-   "image_src": ""
-  },
-  {
-   "slug": "tinker_tuesday_pizza_math_20260901",
-   "title": "Tinker Tuesday: Pizza Math",
-   "partner_name": "Coronado Public Library",
-   "partner_id": null,
-   "description": "September 5th is National Cheese Pizza Day! Use paper shapes to build a tasty pizza with all your favorite toppings while practicing math at the same time.\n\nTinker Tuesday is a hands-on educational program that allows children to explore, create, design, and problem solve focusing on STEAM (Science, Technology, Engineering, Art and Math) concepts.",
-   "link": "",
-   "availability": "",
-   "date_start": "2026-09-01T22:30:00-07:00",
-   "date_end": "2026-09-01T23:30:00-07:00",
-   "age_grade_level": [
-    "Family",
-    "Grades 6-8"
-   ],
-   "cost_range": "",
-   "time_of_day": [
-    "Evening"
-   ],
-   "opportunity_type": "Out-of-school Programs",
-   "areas_of_interest": [
-    "Mathematics",
     "General Science"
    ],
    "specific_attention": [],
@@ -565,6 +529,40 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "friends_and_flowers_floral_soap_tutorial_20260925",
+   "title": "Friends and Flowers: Floral Soap Tutorial",
+   "partner_name": "Coronado Public Library",
+   "partner_id": 761,
+   "description": "> Join the Coronado Floral Association for our Friends & Flowers Fall kickoff event with a fun floral craft: Learn to make your own botanical soap. All materials provided. Attendance limited. Must RSVP by September 18.\n>\n> Meet new friends and enjoy a shared appreciation for flowers! Free and open to the public.",
+   "link": "",
+   "availability": "",
+   "date_start": "2026-09-25T00:30:00-07:00",
+   "date_end": "2026-09-25T02:30:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Chemistry"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "640 Orange Ave., Coronado, CA, 92118, US",
+   "latitude": "32.6875",
+   "longitude": "-117.1756",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "coronado_public_library.png",
    "eligibility": "",
    "image_src": ""
   },

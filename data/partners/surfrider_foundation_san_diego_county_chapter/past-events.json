@@ -1,17 +1,17 @@
 {
- "generated_at": "2026-09-01T08:27:52Z",
+ "generated_at": "2026-09-02T22:54:58Z",
  "partner_slug": "surfrider_foundation_san_diego_county_chapter",
  "kind": "past",
- "event_count": 462,
+ "event_count": 472,
  "events": [
   {
    "slug": "beach_cleanup_20070310",
    "title": "Beach Cleanup",
    "partner_name": "Surfrider Foundation San Diego County Chapter",
    "partner_id": 739,
-   "description": "Meet on the sand north of Charlie's restaurant.",
+   "description": "Check back soon for updates!",
    "link": "",
-   "availability": "Repeats 232 times through 2018-05-12",
+   "availability": "Repeats 233 times through 2018-05-12",
    "date_start": "2007-03-10T17:00:00-08:00",
    "date_end": "2018-05-12T18:00:00-07:00",
    "age_grade_level": [
@@ -19,16 +19,16 @@
    ],
    "cost_range": "Free",
    "time_of_day": [
-    "Evening"
+    "Afternoon"
    ],
-   "opportunity_type": "Volunteering",
+   "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
     "Earth Science/Ecology"
    ],
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "Cardiff State Beach",
+   "location": "Ocean Beach Pier",
    "latitude": "None",
    "longitude": "None",
    "contact_name": "",
@@ -666,9 +666,9 @@
    "partner_id": 739,
    "description": "Meet on the sand at the end of Tamarack Avenue. \n\nDriving Directions \nFrom I-5: Exit Tamarack Avenue and head west towards the beach. \n\nFor more beach cleanup details, visit:\nhttp://surfridersd.org/beachcleanups.php",
    "link": "http://surfridersd.org/beachcleanups.php",
-   "availability": "",
+   "availability": "Repeats 2 times through 2007-12-08",
    "date_start": "2007-10-13T09:00:00-07:00",
-   "date_end": "2007-10-13T11:00:00-07:00",
+   "date_end": "2007-12-08T11:00:00-08:00",
    "age_grade_level": [
     "Family",
     "Adult"
@@ -684,7 +684,7 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "Carlsbad - Tamarack",
+   "location": "Carlsbad - Tamarack Avenue Beach",
    "latitude": "None",
    "longitude": "None",
    "contact_name": "",
@@ -861,6 +861,76 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "water_monitoring_20071117",
+   "title": "Water Monitoring",
+   "partner_name": "Surfrider Foundation San Diego County Chapter",
+   "partner_id": 739,
+   "description": "Surfriderâs Blue Water Task Force and Coastkeeper team up to help isolate the sources of pollution in our countyâs eleven watersheds. The time requirement for new volunteers is usually from 9am until 3pm which includes training and time spent in the field gathering data and water samples. There are two training locations, one in Point Loma and the other at Lake San Marcos. Volunteers will be trained in sample collection techniques, measuring air and water temp, pH, dissolved oxygen, and conductivity. After the training volunteers will split into groups and perform these analyses at designated watersheds.\n\nThis month we will need volunteers that can help with our North San Diego County sampling sites which are located near Escondido Creek.  The Event will be held on July 19 from 8:30am to noon.  We will not be holding a South County monitoring event due to the large volume of new volunteers that have registered and also due to the late monitoring schedule.  Sorry for the inconvenience.  We will be holding another event on Saturday, August 16. If you are interested participating please register early because space is limited.  The deadline to register for the July event is Wednesday, July 16.\n\nTo rsvp for Water Monitoring or for more information please email keri@surfriderSD.org",
+   "link": "",
+   "availability": "Repeats 9 times through 2008-12-06",
+   "date_start": "2007-11-17T17:00:00-08:00",
+   "date_end": "2008-12-06T15:00:00-08:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Volunteering",
+   "areas_of_interest": [
+    "Earth Science/Ecology",
+    "Chemistry",
+    "Physical Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Point Loma or Lake San Marcos, near Escondido Creek (North San Diego County)",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "surfrider_foundation_san_diego.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "chapter_meeting_20080116",
+   "title": "Chapter Meeting",
+   "partner_name": "Surfrider Foundation San Diego County Chapter",
+   "partner_id": 739,
+   "description": "Laura McIntire from the Solana Center for Environmental Innovation will be discussing  household hazardous waste.  \n\nWe may not realize our homes are filled with hazardous products.  We use them every day in our kitchens, bathrooms, garages, yards and automobiles.  When used properly these products can be safe.  However, they contain chemicals that are hazardous and when thrown away with the trash can harm our communities, wildlife and natural resources.  Our hhw presentation covers identification of hhw, reduce, reuse and recycle strategies, safe household alternatives and guidelines for safely disposing of HHW.  The presentation is accompanied by informational brochures and resources.\n\nPresentation provided by the Solana Center for Environmental Innovation (SCEI) and the San Diego Regional Household Hazardous Waste Partnership.\n\nWe will also cover chapter updates, local issues and volunteer opportunities. Everyone is always welcome and we look forward to seeing you there.",
+   "link": "",
+   "availability": "Repeats 16 times through 2024-04-03",
+   "date_start": "2008-01-16T19:00:00-08:00",
+   "date_end": "2024-04-03T03:00:00-07:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Forum Hall at UTC",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "surfrider_foundation_san_diego.png",
    "eligibility": "",
    "image_src": ""
   },
@@ -1119,14 +1189,14 @@
    "time_of_day": [
     "Morning"
    ],
-   "opportunity_type": "Volunteering",
+   "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
     "Earth Science/Ecology"
    ],
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "Various locations throughout San Diego County (Oceanside Pier, South Carlsbad State Beach, Del Mar, Pacific Beach, Mission Beach, Ocean Beach)",
+   "location": "Various locations throughout SD County",
    "latitude": "None",
    "longitude": "None",
    "contact_name": "",
@@ -1143,9 +1213,9 @@
    "partner_id": 739,
    "description": "Contact rap@surfridersd.org for more information.",
    "link": "",
-   "availability": "Repeats 16 times through 2020-06-16",
+   "availability": "Repeats 9 times through 2020-05-20",
    "date_start": "2008-07-09T01:30:00-07:00",
-   "date_end": "2020-06-16T21:00:00-07:00",
+   "date_end": "2020-05-20T03:30:00-07:00",
    "age_grade_level": [],
    "cost_range": "",
    "time_of_day": [
@@ -1158,7 +1228,7 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "Amplified Ale Works Pacific Beach Beer Garden and Brew Pub: 4150 Mission Blvd. #208 San Diego, CA 92109",
+   "location": "Amplified Ale Works Kitchen + Beer Garden, 4150 Mission Blvd #208, San Diego, CA 92109, USA",
    "latitude": "None",
    "longitude": "None",
    "contact_name": "",
@@ -1417,13 +1487,15 @@
    "slug": "know_your_h2o_committee_meeting_fresh_water_issues_20081118",
    "title": "Know Your H2O Committee Meeting (Fresh water issues)",
    "partner_name": "Surfrider Foundation San Diego County Chapter",
-   "partner_id": null,
+   "partner_id": 739,
    "description": "Contact Jared for more info: jared@surfriderSD.org",
    "link": "",
-   "availability": "Repeats 2 times through 2009-05-19",
+   "availability": "Repeats 3 times through 2009-05-19",
    "date_start": "2008-11-18T19:00:00-08:00",
    "date_end": "2009-05-19T20:00:00-07:00",
-   "age_grade_level": [],
+   "age_grade_level": [
+    "Adult"
+   ],
    "cost_range": "",
    "time_of_day": [
     "Evening"
@@ -1436,12 +1508,12 @@
    "financial_support": "No",
    "ngss_aligned": "No",
    "location": "7590 Fay Ave, Suite 509 in La Jolla",
-   "latitude": "",
-   "longitude": "",
+   "latitude": "None",
+   "longitude": "None",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
-   "logo_src": "",
+   "logo_src": "surfrider_foundation_san_diego.png",
    "eligibility": "",
    "image_src": ""
   },
@@ -3307,6 +3379,43 @@
    "image_src": ""
   },
   {
+   "slug": "http_sandiego_surfrider_org_register_for_the_2014_surf_for_the_sea_contest",
+   "title": "Surf for the Sea Contest",
+   "partner_name": "Surfrider Foundation San Diego County Chapter",
+   "partner_id": 739,
+   "description": "The 2014 Surf for the Sea Contest is taking place September 3rd-7th at the North Harbor Jetty in Oceanside.\n\nThis contest is a benefit for the Surfrider Foundation San Diego County Chapter in memory of local surfers who have passed away.\n\nFor more information or to register visit http://sandiego.surfrider.org/register-for-the-2014-surf-for-the-sea-contest.",
+   "link": "http://sandiego.surfrider.org/register-for-the-2014-surf-for-the-sea-contest",
+   "availability": "Apply by 2014-09-07",
+   "date_start": "2010-09-11T00:00:00-07:00",
+   "date_end": "2014-09-07T23:59:59-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Afternoon",
+    "Evening"
+   ],
+   "opportunity_type": "Competitions",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Oceanside Harbor, Oceanside, CA 92054, USA",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "surfrider_foundation_san_diego.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
    "slug": "tijuana_river_action_month_cleanup_20101016",
    "title": "Tijuana River Action Month Cleanup",
    "partner_name": "Surfrider Foundation San Diego County Chapter",
@@ -4103,7 +4212,7 @@
    "slug": "chapter_meeting_with_oscar_romo_20110921",
    "title": "Chapter Meeting with Oscar Romo",
    "partner_name": "Surfrider Foundation San Diego County Chapter",
-   "partner_id": null,
+   "partner_id": 739,
    "description": "Our next chapter meeting is on Wednesday, September 21st from 7-9pm at Forum Hall in UTC.  This month's guest speaker is Oscar Romo who will be talking about the progress in Mexico and the Tijuana River Valley in addressing sediment, trash and sewage that degrades the region.\n\nOscar is the Watershed Coordinator at the Tijuana River National Estuarine Research Reserve.  In this capacity, he is the principal investigator of the San Diego coastal storms project, the trash tracking project and the waste tires tracking project.  He works in the development of bi-national pilot projects to control sediment, trash and waste water flows at the source, as well as the development and implementation of public policies to conserve ecosystems on both sides of the US/Mexico border.  Oscar also serves as the US co-chair of the Border 2012 water task force, as a delegate to the UN Commission on Sustainable Development and as a county delegate to the World Water Forum.",
    "link": "",
    "availability": "",
@@ -4116,7 +4225,7 @@
    "time_of_day": [
     "Evening"
    ],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Professional Development / Conferences",
    "areas_of_interest": [
     "Earth Science/Ecology"
    ],
@@ -4124,12 +4233,12 @@
    "financial_support": "No",
    "ngss_aligned": "No",
    "location": "Forum Hall above the Wells Fargo Branch in UTC",
-   "latitude": "",
-   "longitude": "",
+   "latitude": "None",
+   "longitude": "None",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
-   "logo_src": "",
+   "logo_src": "surfrider_foundation_san_diego.png",
    "eligibility": "",
    "image_src": ""
   },
@@ -5899,6 +6008,40 @@
    "image_src": ""
   },
   {
+   "slug": "beach_cleanup_sponsored_by_the_avenue_home_collective_20170318",
+   "title": "Beach Cleanup Sponsored by the Avenue Home Collective",
+   "partner_name": "Surfrider Foundation San Diego County Chapter",
+   "partner_id": 739,
+   "description": "Beach and street cleanup at Moonlight Beach in Encinitas. Meet next to the restrooms. Bags and gloves will be provided, but we encourage you to bring your own reusable supplies if you have them. Contact alessandro@surfridersd.org for more information.",
+   "link": "",
+   "availability": "",
+   "date_start": "2017-03-18T09:00:00-07:00",
+   "date_end": "2017-03-18T11:00:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Volunteering",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Moonlight State Beach, Encinitas, CA 92024, USA",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "surfrider_foundation_san_diego.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
    "slug": "https_plus_google_com_hangouts_calendar_c3vyznjpzgvyc2qub3jnqgdtywlslmnvbq_l06r3933dquavqikk20eqfv2k8_hs_121",
    "title": "Beach Cleanup Sponsored by FM 94.9, SD County Toyota Dealers and Rincon Band of Luiseño Indians",
    "partner_name": "Surfrider Foundation San Diego County Chapter",
@@ -6231,7 +6374,7 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "Karl Strauss Tasting Room / Beer Garden at 5985 Santa Fe St, San Diego, CA 92109",
+   "location": "Bay City Brewing, 3760 Hancock St San Diego, CA 92110",
    "latitude": "None",
    "longitude": "None",
    "contact_name": "",
@@ -6412,6 +6555,40 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "stop_committee_meeting_20171011",
+   "title": "STOP Committee Meeting",
+   "partner_name": "Surfrider Foundation San Diego County Chapter",
+   "partner_id": 739,
+   "description": "The STOP Coastal Climate Impact committee meetings will be held at locations near public transit to encourage public transit and biking to meetings. Email <a href=\"mailto:ryanv@surfridersd.org\" target=\"_blank\">ryanv@surfridersd.org</a> or <a href=\"mailto:jp@surfridersd.org\" target=\"_blank\">jp@surfridersd.org</a> for more info!",
+   "link": "",
+   "availability": "Repeats 4 times through 2018-10-10",
+   "date_start": "2017-10-11T18:30:00-07:00",
+   "date_end": "2018-10-10T20:00:00-07:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Surfrider Foundation San Diego County Chapter, 9883 Pacific Heights Blvd, San Diego, CA 92121, USA",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "surfrider_foundation_san_diego.png",
    "eligibility": "",
    "image_src": ""
   },
@@ -7250,7 +7427,7 @@
    "slug": "beach_cleanup_sponsored_by_alt949_and_rubio_s_coastal_grill_20180707",
    "title": "Beach Cleanup sponsored by ALT949 and Rubio's Coastal Grill",
    "partner_name": "Surfrider Foundation San Diego County Chapter",
-   "partner_id": null,
+   "partner_id": 739,
    "description": "Beach and street cleanup at the Oceanside Pier. Meet on the north side of the pier, on the beach. Bags and gloves will be provided, but we encourage you to bring your own reusable supplies if you have them. Contact <a href=\"mailto:info@surfridersd.org\" target=\"_blank\" id=\"ow1116\" __is_owner=\"true\">beachcleanups@surfridersd.org</a> for more information.",
    "link": "",
    "availability": "",
@@ -7258,6 +7435,8 @@
    "date_end": "2018-07-07T11:00:00-07:00",
    "age_grade_level": [
     "Family",
+    "Grades 6-8",
+    "Grades 9-12",
     "Adult"
    ],
    "cost_range": "Free",
@@ -7272,12 +7451,12 @@
    "financial_support": "No",
    "ngss_aligned": "No",
    "location": "Oceanside Pier",
-   "latitude": "",
-   "longitude": "",
+   "latitude": "None",
+   "longitude": "None",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
-   "logo_src": "",
+   "logo_src": "surfrider_foundation_san_diego.png",
    "eligibility": "",
    "image_src": ""
   },
@@ -7454,6 +7633,41 @@
    "image_src": ""
   },
   {
+   "slug": "alt949_mission_federal_credit_union_sponsored_beach_cleanup_20180804",
+   "title": "ALT949 & Mission Federal Credit Union Sponsored Beach Cleanup",
+   "partner_name": "Surfrider Foundation San Diego County Chapter",
+   "partner_id": 739,
+   "description": "Beach and street cleanup at the Oceanside Pier. Meet on the north side of the pier, on the beach. Bags and gloves will be provided, but we encourage you to bring your own reusable supplies if you have them. Contact <a href=\"mailto:info@surfridersd.org\" target=\"_blank\" id=\"ow1116\" __is_owner=\"true\">beachcleanups@surfridersd.org</a> for more information.",
+   "link": "",
+   "availability": "",
+   "date_start": "2018-08-04T09:00:00-07:00",
+   "date_end": "2018-08-04T11:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Volunteering",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Oceanside Pier",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "surfrider_foundation_san_diego.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
    "slug": "https_sandiego_surfrider_org_register_2",
    "title": "Ocean Friendly Restaurant Volunteer Training",
    "partner_name": "Surfrider Foundation San Diego County Chapter",
@@ -7488,15 +7702,15 @@
    "image_src": ""
   },
   {
-   "slug": "https_plus_google_com_hangouts_calendar_c3vyznjpzgvyc2qub3jnqgdtywlslmnvbq_1i58r63vmiv6pspcq0njba0eb7_hs_121",
-   "title": "SBCH2O:No Border Sewage Meeting",
+   "slug": "https_plus_google_com_hangouts_caroline_hceid_c3vyznjpzgvyc2qub3jnqgdtywlslmnvbq_4pu0fets3i60r8cd2mernr9q3b_hs_121",
+   "title": "Chapter Meeting: South Bay Clean Water: No Border Sewage",
    "partner_name": "Surfrider Foundation San Diego County Chapter",
    "partner_id": 739,
-   "description": "Join with Google Hangouts: https://plus.google.com/hangouts/_/calendar/c3VyZnJpZGVyc2Qub3JnQGdtYWlsLmNvbQ.1i58r63vmiv6pspcq0njba0eb7?hs=121",
-   "link": "https://plus.google.com/hangouts/_/calendar/c3VyZnJpZGVyc2Qub3JnQGdtYWlsLmNvbQ.1i58r63vmiv6pspcq0njba0eb7?hs=121",
-   "availability": "Repeats 2 times through 2018-11-08",
-   "date_start": "2018-08-09T18:30:00-07:00",
-   "date_end": "2018-11-08T20:00:00-08:00",
+   "description": "https://www.imperialbeachca.gov/index.asp?SEC=0868EF28-0BF3-4D84-8C21-CF57BB7CF141&Type=B_BASIC\n\nJoin with Google Hangouts: https://plus.google.com/hangouts/_/caroline?hceid=c3VyZnJpZGVyc2Qub3JnQGdtYWlsLmNvbQ.4pu0fets3i60r8cd2mernr9q3b&hs=121",
+   "link": "https://plus.google.com/hangouts/_/caroline?hceid=c3VyZnJpZGVyc2Qub3JnQGdtYWlsLmNvbQ.4pu0fets3i60r8cd2mernr9q3b&hs=121",
+   "availability": "",
+   "date_start": "2018-08-16T18:30:00-07:00",
+   "date_end": "2018-08-16T20:30:00-07:00",
    "age_grade_level": [],
    "cost_range": "",
    "time_of_day": [
@@ -7509,7 +7723,7 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "Imperial Beach Public Library (810 Imperial Beach Blvd, Imperial Beach, CA 91932)",
+   "location": "Dempsey Holder Safety Center, 950 Ocean Ln, Imperial Beach, CA 91932, USA",
    "latitude": "None",
    "longitude": "None",
    "contact_name": "",
@@ -7558,7 +7772,7 @@
    "slug": "http_www_cleanupday_org",
    "title": "Coastal Cleanup Day (OB Pier)",
    "partner_name": "Surfrider Foundation San Diego County Chapter",
-   "partner_id": null,
+   "partner_id": 739,
    "description": "California Coastal Cleanup Day (CCD) is a statewide beach and coastal and inland waterway cleanup held throughout California each year, part of the largest such cleanup in the country. CCD provides an opportunity for volunteers of all ages to work together and make a positive impact on our waterways and reduce the amount of marine debris the enters our ocean. We'll be at Ocean Beach Pier, our traditional CCD spot!\n\nSign up here\nhttp://www.cleanupday.org/",
    "link": "http://www.cleanupday.org/",
    "availability": "",
@@ -7566,6 +7780,8 @@
    "date_end": "2018-09-15T12:00:00-07:00",
    "age_grade_level": [
     "Family",
+    "Grades 6-8",
+    "Grades 9-12",
     "Adult"
    ],
    "cost_range": "Free",
@@ -7580,12 +7796,12 @@
    "financial_support": "No",
    "ngss_aligned": "No",
    "location": "Ocean Beach Veteran's Plaza, 1900 Ocean Front St, San Diego, CA 92107, USA",
-   "latitude": "",
-   "longitude": "",
+   "latitude": "None",
+   "longitude": "None",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
-   "logo_src": "",
+   "logo_src": "surfrider_foundation_san_diego.png",
    "eligibility": "",
    "image_src": ""
   },
@@ -7733,6 +7949,40 @@
    "image_src": ""
   },
   {
+   "slug": "https_plus_google_com_hangouts_calendar_c3vyznjpzgvyc2qub3jnqgdtywlslmnvbq_1i58r63vmiv6pspcq0njba0eb7_hs_121",
+   "title": "SBCH2O:No Border Sewage Meeting",
+   "partner_name": "Surfrider Foundation San Diego County Chapter",
+   "partner_id": 739,
+   "description": "Special guest speaker Professor Sarah Giddings (UCSD) will be joining us to discuss the northward transport, dilution, and impacts of Punta Bandera outfall water.\n\nJoin with Google Hangouts: https://plus.google.com/hangouts/_/calendar/c3VyZnJpZGVyc2Qub3JnQGdtYWlsLmNvbQ.1i58r63vmiv6pspcq0njba0eb7?hs=121",
+   "link": "https://plus.google.com/hangouts/_/calendar/c3VyZnJpZGVyc2Qub3JnQGdtYWlsLmNvbQ.1i58r63vmiv6pspcq0njba0eb7?hs=121",
+   "availability": "",
+   "date_start": "2018-11-08T18:30:00-08:00",
+   "date_end": "2018-11-08T20:00:00-08:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Imperial Beach Public Library (810 Imperial Beach Blvd, Imperial Beach, CA 91932)",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "surfrider_foundation_san_diego.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
    "slug": "beach_cleanup_ocean_beach_pier_20181110",
    "title": "Beach Cleanup - Ocean Beach Pier",
    "partner_name": "Surfrider Foundation San Diego County Chapter",
@@ -7796,40 +8046,6 @@
    "financial_support": "No",
    "ngss_aligned": "No",
    "location": "Pacific Beach Taylor Branch Library, 4275 Cass St, San Diego, CA 92109, USA",
-   "latitude": "",
-   "longitude": "",
-   "contact_name": "",
-   "contact_email": "",
-   "contact_phone": "",
-   "logo_src": "",
-   "eligibility": "",
-   "image_src": ""
-  },
-  {
-   "slug": "https_plus_google_com_hangouts_caroline_hceid_c3vyznjpzgvyc2qub3jnqgdtywlslmnvbq_4pu0fets3i60r8cd2mernr9q3b_hs_121",
-   "title": "Chapter Meeting: STOP Climate Change",
-   "partner_name": "Surfrider Foundation San Diego County Chapter",
-   "partner_id": null,
-   "description": "Join with Google Hangouts: https://plus.google.com/hangouts/_/caroline?hceid=c3VyZnJpZGVyc2Qub3JnQGdtYWlsLmNvbQ.4pu0fets3i60r8cd2mernr9q3b&hs=121",
-   "link": "https://plus.google.com/hangouts/_/caroline?hceid=c3VyZnJpZGVyc2Qub3JnQGdtYWlsLmNvbQ.4pu0fets3i60r8cd2mernr9q3b&hs=121",
-   "availability": "",
-   "date_start": "2018-11-15T18:30:00-08:00",
-   "date_end": "2018-11-15T20:30:00-08:00",
-   "age_grade_level": [
-    "Adult"
-   ],
-   "cost_range": "",
-   "time_of_day": [
-    "Evening"
-   ],
-   "opportunity_type": "Out-of-school Programs",
-   "areas_of_interest": [
-    "Earth Science/Ecology"
-   ],
-   "specific_attention": [],
-   "financial_support": "No",
-   "ngss_aligned": "No",
-   "location": "Carruth Cellars Wine Garden, 2215 Kettner Blvd, San Diego, CA 92101, USA",
    "latitude": "",
    "longitude": "",
    "contact_name": "",
@@ -7924,9 +8140,10 @@
    "time_of_day": [
     "Evening"
    ],
-   "opportunity_type": "Volunteering",
+   "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
-    "Earth Science/Ecology"
+    "Earth Science/Ecology",
+    "General Science"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -8365,12 +8582,12 @@
    "slug": "https_meet_google_com_vxr_qqsn_dyv",
    "title": "Ocean Friendly Restaurant Meeting",
    "partner_name": "Surfrider Foundation San Diego County Chapter",
-   "partner_id": null,
+   "partner_id": 739,
    "description": "Meet fellow Ocean Friendly Restaurant Volunteers and get the latest news on the rapidly growing OFR program. Learn how to approach restaurants about the OFR program and how to do compliance checks once they register as an OFR.\n\nJoin with Google Meet: https://meet.google.com/vxr-qqsn-dyv\nOr dial: (US) +1 225-443-9625 PIN: 510268793#\n\nLearn more about Meet at: https://support.google.com/a/users/answer/9282720",
    "link": "https://meet.google.com/vxr-qqsn-dyv",
-   "availability": "Repeats 3 times through 2025-01-01",
+   "availability": "Repeats 2 times through 2024-09-04",
    "date_start": "2019-07-25T02:00:00-07:00",
-   "date_end": "2025-01-01T19:30:00-08:00",
+   "date_end": "2024-09-04T19:30:00-07:00",
    "age_grade_level": [
     "Adult"
    ],
@@ -8386,12 +8603,49 @@
    "financial_support": "No",
    "ngss_aligned": "No",
    "location": "Dan McKinney Family YMCA 8355 Cliffridge Ave, La Jolla, CA 92037, USA",
-   "latitude": "",
-   "longitude": "",
+   "latitude": "None",
+   "longitude": "None",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
-   "logo_src": "",
+   "logo_src": "surfrider_foundation_san_diego.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_sandiego_surfrider_org_events",
+   "title": "Beach Cleanup - Ocean Beach Pier, sponsored by Platinum Premium Products",
+   "partner_name": "Surfrider Foundation San Diego County Chapter",
+   "partner_id": 739,
+   "description": "<br>Join Surfrider Foundation and our host Platinum Premium Products for a beach and street cleanup at Ocean Beach Pier.&nbsp;<br><br>Meet at Ocean Beach Veterans' Plaza, just south of the lifeguard station where Abbot St. meets Newport Ave. If there is another event on the grass, we'll be on the beach nearby. Just look for the blue Surfrider tent!&nbsp;<br><br><br><b>Beach Cleanup Information</b><br><b><br></b><br><ul><li>Meet at the location described, and look for the blue Surfrider tent. That’s where you’ll start your morning by signing in and borrowing cleanup supplies.<br></li><li>We will have supplies on hand, but please bring your own as our supplies are limited. By bringing your own reusable gloves, reusable bag/bucket and/or reusable water bottle, you help us create zero waste at our cleanups.&nbsp;<br></li><li>Please wear comfortable clothes, closed-toed shoes and sunscreen. All volunteers (individuals as well as groups) are welcome to participate and must sign this <a href=\"https://sandiego.surfrider.org/wp-content/uploads/2016/02/BeachCleanupWaiver.pdf\">liability waiver.</a> <b>Volunteers under the age of 18 must have a parent or guardian present at the beginning of the cleanup to sign a liability waiver before the minor can participate.</b><br></li><li>Registration is not required unless a group is larger than 20 people – to register please contact <a href=\"mailto:beachcleanups@surfridersd.org\">beachcleanups@surfridersd.org</a>.<br></li><li>As a volunteer, you play an active role in determining the sources of trash on our beaches. During the cleanup, please be prepared to fill out a data card detailing the types of trash that you collected, and make sure to have your trash weighed when you return to the registration table at the end of the cleanup. Preview our data card <a href=\"https://sandiego.surfrider.org/wp-content/uploads/2018/11/Marine-Debris-Data-Sheet2018.pdf\">here</a>.&nbsp;<br></li></ul><br><b>Weather Cancellation Policy</b><br><br>If it is lightly raining, we will hold the cleanup. If there are heavy rains, we will cancel the cleanup. To check the status of a cleanup, please see the Surfrider San Diego County <a href=\"https://sandiego.surfrider.org/events/\">events calendar</a> or visit us on <a href=\"https://www.facebook.com/surfriderSD/\">social media.</a><br><br>For additional information, please contact <a href=\"mailto:beachcleanups@surfridersd.org\">beachcleanups@surfridersd.org</a>",
+   "link": "https://sandiego.surfrider.org/events/",
+   "availability": "",
+   "date_start": "2019-09-07T09:00:00-07:00",
+   "date_end": "2019-09-07T11:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8",
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Volunteering",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Ocean Beach Veteran's Plaza, 1900 Ocean Front St, San Diego, CA 92107, USA",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "surfrider_foundation_san_diego.png",
    "eligibility": "",
    "image_src": ""
   },
@@ -8470,40 +8724,6 @@
    "image_src": ""
   },
   {
-   "slug": "mailto_beachcleanups_surfridersd_org",
-   "title": "California Coastal Cleanup Day OB (Yachak Yerba Mate sponsored)",
-   "partner_name": "Surfrider Foundation San Diego County Chapter",
-   "partner_id": 739,
-   "description": "<br>Meet at Ocean Beach Veterans' Plaza, just south of the lifeguard station where Abbot St. meets Newport Ave. If there is another event on the grass, we'll be on the beach nearby. Just look for the blue Surfrider tent!&nbsp;<br><br><br><b>Beach Cleanup Information</b><br><b><br></b><br><ul><li>Meet at the location described, and look for the blue Surfrider tent. That’s where you’ll start your morning by signing in and borrowing cleanup supplies.<br></li><li>We will have supplies on hand, but please bring your own as our supplies are limited. By bringing your own reusable gloves, reusable bag/bucket and/or reusable water bottle, you help us create zero waste at our cleanups.&nbsp;<br></li><li>Please wear comfortable clothes, closed-toed shoes and sunscreen. All volunteers (individuals as well as groups) are welcome to participate and must sign this <a href=\"https://sandiego.surfrider.org/wp-content/uploads/2016/02/BeachCleanupWaiver.pdf\">liability waiver.</a> <b>Volunteers under the age of 18 must have a parent or guardian present at the beginning of the cleanup to sign a liability waiver before the minor can participate.</b><br></li><li>Registration is not required unless a group is larger than 20 people – to register please contact <a href=\"mailto:beachcleanups@surfridersd.org\">beachcleanups@surfridersd.org</a>.<br></li><li>As a volunteer, you play an active role in determining the sources of trash on our beaches. During the cleanup, please be prepared to fill out a data card detailing the types of trash that you collected, and make sure to have your trash weighed when you return to the registration table at the end of the cleanup. Preview our data card <a href=\"https://sandiego.surfrider.org/wp-content/uploads/2018/11/Marine-Debris-Data-Sheet2018.pdf\">here</a>.&nbsp;<br></li></ul><br><b>Weather Cancellation Policy</b><br><br>If it is lightly raining, we will hold the cleanup. If there are heavy rains, we will cancel the cleanup. To check the status of a cleanup, please see the Surfrider San Diego County <a href=\"https://sandiego.surfrider.org/events/\">events calendar</a> or visit us on <a href=\"https://www.facebook.com/surfriderSD/\">social media.</a><br><br>For additional information, please contact <a href=\"mailto:beachcleanups@surfridersd.org\">beachcleanups@surfridersd.org</a>",
-   "link": "mailto:beachcleanups@surfridersd.org",
-   "availability": "",
-   "date_start": "2019-09-21T09:00:00-07:00",
-   "date_end": "2019-09-21T12:00:00-07:00",
-   "age_grade_level": [
-    "Family"
-   ],
-   "cost_range": "Free",
-   "time_of_day": [
-    "Morning"
-   ],
-   "opportunity_type": "Volunteering",
-   "areas_of_interest": [
-    "Earth Science/Ecology"
-   ],
-   "specific_attention": [],
-   "financial_support": "No",
-   "ngss_aligned": "No",
-   "location": "Ocean Beach Veteran's Plaza, 1900 Ocean Front St, San Diego, CA 92107, USA",
-   "latitude": "None",
-   "longitude": "None",
-   "contact_name": "",
-   "contact_email": "",
-   "contact_phone": "",
-   "logo_src": "surfrider_foundation_san_diego.png",
-   "eligibility": "",
-   "image_src": ""
-  },
-  {
    "slug": "https_www_eventbrite_com_e_coastal_water_quality_training_tickets_72417630081",
    "title": "Coastal Water Quality Training",
    "partner_name": "Surfrider Foundation San Diego County Chapter",
@@ -8539,18 +8759,17 @@
    "image_src": ""
   },
   {
-   "slug": "https_sandiego_surfrider_org_events",
+   "slug": "mailto_beachcleanups_surfridersd_org",
    "title": "Beach Cleanup - Moonlight Beach (Saint Archer Brewing sponsor)",
    "partner_name": "Surfrider Foundation San Diego County Chapter",
    "partner_id": 739,
    "description": "<br>Beach and street cleanup at Moonlight Beach in Encinitas. Meet next to the restrooms. Bags and gloves will be provided, but we encourage you to bring your own reusable supplies if you have them.<br><br><br><b>Beach Cleanup Information</b><br><b><br></b><br><ul><li>Meet at the location described, and look for the blue Surfrider tent. That’s where you’ll start your morning by signing in and borrowing cleanup supplies.<br></li><li>We will have supplies on hand, but please bring your own as our supplies are limited. By bringing your own reusable gloves, reusable bag/bucket and/or reusable water bottle, you help us create zero waste at our cleanups.&nbsp;<br></li><li>Please wear comfortable clothes, closed-toed shoes and sunscreen. All volunteers (individuals as well as groups) are welcome to participate and must sign this <a href=\"https://sandiego.surfrider.org/wp-content/uploads/2016/02/BeachCleanupWaiver.pdf\" target=\"_blank\">liability waiver.</a> <b>Volunteers under the age of 18 must have a parent or guardian present at the beginning of the cleanup to sign a liability waiver before the minor can participate.</b><br></li><li>Registration is not required unless a group is larger than 20 people – to register please contact <a href=\"mailto:beachcleanups@surfridersd.org\" id=\"ow736\" __is_owner=\"true\">beachcleanups@surfridersd.org</a>.<br></li><li>As a volunteer, you play an active role in determining the sources of trash on our beaches. During the cleanup, please be prepared to fill out a data card detailing the types of trash that you collected, and make sure to have your trash weighed when you return to the registration table at the end of the cleanup. Preview our data card <a href=\"https://sandiego.surfrider.org/wp-content/uploads/2018/11/Marine-Debris-Data-Sheet2018.pdf\" target=\"_blank\">here</a>.&nbsp;<br></li></ul><br><b>Weather Cancellation Policy</b><br><br>If it is lightly raining, we will hold the cleanup. If there are heavy rains, we will cancel the cleanup. To check the status of a cleanup, please see the Surfrider San Diego County <a href=\"https://sandiego.surfrider.org/events/\" target=\"_blank\">events calendar</a> or visit us on <a href=\"https://www.facebook.com/surfriderSD/\" target=\"_blank\">social media.</a><br><br>For additional information, please contact <a href=\"mailto:beachcleanups@surfridersd.org\" id=\"ow766\" __is_owner=\"true\">beachcleanups@surfridersd.org</a>",
-   "link": "https://sandiego.surfrider.org/events/",
+   "link": "mailto:beachcleanups@surfridersd.org",
    "availability": "",
    "date_start": "2019-10-19T09:00:00-07:00",
    "date_end": "2019-10-19T11:00:00-07:00",
    "age_grade_level": [
     "Family",
-    "Adult",
     "Grades 6-8",
     "Grades 9-12"
    ],
@@ -9133,21 +9352,21 @@
    "date_start": "2020-08-17T19:00:00-07:00",
    "date_end": "2020-08-17T20:30:00-07:00",
    "age_grade_level": [
-    "Adult",
-    "Family"
+    "Family",
+    "Adult"
    ],
    "cost_range": "Free",
    "time_of_day": [
     "Evening"
    ],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Online",
    "areas_of_interest": [
     "Earth Science/Ecology"
    ],
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "San Diego County, California",
+   "location": "Online",
    "latitude": "None",
    "longitude": "None",
    "contact_name": "",
@@ -10632,6 +10851,43 @@
    "image_src": ""
   },
   {
+   "slug": "https_waiver_smartwaiver_com_e_agiw29pdiycqpvtysdiuna",
+   "title": "Imperial Beach Cleanup",
+   "partner_name": "Surfrider Foundation San Diego County Chapter",
+   "partner_id": 739,
+   "description": "<span><br><br><span><span><span><span><span>Join Surfrider Foundation for a beach and street cleanup in Imperial Beach.&nbsp;<br><br>Meet at The Spirit of Imperial Beach Statue in Imperial Beach, we'll be on the beach nearby. Just look for the blue Surfrider tent!&nbsp;<br><br><br><b>Beach Cleanup Information</b><br><b><br></b><br><ul><li>Meet at the location described, and look for the blue Surfrider tent. That’s where you’ll start your morning by signing in and borrowing cleanup supplies.<br></li><li>We will have supplies on hand, but please bring your own as our supplies are limited. By bringing your own reusable gloves, reusable bag/bucket and/or reusable water bottle, you help us create zero waste at our cleanups.&nbsp;<br></li><li>Please wear comfortable clothes, closed-toed shoes and sunscreen. All volunteers (individuals as well as groups) are welcome to participate and must sign this <a href=\"https://waiver.smartwaiver.com/e/AGiW29pdiYCqpvtySdiUna/\">liability waiver</a>&nbsp;(select San Diego Chapter as your chapter/club)</li><li><b>Volunteers under the age of 18 must have a parent or guardian sign a liability waiver before the minor can participate.</b><br></li><li>If you have a group of 20 or more people, please contact <a href=\"mailto:beachcleanups@surfridersd.org\">beachcleanups@surfridersd.org</a>&nbsp;prior to the cleanup.<br></li><li>As a volunteer, you play an active role in determining the sources of trash on our beaches. During the cleanup, please be prepared to fill out a data card detailing the types of trash that you collected, and make sure to have your trash weighed when you return to the registration table at the end of the cleanup. Preview our data card <a href=\"https://sandiego.surfrider.org/wp-content/uploads/2020/02/2020FinalCopy-1-1-3-1.pdf\">here</a>.&nbsp;<br></li></ul><br><b>Weather Cancellation Policy</b><br><br>If it is lightly raining, we will hold the cleanup. If there are heavy rains, we will cancel the cleanup. To check the status of a cleanup, please see the Surfrider San Diego County <a href=\"https://sandiego.surfrider.org/events/\">events calendar</a> or visit us on <a href=\"https://www.facebook.com/surfriderSD/\">social media.</a><br><br>For additional information, please contact <a href=\"mailto:beachcleanups@surfridersd.org\">beachcleanups@surfridersd.org</a></span></span></span></span></span></span><span><br></span><span><span><br><span><br><a href=\"mailto:surfridersd.org@gmail.com\">surfridersd.org@gmail.com</a></span></span></span><span><span><span>Created by: Trisha Mejia</span></span></span>",
+   "link": "https://waiver.smartwaiver.com/e/AGiW29pdiYCqpvtySdiUna/",
+   "availability": "Repeats 6 times through 2022-06-18",
+   "date_start": "2021-12-11T17:00:00-08:00",
+   "date_end": "2022-06-18T11:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8",
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Volunteering",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Imperial Beach, The Spirit of Imperial Beach Statue",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "surfrider_foundation_san_diego.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
    "slug": "estuary_clean_up_surfrider_sdrpf_20220115",
    "title": "Estuary Clean-Up: Surfrider + SDRPF",
    "partner_name": "Surfrider Foundation San Diego County Chapter",
@@ -10854,8 +11110,8 @@
    "date_end": "2022-05-21T11:00:00-07:00",
    "age_grade_level": [
     "Family",
-    "Grades 6-8",
     "Grades 9-12",
+    "Grades 6-8",
     "Adult"
    ],
    "cost_range": "Free",
@@ -11282,8 +11538,8 @@
    "date_end": "2026-02-21T19:00:00-08:00",
    "age_grade_level": [
     "Family",
-    "Grades 9-12",
     "Grades 6-8",
+    "Grades 9-12",
     "Adult"
    ],
    "cost_range": "Free",
@@ -11297,7 +11553,7 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "Imperial Beach behind The Spirit of Imperial Beach Statue",
+   "location": "Imperial Beach - Behind The Spirit of Imperial Beach Statue",
    "latitude": "None",
    "longitude": "None",
    "contact_name": "",
@@ -11663,6 +11919,43 @@
    "image_src": ""
   },
   {
+   "slug": "https_x_gldn_io_e_bjysde8kjnb",
+   "title": "Ocean Beach - Beach Cleanup",
+   "partner_name": "Surfrider Foundation San Diego County Chapter",
+   "partner_id": 739,
+   "description": "<u></u><p>Join Surfrider Foundation for a beach and street cleanup at Ocean Beach Pier!</p><p><b>Register:</b> <a href=\"https://x.gldn.io/e/BJysDE8KjNb\">HERE </a>// <a href=\"https://x.gldn.io/e/BJysDE8KjNb\">https://x.gldn.io/e/BJysDE8KjNb</a></p><p>Meet at Ocean Beach Veterans' Plaza, just south of the lifeguard station where Abbot St. meets Newport Ave. If another event is on the grass, we'll be on the beach nearby. Just look for the blue Surfrider tent! </p><p><b>Information</b></p><ul><li><p>You'll start your morning by signing in and gearing up with cleanup supplies at the Surfrider Tent.</p></li><li><p>We will have supplies on hand, but please bring your reusable cleanup supplies, if you have them, as our limited supplies. </p></li><li><p>This is a zero-waste event. Please bring your water in a reusable container, as single-use bottles will not be provided. </p></li><li><p>Please wear comfortable clothes and sun protection.</p></li><li><p>Each individual volunteer must sign and register either ahead of time online HERE or on their smartphone the day of.</p></li><li><p><b>Volunteers under the age of 18 must have a parent or guardian confirm their liability waiver through Golden before the minor can participate. A parent/guardian will need to complete any minor's waiver by confirming an email sent to them from Golden—please check your spam if you do not receive it.</b></p></li><li><p>If you are part of a group of people, please share the registration link with your party and make sure each individual has registered.</p></li></ul><p><b>Weather Cancellation Policy</b></p><p>If it is lightly raining, we will hold the cleanup. If there are heavy rains, we will cancel the cleanup. To check the status of a cleanup, please see the Surfrider San Diego County events calendar or visit us on social media.</p><p>If you have any questions, you can reach out to our beach cleanup coordinator at - <a href=\"mailto:beachcleanups@surfridersd.org\" target=\"_blank\"><u>beachcleanups@surfridersd.org</u></a><br></p><u></u>",
+   "link": "https://x.gldn.io/e/BJysDE8KjNb",
+   "availability": "Repeats 7 times through 2025-06-07",
+   "date_start": "2023-01-07T09:00:00-08:00",
+   "date_end": "2025-06-07T11:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 9-12",
+    "Grades 6-8",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Volunteering",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "1950 Abbott Street, San Diego, CA, USA",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "surfrider_foundation_san_diego.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
    "slug": "https_x_gldn_io_e_jichlynfqab",
    "title": "Clean Border Water Now Program Meeting",
    "partner_name": "Surfrider Foundation San Diego County Chapter",
@@ -11985,43 +12278,6 @@
    "image_src": ""
   },
   {
-   "slug": "https_x_gldn_io_e_jvvwpltshwb",
-   "title": "Imperial Beach - Beach Cleanup In Partnership with SANDAG",
-   "partner_name": "Surfrider Foundation San Diego County Chapter",
-   "partner_id": null,
-   "description": "<u></u><p>Join Surfrider Foundation for a beach and street cleanup at Imperial Beach!</p><p>This month SANDAG will be on the sand with us to talk about beach preservation efforts 🎉 <br></p><p><b>Register:</b> <a href=\"https://x.gldn.io/e/JvvwpltsHwb\">HERE</a> // <a href=\"https://x.gldn.io/e/JvvwpltsHwb\">https://x.gldn.io/e/JvvwpltsHwb</a></p><p>Meet on the sand behind The Spirit of Imperial Beach Statue in Imperial Beach. Just look for the blue Surfrider tent! </p><p><b>Information</b></p><ul><li><p>You'll start your morning by signing in and gearing up with cleanup supplies at the Surfrider Tent.</p></li><li><p>We will have supplies on hand, but please bring your reusable cleanup supplies, if you have them, as our limited supplies. </p></li><li><p>This is a zero-waste event. Please bring your water in a reusable container, as single-use bottles will not be provided. </p></li><li><p>Please wear comfortable clothes and sun protection.</p></li><li><p>Each individual volunteer must sign and register either ahead of time online HERE or on their smartphone the day of.</p></li><li><p><b>Volunteers under the age of 18 must have a parent or guardian confirm their liability waiver through Golden before the minor can participate. A parent/guardian will need to complete any minor's waiver by confirming an email sent to them from Golden—please check your spam if you do not receive it.</b></p></li><li><p>If you are part of a group of people, please share the registration link with your party and make sure each individual has registered.</p></li></ul><p><b>Weather Cancellation Policy</b></p><p>If it is lightly raining, we will hold the cleanup. If there are heavy rains, we will cancel the cleanup. To check the status of a cleanup, please see the Surfrider San Diego County events calendar or visit us on social media.<span> </span></p>If you have any questions, you can reach out to our beach cleanup coordinator at - <a href=\"mailto:beachcleanups@surfridersd.org\"><u>beachcleanups@surfridersd.org</u></a><span><br></span><u></u><u></u><u></u><u></u><u></u><u></u><u></u><u></u>",
-   "link": "https://x.gldn.io/e/JvvwpltsHwb",
-   "availability": "",
-   "date_start": "2023-06-17T10:00:00-07:00",
-   "date_end": "2023-06-17T12:00:00-07:00",
-   "age_grade_level": [
-    "Family",
-    "Grades 6-8",
-    "Grades 9-12",
-    "Adult"
-   ],
-   "cost_range": "Free",
-   "time_of_day": [
-    "Morning"
-   ],
-   "opportunity_type": "Volunteering",
-   "areas_of_interest": [
-    "Earth Science/Ecology"
-   ],
-   "specific_attention": [],
-   "financial_support": "No",
-   "ngss_aligned": "No",
-   "location": "Imperial Beach, behind The Spirit of Imperial Beach Statue",
-   "latitude": "",
-   "longitude": "",
-   "contact_name": "",
-   "contact_email": "",
-   "contact_phone": "",
-   "logo_src": "",
-   "eligibility": "",
-   "image_src": ""
-  },
-  {
    "slug": "https_www_paddleforpeace_org_juneteenth",
    "title": "Juneteenth Community Celebration",
    "partner_name": "Surfrider Foundation San Diego County Chapter",
@@ -12088,6 +12344,43 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_x_gldn_io_e_jvvwpltshwb",
+   "title": "Latino Conservation Week and CBWN Beach Clean Up at Imperial Beach",
+   "partner_name": "Surfrider Foundation San Diego County Chapter",
+   "partner_id": 739,
+   "description": "<u></u><p>Join Surfrider Foundation and other local organizations during Latino Conservation Week for a beach and street cleanup at Imperial Beach! </p><p><b>Register:</b> <a href=\"https://x.gldn.io/e/JvvwpltsHwb\">HERE</a> // <a href=\"https://x.gldn.io/e/JvvwpltsHwb\">https://x.gldn.io/e/JvvwpltsHwb</a></p><p>Meet on the sand behind The Spirit of Imperial Beach Statue in Imperial Beach. Just look for the blue Surfrider tent! </p><p><b>Information</b></p><ul><li><p>You'll start your morning by signing in and gearing up with cleanup supplies at the Surfrider Tent.</p></li><li><p>We will have supplies on hand, but please bring your reusable cleanup supplies, if you have them, as our limited supplies. </p></li><li><p>This is a zero-waste event. Please bring your water in a reusable container, as single-use bottles will not be provided. </p></li><li><p>Please wear comfortable clothes and sun protection.</p></li><li><p>Each individual volunteer must sign and register either ahead of time online HERE or on their smartphone the day of.</p></li><li><p><b>Volunteers under the age of 18 must have a parent or guardian confirm their liability waiver through Golden before the minor can participate. A parent/guardian will need to complete any minor's waiver by confirming an email sent to them from Golden—please check your spam if you do not receive it.</b></p></li><li><p>If you are part of a group of people, please share the registration link with your party and make sure each individual has registered.</p></li></ul><p><b>Weather Cancellation Policy</b></p><p>If it is lightly raining, we will hold the cleanup. If there are heavy rains, we will cancel the cleanup. To check the status of a cleanup, please see the Surfrider San Diego County events calendar or visit us on social media.<span> </span></p>If you have any questions, you can reach out to our beach cleanup coordinator at - <a href=\"mailto:beachcleanups@surfridersd.org\"><u>beachcleanups@surfridersd.org</u></a><span><br></span><u></u><u></u><u></u><u></u><u></u><u></u><u></u><u></u>",
+   "link": "https://x.gldn.io/e/JvvwpltsHwb",
+   "availability": "",
+   "date_start": "2023-07-15T10:00:00-07:00",
+   "date_end": "2023-07-15T13:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 6-8",
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Volunteering",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Imperial Beach, behind The Spirit of Imperial Beach Statue",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "surfrider_foundation_san_diego.png",
    "eligibility": "",
    "image_src": ""
   },
@@ -12172,9 +12465,9 @@
    "date_start": "2023-08-14T18:00:00-07:00",
    "date_end": "2024-11-18T19:00:00-08:00",
    "age_grade_level": [
-    "Family"
+    "Adult"
    ],
-   "cost_range": "Free",
+   "cost_range": "",
    "time_of_day": [
     "Evening"
    ],
@@ -12192,43 +12485,6 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "surfrider_foundation_san_diego.png",
-   "eligibility": "",
-   "image_src": ""
-  },
-  {
-   "slug": "https_x_gldn_io_e_d388kjkshwb",
-   "title": "Moonlight State Beach - Beach Cleanup - In Partnership With Graystar",
-   "partner_name": "Surfrider Foundation San Diego County Chapter",
-   "partner_id": null,
-   "description": "<u></u><p>Join Surfrider Foundation for a beach and street cleanup at Moonlight State Beach!</p><p>This month's cleanup is brought to you in part by <a href=\"https://www.greystar.com/\">Graystar Real Estate and Property Managemen</a>t! <br></p><p><b>Register:</b> <a href=\"https://x.gldn.io/e/d388KJksHwb\">HERE</a> // <a href=\"https://x.gldn.io/e/d388KJksHwb\">https://x.gldn.io/e/d388KJksHwb</a></p><p>Meet on the beach to the right of the volleyball nets. Just look for the blue Surfrider tent! </p><p><b>Information</b></p><ul><li><p>You'll start your morning by signing in and gearing up with cleanup supplies at the Surfrider Tent.</p></li><li><p>We will have supplies on hand, but please bring your reusable cleanup supplies, if you have them, as our limited supplies. </p></li><li><p>This is a zero-waste event. Please bring your water in a reusable container, as single-use bottles will not be provided. </p></li><li><p>Please wear comfortable clothes and sun protection.</p></li><li><p>Each individual volunteer must sign and register either ahead of time online HERE or on their smartphone the day of.</p></li><li><p><b>Volunteers under the age of 18 must have a parent or guardian confirm their liability waiver through Golden before the minor can participate. A parent/guardian will need to complete any minor's waiver by confirming an email sent to them from Golden—please check your spam if you do not receive it.</b></p></li><li><p>If you are part of a group of people, please share the registration link with your party and make sure each individual has registered.</p></li></ul><p><b>Weather Cancellation Policy</b></p><p>If it is lightly raining, we will hold the cleanup. If there are heavy rains, we will cancel the cleanup. To check the status of a cleanup, please see the Surfrider San Diego County events calendar or visit us on social media.</p>If you have any questions, you can reach out to our beach cleanup coordinator at - <a href=\"mailto:beachcleanups@surfridersd.org\"><u>beachcleanups@surfridersd.org</u></a><br><u></u>\n\nJoin with Google Meet: https://meet.google.com/qzf-qcev-wrw\n\nLearn more about Meet at: https://support.google.com/a/users/answer/9282720",
-   "link": "https://x.gldn.io/e/d388KJksHwb",
-   "availability": "",
-   "date_start": "2023-08-19T09:00:00-07:00",
-   "date_end": "2023-08-19T11:00:00-07:00",
-   "age_grade_level": [
-    "Family",
-    "Grades 6-8",
-    "Grades 9-12",
-    "Adult"
-   ],
-   "cost_range": "Free",
-   "time_of_day": [
-    "Morning"
-   ],
-   "opportunity_type": "Volunteering",
-   "areas_of_interest": [
-    "Earth Science/Ecology"
-   ],
-   "specific_attention": [],
-   "financial_support": "No",
-   "ngss_aligned": "No",
-   "location": "Moonlight State Beach",
-   "latitude": "",
-   "longitude": "",
-   "contact_name": "",
-   "contact_email": "",
-   "contact_phone": "",
-   "logo_src": "",
    "eligibility": "",
    "image_src": ""
   },
@@ -12548,6 +12804,40 @@
    "image_src": ""
   },
   {
+   "slug": "https_x_gldn_io_e_d388kjkshwb",
+   "title": "Moonlight State Beach Beach Cleanup & Reusable Bag Drive",
+   "partner_name": "Surfrider Foundation San Diego County Chapter",
+   "partner_id": 739,
+   "description": "<u></u><p>Join Surfrider Foundation for a beach and street cleanup at Moonlight State Beach!</p><p><b>Register:</b> <a href=\"https://x.gldn.io/e/d388KJksHwb\">HERE</a> // <a href=\"https://x.gldn.io/e/d388KJksHwb\">https://x.gldn.io/e/d388KJksHwb</a></p><p>Meet on the beach to the right of the volleyball nets. Just look for the blue Surfrider tent! </p><p><b>Information</b></p><ul><li><p>You'll start your morning by signing in and gearing up with cleanup supplies at the Surfrider Tent.</p></li><li><p>We will have supplies on hand, but please bring your reusable cleanup supplies, if you have them, as our limited supplies. </p></li><li><p>This is a zero-waste event. Please bring your water in a reusable container, as single-use bottles will not be provided. </p></li><li><p>Please wear comfortable clothes and sun protection.</p></li><li><p>Each individual volunteer must sign and register either ahead of time online HERE or on their smartphone the day of.</p></li><li><p><b>Volunteers under the age of 18 must have a parent or guardian confirm their liability waiver through Golden before the minor can participate. A parent/guardian will need to complete any minor's waiver by confirming an email sent to them from Golden—please check your spam if you do not receive it.</b></p></li><li><p>If you are part of a group of people, please share the registration link with your party and make sure each individual has registered.</p></li></ul><p><b>Weather Cancellation Policy</b></p><p>If it is lightly raining, we will hold the cleanup. If there are heavy rains, we will cancel the cleanup. To check the status of a cleanup, please see the Surfrider San Diego County events calendar or visit us on social media.</p>If you have any questions, you can reach out to our beach cleanup coordinator at - <a href=\"mailto:beachcleanups@surfridersd.org\"><u>beachcleanups@surfridersd.org</u></a><br><u></u>\n\nJoin with Google Meet: https://meet.google.com/qzf-qcev-wrw\n\nLearn more about Meet at: https://support.google.com/a/users/answer/9282720",
+   "link": "https://x.gldn.io/e/d388KJksHwb",
+   "availability": "Repeats 3 times through 2023-12-16",
+   "date_start": "2023-10-21T09:00:00-07:00",
+   "date_end": "2023-12-16T11:00:00-08:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Volunteering",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Moonlight State Beach",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "surfrider_foundation_san_diego.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
    "slug": "https_volunteer_surfrider_org_timeslots_hqitrb8sdk",
    "title": "Imperial Beach Ocean Friendly Restaurants Blitz",
    "partner_name": "Surfrider Foundation San Diego County Chapter",
@@ -12859,6 +13149,40 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_x_gldn_io_e_n5fxekdlgfb",
+   "title": "Beach Preservation Program Meeting",
+   "partner_name": "Surfrider Foundation San Diego County Chapter",
+   "partner_id": 739,
+   "description": "<b>Register <a href=\"https://x.gldn.io/e/n5FXeKdLGFb\">HERE</a></b><br><br> <br>Please email <a href=\"mailto:beachpres@surfridersd.org\">beachpres@surfridersd.org </a>if you have any questions before the meeting!<b><br></b>To learn more about our Beach Preservation Program, visit their <a href=\"https://sandiego.surfrider.org/beachpres/\">webpage</a>.<br><b><br></b><br><b>ZOOM login</b><br><a href=\"https://us02web.zoom.us/j/86243828109?pwd=T0ZYeEEybVNVRTZTYitkSkhKc0RtQT09\">https://us02web.zoom.us/j/86243828109?pwd=T0ZYeEEybVNVRTZTYitkSkhKc0RtQT09</a><br><br>Meeting ID: 862 4382 8109<br>Passcode: bp<br>One tap mobile: +16699009128,,86243828109#,,,,*376457# US (San Jose)",
+   "link": "https://x.gldn.io/e/n5FXeKdLGFb",
+   "availability": "Repeats 10 times through 2024-12-03",
+   "date_start": "2024-01-23T02:30:00-08:00",
+   "date_end": "2024-12-03T04:00:00-08:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Zoom",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "surfrider_foundation_san_diego.png",
    "eligibility": "",
    "image_src": ""
   },
@@ -14065,38 +14389,6 @@
    "image_src": ""
   },
   {
-   "slug": "https_x_gldn_io_e_z65ecqsahpb",
-   "title": "Clean Border Water Now Meeting (virtual)",
-   "partner_name": "Surfrider Foundation San Diego County Chapter",
-   "partner_id": 739,
-   "description": "<b>REGISTER HERE: <a href=\"https://www.google.com/url?q=https://x.gldn.io/e/Z65eCqsahPb&amp;sa=D&amp;source=calendar&amp;ust=1734466735380393&amp;usg=AOvVaw0y9YYDdE8yvJ7oe5gGYGi_\" target=\"_blank\">https://x.gldn.io/e/Z65eCqsahPb</a></b><br><br><b>Description<br></b>Join us to learn about the border pollution crisis and how each of us can contribute to solutions. Cover photo by William Bay.<br><br><b>Purpose<br></b>To collectively learn about, address, and eliminate the sewage, trash, sediment, and chemical waste that plagues the Southern California border region. These monthly CBWN meetings occur every second Monday and are open to the public. <br><br><b>Role<br></b>Addressing this massive public health and environmental justice crisis will take all of us. Swing by our meetings to learn more about the issue and ways to get involved. CBWN is a volunteer working group.<br>  <br><b>Vibe</b><br>Practical and actionable solutions!",
-   "link": "https://x.gldn.io/e/Z65eCqsahPb",
-   "availability": "Repeats 10 times through 2025-12-08",
-   "date_start": "2025-02-10T18:00:00-08:00",
-   "date_end": "2025-12-08T19:00:00-08:00",
-   "age_grade_level": [],
-   "cost_range": "Free",
-   "time_of_day": [
-    "Evening"
-   ],
-   "opportunity_type": "Out-of-school Programs",
-   "areas_of_interest": [
-    "Earth Science/Ecology"
-   ],
-   "specific_attention": [],
-   "financial_support": "No",
-   "ngss_aligned": "No",
-   "location": "San Diego County, California",
-   "latitude": "None",
-   "longitude": "None",
-   "contact_name": "",
-   "contact_email": "",
-   "contact_phone": "",
-   "logo_src": "surfrider_foundation_san_diego.png",
-   "eligibility": "",
-   "image_src": ""
-  },
-  {
    "slug": "https_x_gldn_io_e_ude3bslakqb",
    "title": "Ocean Friendly Restaurants & Hotels - Program Mixer & Tour",
    "partner_name": "Surfrider Foundation San Diego County Chapter",
@@ -14189,6 +14481,112 @@
    "financial_support": "No",
    "ngss_aligned": "No",
    "location": "San Diego County, California",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "surfrider_foundation_san_diego.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_volunteer_surfrider_org_timeslots_qxn5bvpzcf",
+   "title": "Embarcadero Marina Park North - Downtown Cleanup",
+   "partner_name": "Surfrider Foundation San Diego County Chapter",
+   "partner_id": 739,
+   "description": "<p>Join Surfrider Foundation for a downtown park and street cleanup at Embarcadero Marina Park North!</p><p><b>Register:</b> <a href=\"https://x.gldn.io/e/J1nvNrT0nPb\" target=\"_blank\"><u>HERE </u></a>// <a href=\"https://x.gldn.io/e/J1nvNrT0nPb\" target=\"_blank\">https://x.gldn.io/e/J1nvNrT0nPb</a></p><p>Meet us on the lawn at Embarcadero Marina Park North. Just look for the blue Surfrider tent! </p><p><b>Information</b></p><ul><li><p>You'll start your morning by signing in and gearing up with cleanup supplies at the Surfrider Tent.</p></li><li><p>We will have supplies on hand, but please bring your reusable cleanup supplies (gloves, reusable bag to collect trash, and/or trash grabber), if you have them, as our supplies are limited. </p></li><li><p>This is a plastic-waste-free event. Please bring your water in a reusable container, as single-use bottles will not be provided.</p></li><li><p>Please wear comfortable clothes and sun protection.</p></li><li><p>Each individual volunteer must sign and register either ahead of time online <a href=\"https://volunteer.surfrider.org/timeslots/QXN5bVPzCF\" target=\"_blank\"><u>HERE</u></a> or on their smartphone the day of.</p></li><li><p><b>Volunteers under the age of 18 must have a parent or guardian confirm their liability waiver through Golden before the minor can participate. A parent/guardian will need to complete any minor's waiver by confirming an email sent to them from Golden—please check your spam if you do not receive it.</b></p></li><li><p>If you are part of a group of people, please share the registration link with your party and make sure each individual has registered.</p></li></ul><p><b>Weather Cancellation Policy</b></p><p>If it is lightly raining, we will hold the cleanup. If there are heavy rains, we will cancel the cleanup. To check the status of a cleanup, please see the Surfrider San Diego County events calendar or visit us on social media. </p><p><b>For more information and FAQs on our beach cleanups, please visit our page <a href=\"https://sandiego.surfrider.org/beach-cleanup-volunteers\" target=\"_blank\"><u><u><u>HERE</u></u></u></a></b></p><p>If you have any questions, you can reach out to our beach cleanup coordinator at - <a href=\"mailto:beachcleanups@surfridersd.org\" target=\"_blank\"><u><u><u><u>beachcleanups@surfridersd.org</u></u></u></u></a></p>",
+   "link": "https://volunteer.surfrider.org/timeslots/QXN5bVPzCF",
+   "availability": "",
+   "date_start": "2025-02-22T09:00:00-08:00",
+   "date_end": "2025-02-22T11:00:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 9-12",
+    "Grades 6-8",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Volunteering",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "400 Kettner Blvd, San Diego, CA 92101, USA",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "surfrider_foundation_san_diego.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_x_gldn_io_e_uv35m6f6gpb",
+   "title": "Beach Preservation Meeting (virtual)",
+   "partner_name": "Surfrider Foundation San Diego County Chapter",
+   "partner_id": 739,
+   "description": "<br><b>REGISTER HERE FOR ZOOM DETAILS: <a href=\"https://x.gldn.io/e/UV35m6f6gPb\">https://x.gldn.io/e/UV35m6f6gPb</a></b><br><br><b>Description</b><br>Join a virtual Beach Preservation meeting! Our Beach Pres volunteers focus on issues that affect public beach access and the future of our natural coastline. <br><br><b>Purpose</b><br>We keep tabs on coastal development, coastal cities, and the California Coastal Commission to ensure that our beaches - and public access to them - are protected. Visit our webpage to learn more: <a href=\"https://sandiego.surfrider.org/beachpres\">https://sandiego.surfrider.org/beachpres</a><br><br><b>Role<br></b>Beach Preservation is a volunteer working group. In this meeting, you'll hear updates from our volunteer leads and have opportunities to raise your hand to support campaigns and initiatives.<br><br><b>Vibe<br></b>Practical and actionable solutions!",
+   "link": "https://x.gldn.io/e/UV35m6f6gPb",
+   "availability": "",
+   "date_start": "2025-03-03T18:30:00-08:00",
+   "date_end": "2025-03-03T20:00:00-08:00",
+   "age_grade_level": [
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Volunteering",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Virtual",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "surfrider_foundation_san_diego.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "https_x_gldn_io_e_z65ecqsahpb",
+   "title": "CANCELED: Clean Border Water Now Meeting (virtual)",
+   "partner_name": "Surfrider Foundation San Diego County Chapter",
+   "partner_id": 739,
+   "description": "<b>REGISTER HERE: <a href=\"https://www.google.com/url?q=https://x.gldn.io/e/Z65eCqsahPb&amp;sa=D&amp;source=calendar&amp;ust=1734466735380393&amp;usg=AOvVaw0y9YYDdE8yvJ7oe5gGYGi_\" target=\"_blank\">https://x.gldn.io/e/Z65eCqsahPb</a></b><br><br><b>Description<br></b>Join us to learn about the border pollution crisis and how each of us can contribute to solutions. Cover photo by William Bay.<br><br><b>Purpose<br></b>To collectively learn about, address, and eliminate the sewage, trash, sediment, and chemical waste that plagues the Southern California border region. These monthly CBWN meetings occur every second Monday and are open to the public. <br><br><b>Role<br></b>Addressing this massive public health and environmental justice crisis will take all of us. Swing by our meetings to learn more about the issue and ways to get involved. CBWN is a volunteer working group.<br>  <br><b>Vibe</b><br>Practical and actionable solutions!",
+   "link": "https://x.gldn.io/e/Z65eCqsahPb",
+   "availability": "",
+   "date_start": "2025-03-10T18:00:00-07:00",
+   "date_end": "2025-03-10T19:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Virtual",
    "latitude": "None",
    "longitude": "None",
    "contact_name": "",
@@ -14545,40 +14943,6 @@
    "image_src": ""
   },
   {
-   "slug": "https_x_gldn_io_e_uv35m6f6gpb",
-   "title": "Beach Preservation Meeting (virtual)",
-   "partner_name": "Surfrider Foundation San Diego County Chapter",
-   "partner_id": 739,
-   "description": "<br><b>REGISTER HERE FOR ZOOM DETAILS: <a href=\"https://x.gldn.io/e/UV35m6f6gPb\">https://x.gldn.io/e/UV35m6f6gPb</a></b><br><br><b>Description</b><br>Join a virtual Beach Preservation meeting! Our Beach Pres volunteers focus on issues that affect public beach access and the future of our natural coastline. <br><br><b>Purpose</b><br>We keep tabs on coastal development, coastal cities, and the California Coastal Commission to ensure that our beaches - and public access to them - are protected. Visit our webpage to learn more: <a href=\"https://sandiego.surfrider.org/beachpres\">https://sandiego.surfrider.org/beachpres</a><br><br><b>Role<br></b>Beach Preservation is a volunteer working group. In this meeting, you'll hear updates from our volunteer leads and have opportunities to raise your hand to support campaigns and initiatives.<br><br><b>Vibe<br></b>Practical and actionable solutions!",
-   "link": "https://x.gldn.io/e/UV35m6f6gPb",
-   "availability": "Repeats 2 times through 2025-12-08",
-   "date_start": "2025-06-02T18:30:00-07:00",
-   "date_end": "2025-12-08T20:00:00-08:00",
-   "age_grade_level": [
-    "Adult"
-   ],
-   "cost_range": "Free",
-   "time_of_day": [
-    "Evening"
-   ],
-   "opportunity_type": "Volunteering",
-   "areas_of_interest": [
-    "Earth Science/Ecology"
-   ],
-   "specific_attention": [],
-   "financial_support": "No",
-   "ngss_aligned": "No",
-   "location": "Virtual",
-   "latitude": "None",
-   "longitude": "None",
-   "contact_name": "",
-   "contact_email": "",
-   "contact_phone": "",
-   "logo_src": "surfrider_foundation_san_diego.png",
-   "eligibility": "",
-   "image_src": ""
-  },
-  {
    "slug": "https_x_gldn_io_e_3eei1astvqb",
    "title": "Ocean Friendly Restaurants - Action Hour",
    "partner_name": "Surfrider Foundation San Diego County Chapter",
@@ -14805,6 +15169,7 @@
    ],
    "cost_range": "",
    "time_of_day": [
+    "Afternoon",
     "Evening"
    ],
    "opportunity_type": "Out-of-school Programs",
@@ -15219,9 +15584,9 @@
    "partner_id": 739,
    "description": "<b>REGISTER HERE: <a href=\"https://volunteer.surfrider.org/timeslots/fE9dBRiogs\">https://volunteer.surfrider.org/timeslots/fE9dBRiogs</a><br><br></b><br><b>Description<br></b>Join a virtual Beach Preservation meeting! Our Beach Pres volunteers focus on issues that affect public beach access and the future of our natural coastline. <br><br><b>Purpose<br></b>We keep tabs on coastal development, coastal cities, and the California Coastal Commission to ensure that our beaches - and public access to them - are protected. Visit our webpage to learn more: <a href=\"https://sandiego.surfrider.org/beachpres\">https://sandiego.surfrider.org/beachpres</a><br><br><b>Role<br></b>Beach Preservation is a volunteer working group. In this meeting, you'll hear updates from our volunteer leads and have opportunities to raise your hand to support campaigns and initiatives.<br><br><b>Vibe<br></b>Practical and actionable solutions!",
    "link": "https://volunteer.surfrider.org/timeslots/fE9dBRiogs",
-   "availability": "Repeats 4 times through 2026-08-03",
+   "availability": "Repeats 2 times through 2026-06-01",
    "date_start": "2026-03-02T18:30:00-08:00",
-   "date_end": "2026-08-03T20:00:00-07:00",
+   "date_end": "2026-06-01T20:00:00-07:00",
    "age_grade_level": [
     "Adult"
    ],
@@ -15425,7 +15790,7 @@
    "slug": "https_volunteer_surfrider_org_timeslots_mjiv10trv9",
    "title": "Moonlight State Beach - Beach Cleanup Sponsored by COOLA",
    "partner_name": "Surfrider Foundation San Diego County Chapter",
-   "partner_id": null,
+   "partner_id": 739,
    "description": "<b>REGISTER HERE: </b><a href=\"https://volunteer.surfrider.org/timeslots/mjIV10trv9\"><b>https://volunteer.surfrider.org/timeslots/mjIV10trv9</b></a><b><br></b><br><b>Description<br></b>Beach cleanups are a fun way to engage in your community and leave the coast better than you found it.<br><br><b>Purpose<br></b>Take action to protect the environment by removing trash from our coastline. In addition to cleaning the beach, Surfrider can use the data you collect to influence laws that reduce pollution at the source!<br>  <br><b>Role<br></b>Take action to protect the environment by removing trash from our coastline and collect data to . In addition to cleaning the beach, Surfrider can use the data you collect to influence laws that reduce pollution at the source!<br>  <br><b>Vibe<br></b>Active teamwork, education and fun!",
    "link": "https://volunteer.surfrider.org/timeslots/mjIV10trv9",
    "availability": "Repeats 2 times through 2026-08-15",
@@ -15433,7 +15798,9 @@
    "date_end": "2026-08-15T11:00:00-07:00",
    "age_grade_level": [
     "Family",
-    "Adult"
+    "Adult",
+    "Grades 6-8",
+    "Grades 9-12"
    ],
    "cost_range": "Free",
    "time_of_day": [
@@ -15447,12 +15814,12 @@
    "financial_support": "No",
    "ngss_aligned": "No",
    "location": "Moonlight State Beach",
-   "latitude": "",
-   "longitude": "",
+   "latitude": "None",
+   "longitude": "None",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
-   "logo_src": "",
+   "logo_src": "surfrider_foundation_san_diego.png",
    "eligibility": "",
    "image_src": ""
   },
@@ -15482,41 +15849,6 @@
    "financial_support": "No",
    "ngss_aligned": "No",
    "location": "Moonlight State Beach",
-   "latitude": "",
-   "longitude": "",
-   "contact_name": "",
-   "contact_email": "",
-   "contact_phone": "",
-   "logo_src": "",
-   "eligibility": "",
-   "image_src": ""
-  },
-  {
-   "slug": "https_volunteer_surfrider_org_timeslots_p9uzx0gklx",
-   "title": "Imperial Beach - Beach Cleanup (Canceled)",
-   "partner_name": "Surfrider Foundation San Diego County Chapter",
-   "partner_id": null,
-   "description": "<b>REGISTER HERE: <a href=\"https://volunteer.surfrider.org/timeslots/p9UZx0Gklx\" target=\"_blank\">https://volunteer.surfrider.org/timeslots/p9UZx0Gklx</a></b>",
-   "link": "https://volunteer.surfrider.org/timeslots/p9UZx0Gklx",
-   "availability": "",
-   "date_start": "2026-04-18T10:00:00-07:00",
-   "date_end": "2026-04-18T12:00:00-07:00",
-   "age_grade_level": [
-    "Family",
-    "Adult"
-   ],
-   "cost_range": "Free",
-   "time_of_day": [
-    "Morning"
-   ],
-   "opportunity_type": "Volunteering",
-   "areas_of_interest": [
-    "Earth Science/Ecology"
-   ],
-   "specific_attention": [],
-   "financial_support": "No",
-   "ngss_aligned": "No",
-   "location": "Imperial Beach",
    "latitude": "",
    "longitude": "",
    "contact_name": "",
@@ -15772,6 +16104,42 @@
    "image_src": ""
   },
   {
+   "slug": "https_volunteer_surfrider_org_timeslots_p9uzx0gklx",
+   "title": "Imperial Beach Cleanup for San Diego River Days",
+   "partner_name": "Surfrider Foundation San Diego County Chapter",
+   "partner_id": 739,
+   "description": "<b>REGISTER HERE: <a href=\"https://volunteer.surfrider.org/timeslots/p9UZx0Gklx\">https://volunteer.surfrider.org/timeslots/p9UZx0Gklx</a></b><br><br><b>Description</b><br>Beach cleanups are a fun way to engage in your community and leave the coast better than you found it.<br><br><b>Purpose<br></b>Our local beaches are protected by volunteers, just like you! We welcome you to a fun day in the sand with family, friends, and new acquaintances while removing trash and raising awareness about plastic pollution.<br>  <br><b>Role<br></b>Take action to protect the environment by removing trash from our coastline. In addition to cleaning the beach, Surfrider can use the data you collect to influence laws that reduce pollution at the source!<br>  <br><b>Vibe<br></b>Active teamwork, education and fun!",
+   "link": "https://volunteer.surfrider.org/timeslots/p9UZx0Gklx",
+   "availability": "",
+   "date_start": "2026-05-16T10:00:00-07:00",
+   "date_end": "2026-05-16T12:00:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Grades 9-12",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Volunteering",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Imperial Beach",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "surfrider_foundation_san_diego.png",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
    "slug": "https_dashboard_goldenvolunteer_com_uclze9clhz_overview",
    "title": "Ocean Beach Lagoon Restoration with Surfrider and SDRPF",
    "partner_name": "Surfrider Foundation San Diego County Chapter",
@@ -15812,7 +16180,7 @@
    "slug": "https_volunteer_surfrider_org_opportunities_pw7hnyqqzb_24web_only_true_branch_match_id_1587953915865727069_branch_referrer_h4siaaaaaaaaa8sokskottlxr9blz0nj08vm10_2fuzwtxzkiymezkmkiyrytktustksrms49pksovl04tsnxlbirlvwaamjq3ntoaaaa_3d",
    "title": "Tijuana Watershed Speaker Series and Clean Border Water Now Community Meeting",
    "partner_name": "Surfrider Foundation San Diego County Chapter",
-   "partner_id": null,
+   "partner_id": 739,
    "description": "<br><b>REGISTER <a href=\"https://volunteer.surfrider.org/opportunities/pw7HnyQQzb?%24web_only=true&amp;_branch_match_id=1587953915865727069&amp;_branch_referrer=H4sIAAAAAAAAA8soKSkottLXr9BLz0nJ08vM10%2FVzwtxzKiyMEzKMkiyrytKTUstKsrMS49PKsovL04tsnXLBIrlVwAAmJQ3NToAAAA%3D\">HERE</a> </b><br><br><b>Description<br></b><span>Join us to learn from a different featured speaker each month.  Sessions will also include advocacy opportunities, upcoming events, and time for questions.</span>",
    "link": "https://volunteer.surfrider.org/opportunities/pw7HnyQQzb?%24web_only=true&_branch_match_id=1587953915865727069&_branch_referrer=H4sIAAAAAAAAA8soKSkottLXr9BLz0nJ08vM10%2FUzwtxzKiyMEzKMkiyrytKTUstKsrMS49PKsovL04tsnXLBIrlVwAAmJQ3NToAAAA%3D",
    "availability": "",
@@ -15833,13 +16201,13 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "",
-   "latitude": "",
-   "longitude": "",
+   "location": "San Diego County, California",
+   "latitude": "None",
+   "longitude": "None",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
-   "logo_src": "",
+   "logo_src": "surfrider_foundation_san_diego.png",
    "eligibility": "",
    "image_src": ""
   },
@@ -15986,15 +16354,14 @@
    "slug": "https_x_gldn_io_e_hx2oxqbzh3b",
    "title": "Surfrider Foundation x prAna - Ocean Beach Cleanup",
    "partner_name": "Surfrider Foundation San Diego County Chapter",
-   "partner_id": null,
+   "partner_id": 739,
    "description": "<b>REGISTER HERE: </b><a href=\"https://x.gldn.io/e/hX2OxqbZH3b\"><b>https://x.gldn.io/e/hX2OxqbZH3b</b></a><br><br><b>Description</b><br>Join us on the sand and let's leave it better! <br><br><b>Purpose</b><br>Our local beaches are protected by volunteers, just like you! We welcome you to a fun day in the sand with family, friends, and new acquaintances while removing trash and raising awareness about plastic pollution. <br><br><b>Role</b><br>Take action to protect the environment by removing trash from our coastline! Please check out the Pro Tips Section after you sign up for everything you will need to know about this cleanup! You will also find these details in your confirmation email.<br><br><b>Vibe</b><br>Active teamwork, education and fun!",
    "link": "https://x.gldn.io/e/hX2OxqbZH3b",
    "availability": "",
    "date_start": "2026-08-01T09:00:00-07:00",
    "date_end": "2026-08-01T11:00:00-07:00",
    "age_grade_level": [
-    "Family",
-    "Adult"
+    "Family"
    ],
    "cost_range": "Free",
    "time_of_day": [
@@ -16008,12 +16375,12 @@
    "financial_support": "No",
    "ngss_aligned": "No",
    "location": "Ocean Beach",
-   "latitude": "",
-   "longitude": "",
+   "latitude": "None",
+   "longitude": "None",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
-   "logo_src": "",
+   "logo_src": "surfrider_foundation_san_diego.png",
    "eligibility": "",
    "image_src": ""
   },

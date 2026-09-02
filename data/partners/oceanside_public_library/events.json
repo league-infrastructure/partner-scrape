@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-09-01T08:27:52Z",
+ "generated_at": "2026-09-02T22:54:58Z",
  "partner_slug": "oceanside_public_library",
  "kind": "current",
- "event_count": 20,
+ "event_count": 21,
  "events": [
   {
    "slug": "computer_basics_20260831",
@@ -148,20 +148,18 @@
    "slug": "homework_helpers_20260903",
    "title": "Homework Helpers",
    "partner_name": "Oceanside Public Library",
-   "partner_id": null,
+   "partner_id": 758,
    "description": "One-on-one homework help every Tuesday in the Civic Center Library Children's area for students in grades K-8.\n\nWalk-ins welcome, no registration required.",
    "link": "",
-   "availability": "Repeats 61 times through 2027-05-28",
+   "availability": "Repeats 70 times through 2027-05-28",
    "date_start": "2026-09-03T23:00:00-07:00",
    "date_end": "2027-05-28T01:00:00-07:00",
    "age_grade_level": [
-    "Family",
-    "Grades 6-8"
+    "Grades 6-8",
+    "Family"
    ],
    "cost_range": "Free",
-   "time_of_day": [
-    "Afternoon"
-   ],
+   "time_of_day": [],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
     "General Science",
@@ -171,8 +169,44 @@
    "financial_support": "No",
    "ngss_aligned": "No",
    "location": "330 North Coast Hwy, Oceanside, CA, 92054, US",
-   "latitude": "",
-   "longitude": "",
+   "latitude": "33.1959",
+   "longitude": "-117.3795",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "lego_brick_building_20260908",
+   "title": "LEGO Brick Building",
+   "partner_name": "Oceanside Public Library",
+   "partner_id": 758,
+   "description": "",
+   "link": "",
+   "availability": "Repeats 4 times through 2026-09-29",
+   "date_start": "2026-09-08T21:30:00-07:00",
+   "date_end": "2026-09-29T23:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K",
+    "Grades 6-8"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Engineering"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "2855 Cedar Rd, Oceanside, CA, 92056, US",
+   "latitude": "33.1959",
+   "longitude": "-117.3795",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",

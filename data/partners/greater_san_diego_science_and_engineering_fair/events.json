@@ -1,7 +1,40 @@
 {
- "generated_at": "2026-09-01T08:27:52Z",
+ "generated_at": "2026-09-02T22:54:58Z",
  "partner_slug": "greater_san_diego_science_and_engineering_fair",
  "kind": "current",
- "event_count": 0,
- "events": []
+ "event_count": 1,
+ "events": [
+  {
+   "slug": "https_www_gsdsef_org_information_schedule",
+   "title": "2027 GSDSEF (Greater San Diego Science and Engineering Fair)",
+   "partner_name": "Greater San Diego Science and Engineering Fair",
+   "partner_id": 231,
+   "description": "Registration deadline: 2027-02-19",
+   "link": "https://www.gsdsef.org/information/schedule",
+   "availability": "Opens ~2027-03-08",
+   "date_start": "2027-03-08T00:00:00-08:00",
+   "date_end": "2027-03-14T00:00:00-08:00",
+   "age_grade_level": [],
+   "cost_range": "",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Competitions",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "4239 KERWOOD CT, San Diego, CA, 92130",
+   "latitude": "32.9529482",
+   "longitude": "-117.2229428",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "greater_san_diego_science.jpg",
+   "eligibility": "Students in grades 6-12",
+   "image_src": ""
+  }
+ ]
 }

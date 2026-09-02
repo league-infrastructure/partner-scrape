@@ -1,31 +1,30 @@
 {
- "generated_at": "2026-09-01T08:27:52Z",
+ "generated_at": "2026-09-02T22:54:58Z",
  "partner_slug": "the_league_of_amazing_programmers",
  "kind": "current",
  "event_count": 1,
  "events": [
   {
    "slug": "https_jtl_pike13_com",
-   "title": "Intro to Robotics (Robot Riot)",
+   "title": "Python Classes",
    "partner_name": "The LEAGUE of Amazing Programmers",
    "partner_id": 287,
-   "description": "Build & Code: Micro:Bit Robotics Take your coding skills to the next level by building and programming your own robot! In this exciting hands-on camp, students will use the Micro:Bit microcontroller to bring their creations to life. You'll learn how to program sensors, motors, and LEDs using Python, JavaScript, or block-based coding. Work with friends to design, build, and code robots that can move, interact, and respond to their environment. This camp is perfect for young engineers and programmers who want to explore the world of robotics in a fun and interactive way! All equipment will be provided by The League of AMAZING Programmers. If you would like to keep your robot at the end of the course there will be an additional fee of $55.00 for the starter kit. As we progress through the course there may be optional add ons to the robot that can be purchased through amazon, those are optional and will be communicated if/when your child gets to that point.",
+   "description": "Learn to program in Python, the most popular programming language. Python is used in everything from machine learning to data science. Our online Python Classes are for kids & teens who are eager to learn programming. We work closely with all students to make coding fun and engaging. Many students explore our extensive curriculum and stay with our program through 12th grade. Classes meet one day per week for 1.5 hours Tuition is $280/month Student–teacher ratio of 5:1 Taught by experienced programmers Grades 4-12 only Our weekly classes run every week throughout the year, so when you register, we will enroll you at the same class time every week (bulk enrollment). You can then cancel or reschedule individual classes online through the client portal. To register for weekly classes Review the schedule below for a day and time slot. ( It's best to select the \"Month\" view. ) Create a client account , and add your students to the account Enroll in a first class for the day and time you want, from the list of classes below. To enroll in all classes of the same day and time, every week, you can: Email Liz Groves at info@jointheleague.org ( Click to compose an email ) with the day and time you would like. Call us at (858) 284-0481. Your child's instructor can enroll your child at the beginning of class. For all details on enrollment, please see our Enrollment Guide and our Policies and Procedures .",
    "link": "https://jtl.pike13.com",
    "availability": "",
-   "date_start": "2026-09-06T20:00:00-07:00",
-   "date_end": "2026-09-06T21:30:00-07:00",
+   "date_start": "2026-09-03T00:00:00-07:00",
+   "date_end": "2026-09-03T01:30:00-07:00",
    "age_grade_level": [
     "Grades 6-8",
     "Grades 9-12"
    ],
-   "cost_range": "Less than $100",
+   "cost_range": "Less than $50",
    "time_of_day": [
     "Evening"
    ],
-   "opportunity_type": "Camps",
+   "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
-    "Coding/Computer Science/Cyber Security",
-    "Engineering"
+    "Coding/Computer Science/Cyber Security"
    ],
    "specific_attention": [],
    "financial_support": "No",

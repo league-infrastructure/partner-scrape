@@ -1,15 +1,15 @@
 {
- "generated_at": "2026-09-01T08:27:52Z",
+ "generated_at": "2026-09-02T22:54:58Z",
  "partner_slug": "san_diego_astronomy_association",
  "kind": "past",
- "event_count": 82,
+ "event_count": 84,
  "events": [
   {
    "slug": "stars_at_mission_trails_tm_20101210",
    "title": "Stars at Mission Trails (TM)",
    "partner_name": "San Diego Astronomy Association",
    "partner_id": 748,
-   "description": "Date / Time: Second Friday of each month, beginning at Sunset.\nCancellations due to weather may occur.\n\nKumeyaay Lake Campground\nTwo Father Junipero Serra Trail\nSan Diego, CA 92119\n(619) 668-2748\n\n\nEvent Coordinator: Kin Searcy\n\nThe SDAA holds a monthly Star Party at Mission Trails Regional Park (MTRP) on the second Friday of every month at the Kumeyaay Lake Campground on the Santee side of MTRP. We set up at dusk in the day-use parking lot, which is just to the right after you enter the campground. Direction to MTRP may be found on the MTRP website.",
+   "description": "Date / Time: First Friday of each month, beginning at Sunset.\nCancellations due to weather may occur.\n\nKumeyaay Lake Campground\nTwo Father Junipero Serra Trail\nSan Diego, CA 92119\n(619) 668-2748\n\n\nEvent Coordinator: Kin Searcy\n\nThe SDAA holds a monthly Star Party at Mission Trails Regional Park (MTRP) on the first Friday of every month at the Kumeyaay Lake Campground on the Santee side of MTRP. We set up at dusk in the day-use parking lot, which is just to the right after you enter the campground. Direction to MTRP may be found on the MTRP website.",
    "link": "",
    "availability": "Repeats 22 times through 2019-04-06",
    "date_start": "2010-12-10T00:00:00-08:00",
@@ -225,8 +225,8 @@
    "slug": "camp_with_the_stars_william_heise_county_park_20110724",
    "title": "Camp with the Stars @ William Heise County Park",
    "partner_name": "San Diego Astronomy Association",
-   "partner_id": null,
-   "description": "Visitors to the park will be treated to telescope views provided by the SDAA. See the Rangers at the gate for location in the park. \n\nVisit http://www.sdcounty.ca.gov/parks/Camping/heise.html for info about the park.",
+   "partner_id": 748,
+   "description": "Visitors to the park will be treated to telescope views provided by the SDAA. See the Rangers at the gate for location in the park. \n\nVisit http://www.sdcounty.ca.gov/parks/Camping/heise.html  for info about the park.",
    "link": "",
    "availability": "Repeats 4 times through 2011-10-02",
    "date_start": "2011-07-24T03:00:00-07:00",
@@ -240,18 +240,18 @@
    ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
-    "Physical Science"
+    "Physics"
    ],
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
    "location": "4945 Heise Park Road, Julian, CA 92036",
-   "latitude": "",
-   "longitude": "",
+   "latitude": "None",
+   "longitude": "None",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
-   "logo_src": "",
+   "logo_src": "san_diego_astronomy_association.jpg",
    "eligibility": "",
    "image_src": ""
   },
@@ -476,7 +476,7 @@
    "slug": "stars_in_the_park_20130403",
    "title": "Stars in the Park",
    "partner_name": "San Diego Astronomy Association",
-   "partner_id": null,
+   "partner_id": 748,
    "description": "At dusk on the first Wednesday of each month, following the monthly \"Sky Tonight\" planetarium show in the Reuben H. Fleet Space Theater, members of the SDAA set up telescopes west of the Fleet on The Prado, for free public sky viewing.",
    "link": "",
    "availability": "Repeats 19 times through 2022-09-08",
@@ -492,18 +492,19 @@
    ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
-    "Physical Science"
+    "Physics",
+    "General Science"
    ],
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
    "location": "Balboa Park - near the Reuben H. Fleet Space Theater",
-   "latitude": "",
-   "longitude": "",
+   "latitude": "None",
+   "longitude": "None",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
-   "logo_src": "",
+   "logo_src": "san_diego_astronomy_association.jpg",
    "eligibility": "",
    "image_src": ""
   },
@@ -907,13 +908,14 @@
    "title": "Stars at West Sycamore",
    "partner_name": "San Diego Astronomy Association",
    "partner_id": 748,
-   "description": "From I-15, go east on Pomerado Road and turn right on Stonebridge Parkway.  The entrance to West Sycamore is at the very east end of Stonebridge Parkway. \nStarts at dusk.\nPark on the paved street and walk past the gate into the park where telescopes are set up.\n\n32 55' 59.6\"N  117 00' 01.5\"W",
+   "description": "Stars at West Sycamore is BACK! \n \nViewing Begins at Dusk.\n\nFrom I-15, go east on Pomerado Road and turn right on Stonebridge Parkway.  The entrance to West Sycamore is at the very east end of Stonebridge Parkway. Starts at dusk.\nPark on the paved street and walk past the gate into the park where telescopes are set up.\n\n32 55&#39; 59.6&quot;N  117 00&#39; 01.5&quot;W",
    "link": "",
    "availability": "Repeats 36 times through 2025-01-18",
    "date_start": "2017-01-27T19:00:00-08:00",
    "date_end": "2025-01-18T00:00:00-08:00",
    "age_grade_level": [
-    "Family"
+    "Family",
+    "Adult"
    ],
    "cost_range": "Free",
    "time_of_day": [
@@ -1192,14 +1194,13 @@
    "slug": "aisig_meeting_20171122",
    "title": "AISIG Meeting",
    "partner_name": "San Diego Astronomy Association",
-   "partner_id": null,
+   "partner_id": 748,
    "description": "Public Meeting on astronomy imaging'",
    "link": "",
    "availability": "Repeats 4 times through 2018-12-26",
    "date_start": "2017-11-22T19:00:00-08:00",
    "date_end": "2018-12-26T21:00:00-08:00",
    "age_grade_level": [
-    "Family",
     "Adult"
    ],
    "cost_range": "Free",
@@ -1213,13 +1214,13 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "Mission Trails Regional Park Visitor Center, 1 Father Junipero Serra Trail, San Diego, CA 92119, USA",
-   "latitude": "",
-   "longitude": "",
+   "location": "16920 Sky Valley Dr Ramona CA 92065  Gate code '#2369'",
+   "latitude": "None",
+   "longitude": "None",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
-   "logo_src": "",
+   "logo_src": "san_diego_astronomy_association.jpg",
    "eligibility": "",
    "image_src": ""
   },
@@ -1553,8 +1554,8 @@
    "partner_id": 748,
    "description": "<h2><i><span style=\"font-weight: normal;\">Title: Resolving the Galactic Center Black Hole with the Event Horizon Telescope.</span></i></h2><h2><i><span style=\"font-weight: normal;\">Speaker: Dr. Chi-kwan “CK” Chan, University of Arizona</span></i></h2><i><span> </span></i><br><span>Details for the program meeting are on the SDAA.org website.<br></span><span><p></p></span><br>You are invited to a Zoom meeting. <br>When: Jul 16, 2025 07:00 PM Pacific Time (US and Canada) <br><br>Register in advance for this meeting:<br><a href=\"https://us02web.zoom.us/meeting/register/tZYkf-2rrTgsE9D7YsRX-mGVVgS_ovMJHX5B\" target=\"_blank\">https://us02web.zoom.us/<u></u>meeting/register/tZYkf-<u></u>2rrTgsE9D7YsRX-mGVVgS_ovMJHX5B</a><u></u> <br><br>After registering, you will receive a confirmation email containing information about joining the meeting.<span><p><br></p></span>",
    "link": "https://us02web.zoom.us/meeting/register/tZYkf-2rrTgsE9D7YsRX-mGVVgS_ovMJHX5B",
-   "availability": "Repeats 14 times through 2026-08-26",
-   "date_start": "2020-04-15T18:30:00-07:00",
+   "availability": "Repeats 11 times through 2026-08-26",
+   "date_start": "2020-04-15T19:00:00-07:00",
    "date_end": "2026-08-26T21:00:00-07:00",
    "age_grade_level": [
     "Adult"
@@ -1566,7 +1567,7 @@
    "opportunity_type": "Professional Development / Conferences",
    "areas_of_interest": [
     "Physics",
-    "Earth Science/Ecology"
+    "Astronomy"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -1774,10 +1775,10 @@
    "time_of_day": [
     "Evening"
    ],
-   "opportunity_type": "Out-of-school Programs",
+   "opportunity_type": "Professional Development / Conferences",
    "areas_of_interest": [
     "Physics",
-    "Earth Science/Ecology"
+    "General Science"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -2276,12 +2277,48 @@
    ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
-    "Physics"
+    "Physics",
+    "Earth Science/Ecology"
    ],
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
    "location": "Oak Oasis in Lakeside",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_diego_astronomy_association.jpg",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "oakoasis_star_party_canceled_20220108",
+   "title": "Oakoasis Star Party-CANCELED",
+   "partner_name": "San Diego Astronomy Association",
+   "partner_id": 748,
+   "description": "<span><i> </i></span><br><span><i><b>CANCELED DUE TO WEATHER ! </b></i></span><br><span><i> </i></span><br><span><i>Stars at OakOasis is now <b>OPEN</b>  and back on the original schedule.</i><br><br><br>Date/Time: Held on the 2nd Saturday of each month, beginning at Sunset. Cancellations due to weather may occur.<br><br>The OakOasis Star Party is a family event great for Astronomers and Earthlings of all sizes. We have a variety of activities all about the night sky. The evening often begins with a twilight hike to check out some bats and scorpions while we wait for the stars to arrive. Once we get back to the parking area, we begin looking at the stars and planets through telescopes. The Park Ranger and SDAA volunteers orient people to the night sky by pointing out planets and constellations and teaching basic astronomy. <br><br>Ranger Kyle<br>Work: 619-561-0580<br><a href=\"mailto:Kyle.Icke@sdcounty.ca.gov\" target=\"_blank\">Kyle.Icke@sdcounty.ca.gov</a><br><br>SDAA Coordinator:<br>Dave Decker<br><a href=\"mailto:outreach@sdaa.org\" target=\"_blank\">outreach@sdaa.org</a><br> </span>",
+   "link": "",
+   "availability": "Repeats 2 times through 2025-12-14",
+   "date_start": "2022-01-08T00:00:00-08:00",
+   "date_end": "2025-12-14T00:00:00-08:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology",
+    "Physics"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "12620 Wildcat Canyon Rd, Lakeside, CA 92040, USA",
    "latitude": "None",
    "longitude": "None",
    "contact_name": "",
@@ -2584,9 +2621,9 @@
    "partner_id": 748,
    "description": "Stars at Mission Trails is BACK!\n \nDate / Time: First Friday of each month, beginning at Sunset.Cancellations due to weather may occur.\n\nKumeyaay Lake Campground\nTwo Father Junipero Serra Trail\nSan Diego, CA 92119\n(619) 668-2748\n\n\nEvent Coordinator: Kin Searcy\n\nThe SDAA holds a monthly Star Party at Mission Trails Regional Park (MTRP) on the first Friday of every month at the Kumeyaay Lake Campground on the Santee side of MTRP. We set up at dusk in the day-use parking lot, which is just to the right after you enter the campground. Direction to MTRP may be found on the MTRP website.",
    "link": "",
-   "availability": "",
+   "availability": "Repeats 2 times through 2025-02-08",
    "date_start": "2024-02-02T00:00:00-08:00",
-   "date_end": "2024-02-03T00:00:00-08:00",
+   "date_end": "2025-02-08T00:00:00-08:00",
    "age_grade_level": [
     "Family",
     "Adult"
@@ -2597,7 +2634,8 @@
    ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
-    "Physics"
+    "Physics",
+    "Earth Science/Ecology"
    ],
    "specific_attention": [],
    "financial_support": "No",
@@ -2930,6 +2968,42 @@
    "contact_email": "",
    "contact_phone": "",
    "logo_src": "",
+   "eligibility": "",
+   "image_src": ""
+  },
+  {
+   "slug": "cancelled_stars_at_sycamore_canyon_20251226",
+   "title": "CANCELLED Stars at Sycamore Canyon",
+   "partner_name": "San Diego Astronomy Association",
+   "partner_id": 748,
+   "description": "We are going back to monthly star parties at this location.\n \nViewing Begins at Dusk.\n\n\nTo access this venue, use the park entrance on Hwy 67, Â½ mile south of Scripps Poway Parkway. Continue through the gate and up the dirt road about 1Â½ miles to the parking area, this is where we setup.  Coordinates from Google Earth for the viewing area are:  32Â°55'47.76\"N, 116Â°58'10.89\"W\nThe street address for the park entrance gate is approximately: 13880 highway 67 Lakeside, CA.",
+   "link": "",
+   "availability": "",
+   "date_start": "2025-12-26T00:00:00-08:00",
+   "date_end": "2025-12-27T00:00:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology",
+    "Physics"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Sycamore Canyon Open Space Preserve, 32°55'47.76\"N, 116°58'10.89\"W",
+   "latitude": "None",
+   "longitude": "None",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_diego_astronomy_association.jpg",
    "eligibility": "",
    "image_src": ""
   }

@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-09-01T08:27:52Z",
+ "generated_at": "2026-09-02T22:54:58Z",
  "partner_slug": "mission_trails_regional_park_foundation",
  "kind": "past",
  "event_count": 37,
@@ -92,7 +92,6 @@
    ],
    "cost_range": "Free",
    "time_of_day": [
-    "Afternoon",
     "Evening"
    ],
    "opportunity_type": "Volunteering",
@@ -102,7 +101,7 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "Kumeyaay Lake Campground (2 Father Junipero Serra Trail, San Diego, CA  92119)",
+   "location": "Kumeyaay Lake Campground (2 Father Junipero Serra Trail, San Diego, CA 92119)",
    "latitude": "32.8347",
    "longitude": "-117.0392",
    "contact_name": "",
@@ -692,35 +691,33 @@
    "slug": "discovery_table_leave_no_trace_20260411",
    "title": "Discovery Table - Leave No Trace",
    "partner_name": "Mission Trails Regional Park Foundation",
-   "partner_id": null,
-   "description": "Stop by the Discovery Table in the lobby of the Visitor Center anytime between 10 a.m. and 1 p.m. and learn the seven principles of Leave No Trace and become better a steward of the park.\n\nDiscovery tables are set up on the second Saturday of every month and some holidays at the Visitor Center and on selected Saturdays during the summer at Kumeyaay Lake Campground.  Tables feature hands-on activities and take-home materials for kids and adults.  Topics vary month-to-month.\n\nUpcoming Topics:\n\n  *\nApril 22 – Leave No Trace\n  *\nMay 9 – Photosynthesis\n  *   May 25 – Bats",
+   "partner_id": 732,
+   "description": "Stop by the special Discovery Table at the Kumeyaay Lake Campground shade structure anytime between 5:30 and 7:30 p.m. and learn the seven principles of Leave No Trace and become better a steward of the park.\n\nDiscovery tables are set up on the second Saturday of every month and some holidays at the Visitor Center and on selected Saturdays during the summer at Kumeyaay Lake Campground.  Tables feature hands-on activities and take-home materials for kids and adults.  Topics vary month-to-month.\n\nUpcoming Topics:\n\n  *   July 3 – Kumeyaay Games\n  *   July 11 – Dog Safety\n  *   July 18 – Owl Pellets (at Kumeyaay Lake Campground)",
    "link": "",
    "availability": "Repeats 2 times through 2026-06-21",
    "date_start": "2026-04-11T10:00:00-07:00",
    "date_end": "2026-06-21T19:30:00-07:00",
    "age_grade_level": [
-    "Family",
-    "Adult"
+    "Family"
    ],
    "cost_range": "Free",
    "time_of_day": [
-    "Morning"
+    "Evening"
    ],
    "opportunity_type": "Out-of-school Programs",
    "areas_of_interest": [
-    "Earth Science/Ecology",
-    "Biology / LifeSciences"
+    "Earth Science/Ecology"
    ],
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "Mission Trails Regional Park Visitor Center (1 Father Junipero Serra Trl, San Diego, CA 92119, United States)",
-   "latitude": "",
-   "longitude": "",
+   "location": "Kumeyaay Lake Campground (2 Father Junipero Serra Trail, San Diego, CA 92119, United States)",
+   "latitude": "32.8347",
+   "longitude": "-117.0392",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
-   "logo_src": "",
+   "logo_src": "mission_trails_regional_park.png",
    "eligibility": "",
    "image_src": ""
   },
@@ -1156,15 +1153,14 @@
    "slug": "ranger_led_night_walk_20260726",
    "title": "Ranger-led Night Walk",
    "partner_name": "Mission Trails Regional Park Foundation",
-   "partner_id": null,
+   "partner_id": 732,
    "description": "Join MTRP Park Ranger Brandon Botticelli for a two-hour night walk from the Bushy Hill parking lot.  Enjoy the park after dark while looking for creatures of the night, such as, owls, scorpions, spiders, snakes, and more.\n\nThis program is free with no reservations required.  Meet at the kiosk in the dirt parking lot at the corner of Father Junipero Serra Trail and Bushy Hill Dr. across from the campground.",
    "link": "",
    "availability": "Repeats 2 times through 2026-08-30",
    "date_start": "2026-07-26T03:00:00-07:00",
    "date_end": "2026-08-30T04:15:00-07:00",
    "age_grade_level": [
-    "Family",
-    "Adult"
+    "Family"
    ],
    "cost_range": "Free",
    "time_of_day": [
@@ -1178,13 +1174,13 @@
    "specific_attention": [],
    "financial_support": "No",
    "ngss_aligned": "No",
-   "location": "Bushy Hill Parking Lot",
-   "latitude": "",
-   "longitude": "",
+   "location": "Bushy Hill Parking Lot, Father Junipero Serra Trail and Bushy Hill Dr.",
+   "latitude": "32.8347",
+   "longitude": "-117.0392",
    "contact_name": "",
    "contact_email": "",
    "contact_phone": "",
-   "logo_src": "",
+   "logo_src": "mission_trails_regional_park.png",
    "eligibility": "",
    "image_src": ""
   },

@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-09-01T08:27:52Z",
+ "generated_at": "2026-09-02T22:54:58Z",
  "partner_slug": "san_diego_children_s_discovery_museum",
  "kind": "current",
- "event_count": 22,
+ "event_count": 26,
  "events": [
   {
    "slug": "https_visitcmod_org_events_sensory_friendly_mornings_2_2026_08_30",
@@ -355,6 +355,79 @@
    "image_src": "518e0237d759d639.jpg"
   },
   {
+   "slug": "https_visitcmod_org_events_tortoise_talk_4_2026_09_02",
+   "title": "Tortoise Talk",
+   "partner_name": "San Diego Children's Discovery Museum",
+   "partner_id": 16,
+   "description": "Meet Sebastian, the 57 year old North American Desert Tortoise! Guests can get an up close look at Sebastian the tortoise and learn about his different adaptations.",
+   "link": "https://visitcmod.org/events/tortoise-talk-4/2026-09-02/",
+   "availability": "Repeats 37 times through 2026-10-31",
+   "date_start": "2026-09-02T10:00:00-07:00",
+   "date_end": "2026-10-31T10:30:00-07:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K",
+    "Grades 6-8"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Children's Museum of Discovery, 320 North Broadway, Escondido, CA",
+   "latitude": "33.124517",
+   "longitude": "-117.082351",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_diego_childrens_discovery.jpg",
+   "eligibility": "",
+   "image_src": "4652a13647c02df2.jpg"
+  },
+  {
+   "slug": "https_visitcmod_org_events_garden_workshop_15_2026_09_02",
+   "title": "Garden Workshop",
+   "partner_name": "San Diego Children's Discovery Museum",
+   "partner_id": 16,
+   "description": "Enjoy a Garden Workshop with our Educators!",
+   "link": "https://visitcmod.org/events/garden-workshop-15/2026-09-02/",
+   "availability": "Repeats 166 times through 2026-12-30",
+   "date_start": "2026-09-02T11:00:00-07:00",
+   "date_end": "2026-12-30T14:30:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K",
+    "Grades 6-8"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology",
+    "Biology / LifeSciences"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Children's Museum of Discovery, 320 North Broadway, Escondido, CA",
+   "latitude": "33.124517",
+   "longitude": "-117.082351",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_diego_childrens_discovery.jpg",
+   "eligibility": "",
+   "image_src": "6616b4e6fd821e6e.png"
+  },
+  {
    "slug": "https_visitcmod_org_events_bilingual_tortoise_talk_3_2026_09_03",
    "title": "Bilingual Tortoise Talk",
    "partner_name": "San Diego Children's Discovery Museum",
@@ -460,6 +533,40 @@
    "image_src": "518e0237d759d639.jpg"
   },
   {
+   "slug": "https_visitcmod_org_events_family_workshop_113_2026_09_04",
+   "title": "Family Workshop",
+   "partner_name": "San Diego Children's Discovery Museum",
+   "partner_id": 16,
+   "description": "Let's make a \"Carnival of the Animals\" character crown. We will listen to the music of the Symphony \"The Carnival of the Animals\" by Camille Saint-Saëns, then make an animal character crown to inspire dancing to the music.",
+   "link": "https://visitcmod.org/events/family-workshop-113/2026-09-04/",
+   "availability": "Repeats 25 times through 2026-09-27",
+   "date_start": "2026-09-04T15:00:00-07:00",
+   "date_end": "2026-09-27T16:00:00-07:00",
+   "age_grade_level": [
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Afternoon"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Children's Museum of Discovery, 320 North Broadway, Escondido, CA",
+   "latitude": "33.124517",
+   "longitude": "-117.082351",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_diego_childrens_discovery.jpg",
+   "eligibility": "",
+   "image_src": "518e0237d759d639.jpg"
+  },
+  {
    "slug": "https_visitcmod_org_events_sensory_friendly_mornings_2_2026_09_06",
    "title": "Sensory Friendly Mornings",
    "partner_name": "San Diego Children's Discovery Museum",
@@ -490,6 +597,42 @@
    "logo_src": "san_diego_childrens_discovery.jpg",
    "eligibility": "",
    "image_src": "7e7e6101544f656f.jpg"
+  },
+  {
+   "slug": "https_visitcmod_org_events_members_only_hours_2_2026_09_15",
+   "title": "Member’s Only Hours",
+   "partner_name": "San Diego Children's Discovery Museum",
+   "partner_id": 16,
+   "description": "Join us every Tuesday from 8:30 a.m. - 9:30 a.m. for our Member's Only Hours.",
+   "link": "https://visitcmod.org/events/members-only-hours-2/2026-09-15/",
+   "availability": "Repeats 14 times through 2026-12-29",
+   "date_start": "2026-09-08T08:30:00-07:00",
+   "date_end": "2026-12-29T09:30:00-08:00",
+   "age_grade_level": [
+    "Family",
+    "Pre-K",
+    "Grades 6-8"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Children's Museum of Discovery, 320 North Broadway, Escondido, CA",
+   "latitude": "33.124517",
+   "longitude": "-117.082351",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "san_diego_childrens_discovery.jpg",
+   "eligibility": "",
+   "image_src": "c2e5ebf81acbd9b5.jpg"
   },
   {
    "slug": "https_visitcmod_org_events_teddy_bear_picnic",

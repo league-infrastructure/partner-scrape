@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-09-01T08:27:52Z",
+ "generated_at": "2026-09-02T22:54:58Z",
  "partner_slug": "the_living_coast_discovery_center",
  "kind": "current",
- "event_count": 5,
+ "event_count": 6,
  "events": [
   {
    "slug": "https_www_thelivingcoast_org_programs_events_upcoming_events_eagle_presentation_2_2_2_2026_09_02",
@@ -176,6 +176,38 @@
    "logo_src": "living_coast_discovery_center.jpg",
    "eligibility": "",
    "image_src": "0ffd1923ca95be9e.jpg"
+  },
+  {
+   "slug": "https_www_thelivingcoast_org_camps",
+   "title": "Coastal Champs",
+   "partner_name": "The Living Coast Discovery Center",
+   "partner_id": 46,
+   "description": "",
+   "link": "https://www.thelivingcoast.org/camps",
+   "availability": "Opens ~2026-11-23",
+   "date_start": "2026-11-23T00:00:00-08:00",
+   "date_end": "2026-11-25T00:00:00-08:00",
+   "age_grade_level": [],
+   "cost_range": "Greater than $200",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Camps",
+   "areas_of_interest": [
+    "General Science"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "1000 Gunpowder Point Dr, Chula Vista, CA, 91910",
+   "latitude": "32.6401018",
+   "longitude": "-117.1103432",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "living_coast_discovery_center.jpg",
+   "eligibility": "",
+   "image_src": ""
   }
  ]
 }

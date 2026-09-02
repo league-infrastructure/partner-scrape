@@ -1,7 +1,111 @@
 {
- "generated_at": "2026-09-01T08:27:52Z",
+ "generated_at": "2026-09-02T22:54:58Z",
  "partner_slug": "escondido_creek_conservancy",
  "kind": "past",
- "event_count": 0,
- "events": []
+ "event_count": 3,
+ "events": [
+  {
+   "slug": "https_www_escondidocreek_org_event_details_shrub_club",
+   "title": "Shrub Club | Escondido Creek Cons",
+   "partner_name": "Escondido Creek Conservancy",
+   "partner_id": 171,
+   "description": "From removing invasive species, fixing trails, and making room for native plants and animals to flourish in the Escondido Creek watershed, Shrub Club is always an amazing way to get outside and enjoy nature with the Conservancy’s volunteers!",
+   "link": "https://www.escondidocreek.org/event-details/shrub-club",
+   "availability": "",
+   "date_start": "",
+   "date_end": "",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [],
+   "opportunity_type": "Volunteering",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Escondido Creek watershed",
+   "latitude": "33.1216365",
+   "longitude": "-117.0821204",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "escondido_creek_conservancy.jpg",
+   "eligibility": "",
+   "image_src": "84124ded83067bfa.jpg"
+  },
+  {
+   "slug": "https_www_escondidocreek_org_event_details_a_hike_to_learn_how_to_help_save_franks_peak",
+   "title": "A Hike to Learn How to Help Save Frank's Peak",
+   "partner_name": "Escondido Creek Conservancy",
+   "partner_id": 171,
+   "description": "Franks Peak has been proposed for development. The Escondido Creek Conservancy is working to save it. You can help! Walk with us!",
+   "link": "https://www.escondidocreek.org/event-details/a-hike-to-learn-how-to-help-save-franks-peak",
+   "availability": "",
+   "date_start": "2024-07-13T09:00:39-07:00",
+   "date_end": "2024-07-13T11:00:39-07:00",
+   "age_grade_level": [
+    "Family",
+    "Adult"
+   ],
+   "cost_range": "Free",
+   "time_of_day": [
+    "Morning"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Ridgeline Trailhead, 1250 South Twin Oaks Valley Road San Marcos, CA 92078",
+   "latitude": "33.1216365",
+   "longitude": "-117.0821204",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "escondido_creek_conservancy.jpg",
+   "eligibility": "",
+   "image_src": "02024ed1d5bfbf6e.jpg"
+  },
+  {
+   "slug": "https_www_escondidocreek_org_event_details_conservation_conversation_san_diego_geology",
+   "title": "Conservation Conversation – San Diego Geology",
+   "partner_name": "Escondido Creek Conservancy",
+   "partner_id": 171,
+   "description": "&quot;Here Wasn’t Here 20-million-years-ago and Other Geological Adventures&quot; - Join Richard Halsey, director of the California Chaparral Institute, as he shares why our region's geology shouldn't be taken for granite!",
+   "link": "https://www.escondidocreek.org/event-details/conservation-conversation-san-diego-geology",
+   "availability": "",
+   "date_start": "2024-07-18T18:00:00-07:00",
+   "date_end": "2024-07-18T19:00:00-07:00",
+   "age_grade_level": [
+    "Adult",
+    "Family"
+   ],
+   "cost_range": "",
+   "time_of_day": [
+    "Evening"
+   ],
+   "opportunity_type": "Out-of-school Programs",
+   "areas_of_interest": [
+    "Earth Science/Ecology"
+   ],
+   "specific_attention": [],
+   "financial_support": "No",
+   "ngss_aligned": "No",
+   "location": "Escondido, 8833 Harmony Grove Rd, Escondido, CA 92029, USA",
+   "latitude": "33.1216365",
+   "longitude": "-117.0821204",
+   "contact_name": "",
+   "contact_email": "",
+   "contact_phone": "",
+   "logo_src": "escondido_creek_conservancy.jpg",
+   "eligibility": "",
+   "image_src": "a5b2cd959c10465d.jpg"
+  }
+ ]
 }

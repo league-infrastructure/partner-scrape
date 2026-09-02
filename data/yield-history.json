@@ -1,4 +1,24 @@
 {
+  "__regions__": {
+    "Central San Diego": {
+      "count": 887
+    },
+    "East County": {
+      "count": 80
+    },
+    "North County Coastal": {
+      "count": 154
+    },
+    "North County Inland": {
+      "count": 92
+    },
+    "South Bay": {
+      "count": 65
+    },
+    "unclassified": {
+      "count": 651
+    }
+  },
   "aef4kids": {
     "found": 8,
     "slugs": [
@@ -14,7 +34,7 @@
     ]
   },
   "anza-borrego-foundation": {
-    "found": 300,
+    "found": 299,
     "slugs": [
       "https_host_nxt_blackbaud_com_registration_form_formid_4950427c_9b45_4dae_bbde_bb75ad57a7e8_envid_p_of6jnj_ndu_ys4lsf7cg9w_zone_usa",
       "https_host_nxt_blackbaud_com_registration_form_formid_5ee0914a_027d_41bc_9187_0199bb1b7a8f_envid_p_of6jnj_ndu_ys4lsf7cg9w_zone_usa",
@@ -190,6 +210,7 @@
       "https_www_aquillius_com_event_psychedelics",
       "https_www_aquillius_com_event_she_talks_empower_lab",
       "https_www_aquillius_com_event_sheconnects_empowering_women_through_community",
+      "https_www_aquillius_com_event_simbiosyx_matching_startups_with_verified_experts_to_fuel_innovation_31",
       "https_www_aquillius_com_event_thriving_in_stem",
       "https_www_aquillius_com_event_where_rems_meets_reality_psychedelics_patients_and_clinical_trials",
       "https_www_aquillius_com_event_www_aquillius_com_event_women_thriving_in_stem_unleash_your_inner_stem_goddess_workshop_networking_event",
@@ -208,7 +229,7 @@
     ]
   },
   "balboa-park": {
-    "found": 167,
+    "found": 175,
     "slugs": [
       "https_balboapark_org_event_a_space_for_all_of_us_2_2026_09_13",
       "https_balboapark_org_event_educator_open_house",
@@ -229,7 +250,14 @@
       "https_balboapark_org_event_sky_tonight_weekend_edition_2026_10_11",
       "https_balboapark_org_event_the_flight_of_jackie_cochran_documentary_screening",
       "https_balboapark_org_event_the_sky_tonight_4_2_2_2026_09_02",
+      "https_balboapark_org_event_the_traveling_tables_of_amistad_workshops_2026_09_06",
       "https_balboapark_org_event_uc_master_gardener_plant_sale_and_garden_event"
+    ]
+  },
+  "biocom-generation-steam": {
+    "found": 1,
+    "slugs": [
+      "https_www_biocom_org_generation_steam_programs_life_science_innov8ed"
     ]
   },
   "biomimicrysandiego": {
@@ -244,6 +272,12 @@
     "found": 1,
     "slugs": [
       "https_aquarium_ucsd_edu_events_triton_weeks_welcome"
+    ]
+  },
+  "birch-aquarium-summer-camps": {
+    "found": 8,
+    "slugs": [
+      "https_aquarium_ucsd_edu_newsroom_birch_aquariums_summer_camps_2026"
     ]
   },
   "boundlessbio": {
@@ -270,27 +304,48 @@
       "https_challenge_island_com_program_slimetopia"
     ]
   },
+  "cipherhacks": {
+    "found": 1,
+    "slugs": [
+      "https_cipherhacks_tech"
+    ]
+  },
   "citizenschools": {
     "found": 2,
+    "slugs": []
+  },
+  "city-of-san-diego-careers": {
+    "found": 0,
     "slugs": []
   },
   "climate-science-alliance": {
     "found": 0,
     "slugs": []
   },
+  "cmod-summer-camp": {
+    "found": 2,
+    "slugs": [
+      "https_visitcmod_org_summercamp"
+    ]
+  },
   "coastalrootsfarm": {
     "found": 10,
     "slugs": [
-      "https_coastalrootsfarm_org_event_monthly_farm_tour_september_2026",
-      "https_coastalrootsfarm_org_event_sukkot_harvest_shabbat"
+      "https_coastalrootsfarm_org_event_monthly_farm_tour_september_2026"
     ]
   },
   "comic-con-museum": {
     "found": 732,
     "slugs": []
   },
+  "congressional-app-challenge-sd": {
+    "found": 1,
+    "slugs": [
+      "https_www_congressionalappchallenge_us_participating_districts"
+    ]
+  },
   "coronado-library": {
-    "found": 736,
+    "found": 735,
     "slugs": [
       "baby_storytime_20260914",
       "bridge_bay_garden_club_discover_the_intricacies_of_horticulture_therapy_presented_by_mattie_dufresne_20270524",
@@ -298,6 +353,7 @@
       "crown_garden_club_planting_for_pollinators_presented_by_sharon_reeve_20270128",
       "crown_garden_club_preventing_plant_extinction_in_san_diego_county_presented_by_maggie_reinbold_20270422",
       "drop_in_tech_help_20260921",
+      "friends_and_flowers_floral_soap_tutorial_20260925",
       "junior_volunteer_meeting_20270204",
       "little_explorers_20261008",
       "little_explorers_pumpkin_play_20260910",
@@ -315,11 +371,14 @@
       "tinker_tuesday_crayon_leaf_art_20260929",
       "tinker_tuesday_jaime_dominguez_art_20260915",
       "tinker_tuesday_lego_engineering_challenge_20260922",
-      "tinker_tuesday_pizza_math_20260901",
       "toddler_storytime_20270119",
       "toddler_storytime_happy_halloween_20261027",
       "toddler_storytime_outer_space_20261006"
     ]
+  },
+  "county-of-san-diego-careers": {
+    "found": 0,
+    "slugs": []
   },
   "county-parks": {
     "found": 553,
@@ -352,9 +411,23 @@
       "trail_trek_20260927"
     ]
   },
+  "cubic": {
+    "found": 0,
+    "slugs": []
+  },
   "detourempowers": {
     "found": 2,
     "slugs": []
+  },
+  "dexcom": {
+    "found": 0,
+    "slugs": []
+  },
+  "doe-science-bowl-sd": {
+    "found": 1,
+    "slugs": [
+      "https_science_osti_gov_wdts_nsb_regional_competitions_high_school_regionals_california_ca_san_diego_high_school_regional_science_bowl"
+    ]
   },
   "ecologikinstitute": {
     "found": 139,
@@ -482,6 +555,12 @@
     "found": 2,
     "slugs": []
   },
+  "eisca-camps": {
+    "found": 2,
+    "slugs": [
+      "https_eisca_org_camps"
+    ]
+  },
   "elementbiosciences": {
     "found": 0,
     "slugs": []
@@ -506,8 +585,13 @@
     ]
   },
   "escondido-creek-conservancy": {
-    "found": 0,
-    "slugs": []
+    "found": 7,
+    "slugs": [
+      "https_www_escondidocreek_org_event_details_a_hike_to_learn_how_to_help_save_franks_peak",
+      "https_www_escondidocreek_org_event_details_bill_the_bug_guy_2026_01_24_10_00",
+      "https_www_escondidocreek_org_event_details_conservation_conversation_san_diego_geology",
+      "https_www_escondidocreek_org_event_details_shrub_club"
+    ]
   },
   "escondido-library": {
     "found": 159,
@@ -524,7 +608,7 @@
       "paws_to_read_20260909",
       "rated_g_tween_book_club_lu_and_ren_s_guide_to_geozoology_20260820",
       "rhyme_shine_storytime_20261029",
-      "toddler_tales_20260901",
+      "toddler_tales_20260915",
       "watershed_literacy_program_20260827"
     ]
   },
@@ -605,6 +689,7 @@
       "https_extendedstudies_ucsd_edu_courses_fundamentals_of_podcasting_art_x407_10",
       "https_extendedstudies_ucsd_edu_courses_futures_advanced_working_drawings_through_autocad_for_high_schoolers_arch_900_04",
       "https_extendedstudies_ucsd_edu_courses_futures_introduction_to_autocad_for_high_schoolers_arch_900_02",
+      "https_extendedstudies_ucsd_edu_courses_futures_micro_internship_for_high_schoolers_aip_900_02",
       "https_extendedstudies_ucsd_edu_courses_futures_revit_architecture_i_introduction_to_revit_for_high_schoolers_arch_900_05",
       "https_extendedstudies_ucsd_edu_courses_futures_revit_architecture_ii_intermediate_revit_for_high_schoolers_arch_900_06",
       "https_extendedstudies_ucsd_edu_courses_futures_revit_architecture_iii_revit_construction_documents_for_high_schoolers_arch_900_07",
@@ -777,6 +862,7 @@
       "https_extendedstudies_ucsd_edu_courses_fundamentals_of_podcasting_art_x407_10",
       "https_extendedstudies_ucsd_edu_courses_futures_advanced_working_drawings_through_autocad_for_high_schoolers_arch_900_04",
       "https_extendedstudies_ucsd_edu_courses_futures_introduction_to_autocad_for_high_schoolers_arch_900_02",
+      "https_extendedstudies_ucsd_edu_courses_futures_micro_internship_for_high_schoolers_aip_900_02",
       "https_extendedstudies_ucsd_edu_courses_futures_revit_architecture_i_introduction_to_revit_for_high_schoolers_arch_900_05",
       "https_extendedstudies_ucsd_edu_courses_futures_revit_architecture_ii_intermediate_revit_for_high_schoolers_arch_900_06",
       "https_extendedstudies_ucsd_edu_courses_futures_revit_architecture_iii_revit_construction_documents_for_high_schoolers_arch_900_07",
@@ -888,12 +974,17 @@
     ]
   },
   "fleet-science-center": {
-    "found": 10,
+    "found": 11,
     "slugs": [
       "https_balboapark_org_event_educator_open_house",
       "https_www_fleetscience_org_events_sky_tonight",
-      "https_www_fleetscience_org_events_suds_science"
+      "https_www_fleetscience_org_events_suds_science",
+      "https_www_fleetscience_org_events_two_scientists_walk_bar"
     ]
+  },
+  "fleet-science-center-camps": {
+    "found": 0,
+    "slugs": []
   },
   "fleetweeksandiego": {
     "found": 14,
@@ -924,16 +1015,22 @@
     ]
   },
   "gsdsef": {
-    "found": 0,
-    "slugs": []
+    "found": 1,
+    "slugs": [
+      "https_www_gsdsef_org_information_schedule"
+    ]
   },
   "hthgse": {
-    "found": 27,
+    "found": 28,
     "slugs": [
       "https_hthgse_edu_events_dl26",
       "https_hthgse_edu_events_dl27",
       "https_hthgse_edu_events_pbl_design_camp_in_person_nov_2026"
     ]
+  },
+  "illumina": {
+    "found": 0,
+    "slugs": []
   },
   "invent": {
     "found": 27,
@@ -941,6 +1038,7 @@
       "https_www_invent_org_camp_press",
       "https_www_invent_org_camp_press_2022",
       "https_www_invent_org_camp_press_2023",
+      "https_www_invent_org_camp_social_sharing",
       "https_www_invent_org_events_cic",
       "https_www_invent_org_nihf_resource_center_camp_supercharged",
       "https_www_invent_org_nihf_resource_center_camp_wonder",
@@ -960,8 +1058,22 @@
     "slugs": []
   },
   "leaguesync": {
-    "found": 0,
-    "slugs": []
+    "found": 7,
+    "slugs": [
+      "https_jtl_pike13_com"
+    ]
+  },
+  "living-coast-camps": {
+    "found": 3,
+    "slugs": [
+      "https_www_thelivingcoast_org_camps"
+    ]
+  },
+  "lji-ljidea": {
+    "found": 1,
+    "slugs": [
+      "https_www_lji_org_careers_internships"
+    ]
   },
   "mastergardenersd": {
     "found": 1,
@@ -984,7 +1096,7 @@
     ]
   },
   "mission-trails": {
-    "found": 138,
+    "found": 136,
     "slugs": [
       "bill_howell_nature_lecture_series_butterflies_of_southern_california_20260215",
       "bill_howell_nature_lecture_series_desert_flora_20260222",
@@ -1046,18 +1158,34 @@
     ]
   },
   "nature-collective": {
-    "found": 24,
+    "found": 35,
     "slugs": [
       "https_naturecollective_org_event_coffee_connections_open_house_2026_10_09",
-      "https_naturecollective_org_event_discovery_tour_september_5_2026",
+      "https_naturecollective_org_event_discovery_tour_november_7_2026",
       "https_naturecollective_org_event_spring_nature_festival_april_19_2026",
       "https_naturecollective_org_event_volunteer_orientation_october_10",
       "https_naturecollective_org_event_volunteer_restoration_event_2026_08_05",
-      "https_naturecollective_org_event_wildlife_tour_september_12_2026"
+      "https_naturecollective_org_event_wildlife_tour_november_14_2026"
+    ]
+  },
+  "niwc-nreip": {
+    "found": 1,
+    "slugs": [
+      "https_www_navalsteminterns_us_nreip"
+    ]
+  },
+  "niwc-seap": {
+    "found": 1,
+    "slugs": [
+      "https_www_navalsteminterns_us_seap"
     ]
   },
   "nmmf": {
     "found": 1,
+    "slugs": []
+  },
+  "northrop-grumman": {
+    "found": 0,
     "slugs": []
   },
   "nsbe": {
@@ -1091,7 +1219,7 @@
     ]
   },
   "oceanside-library": {
-    "found": 950,
+    "found": 937,
     "slugs": [
       "3_d_printer_class_evening_20261006",
       "3_d_printer_hands_on_help_live_demos_20260921",
@@ -1102,8 +1230,8 @@
       "fizz_ferment_the_art_of_kombucha_20260910",
       "game_night_20261029",
       "hands_on_fermentation_class_diy_sauerkraut_workshop_20261008",
-      "homework_helpers_20260901",
-      "lego_brick_building_20260901",
+      "homework_helpers_20260903",
+      "lego_brick_building_20260908",
       "once_upon_a_family_literacy_adventures_20261021",
       "pickle_lab_fast_and_easy_quick_pickles_20261112",
       "pre_k_steam_20260911",
@@ -1140,6 +1268,10 @@
     "found": 1,
     "slugs": []
   },
+  "port-of-san-diego-careers": {
+    "found": 0,
+    "slugs": []
+  },
   "qualcomm": {
     "found": 50,
     "slugs": [
@@ -1157,6 +1289,10 @@
     "found": 1,
     "slugs": []
   },
+  "resmed": {
+    "found": 0,
+    "slugs": []
+  },
   "robotevents-vex-sd": {
     "found": 0,
     "slugs": []
@@ -1167,6 +1303,22 @@
       "https_www_salk_edu_public_event_equinox_sunset_for_discovery_society",
       "https_www_salk_edu_public_event_joan_jacobs_science_and_music_series"
     ]
+  },
+  "salk-heithoff-brody": {
+    "found": 1,
+    "slugs": [
+      "https_www_salk_edu_about_education_outreach_programs_high_school_scholars"
+    ]
+  },
+  "salk-stem-educators-summit": {
+    "found": 1,
+    "slugs": [
+      "https_www_salk_edu_about_education_outreach_programs_salk_stem_educators_summit"
+    ]
+  },
+  "sandag-careers": {
+    "found": 0,
+    "slugs": []
   },
   "sandiego": {
     "found": 60,
@@ -1182,8 +1334,40 @@
     ]
   },
   "sandiego-cv-aopsacademy": {
-    "found": 0,
-    "slugs": []
+    "found": 50,
+    "slugs": [
+      "https_aopsacademy_org_courses_catalog_academic_year",
+      "https_aopsacademy_org_courses_course_acad_1st_grade_math",
+      "https_aopsacademy_org_courses_course_acad_2nd_grade_math",
+      "https_aopsacademy_org_courses_course_acad_3rd_grade_math",
+      "https_aopsacademy_org_courses_course_acad_4th_grade_math",
+      "https_aopsacademy_org_courses_course_acad_5th_grade_math",
+      "https_aopsacademy_org_courses_course_acad_algebra_1",
+      "https_aopsacademy_org_courses_course_acad_algebra_2",
+      "https_aopsacademy_org_courses_course_acad_calculus",
+      "https_aopsacademy_org_courses_course_acad_elem_contest_math",
+      "https_aopsacademy_org_courses_course_acad_geometry",
+      "https_aopsacademy_org_courses_course_acad_high_contest_math",
+      "https_aopsacademy_org_courses_course_acad_math_scholars6",
+      "https_aopsacademy_org_courses_course_acad_math_scholars7",
+      "https_aopsacademy_org_courses_course_acad_math_scholars8",
+      "https_aopsacademy_org_courses_course_acad_middle_contest_math",
+      "https_aopsacademy_org_courses_course_acad_prealgebra",
+      "https_aopsacademy_org_courses_course_acad_precalculus",
+      "https_aopsacademy_org_courses_course_acad_summer_contests_elementary",
+      "https_aopsacademy_org_courses_course_acad_summer_math_2",
+      "https_aopsacademy_org_courses_course_acad_summer_math_3",
+      "https_aopsacademy_org_courses_course_acad_summer_math_4",
+      "https_aopsacademy_org_courses_course_acad_summer_math_5",
+      "https_aopsacademy_org_courses_course_acad_summer_math_6",
+      "https_aopsacademy_org_courses_course_acad_summer_math_7_8",
+      "https_aopsacademy_org_courses_course_acad_summer_math_8_9",
+      "https_aopsacademy_org_courses_course_acad_summer_math_high_contests",
+      "https_aopsacademy_org_courses_course_acad_summer_math_mid_contests",
+      "https_aopsacademy_org_courses_course_acad_summer_math_mid_contests_ac",
+      "https_aopsacademy_org_courses_course_acad_summer_stem_mid_contests",
+      "https_aopsacademy_org_courses_summer"
+    ]
   },
   "sandiego-gov": {
     "found": 299,
@@ -1207,6 +1391,18 @@
       "https_sandiegoarchaeology_org_event_story_time_with_an_archaeologist_2_2026_09_03"
     ]
   },
+  "sbp-spark": {
+    "found": 1,
+    "slugs": [
+      "https_sbpdiscovery_org_education_internships"
+    ]
+  },
+  "scripps-srti": {
+    "found": 1,
+    "slugs": [
+      "https_www_scripps_edu_science_translational_institute_education_training_student_research_internship_program"
+    ]
+  },
   "sd-astronomy-association": {
     "found": 795,
     "slugs": [
@@ -1219,6 +1415,7 @@
       "camp_with_the_stars_william_heise_county_park_20110724",
       "cancelled_due_to_weather_tds_public_star_party_20170219",
       "cancelled_stars_at_mission_trails_tm_open_20240202",
+      "cancelled_stars_at_sycamore_canyon_20251226",
       "casa_de_oro_library_solar_20240321",
       "cresent_moon_viewing_20220630",
       "dixon_lake_20200218",
@@ -1236,7 +1433,6 @@
       "https_www_astrozoom_space_attend_ln_en",
       "https_www_facebook_com_tucsonastronomy_events_ref_page_internal",
       "https_www_mthelixpark_org_astronomy_night",
-      "https_www_mthelixpark_org_events",
       "https_www_rhfleet_org_events_sky_tonight_special_lunar_eclipse",
       "https_www_youtube_com_watch_v_6sx3pk_6uqc_feature_emb_err_woyt",
       "https_www_youtube_com_watch_v_80umsawogjo",
@@ -1250,9 +1446,10 @@
       "lunar_eclipse_20220515",
       "mailto_betbull8_gmail_com",
       "mission_trails_20160716",
+      "mt_helix_park_20170716",
       "mt_helix_park_star_party_rescheduled_20160501",
       "oakoasis_star_party_20180113",
-      "oakoasis_star_party_canceled_20251213",
+      "oakoasis_star_party_canceled_20220108",
       "oakoasis_star_party_open_20210710",
       "palomar_tours_start_20190406",
       "partial_solar_eclipse_20240408",
@@ -1293,8 +1490,30 @@
       "william_heise_county_park_20250411"
     ]
   },
+  "sd-brain-bee": {
+    "found": 1,
+    "slugs": [
+      "https_neurograd_ucsd_edu_neuro_events_outreach_brain_bee_html"
+    ]
+  },
+  "sd-county-regional-airport-authority": {
+    "found": 0,
+    "slugs": []
+  },
+  "sd-foundation-community-scholarship": {
+    "found": 1,
+    "slugs": [
+      "https_www_sdfoundation_org_students_common_scholarship_application"
+    ]
+  },
+  "sd-model-railroad-museum-camps": {
+    "found": 9,
+    "slugs": [
+      "https_www_sdmrm_org_summer_camps"
+    ]
+  },
   "sd-river-park-foundation": {
-    "found": 73,
+    "found": 72,
     "slugs": [
       "https_sandiegoriver_galaxydigital_com_need_detail_need_id_1178009",
       "https_sandiegoriver_org_event_beastly_bats_spooky_spiders_linda_hawleys_nature_adventures",
@@ -1307,10 +1526,70 @@
       "https_sandiegoriver_org_event_make_your_own_sustainable_gifts_workshop_dyi_personal_care_products",
       "https_sandiegoriver_org_event_nature_nights_bat_walk_and_moths_3",
       "https_sandiegoriver_org_event_reindeer_here_no_mule_deer",
-      "https_sandiegoriver_org_event_river_readers_nature_storytime_2_2026_09_01",
+      "https_sandiegoriver_org_event_river_readers_nature_storytime_2_2026_09_08",
       "https_sandiegoriver_org_event_san_diego_river_gorge_overlook_hike",
       "https_sandiegoriver_org_event_the_wondrous_woodrat_mice_moles_shrews_voles_gophers_in_holes",
       "https_sandiegoriver_org_event_wingspan_and_ecologies_game_time_2"
+    ]
+  },
+  "sd-science-project": {
+    "found": 3,
+    "slugs": [
+      "https_www_sdscienceproject_org_sdspevents"
+    ]
+  },
+  "sd-zoo-adventures-art-camp": {
+    "found": 3,
+    "slugs": [
+      "https_zoo_sandiegozoo_org_kids_programs_adventures_art_camp_fifth_eighth_grade"
+    ]
+  },
+  "sd-zoo-animal-art-explorers-camp": {
+    "found": 1,
+    "slugs": [
+      "https_zoo_sandiegozoo_org_kids_programs_animal_art_explorers_camp_third_fourth_grade"
+    ]
+  },
+  "sd-zoo-classic-camp-first-grade": {
+    "found": 2,
+    "slugs": [
+      "https_zoo_sandiegozoo_org_kids_programs_classic_camp_first_grade"
+    ]
+  },
+  "sd-zoo-classic-camp-fourth-fifth-grade": {
+    "found": 2,
+    "slugs": [
+      "https_zoo_sandiegozoo_org_kids_programs_classic_camp_fourth_fifth_grade"
+    ]
+  },
+  "sd-zoo-classic-camp-kindergarten": {
+    "found": 2,
+    "slugs": [
+      "https_zoo_sandiegozoo_org_kids_programs_classic_camp_kindergarten"
+    ]
+  },
+  "sd-zoo-classic-camp-second-grade": {
+    "found": 2,
+    "slugs": [
+      "https_zoo_sandiegozoo_org_kids_programs_classic_camp_second_grade"
+    ]
+  },
+  "sd-zoo-classic-camp-sixth-ninth-grade": {
+    "found": 2,
+    "slugs": [
+      "https_zoo_sandiegozoo_org_kids_programs_classic_camp_sixth_ninth_grade"
+    ]
+  },
+  "sd-zoo-classic-camp-third-grade": {
+    "found": 2,
+    "slugs": [
+      "https_zoo_sandiegozoo_org_kids_programs_classic_camp_third_grade"
+    ]
+  },
+  "sd-zoo-little-artists-camp": {
+    "found": 3,
+    "slugs": [
+      "https_zoo_sandiegozoo_org_kids_programs_little_artists_camp_first_second_grade"
     ]
   },
   "sdautomuseum": {
@@ -1326,7 +1605,7 @@
     ]
   },
   "sdcl": {
-    "found": 3972,
+    "found": 3911,
     "slugs": [
       "https_sdcl_bibliocommons_com_events_6680837fe3e1ee3000462f78",
       "https_sdcl_bibliocommons_com_events_68a902d441789673e1f28951",
@@ -1416,9 +1695,15 @@
       "https_sdcl_bibliocommons_com_events_6a8f3a4981e9d60947cc9823",
       "https_sdcl_bibliocommons_com_events_6a8f3a4981e9d60947cc9828",
       "https_sdcl_bibliocommons_com_events_6a8f3a4981e9d60947cc9829",
+      "https_sdcl_bibliocommons_com_events_6a8f3a4981e9d60947cc982b",
       "https_sdcl_bibliocommons_com_events_6a8f3a4981e9d60947cc982c",
       "https_sdcl_bibliocommons_com_events_6a907effaafa6100295f968f",
-      "https_sdcl_bibliocommons_com_events_6a91e9032dac6e0037227229"
+      "https_sdcl_bibliocommons_com_events_6a91e9032dac6e0037227229",
+      "https_sdcl_bibliocommons_com_events_6a973c6129a7dd0d674855d4",
+      "https_sdcl_bibliocommons_com_events_6a974666e1fb8f13578b8e32",
+      "https_sdcl_bibliocommons_com_events_6a97526de1fb8f13578b9015",
+      "https_sdcl_bibliocommons_com_events_6a97626d341bb11431ee6e2e",
+      "https_sdcl_bibliocommons_com_events_6a9767ef341bb11431ee6e80"
     ]
   },
   "sdcoastkeeper": {
@@ -1481,11 +1766,51 @@
     ]
   },
   "sdrvc": {
-    "found": 0,
+    "found": 3,
     "slugs": []
+  },
+  "sdsc-rehs": {
+    "found": 1,
+    "slugs": [
+      "https_education_sdsc_edu_studenttech_rehs"
+    ]
+  },
+  "sdsu-crmse-math-project": {
+    "found": 5,
+    "slugs": [
+      "https_crmse_sdsu_edu_mathproject"
+    ]
+  },
+  "sdsu-expandai-robotics": {
+    "found": 1,
+    "slugs": [
+      "https_ite_sdsu_edu_oce_our_programs_robotics_camp"
+    ]
   },
   "sdusdfamilies": {
     "found": 1,
+    "slugs": []
+  },
+  "sdzwa-fellowships": {
+    "found": 1,
+    "slugs": [
+      "https_science_sandiegozoo_org_opportunities_summer_student_fellowships"
+    ]
+  },
+  "sdzwa-teacher-workshops": {
+    "found": 5,
+    "slugs": [
+      "https_science_sandiegozoo_org_teacherworkshops"
+    ]
+  },
+  "seaperch-sd-regional": {
+    "found": 1,
+    "slugs": [
+      "https_classroomofthefuture_org_seaperch_san_diego_regional_competition"
+    ]
+  },
+  "servicenow": {
+    "found": 0,
     "slugs": []
   },
   "shieldai": {
@@ -1496,6 +1821,12 @@
     "found": 1,
     "slugs": [
       "https_forms_gle_4yumgsk1wrcj5r3e8"
+    ]
+  },
+  "sio-research-internships": {
+    "found": 8,
+    "slugs": [
+      "https_scripps_ucsd_edu_education_research_internships"
     ]
   },
   "smartmindrobotics": {
@@ -1521,6 +1852,10 @@
       "https_www_solanacenter_org_events_zoning_guidelines_for_rural_composting_seminar"
     ]
   },
+  "sony-interactive-entertainment": {
+    "found": 0,
+    "slugs": []
+  },
   "surfrider-sd": {
     "found": 2188,
     "slugs": [
@@ -1530,6 +1865,7 @@
       "2nd_saturday_stewardship_event_20110212",
       "3rd_annual_march_for_clean_h2o_20190413",
       "advocacy_101_20130308",
+      "alt949_mission_federal_credit_union_sponsored_beach_cleanup_20180804",
       "alta_vista_botanical_gardens_earth_day_festival_20260418",
       "bag_it_screening_20111206",
       "ban_shortsighted_leaders_20071103",
@@ -1537,7 +1873,6 @@
       "beach_cleanup_20070310",
       "beach_cleanup_for_scott_eastwood_20160710",
       "beach_cleanup_imperial_beach_soapy_joe_s_sponsor_20190413",
-      "beach_cleanup_moonlight_state_beach_w_ecofest_and_city_of_encinitas_20220416",
       "beach_cleanup_ocean_beach_pier_20181110",
       "beach_cleanup_rescheduled_20100130",
       "beach_cleanup_sponsored_by_alt949_and_rubio_s_coastal_grill_20180707",
@@ -1545,6 +1880,7 @@
       "beach_cleanup_sponsored_by_fm_94_9_and_mission_federal_credit_union_20170527",
       "beach_cleanup_sponsored_by_fm_94_9_san_diego_county_toyota_dealers_and_rincon_band_of_luise_o_indians_20160813",
       "beach_cleanup_sponsored_by_fm_94_9_sd_county_toyota_dealers_20170603",
+      "beach_cleanup_sponsored_by_the_avenue_home_collective_20170318",
       "beach_cleanup_surfrider_booth_at_isa_adaptive_surf_championship_20181216",
       "beach_cleanup_w_stefan_lessard_from_dave_matthews_band_20090911",
       "beach_cleanup_with_greenpeace_20180728",
@@ -1557,11 +1893,9 @@
       "ca_king_tides_round_1_20241115",
       "california_coastal_cleanup_day_20120915",
       "california_coastal_day_20230923",
-      "canceled_ocean_beach_beach_cleanup_20220806",
-      "cancelled_beach_cleanup_sponsored_by_braces_by_henry_20170218",
       "cardiff_green_expo_20081207",
       "carlsbad_city_council_protectourcoast_from_offshore_oil_drilling_20180829",
-      "chapter_meeting_20070718",
+      "chapter_meeting_20080116",
       "chapter_meeting_q1_clean_water_20210226",
       "chapter_meeting_with_oscar_romo_20110921",
       "chasing_coral_film_screening_20170929",
@@ -1601,12 +1935,13 @@
       "http_creektobay_org",
       "http_dayatthebeach_org_contact_shtml",
       "http_sandiego_surfrider_org_get_involved_volunteer_volunteer_opportunities",
-      "http_sdcoastkeeper_org_content_programs_watermon_getinvolved_cfm",
+      "http_sandiego_surfrider_org_register_for_the_2014_surf_for_the_sea_contest",
       "http_surfridersd_org_beachcleanups_php",
       "http_trnerr_org_tram",
       "http_www_420noce_com",
       "http_www_barefootwine_com_beachrescue_rsvp_asp",
       "http_www_biocom_org_event_suitsandsurfers",
+      "http_www_cleanupday_org",
       "http_www_cnps_org_cnps_conservation_conference_2012",
       "http_www_cottonwoodfilm_org",
       "http_www_creektobay_org",
@@ -1619,7 +1954,6 @@
       "http_www_sdcoastkeeper_org_content_programs_communityevents_worldoceansday_htm_wodfamily",
       "http_www_sdsolarexperience_org",
       "http_www_surfridersd_org_beachcleanups_php",
-      "http_www_surfridersd_org_documents_surf4thesea2010_pdf",
       "http_www_surfridersd_org_ofg_php",
       "http_www_surfridersd_org_water_php",
       "http_www_tijuanaestuary_org",
@@ -1664,7 +1998,6 @@
       "https_plus_google_com_hangouts_calendar_c3vyznjpzgvyc2qub3jnqgdtywlslmnvbq_1i58r63vmiv6pspcq0njba0eb7_hs_121",
       "https_plus_google_com_hangouts_calendar_c3vyznjpzgvyc2qub3jnqgdtywlslmnvbq_45drnc3ggrf73pv5lj4kd9m7r1_hs_121",
       "https_plus_google_com_hangouts_calendar_c3vyznjpzgvyc2qub3jnqgdtywlslmnvbq_45h0jvec4j912rvu6onm9bgtcg_hs_121",
-      "https_plus_google_com_hangouts_calendar_c3vyznjpzgvyc2qub3jnqgdtywlslmnvbq_59pr0uc1jbaluu79fvvco3ojov_hs_121",
       "https_plus_google_com_hangouts_calendar_c3vyznjpzgvyc2qub3jnqgdtywlslmnvbq_5escn86rff8r5o3455o0u07s48_hs_121",
       "https_plus_google_com_hangouts_calendar_c3vyznjpzgvyc2qub3jnqgdtywlslmnvbq_6as15ag27duifll8721fk7rb41_hs_121",
       "https_plus_google_com_hangouts_calendar_c3vyznjpzgvyc2qub3jnqgdtywlslmnvbq_l06r3933dquavqikk20eqfv2k8_hs_121",
@@ -1702,10 +2035,11 @@
       "https_trnerr_wixsite_com_tram2022_event_details_registration_national_public_lands_day",
       "https_us02web_zoom_us_j_81933657830",
       "https_us02web_zoom_us_j_82152025256",
+      "https_us02web_zoom_us_j_82822923893",
       "https_us02web_zoom_us_j_82848956680_pwd_cu9zefdteg1xwkt1a0q4qxpyrfzbut09",
       "https_us02web_zoom_us_j_84630726744_pwd_uwnyyxoxyzj2ns9xvnjlws9rdthmzz09",
       "https_us02web_zoom_us_j_84701753993_pwd_ditkz0ztvi9tsmh1s2jyulz3cuvuut09",
-      "https_us02web_zoom_us_j_84987325366",
+      "https_us02web_zoom_us_j_88217049056",
       "https_us02web_zoom_us_j_88293752773",
       "https_us02web_zoom_us_j_89778114785",
       "https_us02web_zoom_us_meeting_register_tzckdo_gqjgjgnxziqm9_q7lhbevh17rydaq",
@@ -1717,7 +2051,7 @@
       "https_volunteer_surfrider_org_opportunities_cxktrjkfj7",
       "https_volunteer_surfrider_org_opportunities_equ9fdnilx",
       "https_volunteer_surfrider_org_opportunities_j0xuewvvcl",
-      "https_volunteer_surfrider_org_opportunities_pw7hnyqqzb",
+      "https_volunteer_surfrider_org_opportunities_pw7hnyqqzb_24web_only_true_branch_match_id_1587953915865727069_branch_referrer_h4siaaaaaaaaa8sokskottlxr9blz0nj08vm10_2fuzwtxzkiymezkmkiyrytktustksrms49pksovl04tsnxlbirlvwaamjq3ntoaaaa_3d",
       "https_volunteer_surfrider_org_opportunities_smfaq803yw",
       "https_volunteer_surfrider_org_opportunities_uiq0evym77",
       "https_volunteer_surfrider_org_opportunities_wianxou6b6",
@@ -1730,19 +2064,21 @@
       "https_volunteer_surfrider_org_timeslots_mjiv10trv9",
       "https_volunteer_surfrider_org_timeslots_p9uzx0gklx",
       "https_volunteer_surfrider_org_timeslots_puv0lxfim",
+      "https_volunteer_surfrider_org_timeslots_qxn5bvpzcf",
+      "https_volunteer_surfrider_org_timeslots_rm4xfks3zv",
       "https_volunteer_surfrider_org_timeslots_rzahe8v05z",
-      "https_volunteer_surfrider_org_timeslots_s1pauq2pqg",
       "https_volunteer_surfrider_org_timeslots_toxu7wyka3",
+      "https_waiver_smartwaiver_com_e_agiw29pdiycqpvtysdiuna",
+      "https_waiver_smartwaiver_com_e_gw56wjdsypdbsnmpbxufjh",
       "https_waiver_smartwaiver_com_e_ucn8dz8p2cr2p9kd8c75vc",
-      "https_waiver_smartwaiver_com_e_wnsraqnt2rksiyqf3a5cjq",
-      "https_waiver_smartwaiver_com_e_z5wym3fdgfswsxn597qxbb",
+      "https_www_californiavolunteers_ca_gov_ccac_community_climate_action_day_san_diego_february_4_2023",
       "https_www_coastal_ca_gov_kingtides_participate_html",
       "https_www_ecofestencinitas_org",
       "https_www_eventbrite_com_e_coastal_water_quality_training_moonlight_beach_tickets_78548158657",
       "https_www_eventbrite_com_e_coastal_water_quality_training_tickets_72417630081",
       "https_www_eventbrite_com_e_coastal_water_quality_training_tickets_78130242659",
       "https_www_eventbrite_com_e_fright_for_future_haunted_maze_tickets_943956668807",
-      "https_www_eventbrite_com_e_love_your_wetlands_day_2024_tickets_634027331817_aff_erelexpmlt",
+      "https_www_eventbrite_com_e_surfrider_foundation_presents_the_plastic_straws_suck_straws_movie_community_night_tickets_44316100650_aff_es2",
       "https_www_eventbrite_com_e_water_warriors_how_travelers_can_advocate_for_ocean_conservation_tickets_148862966139",
       "https_www_facebook_com_events_1701737166786814",
       "https_www_facebook_com_events_173334583442327",
@@ -1771,11 +2107,11 @@
       "https_x_gldn_io_e_9duucq11npb",
       "https_x_gldn_io_e_9lilbaxzlkb",
       "https_x_gldn_io_e_aep1wp6ylkb",
-      "https_x_gldn_io_e_ag5qz4and1b",
       "https_x_gldn_io_e_awaodl3kkeb",
       "https_x_gldn_io_e_aybehhyoovb",
-      "https_x_gldn_io_e_b7xvhg5kgfb",
+      "https_x_gldn_io_e_b1qxqrjemeb",
       "https_x_gldn_io_e_bga5cxtn7fb",
+      "https_x_gldn_io_e_bjysde8kjnb",
       "https_x_gldn_io_e_bvm3mzxvbxb",
       "https_x_gldn_io_e_c3cvto3o7tb",
       "https_x_gldn_io_e_c9atogwoorb",
@@ -1802,10 +2138,9 @@
       "https_x_gldn_io_e_ltnnlk5frib",
       "https_x_gldn_io_e_lulxg1gyy4b",
       "https_x_gldn_io_e_lyuibmonujb",
-      "https_x_gldn_io_e_nzzytgphmvb",
+      "https_x_gldn_io_e_n5fxekdlgfb",
       "https_x_gldn_io_e_p6jms8ktmub",
       "https_x_gldn_io_e_p8bonpypsib",
-      "https_x_gldn_io_e_pjsa8ta9ndb",
       "https_x_gldn_io_e_qe8nlgfwsgb",
       "https_x_gldn_io_e_qpggkbm1npb",
       "https_x_gldn_io_e_sdmtekasmkb",
@@ -1845,9 +2180,10 @@
       "king_tides_20230121",
       "know_your_h20_committee_meeting_20120314",
       "know_your_h2o_committee_meeting_20090324",
-      "know_your_h2o_committee_meeting_fresh_water_issues_20090421",
+      "know_your_h2o_committee_meeting_fresh_water_issues_20081118",
       "la_mesa_earth_day_fair_20240420",
       "latino_conservation_week_20260912",
+      "lawn_patrol_20130420",
       "lawn_patrol_ocean_friendly_gardens_20101107",
       "mailto_bbowman_surfridersd_org",
       "mailto_beachcleanups_surfridersd_org",
@@ -1867,7 +2203,6 @@
       "mailto_marty_savesanonofrepark_org",
       "mailto_mary_surfridersd_org",
       "mailto_molly_surfridersd_org",
-      "mailto_morgan_surfridersd_org",
       "mailto_ofg_surfridersd_org",
       "mailto_vicki_surfridersd_org",
       "mailto_volunteer_trnerr_org",
@@ -1938,9 +2273,8 @@
       "south_bay_water_quality_workshop_20111012",
       "spons_bcu_torrey_pines_towerpoint_20211105",
       "spons_bcu_w_biopharma_green_team_carlsbad_20211008",
-      "stop_committee_meeting_20180321",
+      "stop_committee_meeting_20171011",
       "stop_santa_cycle_20171217",
-      "straws_film_screening_20180407",
       "sunset_screening_at_the_cottonwood_creek_environmental_film_festival_20080607",
       "supergirl_pro_post_event_beach_cleanup_w_reef_sandals_20180730",
       "surf_for_the_sea_20070929",
@@ -1964,6 +2298,7 @@
       "usibwc_citizen_s_forum_sd_quarterly_meeting_20230302",
       "walk_the_watershed_20100320",
       "water_for_life_20070323",
+      "water_monitoring_20071117",
       "wild_sea_book_signing_20110417",
       "world_ocean_39_s_day_20220608",
       "world_ocean_day_20170608",
@@ -2086,12 +2421,12 @@
     "slugs": []
   },
   "thegarden": {
-    "found": 520,
+    "found": 567,
     "slugs": [
       "https_thegarden_org_public_event_busy_309",
       "https_thegarden_org_public_event_busy_311",
       "https_thegarden_org_public_event_busy_312",
-      "https_thegarden_org_public_event_east_county_advanced_water_purification_2026_09_01",
+      "https_thegarden_org_public_event_east_county_advanced_water_purification_2026_10_22",
       "https_thegarden_org_public_event_free_friday_29",
       "https_thegarden_org_public_event_hold_on_project_wet_teacher_training",
       "https_thegarden_org_public_event_hold_rain_barrel_workshop",
@@ -2101,13 +2436,25 @@
     ]
   },
   "thelivingcoast": {
-    "found": 302,
+    "found": 301,
     "slugs": [
       "https_www_thelivingcoast_org_programs_events_upcoming_events_animals_on_the_bay_day_2026",
       "https_www_thelivingcoast_org_programs_events_upcoming_events_eagle_presentation_2_2_2_2026_09_02",
       "https_www_thelivingcoast_org_programs_events_upcoming_events_sea_turtle_presentation_2_2_2026_09_02",
       "https_www_thelivingcoast_org_programs_events_upcoming_events_shark_ray_presentation_2_2_2026_09_03",
       "https_www_thelivingcoast_org_programs_events_upcoming_events_sweetwater_safari_hikes_3_2026_09_05"
+    ]
+  },
+  "tritonhacks": {
+    "found": 1,
+    "slugs": [
+      "https_www_tritonhacks_org"
+    ]
+  },
+  "ucsd-cosmos": {
+    "found": 1,
+    "slugs": [
+      "https_jacobsschool_ucsd_edu_cosmos_how_to_apply"
     ]
   },
   "ucsd-extended-studies-localist": {
@@ -2132,6 +2479,33 @@
       "https_qi_ucsd_edu_events_showcase_qi"
     ]
   },
+  "ucsd-summer-program-finder": {
+    "found": 22,
+    "slugs": [
+      "https_createyoungscholars_ucsd_edu",
+      "https_eaop_ucsd_edu",
+      "https_extendedstudies_ucsd_edu_international_programs_courses_programs_english_language_institute",
+      "https_gps_ucsd_edu_executive_education_future_leaders_summer_index_html",
+      "https_iem_ucsd_edu_programs_opals_index_html",
+      "https_mathfinds_ucsd_edu",
+      "https_mrsec_ucsd_edu_rimse",
+      "https_ortho_ucsd_edu",
+      "https_recreation_ucsd_edu_programs_and_classes_youth_camps",
+      "https_researchscholars_ucsd_edu",
+      "https_researchscholars_ucsd_edu_currentprograms_business_index_html",
+      "https_researchscholars_ucsd_edu_currentprograms_hawaii_index_html",
+      "https_researchscholars_ucsd_edu_currentprograms_iem_index_html",
+      "https_researchscholars_ucsd_edu_currentprograms_som_index_html",
+      "https_resilientmaterials_ucsd_edu_enlace",
+      "https_sallyridescience_ucsd_edu",
+      "https_stemcellprogram_ucsd_edu_cmm250_spark_program_html",
+      "https_trio_ucsd_edu",
+      "https_www_ecesipp_com",
+      "https_www_rmtlacademy_org",
+      "https_www_ucsandiegocamps_com",
+      "https_www_ucsandiegomensbasketballcamps_com"
+    ]
+  },
   "viasat": {
     "found": 99,
     "slugs": [
@@ -2151,22 +2525,22 @@
     ]
   },
   "visitcmod": {
-    "found": 473,
+    "found": 467,
     "slugs": [
       "https_visitcmod_org_events_bilingual_family_workshop_58_2026_09_03",
       "https_visitcmod_org_events_bilingual_garden_workshop_20_2026_09_03",
       "https_visitcmod_org_events_bilingual_tortoise_talk_3_2026_09_03",
       "https_visitcmod_org_events_fall_camp_3",
-      "https_visitcmod_org_events_family_workshop_112_2026_09_01",
+      "https_visitcmod_org_events_family_workshop_113_2026_09_04",
       "https_visitcmod_org_events_fun_animal_friday_2_2026_10_30",
       "https_visitcmod_org_events_fun_animal_friday_foxes_2",
-      "https_visitcmod_org_events_garden_workshop_15_2026_09_01",
+      "https_visitcmod_org_events_garden_workshop_15_2026_09_02",
       "https_visitcmod_org_events_jimbos_garden_workshop_2026_10_09",
       "https_visitcmod_org_events_jimbos_garden_workshop_playfully_mischievous_popcorn",
-      "https_visitcmod_org_events_members_only_hours_2_2026_09_01",
+      "https_visitcmod_org_events_members_only_hours_2_2026_09_15",
       "https_visitcmod_org_events_sensory_friendly_mornings_2_2026_09_06",
       "https_visitcmod_org_events_teddy_bear_picnic",
-      "https_visitcmod_org_events_tortoise_talk_4_2026_09_01",
+      "https_visitcmod_org_events_tortoise_talk_4_2026_09_02",
       "https_visitcmod_org_events_winter_camp_3"
     ]
   },
@@ -2208,7 +2582,7 @@
     ]
   },
   "xplorstem": {
-    "found": 0,
+    "found": 1,
     "slugs": []
   },
   "ymcasd": {
