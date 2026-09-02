@@ -1,9 +1,12 @@
 ---
 id: '004'
 title: Build the ProgramListingAdapter for program-listing sources
-status: open
-use-cases: [SUC-032]
-depends-on: ['002', '003']
+status: done
+use-cases:
+- SUC-032
+depends-on:
+- '002'
+- '003'
 github-issue: ''
 issue: 28-hs-internship-program-page-extractor.md
 completes_issue: true
@@ -55,25 +58,25 @@ on ticket 002 directly as well, for the same `ProgramLLMClient`/
 
 ## Acceptance Criteria
 
-- [ ] A fixture listing page with N card links (using
+- [x] A fixture listing page with N card links (using
       `tests/fixtures/program_pages/`'s listing sample from ticket 002)
       yields N distinct `EventRef`s from `discover()`.
-- [ ] Each discovered ref, run through `extract()` with a
+- [x] Each discovered ref, run through `extract()` with a
       `FixtureProgramLLMClient` keyed per-URL, yields N distinct
       `Event`s, each with its own independently-extracted
       audience/grade/deadline/eligibility — not one shared value across
       all N.
-- [ ] A card whose target page fetch returns non-200 is skipped
+- [x] A card whose target page fetch returns non-200 is skipped
       (logged), and the remaining cards still yield their `Event`s —
       per-record isolation, matching every other adapter's convention.
-- [ ] `ProgramPageAdapter` and `ProgramListingAdapter` share the exact
+- [x] `ProgramPageAdapter` and `ProgramListingAdapter` share the exact
       same extraction logic (verified by a test asserting both produce
       an identical `Event` from the same raw response/source, modulo
       the `EventRef` that reached them) — proves the refactor in
       ticket 003's file didn't fork behavior between the two adapter
       types.
-- [ ] `ADAPTERS["program_listing"]` resolves via `get_adapter(...)`.
-- [ ] Full test suite stays green.
+- [x] `ADAPTERS["program_listing"]` resolves via `get_adapter(...)`.
+- [x] Full test suite stays green.
 
 ## Testing
 

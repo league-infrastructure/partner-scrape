@@ -27,7 +27,7 @@ from partner_scrape.adapters.leaguesync import LeagueSyncAdapter
 from partner_scrape.adapters.lever import LeverAdapter
 from partner_scrape.adapters.listing_html import ListingHtmlAdapter
 from partner_scrape.adapters.localist import LocalistAdapter
-from partner_scrape.adapters.program_page import ProgramPageAdapter
+from partner_scrape.adapters.program_page import ProgramListingAdapter, ProgramPageAdapter
 from partner_scrape.adapters.robotevents import RobotEventsAdapter
 from partner_scrape.adapters.tec import TecRestAdapter
 from partner_scrape.adapters.wordpress import WordPressRestAdapter
@@ -44,6 +44,7 @@ ADAPTERS["bibliocommons"] = BiblioCommonsAdapter
 ADAPTERS["leaguesync"] = LeagueSyncAdapter
 ADAPTERS["robotevents"] = RobotEventsAdapter
 ADAPTERS["program_page"] = ProgramPageAdapter
+ADAPTERS["program_listing"] = ProgramListingAdapter
 
 __all__ = [
     "Adapter",
@@ -65,4 +66,5 @@ __all__ = [
     "LeagueSyncAdapter",
     "RobotEventsAdapter",
     "ProgramPageAdapter",
+    "ProgramListingAdapter",
 ]
