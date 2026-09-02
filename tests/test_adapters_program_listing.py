@@ -11,6 +11,7 @@ here opens a real network socket or calls the real Anthropic API.
 
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
@@ -356,6 +357,42 @@ class TestPerCardIsolation:
         assert len(events) == 2
         assert CARD_URLS[0] not in {e.url for e in events}
         assert {e.url for e in events} == {CARD_URLS[1], CARD_URLS[2]}
+
+    def test_a_card_whose_llm_extraction_raises_is_skipped_but_the_rest_still_yield_events(
+        self, tmp_path, caplog
+    ):
+        # Sprint 027 ticket 006's own live verification found a real
+        # UCSD Summer Program Finder card (www.rmtlacademy.org) whose
+        # fetched body alone exceeded the model's context window,
+        # raising anthropic.BadRequestError from inside
+        # llm_client.extract_program() -- previously uncaught, which
+        # would have aborted this whole card→discover→fetch→extract
+        # loop and discarded every other card's already-fetched Event
+        # along with it. FixtureProgramLLMClient raises a plain
+        # KeyError for a URL absent from its `responses` dict, which
+        # exercises the identical "the LLM call itself raised" code
+        # path without needing the real Anthropic SDK.
+        responses = {
+            LISTING_URL: _response(_listing_body()),
+            CARD_URLS[0]: _response(_detail_body(CARD_URLS[0])),
+            CARD_URLS[1]: _response(_detail_body(CARD_URLS[1])),
+            CARD_URLS[2]: _response(_detail_body(CARD_URLS[2])),
+        }
+        fetcher = FixtureFetcher(responses)
+        broken_llm_client = FixtureProgramLLMClient(
+            responses={url: result for url, result in _RESULTS.items() if url != CARD_URLS[1]}
+        )
+        adapter = ProgramListingAdapter(
+            llm_client=broken_llm_client, cache=ProgramExtractionCache(tmp_path)
+        )
+
+        with caplog.at_level(logging.WARNING):
+            events = _run(adapter, _source(), fetcher)
+
+        assert len(events) == 2
+        assert CARD_URLS[1] not in {e.url for e in events}
+        assert {e.url for e in events} == {CARD_URLS[0], CARD_URLS[2]}
+        assert "extract_program" in caplog.text
 
 
 class TestSharesExtractionLogicWithProgramPageAdapter:

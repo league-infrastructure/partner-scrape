@@ -14,6 +14,7 @@ one page rather than N separate detail pages.
 
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
@@ -304,6 +305,27 @@ class TestExtractRobustness:
         raw = RawResponse(ref=EventRef(url=PAGE_URL), status=200, body=_page_body())
 
         assert list(adapter.extract(raw, _source())) == []
+
+    def test_extract_programs_raising_is_logged_and_skipped_not_raised(self, tmp_path, caplog):
+        # Sprint 027 ticket 006's own live verification found a real
+        # llm_client.extract_program() call can raise (a page whose body
+        # exceeds the model's context window raised
+        # anthropic.BadRequestError) -- extract_programs() has the
+        # identical uncaught-exception risk, so it gets the identical
+        # isolation. FixtureProgramLLMClient raises a plain KeyError for
+        # a URL absent from its `list_responses` dict, exercising the
+        # same "the LLM call itself raised" code path.
+        adapter = ProgramPageMultiAdapter(
+            llm_client=FixtureProgramLLMClient(list_responses={}),
+            cache=ProgramExtractionCache(tmp_path),
+        )
+        raw = RawResponse(ref=EventRef(url=PAGE_URL), status=200, body=_page_body())
+
+        with caplog.at_level(logging.WARNING):
+            events = list(adapter.extract(raw, _source()))
+
+        assert events == []
+        assert "extract_programs" in caplog.text
 
 
 class TestDispatchRegistration:

@@ -492,18 +492,55 @@ class TestProgramPageSourceConfig:
         source = SourceConfig.from_toml(DEFAULT_SOURCES_DIR / "scripps-reach.toml")
         assert "partner schools only" in source.taxonomy_defaults["eligibility"].lower()
 
-    def test_ucsd_optimus_enlace_cosmos_not_registered_as_individual_program_pages(self):
-        # Reconciliation with ticket 006 (this ticket's Description):
-        # OPTIMUS/ENLACE/COSMOS are registered via the UCSD Summer
-        # Program Finder listing source only, never as individual
-        # program_page sources here, to avoid duplicate-publishing a
-        # kind that bypasses cross-source dedup.
+    def test_ucsd_enlace_not_registered_as_an_individual_program_page(self):
+        # Reconciliation with ticket 006 (this ticket's Description,
+        # revised by ticket 006's own live verification -- see this
+        # ticket's Notes "UPDATE" entry): ENLACE's own UCSD Summer
+        # Program Finder card links to a page that extracts well
+        # (a real inline deadline/eligibility), so it stays registered
+        # via the listing source only, never as an individual
+        # program_page here, to avoid duplicate-publishing a kind that
+        # bypasses cross-source dedup. COSMOS and OPTIMUS are the
+        # opposite case -- see
+        # test_ucsd_cosmos_and_optimus_registered_individually_not_via_listing
+        # below.
         sources = {s.source_id: s for s in load_sources()}
         for source_id in sources:
-            lowered = source_id.lower()
-            assert "optimus" not in lowered
-            assert "enlace" not in lowered
-            assert not (lowered == "cosmos" or lowered.startswith("cosmos-"))
+            assert "enlace" not in source_id.lower()
+
+    def test_ucsd_cosmos_and_optimus_registered_individually_not_via_listing(self):
+        # Sprint 027 ticket 006's own live verification found COSMOS's
+        # and OPTIMUS's UCSD Summer Program Finder cards link to pages
+        # that extract poorly (no deadline/eligibility recoverable) --
+        # ticket 005's Description's own Fix shape step 4 reopens the
+        # listing-only decision for exactly this case. Both are
+        # registered individually instead, and the listing's own
+        # link_selector excludes their card hrefs so neither is
+        # double-published between the two sources.
+        sources = {s.source_id: s for s in load_sources()}
+
+        assert "ucsd-cosmos" in sources
+        cosmos = sources["ucsd-cosmos"]
+        assert cosmos.adapter_type == "program_page"
+        assert cosmos.config["program_kind"] == "internship"
+        assert cosmos.enabled is True
+
+        assert "ucsd-optimus" in sources
+        optimus = sources["ucsd-optimus"]
+        assert optimus.adapter_type == "program_page"
+        assert optimus.config["program_kind"] == "internship"
+        # Even OPTIMUS's own best-reachable live page yielded a title
+        # only (no deadline, no eligibility) -- disabled with a reason
+        # comment, matching the registry's disabled-with-reason
+        # convention, rather than publishing a near-empty record.
+        assert optimus.enabled is False
+        optimus_path = DEFAULT_SOURCES_DIR / "ucsd-optimus.toml"
+        assert "disabled:" in optimus_path.read_text()
+
+        listing = sources["ucsd-summer-program-finder"]
+        link_selector = listing.config["link_selector"]
+        assert "cosmos" in link_selector.lower()
+        assert "moorescancercenter" in link_selector.lower()
 
     def test_illumina_sd2_not_registered(self):
         # Issue 28 names Illumina/SD2 STEM Scholars as a "closed
@@ -516,3 +553,70 @@ class TestProgramPageSourceConfig:
             lowered = source_id.lower()
             assert "illumina" not in lowered
             assert "sd2" not in lowered
+
+
+class TestProgramListingAndMultiSourceConfig:
+    """Sprint 027 ticket 006's own Testing requirement: prove a
+    ``program_listing``-typed TOML with ``config.link_selector`` and a
+    ``program_page_multi``-typed TOML with ``config.program_kind`` both
+    parse into a ``SourceConfig`` correctly. No new loader code is
+    expected for either -- both are ordinary registry data under the
+    existing untyped-``config``-dict mechanism (registry/DESIGN.md's
+    ticket 006 exception-revision addendum).
+    """
+
+    def test_parses_program_listing_fixture_with_link_selector(self):
+        # Own sibling fixtures directory, matching
+        # TestProgramPageSourceConfig's precedent, so it doesn't perturb
+        # TestLoadSources's fixed file count for the shared registry/
+        # fixtures directory.
+        source = SourceConfig.from_toml(
+            FIXTURES_DIR.parent / "registry_program_listing" / "program_listing_good.toml"
+        )
+
+        assert source.adapter_type == "program_listing"
+        assert source.org_name == "Fixture Program Listing Org"
+        assert source.enabled is True
+        assert source.config == {
+            "site_url": "https://example.org",
+            "listing_urls": ["/finder"],
+            "program_kind": "internship",
+            "link_selector": 'li[data-grade*="High School"] a.learnmore',
+        }
+
+    def test_parses_program_page_multi_fixture(self):
+        source = SourceConfig.from_toml(
+            FIXTURES_DIR.parent / "registry_program_page_multi" / "program_page_multi_good.toml"
+        )
+
+        assert source.adapter_type == "program_page_multi"
+        assert source.org_name == "Fixture Program Page Multi Org"
+        assert source.enabled is True
+        assert source.config == {
+            "url": "https://example.org/education/research-internships",
+            "program_kind": "internship",
+        }
+
+    def test_real_registry_registers_ucsd_listing_and_sio_multi_sources(self):
+        # Sprint 027 ticket 006: the UCSD Summer Program Finder
+        # (program_listing, config.link_selector) and the SIO
+        # research-internships page (program_page_multi) are both
+        # registered, enabled, and share kind="internship" per ticket
+        # 005's Architecture rationale.
+        sources = {s.source_id: s for s in load_sources()}
+
+        assert "ucsd-summer-program-finder" in sources
+        listing = sources["ucsd-summer-program-finder"]
+        assert listing.adapter_type == "program_listing"
+        assert listing.enabled is True
+        assert listing.config["program_kind"] == "internship"
+        assert listing.config["site_url"] == "https://summer.ucsd.edu"
+        assert "link_selector" in listing.config
+        assert "High School" in listing.config["link_selector"]
+
+        assert "sio-research-internships" in sources
+        sio = sources["sio-research-internships"]
+        assert sio.adapter_type == "program_page_multi"
+        assert sio.enabled is True
+        assert sio.config["program_kind"] == "internship"
+        assert sio.config["url"] == "https://scripps.ucsd.edu/education/research-internships"

@@ -182,6 +182,38 @@ yields for those three programs, and register an individual
 `program_page` fallback here only if the listing's extraction turns
 out incomplete for any of them.
 
+**UPDATE (2026-09-02, ticket 006's own live-verification revised this
+decision for two of the three programs):** ticket 006's live dry-run of
+the UCSD Summer Program Finder listing (post ticket 008's
+`link_selector`/`program_page_multi` mechanism revision) found ENLACE's
+own card-linked page (resilientmaterials.ucsd.edu/ENLACE) carries a
+real inline deadline and eligibility -- extracts well, so ENLACE stays
+listing-only exactly as originally decided here, unchanged. COSMOS's
+and OPTIMUS's own card-linked pages do not: COSMOS's card links to
+jacobsschool.ucsd.edu/cosmos/about (a description page with no
+deadline anywhere on it -- the real deadline lives on a sibling page,
+/cosmos/how-to-apply, which the listing's card link never reaches), and
+OPTIMUS's card links to
+moorescancercenter.ucsd.edu/education/training-programs/high-school.html
+(a thin blurb with no deadline/eligibility, whose own "Learn more and
+Apply" link 404s to a dead archived page). Per this ticket's own Fix
+shape step 4, ticket 006 re-registered both individually instead:
+`ucsd-cosmos.toml` (`program_page`, pointed at the real
+/cosmos/how-to-apply page, which does carry the deadline/eligibility --
+`enabled = true`, live-verified with a full title/dates/eligibility
+yield) and `ucsd-optimus.toml` (`program_page`, pointed at the best
+OPTIMUS-specific page reachable live -- `enabled = false`, since even
+that page's own live dry-run yielded a title only, no deadline, no
+eligibility; see that file's own comment for the full live-verification
+trail). The UCSD listing's own `config.link_selector` was extended with
+`:not([href*=...])` clauses excluding exactly COSMOS's and OPTIMUS's
+card hrefs, so neither is double-published between the listing and its
+individual registration. `test_ucsd_optimus_enlace_cosmos_not_registered_as_individual_program_pages`
+(referenced above) was renamed and rewritten in ticket 006's own commit
+to assert this new split (COSMOS and OPTIMUS individually registered,
+ENLACE still not) rather than the original "none of the three
+individually registered" assertion -- see `tests/test_registry.py`.
+
 **Illumina/SD2 STEM Scholars investigation** (not registered): live
 web research (2026-09-01) found only a news feature article
 (illumina.com/company/news-center) and an SD2 partnership page

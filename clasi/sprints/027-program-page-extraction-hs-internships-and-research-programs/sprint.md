@@ -120,6 +120,31 @@ precedent for new source registration.
 
 ## Architecture
 
+### Revision (2026-09-02 — ticket 006 exception cycle)
+
+Ticket 006's own required live-verification found that `ProgramListingAdapter.
+discover()`'s sole discovery signal (`EVENT_PATH_RE` path-pattern matching) fits neither
+of this sprint's two headline listing sources' real markup — UCSD's HS-eligible cards
+link cross-domain with no `/program(s)?`-shaped path, and SIO's page is not a
+cards-to-detail-pages listing at all, but one page whose programs are inline sections.
+The exception was thrown `surface: user-visible`; the team-lead reclassified it
+`internal` before dispatching this revision, since the gap is entirely inside
+`ProgramListingAdapter.discover()`'s implementation strategy, not a renegotiation of
+SUC-032's Main Flow (which never specifies *how* a card link is identified). Full
+finding, reclassification rationale, and the resulting design — a configurable
+`config.link_selector` discovery strategy alongside `EVENT_PATH_RE`, and a new
+`program_page_multi` adapter type for one-page/N-record extraction, both designed for
+reuse by sprints 029/030 — are recorded in `design/adapters-DESIGN.md`'s own Revision
+note (canonical source: `adapters/DESIGN.md`). This revision also newly seeds and edits
+`design/discovery-DESIGN.md` (not part of this sprint's original affected-doc list),
+since the new `discover_via_selector` function lives in `discovery/listing.py`; and adds
+a small addendum to `design/registry-DESIGN.md` for the new `adapter_type` value and
+`config.link_selector` key. `design/design.md`'s adapter-count line is refreshed from
+thirteen to fourteen. See the replacement tickets (008, and rewritten 006) in this
+sprint's `## Tickets` table below.
+
+### Original sizing decision (unchanged)
+
 **Substantial** — this sprint introduces a new adapter family (two new
 `adapter_type`s: `program_page`, `program_listing`) with its own LLM
 extraction client and cache (a new cross-module capability inside
@@ -336,9 +361,14 @@ Before tickets can be created, all of the following must be true:
 | 003 | Build the ProgramPageAdapter for individually-registered program pages | 001, 002 |
 | 004 | Build the ProgramListingAdapter for program-listing sources | 002, 003 |
 | 005 | Register the individual HS internship and research program pages | 003 |
-| 006 | Register the UCSD Summer Program Finder and SIO listing sources | 004, 005 |
+| 008 | Add selector-based listing discovery and multi-record page extraction to the program-page mechanism | 002, 004 |
+| 006 | Register the UCSD Summer Program Finder and SIO listing sources | 005, 008 |
 | 007 | Register the SD Foundation Community Scholarship as a Funding Opportunities record | 001, 003 |
 
-Tickets execute serially in the order listed. 001 and 002 have no
-dependency on each other and could execute in either order (or in
-parallel, if this sprint opts into parallel worktrees) before 003.
+Tickets execute in the order listed (not strictly by ticket number —
+008 was created after 006 during ticket 006's exception-revision cycle,
+but must execute before the rewritten 006, which now depends on it).
+001 and 002 have no dependency on each other and could execute in
+either order (or in parallel, if this sprint opts into parallel
+worktrees) before 003. 007 has no dependency on 006/008 and could
+execute at any point after 003.

@@ -127,9 +127,10 @@ in its own directory.
 - [`partner_scrape/DESIGN.md`](../../partner_scrape/DESIGN.md) — **root overview**: the
   run end to end, the four top-level modules, and the shared conventions.
 - [`partner_scrape/adapters/DESIGN.md`](../../partner_scrape/adapters/DESIGN.md) —
-  thirteen per-vendor `discover → fetch → extract` strategies behind a one-line
+  fourteen per-vendor `discover → fetch → extract` strategies behind a one-line
   dispatch table (sprint 027 adds the LLM-extraction `program_page`/
-  `program_listing` pair — see that doc's own sprint 027 section).
+  `program_listing`/`program_page_multi` trio — see that doc's own sprint 027 section
+  and its ticket 006 exception-cycle Revision note).
 - [`partner_scrape/discovery/DESIGN.md`](../../partner_scrape/discovery/DESIGN.md) —
   resolving sources into fetchable URLs; plus hub scanning for organization leads,
   structurally firewalled from the event pipeline.

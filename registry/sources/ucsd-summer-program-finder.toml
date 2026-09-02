@@ -1,0 +1,69 @@
+# UCSD Summer Program Finder -- summer.ucsd.edu's cross-departmental
+# catalog of ~70 summer programs across all UCSD schools/centers, ~24
+# of them HS-eligible. Sprint 027 ticket 006 (issue 28's UCSD Summer
+# Program Finder listing source), `program_listing` adapter, discovered
+# via the ticket 008 mechanism revision's `config.link_selector`
+# (`discovery.discover_via_selector`) rather than `EVENT_PATH_RE` --
+# see this ticket's exception cycle and `adapters/DESIGN.md`'s Revision
+# note: 0 of the 24 real HS-eligible cards' `a.learnmore` targets are
+# `/program(s)?`-shaped, all going cross-domain to unrelated program
+# homepages.
+#
+# Live-verified 2026-09-02 (sprint 027 ticket 006):
+#   GET https://summer.ucsd.edu/program-finder returns HTTP 301 to
+#   http://summer.ucsd.edu/program-finder/; GET .../program-finder/
+#   (trailing slash, as registered below) returns HTTP 200 directly --
+#   listing_urls uses the trailing-slash form to avoid the extra hop.
+# `li[data-grade*="High School"] a.learnmore` against the live page's
+# real markup (confirmed via a direct lxml.cssselect() run against the
+# fetched body, not the pipeline's own dry-run, since this ticket's own
+# live-verification step is what confirmed the selector before
+# committing this file) matches exactly 24 cards -- the same count
+# issue 28's own "21 HS-eligible" estimate plus this ticket's own live
+# count both anticipated.
+#
+# OPTIMUS/ENLACE/COSMOS reconciliation (ticket 005's Notes, cross-
+# referenced here): live-checking each of the three programs' own
+# `a.learnmore` target page found ENLACE's page
+# (resilientmaterials.ucsd.edu/ENLACE) carries a real inline deadline
+# ("The deadline to apply is February 6, 2026") and eligibility
+# ("Students currently enrolled in 11th grade... university students in
+# any year") -- extracts well, so ENLACE stays covered by this listing
+# only, per ticket 005's original decision, unchanged.
+#
+# COSMOS's and OPTIMUS's own `a.learnmore` targets extract poorly --
+# COSMOS's card links to jacobsschool.ucsd.edu/cosmos/about, a program
+# description page with no deadline anywhere on it (the real deadline
+# lives on a sibling page, /cosmos/how-to-apply, which the listing's
+# own card link never reaches); OPTIMUS's card links to
+# moorescancercenter.ucsd.edu/education/training-programs/high-school.html,
+# a thin one-paragraph blurb with no deadline and no eligibility detail
+# whose own "Learn more and Apply" link 404s
+# (.../_archive/optimus/index.html -- a dead archived page). Per this
+# ticket's Fix shape step 4, both are re-registered individually
+# instead (ucsd-cosmos.toml, ucsd-optimus.toml), pointed at better
+# source pages where one exists (COSMOS) or the best page actually
+# reachable live (OPTIMUS) -- see those files' own comments. This
+# selector's `:not([href*=...])` clauses exclude exactly these two
+# cards' hrefs from this listing's own discovery, so COSMOS and OPTIMUS
+# are never double-published between this listing and their individual
+# `program_page` registrations (kind="internship" records bypass
+# cross-source dedup entirely -- see adapters/DESIGN.md's Open
+# Question on this exact risk). 22 of the 24 HS-eligible cards
+# (everything except COSMOS and OPTIMUS) are discovered via this
+# listing.
+
+org_name = "UC San Diego Summer Session -- Summer Program Finder"
+adapter_type = "program_listing"
+enabled = true
+
+[config]
+site_url = "https://summer.ucsd.edu"
+listing_urls = ["/program-finder/"]
+program_kind = "internship"
+link_selector = 'li[data-grade*="High School"] a.learnmore:not([href*="jacobsschool.ucsd.edu/cosmos"]):not([href*="moorescancercenter.ucsd.edu/education/training-programs/high-school.html"])'
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 28 (2026-08-30 seed source catalog); sprint 027 ticket 006 exception-revision live verification (2026-09-02)"

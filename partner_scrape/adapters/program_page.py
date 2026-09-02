@@ -236,6 +236,23 @@ def _extract_one_program(
     sets ``Event.kind`` -- a missing or invalid value is logged and
     skipped, never raised, matching this module's general per-record
     error-isolation stance.
+
+    **(Ticket 006 live-verification finding)** The ``llm_client.
+    extract_program()`` call itself is also wrapped: any exception it
+    raises (a live UCSD Summer Program Finder card,
+    ``www.rmtlacademy.org``, was found to fetch a page whose body alone
+    exceeds the model's context window, raising
+    ``anthropic.BadRequestError``) is logged and treated as a skip for
+    this one ref, never left to propagate. Without this,
+    ``adapters.base.run()``'s fetch/extract loop has no per-ref
+    try/except of its own (by design -- see ``Adapter.extract()``'s own
+    docstring: isolation is each adapter's job), so one oversized page
+    would abort the *entire* source, discarding every other already-
+    fetched card's ``Event`` along with it -- for a ``program_listing``
+    source with 20+ cards, one bad card would otherwise zero out the
+    whole run. Mirrors ``enrich/enricher.py``'s identical "any exception
+    the call raises, not only a specific error type" fail-open stance for
+    its own LLM call.
     """
     if raw.status != 200:
         logger.warning(
@@ -247,7 +264,16 @@ def _extract_one_program(
 
     result = cache.lookup(raw.ref.url, raw.body)
     if result is None:
-        result = llm_client.extract_program(raw.ref.url, raw.body)
+        try:
+            result = llm_client.extract_program(raw.ref.url, raw.body)
+        except Exception as exc:
+            logger.warning(
+                "Program page %s: extract_program() raised %s: %s; skipping",
+                raw.ref.url,
+                type(exc).__name__,
+                exc,
+            )
+            return []
         cache.store(raw.ref.url, raw.body, result)
 
     program_kind = _resolve_program_kind(raw.ref.url, source)
@@ -275,6 +301,10 @@ def _extract_many_programs(
     maps each one onto its own ``Event`` via :func:`_map_result_to_event`,
     the exact same per-result mapping :func:`_extract_one_program` uses.
     All N ``Event``s share this one page's ``url``/``source_id``.
+
+    **(Ticket 006 live-verification finding)** Same ``llm_client`` call
+    isolation as :func:`_extract_one_program` -- see that function's
+    docstring for the live-measured failure this guards against.
     """
     if raw.status != 200:
         logger.warning(
@@ -286,7 +316,16 @@ def _extract_many_programs(
 
     results = cache.lookup_many(raw.ref.url, raw.body)
     if results is None:
-        results = llm_client.extract_programs(raw.ref.url, raw.body)
+        try:
+            results = llm_client.extract_programs(raw.ref.url, raw.body)
+        except Exception as exc:
+            logger.warning(
+                "Program page %s: extract_programs() raised %s: %s; skipping",
+                raw.ref.url,
+                type(exc).__name__,
+                exc,
+            )
+            return []
         cache.store_many(raw.ref.url, raw.body, results)
 
     program_kind = _resolve_program_kind(raw.ref.url, source)

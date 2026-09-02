@@ -11,6 +11,7 @@ calls the real Anthropic API -- LLM extraction is always driven through
 
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
@@ -265,6 +266,26 @@ class TestExtractRobustness:
 
         assert list(adapter.extract(raw, _source())) == []
         assert adapter.llm_client.calls == []
+
+    def test_extract_program_raising_is_logged_and_skipped_not_raised(self, tmp_path, caplog):
+        # Sprint 027 ticket 006's own live verification found a real
+        # UCSD Summer Program Finder card (www.rmtlacademy.org) whose
+        # fetched body alone exceeded the model's context window,
+        # raising anthropic.BadRequestError from inside
+        # llm_client.extract_program() -- previously uncaught here.
+        # FixtureProgramLLMClient raises a plain KeyError for a URL
+        # absent from its `responses` dict, exercising the identical
+        # "the LLM call itself raised" code path.
+        adapter = ProgramPageAdapter(
+            llm_client=FixtureProgramLLMClient(responses={}), cache=ProgramExtractionCache(tmp_path)
+        )
+        raw = RawResponse(ref=EventRef(url=PAGE_URL), status=200, body=_page_body())
+
+        with caplog.at_level(logging.WARNING):
+            events = list(adapter.extract(raw, _source()))
+
+        assert events == []
+        assert "extract_program" in caplog.text
 
 
 class TestClosedPageStillEmitted:

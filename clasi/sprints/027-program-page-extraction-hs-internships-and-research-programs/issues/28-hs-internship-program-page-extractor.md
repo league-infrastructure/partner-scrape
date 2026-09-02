@@ -9,6 +9,7 @@ tickets:
 - 027-005
 - 027-006
 - 027-007
+- 027-008
 ---
 
 # High-school internship & research-program extraction (program pages, not ATS)

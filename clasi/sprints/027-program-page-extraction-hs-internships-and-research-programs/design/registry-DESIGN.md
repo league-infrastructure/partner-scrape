@@ -217,6 +217,15 @@ new adapters — same untyped-dict status as every other adapter-specific `confi
 `"Funding Opportunities"`) rather than left to the LLM extraction call's own
 classification.
 
+**(Ticket 006 exception revision)** A third `adapter_type` value, `program_page_multi`
+(same `config.url`/`config.program_kind` shape as `program_page`, for a page whose body
+holds N inline program records rather than one — see `adapters/DESIGN.md`'s Revision
+note), and one new conventional `config` key for `program_listing` sources,
+`config.link_selector` (a CSS selector string, e.g.
+`li[data-grade*="High School"] a.learnmore`) — both are ordinary registry data, same as
+every key above: no `schema.py`/`loader.py` change, dispatch and interpretation happen
+entirely inside `adapters/`/`discovery/`, which this module still has no dependency on.
+
 ## 6. Open Questions / Known Limitations
 
 - There is no schema validation for the contents of `config`, so a typo in a key an

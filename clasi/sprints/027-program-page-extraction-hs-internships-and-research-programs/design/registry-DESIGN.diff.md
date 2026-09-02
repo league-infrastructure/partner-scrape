@@ -1,6 +1,6 @@
 ---
 source_file: registry-DESIGN.md
-source_hash: 8a9c0de01ee04243866aa739858decc3d8a862d76f41e177083a9801c2e978d9
+source_hash: 97d6eb5532e34f5ba5dbb60ecc44312959f2a31a00f78460e606806446f55fc3
 ---
 # Diff: registry-DESIGN.md
 
@@ -30,7 +30,7 @@ Comparison of the sprint overlay copy of `registry-DESIGN.md` against its pristi
  
  ## 2. Orientation
  
-@@ -194,6 +208,15 @@
+@@ -194,6 +208,24 @@
  contents of `config`" limitation applies identically to `taxonomy_defaults`: a typo'd key
  (e.g. `elegibility`) is silently ignored, not an error.
  
@@ -42,6 +42,15 @@ Comparison of the sprint overlay copy of `registry-DESIGN.md` against its pristi
 +"program"` source whose type is known a priori (e.g. the SD Foundation Scholarship's
 +`"Funding Opportunities"`) rather than left to the LLM extraction call's own
 +classification.
++
++**(Ticket 006 exception revision)** A third `adapter_type` value, `program_page_multi`
++(same `config.url`/`config.program_kind` shape as `program_page`, for a page whose body
++holds N inline program records rather than one — see `adapters/DESIGN.md`'s Revision
++note), and one new conventional `config` key for `program_listing` sources,
++`config.link_selector` (a CSS selector string, e.g.
++`li[data-grade*="High School"] a.learnmore`) — both are ordinary registry data, same as
++every key above: no `schema.py`/`loader.py` change, dispatch and interpretation happen
++entirely inside `adapters/`/`discovery/`, which this module still has no dependency on.
 +
  ## 6. Open Questions / Known Limitations
  

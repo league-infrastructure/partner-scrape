@@ -1,0 +1,41 @@
+# UCSD COSMOS (California State Summer School for Mathematics and
+# Science) -- a four-week residential summer research program for
+# current 8th-12th grade CA students. Registered individually here,
+# NOT via the UCSD Summer Program Finder listing (ucsd-summer-program-
+# finder.toml), per this ticket's OPTIMUS/ENLACE/COSMOS reconciliation
+# (Fix shape step 4, reopening ticket 005's original decision to leave
+# all three to the listing).
+#
+# Reconciliation finding (sprint 027 ticket 006, live-verified
+# 2026-09-02): the UCSD listing's own COSMOS card links to
+# jacobsschool.ucsd.edu/cosmos/about, a program-description page with
+# no deadline anywhere on it -- the real application window
+# ("Applications for COSMOS 2026 open on Wednesday, January 7th @8AM
+# and close on Friday, February 6th @11:59PM", plus grade-8-12/CA-
+# resident eligibility) lives on a sibling page,
+# jacobsschool.ucsd.edu/cosmos/how-to-apply, which the listing's own
+# card link never reaches -- a program_listing crawl of the finder page
+# has no mechanism to discover a program's *other* pages beyond its one
+# card link. Registering COSMOS individually here, pointed directly at
+# the how-to-apply page, recovers the deadline/eligibility the listing
+# path cannot. This listing's own link_selector explicitly excludes
+# COSMOS's card href (see ucsd-summer-program-finder.toml's own
+# comment) so COSMOS is never double-published between the two
+# sources.
+#
+# Live-verified 2026-09-02: GET
+# https://jacobsschool.ucsd.edu/cosmos/how-to-apply returns HTTP 200
+# and contains the deadline/eligibility text quoted above.
+
+org_name = "UCSD COSMOS (California State Summer School for Mathematics and Science)"
+adapter_type = "program_page"
+enabled = true
+
+[config]
+url = "https://jacobsschool.ucsd.edu/cosmos/how-to-apply"
+program_kind = "internship"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 28 (2026-08-30 seed source catalog); sprint 027 ticket 006 OPTIMUS/ENLACE/COSMOS reconciliation (2026-09-02), reopening ticket 005's original listing-only decision"

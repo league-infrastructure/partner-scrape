@@ -1,0 +1,17 @@
+# Synthetic fixture: a well-formed program_listing source with
+# config.link_selector, matching the shape sprint 027 ticket 006
+# registers under registry/sources/ (ucsd-summer-program-finder.toml).
+# Proves the loader's existing untyped-config-dict mechanism parses
+# adapter_type = "program_listing" and config.link_selector with no new
+# loader code, per registry/DESIGN.md's ticket 006 exception-revision
+# addendum.
+
+org_name = "Fixture Program Listing Org"
+adapter_type = "program_listing"
+enabled = true
+
+[config]
+site_url = "https://example.org"
+listing_urls = ["/finder"]
+program_kind = "internship"
+link_selector = 'li[data-grade*="High School"] a.learnmore'

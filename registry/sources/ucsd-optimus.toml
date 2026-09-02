@@ -1,0 +1,65 @@
+# UCSD OPTIMUS (Outreach Program To Inspire Minority and Underrepresented
+# Students) -- an 8-week cancer-research internship at Moores Cancer
+# Center for San Diego high schoolers. Registered individually here,
+# NOT via the UCSD Summer Program Finder listing (ucsd-summer-program-
+# finder.toml), per this ticket's OPTIMUS/ENLACE/COSMOS reconciliation
+# (Fix shape step 4, reopening ticket 005's original decision to leave
+# all three to the listing). See ucsd-summer-program-finder.toml's own
+# comment and ucsd-cosmos.toml's parallel entry.
+#
+# Reconciliation finding (sprint 027 ticket 006, live-verified
+# 2026-09-02): the UCSD listing's own OPTIMUS card links to
+# moorescancercenter.ucsd.edu/education/training-programs/high-school.html
+# -- registered directly below, the best OPTIMUS-specific page actually
+# reachable live. That page's own OPTIMUS section carries only a
+# one-paragraph description and no explicit deadline; its "Learn more
+# and Apply" link resolves to
+# moorescancercenter.ucsd.edu/education/training-programs/_archive/optimus/index.html,
+# which is HTTP 404 (a dead, archived page) -- confirmed live. A web
+# search surfaced a plausible richer description (specific partner high
+# schools, grades 10-11, a stipend) attributed to
+# moorescancercenter.ucsd.edu/education/optimus/index.html, but that URL
+# and every other OPTIMUS-specific path tried (.../education/optimus/,
+# a medschool.ucsd.edu Sites mirror) are also unreachable live (404 or
+# connection failure) -- so this registration deliberately points at
+# the one OPTIMUS-naming page that is actually live today, not at a
+# URL this ticket could not itself confirm still resolves. This
+# listing's own link_selector explicitly excludes OPTIMUS's card href
+# so OPTIMUS is never double-published between the two sources.
+#
+# Live dry-run yield (direct ProgramPageAdapter.discover()->fetch()->
+# extract() call against the real page + a real AnthropicProgramLLMClient,
+# 2026-09-02): one Event, title="OPTIMUS", but start/end both unset and
+# eligibility="" -- the live page genuinely states no deadline and no
+# eligibility criteria beyond generic nav categorization, so there is
+# nothing an LLM extraction (or a human reading the same page) could
+# recover for either field. This does not meet ticket 005's own
+# registration bar ("one Event with a non-empty title, a real date_end
+# or an explicit 'rolling' determination, and a plausible eligibility
+# value") -- unlike sbp-spark/lji-ljidea's precedent (ticket 005 Notes),
+# which had no deadline either but did carry real, plausible eligibility
+# prose, OPTIMUS's page has neither a deadline nor any eligibility text
+# at all. disabled: live-verification found this program's only
+# reachable page carries a title only, no deadline, no eligibility
+# (moorescancercenter.ucsd.edu/education/training-programs/high-school.html's
+# OPTIMUS section is a one-paragraph blurb whose own "Learn more and
+# Apply" link is a dead archived page) -- matching registry/DESIGN.md's
+# disabled-with-reason convention (ticket 005's noaa-hutton/scripps-
+# reach precedent) rather than publishing a near-empty record. Kept in
+# the registry (not deleted) per that same convention, and per this
+# ticket's reconciliation, so OPTIMUS is not silently dropped from the
+# catalog and re-verification is possible if UCSD ever republishes a
+# real OPTIMUS-specific application page.
+
+org_name = "UC San Diego Moores Cancer Center -- OPTIMUS"
+adapter_type = "program_page"
+enabled = false  # disabled: live page carries no deadline/eligibility, only a title (see comment above)
+
+[config]
+url = "https://moorescancercenter.ucsd.edu/education/training-programs/high-school.html"
+program_kind = "internship"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 28 (2026-08-30 seed source catalog); sprint 027 ticket 006 OPTIMUS/ENLACE/COSMOS reconciliation (2026-09-02), reopening ticket 005's original listing-only decision"
