@@ -726,7 +726,11 @@ class TestSDFestivalOfScienceEngineeringRegistration:
     def test_does_not_conflict_with_the_unrelated_gsdsef_registration(self):
         # gsdsef.toml is the Greater San Diego Science and Engineering
         # Fair -- a different STEM fair organization entirely, not
-        # touched by this ticket.
+        # touched by this ticket. (Sprint 029 ticket 005 later edits
+        # gsdsef.toml's own config in place -- config["site_url"] became
+        # config["url"], see TestGSDSEFRegistration below -- but that
+        # ticket is independent of ticket 003's own scope; this test
+        # only needs the two source_ids to stay distinct.)
         sources = {s.source_id: s for s in load_sources()}
 
         assert "gsdsef" in sources
@@ -735,7 +739,7 @@ class TestSDFestivalOfScienceEngineeringRegistration:
 
         sd_festival = sources["sd-festival-of-science-engineering"]
         assert sd_festival.source_id != gsdsef.source_id
-        assert sd_festival.config["site_url"] != gsdsef.config["site_url"]
+        assert sd_festival.config["site_url"] != gsdsef.config["url"]
 
 
 class TestSDCECRegistration:
@@ -804,6 +808,51 @@ class TestSDCECRegistration:
 
         assert source.adapter_type == "program_page_multi"
         assert set(source.config.keys()) <= {"url", "program_kind", "opportunity_type"}
+
+
+class TestGSDSEFRegistration:
+    """Sprint 029 ticket 005 (SUC-048, issue 30: "make sure these
+    [judging/public-day] dates surface"). GSDSEF is an *existing*
+    partner (`registry/sources/gsdsef.toml`) -- this ticket edits that
+    file's own ``config`` in place, never creating a second
+    registration. Exactly one ``registry/sources/`` entry exists for
+    GSDSEF both before and after this ticket.
+    """
+
+    def test_exactly_one_gsdsef_registration_exists(self):
+        sources = load_sources()
+        gsdsef_sources = [s for s in sources if "science and engineering fair" in s.org_name.lower()]
+
+        assert len(gsdsef_sources) == 1
+        assert gsdsef_sources[0].source_id == "gsdsef"
+
+    def test_edited_to_program_page_multi_pointed_at_the_schedule_page(self):
+        # This ticket's own required live-verification found the
+        # pre-existing generic_html + sitemap-diff discovery
+        # structurally cannot reach the one page that carries the
+        # judging/public-day dates (discovery.sitemap.EVENT_PATH_RE
+        # matches no /information/schedule path segment) -- so the
+        # existing file's adapter_type/config was edited in place to
+        # program_page_multi, pointed directly at that page. See the
+        # file's own header comment for the full evidence trail.
+        sources = {s.source_id: s for s in load_sources()}
+
+        assert "gsdsef" in sources
+        gsdsef = sources["gsdsef"]
+        assert gsdsef.adapter_type == "program_page_multi"
+        assert gsdsef.enabled is True
+        assert gsdsef.config["url"] == "https://www.gsdsef.org/information/schedule"
+        assert gsdsef.config["program_kind"] == "program"
+        assert gsdsef.config["opportunity_type"] == "Competitions"
+        # config.site_url (generic_html's own key) is gone -- program_page_multi
+        # never reads it.
+        assert "site_url" not in gsdsef.config
+
+    def test_org_name_unchanged_by_the_config_edit(self):
+        sources = {s.source_id: s for s in load_sources()}
+        gsdsef = sources["gsdsef"]
+
+        assert gsdsef.org_name == "Greater San Diego Science and Engineering Fair"
 
 
 class TestCampMarketingPageProviders:

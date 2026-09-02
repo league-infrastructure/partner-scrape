@@ -804,3 +804,86 @@ class TestSDCECFixtureExtraction:
         # "no override" design point).
         assert len({e.opportunity_type for e in events}) == 2
         assert len({e.identity_key() for e in events}) == 3
+
+
+class TestGSDSECFixtureExtraction:
+    """Sprint 029 ticket 005 (issue 30, SUC-048): GSDSEF's *existing*
+    registration (``registry/sources/gsdsef.toml``) was edited in place
+    -- ``adapter_type`` changed from ``generic_html`` to
+    ``program_page_multi``, ``config.url`` pointed directly at
+    ``/information/schedule`` (the one page carrying the fair week's
+    judging/public-day dates; the pre-existing sitemap-diff discovery
+    structurally cannot reach it -- see the TOML file's own header
+    comment) -- with ``config.opportunity_type = "Competitions"``
+    selecting the competition extraction profile.
+
+    This proves the mechanism: one fetched schedule page,
+    ``extract_programs(profile="competition")``, mapped to an ``Event``
+    via the existing per-result mapping. Real live verification
+    (2026-09-02, reproduced 5x across ``extract_programs()`` and
+    ``extract_program()``) consistently found the *real* extraction
+    returns exactly ONE record spanning the whole Fair Week
+    (``date_start = "2027-03-08"``, ``date_end = "2027-03-14"``,
+    ``registration_deadline = "2027-02-19"``) rather than two
+    separately-dated "Judging"/"Public Day" records -- both target days
+    (Wed judging, Sat public viewing) fall inside that one exported
+    range. This fixture reproduces that same real, single-record
+    result, not a hypothetical two-record split.
+    """
+
+    URL = "https://www.gsdsef.org/information/schedule"
+
+    _RESULTS = [
+        ProgramExtractionResult(
+            program_name="2027 GSDSEF (Greater San Diego Science and Engineering Fair)",
+            audience_grades=["6th grade", "7th grade", "8th grade", "9th grade",
+                              "10th grade", "11th grade", "12th grade"],
+            date_start="2027-03-08",
+            date_end="2027-03-14",
+            cost="",
+            eligibility="",
+            is_open=True,
+            opportunity_type="Competitions",
+            registration_deadline="2027-02-19",
+        ),
+    ]
+
+    def _body(self) -> str:
+        return (FIXTURES_DIR / "gsdsef_schedule_page.html").read_text()
+
+    def _source(self) -> SourceConfig:
+        return SourceConfig(
+            source_id="gsdsef",
+            org_name="Greater San Diego Science and Engineering Fair",
+            adapter_type="program_page_multi",
+            config={
+                "url": self.URL,
+                "program_kind": "program",
+                "opportunity_type": "Competitions",
+            },
+        )
+
+    def test_fair_week_range_covers_both_judging_and_public_day(self, tmp_path):
+        llm_client = FixtureProgramLLMClient(list_responses={self.URL: self._RESULTS})
+        adapter = ProgramPageMultiAdapter(llm_client=llm_client, cache=ProgramExtractionCache(tmp_path))
+        raw = RawResponse(ref=EventRef(url=self.URL), status=200, body=self._body())
+
+        events = list(adapter.extract(raw, self._source()))
+
+        assert len(events) == 1
+        event = events[0]
+        assert event.opportunity_type == "Competitions"
+        assert event.start == datetime.fromisoformat("2027-03-08")
+        assert event.end == datetime.fromisoformat("2027-03-14")
+
+        # Judging (Wed Mar 10) and the public day (Sat Mar 13) both
+        # fall inside the exported [start, end] range.
+        judging_day = datetime.fromisoformat("2027-03-10")
+        public_day = datetime.fromisoformat("2027-03-13")
+        assert event.start <= judging_day <= event.end
+        assert event.start <= public_day <= event.end
+
+        # registration_deadline surfaces via Event.description, the
+        # same mapping seaperch-sd-regional.toml's own registration
+        # relies on (adapters/DESIGN.md's sprint 029 Design Rationale).
+        assert event.description == "Registration deadline: 2027-02-19"
