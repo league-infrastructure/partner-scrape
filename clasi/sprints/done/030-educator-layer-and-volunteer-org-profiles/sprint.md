@@ -1,7 +1,7 @@
 ---
 id: '030'
 title: Educator layer and volunteer org profiles
-status: executing
+status: done
 branch: sprint/030-educator-layer-and-volunteer-org-profiles
 use-cases:
 - SUC-049
