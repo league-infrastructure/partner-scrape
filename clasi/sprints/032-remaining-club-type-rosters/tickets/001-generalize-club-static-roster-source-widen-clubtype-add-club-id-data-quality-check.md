@@ -2,8 +2,9 @@
 id: '001'
 title: Generalize club static-roster source, widen ClubType, add club_id data-quality
   check
-status: open
-use-cases: [SUC-061]
+status: done
+use-cases:
+- SUC-061
 depends-on: []
 github-issue: ''
 issue: 35b-standing-entities-remaining-club-rosters.md
@@ -70,20 +71,20 @@ this sprint's pointer into it, not a replacement for it.
 
 ## Acceptance Criteria
 
-- [ ] `ClubType` (and therefore `VALID_CLUB_TYPES`) includes
+- [x] `ClubType` (and therefore `VALID_CLUB_TYPES`) includes
       `"hack-club"`, `"cyberpatriot"`, `"science-olympiad"`, `"4-h"`,
       `"girls-who-code"`, `"civil-air-patrol"`, and `"sea-cadets"`.
-- [ ] `directory/sources/club_static_roster.py` exists with a
+- [x] `directory/sources/club_static_roster.py` exists with a
       `ClubStaticRosterSource` class; `hack_club_static_roster.py` no
       longer exists (renamed, not duplicated).
-- [ ] `SOURCE_NAME`/provenance is derived per registry entry (e.g. from
+- [x] `SOURCE_NAME`/provenance is derived per registry entry (e.g. from
       `SourceConfig.source_id`), not a single hard-coded literal — a
       unit test asserts two different registry entries produce two
       different `Club.sources` values.
-- [ ] `directory/pipeline.py`'s `_CLUB_SOURCES` table key is
+- [x] `directory/pipeline.py`'s `_CLUB_SOURCES` table key is
       `"club_static_roster"`; `directory/registry/hack-club-sd.toml`'s
       `adapter_type` is `"club_static_roster"`.
-- [ ] The four existing Hack Club chapters still parse and geocode
+- [x] The four existing Hack Club chapters still parse and geocode
       identically to before the rename: same four `club_id`s, same
       `location_precision` per chapter (University City HS and La Jolla
       HS at rung 2 "school", Helix Charter HS at rung 3 "school" with
@@ -91,16 +92,16 @@ this sprint's pointer into it, not a replacement for it.
       same `host_school_website` population pattern. A regression test
       pins this (re-run the existing Hack Club fixture/dataset test
       suite against the renamed module).
-- [ ] `tests/directory/test_sources_static_roster.py`'s (or the
+- [x] `tests/directory/test_sources_static_roster.py`'s (or the
       equivalent renamed test module's) `TestNeverTouchesFetcher`
       coverage still passes against the renamed/generalized source.
-- [ ] A new `Club`-side `club_id` uniqueness/non-blank test exists in
+- [x] A new `Club`-side `club_id` uniqueness/non-blank test exists in
       `tests/directory/test_dataset_validity.py`, structurally mirroring
       `TestUniqueIds` for `Place`.
-- [ ] `directory/DESIGN.md` carries a Revision paragraph describing the
+- [x] `directory/DESIGN.md` carries a Revision paragraph describing the
       rename/generalization, matching the existing Revision-section
       convention (sprint 030's own entry as the template).
-- [ ] Full hermetic test suite passes (`uv run pytest`); no test reaches
+- [x] Full hermetic test suite passes (`uv run pytest`); no test reaches
       a live network call.
 
 ## Implementation Plan

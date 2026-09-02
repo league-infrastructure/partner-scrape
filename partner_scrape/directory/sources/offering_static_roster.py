@@ -49,8 +49,10 @@ logger = logging.getLogger(__name__)
 
 #: This source's provenance name, recorded on every Offering it
 #: produces (``Offering.sources``) -- matches ``sources/
-#: static_roster.py``'s/``sources/hack_club_static_roster.py``'s
-#: ``SOURCE_NAME`` convention exactly.
+#: static_roster.py``'s ``SOURCE_NAME`` convention exactly. (Sprint 032
+#: ticket 001 moved ``sources/club_static_roster.py`` to a
+#: per-registry-entry provenance value instead of a module-level
+#: constant like this one -- see that module's own docstring.)
 SOURCE_NAME = "offering_static_roster"
 
 #: This module's own data directory -- `directory/data/`, matching

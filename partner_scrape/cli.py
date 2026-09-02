@@ -334,7 +334,7 @@ def _add_directory_subcommand(subparsers: argparse._SubParsersAction) -> None:
         metavar="SOURCE",
         help=(
             "Only run this single acquisition source, by adapter_type "
-            "(e.g. 'static_roster', 'hack_club_static_roster', or "
+            "(e.g. 'static_roster', 'club_static_roster', or "
             "'offering_static_roster') -- not a Registry file's stem. "
             "Omitted, every active place/club/offering source runs."
         ),

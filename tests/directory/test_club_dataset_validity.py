@@ -22,7 +22,7 @@ from pathlib import Path
 from partner_scrape.directory.model import VALID_CLUB_TYPES
 from partner_scrape.directory.pipeline import DEFAULT_GEO_DATA_DIR, run_directory
 from partner_scrape.directory.sources.base import run_club_source
-from partner_scrape.directory.sources.hack_club_static_roster import HackClubStaticRosterSource
+from partner_scrape.directory.sources.club_static_roster import ClubStaticRosterSource
 from partner_scrape.registry.loader import load_active_sources
 
 # -- ticket 004 (issue 48): the real, committed places.toml carries 17
@@ -75,8 +75,8 @@ class _NeverCalledFetcher:
 
 def _real_clubs():
     sources = load_active_sources(DIRECTORY_REGISTRY_DIR)
-    hack_club_source = next(s for s in sources if s.adapter_type == "hack_club_static_roster")
-    return run_club_source(hack_club_source, HackClubStaticRosterSource(), _NeverCalledFetcher())
+    hack_club_source = next(s for s in sources if s.adapter_type == "club_static_roster")
+    return run_club_source(hack_club_source, ClubStaticRosterSource(), _NeverCalledFetcher())
 
 
 class TestUniqueIds:
@@ -125,7 +125,7 @@ class TestNoLiveGeocodedCoordinate:
     """AC: each chapter's location precision comes from the shared
     geo-ladder, including a real attempt at the school-matching rung --
     never a guessed coordinate. The static-roster source itself never
-    sets a coordinate at all (see sources/hack_club_static_roster.py's
+    sets a coordinate at all (see sources/club_static_roster.py's
     own docstring); this is the dataset-level half of that guarantee,
     the pipeline-level half is tests/directory/test_pipeline.py's
     TestApplyClubGeocoding / TestRunDirectoryRealFixtureData."""

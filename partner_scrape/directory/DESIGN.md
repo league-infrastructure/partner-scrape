@@ -1,8 +1,59 @@
 # directory
 
-**Owner:** Eric Busboom · **Last reviewed:** 2026-09-02 (sprint 030 — Offerings standing-entity type added) · **Status:** Places, Clubs (Hack Club chapters), and Offerings (volunteer org profiles + free/Title I school programs) complete; issue 35b's remaining six club types and issue 33's educator-PD program pages (routed through `adapters/`, not this module — see this doc's sprint 030 Revision) deferred/tracked elsewhere
+**Owner:** Eric Busboom · **Last reviewed:** 2026-09-02 (sprint 032 ticket 001 — club static-roster source generalized to any club type) · **Status:** Places, Clubs (Hack Club chapters; the curated static-roster source now generalized to serve any club type), and Offerings (volunteer org profiles + free/Title I school programs) complete; issue 35b's remaining six club types' curated content (tickets 002-007) and issue 33's educator-PD program pages (routed through `adapters/`, not this module — see this doc's sprint 030 Revision) deferred/tracked elsewhere
 
 ---
+
+## Revision (2026-09-02 — sprint 032 ticket 001: club static-roster source generalized)
+
+Resolves §5's own Open Question ("Should issue 35b's remaining six
+club types each get their own `ClubSource` ... reusing `ClubType`'s
+Literal (widened) and the existing `_CLUB_SOURCES` dispatch table?")
+in favor of the "reuse, don't duplicate" answer that question always
+anticipated as the likely one. Two changes, landed together in one
+ticket/commit:
+
+1. **`ClubType` widens** from `Literal["hack-club"]` to also include
+   `"cyberpatriot"`, `"science-olympiad"`, `"4-h"`,
+   `"girls-who-code"`, `"civil-air-patrol"`, and `"sea-cadets"` —
+   `VALID_CLUB_TYPES` (already derived via `get_args()`) picks up all
+   six with no further change. No new field, no new dataclass — see
+   sprint.md's Scope Correction for the "no *new* field/schema, not
+   'the Literal never needs another value'" distinction this widening
+   makes concrete.
+2. **`sources/hack_club_static_roster.py` renamed and generalized to
+   `sources/club_static_roster.py`.** The module's `discover()`/
+   `fetch()`/`extract()` logic was already generic — nothing in it was
+   Hack-Club-specific except the file/class name, the hard-coded
+   `SOURCE_NAME` module constant, and the default roster path (naming
+   and defaults, not logic). `HackClubStaticRosterSource` becomes
+   `ClubStaticRosterSource`; the one real behavioral change is that
+   provenance (`Club.sources`) is now derived per registry entry from
+   `SourceConfig.source_id` rather than one hard-coded literal, so a
+   CyberPatriot or Sea Cadets `Club` never carries the misleading
+   string `"hack_club_static_roster"` as its source. `directory/
+   pipeline.py`'s `_CLUB_SOURCES` dispatch key and
+   `hack-club-sd.toml`'s `adapter_type` both change from
+   `"hack_club_static_roster"` to `"club_static_roster"`, landed in the
+   same commit so `run_directory()` never sees a dangling dispatch-table
+   key for the one existing Hack Club registry entry (see sprint.md's
+   Migration Concerns).
+
+**Why one rename rather than six new near-duplicate modules, and why
+now rather than deferred further** — see sprint.md's own Design
+Rationale (Decision/Context/Alternatives/Consequences) for sprint 032;
+not re-derived here beyond the one-line summary: the code was already
+general enough, so writing six copies would have been pure
+duplication, and leaving the module's own name permanently
+Hack-Club-specific would have misdescribed what it now serves.
+
+**This ticket adds no roster content.** The four existing Hack Club
+chapters are unchanged in data and geocoding outcome — only their
+registry entry's `adapter_type` string and `Club.sources` provenance
+value change. Curating and registering the six new club types'
+rosters themselves is tickets 002-007's own work, each a data-only
+addition (new TSV + new registry entry, `adapter_type =
+"club_static_roster"`) requiring no further Python change.
 
 ## Revision (2026-09-02 — sprint 030 Offerings standing-entity type)
 
@@ -662,14 +713,18 @@ non-trivial problem this addition has no need to solve.
   per-chapter URL/meeting schedule against `finder.hackclub.com` or the
   school's own site? Both fields exist on the model and the roster's
   own TSV schema; this ticket leaves them blank rather than guess (see
-  `sources/hack_club_static_roster.py`'s own docstring).
-- Should issue 35b's remaining six club types (CyberPatriot, Science
+  `sources/club_static_roster.py`'s own docstring).
+- ~~Should issue 35b's remaining six club types (CyberPatriot, Science
   Olympiad, 4-H, Girls Who Code, Civil Air Patrol, Sea Cadets) each get
   their own `ClubSource` (e.g. `cyberpatriot_static_roster.py`) reusing
   `ClubType`'s Literal (widened to include the new value) and the
   existing `_CLUB_SOURCES` dispatch table, or would any of them need a
   structurally different source shape (e.g. a live feed, if one is ever
-  found)? Left to that future sprint's own research and implementation
-  judgment — the `Club` model and `ClubSource` protocol were kept
-  general enough (per sprint.md's Design Rationale) not to block on the
-  answer.
+  found)?~~ **Resolved by sprint 032 ticket 001** (see this doc's
+  sprint 032 Revision, above): one generalized `ClubStaticRosterSource`
+  (`sources/club_static_roster.py`) serves all seven club types
+  through the existing `_CLUB_SOURCES` dispatch table, keyed by
+  `adapter_type = "club_static_roster"` — no per-type source module.
+  Curating each of the six new types' actual roster content is left to
+  sprint 032 tickets 002-007, in descending order of how likely a
+  public roster exists.

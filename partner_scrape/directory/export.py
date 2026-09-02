@@ -7,7 +7,7 @@ an independent data contract alongside `export/writer.py`'s
 `opportunities.json` and `teams/export.py`'s `teams.json`. Ticket
 018-008 (Clubs) extends the same function with an optional `clubs`
 argument that, when given, additionally publishes already-acquired
-`Club` records (`directory.sources.hack_club_static_roster`) as a
+`Club` records (`directory.sources.club_static_roster`) as a
 *second*, independent data contract, `clubs.json`. Sprint 030 ticket
 001 (Offerings) extends the same function again with an optional
 `offerings` argument that, when given, additionally publishes

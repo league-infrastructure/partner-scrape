@@ -1,26 +1,29 @@
-"""The Hack Club chapters static roster source
-(``directory.sources.hack_club_static_roster``) -- ticket 018-008's one
-populated ``Club`` type, the Clubs proof of concept issue 35 asked for.
+"""The generalized curated club static-roster source
+(``directory.sources.club_static_roster``) -- one ``ClubSource``
+implementation serving any club type, not just Hack Club.
 
-Hack Club chapters are curated, slow-changing school clubs, not a live
-feed -- issue 35's explicit instruction ("Do NOT design live scrapers
-for either directory") and this ticket's own scope both specify the
-FLL ``static_roster`` precedent (``teams/sources/static_roster.py``): a
+**Sprint 032 ticket 001 generalized this module** from ticket
+018-008's Hack-Club-only ``hack_club_static_roster.py``
+(``HackClubStaticRosterSource``). The logic was already generic --
+``_extract_one()`` reads ``club_type``/``status`` from each TSV row and
+validates against the model's own ``VALID_CLUB_TYPES``/
+``VALID_CLUB_STATUSES`` rather than hard-coding Hack Club anywhere.
+Only the module name, class name, and provenance stamp were
+Hack-Club-specific; see ``directory/DESIGN.md``'s sprint 032 Revision
+for the full rationale. Any club type registered in
+``directory/registry/*.toml`` with ``adapter_type =
+"club_static_roster"`` is served by this one module -- issue 35b's six
+remaining club types (CyberPatriot, Science Olympiad, 4-H, Girls Who
+Code, Civil Air Patrol, Sea Cadets) each need only a new curated TSV
+and a new registry entry, no new Python module.
+
+Every club type this module serves is a curated, slow-changing roster,
+not a live feed -- issue 35's original instruction ("Do NOT design
+live scrapers for either directory") and the FLL ``static_roster``
+precedent (``teams/sources/static_roster.py``) both specify a
 committed data file, hand-curated, never fetched over the network.
-
-**Only the four chapters issue 35 names are curated here --
-``finder.hackclub.com`` was deliberately not searched for additional
-San Diego chapters this ticket, even though the ticket's own
-Implementation Plan floats that as an option.** The team-lead's Scope
-for this ticket is explicit: a static-roster source "NOT a live
-scraper of finder.hackclub.com (that's a discovery/leads step out of
-scope, same 'no unattended web search' discipline as the FLL roster)."
-Running an unattended web search to discover more chapters would be
-exactly the kind of unverified acquisition step that instruction rules
-out. A future curation pass can add more chapters to
-``hack-club-sd.tsv`` by hand once someone has actually verified them
-against ``finder.hackclub.com`` -- this module places no structural
-limit on the roster's size, only this ticket's own data does.
+This module places no structural limit on the roster's size or its
+club type -- only the registered TSV's own content does.
 
 **TSV, not TOML, unlike the Places roster.** ``directory/data/
 places.toml`` chose TOML because each ``Place`` carries substantially
@@ -36,14 +39,14 @@ disk, ``extract()`` never touches the injected ``Fetcher``,
 ``csv.DictReader`` with ``delimiter="\\t"``) rather than Places' TOML
 choice.
 
-**No website or meeting cadence curated yet.** ``website`` and
-``meeting_note`` are real columns on ``hack-club-sd.tsv`` (kept for a
-future, richer curation pass -- see ``Club.website``'s/
-``Club.meeting_note``'s own docstrings), but this ticket leaves both
-blank for all four chapters: no per-chapter Hack Club Slack/social URL
-or meeting schedule was confidently verified without doing the live
-research this ticket's scope explicitly rules out. A blank column is
-the honest "not yet curated" state, never a guessed value.
+**Provenance (``Club.sources``) is derived per registry entry, not a
+single hard-coded literal.** Each registry entry's own
+``SourceConfig.source_id`` (e.g. ``"hack-club-sd"``) is stamped onto
+every `Club` it produces, so a CyberPatriot roster's provenance never
+reads ``"hack_club_static_roster"`` and two different registry entries
+always produce two distinguishable `Club.sources` values -- see
+``tests/directory/test_sources_club_static_roster.py``'s
+``TestProvenance`` for the regression pin.
 
 **Location: this source never geocodes.** Like every other
 ``*Source.extract()`` in this codebase, this module sets only
@@ -73,11 +76,6 @@ from partner_scrape.registry.schema import SourceConfig
 
 logger = logging.getLogger(__name__)
 
-#: This source's provenance name, recorded on every Club it produces
-#: (``Club.sources``) -- matches ``sources/static_roster.py``'s
-#: ``SOURCE_NAME`` convention exactly.
-SOURCE_NAME = "hack_club_static_roster"
-
 #: This module's own data directory -- `directory/data/`, matching
 #: `sources/static_roster.py`'s `DEFAULT_DATA_DIR` convention. Never
 #: overridden in production; tests pass an explicit `roster_path` (via
@@ -85,12 +83,19 @@ SOURCE_NAME = "hack_club_static_roster"
 #: roster.
 DEFAULT_DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 
-#: The real, committed curated Hack Club chapters roster.
+#: Fallback roster path used only when a registry entry omits
+#: `roster_path` entirely -- every real registry entry (Hack Club and
+#: every one of issue 35b's six new club types) sets `roster_path`
+#: explicitly, so this default only matters for a misconfigured entry.
+#: Kept pointed at the original Hack Club roster for backward
+#: compatibility with ticket 018-008's existing behavior/tests.
 DEFAULT_ROSTER_PATH = DEFAULT_DATA_DIR / "hack-club-sd.tsv"
 
 
-def _extract_one(row: dict[str, str | None]) -> Club:
-    """Map one roster TSV row into a `Club`.
+def _extract_one(row: dict[str, str | None], source_name: str) -> Club:
+    """Map one roster TSV row into a `Club`, stamping `source_name`
+    (the registering `SourceConfig.source_id`) as this record's
+    provenance.
 
     Raises:
         ValueError: the row has no usable `club_id`/`name`, an
@@ -103,21 +108,19 @@ def _extract_one(row: dict[str, str | None]) -> Club:
     club_id = (row.get("club_id") or "").strip()
     name = (row.get("name") or "").strip()
     if not club_id or not name:
-        raise ValueError("Hack Club roster row has no usable club_id or name")
+        raise ValueError("Club roster row has no usable club_id or name")
 
     club_type = (row.get("club_type") or "").strip()
     if club_type not in VALID_CLUB_TYPES:
-        raise ValueError(f"Hack Club roster row has an unrecognized club_type: {club_type!r}")
+        raise ValueError(f"Club roster row has an unrecognized club_type: {club_type!r}")
 
     status = (row.get("status") or "active").strip()
     if status not in VALID_CLUB_STATUSES:
-        raise ValueError(f"Hack Club roster row has an unrecognized status: {status!r}")
+        raise ValueError(f"Club roster row has an unrecognized status: {status!r}")
 
     status_note = (row.get("status_note") or "").strip()
     if status != "active" and not status_note:
-        raise ValueError(
-            f"Hack Club roster row {club_id!r} has status {status!r} but no status_note"
-        )
+        raise ValueError(f"Club roster row {club_id!r} has status {status!r} but no status_note")
 
     return Club(
         club_id=club_id,
@@ -130,13 +133,13 @@ def _extract_one(row: dict[str, str | None]) -> Club:
         meeting_note=(row.get("meeting_note") or "").strip(),
         status=status,
         status_note=status_note,
-        sources=[SOURCE_NAME],
+        sources=[source_name],
     )
 
 
-class HackClubStaticRosterSource:
-    """`ClubSource` for the committed, curated Hack Club chapters
-    roster file.
+class ClubStaticRosterSource:
+    """`ClubSource` for a committed, curated club roster file, any club
+    type.
 
     A "source" in name and protocol shape only -- there is no
     acquisition step to isolate a failure from, only a local file read.
@@ -147,12 +150,12 @@ class HackClubStaticRosterSource:
         """Return a single `ClubRef` pointing at the committed roster
         file -- a local filesystem path, never an HTTP URL.
 
-        `SourceConfig.config["roster_path"]` (set in
-        `directory/registry/hack-club-sd.toml`) is resolved relative to
-        `DEFAULT_DATA_DIR` (`directory/data/`) when it is not already
-        an absolute path, matching `sources/static_roster.py`'s exact
-        convention. Falls back to `DEFAULT_ROSTER_PATH` when
-        `roster_path` is omitted entirely.
+        `SourceConfig.config["roster_path"]` (set per registry entry,
+        e.g. `directory/registry/hack-club-sd.toml`) is resolved
+        relative to `DEFAULT_DATA_DIR` (`directory/data/`) when it is
+        not already an absolute path, matching
+        `sources/static_roster.py`'s exact convention. Falls back to
+        `DEFAULT_ROSTER_PATH` when `roster_path` is omitted entirely.
         """
         configured = source.config.get("roster_path")
         if configured:
@@ -183,9 +186,7 @@ class HackClubStaticRosterSource:
         clubs: list[Club] = []
         for row in reader:
             try:
-                clubs.append(_extract_one(row))
+                clubs.append(_extract_one(row, source.source_id))
             except (ValueError, TypeError) as exc:
-                logger.warning(
-                    "Skipping malformed Hack Club roster row on %s: %s", raw.ref.url, exc
-                )
+                logger.warning("Skipping malformed club roster row on %s: %s", raw.ref.url, exc)
         return clubs

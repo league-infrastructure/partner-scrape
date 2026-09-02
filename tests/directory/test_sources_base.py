@@ -59,7 +59,7 @@ class TestNoForbiddenModuleReference:
         # directory is empty or misconfigured.
         assert py_files
         assert any(f.name == "static_roster.py" for f in py_files)
-        assert any(f.name == "hack_club_static_roster.py" for f in py_files)
+        assert any(f.name == "club_static_roster.py" for f in py_files)
         assert any(f.name == "offering_static_roster.py" for f in py_files)
 
         offenders = [f.name for f in py_files if _imports_forbidden_module(f)]
@@ -172,7 +172,7 @@ def _club_source_config() -> SourceConfig:
     return SourceConfig(
         source_id="hack-club-sd",
         org_name="Hack Club San Diego chapters (curated static roster)",
-        adapter_type="hack_club_static_roster",
+        adapter_type="club_static_roster",
         config={},
     )
 

@@ -411,7 +411,7 @@ class TestSourceFilter:
 
     def test_club_source_filter_by_adapter_type_matches_the_real_registry(self, tmp_path):
         payload = run_directory(
-            source="hack_club_static_roster",
+            source="club_static_roster",
             fetcher=_NeverCalledFetcher(),
             dry_run=True,
             site_dir=tmp_path / "unused",
@@ -482,7 +482,7 @@ class TestPerSourceErrorIsolation:
         import partner_scrape.directory.pipeline as pipeline_module
 
         monkeypatch.setitem(
-            pipeline_module._CLUB_SOURCES, "hack_club_static_roster", _BoomingSource()
+            pipeline_module._CLUB_SOURCES, "club_static_roster", _BoomingSource()
         )
 
         _write_real_partners_fixture(tmp_path / "unused")
@@ -517,7 +517,7 @@ class TestPerSourceErrorIsolation:
         # Regression guard for the "one combined loop, not two separate
         # ones" design decision (see pipeline.py's own module
         # docstring): a real Club registry entry (adapter_type
-        # "hack_club_static_roster") must never trip the Place branch's
+        # "club_static_roster") must never trip the Place branch's
         # "no PlaceSource registered" warning.
         import logging
 
@@ -554,7 +554,7 @@ class _FixedPlaceSource:
 
 def _write_static_roster_only_registry(tmp_path: Path) -> Path:
     """A registry dir with only a `static_roster`-adapter_type entry --
-    no `hack_club_static_roster` entry -- so a test's injected
+    no `club_static_roster` entry -- so a test's injected
     `_FixedPlaceSource` is the only source `run_directory()` dispatches
     to, matching `TestPerSourceErrorIsolation`'s own registry-dir
     fixture pattern."""

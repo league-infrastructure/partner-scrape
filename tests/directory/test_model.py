@@ -126,8 +126,19 @@ class TestClubValueSetConstants:
     typo in the Literal is caught here, not silently in a downstream
     validator."""
 
-    def test_valid_club_types_is_hack_club_only_this_ticket(self):
-        assert VALID_CLUB_TYPES == {"hack-club"}
+    def test_valid_club_types_includes_hack_club_and_issue_35b_six(self):
+        # Sprint 032 ticket 001 widened this Literal from
+        # Literal["hack-club"] to include issue 35b's six remaining
+        # club types -- see directory/DESIGN.md's sprint 032 Revision.
+        assert VALID_CLUB_TYPES == {
+            "hack-club",
+            "cyberpatriot",
+            "science-olympiad",
+            "4-h",
+            "girls-who-code",
+            "civil-air-patrol",
+            "sea-cadets",
+        }
 
     def test_valid_club_statuses(self):
         assert VALID_CLUB_STATUSES == {"active", "inactive"}
