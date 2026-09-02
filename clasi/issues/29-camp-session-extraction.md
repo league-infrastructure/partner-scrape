@@ -1,5 +1,6 @@
 ---
 status: pending
+sprint: 028
 ---
 
 # Camp session extraction: the category parents search for first

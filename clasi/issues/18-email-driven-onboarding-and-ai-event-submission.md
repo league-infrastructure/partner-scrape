@@ -1,5 +1,6 @@
 ---
 status: pending
+sprint: '034'
 ---
 
 # Email-driven partner onboarding + AI event submission

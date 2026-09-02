@@ -1,5 +1,14 @@
 ---
-status: pending
+status: in-progress
+sprint: '027'
+tickets:
+- 027-001
+- 027-002
+- 027-003
+- 027-004
+- 027-005
+- 027-006
+- 027-007
 ---
 
 # High-school internship & research-program extraction (program pages, not ATS)

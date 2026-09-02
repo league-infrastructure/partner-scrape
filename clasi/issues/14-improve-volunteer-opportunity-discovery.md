@@ -1,5 +1,6 @@
 ---
 status: pending
+sprint: '030'
 ---
 
 # Improve discovery of volunteer opportunities (third-party platforms + per-org links)

@@ -1,6 +1,7 @@
 ---
 status: pending
 split_from: 35-standing-entities-clubs-and-places.md
+sprint: '032'
 ---
 
 # Standing entities: remaining club-type rosters (deferred half of issue 35)
