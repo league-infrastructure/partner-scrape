@@ -1,0 +1,32 @@
+# NIWC Pacific NREIP -- Naval Research Enterprise Internship Program,
+# a ten-week Department of Navy lab placement, same
+# navalsteminterns.us apply pipeline as SEAP (issue 28's own text
+# groups the two together, "apps Aug-Nov 1"). NREIP's own published
+# eligibility skews undergraduate/graduate, not exclusively HS --
+# registered anyway per issue 28's explicit naming of both programs
+# together; the LLM extraction's own `eligibility` output should
+# surface this rather than an authored override (no fixed HS-only
+# institutional fact to hand-author here). Sprint 027 ticket 005,
+# `program_page` adapter.
+#
+# Live-verified 2026-09-01 (sprint 027 ticket 005):
+#   GET https://www.navalsteminterns.us/nreip/
+# returns HTTP 200. `uv run partner-scrape --source niwc-nreip
+# --dry-run -v` yielded one Event: title "Naval Research Enterprise
+# Internship Program (NREIP)", `date_start` unset, `date_end`=
+# 2025-11-01 (same evergreen-date/stale-year observation as
+# `niwc-seap.toml` -- see its comment). See this ticket's Notes for
+# the full recorded yield.
+
+org_name = "Naval Information Warfare Center Pacific"
+adapter_type = "program_page"
+enabled = true
+
+[config]
+url = "https://www.navalsteminterns.us/nreip/"
+program_kind = "internship"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 28 (2026-08-30 seed source catalog); sprint 027 ticket 005"

@@ -180,12 +180,29 @@ def run(source: SourceConfig, fetcher: Fetcher) -> list[Event]:
     Truncation is never silent: a source that exceeds its cap logs
     exactly how many refs it discovered and how many were dropped.
 
+    **(Ticket 006 exception revision)** A zero-discovered-refs result is
+    also never silent: immediately after ``discover()`` returns, an empty
+    (pre-truncation) ``refs`` logs a warning naming ``source_id`` and
+    ``adapter_type`` -- generic across every adapter type, not only the
+    program families that first surfaced this gap. Complements, not
+    duplicates, ``observability/``'s own per-run zero-yield alert: that
+    alert cannot distinguish "discover() found nothing" from "discover()
+    found candidates but every one failed fetch or extraction" -- this
+    warning fires at the earlier, more specific point.
+
     Raises:
         UnknownAdapterType: ``source.adapter_type`` has no registered
             adapter.
     """
     adapter = get_adapter(source.adapter_type)
     refs = list(adapter.discover(source, fetcher))
+
+    if not refs:
+        logger.warning(
+            "Source %r (adapter_type=%r) discovered 0 URL(s)",
+            source.source_id,
+            source.adapter_type,
+        )
 
     max_urls = source.acquisition_policy.get("max_urls", DEFAULT_MAX_URLS_PER_SOURCE)
     if len(refs) > max_urls:

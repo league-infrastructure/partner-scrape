@@ -242,6 +242,55 @@ class TestMaxUrlsCap:
         assert len(events) == DEFAULT_MAX_URLS_PER_SOURCE + 10
 
 
+class _ZeroRefsFakeAdapter:
+    """Adapter test double whose ``discover()`` always returns zero refs --
+    a generic (non-program-family) adapter type, used to prove
+    ``run()``'s zero-discovered-refs warning (ticket 006 exception
+    revision) fires for every adapter type, not only ``program_page``/
+    ``program_listing``/``program_page_multi``.
+    """
+
+    def discover(self, source, fetcher):
+        return []
+
+    def fetch(self, ref, fetcher, source):
+        raise AssertionError("fetch() should never be called when discover() found nothing")
+
+    def extract(self, raw, source):
+        raise AssertionError("extract() should never be called when discover() found nothing")
+
+
+class TestZeroRefsWarning:
+    """``run()`` logs a warning (never raises) when ``discover()`` returns
+    zero refs for an enabled source -- sprint 027 ticket 006 exception
+    revision, generic across every adapter type (§4 of
+    ``adapters/DESIGN.md``'s Revision note).
+    """
+
+    def test_zero_refs_logs_a_warning_naming_source_and_adapter_type(self, caplog):
+        ADAPTERS["fake_test_type"] = _ZeroRefsFakeAdapter
+
+        with caplog.at_level(logging.WARNING, logger="partner_scrape.adapters.base"):
+            events = run(_source("fake_test_type"), _NullFetcher())
+
+        assert events == []
+        assert "fixture_org" in caplog.text
+        assert "fake_test_type" in caplog.text
+
+    def test_zero_refs_does_not_raise(self):
+        ADAPTERS["fake_test_type"] = _ZeroRefsFakeAdapter
+
+        run(_source("fake_test_type"), _NullFetcher())  # must not raise
+
+    def test_nonzero_refs_logs_no_zero_refs_warning(self, caplog):
+        ADAPTERS["fake_test_type"] = _StaticFakeAdapter
+
+        with caplog.at_level(logging.WARNING, logger="partner_scrape.adapters.base"):
+            run(_source("fake_test_type"), _NullFetcher())
+
+        assert "discovered 0 URL" not in caplog.text
+
+
 class TestAcquisitionKwargs:
     """``acquisition_kwargs(source)`` -- sprint 015 ticket 003's helper
     that reads ``source.acquisition_policy`` into the two kwargs every

@@ -410,3 +410,247 @@ class TestRealCompanySeedSources:
         # anyway -- a legitimate zero-result state, not an error.
         sources = {s.source_id: s for s in load_active_sources()}
         assert sources["boundlessbio"].enabled is True
+
+
+class TestProgramPageSourceConfig:
+    """Sprint 027 ticket 005's own Testing requirement: prove a
+    ``program_page``-typed TOML with ``config.program_kind`` parses into a
+    ``SourceConfig`` correctly. No new loader code is expected -- this
+    verifies the existing untyped-``config``-dict mechanism already
+    handles the new ``adapter_type`` value, per ``registry/DESIGN.md``'s
+    sprint 027 addendum.
+    """
+
+    def test_parses_program_page_fixture(self):
+        # Lives in its own sibling fixtures directory, not FIXTURES_DIR
+        # itself, so it doesn't perturb TestLoadSources's fixed file
+        # count for that directory (matching the existing
+        # registry_fetch_strategy/ subdirectory's precedent).
+        source = SourceConfig.from_toml(
+            FIXTURES_DIR.parent / "registry_program_page" / "program_page_good.toml"
+        )
+
+        assert source.adapter_type == "program_page"
+        assert source.org_name == "Fixture Program Page Org"
+        assert source.enabled is True
+        assert source.config == {
+            "url": "https://example.org/programs/fixture-scholars",
+            "program_kind": "internship",
+        }
+        assert source.taxonomy_defaults == {"eligibility": "Fixture partner schools only"}
+
+    def test_real_registry_registers_program_page_sources_for_issue_28(self):
+        # Sprint 027 ticket 005: at least the majority of issue 28's ~13
+        # individually-named HS internship/research program pages
+        # (excluding the 3 UCSD-listing-covered programs reconciled to
+        # ticket 006, and the Illumina/SD2 "closed pipeline" -- neither
+        # registered here) are live-verified and enabled = true in the
+        # real registry.
+        sources = {s.source_id: s for s in load_sources()}
+
+        enabled_program_pages = [
+            source_id
+            for source_id, source in sources.items()
+            if source.adapter_type == "program_page" and source.enabled
+        ]
+        # 10 of the ~13 named programs are enabled = true (3 disabled
+        # with a live-verification-failure reason: noaa-hutton,
+        # sdzwa-internquest, scripps-reach) -- comfortably a majority.
+        assert len(enabled_program_pages) >= 7
+
+        for source_id in (
+            "salk-heithoff-brody",
+            "sdsc-rehs",
+            "sbp-spark",
+            "lji-ljidea",
+            "scripps-srti",
+            "niwc-seap",
+            "niwc-nreip",
+            "sdzwa-fellowships",
+            "sdsu-expandai-robotics",
+            "biocom-generation-steam",
+        ):
+            assert sources[source_id].adapter_type == "program_page"
+            assert sources[source_id].config["program_kind"] == "internship"
+            assert sources[source_id].enabled is True
+
+    def test_disabled_program_pages_carry_a_reason_comment(self):
+        # This ticket's Fix shape step 3: a page that failed live
+        # verification is registered enabled = false with a reason
+        # comment, not silently dropped.
+        for source_id in ("noaa-hutton", "sdzwa-internquest", "scripps-reach"):
+            path = DEFAULT_SOURCES_DIR / f"{source_id}.toml"
+            source = SourceConfig.from_toml(path)
+            assert source.adapter_type == "program_page"
+            assert source.enabled is False
+            assert "disabled:" in path.read_text()
+
+    def test_scripps_reach_eligibility_override_names_partner_schools(self):
+        # A fixed institutional fact (partner-schools-only) is
+        # hand-authored via taxonomy_defaults.eligibility rather than
+        # left to LLM inference -- this ticket's Fix shape step 1.
+        source = SourceConfig.from_toml(DEFAULT_SOURCES_DIR / "scripps-reach.toml")
+        assert "partner schools only" in source.taxonomy_defaults["eligibility"].lower()
+
+    def test_ucsd_enlace_not_registered_as_an_individual_program_page(self):
+        # Reconciliation with ticket 006 (this ticket's Description,
+        # revised by ticket 006's own live verification -- see this
+        # ticket's Notes "UPDATE" entry): ENLACE's own UCSD Summer
+        # Program Finder card links to a page that extracts well
+        # (a real inline deadline/eligibility), so it stays registered
+        # via the listing source only, never as an individual
+        # program_page here, to avoid duplicate-publishing a kind that
+        # bypasses cross-source dedup. COSMOS and OPTIMUS are the
+        # opposite case -- see
+        # test_ucsd_cosmos_and_optimus_registered_individually_not_via_listing
+        # below.
+        sources = {s.source_id: s for s in load_sources()}
+        for source_id in sources:
+            assert "enlace" not in source_id.lower()
+
+    def test_ucsd_cosmos_and_optimus_registered_individually_not_via_listing(self):
+        # Sprint 027 ticket 006's own live verification found COSMOS's
+        # and OPTIMUS's UCSD Summer Program Finder cards link to pages
+        # that extract poorly (no deadline/eligibility recoverable) --
+        # ticket 005's Description's own Fix shape step 4 reopens the
+        # listing-only decision for exactly this case. Both are
+        # registered individually instead, and the listing's own
+        # link_selector excludes their card hrefs so neither is
+        # double-published between the two sources.
+        sources = {s.source_id: s for s in load_sources()}
+
+        assert "ucsd-cosmos" in sources
+        cosmos = sources["ucsd-cosmos"]
+        assert cosmos.adapter_type == "program_page"
+        assert cosmos.config["program_kind"] == "internship"
+        assert cosmos.enabled is True
+
+        assert "ucsd-optimus" in sources
+        optimus = sources["ucsd-optimus"]
+        assert optimus.adapter_type == "program_page"
+        assert optimus.config["program_kind"] == "internship"
+        # Even OPTIMUS's own best-reachable live page yielded a title
+        # only (no deadline, no eligibility) -- disabled with a reason
+        # comment, matching the registry's disabled-with-reason
+        # convention, rather than publishing a near-empty record.
+        assert optimus.enabled is False
+        optimus_path = DEFAULT_SOURCES_DIR / "ucsd-optimus.toml"
+        assert "disabled:" in optimus_path.read_text()
+
+        listing = sources["ucsd-summer-program-finder"]
+        link_selector = listing.config["link_selector"]
+        assert "cosmos" in link_selector.lower()
+        assert "moorescancercenter" in link_selector.lower()
+
+    def test_illumina_sd2_not_registered(self):
+        # Issue 28 names Illumina/SD2 STEM Scholars as a "closed
+        # pipeline" -- this ticket's investigation (see its Notes)
+        # found no live, public application page to register at all,
+        # so it is not registered as a program_page source (or any
+        # other adapter_type).
+        sources = {s.source_id: s for s in load_sources()}
+        for source_id in sources:
+            lowered = source_id.lower()
+            assert "illumina" not in lowered
+            assert "sd2" not in lowered
+
+    def test_sd_foundation_community_scholarship_registered_as_funding_opportunities(
+        self,
+    ):
+        # Sprint 027 ticket 007 (SUC-035): the SD Foundation Community
+        # Scholarship is this sprint's one deliberate non-internship
+        # program_kind="program" registration, with opportunity_type
+        # fixed to "Funding Opportunities" via a config override (an
+        # operator-curated known fact, not left to LLM classification --
+        # see adapters/program_page.py's opportunity_type_override
+        # handling, generically fixture-tested by ticket 003's
+        # test_program_kind_program_with_opportunity_type_override).
+        #
+        # Live verification (this ticket's own dry-run) found every page
+        # probed on sdfoundation.org -- including this registered URL --
+        # measures 840KB-965KB of raw HTML, which alone exceeds the LLM's
+        # 200K-token context window (600K+ tokens measured), so
+        # extract_program() always raises BadRequestError and the source
+        # always yields zero events. Registered enabled=false with a
+        # reason comment (this registry's disabled-with-reason
+        # convention) rather than left disabled with no explanation, so
+        # the config (program_kind/opportunity_type) is preserved for a
+        # future HTML-reduction capability to pick back up.
+        sources = {s.source_id: s for s in load_sources()}
+
+        assert "sd-foundation-community-scholarship" in sources
+        source = sources["sd-foundation-community-scholarship"]
+        assert source.adapter_type == "program_page"
+        assert source.config["program_kind"] == "program"
+        assert source.config["opportunity_type"] == "Funding Opportunities"
+        assert source.enabled is False
+
+        path = DEFAULT_SOURCES_DIR / "sd-foundation-community-scholarship.toml"
+        assert "disabled:" in path.read_text()
+
+
+class TestProgramListingAndMultiSourceConfig:
+    """Sprint 027 ticket 006's own Testing requirement: prove a
+    ``program_listing``-typed TOML with ``config.link_selector`` and a
+    ``program_page_multi``-typed TOML with ``config.program_kind`` both
+    parse into a ``SourceConfig`` correctly. No new loader code is
+    expected for either -- both are ordinary registry data under the
+    existing untyped-``config``-dict mechanism (registry/DESIGN.md's
+    ticket 006 exception-revision addendum).
+    """
+
+    def test_parses_program_listing_fixture_with_link_selector(self):
+        # Own sibling fixtures directory, matching
+        # TestProgramPageSourceConfig's precedent, so it doesn't perturb
+        # TestLoadSources's fixed file count for the shared registry/
+        # fixtures directory.
+        source = SourceConfig.from_toml(
+            FIXTURES_DIR.parent / "registry_program_listing" / "program_listing_good.toml"
+        )
+
+        assert source.adapter_type == "program_listing"
+        assert source.org_name == "Fixture Program Listing Org"
+        assert source.enabled is True
+        assert source.config == {
+            "site_url": "https://example.org",
+            "listing_urls": ["/finder"],
+            "program_kind": "internship",
+            "link_selector": 'li[data-grade*="High School"] a.learnmore',
+        }
+
+    def test_parses_program_page_multi_fixture(self):
+        source = SourceConfig.from_toml(
+            FIXTURES_DIR.parent / "registry_program_page_multi" / "program_page_multi_good.toml"
+        )
+
+        assert source.adapter_type == "program_page_multi"
+        assert source.org_name == "Fixture Program Page Multi Org"
+        assert source.enabled is True
+        assert source.config == {
+            "url": "https://example.org/education/research-internships",
+            "program_kind": "internship",
+        }
+
+    def test_real_registry_registers_ucsd_listing_and_sio_multi_sources(self):
+        # Sprint 027 ticket 006: the UCSD Summer Program Finder
+        # (program_listing, config.link_selector) and the SIO
+        # research-internships page (program_page_multi) are both
+        # registered, enabled, and share kind="internship" per ticket
+        # 005's Architecture rationale.
+        sources = {s.source_id: s for s in load_sources()}
+
+        assert "ucsd-summer-program-finder" in sources
+        listing = sources["ucsd-summer-program-finder"]
+        assert listing.adapter_type == "program_listing"
+        assert listing.enabled is True
+        assert listing.config["program_kind"] == "internship"
+        assert listing.config["site_url"] == "https://summer.ucsd.edu"
+        assert "link_selector" in listing.config
+        assert "High School" in listing.config["link_selector"]
+
+        assert "sio-research-internships" in sources
+        sio = sources["sio-research-internships"]
+        assert sio.adapter_type == "program_page_multi"
+        assert sio.enabled is True
+        assert sio.config["program_kind"] == "internship"
+        assert sio.config["url"] == "https://scripps.ucsd.edu/education/research-internships"

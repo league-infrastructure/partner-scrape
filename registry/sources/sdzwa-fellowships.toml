@@ -1,0 +1,26 @@
+# San Diego Zoo Wildlife Alliance -- Summer Student Fellowships,
+# a conservation-science research fellowship program (application
+# deadline mid-February). Distinct from `sdzwa-internquest.toml`
+# below (a separate HS-only career-exploration program) -- issue 28
+# names both as separate catalog entries ("SDZWA fellowships (Feb 15)
+# + InternQuest"). Sprint 027 ticket 005 (issue 28's individually-named
+# HS internship pages), `program_page` adapter.
+#
+# Live-verified 2026-09-01 (sprint 027 ticket 005):
+#   GET https://science.sandiegozoo.org/opportunities/summer-student-fellowships
+# returns HTTP 200. `uv run partner-scrape --source sdzwa-fellowships
+# --dry-run -v` yielded one Event: title "Summer Student Fellowships".
+# See this ticket's Notes for the full recorded yield.
+
+org_name = "San Diego Zoo Wildlife Alliance"
+adapter_type = "program_page"
+enabled = true
+
+[config]
+url = "https://science.sandiegozoo.org/opportunities/summer-student-fellowships"
+program_kind = "internship"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 28 (2026-08-30 seed source catalog); sprint 027 ticket 005"

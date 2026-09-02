@@ -1,0 +1,39 @@
+# Scripps Research SRTI -- the Student Research Internship Program
+# (10-week, genomics/mHealth translational research), open to HS
+# (16+), undergraduate, graduate and professional students; deadline
+# March 30. Sprint 027 ticket 005 (issue 28's individually-named HS
+# internship pages), `program_page` adapter. Distinct program (and
+# distinct `source_id`) from `scripps-reach.toml`'s partner-schools-only
+# outreach program below -- issue 28 names both as separate entries.
+#
+# `config.url` is the page's own canonical URL after redirect --
+# `https://www.scripps.edu/science-and-medicine/translational-institute/
+# education-and-training/student-research-internship/index.html` 301s
+# to this path (confirmed live 2026-09-01).
+#
+# Live-verified 2026-09-01 (sprint 027 ticket 005):
+#   GET https://www.scripps.edu/science/translational-institute/education-training/student-research-internship-program/
+# returns HTTP 200. `uv run partner-scrape --source scripps-srti
+# --dry-run -v` yielded one Event: title "Student Research Internship
+# Program", `start`=2026-06-01, `end`=2026-08-07. Note: the page's own
+# published application *deadline* is March 30 (confirmed via a
+# separate live fetch during this ticket's research), but the LLM
+# extraction mapped the *program's* start/end dates (June-August) onto
+# `date_start`/`date_end` rather than the application window -- a
+# data-quality observation about ticket 002's extraction mechanism
+# (also seen on `salk-heithoff-brody.toml`/NIWC sources), not something
+# this registration-only ticket's file scope can fix. See this ticket's
+# Notes.
+
+org_name = "Scripps Research"
+adapter_type = "program_page"
+enabled = true
+
+[config]
+url = "https://www.scripps.edu/science/translational-institute/education-training/student-research-internship-program/"
+program_kind = "internship"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 28 (2026-08-30 seed source catalog); sprint 027 ticket 005"

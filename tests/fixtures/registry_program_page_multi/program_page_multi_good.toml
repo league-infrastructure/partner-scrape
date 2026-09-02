@@ -1,0 +1,14 @@
+# Synthetic fixture: a well-formed program_page_multi source, matching
+# the shape sprint 027 ticket 006 registers under registry/sources/
+# (sio-research-internships.toml). Proves the loader's existing
+# untyped-config-dict mechanism parses adapter_type =
+# "program_page_multi" and config.program_kind with no new loader code,
+# per registry/DESIGN.md's ticket 006 exception-revision addendum.
+
+org_name = "Fixture Program Page Multi Org"
+adapter_type = "program_page_multi"
+enabled = true
+
+[config]
+url = "https://example.org/education/research-internships"
+program_kind = "internship"

@@ -1,0 +1,53 @@
+# SIO Research Internships -- Scripps Institution of Oceanography's
+# single research-internships page, listing ~9 undergraduate REU-style
+# summer research programs (JT-SURF, MPL, CCE LTER, CW3E, UC NRS Field
+# Science Fellowship, ESYS Senior Internship, UC San Diego Academic
+# Internship Program, UCSD Undergraduate Research Hub) as inline
+# <div class="page-section"> blocks with their own deadlines stated
+# directly in the page's prose, not on the outbound program-homepage
+# link each section also carries. Sprint 027 ticket 006 (issue 28's SIO
+# research-internships listing source), `program_page_multi` adapter --
+# the ticket 008 exception-revision mechanism built exactly for this
+# shape (one page, N inline records), since `program_listing`'s
+# card-to-detail-page model has no way to represent a program whose own
+# deadline never leaves the summary page.
+#
+# Live-verified 2026-09-02 (sprint 027 ticket 006):
+#   GET https://scripps.ucsd.edu/education/research-internships returns
+# HTTP 200. The live page's body contains 9 <div class="page-section">
+# blocks, 7 of which carry an explicit "Application deadline: <date>"
+# sentence in their own prose (JT-SURF: Feb 27 2026; MPL: Jan 23 2026;
+# CCE LTER: Jan 31 2026; CW3E: Jan 15 2026; UC NRS Field Science
+# Fellowship: Feb 15 2026; ESYS Senior Internship and UC San Diego
+# Academic Internship Program have non-calendar deadline text ("Included
+# as part of ESYS major" / "Varies by quarter"); UCSD Undergraduate
+# Research Hub's own deadline is "Various") -- comfortably satisfying
+# this ticket's "~10 expected, each with its own deadline pulled from
+# the page's own inline prose" acceptance criterion at N=9. None of
+# these programs' outbound program-homepage links (e.g.
+# mpl.ucsd.edu/internships, cw3e.ucsd.edu/cw3e-internship-program)
+# themselves carry the deadline -- confirming the ticket's own premise
+# that a program_listing card-to-detail-page crawl of this same page
+# could never have recovered these dates, only reading the summary
+# page's own body text can.
+#
+# Undergraduate-audience note: unlike the UCSD Summer Program Finder's
+# HS-eligible-filtered cards, this page's programs are explicitly
+# undergraduate REU-style research placements, not HS-eligible --
+# registered as kind="internship" regardless, matching ticket 005's
+# Architecture rationale (this sprint's Work-based Learning bucket's
+# already-demonstrated breadth; issue 28 itself catalogs this page
+# alongside the HS-only sources without a grade-level carve-out).
+
+org_name = "Scripps Institution of Oceanography -- Research Internships"
+adapter_type = "program_page_multi"
+enabled = true
+
+[config]
+url = "https://scripps.ucsd.edu/education/research-internships"
+program_kind = "internship"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 28 (2026-08-30 seed source catalog); sprint 027 ticket 006 exception-revision live verification (2026-09-02)"

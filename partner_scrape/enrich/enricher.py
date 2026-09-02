@@ -74,7 +74,7 @@ import logging
 
 from partner_scrape.enrich.cache import EnrichmentCache
 from partner_scrape.enrich.llm_client import EnrichmentResult, LLMClient
-from partner_scrape.model import Event
+from partner_scrape.model import PROGRAM_EXTRACTION_KINDS, Event
 from partner_scrape.normalize.taxonomy import (
     build_taxonomy_text,
     classify_opportunity_type,
@@ -213,10 +213,13 @@ class LLMEnricher:
         # call. `misses` preserves `events`' relative order.
         misses: list[Event] = []
         for event in events:
-            if event.kind == "internship":
-                # Relevance Gate bypass (sprint 006 ticket 005, SUC-005):
+            if event.kind in PROGRAM_EXTRACTION_KINDS:
+                # Relevance Gate bypass (sprint 006 ticket 005, SUC-005;
+                # generalized sprint 027 from `kind == "internship"` alone
+                # to `kind in PROGRAM_EXTRACTION_KINDS` -- see model.py):
                 # already classified/gated deterministically by
-                # adapters/ats_filters.py at acquisition time. Never
+                # adapters/ats_filters.py (internship) or the program-page
+                # extraction LLM call (program) at acquisition time. Never
                 # re-judged, never dropped here, and -- skip-LLM is the
                 # preferred, cheaper option over "call but never
                 # gate-drop" -- never even sent to the LLM: no cache

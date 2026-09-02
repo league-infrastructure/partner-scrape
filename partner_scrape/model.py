@@ -28,6 +28,20 @@ from typing import Any, Literal
 #: other values.
 Kind = Literal["event", "program", "internship"]
 
+#: (Sprint 027) The `Kind` values that get curated-record bypass
+#: treatment across the pipeline: `enrich.enricher.LLMEnricher`'s pass-1
+#: skip (no cache lookup, no LLM call, no field mutation) and
+#: `normalize.run()`'s collapse/dedup bypass (each Event becomes its own
+#: 1:1 Instance instead of being routed through `collapse_recurring`/
+#: `dedup_cross_source`). Generalizes what was previously a single
+#: hardcoded `kind == "internship"` check duplicated at three call sites
+#: across two modules -- see `enrich/DESIGN.md` and `normalize/DESIGN.md`'s
+#: sprint 027 additions. This is the explicit reuse surface sprints 029
+#: (competitions) and 030 (educator programs) build on: registering a
+#: source with `program_kind = "program"` gets the same bypass treatment
+#: with zero further code change.
+PROGRAM_EXTRACTION_KINDS = frozenset({"internship", "program"})
+
 # Identity keys are tuples of these two shapes -- see identity_key().
 IdentityKey = tuple[str, str] | tuple[str, str, date | None]
 
@@ -140,6 +154,16 @@ class Event:
     # default is applied downstream, in normalize/taxonomy.py and the
     # LLM prompt, never here.
     opportunity_type: str = ""
+
+    # Per-record eligibility note (sprint 027, issue 28): set via
+    # Event.set(...) by the program-page extraction adapters for the
+    # case a per-*source* SourceConfig.taxonomy_defaults.eligibility
+    # default cannot express -- e.g. a listing source whose individual
+    # program cards each need a different eligibility note. Additive
+    # default "" reproduces every pre-existing adapter's and test's
+    # behavior exactly; see normalize/run.py's _to_opportunity() for the
+    # field_provenance-presence precedence over source_taxonomy_defaults.
+    eligibility: str = ""
 
     # Side-car provenance/confidence map, keyed by field name.
     field_provenance: dict[str, Provenance] = field(default_factory=dict)

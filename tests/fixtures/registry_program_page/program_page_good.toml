@@ -1,0 +1,17 @@
+# Synthetic fixture: a well-formed program_page source, matching the
+# shape sprint 027 ticket 005 registers under registry/sources/ (e.g.
+# salk-heithoff-brody.toml). Proves the loader's existing untyped-
+# config-dict mechanism parses adapter_type = "program_page" and
+# config.program_kind with no new loader code, per registry/DESIGN.md's
+# sprint 027 addendum.
+
+org_name = "Fixture Program Page Org"
+adapter_type = "program_page"
+enabled = true
+
+[config]
+url = "https://example.org/programs/fixture-scholars"
+program_kind = "internship"
+
+[taxonomy_defaults]
+eligibility = "Fixture partner schools only"

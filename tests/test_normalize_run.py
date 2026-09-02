@@ -10,7 +10,7 @@ file is deliberately thin on stage-internal edge cases.
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import date, datetime
 from pathlib import Path
 
 from partner_scrape.model import Event, slugify
@@ -731,6 +731,188 @@ class TestInternshipCostRange:
         [opportunity] = run([event], PARTNERS_PATH)
 
         assert opportunity.cost_range == "Free"
+
+
+# ---------------------------------------------------------------------
+# AC (sprint 027, SUC-033/SUC-034): kind="program" Events get exactly
+# the same curated-record bypass and deadline-first availability
+# treatment `kind="internship"` already has, via the new
+# `PROGRAM_EXTRACTION_KINDS` shared constant. Mirrors
+# TestInternshipCollapseDedupBypass/TestInternshipDateAndAvailability
+# above with a `kind="program"` fixture in place of `"internship"`.
+# ---------------------------------------------------------------------
+
+
+class TestProgramCollapseDedupBypass:
+    def test_same_title_same_date_different_source_both_survive(self):
+        """Would merge under `dedup_cross_source`'s `(title, date, venue)`
+        identity if `kind="program"` Events were not bypassed."""
+        a = _event(
+            source_id="salk",
+            title="Summer Research Internship",
+            start=datetime(2026, 8, 1, 9, 0),
+            location="La Jolla, CA",
+            kind="program",
+            external_id="salk-2027",
+        )
+        b = _event(
+            source_id="sdsc_rehs",
+            title="Summer Research Internship",
+            start=datetime(2026, 8, 1, 9, 0),
+            location="La Jolla, CA",
+            kind="program",
+            external_id="sdsc-2027",
+        )
+
+        opportunities = run([a, b], PARTNERS_PATH)
+
+        assert len(opportunities) == 2
+
+    def test_program_never_shows_repeats_text(self):
+        event = _event(
+            source_id="salk",
+            title="Summer Research Internship",
+            start=datetime(2026, 8, 1, 9, 0),
+            kind="program",
+            external_id="salk-2027",
+        )
+
+        [opportunity] = run([event], PARTNERS_PATH)
+
+        assert "Repeats" not in opportunity.availability
+
+
+class TestProgramDateAndAvailability:
+    def test_known_deadline_sets_iso_date_end_and_apply_by_text(self):
+        event = _event(
+            title="Summer Research Internship",
+            start=datetime(2026, 8, 1, 9, 0),
+            end=datetime(2026, 9, 15, 0, 0),
+            kind="program",
+            external_id="salk-2027",
+        )
+
+        [opportunity] = run([event], PARTNERS_PATH)
+
+        assert opportunity.date_end.startswith("2026-09-15")
+        assert opportunity.availability == "Apply by 2026-09-15"
+
+    def test_future_start_and_no_end_reads_opens_tilde_date(self):
+        """(Sprint 027, issue 28 item 4) `event.start` in the future with
+        no/future `end` produces "Opens ~<date>" instead of "Apply by
+        <date>"/"Rolling -- apply anytime"."""
+        event = _event(
+            title="Summer Research Internship",
+            start=datetime(2027, 1, 15, 9, 0),
+            kind="program",
+            external_id="salk-2028",
+        )
+
+        [opportunity] = run([event], PARTNERS_PATH, today=date(2026, 9, 1))
+
+        assert opportunity.availability == "Opens ~2027-01-15"
+
+    def test_future_start_and_future_end_reads_opens_tilde_date(self):
+        """The "not yet open" branch is checked first, before the
+        "Apply by <date>" branch -- a future `end` doesn't take
+        precedence over a future `start`."""
+        event = _event(
+            title="Summer Research Internship",
+            start=datetime(2027, 1, 15, 9, 0),
+            end=datetime(2027, 3, 1, 0, 0),
+            kind="program",
+            external_id="salk-2028",
+        )
+
+        [opportunity] = run([event], PARTNERS_PATH, today=date(2026, 9, 1))
+
+        assert opportunity.availability == "Opens ~2027-01-15"
+
+    def test_past_start_and_future_end_still_reads_apply_by_date_unchanged(self):
+        """A `start` already in the past (the ordinary, already-open
+        case) must not trip the new "Opens ~" branch -- the existing
+        "Apply by <date>" text is unchanged."""
+        event = _event(
+            title="Summer Research Internship",
+            start=datetime(2026, 8, 1, 9, 0),
+            end=datetime(2026, 12, 1, 0, 0),
+            kind="program",
+            external_id="salk-2027",
+        )
+
+        [opportunity] = run([event], PARTNERS_PATH, today=date(2026, 9, 1))
+
+        assert opportunity.availability == "Apply by 2026-12-01"
+
+    def test_internship_kind_also_gets_opens_tilde_date(self):
+        """The new "Opens ~" branch is not program-specific -- it applies
+        to every `PROGRAM_EXTRACTION_KINDS` member, including the
+        pre-existing `kind="internship"`."""
+        event = _event(
+            title="Software Engineering Intern",
+            start=datetime(2027, 1, 15, 9, 0),
+            kind="internship",
+            external_id="gh-11",
+        )
+
+        [opportunity] = run([event], PARTNERS_PATH, today=date(2026, 9, 1))
+
+        assert opportunity.availability == "Opens ~2027-01-15"
+
+
+class TestProgramEligibilityEventLevelOverride:
+    """(Sprint 027) `_to_opportunity()`'s `eligibility` resolution now
+    checks `Event.field_provenance` before falling back to
+    `source_taxonomy_defaults` -- the same field_provenance-presence
+    precedence pattern already used for `areas_of_interest`/
+    `age_grade_level`/`cost_range`/`time_of_day`/`opportunity_type`."""
+
+    def test_event_level_eligibility_wins_over_source_taxonomy_defaults(self):
+        event = _event(
+            source_id="sio_listing",
+            title="SIO Research Internship: Marine Biology",
+            start=datetime(2026, 8, 1, 9, 0),
+            kind="program",
+            external_id="sio-marine-bio",
+        )
+        event.set(
+            "eligibility",
+            "Open to rising 11th and 12th graders only",
+            source="program_llm_extraction",
+            confidence=0.9,
+        )
+
+        [opportunity] = run(
+            [event],
+            PARTNERS_PATH,
+            source_taxonomy_defaults={
+                "sio_listing": {"eligibility": "Source-level default, should not win"}
+            },
+        )
+
+        assert opportunity.eligibility == "Open to rising 11th and 12th graders only"
+
+    def test_no_field_provenance_eligibility_falls_back_to_taxonomy_defaults_unchanged(self):
+        """No regression for the sprint-015 mechanism: an Event that
+        never calls `Event.set("eligibility", ...)` still resolves from
+        `source_taxonomy_defaults` exactly as before this ticket."""
+        event = _event(
+            source_id="northrop_hip",
+            title="High School Internship Program",
+            start=datetime(2026, 8, 1, 9, 0),
+            kind="program",
+            external_id="hip-2027",
+        )
+
+        [opportunity] = run(
+            [event],
+            PARTNERS_PATH,
+            source_taxonomy_defaults={
+                "northrop_hip": {"eligibility": "Open only to Northrop HIP partner high schools"}
+            },
+        )
+
+        assert opportunity.eligibility == "Open only to Northrop HIP partner high schools"
 
 
 class TestMixedDatetimeAwareness:

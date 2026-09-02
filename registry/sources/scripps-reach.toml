@@ -1,0 +1,50 @@
+# Scripps Research REACH -- the High School Summer Internship Program
+# run in collaboration with the REsearch Awareness for Community High
+# schools (REACH) initiative. Unlike `scripps-srti.toml`'s
+# open-to-all-HS-16+ program, REACH's HS internship track is limited to
+# a fixed, named list of partner schools (confirmed live 2026-09-01:
+# Barrio Logan College Institute, Crawford, Del Lago Academy,
+# Escondido, Hoover, Lincoln, Madison, Morse, Orange Glen). This is a
+# fixed institutional fact better hand-authored than LLM-inferred (the
+# page's own prose lists partner schools by name, not a generic
+# eligibility phrase), so `taxonomy_defaults.eligibility` overrides the
+# LLM's own extraction here -- per this ticket's Fix shape.
+#
+# `config.url` is the page's own canonical URL after redirect --
+# `https://education.scripps.edu/k-12-outreach/ca-outreach/hs-internships`
+# 301s to this trailing-slash path (confirmed live via `curl` 2026-09-01,
+# HTTP 200 with a browser or plain User-Agent).
+#
+# Live-verification failure (2026-09-01, sprint 027 ticket 005):
+# `uv run partner-scrape --source scripps-reach --dry-run -v` (and a
+# direct `ProgramPageAdapter.fetch()` call) fails at the transport
+# layer -- `ssl.SSLCertVerificationError: unable to get local issuer
+# certificate` -- against `education.scripps.edu` specifically (the
+# distinct www.scripps.edu domain `scripps-srti.toml` uses is
+# unaffected). Reproduced directly against this project's Python/
+# OpenSSL/certifi trust store (independent of this project's fetcher
+# code): the server does not send its full intermediate-certificate
+# chain, and this environment's trust store has no cached copy of the
+# missing intermediate, unlike a browser or `curl`'s OS trust store
+# (which chase AIA / cache intermediates more aggressively). This is a
+# real, reproducible fetch failure for this project's own fetcher, not
+# a registration mistake -- registered disabled per this ticket's Fix
+# shape step 3 rather than silently omitted. Re-verify once
+# education.scripps.edu's own TLS configuration is fixed server-side,
+# or if this project ever adds an intermediate-cert workaround.
+
+org_name = "Scripps Research"
+adapter_type = "program_page"
+enabled = false  # disabled: education.scripps.edu fails TLS chain verification (missing intermediate cert) for this project's fetcher, live-verified 2026-09-01 -- see comment above
+
+[config]
+url = "https://education.scripps.edu/k-12-outreach/ca-outreach/hs-internships/"
+program_kind = "internship"
+
+[taxonomy_defaults]
+eligibility = "Partner schools only: Barrio Logan College Institute, Crawford, Del Lago Academy, Escondido, Hoover, Lincoln, Madison, Morse, and Orange Glen high schools (San Diego/Escondido)"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 28 (2026-08-30 seed source catalog); sprint 027 ticket 005"
