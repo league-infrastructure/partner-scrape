@@ -1,7 +1,15 @@
 ---
-status: pending
+status: in-progress
 split_from: 35-standing-entities-clubs-and-places.md
 sprint: '032'
+tickets:
+- 032-001
+- 032-002
+- 032-003
+- 032-004
+- 032-005
+- 032-006
+- 032-007
 ---
 
 # Standing entities: remaining club-type rosters (deferred half of issue 35)
