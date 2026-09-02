@@ -28,7 +28,7 @@ from pathlib import Path
 from typing import Any, Callable, Iterable
 from zoneinfo import ZoneInfo
 
-from partner_scrape.model import Event, slugify
+from partner_scrape.model import PROGRAM_EXTRACTION_KINDS, Event, slugify
 from partner_scrape.normalize.collapse import collapse_recurring
 from partner_scrape.normalize.dedup import dedup_cross_source
 from partner_scrape.normalize.instance import Instance
@@ -64,7 +64,13 @@ WORK_BASED_LEARNING_TYPE = "Work-based Learning"
 #: `normalize/DESIGN.md`'s sprint 015 addendum). `export/writer.py`
 #: imports this set to apply the same currency rule and export sort key
 #: to every member, not only `WORK_BASED_LEARNING_TYPE`.
-DEADLINE_FIRST_TYPES = frozenset({WORK_BASED_LEARNING_TYPE, "Competitions"})
+#: (Sprint 027, issue 28 item 4) Gains a third member, `"Funding
+#: Opportunities"`, for the SD Foundation Community Scholarship
+#: (`kind="program"`, SUC-035) -- reusing this exact mechanism rather
+#: than making `export/writer.py`'s currency check `kind`-aware, which
+#: would require an `Opportunity.kind` field this sprint's Scope
+#: explicitly rules out.
+DEADLINE_FIRST_TYPES = frozenset({WORK_BASED_LEARNING_TYPE, "Competitions", "Funding Opportunities"})
 
 #: Timezone every naive `datetime` is localized into at serialization
 #: time (sprint 012, issue 19) so the exported ISO 8601 offset matches
@@ -180,9 +186,11 @@ def _availability(instance: Instance) -> str:
     return ""
 
 
-def _internship_availability(event: Event) -> str:
-    """"Apply by <date>" when `event.end` (the application deadline) is set;
-    "Rolling -- apply anytime" otherwise (sprint.md Design Rationale: reuse
+def _internship_availability(event: Event, today: date) -> str:
+    """"Opens ~<date>" when `event.start` (the application window open
+    date) is set and in the future; else "Apply by <date>" when
+    `event.end` (the application deadline) is set; else "Rolling --
+    apply anytime" (sprint.md Design Rationale: reuse
     `date_start`/`date_end`/`availability` with redefined internship-specific
     meaning -- most ATS postings expose no reliable deadline, so "still
     present in the feed" is itself the "still open" signal, not a date).
@@ -190,7 +198,17 @@ def _internship_availability(event: Event) -> str:
     Despite the name, this is not internship-specific: sprint 015 ticket
     007 reuses it, unchanged, for every `DEADLINE_FIRST_TYPES` member
     (any deadline-first record's `event.end` is its deadline, not an
-    event end time), not only `kind == "internship"`."""
+    event end time), not only `kind == "internship"`. Sprint 027, issue
+    28 item 4 adds the "not yet open" branch, checked first: a program
+    whose application window is known but has not opened yet gets an
+    honest "Opens ~<date>" note instead of the misleading "Apply by
+    <date>"/"Rolling -- apply anytime" text a not-yet-open window would
+    otherwise get. A **closed** window (an `end` already in the past) is
+    handled entirely by `export/writer.py`'s unchanged
+    `is_current_or_upcoming()` currency filter -- it drops the record
+    from export outright, requiring no new state here."""
+    if event.start is not None and event.start.date() > today:
+        return f"Opens ~{event.start.date().isoformat()}"
     if event.end is not None:
         return f"Apply by {event.end.date().isoformat()}"
     return "Rolling — apply anytime"
@@ -210,6 +228,7 @@ def _to_opportunity(
     partners_by_norm: dict[str, dict[str, Any]],
     org_name: str,
     source_taxonomy_defaults: dict[str, dict[str, Any]],
+    today: date,
     image_resolver: Callable[[str], str] | None = None,
 ) -> Opportunity:
     event = instance.event
@@ -220,8 +239,22 @@ def _to_opportunity(
     # `org_name` is) since this is the only field this ticket wires
     # from `taxonomy_defaults` -- see the `Opportunity.eligibility`
     # field comment and `normalize/DESIGN.md`'s sprint 015 addendum.
+    #
+    # Sprint 027: `eligibility` now follows the same field_provenance-
+    # presence precedence pattern already used for `areas_of_interest`/
+    # `age_grade_level`/`cost_range`/`time_of_day`/`opportunity_type`
+    # below -- an Event-level value (set via `Event.set("eligibility",
+    # ...)` by the program-page extraction adapters) wins over the
+    # per-source `taxonomy_defaults` default when present. Additive: a
+    # source relying purely on `taxonomy_defaults.eligibility` (every
+    # pre-sprint-027 source) is unaffected, since none of them ever call
+    # `Event.set("eligibility", ...)`.
     taxonomy_defaults = source_taxonomy_defaults.get(event.source_id, {})
-    eligibility = taxonomy_defaults.get("eligibility", "")
+    eligibility = (
+        event.eligibility
+        if "eligibility" in event.field_provenance
+        else taxonomy_defaults.get("eligibility", "")
+    )
     partner = find_partner(org_name, partners_by_norm) or {}
     partner_name = partner.get("name") or org_name
 
@@ -293,15 +326,22 @@ def _to_opportunity(
     )
     # Computed after opportunity_type so this branch can check
     # DEADLINE_FIRST_TYPES membership too (sprint 015 ticket 007): any
-    # deadline-first record -- an internship by `kind`, or any other
-    # opportunity_type in DEADLINE_FIRST_TYPES (e.g. Competitions) --
-    # reuses `_internship_availability`'s "Apply by <date>" / "Rolling --
-    # apply anytime" text. This is availability-text derivation only;
-    # the `is_internship`/`kind` bypass used above for the forced
-    # opportunity_type, and elsewhere for collapse/dedup, is unaffected.
+    # deadline-first record -- a program/internship by `kind`, or any
+    # other opportunity_type in DEADLINE_FIRST_TYPES (e.g. Competitions,
+    # Funding Opportunities) -- reuses `_internship_availability`'s
+    # "Opens ~<date>" / "Apply by <date>" / "Rolling -- apply anytime"
+    # text. This is availability-text derivation only; the `is_internship`/
+    # `kind` bypass used above for the forced opportunity_type, and
+    # elsewhere for collapse/dedup, is unaffected.
+    #
+    # Sprint 027: widened from `is_internship` to `event.kind in
+    # PROGRAM_EXTRACTION_KINDS` so a `kind="program"` record (not only
+    # `kind="internship"`) also gets deadline-first availability text
+    # even when its `opportunity_type` isn't itself a `DEADLINE_FIRST_TYPES`
+    # member (e.g. mid-classification or a not-yet-typed program record).
     availability = (
-        _internship_availability(event)
-        if is_internship or opportunity_type in DEADLINE_FIRST_TYPES
+        _internship_availability(event, today)
+        if event.kind in PROGRAM_EXTRACTION_KINDS or opportunity_type in DEADLINE_FIRST_TYPES
         else _availability(instance)
     )
 
@@ -426,40 +466,48 @@ def run(
         if event.end is not None and event.end.tzinfo is not None:
             event.end = event.end.replace(tzinfo=None)
 
-    internship_events: list[Event] = []
+    curated_events: list[Event] = []
     other_events: list[Event] = []
     for event in events:
-        (internship_events if event.kind == "internship" else other_events).append(event)
+        (curated_events if event.kind in PROGRAM_EXTRACTION_KINDS else other_events).append(event)
 
     collapsed = collapse_recurring(other_events, today)
     deduped = dedup_cross_source(collapsed)
 
-    # kind="internship" Events bypass both collapse_recurring and
-    # dedup_cross_source entirely (sprint.md Design Rationale:
-    # "kind='internship' Events bypass both collapse_recurring and
-    # dedup_cross_source") -- both stages' identity assumptions (same
-    # source+title recurs; same title+date+venue across sources is the
-    # same real-world event) don't hold for distinct job requisitions,
-    # so each internship Event is wrapped 1:1 into its own Instance
-    # instead of being routed through either stage.
-    internship_instances = [
+    # kind in PROGRAM_EXTRACTION_KINDS Events (sprint 027: "internship"
+    # or "program"; previously "internship" only) bypass both
+    # collapse_recurring and dedup_cross_source entirely (sprint.md
+    # Design Rationale: "kind='internship' Events bypass both
+    # collapse_recurring and dedup_cross_source", generalized) -- both
+    # stages' identity assumptions (same source+title recurs; same
+    # title+date+venue across sources is the same real-world event)
+    # don't hold for distinct job requisitions or distinct programs that
+    # happen to share similar titling, so each curated Event is wrapped
+    # 1:1 into its own Instance instead of being routed through either
+    # stage.
+    curated_instances = [
         Instance(
             event=event,
             sources=frozenset({event.source_id}),
             repeat_count=1,
             last_seen=(event.start.date() if event.start is not None else None),
         )
-        for event in internship_events
+        for event in curated_events
     ]
 
-    all_instances = deduped + internship_instances
+    all_instances = deduped + curated_instances
 
     opportunities: list[Opportunity] = []
     for instance in all_instances:
         org_name = source_org_names.get(instance.event.source_id, instance.event.source_id)
         opportunities.append(
             _to_opportunity(
-                instance, partners_by_norm, org_name, source_taxonomy_defaults, image_resolver
+                instance,
+                partners_by_norm,
+                org_name,
+                source_taxonomy_defaults,
+                today,
+                image_resolver,
             )
         )
     return opportunities

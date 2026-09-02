@@ -5,6 +5,7 @@ from datetime import datetime
 import pytest
 
 from partner_scrape.model import (
+    PROGRAM_EXTRACTION_KINDS,
     Event,
     Provenance,
     identity_key,
@@ -42,6 +43,9 @@ class TestEventDefaults:
     def test_kind_can_be_program_or_internship(self):
         assert Event(kind="program").kind == "program"
         assert Event(kind="internship").kind == "internship"
+
+    def test_eligibility_defaults_to_empty_string(self):
+        assert Event().eligibility == ""
 
     def test_default_list_fields_are_not_shared_between_instances(self):
         a = Event()
@@ -291,3 +295,13 @@ class TestSameRecord:
         a = Event(source_id="tlc", title="Beach Cleanup", start=datetime(2026, 8, 1))
         b = Event(source_id="tlc", title="Beach Cleanup", start=datetime(2026, 8, 2))
         assert same_record(a, b) is False
+
+
+class TestProgramExtractionKinds:
+    """(Sprint 027) The shared kind set naming which `Kind` values get
+    curated-record bypass treatment in `enrich/enricher.py` and
+    `normalize/run.py` -- see model.py's own sprint 027 comment and
+    `enrich/DESIGN.md`/`normalize/DESIGN.md`'s sprint 027 additions."""
+
+    def test_is_exactly_internship_and_program(self):
+        assert PROGRAM_EXTRACTION_KINDS == frozenset({"internship", "program"})

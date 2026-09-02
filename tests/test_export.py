@@ -387,6 +387,37 @@ class TestDeadlineFirstCurrentUpcomingFilterGeneralization:
         assert payload == []
 
 
+class TestFundingOpportunitiesDeadlineFirst:
+    """(Sprint 027, issue 28 item 4, SUC-035) `DEADLINE_FIRST_TYPES` gains
+    a third member, `"Funding Opportunities"`, for the SD Foundation
+    Community Scholarship (`kind="program"`) -- proves the extension
+    reaches `export/writer.py` with no code change there, since
+    `is_current_or_upcoming()` already branches on `DEADLINE_FIRST_TYPES`
+    membership generically."""
+
+    def test_funding_opportunities_future_deadline_is_kept_current(self):
+        opp = _opportunity(
+            date_start="2026-06-19T09:00:00-07:00",
+            date_end="2026-12-01T00:00:00-08:00",
+            opportunity_type="Funding Opportunities",
+        )
+
+        payload = export_opportunities([opp], today=date(2026, 9, 1))
+
+        assert len(payload) == 1
+
+    def test_funding_opportunities_past_deadline_is_excluded(self):
+        opp = _opportunity(
+            date_start="2026-01-01T09:00:00-08:00",
+            date_end="2026-08-01T00:00:00-07:00",
+            opportunity_type="Funding Opportunities",
+        )
+
+        payload = export_opportunities([opp], today=date(2026, 9, 1))
+
+        assert payload == []
+
+
 class TestExportSortOrder:
     """`export_opportunities`'s sort key (sprint 015 ticket 007): a
     `DEADLINE_FIRST_TYPES` record sorts by `date_end` (its deadline), not

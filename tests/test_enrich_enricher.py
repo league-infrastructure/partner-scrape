@@ -720,8 +720,12 @@ class TestInternshipEventsBypassTheRelevanceGate:
         assert [e.title for e in cache.store_calls] == ["Robotics Night"]
 
     def test_existing_event_kind_relevance_gating_is_unchanged(self, tmp_path):
-        # Guards against a regression where the internship branch
-        # accidentally short-circuits kind="event"/"program" handling.
+        # Guards against a regression where the curated-kind bypass
+        # accidentally short-circuits kind="event" handling. (Sprint 027:
+        # kind="program" is now also bypassed -- see
+        # TestProgramKindEventsBypassTheRelevanceGate below -- so this
+        # regression guard is scoped to the one kind the bypass must
+        # never reach.)
         event = _event(title="Adult Wine Tasting")
         result = EnrichmentResult(relevant=False, relevance_reason="Adult-only, not for youth.")
         llm_client = FixtureLLMClient(responses={"Adult Wine Tasting": result})
@@ -731,6 +735,65 @@ class TestInternshipEventsBypassTheRelevanceGate:
 
         assert survivors == []
         assert event.relevant is False
+
+
+# ---------------------------------------------------------------------
+# AC (sprint 027, SUC-033): kind="program" Events get exactly the same
+# bypass treatment kind="internship" already has -- generalized from a
+# single hardcoded `kind == "internship"` check to
+# `kind in PROGRAM_EXTRACTION_KINDS`. Mirrors
+# TestInternshipEventsBypassTheRelevanceGate above.
+# ---------------------------------------------------------------------
+
+
+class TestProgramKindEventsBypassTheRelevanceGate:
+    def test_program_event_passes_through_unchanged_with_zero_llm_calls(self, tmp_path):
+        event = _event(title="UCSD Summer Research Program", kind="program")
+        # Empty responses: any unexpected enrich_event() call raises
+        # KeyError and fails the test loudly.
+        llm_client = FixtureLLMClient(responses={})
+        cache = _SpyCache(cache_dir=tmp_path)
+        enricher = LLMEnricher(llm_client, cache)
+
+        [survivor] = enricher.enrich([event])
+
+        assert survivor is event
+        assert survivor.relevant is None
+        assert survivor.field_provenance == {}
+        assert llm_client.calls == []
+        assert cache.lookup_calls == []
+        assert cache.store_calls == []
+
+    def test_program_event_is_never_dropped_even_if_a_relevance_verdict_would_be_false(
+        self, tmp_path
+    ):
+        event = _event(title="Adult Wine Tasting", kind="program")
+        result = EnrichmentResult(relevant=False, relevance_reason="Adult-only, not for youth.")
+        llm_client = FixtureLLMClient(responses={"Adult Wine Tasting": result})
+        enricher = LLMEnricher(llm_client, EnrichmentCache(cache_dir=tmp_path))
+
+        survivors = enricher.enrich([event])
+
+        assert survivors == [event]
+        assert event.relevant is None
+        assert llm_client.calls == []
+
+    def test_mixed_batch_gates_only_event_kind_and_preserves_relative_order(self, tmp_path):
+        program = _event(title="SIO Research Internship", kind="program")
+        event = _event(title="Robotics Night")
+        result = EnrichmentResult(relevant=True, relevance_reason="stem")
+        llm_client = FixtureLLMClient(responses={"Robotics Night": result})
+        cache = _SpyCache(cache_dir=tmp_path)
+        enricher = LLMEnricher(llm_client, cache)
+
+        survivors = enricher.enrich([program, event])
+
+        assert [e.title for e in survivors] == ["SIO Research Internship", "Robotics Night"]
+        assert survivors[0].field_provenance == {}
+        assert survivors[1].field_provenance["relevant"].source == LLM_SOURCE
+        assert [e.title for e in llm_client.calls] == ["Robotics Night"]
+        assert [e.title for e in cache.lookup_calls] == ["Robotics Night"]
+        assert [e.title for e in cache.store_calls] == ["Robotics Night"]
 
 
 # ---------------------------------------------------------------------
