@@ -1,0 +1,38 @@
+# Salk STEM Educators Summit (formerly the Ellen Potter Teachers
+# Symposium) -- Salk Institute for Biological Studies. Distinct from
+# salk.toml's general `generic_html` registration -- this entry targets
+# the Summit's own dedicated program page directly. Sprint 030 ticket
+# 005 (issue 33 part 1). Single-event page: the 10th Annual Summit,
+# September 23, 2026.
+#
+# LIVE-VERIFIED 2026-09-02, real network + real
+# `AnthropicProgramLLMClient` via `uv run partner-scrape --source
+# salk-stem-educators-summit --dry-run -v`:
+#
+#   GET https://www.salk.edu/about/education-outreach/programs/salk-stem-educators-summit/
+#   -> HTTP 200. `found=1 dated=1 new=1`, **`wrote 1 opportunity`** --
+#   this sprint's single cleanest pass: direct `extract()` inspection
+#   confirms "Salk STEM Educators Summit", `start=2026-09-23`,
+#   `opportunity_type="Professional Development / Conferences"`,
+#   `eligibility="High school educators currently employed in San Diego
+#   County serving grades 9-12 or GED for the 2026-2027 school year"` --
+#   a real, current/upcoming, correctly-typed record that actually
+#   survives the export currency filter, not merely a past-cycle date.
+#   No instruction-shaped content found on the fetched page (the
+#   newsletter form's "This field is for validation purposes and should
+#   be left unchanged" text is a standard anti-spam honeypot hint, not
+#   directed at this crawler).
+
+org_name = "Salk Institute for Biological Studies"
+adapter_type = "program_page"
+enabled = true
+
+[config]
+url = "https://www.salk.edu/about/education-outreach/programs/salk-stem-educators-summit/"
+program_kind = "program"
+opportunity_type = "Professional Development / Conferences"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 33 part 1 (educator-PD program pages); sprint 030 ticket 005, live-verified via real dry-run (2026-09-02)"

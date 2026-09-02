@@ -1,0 +1,46 @@
+# UC San Diego Mathematics Project -- one of the California Subject
+# Matter Projects, housed within UCSD CREATE. Sprint 030 ticket 005
+# (issue 33 part 1).
+#
+# LIVE-VERIFIED 2026-09-02, real network + real
+# `AnthropicProgramLLMClient`. Two URLs checked:
+#
+# 1. The program's own hub page (`uv run partner-scrape --source
+#    ucsd-math-project --dry-run -v` against
+#    `https://sites.ucsd.edu/mathproject/`) -> HTTP 200, `found=0
+#    dated=0`: this page only names its own sub-programs (ALMA for SD,
+#    Open-Call Teacher Professional Learning, CANMEE Lesson Study,
+#    Summer Academies, "2025 Summer Math Learning") with zero inline
+#    dates.
+# 2. Its "Summer Academies" subpage
+#    (`https://sites.ucsd.edu/mathproject/programs/summer-academies/`),
+#    checked via a direct `ProgramPageMultiAdapter.extract()` call
+#    (real network + real LLM) -> HTTP 200, 4 programs found ("Summer
+#    Academy 2025 at Bonita Vista MS", "...at Morse HS, San Diego",
+#    "...in Oceanside", "...Otay Elementary") but **all four with
+#    `start=None end=None`** -- the page names last year's (2025) site
+#    list by title only, with no day/month/year anywhere in the fetched
+#    text for any of them.
+#
+# CONTENT-AVAILABILITY GAP on both URLs, not an extraction or
+# site-block failure -- confirmed by the second check's real, non-empty
+# program list with a genuine zero-date result, not merely an empty
+# page. Registered against the Summer Academies URL (stronger evidence
+# of real content than the empty hub page) but left disabled: this
+# organization has not yet published its 2026-cycle site list or dates
+# anywhere this ticket's live verification could find. No
+# instruction-shaped content found on either fetched page.
+
+org_name = "UC San Diego Mathematics Project"
+adapter_type = "program_page_multi"
+enabled = false  # disabled: content-availability gap -- Summer Academies subpage names 4 real (2025-cycle) programs but carries zero recoverable dates for any of them; live-verified 2026-09-02
+
+[config]
+url = "https://sites.ucsd.edu/mathproject/programs/summer-academies/"
+program_kind = "program"
+opportunity_type = "Professional Development / Conferences"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 33 part 1 (educator-PD program pages); sprint 030 ticket 005, live-verified via real dry-run (2026-09-02)"

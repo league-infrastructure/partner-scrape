@@ -1,44 +1,57 @@
 """Directory pipeline orchestration: `Registry -> PlaceSource(s)/
-ClubSource(s) -> geo fallback/geocoding -> export`.
+ClubSource(s)/OfferingSource(s) -> geo fallback/geocoding -> export`.
 
 Structurally parallel to `teams.pipeline.run_teams()` -- this module's
 whole job is sequencing, not business logic (see that module's own
 docstring for the same self-check): enumerate this subsystem's own
 Registry (`directory/registry/`, not `partner_scrape/registry/
 sources/` and not `teams/registry/`), dispatch each active source to
-its `PlaceSource` or `ClubSource` implementation via
-`directory.sources.base.run()`/`run_club_source()`, resolve location
-for both record types through the shared offline geocoding ladder
-(`geo_ladder.GeoLadder`, ticket 018-006), and hand the accumulated
-`Place[]`/`Club[]` to `directory.export.export_directory()`. It never
-imports `partner_scrape.pipeline`, `partner_scrape.adapters`, or
+its `PlaceSource`, `ClubSource`, or `OfferingSource` implementation via
+`directory.sources.base.run()`/`run_club_source()`/
+`run_offering_source()`, resolve location for `Place`/`Club` through
+the shared offline geocoding ladder (`geo_ladder.GeoLadder`, ticket
+018-006) -- **`Offering` has no geocoding stage at all, see below** --
+and hand the accumulated `Place[]`/`Club[]`/`Offering[]` to
+`directory.export.export_directory()`. It never imports
+`partner_scrape.pipeline`, `partner_scrape.adapters`, or
 `partner_scrape.teams` -- see `directory/sources/base.py`'s module
 docstring for why the `teams`-avoidance boundary in particular is
 structural (sprint.md's Design Rationale: importing `teams/` from
 `directory/` would be "a semantically backwards dependency").
 
-**Ticket 018-007 wired Places only; ticket 018-008 (this ticket) adds
-the analogous `Club`-side dispatch.** `_PLACE_SOURCES`/
-`_apply_geo_fallback()` are unchanged from ticket 007. `_CLUB_SOURCES`
-and `_apply_club_geocoding()` are this ticket's additions, following
-that module's shape rather than importing from it (there is nothing to
-import -- `Place` and `Club` are separate flat dataclasses, per
-sprint.md's Design Rationale).
+**Ticket 018-007 wired Places only; ticket 018-008 added the analogous
+`Club`-side dispatch; sprint 030 ticket 001 (this ticket) adds a third,
+`Offering`-side dispatch.** `_PLACE_SOURCES`/`_apply_geo_fallback()`
+are unchanged from ticket 007; `_CLUB_SOURCES`/
+`_apply_club_geocoding()` are unchanged from ticket 018-008.
+`_OFFERING_SOURCES` is this ticket's own addition, following that same
+shape rather than importing from either (there is nothing to import --
+`Place`, `Club`, and `Offering` are separate flat dataclasses, per
+sprint.md's Design Rationale) -- **with one deliberate structural
+difference: there is no `_apply_offering_geocoding()` counterpart at
+all.** An `Offering` carries no location/geocoding fields (see
+`directory/model.py`'s `Offering` docstring and this sprint's
+`directory/DESIGN.md` Revision for the full "why" -- it is a program
+hosted by an already-locatable org, not a place to travel to in its own
+right), so no `GeoLadder` dependency is added for it and no fallback
+stage runs over the acquired `Offering[]` list at all.
 
-**One combined dispatch loop, not two separate ones, despite
+**One combined dispatch loop, not three separate ones, despite
 `directory/DESIGN.md`'s forward-looking note describing "a new
-`_CLUB_SOURCES` table and acquisition loop."** A literal second `for`
-loop over the same `sources` list would make the *existing* Place loop
-log a spurious "no PlaceSource registered" warning for every real Club
-registry entry (its `adapter_type` is never in `_PLACE_SOURCES`) --
-implementation judgment ticket 007's own DESIGN.md explicitly left
-open ("ticket 007/008's implementation judgment"). One loop that
-checks `_PLACE_SOURCES` then `_CLUB_SOURCES` per `source_config`
-dispatches each registry entry to exactly the one table it actually
-belongs to, and only warns when an `adapter_type` is in neither.
-`directory.export.export_directory()` is now called with a real
-`clubs` argument; see that module's own docstring for how `clubs.json`
-is written alongside `places.json`.
+`_CLUB_SOURCES` table and acquisition loop."** A literal second/third
+`for` loop over the same `sources` list would make an earlier loop log
+a spurious "no PlaceSource/ClubSource registered" warning for every
+real Club/Offering registry entry (its `adapter_type` is never in that
+earlier table) -- implementation judgment ticket 007's own DESIGN.md
+explicitly left open ("ticket 007/008's implementation judgment"),
+extended identically to a third table by this ticket. One loop that
+checks `_PLACE_SOURCES` then `_CLUB_SOURCES` then `_OFFERING_SOURCES`
+per `source_config` dispatches each registry entry to exactly the one
+table it actually belongs to, and only warns when an `adapter_type` is
+in none of the three. `directory.export.export_directory()` is now
+called with a real `offerings` argument too; see that module's own
+docstring for how `offerings.json` is written alongside `places.json`/
+`clubs.json`.
 """
 
 from __future__ import annotations
@@ -50,14 +63,17 @@ from typing import Any
 
 from partner_scrape.config import get_site_dir
 from partner_scrape.directory.export import export_directory
-from partner_scrape.directory.model import Club, Place
+from partner_scrape.directory.model import Club, Offering, Place
 from partner_scrape.directory.sources.base import (
     ClubSource,
+    OfferingSource,
     PlaceSource,
     run as run_place_source,
     run_club_source,
+    run_offering_source,
 )
 from partner_scrape.directory.sources.hack_club_static_roster import HackClubStaticRosterSource
+from partner_scrape.directory.sources.offering_static_roster import OfferingStaticRosterSource
 from partner_scrape.directory.sources.static_roster import StaticRosterSource
 from partner_scrape.fetch import Fetcher, PoliteFetcher
 from partner_scrape.geo_ladder import GeoLadder
@@ -111,6 +127,15 @@ _PLACE_SOURCES: dict[str, PlaceSource] = {
 #: ticket 018-008's own addition.
 _CLUB_SOURCES: dict[str, ClubSource] = {
     "hack_club_static_roster": HackClubStaticRosterSource(),
+}
+
+#: `adapter_type` (an Offering Registry TOML file's own field, e.g.
+#: `offerings-sd.toml`'s `adapter_type = "offering_static_roster"`) ->
+#: the `OfferingSource` instance that handles it. Same "plain lookup,
+#: not a public extension point" rationale as `_PLACE_SOURCES`/
+#: `_CLUB_SOURCES` above -- sprint 030's own addition.
+_OFFERING_SOURCES: dict[str, OfferingSource] = {
+    "offering_static_roster": OfferingStaticRosterSource(),
 }
 
 
@@ -214,22 +239,30 @@ def _apply_club_geocoding(clubs: list[Club], *, data_dir: str | Path | None) -> 
     return clubs
 
 
-def _check_related_partner_references(places: list[Place], *, site_dir: str | Path | None) -> None:
-    """Join-integrity guard for `Place.related_partner_id` (issue 48,
-    ticket 004): recovers, as real pipeline-level validation, the guard
-    `tests/directory/test_dataset_validity.py`'s deleted
-    `TestRelatedPartnerIdJoinIntegrity` class used to provide.
+def _check_related_partner_references(
+    places: list[Place], offerings: list[Offering], *, site_dir: str | Path | None
+) -> None:
+    """Join-integrity guard for `Place.related_partner_id`/`Offering.
+    related_partner_id` (issue 48, ticket 004; extended to `Offering`
+    by sprint 030 ticket 001): recovers, as real pipeline-level
+    validation, the guard `tests/directory/test_dataset_validity.py`'s
+    deleted `TestRelatedPartnerIdJoinIntegrity` class used to provide.
 
     Unlike `partner_scrape.pipeline.run()`'s ticket-003 wiring (an
     *unconditional* `partners.json` read), this is a *conditional* one:
     `directory.pipeline.run_directory()` never read `partners.json`
-    before this ticket, and `Place.related_partner_id` is a hand-copied
-    value with "no automatic cross-reference join" by original design
-    (sprint 018 ticket 007). Building `references` and returning early
+    before this ticket, and `related_partner_id` is a hand-copied value
+    with "no automatic cross-reference join" by original design
+    (sprint 018 ticket 007, reused verbatim for `Offering` per this
+    sprint's `directory/DESIGN.md` Revision). Building `references`
+    (from both `places` and `offerings`, combined into one list -- the
+    same generic `(referencer_id, partner_id)` shape
+    `check_partner_references()` already takes) and returning early
     when it is empty means a `directory`-only environment with no
     sibling `stem-ecosystem` checkout's `partners.json` still runs
-    cleanly when no `Place` references one -- this is the one
-    behavioral difference from ticket 003's unconditional read.
+    cleanly when neither a `Place` nor an `Offering` references one --
+    this is the one behavioral difference from ticket 003's
+    unconditional read.
 
     When at least one reference exists, `site_dir` is resolved
     identically to `export.export_directory()`'s own resolution (`Path
@@ -239,7 +272,7 @@ def _check_related_partner_references(places: list[Place], *, site_dir: str | Pa
     `RosterValidationError` uncaught: a fatal, structural problem, not
     per-source isolated (contrast with `run_directory()`'s own
     try/except-and-continue for a flaky third-party fetch, which a
-    hand-copy typo in a curated, ~19-row dataset is not).
+    hand-copy typo in a curated, small dataset is not).
 
     A missing `partners.json` when references exist is re-raised as a
     `RuntimeError` with an actionable message, matching
@@ -251,6 +284,10 @@ def _check_related_partner_references(places: list[Place], *, site_dir: str | Pa
         (place.place_id, place.related_partner_id)
         for place in places
         if place.related_partner_id is not None
+    ] + [
+        (offering.offering_id, offering.related_partner_id)
+        for offering in offerings
+        if offering.related_partner_id is not None
     ]
     if not references:
         return
@@ -280,18 +317,20 @@ def run_directory(
     geo_data_dir: str | Path | None = None,
 ) -> dict[str, Any]:
     """Run the Directory pipeline end-to-end: Registry -> `PlaceSource`(s)/
-    `ClubSource`(s) -> `_apply_geo_fallback()`/`_apply_club_geocoding()`
-    -> `export_directory()`.
+    `ClubSource`(s)/`OfferingSource`(s) -> `_apply_geo_fallback()`/
+    `_apply_club_geocoding()` (no Offering-side counterpart -- see this
+    module's own docstring) -> `export_directory()`.
 
     Args:
-        registry_dir: Registry directory to load sources from (both
-            Place Registry and Club Registry entries live side by
-            side). Defaults to :data:`DEFAULT_PLACES_REGISTRY_DIR` (the
-            real seed registry, `partner_scrape/directory/registry/`)
-            when omitted.
+        registry_dir: Registry directory to load sources from (Place
+            Registry, Club Registry, and Offering Registry entries all
+            live side by side). Defaults to
+            :data:`DEFAULT_PLACES_REGISTRY_DIR` (the real seed registry,
+            `partner_scrape/directory/registry/`) when omitted.
         source: when given, restricts the run to the single acquisition
             source whose `adapter_type` matches (e.g.
-            `"static_roster"` or `"hack_club_static_roster"`) -- mirrors
+            `"static_roster"`, `"hack_club_static_roster"`, or
+            `"offering_static_roster"`) -- mirrors
             `teams.pipeline.run_teams()`'s own `source` parameter.
         site_dir: sibling `stem-ecosystem` checkout. No longer forwarded
             into `export_directory()` (sprint 025 ticket 005 removed
@@ -305,8 +344,9 @@ def run_directory(
             content through. Defaults to a real `PoliteFetcher()` when
             omitted -- the production path, even though every source
             this subsystem has as of this ticket (`static_roster`,
-            `hack_club_static_roster`) never calls it. Tests inject a
-            fixture `Fetcher` here so the whole run touches no sockets.
+            `hack_club_static_roster`, `offering_static_roster`) never
+            calls it. Tests inject a fixture `Fetcher` here so the whole
+            run touches no sockets.
         dry_run: when `True`, compute and return the would-be-written
             export payload without touching disk.
         geo_data_dir: the offline geocoding data directory
@@ -314,24 +354,26 @@ def run_directory(
             Defaults to :data:`DEFAULT_GEO_DATA_DIR` (the real
             committed `directory/data/`) when omitted. Tests that need
             to control fallback/geocoding outcomes precisely should
-            pass an explicit fixture directory here.
+            pass an explicit fixture directory here. Never read for
+            `Offering` -- there is no fallback/geocoding stage for it.
 
     Returns:
         `export_directory()`'s `{"meta": ..., "places": [...],
-        "clubs_meta": ..., "clubs": [...]}` payload, passed through
-        unchanged.
+        "clubs_meta": ..., "clubs": [...], "offerings_meta": ...,
+        "offerings": [...]}` payload, passed through unchanged.
 
     Raises:
-        RosterValidationError: at least one `Place` has a non-`None`
-            `related_partner_id` and it does not resolve against
-            `{resolved site_dir}/src/data/partners.json` (issue 48,
-            ticket 004) -- see `_check_related_partner_references()`'s
-            own docstring. Never raised when no `Place` in the run sets
-            `related_partner_id` at all; `partners.json` is not even
-            read in that case.
-        RuntimeError: at least one `Place` has a non-`None`
-            `related_partner_id` and `partners.json` cannot be read at
-            the resolved `site_dir`.
+        RosterValidationError: at least one `Place` or `Offering` has a
+            non-`None` `related_partner_id` and it does not resolve
+            against `{resolved site_dir}/src/data/partners.json` (issue
+            48, ticket 004; extended to `Offering` by sprint 030 ticket
+            001) -- see `_check_related_partner_references()`'s own
+            docstring. Never raised when no `Place`/`Offering` in the
+            run sets `related_partner_id` at all; `partners.json` is
+            not even read in that case.
+        RuntimeError: at least one `Place` or `Offering` has a
+            non-`None` `related_partner_id` and `partners.json` cannot
+            be read at the resolved `site_dir`.
     """
     sources = load_active_sources(
         Path(registry_dir) if registry_dir is not None else DEFAULT_PLACES_REGISTRY_DIR
@@ -344,15 +386,18 @@ def run_directory(
 
     places: list[Place] = []
     clubs: list[Club] = []
+    offerings: list[Offering] = []
     for source_config in sources:
         # One combined dispatch per registry entry -- checks
-        # _PLACE_SOURCES, then _CLUB_SOURCES -- rather than two
-        # separate loops over the same `sources` list. See this
-        # module's own docstring for why: a second, Place-shaped loop
-        # would make the *first* loop's "no PlaceSource registered"
-        # warning fire spuriously for every real Club registry entry.
+        # _PLACE_SOURCES, then _CLUB_SOURCES, then _OFFERING_SOURCES --
+        # rather than three separate loops over the same `sources`
+        # list. See this module's own docstring for why: an earlier,
+        # narrower-shaped loop would make its own "no *Source
+        # registered" warning fire spuriously for every real
+        # later-table registry entry.
         place_source = _PLACE_SOURCES.get(source_config.adapter_type)
         club_source = _CLUB_SOURCES.get(source_config.adapter_type)
+        offering_source = _OFFERING_SOURCES.get(source_config.adapter_type)
 
         if place_source is not None:
             try:
@@ -398,10 +443,33 @@ def run_directory(
             )
             clubs.extend(source_clubs)
 
+        elif offering_source is not None:
+            try:
+                source_offerings = run_offering_source(
+                    source_config, offering_source, active_fetcher
+                )
+            except Exception:
+                # Same per-source error isolation as the Place/Club
+                # branches above.
+                logger.exception(
+                    "Offering source %r (adapter_type=%r) failed; skipping it, "
+                    "run continues with the remaining sources",
+                    source_config.source_id,
+                    source_config.adapter_type,
+                )
+                continue
+
+            logger.info(
+                "Offering source %r yielded %d offering(s)",
+                source_config.source_id,
+                len(source_offerings),
+            )
+            offerings.extend(source_offerings)
+
         else:
             logger.warning(
-                "No PlaceSource or ClubSource registered for adapter_type %r "
-                "(source_id=%r); skipping",
+                "No PlaceSource, ClubSource, or OfferingSource registered for "
+                "adapter_type %r (source_id=%r); skipping",
                 source_config.adapter_type,
                 source_config.source_id,
             )
@@ -409,12 +477,16 @@ def run_directory(
 
     places = _apply_geo_fallback(places, data_dir=geo_data_dir)
     clubs = _apply_club_geocoding(clubs, data_dir=geo_data_dir)
+    # No geocoding/fallback stage for `offerings` at all -- see this
+    # module's own docstring for why (an Offering carries no
+    # location/geocoding fields).
 
-    # Join-integrity validation (issue 48, ticket 004) -- after the
-    # final Place list is settled, before export_directory() writes
+    # Join-integrity validation (issue 48, ticket 004; extended to
+    # Offering by sprint 030 ticket 001) -- after the final Place/
+    # Offering lists are settled, before export_directory() writes
     # anything. See _check_related_partner_references()'s own
     # docstring for the full "conditional read, uncaught raise"
     # rationale.
-    _check_related_partner_references(places, site_dir=site_dir)
+    _check_related_partner_references(places, offerings, site_dir=site_dir)
 
-    return export_directory(places, clubs=clubs, dry_run=dry_run)
+    return export_directory(places, clubs=clubs, offerings=offerings, dry_run=dry_run)

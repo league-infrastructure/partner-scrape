@@ -22,12 +22,14 @@ import pytest
 from partner_scrape.directory import export
 from partner_scrape.directory.export import (
     CLUBS_SCHEMA_FIELDS,
+    OFFERINGS_SCHEMA_FIELDS,
     PLACES_SCHEMA_FIELDS,
     club_to_json_dict,
     export_directory,
+    offering_to_json_dict,
     to_json_dict,
 )
-from partner_scrape.directory.model import Club, Place
+from partner_scrape.directory.model import Club, Offering, Place
 
 
 @pytest.fixture(autouse=True)
@@ -87,6 +89,19 @@ def _make_club(**overrides) -> Club:
     )
     defaults.update(overrides)
     return Club(**defaults)
+
+
+def _make_offering(**overrides) -> Offering:
+    defaults = dict(
+        offering_id="fleet-science-center-volunteer",
+        org_name="Fleet Science Center",
+        title="Volunteer Program",
+        offering_type="volunteer",
+        age_minimum=18,
+        sources=["offering_static_roster"],
+    )
+    defaults.update(overrides)
+    return Offering(**defaults)
 
 
 def _make_site(root: Path, *, opportunities="[]", scrape_meta="{}", teams="{}") -> Path:
@@ -226,6 +241,16 @@ class TestHardInvariants:
         assert not (data_dir / "scrape-meta.json").exists()
         assert not (data_dir / "teams.json").exists()
         assert not (data_dir / "places.json").exists()
+
+    def test_offerings_json_is_untouched_when_offerings_is_none(self, tmp_path):
+        # Sprint 030 ticket 001: extends this class's own hard
+        # invariant to offerings.json -- offerings=None (the default)
+        # must never write it, matching clubs=None's own contract.
+        own_data_dir = tmp_path / "own-data"
+
+        export_directory([_make_place()], own_data_dir=own_data_dir)
+
+        assert not (own_data_dir / "offerings.json").exists()
 
 
 # ---------------------------------------------------------------------
@@ -508,3 +533,288 @@ class TestOwnDataDirPublish:
             export_directory([_make_place()], clubs=[_make_club()], own_data_dir=own_data_dir)
 
         assert (own_data_dir / "places.json").exists()
+
+
+# ---------------------------------------------------------------------
+# Sprint 030 (ticket 001): offerings.json, published from the
+# `offerings` keyword argument. Mirrors every clubs.json test class
+# above, plus a few tests specific to the "offerings defaults to None"
+# backward-compatibility contract itself.
+# ---------------------------------------------------------------------
+
+
+class TestOfferingsSchemaFieldSet:
+    def test_sources_is_dropped_as_bookkeeping(self):
+        assert "sources" not in OFFERINGS_SCHEMA_FIELDS
+
+    def test_every_other_offering_field_is_present(self):
+        from dataclasses import fields
+
+        expected = {f.name for f in fields(Offering) if f.name != "sources"}
+        assert set(OFFERINGS_SCHEMA_FIELDS) == expected
+
+    def test_offering_to_json_dict_projects_exactly_the_schema_fields(self):
+        offering = _make_offering()
+        result = offering_to_json_dict(offering)
+
+        assert set(result.keys()) == set(OFFERINGS_SCHEMA_FIELDS)
+        assert "sources" not in result
+        assert result["offering_id"] == "fleet-science-center-volunteer"
+
+    def test_no_location_fields_in_the_schema(self):
+        # Structural proxy for "Offering carries no location/geocoding
+        # fields at all" -- there is nothing to project even if a
+        # caller wanted to.
+        assert "latitude" not in OFFERINGS_SCHEMA_FIELDS
+        assert "longitude" not in OFFERINGS_SCHEMA_FIELDS
+        assert "location_precision" not in OFFERINGS_SCHEMA_FIELDS
+
+
+class TestOfferingsDefaultToNoneMeansNoOfferingsJsonAtAll:
+    """Backward compatibility with every pre-sprint-030 call site:
+    omitting `offerings` (the default) must never write
+    offerings.json, and must never add offerings_meta/offerings to the
+    returned payload -- exactly the pre-ticket-001 behavior."""
+
+    def test_no_offerings_json_is_written_when_offerings_is_omitted(self, tmp_path):
+        own_data_dir = tmp_path / "own-data"
+
+        export_directory([_make_place()], clubs=[_make_club()], own_data_dir=own_data_dir)
+
+        assert not (own_data_dir / "offerings.json").exists()
+
+    def test_payload_has_no_offerings_keys_when_offerings_is_omitted(self):
+        payload = export_directory([_make_place()], clubs=[_make_club()])
+
+        assert "offerings" not in payload
+        assert "offerings_meta" not in payload
+
+    def test_an_explicit_empty_offering_list_does_write_offerings_json(self, tmp_path):
+        # Distinct from omitting `offerings` entirely -- a real (if
+        # empty) acquisition result is a legitimate "offerings pipeline
+        # ran and found nothing", not "offerings pipeline was never
+        # asked to run".
+        own_data_dir = tmp_path / "own-data"
+
+        export_directory([_make_place()], offerings=[], own_data_dir=own_data_dir)
+
+        assert (own_data_dir / "offerings.json").exists()
+        written = json.loads((own_data_dir / "offerings.json").read_text())
+        assert written == {
+            "meta": written["meta"],
+            "offerings": [],
+        }
+        assert written["meta"]["total"] == 0
+
+
+class TestOfferingsPayloadShape:
+    def test_payload_carries_offerings_meta_and_offerings_keys_without_disturbing_others(self):
+        payload = export_directory(
+            [_make_place()], clubs=[_make_club()], offerings=[_make_offering()]
+        )
+
+        assert set(payload.keys()) == {
+            "meta",
+            "places",
+            "clubs_meta",
+            "clubs",
+            "offerings_meta",
+            "offerings",
+        }
+        assert payload["offerings_meta"]["total"] == 1
+        assert len(payload["offerings"]) == 1
+
+    def test_offerings_meta_carries_generated_total_and_by_offering_type(self):
+        offerings = [
+            _make_offering(offering_id="a", org_name="A", title="A", offering_type="volunteer"),
+            _make_offering(
+                offering_id="b", org_name="B", title="B", offering_type="free_program"
+            ),
+            _make_offering(
+                offering_id="c", org_name="C", title="C", offering_type="volunteer"
+            ),
+        ]
+
+        payload = export_directory([_make_place()], offerings=offerings)
+        meta = payload["offerings_meta"]
+
+        assert meta["total"] == 3
+        assert meta["by_offering_type"] == {"volunteer": 2, "free_program": 1}
+        assert meta["generated"]
+
+    def test_offerings_meta_has_no_by_location_precision_key(self):
+        # Unlike places.json's/clubs.json's meta -- Offering carries no
+        # location fields at all.
+        payload = export_directory([_make_place()], offerings=[_make_offering()])
+
+        assert "by_location_precision" not in payload["offerings_meta"]
+
+    def test_offerings_sorted_by_offering_type_then_org_name(self):
+        offerings = [
+            _make_offering(
+                offering_id="z", org_name="Zebra Org", title="Z", offering_type="volunteer"
+            ),
+            _make_offering(
+                offering_id="a", org_name="Apple Org", title="A", offering_type="free_program"
+            ),
+            _make_offering(
+                offering_id="b", org_name="Banana Org", title="B", offering_type="free_program"
+            ),
+        ]
+
+        payload = export_directory([_make_place()], offerings=offerings)
+        ordered_ids = [o["offering_id"] for o in payload["offerings"]]
+
+        assert ordered_ids == ["a", "b", "z"]
+
+    def test_offerings_are_written_to_disk_at_the_documented_path(self, tmp_path):
+        own_data_dir = tmp_path / "own-data"
+
+        export_directory(
+            [_make_place()], offerings=[_make_offering()], own_data_dir=own_data_dir
+        )
+
+        written = json.loads((own_data_dir / "offerings.json").read_text())
+        assert written["meta"]["total"] == 1
+        assert written["offerings"][0]["offering_id"] == "fleet-science-center-volunteer"
+
+    def test_offerings_json_is_a_genuinely_separate_document_from_places_and_clubs_json(
+        self, tmp_path
+    ):
+        own_data_dir = tmp_path / "own-data"
+
+        export_directory(
+            [_make_place()],
+            clubs=[_make_club()],
+            offerings=[_make_offering()],
+            own_data_dir=own_data_dir,
+        )
+
+        places_written = json.loads((own_data_dir / "places.json").read_text())
+        clubs_written = json.loads((own_data_dir / "clubs.json").read_text())
+        offerings_written = json.loads((own_data_dir / "offerings.json").read_text())
+
+        assert set(places_written.keys()) == {"meta", "places"}
+        assert set(clubs_written.keys()) == {"meta", "clubs"}
+        assert set(offerings_written.keys()) == {"meta", "offerings"}
+
+
+class TestOfferingsDryRun:
+    def test_dry_run_computes_the_offerings_payload_without_writing(self, tmp_path):
+        own_data_dir = tmp_path / "own-data"
+
+        payload = export_directory(
+            [_make_place()],
+            offerings=[_make_offering()],
+            own_data_dir=own_data_dir,
+            dry_run=True,
+        )
+
+        assert payload["offerings_meta"]["total"] == 1
+        assert not own_data_dir.exists()
+
+
+class TestOfferingsHardInvariants:
+    """An `offerings`-bearing `directory` run still never writes or
+    touches `opportunities.json`/`scrape-meta.json`/`teams.json` --
+    same invariant as `TestHardInvariants`/`TestClubsHardInvariants`
+    above, re-checked with `offerings` populated this time."""
+
+    def test_opportunities_scrape_meta_and_teams_are_byte_identical_with_offerings_present(
+        self, tmp_path
+    ):
+        opportunities_body = json.dumps([{"title": "Untouched Opportunity"}])
+        scrape_meta_body = json.dumps({"last_updated": "2026-01-01T00:00:00Z"})
+        teams_body = json.dumps({"meta": {"total": 1}, "teams": []})
+        site = _make_site(
+            tmp_path,
+            opportunities=opportunities_body,
+            scrape_meta=scrape_meta_body,
+            teams=teams_body,
+        )
+
+        export_directory([_make_place()], clubs=[_make_club()], offerings=[_make_offering()])
+
+        data_dir = site / "src" / "data"
+        assert (data_dir / "opportunities.json").read_text() == opportunities_body
+        assert (data_dir / "scrape-meta.json").read_text() == scrape_meta_body
+        assert (data_dir / "teams.json").read_text() == teams_body
+
+
+class TestOfferingsOwnDataDirPublish:
+    def test_writes_only_under_the_given_own_data_dir(self, tmp_path):
+        site = _make_site(tmp_path)
+        own_data_dir = tmp_path / "own-data"
+
+        export_directory(
+            [_make_place()],
+            clubs=[_make_club()],
+            offerings=[_make_offering()],
+            own_data_dir=own_data_dir,
+        )
+
+        written_files = sorted(p for p in tmp_path.rglob("*") if p.is_file())
+        assert written_files == sorted(
+            [
+                site / "src" / "data" / "opportunities.json",
+                site / "src" / "data" / "scrape-meta.json",
+                site / "src" / "data" / "teams.json",
+                own_data_dir / "places.json",
+                own_data_dir / "clubs.json",
+                own_data_dir / "offerings.json",
+            ]
+        )
+
+    def test_offerings_none_means_offerings_json_untouched_at_own_data_dir(self, tmp_path):
+        own_data_dir = tmp_path / "own-data"
+
+        export_directory([_make_place()], clubs=[_make_club()], own_data_dir=own_data_dir)
+
+        assert (own_data_dir / "places.json").exists()
+        assert (own_data_dir / "clubs.json").exists()
+        assert not (own_data_dir / "offerings.json").exists()
+
+    def test_an_explicit_empty_offering_list_does_write_offerings_json_to_own_data_dir_too(
+        self, tmp_path
+    ):
+        own_data_dir = tmp_path / "own-data"
+
+        export_directory([_make_place()], offerings=[], own_data_dir=own_data_dir)
+
+        written = json.loads((own_data_dir / "offerings.json").read_text())
+        assert written["meta"]["total"] == 0
+
+    def test_places_before_clubs_before_offerings_ordering_on_a_places_failure(self, tmp_path):
+        # own_data_dir is pre-occupied by a plain file, so places.json's
+        # write fails -- neither clubs.json nor offerings.json is ever
+        # attempted.
+        own_data_dir = tmp_path / "own-data"
+        own_data_dir.write_text("not a directory")
+
+        with pytest.raises(RuntimeError, match="Cannot write places export"):
+            export_directory(
+                [_make_place()],
+                clubs=[_make_club()],
+                offerings=[_make_offering()],
+                own_data_dir=own_data_dir,
+            )
+
+    def test_offerings_failure_raises_after_places_and_clubs_already_written(self, tmp_path):
+        # own_data_dir/offerings.json is pre-occupied by a directory
+        # (not a plain file), so only that specific write fails --
+        # proven by places.json/clubs.json already existing by the time
+        # the RuntimeError is raised.
+        own_data_dir = tmp_path / "own-data"
+        own_data_dir.mkdir()
+        (own_data_dir / "offerings.json").mkdir()
+
+        with pytest.raises(RuntimeError, match="Cannot write offerings export"):
+            export_directory(
+                [_make_place()],
+                clubs=[_make_club()],
+                offerings=[_make_offering()],
+                own_data_dir=own_data_dir,
+            )
+
+        assert (own_data_dir / "places.json").exists()
+        assert (own_data_dir / "clubs.json").exists()

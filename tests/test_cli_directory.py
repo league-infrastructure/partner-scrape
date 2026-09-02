@@ -92,9 +92,17 @@ def _write_real_partners_fixture(site_dir: Path) -> None:
     matching `id` for each real reference. Parsed straight out of the
     real `places.toml` text rather than hand-listed, so this can never
     drift from the data it stands in for -- mirrors
-    `tests/directory/test_pipeline.py`'s identical fixture."""
-    text = (DEFAULT_GEO_DATA_DIR / "places.toml").read_text(encoding="utf-8")
-    ids = sorted({int(m) for m in re.findall(r"related_partner_id\s*=\s*(\d+)", text)})
+    `tests/directory/test_pipeline.py`'s identical fixture. Sprint 030
+    tickets 002/003 extend this to also parse `offerings.toml`'s own
+    thirteen real `related_partner_id` references (six curated
+    volunteer org profiles, seven curated free/Title I school-program
+    rows) -- `run_directory()`'s join-integrity check joins Place
+    and Offering references together."""
+    places_text = (DEFAULT_GEO_DATA_DIR / "places.toml").read_text(encoding="utf-8")
+    offerings_text = (DEFAULT_GEO_DATA_DIR / "offerings.toml").read_text(encoding="utf-8")
+    ids = {int(m) for m in re.findall(r"related_partner_id\s*=\s*(\d+)", places_text)}
+    ids |= {int(m) for m in re.findall(r"related_partner_id\s*=\s*(\d+)", offerings_text)}
+    ids = sorted(ids)
     data_dir = site_dir / "src" / "data"
     data_dir.mkdir(parents=True, exist_ok=True)
     partners = [{"id": pid, "name": f"Fixture Partner {pid}"} for pid in ids]
@@ -160,6 +168,29 @@ class TestArgumentWiring:
         out = capsys.readouterr().out
         assert "2" in out
         assert "places" in out
+
+    def test_prints_a_summary_including_the_written_offerings_count(self, monkeypatch, capsys):
+        # Sprint 030 ticket 001: the directory subcommand's printed
+        # summary gains an offerings count alongside the places/clubs
+        # counts -- no new flag, no new subcommand.
+        monkeypatch.setattr(
+            cli,
+            "run_directory",
+            lambda **kwargs: {
+                "meta": {"total": 0},
+                "places": [],
+                "clubs_meta": {"total": 0},
+                "clubs": [],
+                "offerings_meta": {"total": 2},
+                "offerings": [{"offering_id": "a"}, {"offering_id": "b"}],
+            },
+        )
+
+        cli.main(["directory"])
+
+        out = capsys.readouterr().out
+        assert "2" in out
+        assert "offerings" in out
 
     def test_dry_run_summary_notes_nothing_was_written(self, monkeypatch, capsys):
         monkeypatch.setattr(

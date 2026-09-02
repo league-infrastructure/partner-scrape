@@ -1,6 +1,10 @@
 ---
-status: pending
+status: done
 sprint: '030'
+tickets:
+- 030-001
+- 030-002
+- 030-006
 ---
 
 # Improve discovery of volunteer opportunities (third-party platforms + per-org links)

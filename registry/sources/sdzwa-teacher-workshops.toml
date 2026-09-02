@@ -1,0 +1,42 @@
+# San Diego Zoo Wildlife Alliance -- Teacher Workshops in Conservation
+# Science, at the Beckman Center. Distinct domain/registration from
+# sandiegozoowildlifealliance.toml (disabled, `sandiegozoowildlifealliance.org`,
+# unrelated Drupal marketing site) -- this entry targets the dedicated
+# `science.sandiegozoo.org` conservation-education subdomain. Sprint
+# 030 ticket 005 (issue 33 part 1). Multiple 2026 session dates listed
+# inline on one page -- `program_page_multi`.
+#
+# LIVE-VERIFIED 2026-09-02, real network + real
+# `AnthropicProgramLLMClient` via `uv run partner-scrape --source
+# sdzwa-teacher-workshops --dry-run -v`:
+#
+#   GET https://science.sandiegozoo.org/teacherworkshops -> HTTP 200.
+#   `found=5 dated=5 new=1`, `wrote 0` in this dry run. Direct
+#   `extract()` inspection confirms all five sessions correctly dated:
+#   2026-06-29/07-01, 2026-07-06/08, 2026-07-13/15, 2026-07-20/22,
+#   2026-07-27/29, each with identical eligibility text ("Informal,
+#   formal, and pre-service educators who work with 6-12 grade
+#   audiences; must teach life science or apply in team of 2-3 with at
+#   least one science teacher"). All five sessions have already occurred
+#   relative to this verification date (2026-09-02) -- `wrote 0` is the
+#   existing currency filter correctly excluding five already-past
+#   records, matching `doe-science-bowl-sd.toml`'s identical accepted
+#   precedent, not a broken extraction. The page itself confirms the
+#   2026 application period is closed and 2027 dates open "in early
+#   February" -- next cycle's dates will be picked up automatically by
+#   the existing weekly cron. Registered enabled on this basis. No
+#   instruction-shaped content found on the fetched page.
+
+org_name = "San Diego Zoo Wildlife Alliance (Teacher Workshops in Conservation Science)"
+adapter_type = "program_page_multi"
+enabled = true
+
+[config]
+url = "https://science.sandiegozoo.org/teacherworkshops"
+program_kind = "program"
+opportunity_type = "Professional Development / Conferences"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 33 part 1 (educator-PD program pages); sprint 030 ticket 005, live-verified via real dry-run (2026-09-02)"

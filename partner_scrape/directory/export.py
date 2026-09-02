@@ -1,5 +1,5 @@
 """`export_directory()`: the Directory pipeline's `places.json`/
-`clubs.json` publish entry point.
+`clubs.json`/`offerings.json` publish entry point.
 
 Publishes already-acquired `Place` records
 (`directory.sources.static_roster`, ticket 018-007) as `places.json` --
@@ -8,13 +8,18 @@ an independent data contract alongside `export/writer.py`'s
 018-008 (Clubs) extends the same function with an optional `clubs`
 argument that, when given, additionally publishes already-acquired
 `Club` records (`directory.sources.hack_club_static_roster`) as a
-*second*, independent data contract, `clubs.json`. This module does not
-re-derive or re-map any field for either record type -- like
-`teams/export.py`, its job is sort, serialize, write; there is no
-current/upcoming filter (both Places and Clubs are undated) and no
-slug-uniqueness pass (`place_id`/`club_id` are already unique by
-construction -- see `directory/DESIGN.md`'s Notes and
-`directory/model.py`'s docstrings).
+*second*, independent data contract, `clubs.json`. Sprint 030 ticket
+001 (Offerings) extends the same function again with an optional
+`offerings` argument that, when given, additionally publishes
+already-acquired `Offering` records
+(`directory.sources.offering_static_roster`) as a *third*, independent
+data contract, `offerings.json`. This module does not re-derive or
+re-map any field for any record type -- like `teams/export.py`, its job
+is sort, serialize, write; there is no current/upcoming filter (Places,
+Clubs, and Offerings are all undated) and no slug-uniqueness pass
+(`place_id`/`club_id`/`offering_id` are already unique by construction
+-- see `directory/DESIGN.md`'s Notes and `directory/model.py`'s
+docstrings).
 
 Sprint 017 first gave both files a sibling `stem-ecosystem` checkout
 write target (`{site_dir}/src/data/` and `{site_dir}/public/data/`),
@@ -98,6 +103,41 @@ acquired anything, e.g. under `--source places-sd`) *does* write a
 and found nothing this time" result, distinct from "the clubs pipeline
 was never asked to run" (`clubs=None`).
 
+## The `offerings.json` data contract (sprint 030 ticket 001)
+
+```json
+{
+  "meta": {
+    "generated": "2026-09-02T04:13:41Z",
+    "total": 13,
+    "by_offering_type": {"volunteer": 6, "free_program": 7}
+  },
+  "offerings": [ {"offering_id": "fleet-science-center-volunteer", ...}, ... ]
+}
+```
+
+Same self-describing-`meta`-travels-inside-the-file shape as
+`places.json`/`clubs.json`, deliberately its own independent document
+rather than nested inside either -- an `offerings` run's freshness/
+count must never be confused with the places or clubs export's own,
+the identical reasoning `places.json`'s own docstring section above
+gives for not sharing `teams.json`'s `meta`. Unlike `places.json`'s/
+`clubs.json`'s `by_location_precision` breakdown, there is no
+`by_location_precision` here -- `Offering` carries no location fields
+at all (see `directory/model.py`'s `Offering` docstring).
+
+**`offerings` defaults to `None`, meaning "do not touch
+`offerings.json` at all"** -- the identical contract `clubs` already
+established, extended to a third file. Every pre-sprint-030 call site/
+test that calls `export_directory(places)` (or
+`export_directory(places, clubs=...)`) with no `offerings` argument is
+unchanged: no `offerings.json` is written. Passing `offerings=[]` (a
+real, empty list -- what `directory.pipeline.run_directory()` passes
+when no `Offering` source acquired anything) *does* write an
+`offerings.json` with `"total": 0`, the same "ran and found nothing"
+vs. "never asked to run" distinction `clubs=[]` vs. `clubs=None`
+already draws.
+
 ## Two hard invariants
 
 This module **never** writes or touches `opportunities.json`,
@@ -106,7 +146,8 @@ and `teams/export.py`'s exclusive outputs. Both invariants are covered
 by a dedicated regression test (`tests/directory/test_export.py`)
 asserting those three files are byte-identical before and after a
 `directory` run, matching `tests/teams/test_export.py`'s own
-`TestHardInvariants` precedent.
+`TestHardInvariants` precedent -- extended by sprint 030 ticket 001 to
+also assert `offerings.json` is untouched when `offerings=None`.
 
 A missing or unwritable `own_data_dir` fails loudly, matching
 `export_teams`'s and `export_opportunities`'s contract exactly -- "fail
@@ -115,13 +156,16 @@ loudly, do not silently skip the export." This is now each file's
 `stem-ecosystem`-checkout writes this section used to also describe --
 see the module docstring's own history of that removal above); the
 `places.json` write is attempted, and must fully succeed, before the
-`clubs.json` write (when `clubs is not None`) begins -- a `clubs.json`
-failure never leaves `places.json` half written, and a `places.json`
-write failure raises before `clubs.json` is ever touched, the same
-places-before-clubs ordering principle as before, now expressed over
-one target instead of three. `own_data_dir` is created automatically
-(`Path.mkdir(parents=True, exist_ok=True)`) if missing, matching
-`teams/export.py`'s identical "not guaranteed to exist yet" rationale.
+`clubs.json` write (when `clubs is not None`) begins, and the
+`clubs.json` write (when attempted) completes before the
+`offerings.json` write (when `offerings is not None`) begins -- a
+later file's failure never leaves an earlier one half written, and an
+earlier file's write failure raises before any later file is ever
+touched, the same "places before clubs" ordering principle as before,
+now extended to "places before clubs before offerings." `own_data_dir`
+is created automatically (`Path.mkdir(parents=True, exist_ok=True)`) if
+missing, matching `teams/export.py`'s identical "not guaranteed to
+exist yet" rationale.
 """
 
 from __future__ import annotations
@@ -133,7 +177,7 @@ from pathlib import Path
 from typing import Any, Iterable
 
 from partner_scrape.config import get_own_data_dir
-from partner_scrape.directory.model import Club, Place
+from partner_scrape.directory.model import Club, Offering, Place
 
 #: The exact field set written to `places.json`, minus `sources` --
 #: `Place.sources` is this subsystem's own cross-source-acquisition
@@ -151,6 +195,14 @@ PLACES_SCHEMA_FIELDS: tuple[str, ...] = tuple(
 #: instead of `Place`. Ticket 018-008's own addition.
 CLUBS_SCHEMA_FIELDS: tuple[str, ...] = tuple(
     f.name for f in fields(Club) if f.name != "sources"
+)
+
+#: The exact field set written to `offerings.json`, minus `sources` --
+#: same rationale and derivation as `PLACES_SCHEMA_FIELDS`/
+#: `CLUBS_SCHEMA_FIELDS` above, for `Offering` instead of `Place`/
+#: `Club`. Sprint 030 ticket 001's own addition.
+OFFERINGS_SCHEMA_FIELDS: tuple[str, ...] = tuple(
+    f.name for f in fields(Offering) if f.name != "sources"
 )
 
 
@@ -176,6 +228,14 @@ def club_to_json_dict(club: Club) -> dict[str, Any]:
     separate: correct, unambiguous typing over deduplicating a
     one-line function body."""
     return {name: getattr(club, name) for name in CLUBS_SCHEMA_FIELDS}
+
+
+def offering_to_json_dict(offering: Offering) -> dict[str, Any]:
+    """Project `offering` onto exactly `OFFERINGS_SCHEMA_FIELDS`.
+    Parallel to `to_json_dict()`/`club_to_json_dict()` above, same
+    "kept separate for correct, unambiguous typing" rationale. Sprint
+    030 ticket 001's own addition."""
+    return {name: getattr(offering, name) for name in OFFERINGS_SCHEMA_FIELDS}
 
 
 def _build_meta(places: list[Place]) -> dict[str, Any]:
@@ -224,10 +284,31 @@ def _build_club_meta(clubs: list[Club]) -> dict[str, Any]:
     }
 
 
+def _build_offering_meta(offerings: list[Offering]) -> dict[str, Any]:
+    """Coverage/data-quality envelope for `offerings`. Parallel to
+    `_build_meta()`/`_build_club_meta()` above, `by_offering_type` in
+    place of `by_category`/`by_club_type` -- same "partial result
+    ships, the gap is visible in the artifact itself" convention, same
+    plain-`dict`-of-first-appearance construction. No
+    `by_location_precision` breakdown -- `Offering` carries no location
+    fields at all (see `directory/model.py`'s `Offering` docstring).
+    Sprint 030 ticket 001's own addition."""
+    by_offering_type: dict[str, int] = {}
+    for offering in offerings:
+        by_offering_type[offering.offering_type] = by_offering_type.get(offering.offering_type, 0) + 1
+
+    return {
+        "generated": _now_iso(),
+        "total": len(offerings),
+        "by_offering_type": by_offering_type,
+    }
+
+
 def export_directory(
     places: Iterable[Place],
     *,
     clubs: Iterable[Club] | None = None,
+    offerings: Iterable[Offering] | None = None,
     dry_run: bool = False,
     own_data_dir: str | Path | None = None,
 ) -> dict[str, Any]:
@@ -237,9 +318,13 @@ def export_directory(
     `stem-ecosystem`-checkout writes this function used to also make).
     When `clubs` is given (ticket 018-008), also serializes and writes
     `clubs.json` the same way, from its own independent
-    `{"meta": ..., "clubs": [...]}` document -- see this module's own
-    docstring for the full `clubs.json` data contract and why `clubs`
-    defaults to `None` rather than an empty list.
+    `{"meta": ..., "clubs": [...]}` document. When `offerings` is given
+    (sprint 030 ticket 001), also serializes and writes `offerings.json`
+    the same way again, from its own independent
+    `{"meta": ..., "offerings": [...]}` document -- see this module's
+    own docstring for the full `offerings.json` data contract and why
+    `offerings`, like `clubs`, defaults to `None` rather than an empty
+    list.
 
     Args:
         places: acquired `Place` records
@@ -256,9 +341,18 @@ def export_directory(
             An explicit (possibly empty) list writes `clubs.json`. Same
             "no filter, no slug-uniqueness pass needed" properties as
             `places` above.
+        offerings: acquired `Offering` records
+            (`directory.pipeline.run_directory()`'s typical
+            caller-supplied input). `None` (the default) means "do not
+            touch `offerings.json` at all" -- every pre-sprint-030 call
+            site/test omits this argument and sees no behavior change.
+            An explicit (possibly empty) list writes `offerings.json`.
+            Same "no filter, no slug-uniqueness pass needed" properties
+            as `places`/`clubs` above (`offering_id` is already unique
+            by construction).
         dry_run: when `True`, compute and return the would-be-written
             payload without touching disk (`own_data_dir` is not
-            written, for either file).
+            written, for any of the three files).
         own_data_dir: path to partner-scrape's own pipeline-output
             directory. Defaults to `Config.get_own_data_dir()`
             (`<repo_root>/data`) when `None`. This directory is created
@@ -270,15 +364,20 @@ def export_directory(
         places.json content that was (or, for `dry_run`, would have
         been) written -- unchanged from ticket 007's own contract. When
         `clubs is not None`, also carries `payload["clubs_meta"]`/
-        `payload["clubs"]` for the clubs.json content.
+        `payload["clubs"]` for the clubs.json content. When `offerings
+        is not None`, also carries `payload["offerings_meta"]`/
+        `payload["offerings"]` for the offerings.json content.
 
     Raises:
-        RuntimeError: `own_data_dir` is not writable, for either
-            `places.json` or (when `clubs is not None`) `clubs.json`.
-            Never silently skips a write. `places.json`'s write
-            completes before any `clubs.json` write is attempted --
-            matches `export_teams`'s own `own_data_dir`-write contract,
-            extended here to "places.json before clubs.json".
+        RuntimeError: `own_data_dir` is not writable, for `places.json`,
+            (when `clubs is not None`) `clubs.json`, or (when
+            `offerings is not None`) `offerings.json`. Never silently
+            skips a write. `places.json`'s write completes before any
+            `clubs.json` write is attempted, and `clubs.json`'s write
+            (when attempted) completes before any `offerings.json`
+            write is attempted -- matches `export_teams`'s own
+            `own_data_dir`-write contract, extended here to
+            "places.json before clubs.json before offerings.json".
     """
     resolved_own_data_dir = Path(own_data_dir) if own_data_dir is not None else get_own_data_dir()
 
@@ -299,12 +398,33 @@ def export_directory(
         payload["clubs_meta"] = club_payload["meta"]
         payload["clubs"] = club_payload["clubs"]
 
+    offering_payload: dict[str, Any] | None = None
+    if offerings is not None:
+        # Sorted by (offering_type, org_name, title): the closest
+        # analog to places.json's/clubs.json's own (type, name)
+        # convention available on this model -- Offering has no single
+        # "name" field (it splits org_name/title, see directory/
+        # model.py's Offering docstring), so org_name (the operating
+        # org, the more Place.name/Club.name-like half) is the primary
+        # sort key with title as a stable tiebreaker for the (rare)
+        # case of two offerings from the same org.
+        offering_list = sorted(
+            list(offerings), key=lambda o: (o.offering_type, o.org_name, o.title)
+        )
+        offering_payload = {
+            "meta": _build_offering_meta(offering_list),
+            "offerings": [offering_to_json_dict(o) for o in offering_list],
+        }
+        payload["offerings_meta"] = offering_payload["meta"]
+        payload["offerings"] = offering_payload["offerings"]
+
     if dry_run:
         return payload
 
     # Serialized from a places-only view, not `payload` itself --
-    # `payload` may also carry `clubs_meta`/`clubs` (added above when
-    # `clubs is not None`), which must never leak into `places.json`.
+    # `payload` may also carry `clubs_meta`/`clubs`/`offerings_meta`/
+    # `offerings` (added above when given), which must never leak into
+    # `places.json`.
     places_payload = {"meta": payload["meta"], "places": payload["places"]}
     serialized = json.dumps(places_payload, indent=1, ensure_ascii=False)
 
@@ -338,6 +458,30 @@ def export_directory(
         except OSError as exc:
             raise RuntimeError(
                 f"Cannot write clubs export to {resolved_own_data_dir}: {exc}. "
+                "Check that own_data_dir is writable."
+            ) from exc
+
+    if offering_payload is not None:
+        serialized_offerings = json.dumps(offering_payload, indent=1, ensure_ascii=False)
+
+        # Same sole write target as places.json/clubs.json above,
+        # reached only once places.json's own write has succeeded --
+        # "places.json before clubs.json before offerings.json"
+        # ordering. Deliberately not additionally gated on
+        # `club_payload is not None` -- offerings.json's own write must
+        # succeed or fail independently of whether clubs was even
+        # given, matching clubs=None/offerings=[...] being a legitimate
+        # combination (run_directory() always passes a real, if
+        # possibly empty, `clubs` list, but a caller driving
+        # export_directory() directly is free to pass offerings without
+        # clubs).
+        own_offerings_path = resolved_own_data_dir / "offerings.json"
+        try:
+            resolved_own_data_dir.mkdir(parents=True, exist_ok=True)
+            own_offerings_path.write_text(serialized_offerings, encoding="utf-8")
+        except OSError as exc:
+            raise RuntimeError(
+                f"Cannot write offerings export to {resolved_own_data_dir}: {exc}. "
                 "Check that own_data_dir is writable."
             ) from exc
 

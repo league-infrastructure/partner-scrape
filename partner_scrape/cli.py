@@ -306,16 +306,20 @@ def _add_teams_subcommand(subparsers: argparse._SubParsersAction) -> None:
 def _add_directory_subcommand(subparsers: argparse._SubParsersAction) -> None:
     parser = subparsers.add_parser(
         "directory",
-        help="Publish the curated Places and Clubs directories as places.json and clubs.json.",
+        help=(
+            "Publish the curated Places, Clubs, and Offerings directories as "
+            "places.json, clubs.json, and offerings.json."
+        ),
         description=(
             "Run the Directory pipeline: load this subsystem's own "
             "Registry (partner_scrape/directory/registry/, disjoint from "
             "the Opportunity Source Registry and from teams/registry/), "
-            "acquire each active place/club source, and publish "
-            "places.json and clubs.json into partner-scrape's own data "
-            "directory. Never runs the normal scrape/export or the teams "
-            "pipeline -- opportunities.json, scrape-meta.json, and "
-            "teams.json are never touched by this command."
+            "acquire each active place/club/offering source, and publish "
+            "places.json, clubs.json, and offerings.json into "
+            "partner-scrape's own data directory. Never runs the normal "
+            "scrape/export or the teams pipeline -- opportunities.json, "
+            "scrape-meta.json, and teams.json are never touched by this "
+            "command."
         ),
     )
     parser.add_argument(
@@ -330,9 +334,9 @@ def _add_directory_subcommand(subparsers: argparse._SubParsersAction) -> None:
         metavar="SOURCE",
         help=(
             "Only run this single acquisition source, by adapter_type "
-            "(e.g. 'static_roster' or 'hack_club_static_roster') -- not "
-            "a Registry file's stem. Omitted, every active place/club "
-            "source runs."
+            "(e.g. 'static_roster', 'hack_club_static_roster', or "
+            "'offering_static_roster') -- not a Registry file's stem. "
+            "Omitted, every active place/club/offering source runs."
         ),
     )
     parser.add_argument(
@@ -344,8 +348,8 @@ def _add_directory_subcommand(subparsers: argparse._SubParsersAction) -> None:
             "for the related-partner-reference join-integrity check only "
             "(default: ../stem-ecosystem, or $SITE_DIR) -- same default "
             "as the `run` command's --site-dir. Read-only: places.json/ "
-            "clubs.json are always written to partner-scrape's own data/ "
-            "directory, never here."
+            "clubs.json/offerings.json are always written to "
+            "partner-scrape's own data/ directory, never here."
         ),
     )
     parser.add_argument(
@@ -378,20 +382,23 @@ def _run_directory(args: argparse.Namespace) -> int:
         dry_run=args.dry_run,
     )
     places = payload["places"]
-    # `.get(..., [])`, not `payload["clubs"]`: the real `run_directory()`
-    # always populates "clubs" (a list, possibly empty), but existing
-    # ticket-007 wiring tests monkeypatch `cli.run_directory` with a
-    # places-only fake payload -- this stays backward compatible with
-    # those doubles rather than requiring every one of them to grow a
-    # "clubs" key it has no reason to know about.
+    # `.get(..., [])`, not `payload["clubs"]`/`payload["offerings"]`:
+    # the real `run_directory()` always populates "clubs"/"offerings"
+    # (a list, possibly empty), but existing ticket-007 wiring tests
+    # monkeypatch `cli.run_directory` with a places-only fake payload --
+    # this stays backward compatible with those doubles rather than
+    # requiring every one of them to grow a "clubs"/"offerings" key it
+    # has no reason to know about.
     clubs = payload.get("clubs", [])
+    offerings = payload.get("offerings", [])
 
     clubs_noun = "club" if len(clubs) == 1 else "clubs"
+    offerings_noun = "offering" if len(offerings) == 1 else "offerings"
     noun = "place" if len(places) == 1 else "places"
     suffix = " (dry run -- nothing written)" if args.dry_run else ""
     print(
-        f"partner-scrape directory: wrote {len(places)} {noun} and "
-        f"{len(clubs)} {clubs_noun}{suffix}."
+        f"partner-scrape directory: wrote {len(places)} {noun}, "
+        f"{len(clubs)} {clubs_noun}, and {len(offerings)} {offerings_noun}{suffix}."
     )
     return 0
 

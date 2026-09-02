@@ -533,12 +533,14 @@ class _RecordingLLMClient:
 
 
 class TestExtractionProfileSelection:
-    """AC (029-006): ``_extract_one_program`` selects ``profile=
-    "competition"`` from ``source.config.get("opportunity_type") ==
-    "Competitions"`` -- no new registry ``config`` key -- and threads a
-    non-``None`` ``reference_date`` through on every call. Every other
-    ``opportunity_type`` (including none at all) keeps the default
-    ``profile="program"``, matching pre-ticket behavior exactly.
+    """AC (029-006; extended 030-004): ``_extract_one_program`` selects
+    ``profile="competition"`` from
+    ``source.config.get("opportunity_type") == "Competitions"``,
+    ``profile="pd"`` from ``opportunity_type == "Professional
+    Development / Conferences"`` -- no new registry ``config`` key -- and
+    threads a non-``None`` ``reference_date`` through on every call.
+    Every other ``opportunity_type`` (including none at all) keeps the
+    default ``profile="program"``, matching pre-ticket behavior exactly.
     """
 
     def test_competitions_opportunity_type_selects_the_competition_profile(self, tmp_path):
@@ -550,6 +552,21 @@ class TestExtractionProfileSelection:
         list(adapter.extract(raw, source))
 
         assert llm_client.profile_calls == ["competition"]
+        assert llm_client.reference_date_calls[0] is not None
+
+    def test_pd_opportunity_type_selects_the_pd_profile(self, tmp_path):
+        llm_client = _RecordingLLMClient(
+            result=_extraction_result(opportunity_type="Professional Development / Conferences")
+        )
+        adapter = ProgramPageAdapter(llm_client=llm_client, cache=ProgramExtractionCache(tmp_path))
+        source = _source(
+            program_kind="program", opportunity_type="Professional Development / Conferences"
+        )
+        raw = RawResponse(ref=EventRef(url=PAGE_URL), status=200, body=_page_body())
+
+        list(adapter.extract(raw, source))
+
+        assert llm_client.profile_calls == ["pd"]
         assert llm_client.reference_date_calls[0] is not None
 
     def test_non_competitions_opportunity_type_keeps_the_default_program_profile(self, tmp_path):
@@ -571,6 +588,37 @@ class TestExtractionProfileSelection:
         list(adapter.extract(raw, source))
 
         assert llm_client.profile_calls == ["program"]
+
+    def test_pre_existing_program_and_competition_source_configs_resolve_unchanged(self, tmp_path):
+        """AC (030-004): regression assertion, not just eyeballing the
+        diff -- every pre-existing ``"program"``-/``"competition"``-
+        profile source config still resolves to the exact same profile
+        it did before this ticket's ``"pd"`` branch was added. Calls
+        ``_resolve_extraction_profile`` directly against a representative
+        sample of source configs spanning "no override", every
+        non-competition/non-pd override value, and the competition
+        override -- the whole space this ticket's new ``elif`` branch
+        could have disturbed.
+        """
+        from partner_scrape.adapters.program_page import _resolve_extraction_profile
+
+        no_override = _source(program_kind="internship")
+        assert _resolve_extraction_profile(no_override) == "program"
+
+        for opportunity_type in [
+            "Out-of-school Programs",
+            "Online",
+            "School Programs",
+            "Career Connections",
+            "Volunteering",
+            "Funding Opportunities",
+            "Camps",
+        ]:
+            source = _source(program_kind="program", opportunity_type=opportunity_type)
+            assert _resolve_extraction_profile(source) == "program"
+
+        competition_source = _source(program_kind="program", opportunity_type="Competitions")
+        assert _resolve_extraction_profile(competition_source) == "competition"
 
 
 class TestCompetitionRegistrationDeadlineSeparation:

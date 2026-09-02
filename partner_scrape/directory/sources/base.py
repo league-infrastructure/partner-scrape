@@ -1,26 +1,28 @@
-"""The pluggable ``PlaceSource`` and ``ClubSource`` contracts --
-parallel to, and structurally disjoint from,
+"""The pluggable ``PlaceSource``, ``ClubSource``, and ``OfferingSource``
+contracts -- parallel to, and structurally disjoint from,
 ``teams.sources.base.TeamSource`` and ``adapters.base.Adapter``.
 
-``sources/static_roster.py`` (ticket 018-007) and
-``sources/hack_club_static_roster.py`` (ticket 018-008) each implement
+``sources/static_roster.py`` (ticket 018-007),
+``sources/hack_club_static_roster.py`` (ticket 018-008), and
+``sources/offering_static_roster.py`` (sprint 030) each implement
 ``discover -> fetch -> extract``, the same three-method shape
 ``TeamSource``/``Adapter`` use -- reusing that mental model is
 deliberate (see ``teams/sources/base.py``'s own docstring, which this
-module's rationale mirrors exactly for ``Place``/``Club`` in place of
-``Team``).
+module's rationale mirrors exactly for ``Place``/``Club``/``Offering``
+in place of ``Team``).
 
-**``PlaceSource`` and ``ClubSource`` are two separate ``Protocol``s,
-not one shared source contract.** ``Place.extract()`` and
-``Club.extract()`` return different record types, so a single
-``Protocol`` typed generically over "either" would either lose real
+**``PlaceSource``, ``ClubSource``, and ``OfferingSource`` are three
+separate ``Protocol``s, not one shared source contract.**
+``Place.extract()``, ``Club.extract()``, and ``Offering.extract()``
+return different record types, so a single ``Protocol`` typed
+generically over "any of the three" would either lose real
 type-checking or need a level of generic machinery this module's small
-scope does not justify -- kept as two clearly-typed, near-identical
+scope does not justify -- kept as three clearly-typed, near-identical
 protocols instead, the same "field-name duplication accepted, no
 shared base" tradeoff sprint 018's Design Rationale makes for the
-``Place``/``Club`` record types themselves (``directory/model.py``'s
-own docstring), extended here to the two record-specific source
-contracts for the identical reason.
+``Place``/``Club``/``Offering`` record types themselves
+(``directory/model.py``'s own docstring), extended here to the
+record-specific source contracts for the identical reason.
 
 What is **not** reused is ``adapters.base`` or ``teams.sources.base``
 themselves. This module (and every module in ``directory/sources/``)
@@ -42,7 +44,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Iterable, Protocol
 
-from partner_scrape.directory.model import Club, Place
+from partner_scrape.directory.model import Club, Offering, Place
 from partner_scrape.fetch import Fetcher
 from partner_scrape.registry.schema import SourceConfig
 
@@ -193,3 +195,79 @@ def run_club_source(source: SourceConfig, club_source: ClubSource, fetcher: Fetc
         raw = club_source.fetch(ref, fetcher)
         clubs.extend(club_source.extract(raw, source))
     return clubs
+
+
+@dataclass
+class OfferingRef:
+    """A reference to one fetchable unit of source content, for an
+    ``OfferingSource``.
+
+    Parallel to :class:`PlaceRef`/:class:`ClubRef` above. This ticket's
+    ``sources/offering_static_roster.py`` returns exactly one
+    ``OfferingRef`` (the committed roster file) -- sprint 030's own
+    addition.
+    """
+
+    url: str
+    context: dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class RawOfferingResponse:
+    """One fetched, not-yet-interpreted unit of raw source content, for
+    an ``OfferingSource``.
+
+    Parallel to :class:`RawPlaceResponse`/:class:`RawClubResponse`
+    above. Carries the ``ref`` it came from so ``extract()`` can log
+    which request a malformed body belonged to.
+    """
+
+    ref: OfferingRef
+    status: int
+    body: str
+
+
+class OfferingSource(Protocol):
+    """Injectable per-source strategy for ``Offering`` acquisition:
+    discover -> fetch -> extract. See :class:`PlaceSource`/
+    :class:`ClubSource` above and this module's own docstring for why
+    this is a third, separately typed ``Protocol`` rather than a shared
+    one -- sprint 030's own addition, structurally identical to the
+    existing two.
+    """
+
+    def discover(self, source: SourceConfig, fetcher: Fetcher) -> Iterable[OfferingRef]:
+        """Resolve ``source`` into the set of fetchable ``OfferingRef``s."""
+        ...
+
+    def fetch(self, ref: OfferingRef, fetcher: Fetcher) -> RawOfferingResponse:
+        """Retrieve one ``OfferingRef``'s raw content via the injected ``fetcher``."""
+        ...
+
+    def extract(self, raw: RawOfferingResponse, source: SourceConfig) -> Iterable[Offering]:
+        """Map one raw response into zero or more ``Offering`` records.
+
+        Implementations must isolate per-record failures: one malformed
+        record in an otherwise good response is logged and skipped, not
+        raised -- matching every other ``*Source.extract()``'s
+        convention in this codebase.
+        """
+        ...
+
+
+def run_offering_source(
+    source: SourceConfig, offering_source: OfferingSource, fetcher: Fetcher
+) -> list[Offering]:
+    """Chain discover -> fetch -> extract for one ``OfferingSource``.
+
+    Parallel to ``run()``/``run_club_source()`` above, but for
+    ``Offering`` instead of ``Place``/``Club`` -- same "kept separate
+    for correct, unambiguous typing" rationale.
+    """
+    refs = list(offering_source.discover(source, fetcher))
+
+    offerings: list[Offering] = []
+    for ref in refs:
+        raw = offering_source.fetch(ref, fetcher)
+        offerings.extend(offering_source.extract(raw, source))
+    return offerings

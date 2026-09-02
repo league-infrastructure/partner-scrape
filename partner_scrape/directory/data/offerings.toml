@@ -1,0 +1,195 @@
+# Curated standing "here's what this org offers and how to get it"
+# records -- serving both issue 14 Strategy B (volunteer org profiles)
+# and issue 33 part 2 (free/Title I school-program records) through one
+# `offering_type`-discriminated shape (see `directory/model.py`'s
+# `Offering` docstring and this sprint's `directory/DESIGN.md` Revision
+# for the full rationale). Never a live scrape (issue 35's original
+# instruction, extended to Offerings by sprint 030).
+#
+# `related_partner_id` is a deliberate, hand-verified join against
+# `data/partners.json`'s own `id` field -- never auto-derived, reusing
+# `places.toml`'s existing convention exactly (the design docs' own
+# `site/src/data/partners.json` path predates sprint 019's `site/`
+# removal -- see `tests/directory/test_dataset_validity.py`'s own note
+# on this). Omitted entirely where no confident partner-roster match
+# exists.
+#
+# Six volunteer org profiles below (ticket 002, issue 14 Strategy B),
+# live-verified 2026-09-02 against each org's own current volunteer
+# page. Age minimums: Fleet 18, SDZWA 18, Birch 16 -- matching issue
+# 14's 2026-08-30 research verbatim. The Nat, I Love A Clean San Diego
+# (ILACSD), and San Diego River Park Foundation each publish no general
+# numeric age minimum as of this verification -- age_minimum left
+# unset (None) rather than guessed, per this ticket's own instruction.
+
+[[offering]]
+offering_id = "fleet-science-center-volunteer"
+org_name = "Fleet Science Center"
+title = "Volunteer Program"
+offering_type = "volunteer"
+description = "Fleet volunteers serve as Gallery Ambassadors facilitating science demonstrations and greeting visitors, support Community Engagement events (Family Science Night, Educator Open House, Junior Science Club), help with Special Events (IMAX premieres, the annual gala), assist at monthly Accessibility Mornings (sensory-friendly hours, third Saturday), and support seasonal STEM camps."
+eligibility = "Must be 18 years of age or older. No short-term or community-service-only placements are offered."
+age_minimum = 18
+how_to_book = "Apply online through the Fleet's VolunteerMatters portal (fleetscience.volunteermatters.org). Volunteers must commit to a minimum of six months and complete quarterly onboarding (orientation and training). Questions: 619-238-1233 x835 or volunteerservices@rhfleet.org."
+link_url = "https://www.fleetscience.org/volunteer"
+last_verified = "2026-09-02"
+status = "active"
+related_partner_id = 121
+
+[[offering]]
+offering_id = "sdzwa-volunteer"
+org_name = "San Diego Zoo Wildlife Alliance"
+title = "Conservation & Information Ambassador Volunteer Program"
+offering_type = "volunteer"
+description = "Volunteers serve as Conservation Ambassadors and Information Ambassadors at the San Diego Zoo and Safari Park -- greeting guests, helping with visit planning, and inspiring conservation support. No animal handling or direct animal contact is involved in any volunteer role."
+eligibility = "Must be 18 years or older; the general volunteer program does not currently accept teens under 18 (interested youth can look into the Education department's separate Youth Programs). Expects a minimum annual commitment of roughly 60-100 hours."
+age_minimum = 18
+how_to_book = "Apply and manage scheduling through Volgistics (volgistics.com/vicnet/14407). As of this record's verification date, the Zoo's own volunteer page states recruitment is temporarily closed (\"check back late 2025\") -- check the page directly for the current application window before applying."
+link_url = "https://sandiegozoowildlifealliance.org/volunteer"
+last_verified = "2026-09-02"
+status = "active"
+related_partner_id = 241
+
+[[offering]]
+offering_id = "birch-aquarium-volunteer"
+org_name = "Birch Aquarium at Scripps Institution of Oceanography"
+title = "Volunteer Program"
+offering_type = "volunteer"
+description = "Volunteers guide guests through exhibits and facilitate educational encounters as Tide Pool Interpreters, Greeters, Aquarist Assistants (supporting husbandry tasks), or School Programs Assistants (assisting with classroom curriculum)."
+eligibility = "Minimum age to volunteer is 16 years old. Requires a minimum six-month commitment with one 4-hour shift weekly, plus two reference letters at application; short-term or summer-only placements are not available."
+age_minimum = 16
+how_to_book = "Apply online through Birch Aquarium's Volgistics-based volunteer application. New-volunteer onboarding cycles run four times a year, each starting with a virtual information session -- check the page for the next intake date."
+link_url = "https://aquarium.ucsd.edu/about/volunteer"
+last_verified = "2026-09-02"
+status = "active"
+related_partner_id = 238
+
+[[offering]]
+offering_id = "sdnhm-volunteer"
+org_name = "San Diego Natural History Museum (The Nat)"
+title = "Volunteer Program"
+offering_type = "volunteer"
+description = "The Nat's 500+ volunteers serve as Canyoneers (leading hikes), Docents (school tours and outreach), NATuralists (museum-floor activities), and Whalers (whale-watching interpretation), plus occasional behind-the-scenes science/administrative roles. High school students can volunteer specifically through the Nat's summer camp volunteer positions."
+eligibility = "General roles: no minimum age is published on the Nat's own volunteer page. A high-school-specific opening exists: summer camp volunteer positions for current high school students."
+how_to_book = "Submit the Volunteer Application linked from the Nat's volunteer page; current volunteers manage scheduling through Volgistics (volgistics.com/vicnet). Questions: 619-232-3821 or 877-946-7797."
+link_url = "https://www.sdnhm.org/join-and-give/volunteer/"
+last_verified = "2026-09-02"
+status = "active"
+related_partner_id = 24
+
+[[offering]]
+offering_id = "ilacsd-volunteer"
+org_name = "I Love A Clean San Diego"
+title = "Volunteer Program"
+offering_type = "volunteer"
+description = "ILACSD runs community cleanups (creek/beach/canyon), an Adopt-A-Beach-or-Canyon self-led program (completing 3 cleanups in a year qualifies a group for a named adoption sign), and cigarette-litter-reduction infrastructure work across San Diego County."
+eligibility = "\"Volunteers of all ages are invited to participate\" in cleanups, per the organization's own volunteer page; no numeric minimum age is published."
+how_to_book = "Sign in through ILACSD's Samaritan-powered Volunteer Portal linked from the org's volunteer page, or browse current cleanup and group opportunities there directly. Office: 619-291-0103."
+link_url = "https://www.cleansd.org/volunteer/"
+last_verified = "2026-09-02"
+status = "active"
+related_partner_id = 361
+
+[[offering]]
+offering_id = "san-diego-river-park-foundation-volunteer"
+org_name = "San Diego River Park Foundation"
+title = "Volunteer Program"
+offering_type = "volunteer"
+description = "Volunteers support river clean-ups (including kayak-based cleanups), native-plant garden maintenance, water-quality monitoring, habitat restoration and invasive-plant removal, trail maintenance, wildlife camera network upkeep, and event/administrative support."
+eligibility = "No numeric minimum age is published on the Foundation's own volunteer page."
+how_to_book = "Sign up through the Foundation's Galaxy Digital events & activities portal (sandiegoriver.galaxydigital.com): find an opportunity that interests you, then click Sign Up. Alternatively, call 619-297-7380 or email volunteer@sandiegoriver.org."
+link_url = "https://sandiegoriver.org/get-involved/volunteer/"
+last_verified = "2026-09-02"
+status = "active"
+related_partner_id = 323
+
+[[offering]]
+offering_id = "sdzwa-free-field-trips"
+org_name = "San Diego Zoo Wildlife Alliance"
+title = "FREE Field Trips for San Diego County Schools (Grant-Funded)"
+offering_type = "free_program"
+description = "Grant-funded, no-cost field trips to the San Diego Zoo or Safari Park for San Diego County school groups, alongside the Zoo's standard (paid) school-group visit program."
+eligibility = "Grade-specific: Grade 1 -- Title I schools in San Diego County only; Grade 2 -- all San Diego County classes; Grades 3 and 4 -- Title I schools in San Diego County only; Grade 5 -- select districts or Title I schools in San Diego County. The Zoo's general school-group program (which these free trips are booked alongside) additionally requires the school be listed on the CA Department of Education Directory and located in San Diego County, with reservations required about one month in advance."
+how_to_book = "Registration for the 2026-27 school year opens mid-August at bookeo.com/sdzed-programs. As with the Zoo's general San Diego County school-group program, book well ahead -- the Zoo's own site states reservations for a school visit are required about one month (roughly 4 weeks) in advance. Questions: EducationZoo@sdzwa.org."
+link_url = "https://zoo.sandiegozoo.org/grant-funded-programs"
+last_verified = "2026-09-02"
+status = "active"
+related_partner_id = 241
+
+[[offering]]
+offering_id = "sdnhm-museum-access-fund"
+org_name = "San Diego Natural History Museum (The Nat)"
+title = "Museum Access Fund"
+offering_type = "free_program"
+description = "No-cost or low-cost access to the Nat's co-curricular science experiences -- workshops, tours, school-program visits, and teacher kits -- for qualified Title I schools, with limited transportation funding also available. Grown from serving 2,000 students a year at the fund's 1998 start to a current goal of 6,000 students a year."
+eligibility = "Qualified Title I schools in San Diego County."
+how_to_book = "Contact the Education Department directly for availability: 619.255.0349 or reservationcoordinator@sdnhm.org."
+link_url = "https://www.sdnhm.org/education/education-resources/museum-access-funds/"
+last_verified = "2026-09-02"
+status = "active"
+related_partner_id = 24
+
+[[offering]]
+offering_id = "living-coast-title-1-and-cvesd"
+org_name = "The Living Coast Discovery Center"
+title = "Title 1 Sponsorship + Chula Vista Elementary School District Partnership"
+offering_type = "free_program"
+description = "Two related supports: (1) sponsorship covering program fees (not transportation) for eligible K-12 Title I/qualified San Diego County school groups, funded by local organizations and foundations including the U.S. Fish & Wildlife Service and the Unified Port of San Diego; (2) a long-standing district-wide partnership bringing \"standards-based, hands-on science classes to all schools throughout\" Chula Vista Elementary School District, including transportation support."
+eligibility = "Sponsorship: K-12 classes from Title 1 or otherwise-qualified San Diego County schools (transportation costs not covered by the sponsorship itself). District partnership: any CVESD school."
+how_to_book = "Sponsorship: submit the online application for the 2026-27 school year, specifying on-site field trip or classroom outreach. CVESD teachers: use the district's dedicated Google Sites confirmation and requirements pages linked from the Living Coast's Educators hub. Contact: (619) 409-5900 or info@thelivingcoast.org."
+link_url = "https://www.thelivingcoast.org/educators/"
+last_verified = "2026-09-02"
+status = "active"
+related_partner_id = 46
+
+[[offering]]
+offering_id = "birch-aquarium-financial-aid"
+org_name = "Birch Aquarium at Scripps Institution of Oceanography"
+title = "School & Youth Group Financial Aid"
+offering_type = "free_program"
+description = "Scholarship support toward Discovery Labs, Self-Guided Visits, and Aquarium Express Outreach programs; the related Price Philanthropies program delivers Aquarium Express Outreach at no cost to eligible City Heights-area schools."
+eligibility = "Schools demonstrating financial need; Title I schools and schools with a high percentage of students eligible for Free/Reduced-Price Meals (FRPM) are prioritized."
+how_to_book = "Apply for aid before making a reservation -- funds are limited and applications must be submitted prior to the program date(s), never retroactively. A separate application is required per teacher and must be resubmitted each school year. The 2026-27 financial aid application is open now."
+link_url = "https://aquarium.ucsd.edu/learn/school-youth-group-programs/financial-aid-school-and-youth-groups"
+last_verified = "2026-09-02"
+status = "active"
+related_partner_id = 238
+
+[[offering]]
+offering_id = "fleet-science-center-school-programs"
+org_name = "Fleet Science Center"
+title = "Discounted Field Trips, Access Science Scholarships, Science to Go, and Family Science Nights"
+offering_type = "free_program"
+description = "Discounted school-group admission for on-site field trips (with Access Science Scholarships covering part of the cost for Title 1 public schools); Science to Go brings interactive workshops/assembly shows on-site to a school, library, or community center; Family Science Nights bring a themed 90-minute hands-on science event to a school for children, parents, and teachers together."
+eligibility = "Field trips: any San Diego County school (special discounted rate); Access Science Scholarships specifically for Title 1 public schools of San Diego County, partially or fully awarded up to an $800/school cap per August-July school year. Science to Go / Family Science Nights: any school or community venue able to host the outreach team."
+how_to_book = "Field trips: complete the Request Form; the Fleet's education team confirms booking (currently accepting 2026-27 school year requests). Science to Go: schedule at least two weeks in advance ($325 single/$500 double program for up to 25 students, plus a $6/student fee above 25 up to 34, plus mileage past 30 miles round-trip). Family Science Nights: schedule at least two weeks in advance ($738 flat, up to 300 participants, 90 minutes, mileage fee past 15 miles). Contact: education@rhfleet.org or 619-238-1233."
+link_url = "https://www.fleetscience.org/learn/school-programs/field-trips-fleet"
+last_verified = "2026-09-02"
+status = "active"
+related_partner_id = 121
+
+[[offering]]
+offering_id = "qualcomm-thinkabit-lab"
+org_name = "Qualcomm"
+title = "Thinkabit Lab"
+offering_type = "free_program"
+description = "Hands-on invention/engineering activities exploring STEM careers and Internet-of-Things engineering projects, delivered through school-hosted \"Hub\" (large, 3-5 days/week) or \"Spoke\" (single school/district, periodic sessions) sites. San Diego Unified School District sites: Lewis Middle School, Morse High School, and Taft Middle School. Sweetwater Union High School District site: Scripps Mesa STEAM Lab. Qualcomm's own original on-campus San Diego lab has closed and no longer hosts school visits directly."
+eligibility = "Students at the listed SDUSD/Sweetwater host-school sites; any teacher/adult may also use the free online Learning Center independently of a physical site."
+how_to_book = "Access at a listed host school runs through that school's own program. Any teacher can use the free online Learning Center (email required) for independent or classroom activities, or download the \"How to Get Started Guide.\" A school or organization interested in becoming a new Hub or Spoke site can inquire via ContactThinkabitLab@qualcomm.com."
+link_url = "https://thinkabitlab.com"
+last_verified = "2026-09-02"
+status = "active"
+related_partner_id = 156
+
+[[offering]]
+offering_id = "biocom-life-science-station-innov8ed"
+org_name = "Biocom Institute"
+title = "Life Science Station + Life Science Innov8Ed"
+offering_type = "free_program"
+description = "Life Science Station: in partnership with Chula Vista Elementary School District, combines in-class learning with a day-long field trip for every 4th grader in the district -- hands-on activities, career exploration, and engineering design challenges. Life Science Innov8Ed: hands-on science labs/lessons, career panels, company tours, and teacher professional development delivered directly to underserved and Title I schools across San Diego County (as of this record, reaching roughly 9,245 students across 56 schools and 88 teachers annually)."
+eligibility = "Life Science Station: every 4th-grade student in Chula Vista Elementary School District. Life Science Innov8Ed: underserved and Title I schools across San Diego County."
+how_to_book = "Educators can reach either program through Biocom's Generation STEAM \"Educator\" contact link on the programs page."
+link_url = "https://www.biocom.org/generation-steam/programs/"
+last_verified = "2026-09-02"
+status = "active"
+related_partner_id = 220

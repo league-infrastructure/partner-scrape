@@ -11,7 +11,7 @@ from pathlib import Path
 
 import pytest
 
-from partner_scrape.directory.model import Club, Place
+from partner_scrape.directory.model import Club, Offering, Place
 from partner_scrape.directory.pipeline import (
     DEFAULT_GEO_DATA_DIR,
     DEFAULT_PLACES_REGISTRY_DIR,
@@ -19,7 +19,7 @@ from partner_scrape.directory.pipeline import (
     _apply_geo_fallback,
     run_directory,
 )
-from partner_scrape.directory.sources.base import PlaceRef, RawPlaceResponse
+from partner_scrape.directory.sources.base import OfferingRef, PlaceRef, RawOfferingResponse, RawPlaceResponse
 from partner_scrape.fetch.fetcher import FetchResponse
 from partner_scrape.registry.validate_roster import RosterValidationError
 
@@ -84,12 +84,21 @@ class _NeverCalledFetcher:
 # straight out of the real places.toml text rather than hand-listed, so
 # this fixture can never drift from the data it stands in for -- and
 # never a duplicate committed copy of the real partners.json itself
-# (sprint.md Scope > Out of Scope). --------------------------------
+# (sprint.md Scope > Out of Scope). Sprint 030 tickets 002/003 extend
+# this to also parse offerings.toml's own related_partner_id references
+# (six from ticket 002's curated volunteer org profiles, seven more from
+# ticket 003's curated free/Title I school-program rows) --
+# _check_related_partner_references() joins Place and Offering
+# references in one combined check, so a fixture built from places.toml
+# alone now under-covers a real, unfiltered run_directory() call. -----
 
 
 def _real_related_partner_ids() -> list[int]:
-    text = (DEFAULT_GEO_DATA_DIR / "places.toml").read_text(encoding="utf-8")
-    return sorted({int(m) for m in re.findall(r"related_partner_id\s*=\s*(\d+)", text)})
+    places_text = (DEFAULT_GEO_DATA_DIR / "places.toml").read_text(encoding="utf-8")
+    offerings_text = (DEFAULT_GEO_DATA_DIR / "offerings.toml").read_text(encoding="utf-8")
+    ids = {int(m) for m in re.findall(r"related_partner_id\s*=\s*(\d+)", places_text)}
+    ids |= {int(m) for m in re.findall(r"related_partner_id\s*=\s*(\d+)", offerings_text)}
+    return sorted(ids)
 
 
 def _write_real_partners_fixture(site_dir: Path) -> None:
@@ -458,6 +467,11 @@ class TestPerSourceErrorIsolation:
 
         monkeypatch.setitem(pipeline_module._PLACE_SOURCES, "static_roster", _BoomingSource())
 
+        # The Place source raises, but the real Offering source still
+        # runs unfiltered and its six curated volunteer rows carry real
+        # related_partner_id references -- the fixture is needed even
+        # though this test's own assertion is about Places.
+        _write_real_partners_fixture(tmp_path / "unused")
         payload = run_directory(
             fetcher=_NeverCalledFetcher(), dry_run=True, site_dir=tmp_path / "unused"
         )
@@ -486,6 +500,10 @@ class TestPerSourceErrorIsolation:
 
         monkeypatch.setitem(pipeline_module._PLACE_SOURCES, "static_roster", _BoomingSource())
 
+        # The real Offering source still runs unfiltered alongside
+        # Clubs -- its six curated volunteer rows carry real
+        # related_partner_id references, so the fixture is needed.
+        _write_real_partners_fixture(tmp_path / "unused")
         payload = run_directory(
             fetcher=_NeverCalledFetcher(), dry_run=True, site_dir=tmp_path / "unused"
         )
@@ -664,3 +682,260 @@ class TestRelatedPartnerIdJoinIntegrity:
 
         assert payload["meta"]["total"] == 1
         assert not (site_dir / "src" / "data" / "partners.json").exists()
+
+
+# ---------------------------------------------------------------------
+# Sprint 030 ticket 001: Offering, the third standing-entity dispatch.
+# Against the real, committed Offering Registry -- no fixture copy,
+# matching this ticket's other "trust the real data" tests. As of
+# ticket 003 (issue 33 part 2), the real roster carries thirteen rows:
+# six curated volunteer org profiles (ticket 002, issue 14 Strategy B)
+# plus seven curated free/Title I school-program rows (ticket 003) --
+# no placeholders remaining.
+# ---------------------------------------------------------------------
+
+
+class TestRunDirectoryOfferingDispatch:
+    def test_dry_run_reports_thirteen_offerings_with_no_network(self, tmp_path):
+        _write_real_partners_fixture(tmp_path / "unused")
+        payload = run_directory(
+            fetcher=_NeverCalledFetcher(), dry_run=True, site_dir=tmp_path / "unused"
+        )
+
+        assert payload["offerings_meta"]["total"] == 13
+        assert len(payload["offerings"]) == 13
+
+    def test_a_real_offering_registry_entry_never_trips_place_or_club_warnings(
+        self, tmp_path, caplog
+    ):
+        # Regression guard for the "one combined loop, checking
+        # _PLACE_SOURCES then _CLUB_SOURCES then _OFFERING_SOURCES"
+        # design decision (see pipeline.py's own module docstring): a
+        # real Offering registry entry (adapter_type
+        # "offering_static_roster") must never trip either earlier
+        # branch's "not registered" warning.
+        import logging
+
+        _write_real_partners_fixture(tmp_path / "unused")
+        with caplog.at_level(logging.WARNING):
+            run_directory(fetcher=_NeverCalledFetcher(), dry_run=True, site_dir=tmp_path / "unused")
+
+        assert not any(
+            "not registered" in record.message.lower() for record in caplog.records
+        )
+
+    def test_places_and_clubs_are_still_populated_alongside_offerings(self, tmp_path):
+        # The combined three-way dispatch loop must not regress
+        # Place/Club acquisition now that a third table is checked per
+        # source_config.
+        _write_real_partners_fixture(tmp_path / "unused")
+        payload = run_directory(
+            fetcher=_NeverCalledFetcher(), dry_run=True, site_dir=tmp_path / "unused"
+        )
+
+        assert payload["meta"]["total"] == 19
+        assert payload["clubs_meta"]["total"] == 4
+        assert payload["offerings_meta"]["total"] == 13
+
+
+class TestOfferingHasNoGeocodingStage:
+    """AC: "No geocoding stage is added for Offering -- no
+    `_apply_offering_geocoding()` function exists," and a test proving
+    no `GeoLadder` is ever constructed for `Offering` records. Unlike
+    `TestApplyGeoFallback`/`TestApplyClubGeocoding` above, there is no
+    `_apply_offering_geocoding()` function to call at all -- this class
+    proves that structurally and via a raising `GeoLadder` double over a
+    real run that only acquires Offerings.
+    """
+
+    def test_no_apply_offering_geocoding_function_exists(self):
+        import partner_scrape.directory.pipeline as pipeline_module
+
+        assert not hasattr(pipeline_module, "_apply_offering_geocoding")
+
+    def test_geo_ladder_is_never_constructed_for_an_offering_only_run(
+        self, tmp_path, monkeypatch
+    ):
+        import partner_scrape.directory.pipeline as pipeline_module
+
+        def _boom(*args, **kwargs):
+            raise AssertionError("GeoLadder must never be constructed for an Offering-only run")
+
+        monkeypatch.setattr(pipeline_module, "GeoLadder", _boom)
+
+        _write_real_partners_fixture(tmp_path / "unused")
+        payload = run_directory(
+            source="offering_static_roster",
+            fetcher=_NeverCalledFetcher(),
+            dry_run=True,
+            site_dir=tmp_path / "unused",
+        )
+
+        assert payload["offerings_meta"]["total"] == 13
+        assert payload["meta"]["total"] == 0
+        assert payload["clubs_meta"]["total"] == 0
+
+    def test_offering_records_carry_no_location_attributes(self, tmp_path):
+        _write_real_partners_fixture(tmp_path / "unused")
+        payload = run_directory(
+            fetcher=_NeverCalledFetcher(), dry_run=True, site_dir=tmp_path / "unused"
+        )
+
+        for offering in payload["offerings"]:
+            assert "latitude" not in offering
+            assert "longitude" not in offering
+            assert "location_precision" not in offering
+
+
+class TestOfferingSourceFilter:
+    def test_source_filter_by_adapter_type_matches_the_real_registry(self, tmp_path):
+        _write_real_partners_fixture(tmp_path / "unused")
+        payload = run_directory(
+            source="offering_static_roster",
+            fetcher=_NeverCalledFetcher(),
+            dry_run=True,
+            site_dir=tmp_path / "unused",
+        )
+
+        assert payload["offerings_meta"]["total"] == 13
+        assert payload["meta"]["total"] == 0
+        assert payload["clubs_meta"]["total"] == 0
+
+
+def _write_offering_only_registry(tmp_path: Path) -> Path:
+    """A registry dir with only an `offering_static_roster`-adapter_type
+    entry -- mirrors `_write_static_roster_only_registry()`'s own
+    pattern above, for the Offering-side error-isolation/join-integrity
+    tests below."""
+    registry_dir = tmp_path / "registry"
+    registry_dir.mkdir()
+    (registry_dir / "offerings.toml").write_text(
+        'org_name = "Fixture Offerings"\nadapter_type = "offering_static_roster"\nenabled = true\n'
+        "[config]\n",
+        encoding="utf-8",
+    )
+    return registry_dir
+
+
+class _FixedOfferingSource:
+    """An `OfferingSource` fixture double -- mirrors `_FixedPlaceSource`
+    above, for `Offering` instead of `Place`."""
+
+    def __init__(self, offerings: list[Offering]) -> None:
+        self._offerings = offerings
+
+    def discover(self, source, fetcher):
+        return [OfferingRef(url="fixture://offerings")]
+
+    def fetch(self, ref, fetcher):
+        return RawOfferingResponse(ref=ref, status=200, body="")
+
+    def extract(self, raw, source):
+        return self._offerings
+
+
+class TestOfferingPerSourceErrorIsolation:
+    def test_a_raising_offering_source_is_logged_and_skipped_not_fatal(
+        self, tmp_path, monkeypatch
+    ):
+        import partner_scrape.directory.pipeline as pipeline_module
+
+        monkeypatch.setitem(
+            pipeline_module._OFFERING_SOURCES, "offering_static_roster", _BoomingSource()
+        )
+
+        # The real committed places.toml carries hand-verified
+        # related_partner_id references, validated unconditionally --
+        # write the fixture before any call against the real registry.
+        _write_real_partners_fixture(tmp_path / "unused")
+        payload = run_directory(fetcher=_NeverCalledFetcher(), dry_run=True, site_dir=tmp_path / "unused")
+
+        assert payload["offerings_meta"]["total"] == 0
+        # The unrelated Place/Club sources are unaffected -- per-source
+        # isolation, not "one broken source kills the whole run".
+        assert payload["meta"]["total"] == 19
+        assert payload["clubs_meta"]["total"] == 4
+
+
+class TestOfferingRelatedPartnerIdJoinIntegrity:
+    """Extends `TestRelatedPartnerIdJoinIntegrity` above to
+    `Offering.related_partner_id` -- same generic
+    `_check_related_partner_references()` guard, now fed references
+    from both `places` and `offerings`."""
+
+    def test_dangling_offering_related_partner_id_raises_naming_both_ids(
+        self, tmp_path, monkeypatch
+    ):
+        import partner_scrape.directory.pipeline as pipeline_module
+
+        registry_dir = _write_offering_only_registry(tmp_path)
+        monkeypatch.setitem(
+            pipeline_module._OFFERING_SOURCES,
+            "offering_static_roster",
+            _FixedOfferingSource(
+                [
+                    Offering(
+                        offering_id="orphan-offering",
+                        org_name="Orphan Org",
+                        title="Orphan Offering",
+                        offering_type="volunteer",
+                        related_partner_id=999,
+                    )
+                ]
+            ),
+        )
+
+        site_dir = tmp_path / "site"
+        data_dir = site_dir / "src" / "data"
+        data_dir.mkdir(parents=True)
+        (data_dir / "partners.json").write_text(
+            json.dumps([{"id": 1, "name": "Real Partner"}]), encoding="utf-8"
+        )
+
+        with pytest.raises(RosterValidationError) as excinfo:
+            run_directory(
+                registry_dir=registry_dir,
+                fetcher=_NeverCalledFetcher(),
+                dry_run=True,
+                site_dir=site_dir,
+            )
+
+        message = str(excinfo.value)
+        assert "orphan-offering" in message
+        assert "999" in message
+
+    def test_valid_offering_related_partner_id_does_not_raise(self, tmp_path, monkeypatch):
+        import partner_scrape.directory.pipeline as pipeline_module
+
+        registry_dir = _write_offering_only_registry(tmp_path)
+        monkeypatch.setitem(
+            pipeline_module._OFFERING_SOURCES,
+            "offering_static_roster",
+            _FixedOfferingSource(
+                [
+                    Offering(
+                        offering_id="matched-offering",
+                        org_name="Matched Org",
+                        title="Matched Offering",
+                        offering_type="volunteer",
+                        related_partner_id=1,
+                    )
+                ]
+            ),
+        )
+
+        site_dir = tmp_path / "site"
+        data_dir = site_dir / "src" / "data"
+        data_dir.mkdir(parents=True)
+        (data_dir / "partners.json").write_text(
+            json.dumps([{"id": 1, "name": "Real Partner"}]), encoding="utf-8"
+        )
+
+        payload = run_directory(
+            registry_dir=registry_dir,
+            fetcher=_NeverCalledFetcher(),
+            dry_run=True,
+            site_dir=site_dir,
+        )
+
+        assert payload["offerings_meta"]["total"] == 1

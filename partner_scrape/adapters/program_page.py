@@ -163,10 +163,12 @@ def _resolve_program_kind(url: str, source: SourceConfig) -> str | None:
 
 
 def _resolve_extraction_profile(source: SourceConfig) -> str:
-    """(Sprint 029 ticket 006) Return the ``ProgramLLMClient`` ``profile``
-    to use for ``source`` -- ``"competition"`` when the source's own
-    ``config.opportunity_type`` override is already ``"Competitions"``,
-    else the default ``"program"``.
+    """(Sprint 029 ticket 006; extended sprint 030 ticket 004) Return the
+    ``ProgramLLMClient`` ``profile`` to use for ``source`` --
+    ``"competition"`` when the source's own ``config.opportunity_type``
+    override is ``"Competitions"``, ``"pd"`` when it is
+    ``"Professional Development / Conferences"``, else the default
+    ``"program"``.
 
     No new registry ``config`` key: reuses the exact override value every
     affected source's TOML already carries (the same value
@@ -174,9 +176,19 @@ def _resolve_extraction_profile(source: SourceConfig) -> str:
     ``resolved_opportunity_type``). Shared by both
     :func:`_extract_one_program` and :func:`_extract_many_programs` so a
     ``program_page``/``program_listing``/``program_page_multi`` source
-    all select the profile identically.
+    all select the profile identically. Every pre-existing
+    ``"program"``-/``"competition"``-profile source's behavior is
+    byte-for-byte unchanged -- the new ``"pd"`` branch's condition
+    cannot newly match a pre-existing registration (see
+    ``adapters/DESIGN.md``'s "Revision (2026-09-02 -- sprint 030
+    educator-PD extraction profile)" section).
     """
-    return "competition" if source.config.get("opportunity_type") == "Competitions" else "program"
+    opportunity_type = source.config.get("opportunity_type")
+    if opportunity_type == "Competitions":
+        return "competition"
+    if opportunity_type == "Professional Development / Conferences":
+        return "pd"
+    return "program"
 
 
 def _map_result_to_event(

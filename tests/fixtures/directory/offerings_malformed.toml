@@ -1,0 +1,35 @@
+# Hand-authored malformed entries for per-record error isolation
+# testing (tests/directory/test_sources_offering_static_roster.py's
+# TestMalformedEntryIsolation) -- the real committed
+# directory/data/offerings.toml has no malformed entries of its own.
+
+[[offering]]
+# Missing offering_id, org_name, and title entirely.
+offering_type = "volunteer"
+
+[[offering]]
+offering_id = "no-offering-type"
+org_name = "Missing Offering Type Org"
+title = "Missing Offering Type"
+# offering_type omitted
+
+[[offering]]
+offering_id = "bad-offering-type"
+org_name = "Bad Offering Type Org"
+title = "Bad Offering Type"
+offering_type = "internship"
+
+[[offering]]
+offering_id = "closed-no-note"
+org_name = "Closed With No Note Org"
+title = "Closed With No Note"
+offering_type = "volunteer"
+status = "closed"
+# status_note omitted -- must be present whenever status != "active"
+
+[[offering]]
+offering_id = "good-offering"
+org_name = "Good Offering Org"
+title = "Good Offering"
+offering_type = "free_program"
+description = "The one well-formed entry in this fixture."

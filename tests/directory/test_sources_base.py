@@ -16,14 +16,17 @@ from pathlib import Path
 
 import partner_scrape.directory as directory_pkg
 import partner_scrape.directory.sources as directory_sources_pkg
-from partner_scrape.directory.model import Club, Place
+from partner_scrape.directory.model import Club, Offering, Place
 from partner_scrape.directory.sources.base import (
     ClubRef,
+    OfferingRef,
     PlaceRef,
     RawClubResponse,
+    RawOfferingResponse,
     RawPlaceResponse,
     run,
     run_club_source,
+    run_offering_source,
 )
 from partner_scrape.fetch.fetcher import FetchResponse
 from partner_scrape.registry.schema import SourceConfig
@@ -57,6 +60,7 @@ class TestNoForbiddenModuleReference:
         assert py_files
         assert any(f.name == "static_roster.py" for f in py_files)
         assert any(f.name == "hack_club_static_roster.py" for f in py_files)
+        assert any(f.name == "offering_static_roster.py" for f in py_files)
 
         offenders = [f.name for f in py_files if _imports_forbidden_module(f)]
         assert offenders == []
@@ -190,3 +194,64 @@ class TestRunClubSourceChaining:
         clubs = run_club_source(_club_source_config(), source_double, _StubFetcher())
 
         assert clubs == []
+
+
+class _FakeOfferingSource:
+    """Minimal OfferingSource double for exercising
+    run_offering_source()'s chaining -- parallel to
+    `_FakeSource`/`_FakeClubSource` above, for `Offering` instead of
+    `Place`/`Club`."""
+
+    def __init__(self, offerings: list[Offering]):
+        self._offerings = offerings
+        self.discover_calls = 0
+        self.fetch_calls: list[OfferingRef] = []
+
+    def discover(self, source: SourceConfig, fetcher):
+        self.discover_calls += 1
+        return [OfferingRef(url="local://offerings")]
+
+    def fetch(self, ref: OfferingRef, fetcher) -> RawOfferingResponse:
+        self.fetch_calls.append(ref)
+        response = fetcher.get(ref.url)
+        return RawOfferingResponse(ref=ref, status=response.status, body=response.body)
+
+    def extract(self, raw: RawOfferingResponse, source: SourceConfig):
+        return self._offerings
+
+
+def _offering_source_config() -> SourceConfig:
+    return SourceConfig(
+        source_id="offerings-sd",
+        org_name="San Diego STEM Offerings (curated static roster)",
+        adapter_type="offering_static_roster",
+        config={},
+    )
+
+
+class TestRunOfferingSourceChaining:
+    def test_run_offering_source_chains_discover_fetch_extract_and_returns_extracted_offerings(
+        self,
+    ):
+        expected = [
+            Offering(
+                offering_id="a-offering",
+                org_name="An Org",
+                title="A Title",
+                offering_type="volunteer",
+            )
+        ]
+        source_double = _FakeOfferingSource(expected)
+
+        offerings = run_offering_source(_offering_source_config(), source_double, _StubFetcher())
+
+        assert offerings == expected
+        assert source_double.discover_calls == 1
+        assert len(source_double.fetch_calls) == 1
+
+    def test_run_offering_source_returns_empty_list_when_extract_yields_nothing(self):
+        source_double = _FakeOfferingSource([])
+
+        offerings = run_offering_source(_offering_source_config(), source_double, _StubFetcher())
+
+        assert offerings == []
