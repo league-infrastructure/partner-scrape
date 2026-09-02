@@ -35,12 +35,18 @@ from partner_scrape.adapters.program_llm import ProgramExtractionResult
 #: Subdirectory of ``SCRAPE_CACHE_DIR`` entries are stored under.
 _CACHE_SUBDIR = "program_extraction_cache"
 
-#: Bumped whenever ``ProgramExtractionResult``'s shape changes.
-#: ``content_hash`` covers only the page's raw body, never the result's
-#: own shape, so it cannot detect a stored-value shape change on its own
-#: -- mirrors ``enrich/cache.py``'s ``_CACHE_SCHEMA_VERSION`` convention
-#: and rationale exactly.
-_CACHE_SCHEMA_VERSION = 1
+#: Bumped whenever ``ProgramExtractionResult``'s shape changes, or when
+#: this cache's own on-disk entry shape changes. ``content_hash`` covers
+#: only the page's raw body, never the result's own shape, so it cannot
+#: detect a stored-value shape change on its own -- mirrors
+#: ``enrich/cache.py``'s ``_CACHE_SCHEMA_VERSION`` convention and
+#: rationale exactly. **(Ticket 006 exception revision)** bumped 1 -> 2
+#: for the new list-valued ``lookup_many``/``store_many`` entry shape
+#: (``"results"`` alongside the existing ``"result"`` key) -- forces
+#: exactly one harmless re-extraction of any pre-revision cache entry, a
+#: cache being a pure optimization (see ``adapters/DESIGN.md``'s Revision
+#: note).
+_CACHE_SCHEMA_VERSION = 2
 
 
 def content_hash(body: str) -> str:
@@ -123,6 +129,49 @@ class ProgramExtractionCache:
             "schema_version": _CACHE_SCHEMA_VERSION,
             "content_hash": content_hash(body),
             "result": _result_to_jsonable(result),
+        }
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(entry, f, indent=2)
+
+    def lookup_many(self, url: str, body: str) -> list[ProgramExtractionResult] | None:
+        """The list-valued counterpart to :meth:`lookup`, for
+        ``program_page_multi`` sources (ticket 006 exception revision).
+
+        Same URL + content-hash keying as :meth:`lookup`; returns
+        ``None`` for no entry, a stale ``schema_version``, or a changed
+        content hash -- identical miss conditions, applied to the
+        list-shaped entry :meth:`store_many` writes.
+        """
+        path = _entry_path(self.cache_dir, url)
+        if not path.exists():
+            return None
+        with open(path, encoding="utf-8") as f:
+            entry = json.load(f)
+        if entry.get("schema_version") != _CACHE_SCHEMA_VERSION:
+            return None
+        if entry.get("content_hash") != content_hash(body):
+            return None
+        results = entry.get("results")
+        if results is None:
+            return None
+        return [_result_from_jsonable(r) for r in results]
+
+    def store_many(self, url: str, body: str, results: list[ProgramExtractionResult]) -> None:
+        """The list-valued counterpart to :meth:`store`, for
+        ``program_page_multi`` sources (ticket 006 exception revision).
+
+        Writes a JSON list (``"results"``) instead of a single object
+        (``"result"``) under the same URL-hashed cache file
+        :meth:`store` would use for a ``program_page``/``program_listing``
+        source -- safe by construction, since a real URL is only ever
+        registered as one adapter type.
+        """
+        path = _entry_path(self.cache_dir, url)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        entry = {
+            "schema_version": _CACHE_SCHEMA_VERSION,
+            "content_hash": content_hash(body),
+            "results": [_result_to_jsonable(r) for r in results],
         }
         with open(path, "w", encoding="utf-8") as f:
             json.dump(entry, f, indent=2)

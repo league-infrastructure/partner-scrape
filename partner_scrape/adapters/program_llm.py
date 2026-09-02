@@ -112,6 +112,18 @@ class ProgramLLMClient(Protocol):
         """Return one LLM extraction result for the page at ``url``."""
         ...
 
+    def extract_programs(self, url: str, body: str) -> list[ProgramExtractionResult]:
+        """Return one LLM extraction result *per inline program record*
+        found on the page at ``url``.
+
+        **(Ticket 006 exception revision)** For a page whose body holds N
+        distinct program sections (SIO's shape -- see
+        ``adapters/DESIGN.md``'s Revision note), rather than the single
+        record :meth:`extract_program` recovers for a page dedicated to
+        one program.
+        """
+        ...
+
 
 class ProgramLLMExtractionError(Exception):
     """Raised when an LLM response cannot be parsed into a
@@ -180,16 +192,36 @@ def _build_program_extraction_json_schema() -> dict[str, Any]:
 PROGRAM_EXTRACTION_JSON_SCHEMA = _build_program_extraction_json_schema()
 
 
-_SYSTEM_PROMPT = f"""You are helping curate a directory of STEM learning \
-opportunities for learners of all ages in the San Diego area. You are \
-given the raw text of one curated program page -- a paid summer research \
-placement, an internship, a scholarship, or a similar application-window \
-program -- scraped from a lab, university, or organization's website. \
-Extract the following fields, using only what is solidly supported by the \
-page text. Never guess a specific date, grade, or amount that is not \
-stated or strongly implied.
+def _build_program_list_extraction_json_schema() -> dict[str, Any]:
+    """The list-valued counterpart to
+    :func:`_build_program_extraction_json_schema`, for
+    ``extract_programs()``'s one-page/N-record shape (ticket 006
+    exception revision). Wraps the identical per-record object schema --
+    built the same dataclass-introspection way, never duplicated by hand
+    -- in ``{"programs": [...]}``.
+    """
+    return {
+        "type": "object",
+        "properties": {
+            "programs": {"type": "array", "items": PROGRAM_EXTRACTION_JSON_SCHEMA}
+        },
+        "required": ["programs"],
+        "additionalProperties": False,
+    }
 
-- program_name: the program's name, as titled on the page.
+
+#: The structured-output schema sent on every real ``extract_programs()``
+#: request -- see :func:`_build_program_list_extraction_json_schema`.
+PROGRAM_LIST_EXTRACTION_JSON_SCHEMA = _build_program_list_extraction_json_schema()
+
+
+#: The per-field extraction rules, shared verbatim between the
+#: single-record (:data:`_SYSTEM_PROMPT`) and multi-record
+#: (:data:`_SYSTEM_PROMPT_MULTI`) system prompts -- ticket 006 exception
+#: revision's ``extract_programs()`` asks the model to apply these exact
+#: same rules once per distinct program section rather than once for the
+#: whole page.
+_FIELD_EXTRACTION_RULES = f"""- program_name: the program's name, as titled on the page.
 - audience_grades: zero or more grade/audience descriptors actually named \
 on the page (e.g. "9th grade", "high school", "undergraduate"), as short \
 strings in the page's own words.
@@ -208,9 +240,46 @@ the page gives no clear signal either way.
 - opportunity_type: exactly one of {_OPPORTUNITY_TYPE_VALUES}, based on \
 what kind of opportunity this is. Use "Out-of-school Programs" as the \
 general default whenever nothing more specific clearly applies -- this \
-field is never left blank.
+field is never left blank."""
+
+
+_SYSTEM_PROMPT = f"""You are helping curate a directory of STEM learning \
+opportunities for learners of all ages in the San Diego area. You are \
+given the raw text of one curated program page -- a paid summer research \
+placement, an internship, a scholarship, or a similar application-window \
+program -- scraped from a lab, university, or organization's website. \
+Extract the following fields, using only what is solidly supported by the \
+page text. Never guess a specific date, grade, or amount that is not \
+stated or strongly implied.
+
+{_FIELD_EXTRACTION_RULES}
 
 Respond only with the structured JSON the response format requires."""
+
+
+#: (Ticket 006 exception revision) System prompt for ``extract_programs()``
+#: -- a page whose body holds N distinct program sections inline (SIO's
+#: shape: a ``<div class="page-section">`` block per program, each with
+#: its own deadline in prose on the summary page itself, not a link to a
+#: page that carries it), rather than one page dedicated to one program.
+_SYSTEM_PROMPT_MULTI = f"""You are helping curate a directory of STEM learning \
+opportunities for learners of all ages in the San Diego area. You are \
+given the raw text of one curated page that describes MULTIPLE distinct \
+programs -- each a paid summer research placement, an internship, a \
+scholarship, or a similar application-window program -- as separate \
+inline sections on the same page, rather than links out to separate \
+detail pages. Identify every distinct program described on the page, and \
+for EACH one extract the following fields, using only what is solidly \
+supported by that program's own section of the page text. Never guess a \
+specific date, grade, or amount that is not stated or strongly implied \
+for that program, and never blend two distinct programs' details into \
+one record.
+
+{_FIELD_EXTRACTION_RULES}
+
+Respond only with the structured JSON the response format requires: a \
+single object with one key, "programs", whose value is a list with \
+exactly one entry per distinct program found on the page."""
 
 
 def _build_user_prompt(url: str, body: str) -> str:
@@ -284,6 +353,34 @@ def _parse_response(response: Any) -> ProgramExtractionResult:
     return _result_from_dict(data)
 
 
+def _results_from_dict(data: Any) -> list[ProgramExtractionResult]:
+    """The list-valued counterpart to :func:`_result_from_dict`, for a
+    ``{"programs": [...]}``-shaped response (ticket 006 exception
+    revision's ``extract_programs()``).
+    """
+    if not isinstance(data, dict):
+        raise ProgramLLMExtractionError(f"Expected the response to be a JSON object, got {type(data).__name__}")
+
+    if "programs" not in data:
+        raise ProgramLLMExtractionError("Response is missing required field(s): ['programs']")
+
+    programs = data["programs"]
+    if not isinstance(programs, list):
+        raise ProgramLLMExtractionError(
+            f"Expected 'programs' to be a list, got {type(programs).__name__}"
+        )
+    return [_result_from_dict(item) for item in programs]
+
+
+def _parse_programs_response(response: Any) -> list[ProgramExtractionResult]:
+    text = _extract_response_text(response)
+    try:
+        data = json.loads(text)
+    except json.JSONDecodeError as exc:
+        raise ProgramLLMExtractionError(f"Anthropic response was not valid JSON: {exc}") from exc
+    return _results_from_dict(data)
+
+
 # --------------------------------------------------------------------
 # The real implementation
 # --------------------------------------------------------------------
@@ -316,6 +413,23 @@ class AnthropicProgramLLMClient:
         )
         return _parse_response(response)
 
+    def extract_programs(self, url: str, body: str) -> list[ProgramExtractionResult]:
+        """(Ticket 006 exception revision) One call, N results -- for a
+        page whose body holds N inline program records (SIO's shape).
+        ``max_tokens`` is raised over :meth:`extract_program`'s to make
+        room for a list-valued response of unknown-but-bounded length.
+        """
+        response = self._client.messages.create(
+            model=MODEL_ID,
+            max_tokens=4096,
+            system=_SYSTEM_PROMPT_MULTI,
+            messages=[{"role": "user", "content": _build_user_prompt(url, body)}],
+            output_config={
+                "format": {"type": "json_schema", "schema": PROGRAM_LIST_EXTRACTION_JSON_SCHEMA}
+            },
+        )
+        return _parse_programs_response(response)
+
 
 # --------------------------------------------------------------------
 # Test double
@@ -325,25 +439,36 @@ class AnthropicProgramLLMClient:
 @dataclass
 class FixtureProgramLLMClient:
     """``ProgramLLMClient`` test double: returns canned
-    ``ProgramExtractionResult``s.
+    ``ProgramExtractionResult``s (single or list-valued).
 
-    Never opens a socket or imports ``anthropic``. ``responses`` is looked
-    up by ``key_fn(url, body)`` (default: the URL alone). Every
-    ``(url, body)`` pair passed to :meth:`extract_program` is recorded in
-    ``calls``, in order, so tests can assert on how many times -- and with
-    what -- this client was invoked (e.g. a cache-hit test proving a
-    second run makes no further call).
+    Never opens a socket or imports ``anthropic``. ``responses`` (for
+    :meth:`extract_program`) and ``list_responses`` (for
+    :meth:`extract_programs`, ticket 006 exception revision) are each
+    looked up by the identical ``key_fn(url, body)`` (default: the URL
+    alone) -- the same lookup mechanism extended to a second canned-value
+    dict rather than a second test-double class. Every ``(url, body)``
+    pair passed to :meth:`extract_program`/:meth:`extract_programs` is
+    recorded in ``calls``/``list_calls`` respectively, in order, so tests
+    can assert on how many times -- and with what -- this client was
+    invoked (e.g. a cache-hit test proving a second run makes no further
+    call).
 
     Raises:
-        KeyError: if ``key_fn(url, body)`` is absent from ``responses`` --
-            a loud failure if the code under test asks this double to
-            extract a page it wasn't told to expect.
+        KeyError: if ``key_fn(url, body)`` is absent from the relevant
+            responses dict -- a loud failure if the code under test asks
+            this double to extract a page it wasn't told to expect.
     """
 
-    responses: dict[Any, ProgramExtractionResult]
+    responses: dict[Any, ProgramExtractionResult] = field(default_factory=dict)
+    list_responses: dict[Any, list[ProgramExtractionResult]] = field(default_factory=dict)
     key_fn: Callable[[str, str], Any] = lambda url, body: url
     calls: list[tuple[str, str]] = field(default_factory=list)
+    list_calls: list[tuple[str, str]] = field(default_factory=list)
 
     def extract_program(self, url: str, body: str) -> ProgramExtractionResult:
         self.calls.append((url, body))
         return self.responses[self.key_fn(url, body)]
+
+    def extract_programs(self, url: str, body: str) -> list[ProgramExtractionResult]:
+        self.list_calls.append((url, body))
+        return self.list_responses[self.key_fn(url, body)]

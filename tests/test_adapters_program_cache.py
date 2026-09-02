@@ -107,6 +107,76 @@ class TestProgramExtractionCacheRoundTrip:
         assert len(written) == 1
 
 
+class TestProgramExtractionCacheLookupManyMiss:
+    def test_lookup_many_returns_none_for_an_unseen_url(self, tmp_path):
+        cache = ProgramExtractionCache(cache_dir=tmp_path)
+
+        assert cache.lookup_many("https://example.org/unseen", "body") is None
+
+
+class TestProgramExtractionCacheLookupManyRoundTrip:
+    """The list-valued counterpart to
+    ``TestProgramExtractionCacheRoundTrip`` above -- ticket 006 exception
+    revision's ``lookup_many``/``store_many``, for ``program_page_multi``
+    sources.
+    """
+
+    def test_store_many_then_lookup_many_returns_equivalent_results(self, tmp_path):
+        cache = ProgramExtractionCache(cache_dir=tmp_path)
+        url = "https://example.org/sio-internships"
+        body = "the page body"
+        results = [_sample_result(program_name="A"), _sample_result(program_name="B")]
+
+        cache.store_many(url, body, results)
+        looked_up = cache.lookup_many(url, body)
+
+        assert looked_up == results
+
+    def test_changed_body_for_the_same_url_is_a_cache_miss(self, tmp_path):
+        cache = ProgramExtractionCache(cache_dir=tmp_path)
+        url = "https://example.org/sio-internships"
+        cache.store_many(url, "original body", [_sample_result()])
+
+        assert cache.lookup_many(url, "a completely different body") is None
+
+    def test_store_many_overwrites_a_prior_entry_for_the_same_url(self, tmp_path):
+        cache = ProgramExtractionCache(cache_dir=tmp_path)
+        url = "https://example.org/sio-internships"
+        body = "the page body"
+        cache.store_many(url, body, [_sample_result(program_name="First")])
+        cache.store_many(url, body, [_sample_result(program_name="Second")])
+
+        [result] = cache.lookup_many(url, body)
+        assert result.program_name == "Second"
+
+    def test_entry_is_persisted_as_a_file_under_cache_dir(self, tmp_path):
+        cache = ProgramExtractionCache(cache_dir=tmp_path)
+        cache.store_many("https://example.org/sio-internships", "body", [_sample_result()])
+
+        written = list((tmp_path / "program_extraction_cache").glob("*.json"))
+        assert len(written) == 1
+
+    def test_empty_list_round_trips(self, tmp_path):
+        cache = ProgramExtractionCache(cache_dir=tmp_path)
+        url = "https://example.org/sio-internships"
+        cache.store_many(url, "body", [])
+
+        assert cache.lookup_many(url, "body") == []
+
+    def test_a_stale_schema_version_is_a_miss(self, tmp_path):
+        cache = ProgramExtractionCache(cache_dir=tmp_path)
+        url = "https://example.org/sio-internships"
+        body = "body"
+        cache.store_many(url, body, [_sample_result()])
+
+        [written] = list((tmp_path / "program_extraction_cache").glob("*.json"))
+        entry = json.loads(written.read_text())
+        entry["schema_version"] = _CACHE_SCHEMA_VERSION - 1
+        written.write_text(json.dumps(entry))
+
+        assert cache.lookup_many(url, body) is None
+
+
 class TestProgramExtractionCacheDefaultsToConfiguredCacheDir:
     def test_cache_dir_defaults_to_config_scrape_cache_dir(self, tmp_path, monkeypatch):
         monkeypatch.setenv("SCRAPE_CACHE_DIR", str(tmp_path))

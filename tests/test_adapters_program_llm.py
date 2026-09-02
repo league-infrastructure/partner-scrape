@@ -20,6 +20,7 @@ import pytest
 
 from partner_scrape.adapters.program_llm import (
     PROGRAM_EXTRACTION_JSON_SCHEMA,
+    PROGRAM_LIST_EXTRACTION_JSON_SCHEMA,
     MODEL_ID,
     AnthropicProgramLLMClient,
     FixtureProgramLLMClient,
@@ -302,6 +303,94 @@ class TestAnthropicProgramLLMClientRejectsMalformedResponses:
 # ---------------------------------------------------------------------
 
 
+# ---------------------------------------------------------------------
+# extract_programs()'s list-valued schema and request shape (ticket 006
+# exception revision, AC: schema built via the same dataclass-
+# introspection mechanism as the existing schema, no hand-maintained
+# duplicate)
+# ---------------------------------------------------------------------
+
+
+class TestProgramListExtractionJsonSchema:
+    def test_wraps_the_per_record_schema_in_a_programs_array(self):
+        assert PROGRAM_LIST_EXTRACTION_JSON_SCHEMA == {
+            "type": "object",
+            "properties": {"programs": {"type": "array", "items": PROGRAM_EXTRACTION_JSON_SCHEMA}},
+            "required": ["programs"],
+            "additionalProperties": False,
+        }
+
+    def test_items_schema_is_the_exact_dataclass_introspected_object_not_a_hand_written_copy(self):
+        # Identity, not just equality -- proves this is the same object
+        # _build_program_extraction_json_schema() already produced, never
+        # a second hand-maintained literal that happens to match today.
+        assert PROGRAM_LIST_EXTRACTION_JSON_SCHEMA["properties"]["programs"]["items"] is (
+            PROGRAM_EXTRACTION_JSON_SCHEMA
+        )
+
+
+_MULTI_RESULT_PAYLOAD = {
+    "programs": [
+        _FULL_RESULT_PAYLOAD,
+        dict(_FULL_RESULT_PAYLOAD, program_name="Fixture Second Program", date_end="2027-03-01"),
+    ]
+}
+
+
+class TestAnthropicProgramLLMClientExtractPrograms:
+    def test_request_uses_model_id_constant_and_list_schema(self, monkeypatch):
+        fake_messages = _install_fake_anthropic(monkeypatch, response_text=json.dumps(_MULTI_RESULT_PAYLOAD))
+        client = AnthropicProgramLLMClient()
+
+        client.extract_programs("https://example.org/sio-internships", _read_fixture("prose_program_page.html"))
+
+        assert len(fake_messages.calls) == 1
+        call_kwargs = fake_messages.calls[0]
+        assert call_kwargs["model"] == MODEL_ID
+        assert call_kwargs["output_config"]["format"]["type"] == "json_schema"
+        assert call_kwargs["output_config"]["format"]["schema"] == PROGRAM_LIST_EXTRACTION_JSON_SCHEMA
+
+    def test_parses_a_list_of_results(self, monkeypatch):
+        _install_fake_anthropic(monkeypatch, response_text=json.dumps(_MULTI_RESULT_PAYLOAD))
+        client = AnthropicProgramLLMClient()
+
+        results = client.extract_programs("https://example.org/sio-internships", "body")
+
+        assert len(results) == 2
+        assert all(isinstance(r, ProgramExtractionResult) for r in results)
+        assert results[0].program_name == "Fixture Research Experience for High School Students"
+        assert results[1].program_name == "Fixture Second Program"
+        assert results[1].date_end == "2027-03-01"
+
+    def test_empty_programs_list_is_valid(self, monkeypatch):
+        _install_fake_anthropic(monkeypatch, response_text=json.dumps({"programs": []}))
+        client = AnthropicProgramLLMClient()
+
+        assert client.extract_programs("https://example.org/x", "body") == []
+
+    def test_missing_programs_key_raises_program_llm_extraction_error(self, monkeypatch):
+        _install_fake_anthropic(monkeypatch, response_text=json.dumps({}))
+        client = AnthropicProgramLLMClient()
+
+        with pytest.raises(ProgramLLMExtractionError):
+            client.extract_programs("https://example.org/x", "body")
+
+    def test_non_list_programs_value_raises_program_llm_extraction_error(self, monkeypatch):
+        _install_fake_anthropic(monkeypatch, response_text=json.dumps({"programs": "not a list"}))
+        client = AnthropicProgramLLMClient()
+
+        with pytest.raises(ProgramLLMExtractionError):
+            client.extract_programs("https://example.org/x", "body")
+
+    def test_a_malformed_record_within_the_list_raises_program_llm_extraction_error(self, monkeypatch):
+        bad_payload = {"programs": [dict(_FULL_RESULT_PAYLOAD, is_open="yes")]}
+        _install_fake_anthropic(monkeypatch, response_text=json.dumps(bad_payload))
+        client = AnthropicProgramLLMClient()
+
+        with pytest.raises(ProgramLLMExtractionError):
+            client.extract_programs("https://example.org/x", "body")
+
+
 class TestFixtureProgramLLMClient:
     def test_returns_canned_result_looked_up_by_url(self):
         canned = ProgramExtractionResult(program_name="Fixture Program")
@@ -353,3 +442,46 @@ class TestFixtureProgramLLMClient:
         client = FixtureProgramLLMClient(responses={"https://example.org/p": canned})
 
         assert client.extract_program("https://example.org/p", "body") is canned
+
+
+class TestFixtureProgramLLMClientExtractPrograms:
+    """Ticket 006 exception revision: ``FixtureProgramLLMClient`` extended
+    to also return a canned list, via a second ``list_responses`` dict
+    keyed the same way (``key_fn``) as the existing ``responses`` dict --
+    not a second test-double class.
+    """
+
+    def test_returns_canned_list_looked_up_by_url(self):
+        canned = [ProgramExtractionResult(program_name="A"), ProgramExtractionResult(program_name="B")]
+        client = FixtureProgramLLMClient(list_responses={"https://example.org/p": canned})
+
+        result = client.extract_programs("https://example.org/p", "body text")
+
+        assert result is canned
+
+    def test_records_every_call_in_order_separately_from_singular_calls(self):
+        client = FixtureProgramLLMClient(
+            responses={"https://example.org/p": ProgramExtractionResult()},
+            list_responses={"https://example.org/p": []},
+        )
+
+        client.extract_program("https://example.org/p", "body")
+        client.extract_programs("https://example.org/p", "body")
+
+        assert client.calls == [("https://example.org/p", "body")]
+        assert client.list_calls == [("https://example.org/p", "body")]
+
+    def test_unknown_key_raises_key_error(self):
+        client = FixtureProgramLLMClient()
+
+        with pytest.raises(KeyError):
+            client.extract_programs("https://example.org/unregistered", "body")
+
+    def test_custom_key_fn_looks_up_by_url_and_body(self):
+        canned = [ProgramExtractionResult(program_name="A")]
+        client = FixtureProgramLLMClient(
+            list_responses={("https://example.org/p", "body one"): canned},
+            key_fn=lambda url, body: (url, body),
+        )
+
+        assert client.extract_programs("https://example.org/p", "body one") is canned

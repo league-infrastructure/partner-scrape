@@ -173,6 +173,71 @@ class TestRegistration:
         assert isinstance(adapter, ProgramListingAdapter)
 
 
+class TestDiscoverRoutesOnLinkSelector:
+    """``ProgramListingAdapter.discover()`` routes to
+    ``discovery.listing.discover_via_selector`` only when
+    ``source.config["link_selector"]`` is set (sprint 027 ticket 006
+    exception revision); otherwise it falls back to today's
+    ``discover_via_listing`` unchanged -- proven here by substituting a
+    fake for each and checking the adapter calls the right one.
+    """
+
+    def test_no_link_selector_calls_discover_via_listing(self, tmp_path, monkeypatch):
+        captured: dict[str, object] = {}
+
+        def fake_discover_via_listing(source, fetcher):
+            captured["called"] = "discover_via_listing"
+            return [EventRef(url="https://example.org/programs/sentinel")]
+
+        def fake_discover_via_selector(source, fetcher):
+            captured["called"] = "discover_via_selector"
+            return []
+
+        monkeypatch.setattr(
+            "partner_scrape.discovery.listing.discover_via_listing", fake_discover_via_listing
+        )
+        monkeypatch.setattr(
+            "partner_scrape.discovery.listing.discover_via_selector", fake_discover_via_selector
+        )
+
+        adapter = ProgramListingAdapter(llm_client=_llm_client(), cache=ProgramExtractionCache(tmp_path))
+        source = _source()  # no link_selector key
+
+        refs = adapter.discover(source, FixtureFetcher({}))
+
+        assert captured["called"] == "discover_via_listing"
+        assert [r.url for r in refs] == ["https://example.org/programs/sentinel"]
+
+    def test_link_selector_set_calls_discover_via_selector(self, tmp_path, monkeypatch):
+        captured: dict[str, object] = {}
+
+        def fake_discover_via_listing(source, fetcher):
+            captured["called"] = "discover_via_listing"
+            return []
+
+        def fake_discover_via_selector(source, fetcher):
+            captured["called"] = "discover_via_selector"
+            captured["link_selector"] = source.config["link_selector"]
+            return [EventRef(url="https://cross-domain.example.org/homepage")]
+
+        monkeypatch.setattr(
+            "partner_scrape.discovery.listing.discover_via_listing", fake_discover_via_listing
+        )
+        monkeypatch.setattr(
+            "partner_scrape.discovery.listing.discover_via_selector", fake_discover_via_selector
+        )
+
+        adapter = ProgramListingAdapter(llm_client=_llm_client(), cache=ProgramExtractionCache(tmp_path))
+        source = _source()
+        source.config["link_selector"] = 'li[data-grade*="High School"] a.learnmore'
+
+        refs = adapter.discover(source, FixtureFetcher({}))
+
+        assert captured["called"] == "discover_via_selector"
+        assert captured["link_selector"] == 'li[data-grade*="High School"] a.learnmore'
+        assert [r.url for r in refs] == ["https://cross-domain.example.org/homepage"]
+
+
 class TestDiscover:
     def test_discover_returns_one_ref_per_matched_card_link(self, tmp_path):
         adapter = ProgramListingAdapter(llm_client=_llm_client(), cache=ProgramExtractionCache(tmp_path))
