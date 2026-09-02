@@ -29,6 +29,7 @@ from partner_scrape.adapters.leaguesync import LeagueSyncAdapter
 from partner_scrape.adapters.lever import LeverAdapter
 from partner_scrape.adapters.listing_html import ListingHtmlAdapter
 from partner_scrape.adapters.localist import LocalistAdapter
+from partner_scrape.adapters.neogov import NeogovAdapter
 from partner_scrape.adapters.program_page import (
     ProgramListingAdapter,
     ProgramPageAdapter,
@@ -60,6 +61,7 @@ ADAPTERS["campbrain"] = CampBrainAdapter
 ADAPTERS["smartrecruiters"] = SmartRecruitersAdapter
 ADAPTERS["workable"] = WorkableAdapter
 ADAPTERS["workday"] = WorkdayAdapter
+ADAPTERS["neogov"] = NeogovAdapter
 
 __all__ = [
     "Adapter",
@@ -88,4 +90,5 @@ __all__ = [
     "SmartRecruitersAdapter",
     "WorkableAdapter",
     "WorkdayAdapter",
+    "NeogovAdapter",
 ]
