@@ -40,17 +40,23 @@ results are always mapped onto an ``Event`` identically.
 produces a fully-working production instance -- the defaults construct a
 real ``AnthropicProgramLLMClient``/``ProgramExtractionCache``.
 
-**No ``description`` field, with one sprint-028 exception.**
-``ProgramExtractionResult`` (ticket 002) carries no ``description``
-output -- only ``program_name``, ``audience_grades``, ``date_start``,
-``date_end``, ``cost``, ``eligibility``, ``is_open``, and
-``opportunity_type``. Neither adapter invents a description, with one
-narrow exception: (sprint 028) when the *resolved* ``opportunity_type``
-is ``"Camps"`` and ``result.is_open`` is ``False``, :func:`_map_result_to_event`
-sets ``Event.description`` to a sold-out note -- see that function's
-docstring and ``adapters/DESIGN.md``'s sprint 028 section. Every other
-``program_kind``/``opportunity_type`` combination still leaves
-``Event.description`` unset.
+**No ``description`` field, with two narrow exceptions.**
+``ProgramExtractionResult`` carries no free-form ``description`` output
+of its own -- only ``program_name``, ``audience_grades``, ``date_start``,
+``date_end``, ``cost``, ``eligibility``, ``is_open``,
+``opportunity_type``, and (sprint 029 ticket 006) ``registration_deadline``.
+Neither adapter invents a description, with two narrow exceptions, both
+computed from the *resolved* ``opportunity_type`` (the config override or
+the LLM's own classification, whichever won) inside
+:func:`_map_result_to_event`: (sprint 028) a resolved ``"Camps"`` record
+with ``result.is_open`` ``False`` gets a sold-out note; (sprint 029
+ticket 006) a resolved ``"Competitions"`` record with a non-empty
+``result.registration_deadline`` gets a "Registration deadline: ..."
+note -- see that function's docstring and ``adapters/DESIGN.md``'s
+sprint 028 section and its sprint 029 Revision section (Design
+Rationale: "fold ``registration_deadline`` into ``Event.description``").
+Every other ``program_kind``/``opportunity_type`` combination still
+leaves ``Event.description`` unset.
 
 **A closed page is still emitted.** ``result.is_open is False`` is not
 checked here -- filtering "is this program still current" happens at
@@ -80,7 +86,7 @@ harmless cache miss under the cache's existing contract.
 from __future__ import annotations
 
 import logging
-from datetime import datetime
+from datetime import date, datetime
 from typing import Iterable
 
 from partner_scrape.adapters.base import EventRef, RawResponse, acquisition_kwargs
@@ -154,6 +160,23 @@ def _resolve_program_kind(url: str, source: SourceConfig) -> str | None:
         )
         return None
     return program_kind
+
+
+def _resolve_extraction_profile(source: SourceConfig) -> str:
+    """(Sprint 029 ticket 006) Return the ``ProgramLLMClient`` ``profile``
+    to use for ``source`` -- ``"competition"`` when the source's own
+    ``config.opportunity_type`` override is already ``"Competitions"``,
+    else the default ``"program"``.
+
+    No new registry ``config`` key: reuses the exact override value every
+    affected source's TOML already carries (the same value
+    :func:`_map_result_to_event` reads to resolve
+    ``resolved_opportunity_type``). Shared by both
+    :func:`_extract_one_program` and :func:`_extract_many_programs` so a
+    ``program_page``/``program_listing``/``program_page_multi`` source
+    all select the profile identically.
+    """
+    return "competition" if source.config.get("opportunity_type") == "Competitions" else "program"
 
 
 def _map_result_to_event(
@@ -244,6 +267,26 @@ def _map_result_to_event(
             "description", "Sold out", source=PROGRAM_LLM_SOURCE, confidence=PROGRAM_LLM_CONFIDENCE
         )
 
+    # (Sprint 029 ticket 006) A competition's registration deadline
+    # surfaces via Event.description too -- the same "no description
+    # field, with one narrow exception" mechanism sprint 028's Camps
+    # sold-out branch above already established, extended by one more
+    # narrow, resolved-opportunity_type-gated case. Never mapped onto
+    # Event.start/Event.end -- see adapters/DESIGN.md's Design Rationale
+    # for why date_end cannot mean both "the event's own last day" and "a
+    # separate registration deadline" at once (seaperch-sd-regional's
+    # live failure). Computed from the *resolved* opportunity_type, same
+    # as the Camps branch above, so this only fires for competition
+    # records -- no other program_kind/opportunity_type combination's
+    # Event.description changes from its pre-ticket-006 state.
+    if resolved_opportunity_type == "Competitions" and result.registration_deadline:
+        event.set(
+            "description",
+            f"Registration deadline: {result.registration_deadline}",
+            source=PROGRAM_LLM_SOURCE,
+            confidence=PROGRAM_LLM_CONFIDENCE,
+        )
+
     # registration_url: an explicit config.apply_url override (a
     # program whose application form lives at a different URL than
     # the page this adapter read) wins; otherwise the page's own
@@ -322,8 +365,11 @@ def _extract_one_program(
 
     result = cache.lookup(raw.ref.url, text)
     if result is None:
+        profile = _resolve_extraction_profile(source)
         try:
-            result = llm_client.extract_program(raw.ref.url, text)
+            result = llm_client.extract_program(
+                raw.ref.url, text, profile=profile, reference_date=date.today()
+            )
         except Exception as exc:
             logger.warning(
                 "Program page %s: extract_program() raised %s: %s; skipping",
@@ -381,8 +427,11 @@ def _extract_many_programs(
 
     results = cache.lookup_many(raw.ref.url, text)
     if results is None:
+        profile = _resolve_extraction_profile(source)
         try:
-            results = llm_client.extract_programs(raw.ref.url, text)
+            results = llm_client.extract_programs(
+                raw.ref.url, text, profile=profile, reference_date=date.today()
+            )
         except Exception as exc:
             logger.warning(
                 "Program page %s: extract_programs() raised %s: %s; skipping",

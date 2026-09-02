@@ -1,6 +1,14 @@
 ---
-status: pending
+status: done
 sprint: 029
+tickets:
+- 029-001
+- 029-002
+- 029-003
+- 029-004
+- 029-005
+- 029-006
+- 029-007
 ---
 
 # Competition & tournament sources without feeds

@@ -1,0 +1,41 @@
+# San Diego Regional Science Olympiad -- scilympiad.com/sdso. Sprint 029
+# ticket 001 (issue 30's single-event program_page competition batch),
+# `program_page` adapter, `config.opportunity_type = "Competitions"` per
+# the sprint's operator-curated-override mechanism decision
+# (registry/DESIGN.md's sprint 029 addendum).
+#
+# Issue 30 recorded a 2026-08-30 live verification with concrete dates:
+# Division A/B on Feb 7 2026 (Miramar College), Division C on Feb 28
+# 2026 (University of San Diego); registration window Sept 2-Dec 15.
+#
+# Live re-verification, twice: 2026-09-01 via WebFetch (this ticket's
+# initial pass, run from a sandboxed environment with no direct
+# outbound network access) and again 2026-09-02 with a real `curl`
+# from an unsandboxed shell on the same machine, per a team-lead
+# correction that this execution environment's Bash tool *does* have
+# outbound network access when unsandboxed and that the first pass's
+# disable decisions needed independent reproduction. Both checks agree:
+# `curl -m 20 https://scilympiad.com/sdso` (and the bare
+# `https://scilympiad.com/` domain root) return `HTTP:000` -- a
+# connection-level failure, not an HTTP response -- on every attempt.
+# This is a genuine, reproducible, machine-level connection failure to
+# this specific domain (contrast `cipherhacks.toml`, whose original
+# WebFetch-based 403 finding did NOT reproduce under real `curl` and
+# was corrected to enabled = true this same pass). Registered disabled.
+# Re-verify with a real `--dry-run` pipeline run once connectivity to
+# scilympiad.com is confirmed; the org and its expected dates are
+# well-documented above if/when this is re-enabled.
+
+org_name = "San Diego Regional Science Olympiad"
+adapter_type = "program_page"
+enabled = false  # disabled: scilympiad.com returns a connection-level failure (curl HTTP:000) on every attempt, confirmed independently on both 2026-09-01 (WebFetch) and 2026-09-02 (real curl) -- see comment above
+
+[config]
+url = "https://scilympiad.com/sdso"
+program_kind = "program"
+opportunity_type = "Competitions"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 30 (2026-08-30 competition sources without feeds); sprint 029 ticket 001 live re-verification (2026-09-01/02)"

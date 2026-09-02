@@ -1,0 +1,89 @@
+# San Diego Festival of Science & Engineering / EXPO Day -- an existing
+# partner (issue 30/29-competition-and-tournament sprint), NOT the same
+# organization as `usasciencefestival.toml` (USA Science & Engineering
+# Festival -- a distinct, unrelated, already-disabled *national* org,
+# WAF-blocked; re-confirmed via a registry-wide grep before adding this
+# file -- see sprint 029 ticket 003) and NOT the same as `gsdsef.toml`
+# (Greater San Diego Science and Engineering Fair -- a different STEM
+# fair org entirely). This organization had no registration under any
+# name before this ticket.
+#
+# `lovestemsd.org` (Drupal 7) runs a DB-driven "Festival Week"/"STEM
+# Week" events view -- a Views listing with an exposed
+# ages/topics/region filter -- intended to carry each festival-week
+# event (workshops, the STEAM Design Contest, EXPO Day itself, etc.) as
+# its own dated node/detail page, which is why this registers as
+# `program_listing` (`ProgramListingAdapter`) rather than a single
+# `program_page`: sprint.md's SUC-046. No `config.opportunity_type`
+# override -- festival-week events span more than one type (workshops,
+# the EXPO Day showcase, competitions like the STEAM Design Contest), so
+# each record keeps the LLM's own per-page classification, per this
+# ticket's own Description.
+#
+# Live-verified 2026-09-02 (sprint 029 ticket 003), real network, no
+# headless fetcher needed (plain HTTP, no WAF/JS-rendering block):
+#   GET https://lovestemsd.org/stem-week-events-2020 -> HTTP 200. This
+#   URL is one of several year-stamped path aliases Drupal has reused
+#   for the *same* underlying "Festival Week" View over time -- verified
+#   identical (same `id="views-exposed-form-festival-week-page-N"` exposed
+#   filter form, same "No events match that search" empty state) against
+#   three other aliases found via web search: /festival-week,
+#   /steam-week-events-2021, /events-2023. Registered here because it is
+#   the alias the site's own current main-nav "STEM Week" link points to
+#   live today, not because of anything specific to the "2020" in its
+#   slug (the org has visibly not kept these aliases in sync with the
+#   current year -- see below).
+#
+# CURRENT FAILURE MODE (content-availability gap, not a fetch/WAF block
+# and not an extraction-framing bug): the exposed-filter GET returns
+# HTTP 200 with the "Festival Week" View's default (unfiltered, all
+# selects at their own "- Any -"/`All` default) query already applied,
+# and the server-rendered response is "No events match that search.
+# Please try again!" on every one of the four aliases above -- zero
+# `<li class="views-row">` event cards in the view's own content region
+# right now (the sponsor-logo carousel elsewhere on the same page,
+# unrelated, does render its own `views-row` items, confirming the
+# empty state is specific to the festival-week events View, not a
+# site-wide rendering failure). Separately, `/2024-festival` -- a third
+# rotated alias -- now resolves to the *same* "Know Before You Go" node
+# as `/expo-day-2026`, which itself already states EXPO Day is
+# "Saturday, March 13th, 2027 ... at Petco Park" -- i.e. the org has
+# already rotated its top-level EXPO Day marketing page one full cycle
+# past the "Mar 7 2026" date issue 30 recorded at its own 2026-08-30
+# verification date (one sub-page, /steam-design-contest, is stale and
+# still says "March 7, 2026", confirming the site is mid-rotation, not
+# consistently on one cycle). Net effect: discover_via_listing/
+# EVENT_PATH_RE (the registered default below -- no `link_selector` set)
+# cannot be evidenced against real card markup right now, because there
+# are currently zero cards of any shape to observe on the live page --
+# not because EVENT_PATH_RE was tried and failed to match, and not
+# something a link_selector could fix (there is nothing here for a
+# selector to select). This is the same "off-season page, not a broken
+# source" disposition `registry/DESIGN.md`'s Sprint 029 Design
+# Rationale ("no new annual-review/recheck mechanism") already accepts
+# as an unsolved, expected gap for a slow-changing annual page between
+# cycles -- the existing weekly cron re-checks this source unconditionally,
+# so it will pick up real event cards, and the true EVENT_PATH_RE-vs-
+# link_selector question, the moment the org populates the next cycle's
+# festival-week events (expected ahead of the already-announced
+# March 13, 2027 EXPO Day).
+#
+# `enabled = false` until a live re-check finds real event cards on this
+# listing to verify discovery/extraction against -- not disabled for a
+# fetch/WAF reason, which is the only reason this file exists rather
+# than the source being simply unregistered: this is registry data ready
+# to flip on the moment the underlying content gap closes.
+
+org_name = "San Diego Festival of Science & Engineering (lovestemsd.org)"
+adapter_type = "program_listing"
+enabled = false  # disabled: "Festival Week" events listing is live and reachable but currently has zero event cards to discover (content-availability gap, confirmed live 2026-09-02 across 4 rotated URL aliases, and by a real --dry-run pipeline run showing "discovered 0 URL(s)") -- not a fetch/WAF block, not an extraction bug
+
+[config]
+site_url = "https://lovestemsd.org"
+listing_urls = ["/stem-week-events-2020"]
+program_kind = "program"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 30 (2026-08-30 gap analysis); sprint 029 ticket 003 live verification (2026-09-02)"

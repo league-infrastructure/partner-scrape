@@ -1,0 +1,94 @@
+# San Diego Math Circle -- sdmathcircle.org -- Saturday enrichment
+# classes at UCSD; the official San Diego host site for AMC 8/10/12,
+# AIME I/II, ARML (Power Contest and the national ARML itself), USAMO/
+# USAJMO, BAMO, and San Diego Math League/Olympiad. Sprint 029 ticket
+# 002 (issue 30's competition-sources batch), SUC-045 --
+# `program_page_multi` adapter, since its master calendar is a public
+# Google Sheet with N distinct dated items inline on one page, not N
+# separate detail pages, the identical shape `program_page_multi`
+# already handles (sprint 027/028 precedent).
+#
+# `config.url` points at the sheet's CSV export endpoint
+# (`/export?format=csv&gid=...`), not its `/edit` URL (auth-gated) or
+# its `/htmlview` (JS-rendered, 82 lines of script scaffolding and no
+# row data to a plain fetch -- confirmed live 2026-09-02). The `gid`
+# pins the "2025-2026 Master Calendar" tab -- sdmathcircle.org/
+# sdmc-calendar links one dated Google Sheet per school year (2018-19
+# through 2025-26 all present as of this verification), each titled
+# "<year> Master Calendar" in its own anchor text, confirming this is
+# the correct/primary sheet, not a guess.
+#
+# DISABLED -- real extraction failure, live-verified 2026-09-02, not a
+# fetch/site block. The CSV export itself fetches cleanly (HTTP 200,
+# 335 rows of real data) and `extract.reduce_html_to_text()` does not
+# mangle it -- the AMC/AIME/ARML dated rows (e.g. "AMC 10 A and AMC 12
+# A / November 05, 2025") are intact and present in the exact text
+# forwarded to the LLM (verified directly by calling
+# `reduce_html_to_text()` on the fetched CSV and grepping the result).
+# But a real end-to-end
+# `uv run partner-scrape --source sd-math-circle --dry-run -v` run
+# (real network, real `AnthropicProgramLLMClient`, matching the sprint
+# 027/028 verification standard) shows `extract_programs()` locks onto
+# the wrong axis of this page's shape: this sheet is a dense
+# ~40-week x 5-column *class-schedule grid* (regular Saturday classes
+# for the Fermat/Euler/Gauss/Cauchy/AI grade-level groups), with the
+# actual competition-dated items (AMC, AIME, ARML, USAMO, BAMO, etc.)
+# appearing as scattered one-off rows *inside* that grid rather than
+# as the page's own top-level "distinct programs." The LLM instead
+# extracted the 5 recurring class-group columns themselves as if they
+# were 5 distinct programs -- "San Diego Math Circle - Fermat Group"
+# / "- Euler Group" / "- Gauss Group" / "- Cauchy Group" / "- AI
+# Group" -- each dated identically to Sept 27, 2025 (the shared
+# "Opening Day" row), and none of them named AMC, AIME, ARML, or Math
+# Kangaroo. `found=6 dated=5` in the dry run, but every one of the 5
+# dated records is wrong on two axes at once: mislabeled (regular
+# enrichment classes tagged `opportunity_type = "Competitions"`, per
+# this file's own config override) and misdated (all five sharing one
+# meaningless "opening day" date rather than each row's own actual
+# date). Publishing these would be actively incorrect data, not merely
+# incomplete -- worse than the zero-yield case sprint 027/028's
+# "enabled with a reason comment" precedent otherwise covers.
+#
+# This is the `program_page_multi` mechanism's existing "one-off
+# competition page" prompt weakness (same class of failure the
+# team-lead flagged from ticket 001's 5 disabled sources), compounded
+# here by this specific page's shape: a weekly attendance grid, not a
+# simple "here are our N programs" listing. Fixing it would mean
+# changing the LLM extraction prompt/mechanism itself, which is out of
+# this ticket's and this sprint's scope (sprint.md's Out of Scope:
+# "Building a new extraction mechanism -- this sprint reuses Sprint
+# A's (027) curated-source + LLM date-extraction mechanism as-is").
+# Registered disabled rather than left incorrectly enabled with
+# mislabeled/misdated records. Re-verify (or revisit with a
+# prompt/mechanism change) in a future ticket if this source should
+# ship -- e.g. a per-row or per-cell extraction pass, or a config
+# escape hatch to point the LLM at the individual `/events/<slug>`
+# pages this site also publishes for AMC/AIME/ARML/Math Kangaroo
+# (sdmathcircle.org/events/amc-10-12-a, /events/aime, /events/arml,
+# /events/math-kangaroo, etc.) instead of the grid sheet.
+#
+# Math Kangaroo specifically: not present as a *dated* item anywhere
+# in the live 2025-2026 sheet even before the above extraction
+# failure -- checked directly (grep -i "kangaroo" over the full
+# 335-line CSV export), it appears exactly once, in the sheet's own
+# "External Links" reference table at the bottom (`Math Kangaroo,,
+# http://www.mathkangaroo.com/mk/default.html`), with no date
+# attached. Unlike AMC/AIME, which SDMC hosts on-site with specific
+# dated rows, Math Kangaroo is administered through independent local
+# registration centers nationally, and SDMC's sheet only links to it
+# as an external resource, not as one of its own dated calendar
+# entries this cycle.
+
+org_name = "San Diego Math Circle"
+adapter_type = "program_page_multi"
+enabled = false  # disabled: real extraction failure, live-verified 2026-09-02 -- LLM extracts the 5 regular class-group columns (all sharing one "Opening Day" date), not the actual AMC/AIME/ARML dated rows buried in this grid-shaped sheet; see comment above
+
+[config]
+url = "https://docs.google.com/spreadsheets/d/18u6y_7MGD3ZQCIBh7fqE5TZTK0qzP0Ns6z1A9_5W0oA/export?format=csv&gid=28676418"
+program_kind = "program"
+opportunity_type = "Competitions"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 30 (2026-08-30 competition sources without feeds); sprint 029 ticket 002, live-verified end-to-end via real dry-run (2026-09-02) -- fetch/parse succeed but LLM extraction on this grid-shaped sheet yields mislabeled/misdated records, not the AMC/AIME/ARML competition items; see file header"

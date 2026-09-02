@@ -24,6 +24,20 @@ deliberately, per that same "mirrors, never imports" rule -- do not import
 **no** explicit ``api_key`` argument -- the SDK resolves
 ``ANTHROPIC_API_KEY`` itself, matching ``enrich/llm_client.py``'s exact
 credential convention.
+
+**(Sprint 029 ticket 006)** ``extract_program``/``extract_programs`` gain
+two backward-compatible keyword-only parameters, ``profile`` and
+``reference_date``, selecting between this module's original
+application-window *program* system prompts (default, unchanged) and a
+new single-dated-event *competition* prompt pair
+(``_SYSTEM_PROMPT_COMPETITION``/``_SYSTEM_PROMPT_COMPETITION_MULTI``),
+fixing a systematic date-vs-deadline-framing and year-inference
+extraction failure tickets 001/002's own live-verification found in the
+unrevised prompts when applied to a competition/tournament page. See
+``adapters/DESIGN.md``'s "Revision (2026-09-02 -- sprint 029
+competition-genre extraction fix)" section for the full evidence and
+design write-up. ``ProgramExtractionResult`` gains one new field,
+``registration_deadline``, populated only by the competition profile.
 """
 
 from __future__ import annotations
@@ -33,6 +47,7 @@ import json
 import types
 import typing
 from dataclasses import dataclass, field
+from datetime import date
 from typing import Any, Callable, Protocol
 
 import anthropic
@@ -96,6 +111,15 @@ class ProgramExtractionResult:
     eligibility: str = ""
     is_open: bool = True
     opportunity_type: str = ""
+    #: ISO date (``YYYY-MM-DD``) or ``""`` -- (sprint 029 ticket 006) a
+    #: registration/team-signup/paperwork deadline stated *separately*
+    #: from the event's own date. Populated only by ``profile=
+    #: "competition"``'s field rules; always ``""`` for the base
+    #: ``profile="program"`` (an application-window program's one
+    #: deadline is already ``date_end`` -- see ``_FIELD_EXTRACTION_RULES``).
+    #: Never mapped onto ``Event.start``/``Event.end`` -- see
+    #: ``adapters/program_page.py``'s ``_map_result_to_event``.
+    registration_deadline: str = ""
 
 
 class ProgramLLMClient(Protocol):
@@ -108,11 +132,39 @@ class ProgramLLMClient(Protocol):
     partially-parsed dict.
     """
 
-    def extract_program(self, url: str, body: str) -> ProgramExtractionResult:
-        """Return one LLM extraction result for the page at ``url``."""
+    def extract_program(
+        self,
+        url: str,
+        body: str,
+        *,
+        profile: str = "program",
+        reference_date: date | None = None,
+    ) -> ProgramExtractionResult:
+        """Return one LLM extraction result for the page at ``url``.
+
+        **(Sprint 029 ticket 006)** ``profile`` selects the system prompt
+        variant: ``"program"`` (default, unchanged) for an
+        application-window program page, or ``"competition"`` for a
+        single-dated-event competition/tournament page (its own
+        ``date_start``/``date_end``-vs-``registration_deadline``
+        framing). ``reference_date`` (default ``None``, meaning "no
+        reference date line is added to the prompt" -- byte-identical to
+        pre-revision behavior) is injected into the *user* prompt as
+        "Page fetched on: ``<ISO date>``", used only by the competition
+        profile's year-inference rule. Both are optional and
+        backward-compatible: every call site that omits them is
+        unaffected.
+        """
         ...
 
-    def extract_programs(self, url: str, body: str) -> list[ProgramExtractionResult]:
+    def extract_programs(
+        self,
+        url: str,
+        body: str,
+        *,
+        profile: str = "program",
+        reference_date: date | None = None,
+    ) -> list[ProgramExtractionResult]:
         """Return one LLM extraction result *per inline program record*
         found on the page at ``url``.
 
@@ -121,6 +173,9 @@ class ProgramLLMClient(Protocol):
         ``adapters/DESIGN.md``'s Revision note), rather than the single
         record :meth:`extract_program` recovers for a page dedicated to
         one program.
+
+        **(Sprint 029 ticket 006)** ``profile``/``reference_date`` -- see
+        :meth:`extract_program`.
         """
         ...
 
@@ -239,7 +294,61 @@ either way.
 - opportunity_type: exactly one of {_OPPORTUNITY_TYPE_VALUES}, based on \
 what kind of opportunity this is. Use "Out-of-school Programs" as the \
 general default whenever nothing more specific clearly applies -- this \
-field is never left blank."""
+field is never left blank.
+- registration_deadline: always "" for this page type -- an \
+application-window program's one deadline is already date_end."""
+
+
+#: (Sprint 029 ticket 006) The per-field extraction rules for the
+#: competition/tournament genre, shared verbatim between the
+#: single-record (:data:`_SYSTEM_PROMPT_COMPETITION`) and multi-record
+#: (:data:`_SYSTEM_PROMPT_COMPETITION_MULTI`) system prompts, the same
+#: way :data:`_FIELD_EXTRACTION_RULES` is shared between the base
+#: single-/multi-record prompts. Unlike the base profile's rules (a
+#: prose *program* page whose primary date is an application window),
+#: this profile's page is a single dated *event* -- see
+#: ``adapters/DESIGN.md``'s "Revision (2026-09-02 -- sprint 029
+#: competition-genre extraction fix)" section for the live evidence
+#: (``sd-brain-bee``, ``seaperch-sd-regional``, ``tritonhacks``) this
+#: rewrite directly addresses.
+_FIELD_EXTRACTION_RULES_COMPETITION = f"""- program_name: the competition or tournament's name, as titled on the \
+page.
+- audience_grades: zero or more grade/audience descriptors actually named \
+on the page (e.g. "9th grade", "high school", "undergraduate"), as short \
+strings in the page's own words.
+- date_start: the competition/tournament event's OWN date, as an ISO date \
+(YYYY-MM-DD), or "" if not stated -- the first day of the event if it \
+spans multiple days. Look for the date under any of: "Event Date," \
+"Competition Date," "Tournament Date," "Save the Date," as well as \
+ordinary prose. This is NEVER a registration, sign-up, or paperwork \
+deadline -- put that in registration_deadline instead, never here.
+- date_end: the event's own last day, as an ISO date (YYYY-MM-DD), if it \
+spans multiple days, else "". It is NOT a registration, sign-up, or \
+paperwork deadline -- put that in registration_deadline instead, never \
+here.
+- registration_deadline: a registration, team-signup, or paperwork \
+deadline (e.g. a Technical Design Report submission due date) stated \
+separately from the event's own date, as an ISO date (YYYY-MM-DD), or "" \
+if none is stated or the page states only one date.
+- cost: a short description of program cost or stipend/pay (e.g. "Free", \
+"Paid stipend", "$500 fee"), or "" if not stated.
+- eligibility: a short free-text summary of eligibility requirements \
+(grade level, residency, citizenship, GPA, etc.), or "" if not stated.
+- is_open: true if open for enrollment/application; false if closed, \
+full, or sold out. Default to true when the page gives no clear signal \
+either way.
+- opportunity_type: exactly one of {_OPPORTUNITY_TYPE_VALUES}, based on \
+what kind of opportunity this is. Use "Out-of-school Programs" as the \
+general default whenever nothing more specific clearly applies -- this \
+field is never left blank.
+
+Year inference (a narrow, explicit exception to "never guess a date not \
+stated," scoped only to a year component): if a date on the page states \
+a month and day but no year, infer the soonest year (this one, or next) \
+in which that month/day falls on or after the reference date stated \
+above ("Page fetched on: <date>") -- never leave the year off, and do \
+not default to the current calendar year if that month/day has already \
+passed relative to the reference date."""
 
 
 _SYSTEM_PROMPT = f"""You are helping curate a directory of STEM learning \
@@ -283,10 +392,72 @@ single object with one key, "programs", whose value is a list with \
 exactly one entry per distinct program found on the page."""
 
 
-def _build_user_prompt(url: str, body: str) -> str:
+#: (Sprint 029 ticket 006) System prompt for ``extract_program(...,
+#: profile="competition")`` -- one page dedicated to a single-dated
+#: competition/tournament event, as opposed to :data:`_SYSTEM_PROMPT`'s
+#: application-window program genre. See ``adapters/DESIGN.md``'s
+#: "Revision (2026-09-02 -- sprint 029 competition-genre extraction
+#: fix)" section.
+_SYSTEM_PROMPT_COMPETITION = f"""You are helping curate a directory of STEM learning \
+opportunities for learners of all ages in the San Diego area. You are \
+given the raw text of one curated competition or tournament page -- a \
+single dated event, such as a robotics league match, an academic bowl, \
+a hackathon, or a science fair -- scraped from an organization's \
+website. Unlike an application-window program, this page's primary date \
+is the event's OWN date, not an application or registration deadline. \
+Extract the following fields, using only what is solidly supported by \
+the page text. Never guess a specific date, grade, or amount that is \
+not stated or strongly implied, except for the narrow year-inference \
+rule below.
+
+{_FIELD_EXTRACTION_RULES_COMPETITION}
+
+Respond only with the structured JSON the response format requires."""
+
+
+#: (Sprint 029 ticket 006) The ``profile="competition"`` counterpart to
+#: :data:`_SYSTEM_PROMPT_MULTI` -- one page whose body holds N inline
+#: competition/tournament records rather than one.
+_SYSTEM_PROMPT_COMPETITION_MULTI = f"""You are helping curate a directory of STEM learning \
+opportunities for learners of all ages in the San Diego area. You are \
+given the raw text of one curated page that describes MULTIPLE distinct \
+competitions or tournaments -- each a single dated event -- as separate \
+inline sections on the same page, rather than links out to separate \
+detail pages. Identify every distinct competition described on the \
+page, and for EACH one extract the following fields, using only what is \
+solidly supported by that competition's own section of the page text. \
+Never guess a specific date, grade, or amount that is not stated or \
+strongly implied for that competition, except for the narrow \
+year-inference rule below, and never blend two distinct competitions' \
+details into one record.
+
+{_FIELD_EXTRACTION_RULES_COMPETITION}
+
+If no distinct competitions are described on the page, return an empty \
+list.
+
+Respond only with the structured JSON the response format requires: a \
+single object with one key, "programs", whose value is a list with \
+exactly one entry per distinct competition found on the page."""
+
+
+def _build_user_prompt(url: str, body: str, reference_date: date | None = None) -> str:
+    """Build the per-call user prompt.
+
+    **(Sprint 029 ticket 006)** ``reference_date``, when given, is
+    injected as a "Page fetched on: ``<ISO date>``" line -- used by the
+    competition profile's year-inference rule (see
+    ``_FIELD_EXTRACTION_RULES_COMPETITION``). Injected into the *user*
+    prompt, never the system prompt, since it varies per call rather
+    than being static text. ``reference_date=None`` (every pre-revision
+    call site) omits the line entirely, so the prompt is byte-identical
+    to pre-revision behavior.
+    """
+    reference_line = f"Page fetched on: {reference_date.isoformat()}\n\n" if reference_date is not None else ""
     return (
         f"Program page URL: {url}\n\n"
-        "Here is the page's raw text. Extract the fields the response "
+        + reference_line
+        + "Here is the page's raw text. Extract the fields the response "
         "format requires.\n\n" + body
     )
 
@@ -335,6 +506,7 @@ def _result_from_dict(data: Any) -> ProgramExtractionResult:
         eligibility=_expect_str(data["eligibility"], "eligibility"),
         is_open=_expect_bool(data["is_open"], "is_open"),
         opportunity_type=_expect_str(data["opportunity_type"], "opportunity_type"),
+        registration_deadline=_expect_str(data["registration_deadline"], "registration_deadline"),
     )
 
 
@@ -402,29 +574,50 @@ class AnthropicProgramLLMClient:
     def __init__(self) -> None:
         self._client = anthropic.Anthropic()
 
-    def extract_program(self, url: str, body: str) -> ProgramExtractionResult:
+    def extract_program(
+        self,
+        url: str,
+        body: str,
+        *,
+        profile: str = "program",
+        reference_date: date | None = None,
+    ) -> ProgramExtractionResult:
+        system_prompt = _SYSTEM_PROMPT_COMPETITION if profile == "competition" else _SYSTEM_PROMPT
         response = self._client.messages.create(
             model=MODEL_ID,
             max_tokens=1024,
-            system=_SYSTEM_PROMPT,
-            messages=[{"role": "user", "content": _build_user_prompt(url, body)}],
+            system=system_prompt,
+            messages=[{"role": "user", "content": _build_user_prompt(url, body, reference_date)}],
             output_config={
                 "format": {"type": "json_schema", "schema": PROGRAM_EXTRACTION_JSON_SCHEMA}
             },
         )
         return _parse_response(response)
 
-    def extract_programs(self, url: str, body: str) -> list[ProgramExtractionResult]:
+    def extract_programs(
+        self,
+        url: str,
+        body: str,
+        *,
+        profile: str = "program",
+        reference_date: date | None = None,
+    ) -> list[ProgramExtractionResult]:
         """(Ticket 006 exception revision) One call, N results -- for a
         page whose body holds N inline program records (SIO's shape).
         ``max_tokens`` is raised over :meth:`extract_program`'s to make
         room for a list-valued response of unknown-but-bounded length.
+
+        **(Sprint 029 ticket 006)** ``profile``/``reference_date`` --
+        see :meth:`extract_program`.
         """
+        system_prompt = (
+            _SYSTEM_PROMPT_COMPETITION_MULTI if profile == "competition" else _SYSTEM_PROMPT_MULTI
+        )
         response = self._client.messages.create(
             model=MODEL_ID,
             max_tokens=4096,
-            system=_SYSTEM_PROMPT_MULTI,
-            messages=[{"role": "user", "content": _build_user_prompt(url, body)}],
+            system=system_prompt,
+            messages=[{"role": "user", "content": _build_user_prompt(url, body, reference_date)}],
             output_config={
                 "format": {"type": "json_schema", "schema": PROGRAM_LIST_EXTRACTION_JSON_SCHEMA}
             },
@@ -458,6 +651,14 @@ class FixtureProgramLLMClient:
         KeyError: if ``key_fn(url, body)`` is absent from the relevant
             responses dict -- a loud failure if the code under test asks
             this double to extract a page it wasn't told to expect.
+
+    **(Sprint 029 ticket 006)** :meth:`extract_program`/
+    :meth:`extract_programs` accept the same ``profile``/
+    ``reference_date`` keyword-only parameters as the real
+    ``ProgramLLMClient`` Protocol -- accepted, ignored: canned responses
+    never depend on them, so no existing fixture-test call site needs to
+    change, and ``calls``/``list_calls`` keep recording only ``(url,
+    body)`` exactly as before.
     """
 
     responses: dict[Any, ProgramExtractionResult] = field(default_factory=dict)
@@ -466,10 +667,24 @@ class FixtureProgramLLMClient:
     calls: list[tuple[str, str]] = field(default_factory=list)
     list_calls: list[tuple[str, str]] = field(default_factory=list)
 
-    def extract_program(self, url: str, body: str) -> ProgramExtractionResult:
+    def extract_program(
+        self,
+        url: str,
+        body: str,
+        *,
+        profile: str = "program",
+        reference_date: date | None = None,
+    ) -> ProgramExtractionResult:
         self.calls.append((url, body))
         return self.responses[self.key_fn(url, body)]
 
-    def extract_programs(self, url: str, body: str) -> list[ProgramExtractionResult]:
+    def extract_programs(
+        self,
+        url: str,
+        body: str,
+        *,
+        profile: str = "program",
+        reference_date: date | None = None,
+    ) -> list[ProgramExtractionResult]:
         self.list_calls.append((url, body))
         return self.list_responses[self.key_fn(url, body)]

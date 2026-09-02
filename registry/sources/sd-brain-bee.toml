@@ -1,0 +1,56 @@
+# San Diego Brain Bee -- hosted by UC San Diego's neuroscience graduate
+# program (neurograd.ucsd.edu). Sprint 029 ticket 001 (issue 30's
+# single-event program_page competition batch), `program_page`
+# adapter, `config.opportunity_type = "Competitions"` per the sprint's
+# operator-curated-override mechanism decision (registry/DESIGN.md's
+# sprint 029 addendum).
+#
+# CORRECTION (2026-09-02): this ticket's first pass (2026-09-01)
+# registered this source `enabled = true` claiming a "correctly-dated"
+# WebFetch summary of "February 14, 2026" -- never confirmed against
+# the real adapter. A real end-to-end
+# `uv run partner-scrape --source sd-brain-bee --dry-run -v` run
+# (2026-09-02, real network, real `AnthropicProgramLLMClient`,
+# reproduced twice for consistency) shows the page fetches cleanly and
+# the reduced text plainly contains the date ("Save the Date: 🗓 Event
+# Date: February 14, 2026 at 10:00AM - 2:00 PM"), and eligibility IS
+# correctly recovered ("High school students (grades 9-12)... ages
+# 14-18"), but `date_start`/`date_end` both come back empty --
+# reproduced identically across two independent extraction calls
+# against the same fetched text, so this is a systematic extraction
+# miss (likely the emoji/"Save the Date" framing not matching the
+# LLM's expected date-field phrasing), not one-off model noise.
+# `found=1 dated=0`, `wrote 0 opportunities`. Registered disabled
+# rather than shipped with a silently missing date. Fixing the
+# extraction prompt is out of this registry-only ticket's scope --
+# flagged here as a follow-up. Re-verify once that lands.
+#
+# RE-ENABLED (2026-09-02, ticket 029-007, post ticket-006 competition-
+# profile fix): the fix landed. The `profile="competition"` prompt's
+# explicit "look for 'Event Date,' ... 'Save the Date,'" phrasing
+# guidance directly addresses this source's prior miss. A real
+# `uv run partner-scrape --source sd-brain-bee --dry-run -v` run
+# (2026-09-02, real network, real `AnthropicProgramLLMClient`) now
+# yields `found=1 dated=1 wrote 1 (dry run)`, and three independent
+# direct `extract_program(profile="competition")` calls against the
+# identical, freshly-fetched reduced text all consistently return
+# `date_start = "2026-02-14"` (matches the page's own "Event Date:
+# February 14, 2026" and issue 30's recorded Feb 14 2026 date) with
+# `date_end = ""` (single-day event, correct) and eligibility intact --
+# reproduced 4/4 across the CLI run and three direct calls.
+# `registration_deadline` is correctly empty -- the page states only
+# one date, no separate deadline. Re-enabled.
+
+org_name = "UC San Diego Neurograd (San Diego Brain Bee)"
+adapter_type = "program_page"
+enabled = true  # enabled: real post-fix dry-run re-verification (2026-09-02, reproduced 4x) recovers the correct 2026-02-14 event date -- see comment above
+
+[config]
+url = "https://neurograd.ucsd.edu/neuro-events/outreach/brain-bee.html"
+program_kind = "program"
+opportunity_type = "Competitions"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 30 (2026-08-30 competition sources without feeds); sprint 029 ticket 001 (corrected 2026-09-02 after a WebFetch-only check that never exercised the real extraction pipeline)"

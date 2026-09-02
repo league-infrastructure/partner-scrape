@@ -550,3 +550,340 @@ class TestMultiWeekThemedCampPage:
         # not one blended date range applied to all three.
         ends = {e.end.date().isoformat() for e in events}
         assert len(ends) == 3
+
+
+class TestSDMathCircleFixtureExtraction:
+    """Sprint 029 ticket 002 (issue 30, SUC-045): San Diego Math
+    Circle's public master-calendar Google Sheet, registered as
+    ``program_page_multi`` (``registry/sources/sd-math-circle.toml``).
+
+    This proves the *mechanism* SUC-045's Main Flow describes -- one
+    fetched sheet export, reduced via ``reduce_html_to_text()``, run
+    through ``extract_programs()``, with each of its N distinct dated
+    items mapped to its own independent ``Event`` -- using a canned
+    ``FixtureProgramLLMClient`` result list standing in for what a
+    correct extraction of this page's AMC/AIME dated rows would look
+    like. This is independent of, and does not contradict,
+    ``sd-math-circle.toml``'s own live-verified finding that the real
+    ``AnthropicProgramLLMClient`` does not currently produce this
+    correct result on this specific grid-shaped sheet (it extracts the
+    page's recurring class-group columns instead) -- the real source
+    is registered ``enabled = false`` for exactly that reason. This
+    test demonstrates the adapter's N-results-to-N-Events mapping
+    itself is sound, the same code path every other ``program_page_multi``
+    source already relies on.
+
+    Fixture body is ``tests/fixtures/program_pages/
+    sd_math_circle_calendar.csv`` -- a trimmed, real excerpt of the
+    live 2025-2026 Master Calendar sheet's actual CSV export (real
+    row/column shape: recurring class-group columns interleaved with
+    one-off competition-dated rows), matching the CSV export form
+    actually registered in ``config.url``.
+    """
+
+    URL = (
+        "https://docs.google.com/spreadsheets/d/18u6y_7MGD3ZQCIBh7fqE5TZTK0qzP0Ns6z1A9_5W0oA"
+        "/export?format=csv&gid=28676418"
+    )
+
+    #: Five distinct dated competition items, standing in for a correct
+    #: extraction of the fixture CSV's AMC/AIME rows -- deliberately
+    #: not the wrong "class group" results the real live LLM call
+    #: currently returns for this page (see class docstring).
+    _RESULTS = [
+        ProgramExtractionResult(
+            program_name="AMC 10 A and AMC 12 A",
+            audience_grades=["9th grade", "10th grade", "11th grade", "12th grade"],
+            date_start="2025-11-05",
+            date_end="",
+            cost="",
+            eligibility="",
+            is_open=True,
+            opportunity_type="Competitions",
+        ),
+        ProgramExtractionResult(
+            program_name="AMC 10 B and AMC 12 B",
+            audience_grades=["9th grade", "10th grade", "11th grade", "12th grade"],
+            date_start="2025-11-13",
+            date_end="",
+            cost="",
+            eligibility="",
+            is_open=True,
+            opportunity_type="Competitions",
+        ),
+        ProgramExtractionResult(
+            program_name="AMC 8",
+            audience_grades=["6th grade", "7th grade", "8th grade"],
+            date_start="2026-01-25",
+            date_end="",
+            cost="",
+            eligibility="",
+            is_open=True,
+            opportunity_type="Competitions",
+        ),
+        ProgramExtractionResult(
+            program_name="AIME I",
+            audience_grades=["9th grade", "10th grade", "11th grade", "12th grade"],
+            date_start="2026-02-05",
+            date_end="",
+            cost="",
+            eligibility="AMC 10/12 qualifiers only",
+            is_open=True,
+            opportunity_type="Competitions",
+        ),
+        ProgramExtractionResult(
+            program_name="American Regions Math League (ARML)",
+            audience_grades=["9th grade", "10th grade", "11th grade", "12th grade"],
+            date_start="2026-05-29",
+            date_end="2026-05-30",
+            cost="",
+            eligibility="By evaluation and invitation",
+            is_open=True,
+            opportunity_type="Competitions",
+        ),
+    ]
+
+    def _body(self) -> str:
+        return (FIXTURES_DIR / "sd_math_circle_calendar.csv").read_text()
+
+    def _source(self) -> SourceConfig:
+        return SourceConfig(
+            source_id="fixture_sd_math_circle",
+            org_name="Fixture San Diego Math Circle",
+            adapter_type="program_page_multi",
+            config={
+                "url": self.URL,
+                "program_kind": "program",
+                "opportunity_type": "Competitions",
+            },
+        )
+
+    def test_n_dated_rows_yield_n_distinct_competitions_events(self, tmp_path):
+        llm_client = FixtureProgramLLMClient(list_responses={self.URL: self._RESULTS})
+        adapter = ProgramPageMultiAdapter(llm_client=llm_client, cache=ProgramExtractionCache(tmp_path))
+        raw = RawResponse(ref=EventRef(url=self.URL), status=200, body=self._body())
+
+        events = list(adapter.extract(raw, self._source()))
+
+        assert len(events) == 5
+        assert all(e.opportunity_type == "Competitions" for e in events)
+        assert all(e.url == self.URL for e in events)
+        assert all(e.source_id == "fixture_sd_math_circle" for e in events)
+
+        titles = [e.title for e in events]
+        assert titles == [
+            "AMC 10 A and AMC 12 A",
+            "AMC 10 B and AMC 12 B",
+            "AMC 8",
+            "AIME I",
+            "American Regions Math League (ARML)",
+        ]
+        # Each record keeps its own distinct start date -- proves
+        # independent per-record mapping, not one shared date (the
+        # real live LLM call's actual, wrong failure mode for this
+        # page -- see class docstring) applied to every result.
+        starts = [e.start.date().isoformat() for e in events]
+        assert starts == ["2025-11-05", "2025-11-13", "2026-01-25", "2026-02-05", "2026-05-29"]
+        assert len(set(starts)) == 5
+
+        arml = events[-1]
+        assert arml.end.date().isoformat() == "2026-05-30"
+
+
+class TestSDCECFixtureExtraction:
+    """Sprint 029 ticket 004 (issue 30, SUC-047): SDCEC's hand-curated
+    youth STEM event list, registered as ``program_page_multi``
+    (``registry/sources/sdcec.toml``), with no ``opportunity_type``
+    override -- the list mixes competitions with other opportunity
+    types, so each item keeps the LLM's own per-record classification
+    (matching ``TestSDFestivalOfScienceEngineeringRegistration``'s/
+    ticket 003's identical no-override reasoning).
+
+    This proves the *mechanism* SUC-047's Main Flow describes -- one
+    fetched page, run through ``extract_programs()``, with N
+    independently-typed inline records (including the Engineers Week
+    Awards Banquet) each mapped to its own ``Event`` -- using a canned
+    ``FixtureProgramLLMClient`` result list, the same "mechanism is
+    fixture-proven instead" approach ticket 003 used
+    (``TestSDFestivalOfScienceEngineeringListingSource``) once its own
+    live verification found the real page's content did not exercise
+    the happy path. ``sdcec.toml``'s own live-verified finding is that
+    the real ``AnthropicProgramLLMClient`` call is non-deterministic on
+    the real ``/stem`` page (0/17/21/32 distinct result sets across four
+    real calls) and that no live Feb 20 2026 Engineers Week awards
+    record currently exists on the site at all -- the real source is
+    registered ``enabled = false`` for exactly those reasons (see that
+    file's own header comment). This test demonstrates the adapter's
+    N-results-to-N-Events mapping itself is sound, the same code path
+    every other ``program_page_multi`` source already relies on.
+
+    Fixture body is
+    ``tests/fixtures/program_pages/sdcec_stem_page.html`` -- a small
+    fixture reproducing the real page's shape: an unlabeled "current"
+    curated list followed by an undated-by-item "Prior sTEm Events"
+    archive section on the same page.
+    """
+
+    URL = "https://www.sandiegoengineers.org/stem"
+
+    #: Three distinct items from the "current" section, standing in for
+    #: a correct extraction of this page's curated list -- deliberately
+    #: independently typed (Competitions, Camps, Out-of-school
+    #: Programs), per SUC-047's own "no override, let the LLM classify
+    #: each record independently" design.
+    _RESULTS = [
+        ProgramExtractionResult(
+            program_name="San Diego Engineers Week Awards Banquet",
+            audience_grades=[],
+            date_start="2026-02-20",
+            date_end="",
+            cost="",
+            eligibility="K-12 and professional honorees",
+            is_open=True,
+            opportunity_type="Competitions",
+        ),
+        ProgramExtractionResult(
+            program_name="Optics Workshop",
+            audience_grades=["3rd grade", "4th grade", "5th grade", "6th grade", "7th grade", "8th grade"],
+            date_start="2026-09-12",
+            date_end="",
+            cost="",
+            eligibility="girls grade 3-8",
+            is_open=True,
+            opportunity_type="Camps",
+        ),
+        ProgramExtractionResult(
+            program_name="Congressional App Challenge",
+            audience_grades=["8th grade", "9th grade", "10th grade", "11th grade", "12th grade"],
+            date_start="2026-06-01",
+            date_end="2026-10-28",
+            cost="",
+            eligibility="teens 13-18",
+            is_open=True,
+            opportunity_type="Competitions",
+        ),
+    ]
+
+    def _body(self) -> str:
+        return (FIXTURES_DIR / "sdcec_stem_page.html").read_text()
+
+    def _source(self) -> SourceConfig:
+        return SourceConfig(
+            source_id="fixture_sdcec",
+            org_name="Fixture San Diego County Engineering Council",
+            adapter_type="program_page_multi",
+            config={
+                "url": self.URL,
+                "program_kind": "program",
+                # Deliberately no opportunity_type override -- see class
+                # docstring.
+            },
+        )
+
+    def test_n_curated_items_yield_n_independently_typed_events(self, tmp_path):
+        llm_client = FixtureProgramLLMClient(list_responses={self.URL: self._RESULTS})
+        adapter = ProgramPageMultiAdapter(llm_client=llm_client, cache=ProgramExtractionCache(tmp_path))
+        raw = RawResponse(ref=EventRef(url=self.URL), status=200, body=self._body())
+
+        events = list(adapter.extract(raw, self._source()))
+
+        assert len(events) == 3
+        assert all(e.url == self.URL for e in events)
+        assert all(e.source_id == "fixture_sdcec" for e in events)
+
+        awards, optics, cac = events
+        assert awards.title == "San Diego Engineers Week Awards Banquet"
+        assert awards.start == datetime.fromisoformat("2026-02-20")
+        assert awards.opportunity_type == "Competitions"
+
+        assert optics.opportunity_type == "Camps"
+        assert cac.opportunity_type == "Competitions"
+
+        # Independently classified -- no config override forced a
+        # single shared opportunity_type onto all three (SUC-047's own
+        # "no override" design point).
+        assert len({e.opportunity_type for e in events}) == 2
+        assert len({e.identity_key() for e in events}) == 3
+
+
+class TestGSDSECFixtureExtraction:
+    """Sprint 029 ticket 005 (issue 30, SUC-048): GSDSEF's *existing*
+    registration (``registry/sources/gsdsef.toml``) was edited in place
+    -- ``adapter_type`` changed from ``generic_html`` to
+    ``program_page_multi``, ``config.url`` pointed directly at
+    ``/information/schedule`` (the one page carrying the fair week's
+    judging/public-day dates; the pre-existing sitemap-diff discovery
+    structurally cannot reach it -- see the TOML file's own header
+    comment) -- with ``config.opportunity_type = "Competitions"``
+    selecting the competition extraction profile.
+
+    This proves the mechanism: one fetched schedule page,
+    ``extract_programs(profile="competition")``, mapped to an ``Event``
+    via the existing per-result mapping. Real live verification
+    (2026-09-02, reproduced 5x across ``extract_programs()`` and
+    ``extract_program()``) consistently found the *real* extraction
+    returns exactly ONE record spanning the whole Fair Week
+    (``date_start = "2027-03-08"``, ``date_end = "2027-03-14"``,
+    ``registration_deadline = "2027-02-19"``) rather than two
+    separately-dated "Judging"/"Public Day" records -- both target days
+    (Wed judging, Sat public viewing) fall inside that one exported
+    range. This fixture reproduces that same real, single-record
+    result, not a hypothetical two-record split.
+    """
+
+    URL = "https://www.gsdsef.org/information/schedule"
+
+    _RESULTS = [
+        ProgramExtractionResult(
+            program_name="2027 GSDSEF (Greater San Diego Science and Engineering Fair)",
+            audience_grades=["6th grade", "7th grade", "8th grade", "9th grade",
+                              "10th grade", "11th grade", "12th grade"],
+            date_start="2027-03-08",
+            date_end="2027-03-14",
+            cost="",
+            eligibility="",
+            is_open=True,
+            opportunity_type="Competitions",
+            registration_deadline="2027-02-19",
+        ),
+    ]
+
+    def _body(self) -> str:
+        return (FIXTURES_DIR / "gsdsef_schedule_page.html").read_text()
+
+    def _source(self) -> SourceConfig:
+        return SourceConfig(
+            source_id="gsdsef",
+            org_name="Greater San Diego Science and Engineering Fair",
+            adapter_type="program_page_multi",
+            config={
+                "url": self.URL,
+                "program_kind": "program",
+                "opportunity_type": "Competitions",
+            },
+        )
+
+    def test_fair_week_range_covers_both_judging_and_public_day(self, tmp_path):
+        llm_client = FixtureProgramLLMClient(list_responses={self.URL: self._RESULTS})
+        adapter = ProgramPageMultiAdapter(llm_client=llm_client, cache=ProgramExtractionCache(tmp_path))
+        raw = RawResponse(ref=EventRef(url=self.URL), status=200, body=self._body())
+
+        events = list(adapter.extract(raw, self._source()))
+
+        assert len(events) == 1
+        event = events[0]
+        assert event.opportunity_type == "Competitions"
+        assert event.start == datetime.fromisoformat("2027-03-08")
+        assert event.end == datetime.fromisoformat("2027-03-14")
+
+        # Judging (Wed Mar 10) and the public day (Sat Mar 13) both
+        # fall inside the exported [start, end] range.
+        judging_day = datetime.fromisoformat("2027-03-10")
+        public_day = datetime.fromisoformat("2027-03-13")
+        assert event.start <= judging_day <= event.end
+        assert event.start <= public_day <= event.end
+
+        # registration_deadline surfaces via Event.description, the
+        # same mapping seaperch-sd-regional.toml's own registration
+        # relies on (adapters/DESIGN.md's sprint 029 Design Rationale).
+        assert event.description == "Registration deadline: 2027-02-19"

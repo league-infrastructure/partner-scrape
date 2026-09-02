@@ -1,0 +1,45 @@
+# Congressional App Challenge -- San Diego-area districts (CA-49, CA-50,
+# CA-51, CA-52 confirmed participating; CA-48 not, per live check
+# below). Sprint 029 ticket 001 (issue 30's single-event program_page
+# competition batch), `program_page` adapter, `config.opportunity_type
+# = "Competitions"` per the sprint's operator-curated-override
+# mechanism decision (registry/DESIGN.md's sprint 029 addendum). One
+# registration covers all participating local districts via the
+# challenge's own participating-districts page, per issue 30's
+# instruction to register the org's own official page directly.
+# `house.gov` is deliberately NOT used as `config.url` -- issue 30
+# itself records "house.gov 403s; do not register that domain",
+# confirmed again during this ticket's own verification pass (a
+# district's own `*.house.gov/AppChallenge` page 403s the same way).
+#
+# Live-verified end-to-end 2026-09-02 via a real
+# `uv run partner-scrape --source congressional-app-challenge-sd
+# --dry-run -v` run (real network, real `AnthropicProgramLLMClient`,
+# matching the sprint 027/028 standard -- this ticket's original
+# 2026-09-01 WebFetch-only pass is superseded by this real run, per a
+# team-lead correction that the first pass never exercised the actual
+# adapter). `https://www.congressionalappchallenge.us/participating-districts/`
+# fetches cleanly (HTTP 200) and extraction succeeds: program_name
+# "Congressional App Challenge", `date_start = "2026-05-01"`,
+# `date_end = "2026-10-26"`, cost "Free", opportunity_type
+# "Competitions" -- exactly matching the page's own stated "runs from
+# May 1 to October 26, 2026" window. `found=1 dated=1`, and this is
+# the ONE source in this ticket's whole batch that currently
+# `wrote 1 opportunity` in the dry run -- a genuinely live, currently-
+# open, correctly-dated Competitions record as of this verification
+# date (Oct 26 2026 is still in the future relative to 2026-09-02),
+# not merely a stale-cycle one.
+
+org_name = "Congressional App Challenge"
+adapter_type = "program_page"
+enabled = true
+
+[config]
+url = "https://www.congressionalappchallenge.us/participating-districts/"
+program_kind = "program"
+opportunity_type = "Competitions"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 30 (2026-08-30 competition sources without feeds); sprint 029 ticket 001 live-verified end-to-end via real dry-run (2026-09-02)"

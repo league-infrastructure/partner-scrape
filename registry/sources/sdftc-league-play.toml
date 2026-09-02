@@ -1,0 +1,73 @@
+# SDFTC (San Diego FIRST Tech Challenge) league play -- sdftc.org, a
+# Weebly site. Sprint 029 ticket 001 (issue 30's single-event
+# program_page competition batch), `program_page` adapter,
+# `config.opportunity_type = "Competitions"` per the sprint's
+# operator-curated-override mechanism decision (registry/DESIGN.md's
+# sprint 029 addendum). Distinct from cafirst.org's own TEC-backed FRC
+# registration (issue 25, out of scope for this sprint) -- this is
+# sdftc.org itself, the regional FTC organizing body's own site.
+#
+# CORRECTION (2026-09-02): this ticket's first pass (2026-09-01)
+# registered this source `enabled = true` on a WebFetch-only check,
+# reasoning that a live-but-dateless page was an acceptable "annual
+# page not yet updated" gap -- never confirmed against the real
+# adapter. A real end-to-end
+# `uv run partner-scrape --source sdftc-league-play --dry-run -v` run
+# (2026-09-02, real network, real `AnthropicProgramLLMClient`)
+# confirms the page fetches fine (HTTP 200) but the LLM extraction
+# genuinely recovers NO date at all: `date_start=""`, `date_end=""`.
+# Inspecting the actual reduced text sent to the LLM confirms why --
+# it is nav/mission-statement content only ("2026-27 Kick Off",
+# "2026-27 Registration" as bare menu labels, no adjacent calendar
+# date anywhere in the visible body). `found=1 dated=0`,
+# `wrote 0 opportunities`. This is a genuine "does not yield a usable
+# record" case, not merely a stale-cycle one (contrast
+# `doe-science-bowl-sd.toml`/`cipherhacks.toml`, which both DO recover
+# real dates, just for an already-past cycle) -- registered disabled
+# per the sprint 027/028 live-verification standard.
+#
+# RE-VERIFIED (2026-09-02, ticket 029-007, post ticket-006 competition-
+# profile fix): still disabled. `adapters/DESIGN.md`'s Revision already
+# predicted this -- `sdftc-league-play` was traced to a fetch/content-
+# availability gap (no calendar date anywhere in the fetched, reduced
+# text), a different root cause than the deadline-vs-event-date framing
+# bug ticket 006 fixes, and the page's reduced text is unchanged: still
+# only the same bare "2026-27 Kick Off"/"2026-27 Registration" nav
+# labels, no adjacent date. Three of four independent
+# `profile="competition"` extraction calls against that identical,
+# freshly-fetched, unchanged text returned `date_start=""`/`date_end=""`
+# as expected (`found=1 dated=0`); one outlier call (observed via a real
+# `--dry-run -v` pipeline run, `enabled` flipped temporarily for this
+# re-verification) fabricated `date_start` equal to that call's own
+# `reference_date` (today, 2026-09-02) with no supporting text -- not
+# reproduced across three follow-up direct-to-`AnthropicProgramLLMClient`
+# calls against the exact same fetched text (hash-verified identical).
+# Treated as one-off model sampling noise, not a real recovered date --
+# a wrong, hallucinated date would be worse than none, so this source is
+# NOT flipped to `enabled = true` on a single non-reproduced positive,
+# per this ticket's own reproduction standard. The stale/contaminated
+# cache entry that outlier call wrote was deleted so a future
+# re-verification gets a fresh call rather than replaying it. Flagged as
+# a new, distinct finding for a future prompt-hardening ticket: the
+# competition profile can occasionally invent `reference_date` as an
+# event date when no date is present in the source text -- out of this
+# registry-only ticket's scope to fix. Re-verify once SDFTC's own site
+# publishes specific league-meet/tournament dates (their
+# `2025-26registration.html` and `league-meets.html` subpages were
+# checked too during this ticket's research and are, respectively,
+# registration-mechanics-only and nine seasons stale -- neither is a
+# better `config.url` than the homepage).
+
+org_name = "San Diego FIRST Tech Challenge"
+adapter_type = "program_page"
+enabled = false  # disabled: real post-fix dry-run re-verification (2026-09-02) still recovers no date -- the page's visible content has no calendar date -- see comment above
+
+[config]
+url = "https://www.sdftc.org/"
+program_kind = "program"
+opportunity_type = "Competitions"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 30 (2026-08-30 competition sources without feeds); sprint 029 ticket 001 (corrected 2026-09-02 after a WebFetch-only check that never exercised the real extraction pipeline)"

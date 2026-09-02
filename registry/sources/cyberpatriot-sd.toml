@@ -1,0 +1,46 @@
+# CyberPatriot SD (AFA Cardenas chapter) / SoCal Mayor's Cyber Cup
+# (NDIA SD) -- San Diego's regional cybersecurity competition season
+# (Oct-Mar). Sprint 029 ticket 001 (issue 30's single-event
+# program_page competition batch), `program_page` adapter,
+# `config.opportunity_type = "Competitions"` per the sprint's
+# operator-curated-override mechanism decision (registry/DESIGN.md's
+# sprint 029 addendum). Registered disabled per the sprint's own
+# architecture decision (sprint.md's Description, and
+# registry/DESIGN.md's sprint 029 addendum), NOT re-derived by this
+# ticket:
+#
+# `ndia-sd.org` (National Defense Industrial Association, San Diego --
+# the NDIA SD chapter that runs the SoCal Mayor's Cyber Cup) is
+# JS-rendered and needs a headless-fetcher settle wait this project's
+# shared `PlaywrightFetcher` (`partner_scrape/fetch/headless.py`) does
+# not yet provide -- see clasi/issues/38-headless-fetcher-settle-wait-for-spa-platforms.md
+# ("issue 38"), the same gap that left sprint 028's
+# `helen-woodward-camps.toml`/`sandiego-air-space-camps.toml`
+# registrations disabled. Fixing the fetcher is explicitly out of this
+# ticket's scope. `sdccoe.org` (Cyber Center of Excellence, hosting the
+# AFA Cardenas CyberPatriot chapter) carries only a stale TEC (per
+# issue 30) and, independently confirmed by this ticket's own
+# 2026-09-01 WebFetch check, its live page currently makes no mention
+# of CyberPatriot or the Cyber Cup at all and lists no dated
+# competition events -- a static informational homepage, not an event
+# page. Neither domain yields a usable dated record today.
+#
+# `config.url` points at `ndia-sd.org` as the primary registration
+# target (the issue-38-tracked blocker, and the org that actually runs
+# the Cyber Cup); re-verify and flip to `enabled = true` once issue 38
+# lands and a fresh headless fetch confirms real dated content.
+
+org_name = "NDIA San Diego (SoCal Mayor's Cyber Cup) / AFA Cardenas Chapter (CyberPatriot SD)"
+adapter_type = "program_page"
+enabled = false  # disabled: ndia-sd.org needs the headless fetcher's still-missing settle wait (issue 38); sdccoe.org carries only a stale TEC and no CyberPatriot/Cyber Cup content as of this ticket's 2026-09-01 live check -- see comment above
+
+[config]
+url = "https://ndia-sd.org"
+program_kind = "program"
+opportunity_type = "Competitions"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+fetch_strategy = "headless"
+discovered_via = "issue 30 (2026-08-30 competition sources without feeds); sprint 029 ticket 001 (issue 38 headless-fetcher settle-wait gap, live-checked 2026-09-01)"

@@ -665,6 +665,196 @@ class TestProgramListingAndMultiSourceConfig:
         assert sio.config["url"] == "https://scripps.ucsd.edu/education/research-internships"
 
 
+class TestSDFestivalOfScienceEngineeringRegistration:
+    """Sprint 029 ticket 003 (SUC-046, issue 30): the SD Festival of
+    Science & Engineering / EXPO Day -- an existing partner, previously
+    registered under no source_id at all -- is registered as a
+    ``program_listing`` source for ``lovestemsd.org``'s DB-driven
+    "Festival Week" per-event listing.
+    """
+
+    def test_registered_as_program_listing_no_opportunity_type_override(self):
+        sources = {s.source_id: s for s in load_sources()}
+
+        assert "sd-festival-of-science-engineering" in sources
+        source = sources["sd-festival-of-science-engineering"]
+        assert source.adapter_type == "program_listing"
+        assert source.config["site_url"] == "https://lovestemsd.org"
+        assert source.config["listing_urls"] == ["/stem-week-events-2020"]
+        assert source.config["program_kind"] == "program"
+        # Deliberately no override -- festival-week events span more
+        # than one type (workshops, the EXPO Day showcase,
+        # competitions), so each record keeps the LLM's own
+        # classification (this ticket's Description).
+        assert "opportunity_type" not in source.config
+
+    def test_disabled_with_a_reason_pending_the_next_annual_cycles_content(self):
+        # This ticket's own required live-verification (a real
+        # --dry-run pipeline run, not just a WebFetch check) found
+        # lovestemsd.org's "Festival Week" listing reachable (HTTP 200)
+        # but currently carrying zero event cards -- a content-
+        # availability gap between the site's own annual cycles, not a
+        # fetch/WAF block and not an extraction-framing bug. See the
+        # TOML file's own header comment for the full live evidence.
+        sources = {s.source_id: s for s in load_sources()}
+        source = sources["sd-festival-of-science-engineering"]
+
+        assert source.enabled is False
+        path = DEFAULT_SOURCES_DIR / "sd-festival-of-science-engineering.toml"
+        text = path.read_text()
+        assert "disabled:" in text
+        assert "content-availability gap" in text
+
+    def test_does_not_touch_or_conflict_with_the_unrelated_usasciencefestival_registration(self):
+        # usasciencefestival.toml is a distinct, already-disabled
+        # *national* org (USA Science & Engineering Festival, WAF-
+        # blocked) -- confirmed by a registry-wide grep before adding
+        # this ticket's new file, per the ticket's own Description. This
+        # test guards against ever conflating the two again.
+        sources = {s.source_id: s for s in load_sources()}
+
+        assert "usasciencefestival" in sources
+        usa_sef = sources["usasciencefestival"]
+        assert usa_sef.org_name == "USA Science & Engineering Festival"
+        assert usa_sef.enabled is False
+        assert usa_sef.config["site_url"] == "https://usasciencefestival.org"
+
+        sd_festival = sources["sd-festival-of-science-engineering"]
+        assert sd_festival.org_name != usa_sef.org_name
+        assert sd_festival.config["site_url"] != usa_sef.config["site_url"]
+
+    def test_does_not_conflict_with_the_unrelated_gsdsef_registration(self):
+        # gsdsef.toml is the Greater San Diego Science and Engineering
+        # Fair -- a different STEM fair organization entirely, not
+        # touched by this ticket. (Sprint 029 ticket 005 later edits
+        # gsdsef.toml's own config in place -- config["site_url"] became
+        # config["url"], see TestGSDSEFRegistration below -- but that
+        # ticket is independent of ticket 003's own scope; this test
+        # only needs the two source_ids to stay distinct.)
+        sources = {s.source_id: s for s in load_sources()}
+
+        assert "gsdsef" in sources
+        gsdsef = sources["gsdsef"]
+        assert gsdsef.org_name == "Greater San Diego Science and Engineering Fair"
+
+        sd_festival = sources["sd-festival-of-science-engineering"]
+        assert sd_festival.source_id != gsdsef.source_id
+        assert sd_festival.config["site_url"] != gsdsef.config["url"]
+
+
+class TestSDCECRegistration:
+    """Sprint 029 ticket 004 (SUC-047, issue 30): SDCEC is registered as
+    an actual org source (``program_page_multi`` against the same
+    ``/stem`` page ``registry/hubs/sdcec-stem.toml`` already reads as a
+    discovery-only hub) -- a hub and a source for the same org are two
+    different, already-separate catalogs (``registry/DESIGN.md``'s §3
+    physical-separation invariant), not the same-org-registered-twice
+    risk this sprint avoids for GSDSEF/the SD Festival.
+    """
+
+    def test_registered_as_program_page_multi_no_opportunity_type_override(self):
+        sources = {s.source_id: s for s in load_sources()}
+
+        assert "sdcec" in sources
+        source = sources["sdcec"]
+        assert source.adapter_type == "program_page_multi"
+        assert source.config["url"] == "https://www.sandiegoengineers.org/stem"
+        assert source.config["program_kind"] == "program"
+        # Deliberately no override -- SDCEC's curated list mixes
+        # competitions with other opportunity types, so each item keeps
+        # the LLM's own per-record classification (this ticket's
+        # Description, matching ticket 003's identical reasoning).
+        assert "opportunity_type" not in source.config
+
+    def test_disabled_with_a_reason_pending_a_reliable_extraction(self):
+        # This ticket's own required live-verification (real
+        # end-to-end dry-run plus direct extract_programs() calls, not
+        # just a WebFetch check) found real extraction on this page is
+        # non-deterministic across repeated calls (0/17/21/32 distinct
+        # result sets on identical fetched text) and that the "Feb 20
+        # 2026 Engineers Week awards" record this ticket's Description
+        # named is not published anywhere on the live site today -- see
+        # the TOML file's own header comment for the full live evidence.
+        sources = {s.source_id: s for s in load_sources()}
+        source = sources["sdcec"]
+
+        assert source.enabled is False
+        path = DEFAULT_SOURCES_DIR / "sdcec.toml"
+        text = path.read_text()
+        assert "disabled:" in text
+        assert "extraction-reliability failure" in text
+
+    def test_the_existing_discovery_only_hub_is_unmodified(self):
+        # AC: registry/hubs/sdcec-stem.toml is unmodified by this
+        # ticket -- it stays a discovery-only hub with no adapter_type
+        # and no acquisition_policy (HubConfig's own shape), a
+        # physically separate catalog from the new sources/sdcec.toml
+        # entry above (registry/DESIGN.md's §3 invariant).
+        from partner_scrape.registry.hub_schema import DEFAULT_HUBS_DIR, load_hubs
+
+        hubs = {h.hub_id: h for h in load_hubs()}
+        assert "sdcec-stem" in hubs
+        hub = hubs["sdcec-stem"]
+        assert hub.page_urls == ["https://www.sandiegoengineers.org/stem"]
+
+        path = DEFAULT_HUBS_DIR / "sdcec-stem.toml"
+        text = path.read_text()
+        assert "adapter_type" not in text
+        assert "[acquisition_policy]" not in text
+
+    def test_no_new_adapter_type_or_config_key_introduced(self):
+        sources = {s.source_id: s for s in load_sources()}
+        source = sources["sdcec"]
+
+        assert source.adapter_type == "program_page_multi"
+        assert set(source.config.keys()) <= {"url", "program_kind", "opportunity_type"}
+
+
+class TestGSDSEFRegistration:
+    """Sprint 029 ticket 005 (SUC-048, issue 30: "make sure these
+    [judging/public-day] dates surface"). GSDSEF is an *existing*
+    partner (`registry/sources/gsdsef.toml`) -- this ticket edits that
+    file's own ``config`` in place, never creating a second
+    registration. Exactly one ``registry/sources/`` entry exists for
+    GSDSEF both before and after this ticket.
+    """
+
+    def test_exactly_one_gsdsef_registration_exists(self):
+        sources = load_sources()
+        gsdsef_sources = [s for s in sources if "science and engineering fair" in s.org_name.lower()]
+
+        assert len(gsdsef_sources) == 1
+        assert gsdsef_sources[0].source_id == "gsdsef"
+
+    def test_edited_to_program_page_multi_pointed_at_the_schedule_page(self):
+        # This ticket's own required live-verification found the
+        # pre-existing generic_html + sitemap-diff discovery
+        # structurally cannot reach the one page that carries the
+        # judging/public-day dates (discovery.sitemap.EVENT_PATH_RE
+        # matches no /information/schedule path segment) -- so the
+        # existing file's adapter_type/config was edited in place to
+        # program_page_multi, pointed directly at that page. See the
+        # file's own header comment for the full evidence trail.
+        sources = {s.source_id: s for s in load_sources()}
+
+        assert "gsdsef" in sources
+        gsdsef = sources["gsdsef"]
+        assert gsdsef.adapter_type == "program_page_multi"
+        assert gsdsef.enabled is True
+        assert gsdsef.config["url"] == "https://www.gsdsef.org/information/schedule"
+        assert gsdsef.config["program_kind"] == "program"
+        assert gsdsef.config["opportunity_type"] == "Competitions"
+        # config.site_url (generic_html's own key) is gone -- program_page_multi
+        # never reads it.
+        assert "site_url" not in gsdsef.config
+
+    def test_org_name_unchanged_by_the_config_edit(self):
+        sources = {s.source_id: s for s in load_sources()}
+        gsdsef = sources["gsdsef"]
+
+        assert gsdsef.org_name == "Greater San Diego Science and Engineering Fair"
+
+
 class TestCampMarketingPageProviders:
     """Sprint 028 ticket 004 (issue 29, SUC-038/SUC-041): the verified
     nonprofit/institutional camp marketing-page providers, each
@@ -812,3 +1002,226 @@ class TestCampMarketingPageProviders:
                 assert not is_marketing_page, (
                     f"{source.source_id} registers Helen Woodward via a marketing page"
                 )
+
+
+class TestCompetitionSourceConfig:
+    """Sprint 029 ticket 001 (issue 30's single-event program_page
+    competition batch, SUC-044): every source reuses the existing
+    ``program_page`` adapter_type with ``config.opportunity_type =
+    "Competitions"`` -- the same operator-curated-override convention
+    ``sd-foundation-community-scholarship.toml`` established for
+    ``"Funding Opportunities"`` (registry/DESIGN.md's sprint 029
+    addendum). No new loader code is expected -- this verifies the
+    existing untyped-``config``-dict mechanism already handles this
+    reuse, exactly like the sprint 027/028 precedents above.
+
+    **029-001b correction**: this ticket's first pass (2026-09-01)
+    verified sources via the WebFetch tool only, never the real
+    adapter/pipeline -- several of its enable/disable calls turned out
+    wrong once re-verified end-to-end with real
+    ``uv run partner-scrape --source <id> --dry-run -v`` runs
+    (2026-09-02), matching the sprint 027/028 live-verification
+    standard. ``cipherhacks`` flipped disabled->enabled (its 403
+    finding did not reproduce against a real fetch); ``mathcounts-sd-chapter``,
+    ``sdftc-league-play``, ``seaperch-sd-regional``, ``sd-brain-bee``,
+    and ``botball-greater-sd`` flipped enabled->disabled (each fetches
+    fine but the real extraction yields no correctly-dated record);
+    ``tritonhacks`` flipped enabled->disabled (fetches fine but the
+    real extraction recovers the wrong year). ``sd-science-olympiad``
+    and ``garibaldi-bowl`` stayed disabled, independently reconfirmed
+    with real ``curl``.
+
+    **029-006/007**: ticket 006 fixed the shared deadline-vs-event-date
+    extraction framing bug (a new ``profile="competition"`` prompt pair,
+    selected via the source's existing ``config.opportunity_type ==
+    "Competitions"`` override, plus a year-inference rule and a
+    ``registration_deadline`` field). Ticket 007 re-verified all five of
+    029-001b's genuinely-disabled sources end-to-end, live, against the
+    corrected mechanism (real network, real
+    ``AnthropicProgramLLMClient``, reproduced 3-4x per source):
+    ``sd-brain-bee`` (now recovers "Event Date: February 14, 2026"),
+    ``seaperch-sd-regional`` (now recovers the April 4 2026 competition
+    date in ``date_start``, with the TDR paperwork deadline correctly
+    separated into ``registration_deadline``/``Event.description``
+    rather than swallowing ``date_end``), and ``tritonhacks`` (now
+    recovers the correct 2026-05-16/17 dates, not the old arbitrary
+    2025-05-08 guess) all flipped disabled->enabled. ``sdftc-league-play``
+    and ``botball-greater-sd`` stayed disabled -- both were traced to a
+    different root cause (no calendar date reaches the model at all, a
+    fetch/content-availability gap ticket 006's framing fix has no
+    mechanism to recover), re-confirmed unchanged post-fix. ``sd-math-circle``
+    (a distinct grid/tabular extraction gap, deferred) and
+    ``mathcounts-sd-chapter`` (an unrelated WAF block) are untouched by
+    ticket 007 and not part of either list below.
+    """
+
+    #: (source_id, org_name substring) for every enabled=true
+    #: competition source this ticket registers.
+    _ENABLED_COMPETITION_SOURCES = [
+        "doe-science-bowl-sd",
+        "congressional-app-challenge-sd",
+        "cipherhacks",
+        "sd-brain-bee",
+        "seaperch-sd-regional",
+        "tritonhacks",
+    ]
+
+    #: (source_id, reason substring expected in the file's disabled
+    #: comment) for every enabled=false competition source this ticket
+    #: registers -- sprint 027 tickets 005/006's disabled-with-reason
+    #: precedent.
+    _DISABLED_COMPETITION_SOURCES = [
+        ("sd-science-olympiad", "curl HTTP:000"),
+        ("garibaldi-bowl", "404"),
+        ("mathcounts-sd-chapter", "403"),
+        ("sdftc-league-play", "no calendar date"),
+        ("botball-greater-sd", "no calendar date"),
+    ]
+
+    def test_every_enabled_competition_source_is_program_page_with_competitions_override(self):
+        sources = {s.source_id: s for s in load_sources()}
+
+        for source_id in self._ENABLED_COMPETITION_SOURCES:
+            assert source_id in sources, f"{source_id} is not registered"
+            source = sources[source_id]
+            assert source.adapter_type == "program_page"
+            assert source.enabled is True
+            assert source.config["program_kind"] == "program"
+            assert source.config["opportunity_type"] == "Competitions"
+            assert source.config["url"].startswith("https://")
+
+    def test_disabled_competition_sources_carry_a_reason_comment(self):
+        for source_id, reason_substring in self._DISABLED_COMPETITION_SOURCES:
+            path = DEFAULT_SOURCES_DIR / f"{source_id}.toml"
+            assert path.exists(), f"{source_id}.toml does not exist"
+            text = path.read_text()
+            assert "disabled:" in text
+            assert reason_substring in text
+
+        sources = {s.source_id: s for s in load_sources()}
+        for source_id, _ in self._DISABLED_COMPETITION_SOURCES:
+            assert sources[source_id].enabled is False
+            assert sources[source_id].adapter_type == "program_page"
+            assert sources[source_id].config["opportunity_type"] == "Competitions"
+
+    def test_cyberpatriot_sd_is_disabled_referencing_issue_38(self):
+        # AC: CyberPatriot SD / SoCal Mayor's Cyber Cup is registered
+        # enabled=false with a reason comment referencing issue 38 (the
+        # headless-fetcher settle-wait gap ndia-sd.org's JS-rendering
+        # needs) -- the sprint's own architecture decision, not
+        # re-derived by this ticket.
+        sources = {s.source_id: s for s in load_sources()}
+
+        assert "cyberpatriot-sd" in sources
+        source = sources["cyberpatriot-sd"]
+        assert source.adapter_type == "program_page"
+        assert source.enabled is False
+        assert source.config["opportunity_type"] == "Competitions"
+        assert source.acquisition_policy.get("fetch_strategy") == "headless"
+
+        path = DEFAULT_SOURCES_DIR / "cyberpatriot-sd.toml"
+        text = path.read_text()
+        assert "issue 38" in text
+
+    def test_no_new_adapter_type_or_config_key_introduced(self):
+        # AC: no registered source in this ticket introduces a new
+        # adapter_type value or a new conventional config key --
+        # program_page with program_kind/opportunity_type only.
+        all_ids = [source_id for source_id, _ in self._DISABLED_COMPETITION_SOURCES] + [
+            "cyberpatriot-sd"
+        ] + self._ENABLED_COMPETITION_SOURCES
+        sources = {s.source_id: s for s in load_sources()}
+
+        for source_id in all_ids:
+            source = sources[source_id]
+            assert source.adapter_type == "program_page"
+            assert set(source.config.keys()) <= {"url", "program_kind", "opportunity_type"}
+
+    def test_congressional_app_challenge_does_not_register_house_gov(self):
+        # Issue 30: "house.gov 403s; do not register that domain."
+        sources = load_sources()
+
+        for source in sources:
+            assert "house.gov" not in source.config.get("url", "")
+
+    def test_hackathons_registered_directly_not_via_hackclub_aggregator(self):
+        # Issue 30: register each hackathon's own official page
+        # directly, not hackathons.hackclub.com's aggregator.
+        sources = {s.source_id: s for s in load_sources()}
+
+        for source_id in ("tritonhacks", "cipherhacks"):
+            assert "hackclub.com" not in sources[source_id].config["url"]
+
+
+class TestMathCircleSourceConfig:
+    """Sprint 029 ticket 002 (issue 30, SUC-045): San Diego Math
+    Circle's public master-calendar Google Sheet, registered as
+    ``program_page_multi`` — the identical mechanism sprint 027/028's
+    ``ProgramPageMultiAdapter`` already provides for one page/N inline
+    dated records, reused here verbatim (no new adapter code, no new
+    ``config`` key).
+
+    Live re-verification (2026-09-02, real network + real
+    ``AnthropicProgramLLMClient``, matching the ticket 001b standard)
+    found the sheet itself fetches and parses cleanly as text (the
+    AMC/AIME/ARML dated rows survive ``reduce_html_to_text()`` intact),
+    but the real LLM extraction locks onto the wrong axis of this
+    particular grid-shaped sheet — it returns the 5 recurring
+    grade-level class-group columns (Fermat/Euler/Gauss/Cauchy/AI),
+    each dated identically to the shared "Opening Day" row, not the
+    scattered one-off AMC/AIME/ARML competition rows. Registered
+    ``enabled = false`` with a reason comment (the ticket's own
+    AC3 escape hatch: "If the sheet is not cleanly fetchable/parseable
+    at ticket time, the source is registered enabled = false with a
+    reason comment instead of silently dropped") rather than shipped
+    with mislabeled/misdated records.
+    """
+
+    def test_is_registered_program_page_multi_with_competitions_override(self):
+        sources = {s.source_id: s for s in load_sources()}
+
+        assert "sd-math-circle" in sources
+        source = sources["sd-math-circle"]
+        assert source.adapter_type == "program_page_multi"
+        assert source.config["program_kind"] == "program"
+        assert source.config["opportunity_type"] == "Competitions"
+        assert source.config["url"].startswith("https://docs.google.com/spreadsheets/")
+
+    def test_url_points_at_the_csv_export_not_the_edit_or_htmlview_form(self):
+        # Ticket AC: config.url must point at whichever export form
+        # live-verification confirms works -- verification found the
+        # CSV export (/export?format=csv) fetches and parses cleanly,
+        # while /htmlview returns no usable static row data (JS-only)
+        # and /edit is auth-gated.
+        sources = {s.source_id: s for s in load_sources()}
+        url = sources["sd-math-circle"].config["url"]
+
+        assert "export?format=csv" in url
+        assert "/edit" not in url
+        assert "htmlview" not in url
+
+    def test_is_disabled_with_an_extraction_failure_reason_comment(self):
+        # Real extraction failure, not a fetch/site block -- the
+        # source fetches and parses fine, but the real LLM extraction
+        # returns the wrong records (regular class groups, not
+        # competition dates). Must not be silently enabled with
+        # mislabeled/misdated output, and must not be silently dropped
+        # (AC3).
+        sources = {s.source_id: s for s in load_sources()}
+        source = sources["sd-math-circle"]
+
+        assert source.enabled is False
+
+        path = DEFAULT_SOURCES_DIR / "sd-math-circle.toml"
+        assert path.exists()
+        text = path.read_text()
+        assert "disabled:" in text
+        assert "extraction failure" in text
+        assert "Opening Day" in text  # the specific wrong shared date found
+
+    def test_no_new_adapter_type_or_config_key_introduced(self):
+        sources = {s.source_id: s for s in load_sources()}
+        source = sources["sd-math-circle"]
+
+        assert source.adapter_type == "program_page_multi"
+        assert set(source.config.keys()) <= {"url", "program_kind", "opportunity_type"}

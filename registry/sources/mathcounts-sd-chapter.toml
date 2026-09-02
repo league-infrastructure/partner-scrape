@@ -1,0 +1,44 @@
+# MATHCOUNTS San Diego chapter -- cspeef.org (MATHCOUNTS of
+# California). Sprint 029 ticket 001 (issue 30's single-event
+# program_page competition batch), `program_page` adapter,
+# `config.opportunity_type = "Competitions"` per the sprint's
+# operator-curated-override mechanism decision (registry/DESIGN.md's
+# sprint 029 addendum).
+#
+# CORRECTION (2026-09-02): this ticket's first pass (2026-09-01)
+# registered this source `enabled = true` on a WebFetch tool result of
+# HTTP 200 with real, correctly-dated content (next chapter
+# competition Feb 27 2027, UCSD Warren Lecture Hall) -- WRONG, or at
+# least incomplete: that check never exercised this project's own
+# fetcher. A real end-to-end
+# `uv run partner-scrape --source mathcounts-sd-chapter --dry-run -v`
+# run (2026-09-02, real network, matching the sprint 027/028
+# verification standard) fails at fetch time:
+#
+#   WARNING partner_scrape.adapters.program_page: Program page fetch
+#   https://cspeef.org/competitions/san-diego/ returned status 403;
+#   skipping
+#
+# `found=0 dated=0` -- a genuine WAF/bot-protection block against this
+# project's own fetcher (`PoliteFetcher`'s User-Agent), even though
+# the same URL returns HTTP 200 to WebFetch's differently-identified
+# request. Same failure shape as `noaa-hutton.toml`/
+# `sdzwa-internquest.toml` (sprint 027): a real, current, reachable-
+# by-some-clients page that this project's own fetcher cannot reach.
+# Registered disabled rather than left incorrectly enabled with a
+# zero-yield alert. Re-verify with a headless fetch strategy or a
+# different User-Agent in a future ticket if this source should ship.
+
+org_name = "MATHCOUNTS of California -- San Diego Chapter"
+adapter_type = "program_page"
+enabled = false  # disabled: cspeef.org returns HTTP 403 (WAF/bot block) to this project's own PoliteFetcher, live-verified via a real dry-run 2026-09-02 -- see comment above
+
+[config]
+url = "https://cspeef.org/competitions/san-diego/"
+program_kind = "program"
+opportunity_type = "Competitions"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 30 (2026-08-30 competition sources without feeds); sprint 029 ticket 001 (corrected 2026-09-02 after a false-positive success finding on 2026-09-01 that never exercised the real fetcher)"
