@@ -59,9 +59,19 @@ class FixtureFetcher:
 
     responses: dict[str, FetchResponse | list[FetchResponse]]
     calls: list[tuple[str, dict[str, str] | None]] = field(default_factory=list)
+    post_calls: list[tuple[str, dict, dict[str, str] | None]] = field(default_factory=list)
 
     def get(self, url: str, headers: dict[str, str] | None = None) -> FetchResponse:
         self.calls.append((url, headers))
+        canned = self.responses[url]
+        if isinstance(canned, list):
+            return canned.pop(0) if len(canned) > 1 else canned[0]
+        return canned
+
+    def post(
+        self, url: str, body: dict, headers: dict[str, str] | None = None
+    ) -> FetchResponse:
+        self.post_calls.append((url, body, headers))
         canned = self.responses[url]
         if isinstance(canned, list):
             return canned.pop(0) if len(canned) > 1 else canned[0]
@@ -677,3 +687,122 @@ class TestCacheWriteThreadSafety:
         assert entry is not None
         assert entry["body"] == "v1"  # untouched by the 304 path
         assert entry["status"] == 200
+
+
+class TestPost:
+    """``PoliteFetcher.post()`` (sprint 031) -- added for Workday's
+    ``POST /wday/cxs/{tenant}/{site}/jobs`` search endpoint. Applies the
+    same robots.txt check and per-domain ``Throttle.wait()`` call
+    ``get()`` already applies, then delegates straight to
+    ``self.fetcher.post(...)`` -- deliberately never touching the
+    on-disk cache (see ``fetch/DESIGN.md``'s sprint 031 Design
+    Rationale: two different pages of the same URL's paginated search
+    body would otherwise collide under the cache's URL-only key).
+    """
+
+    def test_disallowed_url_is_never_posted_to(self, tmp_path):
+        url = "https://example.org/events/secret"
+        robots_url = "https://example.org/robots.txt"
+        fetcher = FixtureFetcher(
+            {robots_url: _response(robots_url, body=_read_fixture("robots_disallow_events.txt"))}
+        )
+        polite = PoliteFetcher(cache_dir=tmp_path, fetcher=fetcher)
+
+        with pytest.raises(RobotsDisallowed):
+            polite.post(url, body={"offset": 0})
+
+        assert fetcher.post_calls == []
+
+    def test_allowed_url_is_posted_to_with_the_given_body_and_headers(self, tmp_path):
+        url = "https://example.org/wday/cxs/acme/careers/jobs"
+        robots_url = "https://example.org/robots.txt"
+        fetcher = FixtureFetcher(
+            {
+                robots_url: _response(robots_url, body=_read_fixture("robots_allow_all.txt")),
+                url: _response(url, body='{"total": 0, "jobPostings": []}'),
+            }
+        )
+        polite = PoliteFetcher(cache_dir=tmp_path, fetcher=fetcher)
+
+        response = polite.post(
+            url, body={"offset": 0}, headers={"Referer": "https://acme.com/careers"}
+        )
+
+        assert response.status == 200
+        assert fetcher.post_calls == [
+            (url, {"offset": 0}, {"Referer": "https://acme.com/careers"})
+        ]
+
+    def test_respect_robots_false_skips_the_check_entirely(self, tmp_path):
+        url = "https://example.org/wday/cxs/acme/careers/jobs"
+        # Deliberately no robots.txt entry configured -- if the code
+        # tried to check it anyway, FixtureFetcher would raise KeyError.
+        fetcher = FixtureFetcher({url: _response(url, body="ok")})
+        polite = PoliteFetcher(cache_dir=tmp_path, fetcher=fetcher)
+
+        response = polite.post(url, body={"offset": 0}, respect_robots=False)
+
+        assert response.status == 200
+
+    def test_enforces_rate_limiting_like_get(self, tmp_path):
+        clock = FakeClock(start=0.0)
+        sleeps: list[float] = []
+        throttle = Throttle(clock=clock, sleep=lambda seconds: (sleeps.append(seconds), clock.advance(seconds)))
+        url1 = "https://example.org/wday/cxs/acme/careers/jobs"
+        url2 = "https://example.org/wday/cxs/acme/careers/jobs2"
+        fetcher = FixtureFetcher(
+            {url1: _response(url1, body="a"), url2: _response(url2, body="b")}
+        )
+        polite = PoliteFetcher(cache_dir=tmp_path, fetcher=fetcher, throttle=throttle)
+
+        polite.post(url1, body={"offset": 0}, rate_limit_seconds=2.0, respect_robots=False)
+        polite.post(url2, body={"offset": 0}, rate_limit_seconds=2.0, respect_robots=False)
+
+        assert sleeps == [2.0]
+
+    def test_never_reads_from_or_writes_to_the_on_disk_cache(self, tmp_path):
+        """No cache file is created for a POST call -- distinct from
+        every ``get()`` test above, which always ends up with a cache
+        file under ``tmp_path``.
+        """
+        url = "https://example.org/wday/cxs/acme/careers/jobs"
+        fetcher = FixtureFetcher({url: _response(url, status=200, body='{"total": 1}')})
+        polite = PoliteFetcher(cache_dir=tmp_path, fetcher=fetcher)
+
+        polite.post(url, body={"offset": 0}, respect_robots=False)
+
+        assert cache_path(tmp_path, url).exists() is False
+        assert list(tmp_path.rglob("*.json")) == []
+
+    def test_two_posts_to_the_same_url_with_different_bodies_both_reach_the_fetcher(
+        self, tmp_path
+    ):
+        """The load-bearing case ``fetch/DESIGN.md``'s Design Rationale
+        calls out: two different pages of the same tenant's job list
+        share one URL. A URL-keyed cache would (wrongly) collide and
+        silently serve page 1's body for page 2's request; ``post()``
+        must never do that -- both calls must reach the underlying
+        ``Fetcher``, each with its own distinct body.
+        """
+        url = "https://example.org/wday/cxs/acme/careers/jobs"
+        response_page1 = _response(url, status=200, body='{"offset": 0, "jobPostings": []}')
+        response_page2 = _response(url, status=200, body='{"offset": 20, "jobPostings": []}')
+        fetcher = FixtureFetcher({url: [response_page1, response_page2]})
+        polite = PoliteFetcher(cache_dir=tmp_path, fetcher=fetcher)
+
+        first = polite.post(url, body={"offset": 0}, respect_robots=False)
+        second = polite.post(url, body={"offset": 20}, respect_robots=False)
+
+        assert first.body == '{"offset": 0, "jobPostings": []}'
+        assert second.body == '{"offset": 20, "jobPostings": []}'
+        assert [call[1] for call in fetcher.post_calls] == [{"offset": 0}, {"offset": 20}]
+        assert cache_path(tmp_path, url).exists() is False
+
+    def test_no_headers_argument_still_sends_empty_dict(self, tmp_path):
+        url = "https://example.org/wday/cxs/acme/careers/jobs"
+        fetcher = FixtureFetcher({url: _response(url, status=200, body="ok")})
+        polite = PoliteFetcher(cache_dir=tmp_path, fetcher=fetcher)
+
+        polite.post(url, body={"offset": 0}, respect_robots=False)
+
+        assert fetcher.post_calls == [(url, {"offset": 0}, {})]

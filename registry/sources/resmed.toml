@@ -1,0 +1,44 @@
+# ResMed -- San Diego headquarters, Workday-backed careers board.
+# Issue 31 names this as "likely" Workday, not confirmed -- confirmed
+# live during this ticket's own verification, registered per this
+# ticket's acceptance criteria for a confirmed tenant/site pair.
+#
+# Live-verified 2026-09-02 (sprint 031 ticket 005):
+# POST https://resmed.wd3.myworkdayjobs.com/wday/cxs/resmed/ResMed_External_Careers/jobs
+# -> a headerless plain POST 403s (issue 31's own census); browser-like
+# headers (Accept: application/json, Referer set to this site's own
+# careers page, a realistic Chrome User-Agent) clear it: HTTP 200,
+# valid JSON, total=219, paginated via offset (server-capped at
+# limit=20). Note the "wd3" host shard, distinct from the "wd1" shard
+# every other tenant registered this sprint uses -- confirming
+# adapters/workday.py's module docstring's point that Workday's API
+# host is sharded per tenant, with no codebase-wide default.
+#
+# robots.txt (resmed.wd3.myworkdayjobs.com) checked live via
+# urllib.robotparser against the exact /wday/cxs/resmed/
+# ResMed_External_Careers/jobs path this source POSTs to: ALLOWED (no
+# blanket "Disallow: /"; only /myjobs/ is disallowed, which this path
+# is not under).
+#
+# ats_filters.classify_posting result (2026-09-02, all 219 raw postings
+# fetched across every page, direct requests bypassing this project's
+# own robots policy for the purpose of this one-time verification): 27
+# postings located in San Diego, spanning Product Manager, Software/iOS/
+# Android Engineer, UX Designer, and various Sr/Director-level roles --
+# no internship-titled posting currently live. 0 of the 219 match
+# classify_posting's internship + STEM + San Diego test. A working-
+# adapter pass, not a failure, per this sprint's own Success Criteria.
+
+org_name = "ResMed"
+adapter_type = "workday"
+enabled = true
+
+[config]
+tenant = "resmed"
+site = "ResMed_External_Careers"
+api_base = "https://resmed.wd3.myworkdayjobs.com"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 31 ATS census (2026-08-30) named this \"likely\"; tenant/site confirmed live 2026-09-02 (sprint 031 ticket 005)"

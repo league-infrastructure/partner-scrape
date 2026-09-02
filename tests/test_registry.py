@@ -546,9 +546,15 @@ class TestProgramPageSourceConfig:
         # Issue 28 names Illumina/SD2 STEM Scholars as a "closed
         # pipeline" -- this ticket's investigation (see its Notes)
         # found no live, public application page to register at all,
-        # so it is not registered as a program_page source (or any
-        # other adapter_type).
-        sources = {s.source_id: s for s in load_sources()}
+        # so it is not registered as a program_page source. Scoped to
+        # adapter_type="program_page" (this test class's own subject,
+        # per its docstring) rather than every adapter_type -- sprint
+        # 031 ticket 005 later registered "illumina" as a *workday*
+        # source (registry/sources/illumina.toml), Illumina's general,
+        # live-verified public ATS careers board, an entirely different
+        # data source from the SD2 STEM Scholars closed pipeline this
+        # test guards against re-registering.
+        sources = {s.source_id: s for s in load_sources() if s.adapter_type == "program_page"}
         for source_id in sources:
             lowered = source_id.lower()
             assert "illumina" not in lowered

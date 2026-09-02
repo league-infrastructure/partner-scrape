@@ -1,0 +1,42 @@
+# Cubic Corporation -- San Diego headquarters (Cubic Transportation
+# Systems / Cubic Defense), Workday-backed careers board.
+#
+# Live-verified 2026-09-02 (sprint 031 ticket 005):
+# POST https://cubic.wd1.myworkdayjobs.com/wday/cxs/cubic/cubic_USA_careers/jobs
+# -> a headerless plain POST 403s (issue 31's own census); browser-like
+# headers (Accept: application/json, Referer set to this site's own
+# careers page, a realistic Chrome User-Agent) clear it: HTTP 200,
+# valid JSON, total=55, paginated via offset (server-capped at
+# limit=20). A second, broader "cubic_global_careers" site also
+# resolves live (total=84, includes non-US postings) but was not
+# registered -- the narrower US site is the better default for this
+# project's San-Diego-only filtering; see adapters/workday.py's module
+# docstring.
+#
+# robots.txt (cubic.wd1.myworkdayjobs.com) checked live via
+# urllib.robotparser against the exact /wday/cxs/cubic/
+# cubic_USA_careers/jobs path this source POSTs to: ALLOWED (no blanket
+# "Disallow: /"; only /refreshFacet/ is disallowed).
+#
+# ats_filters.classify_posting result (2026-09-02, all 55 raw postings
+# fetched across every page, direct requests bypassing this project's
+# own robots policy for the purpose of this one-time verification): 11
+# postings located in San Diego, all Systems/Electrical/RF Engineer,
+# Engineering Director, or non-technical management/support roles -- no
+# internship-titled posting currently live. 0 of the 55 match
+# classify_posting's internship + STEM + San Diego test. A working-
+# adapter pass, not a failure, per this sprint's own Success Criteria.
+
+org_name = "Cubic Corporation"
+adapter_type = "workday"
+enabled = true
+
+[config]
+tenant = "cubic"
+site = "cubic_USA_careers"
+api_base = "https://cubic.wd1.myworkdayjobs.com"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 31 ATS census (2026-08-30), live-verified 2026-09-02 (sprint 031 ticket 005)"

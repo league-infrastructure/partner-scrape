@@ -1,0 +1,49 @@
+# Port of San Diego (San Diego Unified Port District) -- NEOGOV/
+# governmentjobs.com-backed careers board.
+#
+# Live-verified 2026-09-02 (sprint 031 ticket 006): the agency's own
+# careers page (https://www.portofsandiego.org/people/careers) links to
+# https://www.governmentjobs.com/careers/portofsd -- confirmed via a
+# live fetch of the Port's own site, not guessed from a slug pattern.
+# GET https://www.governmentjobs.com/careers/portofsd/home/loadJobsOnMaps
+# (with X-Requested-With/Accept/Referer headers -- see
+# adapters/neogov.py's module docstring for the full live-discovery
+# write-up) -> HTTP 200, valid JSON, success=true, 5 raw postings,
+# confirmed not paginated.
+#
+# ats_filters.classify_posting result (2026-09-02 live re-check): 0 of
+# 5 match classify_posting's internship + STEM + San Diego test (none
+# of the 5 current postings is internship-categorized). A working,
+# zero-match pass, not a failure, per this sprint's own Success
+# Criteria. Cadence matters more than any single run's yield for these
+# agencies (issue 31) -- student/intern classes post seasonally.
+#
+# GENUINE BLOCK, disabled: www.governmentjobs.com/robots.txt disallows
+# all bots except a named allow-list (Googlebot, bingbot, yahoobot,
+# msnbot, gsa-crawler-www, NHN, Twitterbot, facebookexternalhit) --
+# confirmed live 2026-09-02 ("User-agent: *\nDisallow: /" beneath that
+# allow-list). This project's PoliteFetcher respects robots.txt by
+# default (acquisition_policy.respect_robots defaults to true) and
+# raises RobotsDisallowed for this bot's user agent against any path
+# under this host. Same shape as servicenow.toml's (sprint 031 ticket
+# 002) SmartRecruiters disable -- no stakeholder decision yet to
+# override respect_robots for this vendor. Registered enabled=false
+# rather than assumed respect_robots=false, per this sprint's own
+# "enabled=false only for a genuine block" standard. The adapter itself
+# (adapters/neogov.py) is fully built and tested against fixtures
+# reproducing this live response shape (tests/test_adapters_neogov.py)
+# -- flipping this source to enabled=true needs no further adapter
+# code, only a registry edit plus a stakeholder decision to override
+# respect_robots for this vendor.
+
+org_name = "Port of San Diego (San Diego Unified Port District)"
+adapter_type = "neogov"
+enabled = false  # disabled: www.governmentjobs.com/robots.txt blocks all bots except a named allow-list (Disallow: / for User-agent: *); no stakeholder decision yet to override respect_robots for this vendor (see header comment)
+
+[config]
+agency = "portofsd"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 31 ATS census (2026-08-30), live-discovered and verified 2026-09-02 (sprint 031 ticket 006)"

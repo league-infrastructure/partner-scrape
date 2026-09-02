@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import functools
 import http.client
+import json
 import logging
 import ssl
 import urllib.error
@@ -21,7 +22,7 @@ import urllib.parse
 import urllib.request
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from typing import Protocol
+from typing import Any, Protocol
 
 import certifi
 
@@ -115,6 +116,20 @@ class Fetcher(Protocol):
         """Issue a GET request to ``url`` with optional extra ``headers``."""
         ...
 
+    def post(
+        self, url: str, body: dict[str, Any], headers: dict[str, str] | None = None
+    ) -> FetchResponse:
+        """Issue a POST request to ``url`` with a JSON ``body`` and optional extra ``headers``.
+
+        (Sprint 031) Added for Workday's ``POST /wday/cxs/{tenant}/
+        {site}/jobs`` search endpoint -- this codebase's first non-GET
+        network call. Additive: every ``Fetcher`` implementation before
+        sprint 031 had only ``get()``, and structural typing means an
+        existing test double that never calls ``post()`` remains a
+        perfectly valid ``Fetcher`` without implementing this method.
+        """
+        ...
+
 
 class UrllibFetcher:
     """The real ``Fetcher``: stdlib ``urllib.request``, no new dependency."""
@@ -126,6 +141,39 @@ class UrllibFetcher:
     def get(self, url: str, headers: dict[str, str] | None = None) -> FetchResponse:
         request_headers = {"User-Agent": self.user_agent, **(headers or {})}
         request = urllib.request.Request(sanitize_url(url), headers=request_headers)
+        return self._execute(url, request)
+
+    def post(
+        self, url: str, body: dict[str, Any], headers: dict[str, str] | None = None
+    ) -> FetchResponse:
+        """(Sprint 031) POST ``body`` JSON-encoded to ``url``.
+
+        Reuses ``get()``'s exact transport-error handling (``_execute``)
+        -- an ``HTTPError`` normalizes into a ``FetchResponse`` with that
+        status; a connection-level failure returns
+        ``TRANSPORT_ERROR_STATUS`` rather than raising.
+        """
+        request_headers = {
+            "User-Agent": self.user_agent,
+            "Content-Type": "application/json",
+            **(headers or {}),
+        }
+        request = urllib.request.Request(
+            sanitize_url(url),
+            data=json.dumps(body).encode("utf-8"),
+            headers=request_headers,
+            method="POST",
+        )
+        return self._execute(url, request)
+
+    def _execute(self, url: str, request: urllib.request.Request) -> FetchResponse:
+        """Shared transport-error handling for both ``get()`` and ``post()``.
+
+        ``url`` is the caller's original (unsanitized) URL -- recorded on
+        the returned ``FetchResponse`` regardless of any percent-encoding
+        applied to ``request``'s own target, matching ``get()``'s
+        pre-existing behavior.
+        """
         try:
             with urllib.request.urlopen(
                 request, timeout=self.timeout, context=_ssl_context()

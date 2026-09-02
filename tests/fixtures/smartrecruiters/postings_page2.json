@@ -1,0 +1,20 @@
+{
+  "offset": 100,
+  "limit": 100,
+  "totalFound": 150,
+  "content": [
+    {
+      "id": "744000100000007",
+      "name": "Hardware Engineering Intern",
+      "releasedDate": "2026-06-07T09:30:00.000Z",
+      "location": {
+        "city": "San Diego",
+        "region": "California",
+        "country": "us",
+        "fullLocation": "San Diego, California, United States"
+      },
+      "department": {"id": "d1", "label": "Engineering"},
+      "typeOfEmployment": {"id": "intern", "label": "Intern"}
+    }
+  ]
+}

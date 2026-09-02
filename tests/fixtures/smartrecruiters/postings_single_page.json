@@ -1,0 +1,20 @@
+{
+  "offset": 0,
+  "limit": 100,
+  "totalFound": 1,
+  "content": [
+    {
+      "id": "744000100000009",
+      "name": "Robotics Engineering Intern",
+      "releasedDate": "2026-06-09T09:30:00.000Z",
+      "location": {
+        "city": "San Diego",
+        "region": "California",
+        "country": "us",
+        "fullLocation": "San Diego, California, United States"
+      },
+      "department": {"id": "d1", "label": "Engineering"},
+      "typeOfEmployment": {"id": "intern", "label": "Intern"}
+    }
+  ]
+}

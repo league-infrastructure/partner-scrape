@@ -1,0 +1,122 @@
+{
+  "name": "Fixture Regional Authority",
+  "description": "Fixture account for adapter tests.",
+  "jobs": [
+    {
+      "title": "Software Engineering Summer Internship - Airport Operations",
+      "shortcode": "FIX0001",
+      "code": "F001",
+      "employment_type": "Internship",
+      "telecommuting": false,
+      "department": "Information & Technology Services - 24",
+      "url": "https://apply.workable.com/j/FIX0001",
+      "shortlink": "https://apply.workable.com/j/FIX0001",
+      "application_url": "https://apply.workable.com/j/FIX0001/apply",
+      "published_on": "2026-05-01",
+      "created_at": "2026-04-15",
+      "country": "United States",
+      "city": "San Diego",
+      "state": "California",
+      "locations": [
+        {"country": "United States", "countryCode": "US", "city": "San Diego", "region": "California", "hidden": false}
+      ],
+      "description": "<p>Join our 9-week paid summer internship program supporting airport IT operations. &amp; more.</p>"
+    },
+    {
+      "title": "Airport Traffic Officer",
+      "shortcode": "FIX0002",
+      "code": "F002",
+      "employment_type": "Full-time",
+      "telecommuting": false,
+      "department": "Landside Operations - 23",
+      "url": "https://apply.workable.com/j/FIX0002",
+      "shortlink": "https://apply.workable.com/j/FIX0002",
+      "application_url": "https://apply.workable.com/j/FIX0002/apply",
+      "published_on": "2026-08-29",
+      "created_at": "2026-08-27",
+      "country": "United States",
+      "city": "San Diego",
+      "state": "California",
+      "locations": [
+        {"country": "United States", "countryCode": "US", "city": "San Diego", "region": "California", "hidden": false}
+      ],
+      "description": "<p>Full-time role patrolling airport roadways.</p>"
+    },
+    {
+      "title": "Data Analytics Intern",
+      "shortcode": "FIX0003",
+      "code": "F003",
+      "employment_type": "Internship",
+      "telecommuting": false,
+      "department": "Information & Technology Services - 24",
+      "url": "https://apply.workable.com/j/FIX0003",
+      "shortlink": "https://apply.workable.com/j/FIX0003",
+      "application_url": "https://apply.workable.com/j/FIX0003/apply",
+      "published_on": "2026-05-01",
+      "created_at": "2026-04-15",
+      "country": "United States",
+      "city": "Los Angeles",
+      "state": "California",
+      "locations": [
+        {"country": "United States", "countryCode": "US", "city": "Los Angeles", "region": "California", "hidden": false}
+      ],
+      "description": "<p>Data analytics internship at our LA office.</p>"
+    },
+    {
+      "title": "Marketing Coordinator Intern",
+      "shortcode": "FIX0004",
+      "code": "F004",
+      "employment_type": "Internship",
+      "telecommuting": false,
+      "department": "Art & Customer Relations - 63",
+      "url": "https://apply.workable.com/j/FIX0004",
+      "shortlink": "https://apply.workable.com/j/FIX0004",
+      "application_url": "https://apply.workable.com/j/FIX0004/apply",
+      "published_on": "2026-05-01",
+      "created_at": "2026-04-15",
+      "country": "United States",
+      "city": "San Diego",
+      "state": "California",
+      "locations": [
+        {"country": "United States", "countryCode": "US", "city": "San Diego", "region": "California", "hidden": false}
+      ],
+      "description": "<p>Marketing coordinator internship.</p>"
+    },
+    {
+      "shortcode": "FIX0005",
+      "code": "F005",
+      "employment_type": "Internship",
+      "telecommuting": false,
+      "department": "Information & Technology Services - 24",
+      "url": "https://apply.workable.com/j/FIX0005",
+      "shortlink": "https://apply.workable.com/j/FIX0005",
+      "application_url": "https://apply.workable.com/j/FIX0005/apply",
+      "published_on": "2026-05-01",
+      "created_at": "2026-04-15",
+      "country": "United States",
+      "city": "San Diego",
+      "state": "California",
+      "description": "<p>Malformed record, no title.</p>"
+    },
+    {
+      "title": "Bioinformatics Intern",
+      "shortcode": "FIX0006",
+      "code": "F006",
+      "employment_type": "Internship",
+      "telecommuting": false,
+      "department": "Information & Technology Services - 24",
+      "url": "https://apply.workable.com/j/FIX0006",
+      "shortlink": "https://apply.workable.com/j/FIX0006",
+      "application_url": "https://apply.workable.com/j/FIX0006/apply",
+      "published_on": "2026-05-01",
+      "created_at": "2026-04-15",
+      "country": "United States",
+      "city": "La Jolla",
+      "state": "California",
+      "locations": [
+        {"country": "United States", "countryCode": "US", "city": "La Jolla", "region": "California", "hidden": false}
+      ],
+      "description": "<p>Bioinformatics internship in La Jolla.</p>"
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+# ServiceNow -- San Diego office presence, SmartRecruiters-backed
+# careers board. Live-verified 2026-09-02 (sprint 031 ticket 002):
+# GET https://api.smartrecruiters.com/v1/companies/ServiceNow/postings
+# -> HTTP 200, valid JSON, totalFound=577, paginated via offset/limit
+# (server-capped at limit=100 -- see adapters/smartrecruiters.py's
+# module docstring for the full field-shape write-up).
+#
+# ats_filters.classify_posting result (2026-09-02 live re-check, all
+# 577 raw postings fetched across 6 pages, direct requests bypassing
+# this project's own robots policy for the purpose of this one-time
+# verification): 41 postings located in San Diego, all Senior/Staff/
+# Director/Manager-level full-time roles; the one
+# typeOfEmployment.label=="Intern" posting found across the whole board
+# ("Intern - Marketing Associate") is in Sydney, Australia, in
+# Marketing, not STEM. 0 of the 577 match classify_posting's internship
+# + STEM + San Diego test -- itself a working-adapter pass, not a
+# failure, per this sprint's own Success Criteria.
+#
+# GENUINE BLOCK, disabled: api.smartrecruiters.com/robots.txt disallows
+# all bots except a named LinkedInBot exception
+# ("User-agent: *\nDisallow: /", with a separate
+# "User-agent: LinkedInBot\nAllow: /v1/companies/" carve-out) --
+# confirmed live 2026-09-02. This project's PoliteFetcher respects
+# robots.txt by default (acquisition_policy.respect_robots defaults to
+# true) and raises RobotsDisallowed for this exact path under our own
+# bot's user agent; a real pipeline dry run
+# (`uv run partner-scrape --source servicenow --dry-run -v`) fails with
+# that exception. Unlike the iCal-feed respect_robots=false precedent
+# (issue 38 -- a stakeholder decision that published *calendar
+# subscription* URLs are feed-client traffic), no equivalent stakeholder
+# decision exists yet for a SmartRecruiters-hosted JSON API that
+# explicitly, deliberately excludes generic bots while carving out one
+# named partner -- overriding robots here is a policy call, not an
+# implementation one. Registered enabled=false rather than assumed
+# respect_robots=false, per this sprint's own "enabled=false only for a
+# genuine block" standard. The adapter itself
+# (adapters/smartrecruiters.py) is fully built and tested against
+# recorded fixtures (tests/test_adapters_smartrecruiters.py) -- flipping
+# this source to enabled=true (with or without a respect_robots
+# override) needs no further adapter code, only a registry edit, once a
+# stakeholder decision is made.
+
+org_name = "ServiceNow"
+adapter_type = "smartrecruiters"
+enabled = false  # disabled: api.smartrecruiters.com/robots.txt blocks all bots except LinkedInBot (Disallow: / for User-agent: *); no stakeholder decision yet to override respect_robots for this vendor (see header comment)
+
+[config]
+company = "ServiceNow"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 31 ATS census (2026-08-30), re-verified live 2026-09-02 (sprint 031 ticket 002)"

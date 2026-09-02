@@ -247,3 +247,39 @@ class PoliteFetcher:
             return response
 
         return response
+
+    def post(
+        self,
+        url: str,
+        body: dict[str, Any],
+        rate_limit_seconds: float = DEFAULT_RATE_LIMIT_SECONDS,
+        respect_robots: bool = True,
+        headers: dict[str, str] | None = None,
+    ) -> FetchResponse:
+        """(Sprint 031) Politely POST ``body`` to ``url`` -- never cached.
+
+        Applies the same robots.txt check and per-domain
+        ``Throttle.wait()`` call ``get()`` already applies, then
+        delegates straight to ``self.fetcher.post(...)``. Deliberately
+        skips ``read_cache_entry``/``conditional_headers``/
+        ``write_cache_entry`` entirely: the on-disk cache is keyed by
+        ``sha256(url)`` alone, but a Workday search POST's result
+        depends on its body (search text, pagination offset, facets),
+        not just the URL -- two different pages of the same tenant's
+        job list share one URL and would collide under the current key,
+        silently serving page 1's cached body for every subsequent
+        page's request. See ``fetch/DESIGN.md``'s sprint 031 Design
+        Rationale for the full write-up and the alternatives considered.
+
+        Raises:
+            RobotsDisallowed: ``respect_robots`` is true and ``url`` is
+                disallowed by its site's robots.txt. Raised before the
+                target URL itself is ever requested.
+        """
+        if respect_robots and not is_allowed(url, self.fetcher, self.user_agent):
+            raise RobotsDisallowed(
+                f"{url} is disallowed by robots.txt for {self.user_agent!r}"
+            )
+
+        self.throttle.wait(domain_of(url), rate_limit_seconds)
+        return self.fetcher.post(url, body, headers=headers or {})

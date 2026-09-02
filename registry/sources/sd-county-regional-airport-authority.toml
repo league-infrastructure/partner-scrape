@@ -1,0 +1,42 @@
+# San Diego County Regional Airport Authority (operates San Diego
+# International Airport / SAN) -- Workable-backed careers board. Live-
+# verified 2026-09-02 (sprint 031 ticket 003):
+# GET https://apply.workable.com/api/v1/widget/accounts/
+# san-diego-county-regional-airport-authority?details=true -> HTTP 200,
+# valid JSON, 5 raw postings, confirmed not paginated for this account
+# (the whole jobs list came back in one response) -- see
+# adapters/workable.py's module docstring for the full live-
+# verification write-up, including the one shape difference found
+# versus this ticket's originally assumed response (flat city/state
+# keys per job, not a nested location object).
+#
+# ats_filters.classify_posting result (2026-09-02 live re-check): all 5
+# current postings ("Airport Art Program Manager", "Airport Traffic
+# Officer", "Manager, Airline Relations", "Procurement Coordinator",
+# "Senior Network Engineer") are San Diego-located, full-time roles --
+# 0 currently carry an internship/co-op/apprentice title or commitment
+# signal, so 0 of the 5 match classify_posting. Per this sprint's own
+# Success Criteria, this is a working, zero-current-match pass, not a
+# failure: this account has previously posted paid 9-week summer
+# internships (e.g. "Business Intelligence - Intern II", confirmed via
+# issue 31's own 2026-08-30 census and a live web search during this
+# ticket's verification) -- those postings are seasonal and simply not
+# open right now. Kept enabled=true, matching every other ATS source's
+# convention (e.g. gossamerbio.toml) for a working-but-currently-zero-
+# yield board; this source's own weekly scheduled run will pick up a
+# future internship posting the moment it opens, with no code change.
+#
+# No location_keywords override: San Diego-located postings already use
+# the exact "San Diego" substring the default ["San Diego"] match needs.
+
+org_name = "San Diego County Regional Airport Authority"
+adapter_type = "workable"
+enabled = true
+
+[config]
+account = "san-diego-county-regional-airport-authority"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 31 ATS census (2026-08-30), re-verified live 2026-09-02 (sprint 031 ticket 003)"

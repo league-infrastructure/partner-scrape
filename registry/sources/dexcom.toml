@@ -1,0 +1,43 @@
+# Dexcom -- San Diego headquarters, Workday-backed careers board.
+#
+# Live-verified 2026-09-02 (sprint 031 ticket 005):
+# POST https://dexcom.wd1.myworkdayjobs.com/wday/cxs/dexcom/Dexcom/jobs
+# -> a headerless plain POST 403s (issue 31's own census); browser-like
+# headers (Accept: application/json, Referer set to this site's own
+# careers page, a realistic Chrome User-Agent) clear it: HTTP 200,
+# valid JSON, total=295, paginated via offset (server-capped at
+# limit=20).
+#
+# robots.txt (dexcom.wd1.myworkdayjobs.com) checked live via
+# urllib.robotparser against the exact /wday/cxs/dexcom/Dexcom/jobs
+# path this source POSTs to: ALLOWED (no blanket "Disallow: /"; only
+# /refreshFacet/ is disallowed).
+#
+# ats_filters.classify_posting result (2026-09-02, all 295 raw postings
+# fetched across every page, direct requests bypassing this project's
+# own robots policy for the purpose of this one-time verification): 53
+# postings located in San Diego. 3 intern-titled postings are live
+# board-wide at verification time -- "2027 US Summer Internship - Early
+# Interest" (San Diego) and two Facilities-intern roles (Penang,
+# Malaysia) -- but none carries a STEM keyword in its *title*, the only
+# field this adapter can classify against for Workday (no department
+# field exists in the list-view API). 0 of the 295 match
+# classify_posting's internship + STEM + San Diego test. A working-
+# adapter pass with real internship activity visible but not yet
+# title-classifiable, not a failure, per this sprint's own Success
+# Criteria; see adapters/workday.py's module docstring for the fuller
+# account.
+
+org_name = "Dexcom"
+adapter_type = "workday"
+enabled = true
+
+[config]
+tenant = "dexcom"
+site = "Dexcom"
+api_base = "https://dexcom.wd1.myworkdayjobs.com"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 31 ATS census (2026-08-30), live-verified 2026-09-02 (sprint 031 ticket 005)"

@@ -29,14 +29,18 @@ from partner_scrape.adapters.leaguesync import LeagueSyncAdapter
 from partner_scrape.adapters.lever import LeverAdapter
 from partner_scrape.adapters.listing_html import ListingHtmlAdapter
 from partner_scrape.adapters.localist import LocalistAdapter
+from partner_scrape.adapters.neogov import NeogovAdapter
 from partner_scrape.adapters.program_page import (
     ProgramListingAdapter,
     ProgramPageAdapter,
     ProgramPageMultiAdapter,
 )
 from partner_scrape.adapters.robotevents import RobotEventsAdapter
+from partner_scrape.adapters.smartrecruiters import SmartRecruitersAdapter
 from partner_scrape.adapters.tec import TecRestAdapter
 from partner_scrape.adapters.wordpress import WordPressRestAdapter
+from partner_scrape.adapters.workable import WorkableAdapter
+from partner_scrape.adapters.workday import WorkdayAdapter
 
 ADAPTERS["tec_rest"] = TecRestAdapter
 ADAPTERS["wp_rest"] = WordPressRestAdapter
@@ -54,6 +58,10 @@ ADAPTERS["program_listing"] = ProgramListingAdapter
 ADAPTERS["program_page_multi"] = ProgramPageMultiAdapter
 ADAPTERS["activenet_camps"] = ActiveNetCampsAdapter
 ADAPTERS["campbrain"] = CampBrainAdapter
+ADAPTERS["smartrecruiters"] = SmartRecruitersAdapter
+ADAPTERS["workable"] = WorkableAdapter
+ADAPTERS["workday"] = WorkdayAdapter
+ADAPTERS["neogov"] = NeogovAdapter
 
 __all__ = [
     "Adapter",
@@ -79,4 +87,8 @@ __all__ = [
     "ProgramPageMultiAdapter",
     "ActiveNetCampsAdapter",
     "CampBrainAdapter",
+    "SmartRecruitersAdapter",
+    "WorkableAdapter",
+    "WorkdayAdapter",
+    "NeogovAdapter",
 ]
