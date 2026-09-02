@@ -93,9 +93,10 @@ def _write_real_partners_fixture(site_dir: Path) -> None:
     real `places.toml` text rather than hand-listed, so this can never
     drift from the data it stands in for -- mirrors
     `tests/directory/test_pipeline.py`'s identical fixture. Sprint 030
-    ticket 002 extends this to also parse `offerings.toml`'s own six
-    real `related_partner_id` references (curated volunteer org
-    profiles) -- `run_directory()`'s join-integrity check joins Place
+    tickets 002/003 extend this to also parse `offerings.toml`'s own
+    thirteen real `related_partner_id` references (six curated
+    volunteer org profiles, seven curated free/Title I school-program
+    rows) -- `run_directory()`'s join-integrity check joins Place
     and Offering references together."""
     places_text = (DEFAULT_GEO_DATA_DIR / "places.toml").read_text(encoding="utf-8")
     offerings_text = (DEFAULT_GEO_DATA_DIR / "offerings.toml").read_text(encoding="utf-8")

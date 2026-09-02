@@ -1,16 +1,19 @@
 """Dataset-validity regression tests for the curated Offerings roster
-(`partner_scrape/directory/data/offerings.toml`)'s six volunteer org
-profile rows (sprint 030, ticket 002, issue 14 Strategy B).
+(`partner_scrape/directory/data/offerings.toml`): six volunteer org
+profile rows (sprint 030, ticket 002, issue 14 Strategy B) and seven
+free/Title I school-program rows (sprint 030, ticket 003, issue 33
+part 2) -- thirteen rows total, no placeholders remaining.
 
 Data-only-ticket tests, matching sprint.md's Test Strategy precedent
 for a curated dataset (`tests/directory/test_dataset_validity.py`'s
 Places precedent, `tests/directory/test_club_dataset_validity.py`'s
 Clubs precedent): these pin down properties of the *real* committed
 data -- Fleet/SDZWA/Birch's issue-14-verbatim age minimums, the other
-three orgs' honestly-researched age minimums, and every row's
-hand-verified `related_partner_id` join -- rather than a synthetic
-fixture, so a future edit to `offerings.toml` that regresses one of
-these is caught directly.
+three volunteer orgs' honestly-researched age minimums, every
+free/Title I row's non-empty eligibility/how_to_book and unset
+age_minimum, and every row's hand-verified `related_partner_id` join --
+rather than a synthetic fixture, so a future edit to `offerings.toml`
+that regresses one of these is caught directly.
 
 `TestRelatedPartnerIdJoinIntegrity` drives the real, committed roster
 through `directory.pipeline.run_directory()`'s own join-integrity guard
@@ -61,6 +64,10 @@ def _real_offerings():
 
 def _real_volunteer_offerings():
     return {o.offering_id: o for o in _real_offerings() if o.offering_type == "volunteer"}
+
+
+def _real_free_program_offerings():
+    return {o.offering_id: o for o in _real_offerings() if o.offering_type == "free_program"}
 
 
 class TestSixVolunteerOrgsPresent:
@@ -120,15 +127,70 @@ class TestDescriptionsAreNonEmpty:
             assert offering.description, offering.offering_id
 
 
+class TestSevenFreeProgramsPresent:
+    """AC (ticket 003): all seven named free/Title I school programs
+    are present with offering_type = "free_program"."""
+
+    def test_all_seven_named_free_programs_are_present(self):
+        by_id = _real_free_program_offerings()
+
+        assert set(by_id) == {
+            "sdzwa-free-field-trips",
+            "sdnhm-museum-access-fund",
+            "living-coast-title-1-and-cvesd",
+            "birch-aquarium-financial-aid",
+            "fleet-science-center-school-programs",
+            "qualcomm-thinkabit-lab",
+            "biocom-life-science-station-innov8ed",
+        }
+
+
+class TestFreeProgramAgeMinimumIsAlwaysNone:
+    """AC: age_minimum stays None for every row in ticket 003 -- these
+    are school-group programs, not individual-volunteer roles."""
+
+    def test_every_free_program_rows_age_minimum_is_none(self):
+        for offering in _real_free_program_offerings().values():
+            assert offering.age_minimum is None, offering.offering_id
+
+
+class TestFreeProgramEligibilityAndHowToBookAreSpecific:
+    """AC: eligibility and how_to_book are the load-bearing fields --
+    every row's is non-empty and states the actual qualifying
+    criterion/process, not a vague summary."""
+
+    def test_every_free_program_rows_eligibility_is_non_empty(self):
+        for offering in _real_free_program_offerings().values():
+            assert offering.eligibility, offering.offering_id
+
+    def test_every_free_program_rows_how_to_book_is_non_empty(self):
+        for offering in _real_free_program_offerings().values():
+            assert offering.how_to_book, offering.offering_id
+
+    def test_every_free_program_rows_last_verified_is_a_real_iso_date(self):
+        for offering in _real_free_program_offerings().values():
+            assert offering.last_verified, offering.offering_id
+            # A real ISO date (YYYY-MM-DD), not "" and not left
+            # unparseable -- format-checked structurally.
+            year, month, day = offering.last_verified.split("-")
+            assert len(year) == 4 and len(month) == 2 and len(day) == 2, offering.offering_id
+
+    def test_every_free_program_rows_link_url_is_non_empty_and_well_formed(self):
+        for offering in _real_free_program_offerings().values():
+            assert offering.link_url, offering.offering_id
+            assert offering.link_url.startswith(("http://", "https://")), offering.offering_id
+
+
 class TestRelatedPartnerIdJoinIntegrity:
     """AC: every row's related_partner_id is hand-checked against the
     partner roster's own id field where a confident match exists --
-    left None otherwise, never guessed. Spot-checks the six hand-copied
-    ids directly, then re-verifies every non-None reference in the real
-    roster resolves through directory.pipeline's own join-integrity
-    guard (the same mechanism a real `directory` CLI run exercises)."""
+    left None otherwise, never guessed. Spot-checks the thirteen
+    hand-copied ids directly, then re-verifies every non-None reference
+    in the real roster resolves through directory.pipeline's own
+    join-integrity guard (the same mechanism a real `directory` CLI run
+    exercises)."""
 
-    def test_hand_copied_partner_ids_match_the_expected_org(self):
+    def test_hand_copied_volunteer_partner_ids_match_the_expected_org(self):
         by_id = _real_volunteer_offerings()
 
         assert by_id["fleet-science-center-volunteer"].related_partner_id == 121
@@ -137,6 +199,17 @@ class TestRelatedPartnerIdJoinIntegrity:
         assert by_id["sdnhm-volunteer"].related_partner_id == 24
         assert by_id["ilacsd-volunteer"].related_partner_id == 361
         assert by_id["san-diego-river-park-foundation-volunteer"].related_partner_id == 323
+
+    def test_hand_copied_free_program_partner_ids_match_the_expected_org(self):
+        by_id = _real_free_program_offerings()
+
+        assert by_id["sdzwa-free-field-trips"].related_partner_id == 241
+        assert by_id["sdnhm-museum-access-fund"].related_partner_id == 24
+        assert by_id["living-coast-title-1-and-cvesd"].related_partner_id == 46
+        assert by_id["birch-aquarium-financial-aid"].related_partner_id == 238
+        assert by_id["fleet-science-center-school-programs"].related_partner_id == 121
+        assert by_id["qualcomm-thinkabit-lab"].related_partner_id == 156
+        assert by_id["biocom-life-science-station-innov8ed"].related_partner_id == 220
 
     def test_every_related_partner_id_resolves_via_run_directorys_join_guard(self, tmp_path):
         text = DEFAULT_ROSTER_PATH.read_text(encoding="utf-8")
@@ -163,4 +236,4 @@ class TestRelatedPartnerIdJoinIntegrity:
             dry_run=True,
         )
 
-        assert len(payload["offerings"]) == 7
+        assert len(payload["offerings"]) == 13

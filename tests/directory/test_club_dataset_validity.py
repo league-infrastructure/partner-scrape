@@ -32,9 +32,10 @@ from partner_scrape.registry.loader import load_active_sources
 # one. Parsed straight out of the real places.toml text rather than
 # hand-listed, so this can never drift from the data it stands in for
 # -- mirrors tests/directory/test_pipeline.py's identical fixture.
-# Sprint 030 ticket 002 extends this to also parse offerings.toml's own
-# related_partner_id references (six real ones, added by ticket 002's
-# curated volunteer org profiles) -- run_directory()'s join-integrity
+# Sprint 030 tickets 002/003 extend this to also parse offerings.toml's
+# own related_partner_id references (six from ticket 002's curated
+# volunteer org profiles, seven more from ticket 003's curated
+# free/Title I school-program rows) -- run_directory()'s join-integrity
 # check joins Place and Offering references together, so a fixture
 # built from places.toml alone now under-covers a real, unfiltered
 # run_directory() call. ------------------------------------------------

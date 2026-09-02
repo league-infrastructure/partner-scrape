@@ -84,10 +84,11 @@ class _NeverCalledFetcher:
 # straight out of the real places.toml text rather than hand-listed, so
 # this fixture can never drift from the data it stands in for -- and
 # never a duplicate committed copy of the real partners.json itself
-# (sprint.md Scope > Out of Scope). Sprint 030 ticket 002 extends this
-# to also parse offerings.toml's own related_partner_id references
-# (six real ones, added by ticket 002's curated volunteer org profiles)
-# -- _check_related_partner_references() joins Place and Offering
+# (sprint.md Scope > Out of Scope). Sprint 030 tickets 002/003 extend
+# this to also parse offerings.toml's own related_partner_id references
+# (six from ticket 002's curated volunteer org profiles, seven more from
+# ticket 003's curated free/Title I school-program rows) --
+# _check_related_partner_references() joins Place and Offering
 # references in one combined check, so a fixture built from places.toml
 # alone now under-covers a real, unfiltered run_directory() call. -----
 
@@ -687,21 +688,22 @@ class TestRelatedPartnerIdJoinIntegrity:
 # Sprint 030 ticket 001: Offering, the third standing-entity dispatch.
 # Against the real, committed Offering Registry -- no fixture copy,
 # matching this ticket's other "trust the real data" tests. As of
-# ticket 002 (issue 14 Strategy B), the real roster carries seven rows:
-# six curated volunteer org profiles plus ticket 001's original
-# free_program placeholder (replaced by ticket 003).
+# ticket 003 (issue 33 part 2), the real roster carries thirteen rows:
+# six curated volunteer org profiles (ticket 002, issue 14 Strategy B)
+# plus seven curated free/Title I school-program rows (ticket 003) --
+# no placeholders remaining.
 # ---------------------------------------------------------------------
 
 
 class TestRunDirectoryOfferingDispatch:
-    def test_dry_run_reports_seven_offerings_with_no_network(self, tmp_path):
+    def test_dry_run_reports_thirteen_offerings_with_no_network(self, tmp_path):
         _write_real_partners_fixture(tmp_path / "unused")
         payload = run_directory(
             fetcher=_NeverCalledFetcher(), dry_run=True, site_dir=tmp_path / "unused"
         )
 
-        assert payload["offerings_meta"]["total"] == 7
-        assert len(payload["offerings"]) == 7
+        assert payload["offerings_meta"]["total"] == 13
+        assert len(payload["offerings"]) == 13
 
     def test_a_real_offering_registry_entry_never_trips_place_or_club_warnings(
         self, tmp_path, caplog
@@ -733,7 +735,7 @@ class TestRunDirectoryOfferingDispatch:
 
         assert payload["meta"]["total"] == 19
         assert payload["clubs_meta"]["total"] == 4
-        assert payload["offerings_meta"]["total"] == 7
+        assert payload["offerings_meta"]["total"] == 13
 
 
 class TestOfferingHasNoGeocodingStage:
@@ -769,7 +771,7 @@ class TestOfferingHasNoGeocodingStage:
             site_dir=tmp_path / "unused",
         )
 
-        assert payload["offerings_meta"]["total"] == 7
+        assert payload["offerings_meta"]["total"] == 13
         assert payload["meta"]["total"] == 0
         assert payload["clubs_meta"]["total"] == 0
 
@@ -795,7 +797,7 @@ class TestOfferingSourceFilter:
             site_dir=tmp_path / "unused",
         )
 
-        assert payload["offerings_meta"]["total"] == 7
+        assert payload["offerings_meta"]["total"] == 13
         assert payload["meta"]["total"] == 0
         assert payload["clubs_meta"]["total"] == 0
 
