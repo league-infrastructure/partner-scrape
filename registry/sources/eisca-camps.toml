@@ -1,0 +1,45 @@
+# Elementary Institute of Science -- summer camp page. Sprint 028
+# ticket 004 (issue 29).
+#
+# Live-verified 2026-09-01: GET https://eisca.org/camps returns HTTP 200
+# (https://www.eisca.org/camps 301-redirects here). Body reads "SUMMER
+# CAMP 2026 OPEN REGISTRATION 8 Weeks | June 8th - July 31st, 2026 ...
+# Price: $300* per student", followed by an explicit 8-week breakdown
+# (Week 1 June 8 "Science of Sound" ... Week 8 July 27 "Earth Heroes"),
+# each week its own theme at the same price -- program_page_multi's
+# eight-weekly-record shape, matching the San Diego Zoo batch's
+# structure.
+#
+# Live dry-run confirmed (`--source eisca-camps --dry-run -v`): found=2
+# dated=2 -- the LLM call collapsed the 8-week summer program into one
+# spanning record (2026-06-08/07-31, $300/student) rather than 8
+# per-week rows (the same theme-collapsing behavior most of the San
+# Diego Zoo batch showed -- an LLM extraction-granularity choice, not a
+# registry defect; both interpretations are correctly dated/priced),
+# plus a second, distinct "Spring Nature Explorers Camp" record
+# (2026-03-30/04-03, $300/student, `is_open=false`) also described on
+# this same page.
+#
+# NOTE on coexistence with `eisca.toml` (pre-existing, `generic_html`,
+# sitemap-driven crawl of the whole `eisca.org` domain, not forced to
+# `opportunity_type = "Camps"`): same non-blocking overlap category as
+# `fleet-science-center-camps.toml`'s own note -- a general-purpose
+# whole-site scraper coexisting with this ticket's camp-specific,
+# per-session, `opportunity_type = "Camps"`-forced source, not the
+# camp-specific dual-registration pattern (Air & Space Museum/Helen
+# Woodward) the sprint's Design Rationale forbids. Flagged for a future
+# architecture pass, not resolved in this data-only ticket.
+
+org_name = "Elementary Institute of Science"
+adapter_type = "program_page_multi"
+enabled = true
+
+[config]
+url = "https://eisca.org/camps"
+program_kind = "program"
+opportunity_type = "Camps"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 29 (2026-08-30 camp session extraction); sprint 028 ticket 004 live verification (2026-09-01)"

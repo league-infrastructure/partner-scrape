@@ -1,0 +1,42 @@
+# Living Coast Discovery Center -- camps page. Sprint 028 ticket 004
+# (issue 29's verified nonprofit/institutional camp marketing-page
+# providers). Currently-published sessions are seasonal break camps
+# (Fall/Thanksgiving/Winter), not summer -- program_page_multi is the
+# right shape regardless of which season is currently posted (SUC-040's
+# empty-list handling covers a fully off-season page; this page is not
+# off-season, just not summer, at verification time).
+#
+# Live-verified 2026-09-01: GET https://www.thelivingcoast.org/camps
+# returns HTTP 200. Body's "Upcoming Camp Sessions" table lists three
+# named, dated, priced sessions: "Birds of a Feather", "Tortoise Trek"
+# (both $425 / $382.50 member, one in late September and one in early
+# October per the page's own table), and "Coastal Champs" (November
+# 23-25, $255 / $229.50 member) -- each its own distinct week-session
+# record, the program_page_multi shape.
+#
+# Live dry-run confirmed (`--source living-coast-camps --dry-run -v`):
+# found=3 dated=3 -- "Birds of a Feather" (2026-09-21/25, $425/$382.50),
+# "Tortoise Trek" (2026-09-28/10-02, $425/$382.50), "Coastal Champs"
+# (2026-11-23/25, $255/$229.50), all `is_open=true`.
+#
+# NOTE on coexistence with `thelivingcoast.toml` (pre-existing,
+# `tec_rest`, this org's WordPress "The Events Calendar" feed): live-
+# checked 2026-09-01, that feed carries only daily animal presentations
+# and closure notices (Eagle/Shark & Ray/Sea Turtle presentations,
+# "CLOSED MONDAY AND TUESDAY") -- no camp sessions -- so this new
+# source adds genuinely new coverage, not a duplicate of an existing
+# feed's content.
+
+org_name = "Living Coast Discovery Center"
+adapter_type = "program_page_multi"
+enabled = true
+
+[config]
+url = "https://www.thelivingcoast.org/camps"
+program_kind = "program"
+opportunity_type = "Camps"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 29 (2026-08-30 camp session extraction); sprint 028 ticket 004 live verification (2026-09-01)"

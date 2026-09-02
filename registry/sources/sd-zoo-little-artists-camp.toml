@@ -1,0 +1,30 @@
+# San Diego Zoo -- Little Artists: Art Camp (1st-2nd Grade). See
+# sd-zoo-classic-camp-kindergarten.toml for the shared per-page shape
+# this whole nine-page batch follows -- same two-theme/eight-week
+# structure, different named program.
+#
+# Live-verified 2026-09-01: GET
+# https://zoo.sandiegozoo.org/kids-programs/little-artists-camp-first-second-grade
+# returns HTTP 200, "$525* Price details", "Little Artists is a
+# full-day camp ... designed for those who are interested in both art
+# and wildlife."
+#
+# Live dry-run confirmed (`--source sd-zoo-little-artists-camp
+# --dry-run -v`): found=1 dated=1 -- one spanning record ($525,
+# correctly dated, `is_open=true`); see
+# sd-zoo-classic-camp-first-grade.toml's comment on this batch's
+# theme-collapsing extraction pattern.
+
+org_name = "San Diego Zoo Wildlife Alliance -- Little Artists: Art Camp (1st-2nd Grade)"
+adapter_type = "program_page_multi"
+enabled = true
+
+[config]
+url = "https://zoo.sandiegozoo.org/kids-programs/little-artists-camp-first-second-grade"
+program_kind = "program"
+opportunity_type = "Camps"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 29 (2026-08-30 camp session extraction); sprint 028 ticket 004 live verification (2026-09-01)"

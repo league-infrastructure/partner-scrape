@@ -1,0 +1,38 @@
+# San Diego Model Railroad Museum -- summer camps page. Sprint 028
+# ticket 004 (issue 29). This is the sprint's designated live target
+# for ticket 003's sold-out-via-`Event.description` mapping: several of
+# this page's weekly sessions are explicitly marked "SOLD OUT!" inline.
+#
+# Live-verified 2026-09-01: GET https://www.sdmrm.org/summer-camps
+# returns HTTP 200. Body's "Weekly Camp Sessions" list: June 15-18
+# (Grades K-2, Beginner, $200/$180 member -- open), June 22-26 (Grades
+# K-2, $250/$225 member, "SOLD OUT!"), June 29-July 3 ("SOLD OUT!"),
+# July 6-10 ("SOLD OUT!"), July 13-17 ("SOLD OUT!"), July 20-24 ("SOLD
+# OUT!"), July 27-31 ("SOLD OUT!"), August 3-7 (Grades 9-12, Teen
+# Clinic, $300/$275 member, "SOLD OUT!") -- eight weekly sessions, seven
+# of eight sold out, each its own program_page_multi record; the
+# generalized `is_open` extraction rule (ticket 003) should resolve
+# each "SOLD OUT!" row to `is_open=False`, surfaced via a sold-out
+# `Event.description` per adapters/DESIGN.md's sprint 028 section.
+#
+# Live dry-run confirmed (`--source sd-model-railroad-museum-camps
+# --dry-run -v`): found=9 dated=9 -- all 8 weekly sessions extracted
+# individually with correct dates/prices, 7 of 8 with `is_open=false`
+# (only the June 15-18 opening week is `is_open=true`), plus one
+# additional distinct virtual-camp record described further down the
+# page. This is this ticket's live-verified exercise of ticket 003's
+# sold-out-via-`Event.description` mapping.
+
+org_name = "San Diego Model Railroad Museum"
+adapter_type = "program_page_multi"
+enabled = true
+
+[config]
+url = "https://www.sdmrm.org/summer-camps"
+program_kind = "program"
+opportunity_type = "Camps"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 29 (2026-08-30 camp session extraction); sprint 028 ticket 004 live verification (2026-09-01)"

@@ -1,0 +1,32 @@
+# San Diego Zoo -- Classic Camp, Kindergarten. One of nine individually
+# registered San Diego Zoo `kids-programs/*` camp pages (sprint 028
+# ticket 004, issue 29). Each page offers two four-week themed
+# sub-programs at the same weekly price, one page per grade band --
+# see adapters/DESIGN.md's sprint 028 section for why each week is its
+# own extracted record rather than one page-level date range.
+#
+# Live-verified 2026-09-01: GET
+# https://zoo.sandiegozoo.org/kids-programs/classic-camp-kindergarten
+# returns HTTP 200. Body reads "$525* Price details ... UPCOMING DATES"
+# followed by two four-week blocks -- "Wonderful Wildlife Discoveries"
+# (June 8-12, 15-19, 22-26, July 6-10, 2026) and "Wildlife on the Move!"
+# (July 13-17, 20-24, 27-31, August 3-7, 2026) -- eight weekly sessions
+# total, each $525, `program_page_multi`'s target shape.
+#
+# Live dry-run confirmed (`--source sd-zoo-classic-camp-kindergarten
+# --dry-run -v`): found=8 dated=8 -- all eight weekly sessions extracted
+# individually, each $525, `is_open=true`.
+
+org_name = "San Diego Zoo Wildlife Alliance -- Classic Camp (Kindergarten)"
+adapter_type = "program_page_multi"
+enabled = true
+
+[config]
+url = "https://zoo.sandiegozoo.org/kids-programs/classic-camp-kindergarten"
+program_kind = "program"
+opportunity_type = "Camps"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 29 (2026-08-30 camp session extraction); sprint 028 ticket 004 live verification (2026-09-01)"

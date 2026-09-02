@@ -1,0 +1,49 @@
+# Coastal Roots Farm -- Farm Camp page. Sprint 028 ticket 004 (issue
+# 29). This org is also CampBrain-hosted per issue 29's platform
+# priority list; SUC-043 only requires it be registered via *at most*
+# one path, so this marketing page being disabled (below) does not by
+# itself force ticket 006's CampBrain adapter to register it -- that is
+# ticket 006's own call to make against its live CampBrain evidence.
+#
+# DISABLED -- extraction quality gap, not a fetch/access block.
+#
+# Live-verified 2026-09-01: GET
+# https://coastalrootsfarm.org/farm-camp/ returns HTTP 200, and
+# `extract.reduce_html_to_text()`'s output cleanly contains the page's
+# "Upcoming Camp Sessions" table as flattened prose: "Fall Break Camp
+# October 26-30, 2026 ... $440 Thanksgiving Break Camp November 23-25
+# ... $260 Winter Break Camp December 28-31, 2026 ... $350" -- three
+# distinct named, dated, priced sessions, clearly legible to a human
+# reader. However two separate live `extract_programs()` calls against
+# this exact reduced text (one cache-fresh) both collapsed all three
+# sessions into a single blended "Farm Camp" record with `date_start`/
+# `date_end` both empty and a combined `cost` string listing all three
+# prices together -- `found=1 dated=0` on live dry-run, not the
+# `program_page_multi` per-session shape this page's own content
+# supports. This is a real, reproduced LLM-extraction-quality gap for
+# this specific page's row-boundary-free flattened-table shape, not a
+# registry configuration problem `program_page_multi`'s existing
+# `config.url`/`program_kind`/`opportunity_type` shape can fix, and
+# fixing the extraction prompt itself is out of this data-only
+# ticket's scope (adapters/DESIGN.md's sprint 028 section covers what
+# ticket 003 did and did not change to `_SYSTEM_PROMPT_MULTI`).
+#
+# DISABLED per sprint 027 tickets 005/006's precedent for a
+# live-verified-but-currently-unusable source. Re-verify once a future
+# ticket improves per-row extraction for this table shape, or once this
+# org's CampBrain listing (ticket 006) is evaluated as the working
+# alternative path.
+
+org_name = "Coastal Roots Farm"
+adapter_type = "program_page_multi"
+enabled = false  # disabled: extraction reliably blends this page's 3 distinct dated/priced sessions into one dateless record (live-verified 2026-09-01); see comment above
+
+[config]
+url = "https://coastalrootsfarm.org/farm-camp/"
+program_kind = "program"
+opportunity_type = "Camps"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 29 (2026-08-30 camp session extraction); sprint 028 ticket 004 live verification (2026-09-01)"

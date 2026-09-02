@@ -1,0 +1,27 @@
+# San Diego Zoo -- Classic Camp, 2nd Grade. See
+# sd-zoo-classic-camp-kindergarten.toml for the shared per-page shape
+# this whole nine-page batch follows.
+#
+# Live-verified 2026-09-01: GET
+# https://zoo.sandiegozoo.org/kids-programs/classic-camp-second-grade
+# returns HTTP 200, "$525* Price details", same two-theme/eight-week
+# UPCOMING DATES structure as the kindergarten page.
+#
+# Live dry-run confirmed (`--source sd-zoo-classic-camp-second-grade
+# --dry-run -v`): found=2 dated=2, each $525 and correctly dated (see
+# sd-zoo-classic-camp-first-grade.toml's comment on this batch's
+# theme-collapsing extraction pattern).
+
+org_name = "San Diego Zoo Wildlife Alliance -- Classic Camp (2nd Grade)"
+adapter_type = "program_page_multi"
+enabled = true
+
+[config]
+url = "https://zoo.sandiegozoo.org/kids-programs/classic-camp-second-grade"
+program_kind = "program"
+opportunity_type = "Camps"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 29 (2026-08-30 camp session extraction); sprint 028 ticket 004 live verification (2026-09-01)"

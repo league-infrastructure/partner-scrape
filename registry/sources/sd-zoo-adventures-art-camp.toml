@@ -1,0 +1,27 @@
+# San Diego Zoo -- Adventures: Art Camp (5th-8th Grade). See
+# sd-zoo-classic-camp-kindergarten.toml for the shared per-page shape
+# this whole nine-page batch follows.
+#
+# Live-verified 2026-09-01: GET
+# https://zoo.sandiegozoo.org/kids-programs/adventures-art-camp-fifth-eighth-grade
+# returns HTTP 200, "$525* Price details", matching the rest of this
+# batch's two-theme/eight-week UPCOMING DATES structure.
+#
+# Live dry-run confirmed (`--source sd-zoo-adventures-art-camp
+# --dry-run -v`): found=2 dated=2, each $525 and correctly dated (see
+# sd-zoo-classic-camp-first-grade.toml's comment on this batch's
+# theme-collapsing extraction pattern).
+
+org_name = "San Diego Zoo Wildlife Alliance -- Adventures: Art Camp (5th-8th Grade)"
+adapter_type = "program_page_multi"
+enabled = true
+
+[config]
+url = "https://zoo.sandiegozoo.org/kids-programs/adventures-art-camp-fifth-eighth-grade"
+program_kind = "program"
+opportunity_type = "Camps"
+
+[acquisition_policy]
+rate_limit_seconds = 1.0
+respect_robots = true
+discovered_via = "issue 29 (2026-08-30 camp session extraction); sprint 028 ticket 004 live verification (2026-09-01)"

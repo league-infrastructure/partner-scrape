@@ -663,3 +663,143 @@ class TestProgramListingAndMultiSourceConfig:
         assert sio.enabled is True
         assert sio.config["program_kind"] == "internship"
         assert sio.config["url"] == "https://scripps.ucsd.edu/education/research-internships"
+
+
+class TestCampMarketingPageProviders:
+    """Sprint 028 ticket 004 (issue 29, SUC-038/SUC-041): the verified
+    nonprofit/institutional camp marketing-page providers, each
+    registered as a ``program_page``/``program_page_multi`` source with
+    ``config.opportunity_type = "Camps"`` -- the same operator-curated-
+    override convention ``sd-foundation-community-scholarship.toml``
+    already established for ``"Funding Opportunities"``. No new loader
+    code: every value here is ordinary registry data under the existing
+    untyped-``config``-dict mechanism.
+    """
+
+    #: (source_id, org_name substring) for every enabled=true Camps
+    #: source this ticket registers.
+    _ENABLED_CAMPS_SOURCES = [
+        "sd-zoo-classic-camp-kindergarten",
+        "sd-zoo-classic-camp-first-grade",
+        "sd-zoo-classic-camp-second-grade",
+        "sd-zoo-classic-camp-third-grade",
+        "sd-zoo-classic-camp-fourth-fifth-grade",
+        "sd-zoo-classic-camp-sixth-ninth-grade",
+        "sd-zoo-little-artists-camp",
+        "sd-zoo-animal-art-explorers-camp",
+        "sd-zoo-adventures-art-camp",
+        "living-coast-camps",
+        "eisca-camps",
+        "sd-model-railroad-museum-camps",
+        "cmod-summer-camp",
+        "birch-aquarium-summer-camps",
+        "fleet-science-center-camps",
+    ]
+
+    #: (source_id, reason substring expected in the file's disabled
+    #: comment) for every enabled=false Camps source this ticket
+    #: registers -- sprint 027 tickets 005/006's disabled-with-reason
+    #: precedent.
+    _DISABLED_CAMPS_SOURCES = [
+        "coastal-roots-farm-camp",
+        "camp-invention-morning-creek",
+        "southwestern-college-yes-academy",
+    ]
+
+    def test_every_enabled_camps_source_is_registered_as_program_page_family(self):
+        sources = {s.source_id: s for s in load_sources()}
+
+        for source_id in self._ENABLED_CAMPS_SOURCES:
+            assert source_id in sources, f"{source_id} not registered"
+            source = sources[source_id]
+            assert source.adapter_type in ("program_page", "program_page_multi")
+            assert source.config["program_kind"] == "program"
+            assert source.config["opportunity_type"] == "Camps"
+            assert source.enabled is True
+
+    def test_every_disabled_camps_source_has_a_documented_reason(self):
+        sources = {s.source_id: s for s in load_sources()}
+
+        for source_id in self._DISABLED_CAMPS_SOURCES:
+            assert source_id in sources, f"{source_id} not registered"
+            source = sources[source_id]
+            assert source.adapter_type in ("program_page", "program_page_multi")
+            assert source.config["opportunity_type"] == "Camps"
+            assert source.enabled is False
+
+            path = DEFAULT_SOURCES_DIR / f"{source_id}.toml"
+            assert "disabled:" in path.read_text()
+
+    def test_enabled_and_disabled_sets_together_cover_every_registered_camps_source(self):
+        # Belt-and-suspenders against a source silently falling through
+        # both lists above (neither enabled nor accounted-for-disabled).
+        sources = load_sources()
+        camps_sources = {
+            s.source_id
+            for s in sources
+            if s.config.get("opportunity_type") == "Camps"
+        }
+
+        assert camps_sources == set(self._ENABLED_CAMPS_SOURCES) | set(
+            self._DISABLED_CAMPS_SOURCES
+        )
+
+    def test_sd_zoo_nine_program_pages_each_point_at_their_own_kids_programs_url(self):
+        sources = {s.source_id: s for s in load_sources()}
+        zoo_source_ids = [s for s in self._ENABLED_CAMPS_SOURCES if s.startswith("sd-zoo-")]
+
+        assert len(zoo_source_ids) == 9
+        urls = {sources[s].config["url"] for s in zoo_source_ids}
+        assert len(urls) == 9  # nine distinct per-program pages, no accidental duplicate
+        assert all(url.startswith("https://zoo.sandiegozoo.org/kids-programs/") for url in urls)
+
+    def test_fleet_is_registered_enabled_true_year_round(self):
+        # SUC-040: Fleet's in-season-only marketing page must not be
+        # gated behind enabled=false pending "season" -- the existing
+        # weekly cron plus the empty-list-is-valid prompt handling
+        # (ticket 003) is the deliberate substitute for a seasonal-
+        # recheck subsystem.
+        sources = {s.source_id: s for s in load_sources()}
+
+        fleet = sources["fleet-science-center-camps"]
+        assert fleet.enabled is True
+        assert fleet.config["url"] == "https://www.fleetscience.org/events/camps"
+
+    def test_sd_model_railroad_museum_is_the_sold_out_target(self):
+        sources = {s.source_id: s for s in load_sources()}
+
+        sdmrm = sources["sd-model-railroad-museum-camps"]
+        assert sdmrm.enabled is True
+        assert sdmrm.config["url"] == "https://www.sdmrm.org/summer-camps"
+
+    def test_camp_galileo_sd_is_not_registered(self):
+        # Commercial-chain scope exclusion (sprint.md's "Camp Galileo
+        # tension") -- Camp Galileo SD appears in issue 29's own
+        # marketing-page list but is the commercial "Galileo" studio
+        # brand named in the roadmap's commercial-chain exclusion list,
+        # so it must never appear in registry/sources/ under any name.
+        sources = {s.source_id: s for s in load_sources()}
+
+        for source_id, source in sources.items():
+            assert "galileo" not in source_id.lower()
+            assert "galileo" not in source.org_name.lower()
+
+    def test_air_and_space_museum_and_helen_woodward_have_no_marketing_page_entry(self):
+        # SUC-041/SUC-042: both orgs are registered only via the
+        # activenet_camps adapter (ticket 005), never also as a
+        # program_page/program_page_multi marketing-page source, to
+        # avoid the dual-registration risk adapters/DESIGN.md documents
+        # (the sprint 027 COSMOS/OPTIMUS/ENLACE pattern, applied here).
+        sources = load_sources()
+
+        for source in sources:
+            org_lower = source.org_name.lower()
+            is_marketing_page = source.adapter_type in ("program_page", "program_page_multi")
+            if "air" in org_lower and "space" in org_lower:
+                assert not is_marketing_page, (
+                    f"{source.source_id} registers Air & Space Museum via a marketing page"
+                )
+            if "helen woodward" in org_lower or "woodward" in org_lower:
+                assert not is_marketing_page, (
+                    f"{source.source_id} registers Helen Woodward via a marketing page"
+                )
