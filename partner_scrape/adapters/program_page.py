@@ -51,6 +51,24 @@ checked here -- filtering "is this program still current" happens at
 export time via ``export.writer.is_current_or_upcoming()``, not at
 extraction time (see ``normalize/DESIGN.md``'s sprint 027 addendum). This
 module's job is only to map the LLM's structured output onto an ``Event``.
+
+**(Sprint 028) HTML-to-text reduction before every cache lookup and LLM
+call.** :func:`_extract_one_program`/:func:`_extract_many_programs` call
+``extract.reduce_html_to_text(raw.body)`` immediately after the non-200
+status check, closing issue 36 -- two verified sprint-027 failures
+(the SD Foundation Community Scholarship's 840KB-965KB pages, a 612KB
+UCSD Summer Program Finder card) raised
+``anthropic.BadRequestError: prompt is too long`` from sending
+``raw.body`` to the LLM verbatim. The *reduced* text, not the raw fetched
+body, is what gets hashed for the extraction cache key and sent to the
+LLM -- a deliberate improvement, not an incidental side effect: a page's
+raw HTML changes on every boilerplate edit the reduction step already
+discards, so hashing the reduced text avoids invalidating the cache for
+changes the LLM never sees. See ``adapters/DESIGN.md``'s sprint 028
+section for the full Design Rationale. ``ProgramExtractionCache.
+_CACHE_SCHEMA_VERSION`` is unchanged -- the entry's on-disk shape is
+unchanged, only what gets hashed; a stale stored hash is simply a normal,
+harmless cache miss under the cache's existing contract.
 """
 
 from __future__ import annotations
@@ -68,6 +86,7 @@ from partner_scrape.adapters.program_llm import (
     ProgramExtractionResult,
     ProgramLLMClient,
 )
+from partner_scrape.extract.ladder import reduce_html_to_text
 from partner_scrape.fetch import Fetcher
 from partner_scrape.model import PROGRAM_EXTRACTION_KINDS, Event
 from partner_scrape.registry.schema import SourceConfig
@@ -229,13 +248,18 @@ def _extract_one_program(
     ``extract.ladder.extract_fields()``).
 
     A non-200 fetch is logged and skipped (``[]``), matching
-    ``listing_html.py``'s convention. Otherwise: check the program
-    extraction cache by URL + content hash; on a miss, call the injected
-    ``ProgramLLMClient`` and store the result. The source's
-    ``config.program_kind`` (required; ``"internship"`` or ``"program"``)
-    sets ``Event.kind`` -- a missing or invalid value is logged and
-    skipped, never raised, matching this module's general per-record
-    error-isolation stance.
+    ``listing_html.py``'s convention. Otherwise: ``raw.body`` is first
+    reduced to bounded visible text via ``extract.reduce_html_to_text()``
+    (sprint 028, issue 36 -- see ``adapters/DESIGN.md``'s sprint 028
+    section) -- every downstream step (cache lookup/store, the LLM call)
+    uses this *reduced* text, never the raw fetched body, so the
+    extraction cache's key is now a hash of the reduced text (a
+    deliberate improvement; see that section's Design Rationale). On a
+    miss, call the injected ``ProgramLLMClient`` and store the result.
+    The source's ``config.program_kind`` (required; ``"internship"`` or
+    ``"program"``) sets ``Event.kind`` -- a missing or invalid value is
+    logged and skipped, never raised, matching this module's general
+    per-record error-isolation stance.
 
     **(Ticket 006 live-verification finding)** The ``llm_client.
     extract_program()`` call itself is also wrapped: any exception it
@@ -252,7 +276,10 @@ def _extract_one_program(
     source with 20+ cards, one bad card would otherwise zero out the
     whole run. Mirrors ``enrich/enricher.py``'s identical "any exception
     the call raises, not only a specific error type" fail-open stance for
-    its own LLM call.
+    its own LLM call. **(Sprint 028)** the HTML-reduction step above is
+    what now keeps that same oversized page from raising in the first
+    place, for the common case; this per-ref isolation remains as the
+    backstop for whatever still doesn't fit.
     """
     if raw.status != 200:
         logger.warning(
@@ -262,10 +289,12 @@ def _extract_one_program(
         )
         return []
 
-    result = cache.lookup(raw.ref.url, raw.body)
+    text = reduce_html_to_text(raw.body)
+
+    result = cache.lookup(raw.ref.url, text)
     if result is None:
         try:
-            result = llm_client.extract_program(raw.ref.url, raw.body)
+            result = llm_client.extract_program(raw.ref.url, text)
         except Exception as exc:
             logger.warning(
                 "Program page %s: extract_program() raised %s: %s; skipping",
@@ -274,7 +303,7 @@ def _extract_one_program(
                 exc,
             )
             return []
-        cache.store(raw.ref.url, raw.body, result)
+        cache.store(raw.ref.url, text, result)
 
     program_kind = _resolve_program_kind(raw.ref.url, source)
     if program_kind is None:
@@ -293,18 +322,23 @@ def _extract_many_programs(
     ``Event``s -- ``ProgramPageMultiAdapter.extract()``'s implementation.
 
     Structurally identical to :func:`_extract_one_program` -- non-200
-    fetch is logged and skipped, the extraction cache
+    fetch is logged and skipped, ``raw.body`` is reduced to bounded
+    visible text via ``extract.reduce_html_to_text()`` (sprint 028,
+    issue 36) before anything else, the extraction cache
     (``lookup_many``/``store_many``, the list-valued counterpart) is
-    checked before calling the injected ``ProgramLLMClient``, and the
-    source's ``config.program_kind`` gates the whole page the same way --
-    but calls ``llm_client.extract_programs()`` for a list of results and
-    maps each one onto its own ``Event`` via :func:`_map_result_to_event`,
-    the exact same per-result mapping :func:`_extract_one_program` uses.
-    All N ``Event``s share this one page's ``url``/``source_id``.
+    checked against that reduced text before calling the injected
+    ``ProgramLLMClient``, and the source's ``config.program_kind`` gates
+    the whole page the same way -- but calls ``llm_client.
+    extract_programs()`` for a list of results and maps each one onto its
+    own ``Event`` via :func:`_map_result_to_event`, the exact same
+    per-result mapping :func:`_extract_one_program` uses. All N
+    ``Event``s share this one page's ``url``/``source_id``.
 
     **(Ticket 006 live-verification finding)** Same ``llm_client`` call
     isolation as :func:`_extract_one_program` -- see that function's
-    docstring for the live-measured failure this guards against.
+    docstring for the live-measured failure this guards against, and for
+    how the sprint 028 reduction step above now keeps the common case
+    from raising in the first place.
     """
     if raw.status != 200:
         logger.warning(
@@ -314,10 +348,12 @@ def _extract_many_programs(
         )
         return []
 
-    results = cache.lookup_many(raw.ref.url, raw.body)
+    text = reduce_html_to_text(raw.body)
+
+    results = cache.lookup_many(raw.ref.url, text)
     if results is None:
         try:
-            results = llm_client.extract_programs(raw.ref.url, raw.body)
+            results = llm_client.extract_programs(raw.ref.url, text)
         except Exception as exc:
             logger.warning(
                 "Program page %s: extract_programs() raised %s: %s; skipping",
@@ -326,7 +362,7 @@ def _extract_many_programs(
                 exc,
             )
             return []
-        cache.store_many(raw.ref.url, raw.body, results)
+        cache.store_many(raw.ref.url, text, results)
 
     program_kind = _resolve_program_kind(raw.ref.url, source)
     if program_kind is None:

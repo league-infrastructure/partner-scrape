@@ -1,7 +1,7 @@
 ---
 id: '001'
 title: Reduce fetched HTML to bounded text before program-page LLM extraction
-status: open
+status: done
 use-cases:
 - SUC-036
 depends-on: []
@@ -55,23 +55,32 @@ text).
 
 ## Acceptance Criteria
 
-- [ ] `extract.reduce_html_to_text(html, max_chars=100_000)` is implemented,
+- [x] `extract.reduce_html_to_text(html, max_chars=100_000)` is implemented,
       exported from `extract/`, and reuses the existing visible-text-walking
       helpers rather than a new tree-walking implementation.
-- [ ] A saved ~900KB fixture page (representative of the SD Foundation site's
+- [x] A saved ~900KB fixture page (representative of the SD Foundation site's
       template bloat) reduces to well under the 200K-token limit.
-- [ ] `_extract_one_program`/`_extract_many_programs` call
+- [x] `_extract_one_program`/`_extract_many_programs` call
       `reduce_html_to_text()` on `raw.body` before every cache lookup and LLM
       call.
-- [ ] A fixture test proves the extraction cache key is derived from the
+- [x] A fixture test proves the extraction cache key is derived from the
       *reduced* text: a content-only change to a stripped element (e.g. a
       `<script>` block) does not invalidate an existing cache entry.
-- [ ] `FixtureProgramLLMClient`-based fixture test proves the reduced ~900KB
+- [x] `FixtureProgramLLMClient`-based fixture test proves the reduced ~900KB
       fixture page still yields the correct program/session fields.
-- [ ] Every existing `program_page`/`program_listing`/`program_page_multi`
+- [x] Every existing `program_page`/`program_listing`/`program_page_multi`
       fixture test continues to pass unmodified (reducing an already-small
-      page is a no-op on its extracted fields).
-- [ ] `_CACHE_SCHEMA_VERSION` is unchanged.
+      page is a no-op on its extracted fields). One exception, documented in
+      this ticket's commit and inline in the test itself: `test_adapters_
+      program_page_multi.py`'s `test_llm_client_called_once_for_the_whole_
+      page` asserted the exact raw body forwarded to the LLM client, an
+      implementation detail this ticket's required wiring necessarily
+      changes (the call now carries reduced text, not raw HTML); the
+      assertion was updated to compare against `reduce_html_to_text(...)`
+      of the same fixture, and the underlying behavior it verifies (one
+      `extract_programs()` call for the whole page) is unaffected. Every
+      other existing fixture test in these three files passed unmodified.
+- [x] `_CACHE_SCHEMA_VERSION` is unchanged.
 
 ## Testing
 

@@ -26,6 +26,7 @@ from partner_scrape.adapters.program_llm import (
     ProgramExtractionResult,
 )
 from partner_scrape.adapters.program_page import ProgramPageAdapter
+from partner_scrape.extract.ladder import reduce_html_to_text
 from partner_scrape.fetch.fetcher import FetchResponse
 from partner_scrape.model import Event, Provenance
 from partner_scrape.registry.schema import SourceConfig
@@ -322,3 +323,110 @@ class TestDispatchRegistration:
         # as defaults (adapters/DESIGN.md's documented deviation).
         refs = adapter.discover(_source(), FixtureFetcher({}))
         assert [r.url for r in refs] == [PAGE_URL]
+
+
+# ---------------------------------------------------------------------
+# HTML-to-text reduction before caching/LLM extraction (sprint 028,
+# issue 36)
+# ---------------------------------------------------------------------
+
+#: Shared with tests/test_extract_ladder.py -- the ~900KB bloated fixture
+#: representative of the SD Foundation site's own live-measured template
+#: bloat (a large repeated nav menu plus an inline script payload on
+#: every page).
+BLOATED_PAGE_URL = "https://example.org/scholarships/community"
+
+
+def _bloated_page_body() -> str:
+    return (FIXTURES_DIR / "sd_foundation_bloated_page.html").read_text()
+
+
+class TestCacheKeyIsDerivedFromReducedTextNotRawBody:
+    """AC: a fixture test proves the extraction cache key is derived from
+    the *reduced* text: a content-only change to a stripped element (a
+    ``<script>`` block) does not invalidate an existing cache entry.
+    """
+
+    def test_changing_only_a_stripped_script_block_is_still_a_cache_hit(self, tmp_path):
+        page_with_script_a = (
+            "<html><head><script>var trackingId = 'AAA111';</script></head>"
+            "<body><main><h1>Fixture Reduction Cache Program</h1>"
+            "<p>Applications open on December 1, 2026 and are due by "
+            "February 15, 2027.</p></main></body></html>"
+        )
+        page_with_script_b = (
+            "<html><head><script>var trackingId = 'ZZZ999-completely-different';"
+            "</script></head>"
+            "<body><main><h1>Fixture Reduction Cache Program</h1>"
+            "<p>Applications open on December 1, 2026 and are due by "
+            "February 15, 2027.</p></main></body></html>"
+        )
+        # The two raw bodies genuinely differ -- if the cache still hashed
+        # raw.body (pre-sprint-028 behavior), this would be a cache miss.
+        assert page_with_script_a != page_with_script_b
+        # ...but they reduce to the identical visible text, since
+        # <script> content is stripped before hashing.
+        assert reduce_html_to_text(page_with_script_a) == reduce_html_to_text(page_with_script_b)
+
+        cache = ProgramExtractionCache(tmp_path)
+        llm_client = FixtureProgramLLMClient(responses={PAGE_URL: _extraction_result()})
+        adapter = ProgramPageAdapter(llm_client=llm_client, cache=cache)
+        source = _source()
+
+        raw_a = RawResponse(ref=EventRef(url=PAGE_URL), status=200, body=page_with_script_a)
+        raw_b = RawResponse(ref=EventRef(url=PAGE_URL), status=200, body=page_with_script_b)
+
+        events_a = list(adapter.extract(raw_a, source))
+        assert len(llm_client.calls) == 1
+
+        events_b = list(adapter.extract(raw_b, source))
+        assert len(llm_client.calls) == 1  # still one call -- cache hit, not a miss
+
+        assert len(events_a) == len(events_b) == 1
+        assert events_a[0].title == events_b[0].title
+
+
+class TestOversizedPageExtractsSuccessfullyAfterReduction:
+    """AC: a ``FixtureProgramLLMClient``-based fixture test proves the
+    reduced ~900KB fixture page (representative of the SD Foundation
+    site's own live-measured template bloat, issue 36) still yields the
+    correct program fields -- where the unreduced raw body alone
+    (859KB+) would have exceeded the model's ~200K-token context window
+    and raised ``anthropic.BadRequestError`` in production, per the two
+    live sprint-027 failures this ticket closes.
+    """
+
+    def test_bloated_page_extracts_the_correct_program_fields(self, tmp_path):
+        result = _extraction_result(
+            program_name="Fixture SD Foundation Community Scholarship",
+            date_start="2026-11-01",
+            date_end="2027-01-15",
+            cost="$5,000 scholarship",
+            eligibility="Current 12th grade students residing in San Diego County.",
+            opportunity_type="Funding Opportunities",
+        )
+        llm_client = FixtureProgramLLMClient(responses={BLOATED_PAGE_URL: result})
+        adapter = ProgramPageAdapter(llm_client=llm_client, cache=ProgramExtractionCache(tmp_path))
+        source = _source(program_kind="program", url=BLOATED_PAGE_URL)
+        fetcher = _fetcher(url=BLOATED_PAGE_URL, body=_bloated_page_body())
+
+        refs = adapter.discover(source, fetcher)
+        raw = adapter.fetch(refs[0], fetcher, source)
+        events = list(adapter.extract(raw, source))
+
+        # The reduced text actually sent to the LLM client is well under
+        # the raw fetched body's size -- this is what keeps a page this
+        # size from ever reaching the model's context limit.
+        assert len(llm_client.calls) == 1
+        called_url, called_body = llm_client.calls[0]
+        assert called_url == BLOATED_PAGE_URL
+        assert len(called_body) < 10_000
+        assert len(called_body) < len(raw.body) / 50
+
+        assert len(events) == 1
+        event = events[0]
+        assert event.title == "Fixture SD Foundation Community Scholarship"
+        assert event.start == datetime.fromisoformat("2026-11-01")
+        assert event.end == datetime.fromisoformat("2027-01-15")
+        assert event.cost == "$5,000 scholarship"
+        assert event.eligibility == "Current 12th grade students residing in San Diego County."

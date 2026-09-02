@@ -24,6 +24,7 @@ from partner_scrape.adapters.base import EventRef, RawResponse
 from partner_scrape.adapters.program_cache import ProgramExtractionCache
 from partner_scrape.adapters.program_llm import FixtureProgramLLMClient, ProgramExtractionResult
 from partner_scrape.adapters.program_page import ProgramPageMultiAdapter
+from partner_scrape.extract.ladder import reduce_html_to_text
 from partner_scrape.fetch.fetcher import FetchResponse
 from partner_scrape.registry.schema import SourceConfig
 
@@ -188,13 +189,23 @@ class TestEndToEndExtraction:
         assert cw3e.eligibility == "Current undergraduate students."
 
     def test_llm_client_called_once_for_the_whole_page(self, tmp_path):
+        # (Sprint 028, issue 36) the LLM call now receives raw.body only
+        # after extract.reduce_html_to_text() has reduced it -- see
+        # test_extract_ladder.py / test_adapters_program_page.py's own
+        # sprint 028 tests for the reduction step itself. This assertion
+        # was updated (not "unmodified" -- see ticket 028-001's own
+        # commit) because it inspects the literal body forwarded to the
+        # LLM client, an implementation detail this ticket's required
+        # wiring necessarily changes; the *behavior* under test --
+        # exactly one extract_programs() call for the whole page, never
+        # the singular extract_program() -- is unaffected.
         llm_client = _llm_client()
         adapter = ProgramPageMultiAdapter(llm_client=llm_client, cache=ProgramExtractionCache(tmp_path))
         raw = RawResponse(ref=EventRef(url=PAGE_URL), status=200, body=_page_body())
 
         list(adapter.extract(raw, _source()))
 
-        assert llm_client.list_calls == [(PAGE_URL, _page_body())]
+        assert llm_client.list_calls == [(PAGE_URL, reduce_html_to_text(_page_body()))]
         assert llm_client.calls == []  # never calls the singular extract_program
 
 
