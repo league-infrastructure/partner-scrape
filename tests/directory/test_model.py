@@ -8,12 +8,15 @@ from dataclasses import fields
 
 from partner_scrape.directory.model import (
     Club,
+    Offering,
     Place,
     VALID_CATEGORIES,
     VALID_CLUB_LOCATION_PRECISIONS,
     VALID_CLUB_STATUSES,
     VALID_CLUB_TYPES,
     VALID_LOCATION_PRECISIONS,
+    VALID_OFFERING_STATUSES,
+    VALID_OFFERING_TYPES,
     VALID_STATUSES,
 )
 
@@ -173,3 +176,118 @@ class TestClubFieldSet:
         names = {f.name for f in fields(Club)}
         assert "website" in names
         assert "host_school_website" in names
+
+
+# ---------------------------------------------------------------------
+# Sprint 030 ticket 001: Offering, the third standing-entity type,
+# serving both issue 14 Strategy B (volunteer org profiles) and issue
+# 33 part 2 (free/Title I school-program records).
+# ---------------------------------------------------------------------
+
+
+class TestBareOfferingIsConstructible:
+    def test_bare_offering_constructs_with_neutral_defaults(self):
+        offering = Offering()
+
+        assert offering.offering_id == ""
+        assert offering.org_name == ""
+        assert offering.title == ""
+        assert offering.offering_type == ""
+        assert offering.description == ""
+        assert offering.eligibility == ""
+        assert offering.age_minimum is None
+        assert offering.how_to_book == ""
+        assert offering.link_url == ""
+        assert offering.last_verified == ""
+        assert offering.status == "active"
+        assert offering.status_note == ""
+        assert offering.related_partner_id is None
+        assert offering.sources == []
+
+
+class TestOfferingValueSetConstants:
+    """VALID_OFFERING_TYPES/VALID_OFFERING_STATUSES are derived from
+    their respective Literal type via `typing.get_args`, matching
+    `Place`'s/`Club`'s own VALID_* drift-proof derivation pattern."""
+
+    def test_valid_offering_types(self):
+        assert VALID_OFFERING_TYPES == {"volunteer", "free_program"}
+
+    def test_valid_offering_statuses(self):
+        assert VALID_OFFERING_STATUSES == {"active", "seasonal", "closed"}
+
+    def test_constants_are_never_empty(self):
+        assert VALID_OFFERING_TYPES
+        assert VALID_OFFERING_STATUSES
+
+
+class TestOfferingNoLocationFields:
+    """Deliberate scope narrowing versus Place/Club (sprint 030's own
+    Design Rationale): an Offering carries no location/geocoding
+    fields at all."""
+
+    def test_no_latitude_longitude_or_location_precision_fields(self):
+        names = {f.name for f in fields(Offering)}
+        assert "latitude" not in names
+        assert "longitude" not in names
+        assert "location_precision" not in names
+        assert "matched_name" not in names
+        assert "needs_review" not in names
+
+
+class TestOfferingNoSharedBaseWithPlaceClubOrTeam:
+    """Sprint 018's Design Rationale, extended to Offering by sprint
+    030: `Offering` is a standalone flat dataclass, never a subclass of
+    or sharing a base with `Place`, `Club`, or `teams.model.Team`."""
+
+    def test_offering_does_not_subclass_place(self):
+        assert not issubclass(Offering, Place)
+
+    def test_offering_does_not_subclass_club(self):
+        assert not issubclass(Offering, Club)
+
+    def test_offering_does_not_subclass_team(self):
+        from partner_scrape.teams.model import Team
+
+        assert not issubclass(Offering, Team)
+
+    def test_offering_mro_has_no_shared_base_beyond_object(self):
+        assert Offering.__mro__[1] is object
+
+
+class TestOfferingFieldSet:
+    def test_sources_field_exists_for_provenance(self):
+        names = {f.name for f in fields(Offering)}
+        assert "sources" in names
+
+    def test_age_minimum_is_a_first_class_field(self):
+        # Issue 14's own instruction: "Note age minimums explicitly ...
+        # it matters for the teen audience" -- never folded into
+        # free-text eligibility.
+        names = {f.name for f in fields(Offering)}
+        assert "age_minimum" in names
+
+    def test_related_partner_id_field_exists(self):
+        names = {f.name for f in fields(Offering)}
+        assert "related_partner_id" in names
+
+    def test_no_email_field(self):
+        names = {f.name for f in fields(Offering)}
+        assert "email" not in names
+
+
+class TestOfferingStatusNoteValidation:
+    """Mirrors Place.status_note's/Club.status_note's own convention:
+    status_note is required whenever status != "active". This is
+    enforced by the source layer (`offering_static_roster._extract_one`),
+    not the bare dataclass constructor -- a bare `Offering(status=
+    "closed")` is still constructible with an empty `status_note`, the
+    same "the dataclass itself never validates" property Place/Club
+    already have. See `test_sources_offering_static_roster.py` for the
+    actual validation-raising tests.
+    """
+
+    def test_bare_construction_with_non_active_status_does_not_raise(self):
+        offering = Offering(status="closed")
+        assert offering.status == "closed"
+        assert offering.status_note == ""

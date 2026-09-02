@@ -1,4 +1,4 @@
-"""The canonical Place and Club records (``directory/model.py``).
+"""The canonical Place, Club, and Offering records (``directory/model.py``).
 
 A ``Place`` is a curated, standing "where to go any day" San Diego
 STEM venue -- a makerspace, planetarium, observatory, tidepool site,
@@ -14,7 +14,15 @@ sprint's one proof-of-concept type (issue 35's other six named club
 types are split to issue 35b, a future sprint). See :class:`Club`'s
 own docstring below for its full rationale.
 
-**Deliberately two separate flat dataclasses, not a shared base
+An ``Offering`` (sprint 030) is a third standing directory entity: an
+undated, non-recurring "here's what this org offers and how to get it"
+record, serving both issue 14 Strategy B (volunteer org profiles) and
+issue 33 part 2 (free/Title I school-program records) through one model
+with an ``offering_type`` discriminator. Unlike `Place`/`Club`, an
+`Offering` carries **no location/geocoding fields at all** -- see
+:class:`Offering`'s own docstring for the full rationale.
+
+**Deliberately three separate flat dataclasses, not a shared base
 class.** Per sprint.md's Design Rationale ("`Place` and `Club` are
 separate flat dataclasses, not a shared base class"), a `Club` has
 membership/program concerns a `Place` doesn't (and vice versa for
@@ -23,12 +31,13 @@ speculative optional fields on both or under-model one of them.
 Field-name duplication with `Team` (``website``, location fields,
 ``sources``) is accepted, matching the existing `Team`/`Event`
 precedent `teams/model.py`'s own docstring cites -- and the same
-duplication is accepted between `Place` and `Club` themselves, for the
-identical reason.
+duplication is accepted among `Place`, `Club`, and `Offering`
+themselves, for the identical reason (sprint 030 extends this
+three-way, per this sprint's `directory/DESIGN.md` Revision).
 
-Every field defaults to an empty/neutral value so a bare ``Place()``
-or ``Club()`` is always constructible, matching ``Team``'s and
-``Event``'s existing convention.
+Every field defaults to an empty/neutral value so a bare ``Place()``,
+``Club()``, or ``Offering()`` is always constructible, matching
+``Team``'s and ``Event``'s existing convention.
 """
 
 from __future__ import annotations
@@ -302,5 +311,134 @@ class Club:
 
     # Provenance: which source(s) contributed to this record, e.g.
     # ["hack_club_static_roster"] -- matches Place.sources's / Team.sources's
+    # existing convention.
+    sources: list[str] = field(default_factory=list)
+
+
+#: The two genres one `Offering` model serves (sprint 030): a standing
+#: individual volunteer role (issue 14 Strategy B -- Fleet, SDZWA,
+#: Birch, the Nat, ILACSD, San Diego River Park Foundation) or a
+#: free/Title I school-program record (issue 33 part 2 -- Zoo FREE
+#: field trips, the Nat's Museum Access Fund, Living Coast Title 1 aid,
+#: Birch financial aid, Fleet discounted trips, Qualcomm Thinkabit Lab,
+#: Biocom Life Science Station/Innov8Ed). Kept a plain ``str`` on the
+#: dataclass itself, matching ``Place.category``'s/``Club.club_type``'s
+#: own "don't over-type a field a small, hand-curated dataset already
+#: controls tightly" convention -- this Literal exists for
+#: documentation and for :data:`VALID_OFFERING_TYPES`'s drift-proof
+#: derivation, consulted by
+#: ``sources/offering_static_roster.py``'s per-entry validation. See
+#: this sprint's `directory/DESIGN.md` Revision for the full "why one
+#: model, not two" Design Rationale.
+OfferingType = Literal["volunteer", "free_program"]
+
+#: Derived from :data:`OfferingType`, the same drift-proof pattern
+#: :data:`VALID_CATEGORIES`/:data:`VALID_CLUB_TYPES` use.
+VALID_OFFERING_TYPES: frozenset[str] = frozenset(get_args(OfferingType))
+
+#: Whether an Offering is still available as described. ``"seasonal"``
+#: covers a program that only runs part of the year (e.g. a summer-only
+#: field-trip window) without implying it is closed -- distinct from
+#: both ``Place.Status``'s ``"opening"`` (not yet operating at all) and
+#: ``Club.ClubStatus``'s ``"inactive"`` (folded). :attr:`Offering.
+#: status_note` should always carry the human-readable detail whenever
+#: ``status != "active"``, mirroring ``Place.status_note``'s/``Club.
+#: status_note``'s existing validation rule exactly.
+OfferingStatus = Literal["active", "seasonal", "closed"]
+
+#: Derived from :data:`OfferingStatus`, same drift-proof pattern as
+#: :data:`VALID_STATUSES`/:data:`VALID_CLUB_STATUSES`.
+VALID_OFFERING_STATUSES: frozenset[str] = frozenset(get_args(OfferingStatus))
+
+
+@dataclass
+class Offering:
+    """One curated, standing "here's what this org offers and how to
+    get it" record -- an undated, non-recurring entity, serving both
+    issue 14 Strategy B (volunteer org profiles) and issue 33 part 2
+    (free/Title I school-program records) through one model with an
+    :attr:`offering_type` discriminator, rather than two separate
+    models. See this sprint's `directory/DESIGN.md` Revision (2026-09-02
+    -- sprint 030 Offerings standing-entity type) for the full rationale
+    this docstring summarizes.
+
+    Populated directly by an ``OfferingSource``'s ``extract()`` (this
+    ticket: ``sources/offering_static_roster.py``) for every field --
+    unlike `Place`/`Club`, there is no separate geocoding-time stage:
+    **`Offering` carries no location/geocoding fields at all**. An
+    Offering is a program or role hosted by an already-locatable org
+    (see :attr:`related_partner_id`), not a place you travel to in its
+    own right -- giving it its own `latitude`/`longitude` would mean
+    geocoding the same organization a second time for no reader
+    benefit. `directory.pipeline.run_directory()`'s dispatch therefore
+    has no fallback/geocoding stage for `Offering` at all, and no
+    `GeoLadder` dependency is added for this addition.
+
+    **`age_minimum` is a first-class typed field, never folded into
+    free-text `eligibility`.** Issue 14's own instruction: "Note age
+    minimums explicitly: Fleet 18+, SDZWA 18+, Birch 16+ -- it matters
+    for the teen audience." `None` means "no individual-volunteer age
+    minimum applies" (every free/Title-I school-program record's
+    eligibility is about the *school*, not an individual's age) --
+    never a guessed `0`.
+
+    **`related_partner_id` reuses `Place`'s existing hand-verified-join
+    convention exactly** -- never auto-derived; hand-copied against
+    `site/src/data/partners.json`'s own `id` field at authoring time,
+    same as `places.toml`'s existing rows.
+
+    Every field defaults to an empty/neutral value so a bare
+    ``Offering()`` is always constructible, matching `Place`'s/`Club`'s
+    existing convention.
+    """
+
+    # Identity
+    offering_id: str = ""  # slug, e.g. "fleet-science-center-volunteer"
+    # -- also this Offering's stable URL slug, matching Place.place_id's
+    # / Club.club_id's "one field doubles as both id and slug"
+    # convention (no separate model.slugify() needed).
+    org_name: str = ""  # the operating organization, e.g. "Fleet
+    # Science Center" -- the counterpart to Place.name/Club.name for
+    # "who is this," distinct from `title` below ("what is this,
+    # specifically").
+    title: str = ""  # the offering's own name, e.g. "Volunteer
+    # Program" or "Museum Access Fund" -- what a reader clicks into,
+    # scoped under `org_name`.
+    offering_type: str = ""  # OfferingType, see this module's own
+    # docstring for why this stays a plain str.
+    description: str = ""
+
+    eligibility: str = ""  # free-text, e.g. "Title I schools only" or
+    # "High school students, San Diego County." Never used to carry an
+    # age minimum -- see age_minimum below.
+    age_minimum: int | None = None  # first-class typed field -- see
+    # this dataclass's own docstring for why this is never folded into
+    # `eligibility`. `None` means "no individual-volunteer age minimum
+    # applies," never a guessed `0`.
+
+    how_to_book: str = ""  # human-readable instructions for how to
+    # actually get this offering -- apply, register, sign up, contact.
+    link_url: str = ""  # link out to the org's own page for this
+    # offering, matching Place.website's/Club.website's "never
+    # fabricated" convention.
+
+    last_verified: str = ""  # ISO date (YYYY-MM-DD) this record was
+    # actually checked against the org's own current page -- never
+    # guessed or left as a placeholder for a real curated row.
+
+    status: str = "active"  # OfferingStatus
+    status_note: str = ""  # Required (non-empty) whenever status !=
+    # "active", mirroring Place.status_note's/Club.status_note's own
+    # validation convention exactly -- never left blank for a
+    # non-"active" status.
+
+    related_partner_id: int | None = None  # site/src/data/partners.json's
+    # own `id`, hand-copied -- never auto-joined. See this dataclass's
+    # own docstring; reuses Place.related_partner_id's convention
+    # exactly, including its join-integrity check discipline
+    # (`directory.pipeline._check_related_partner_references()`).
+
+    # Provenance: which source(s) contributed to this record, e.g.
+    # ["offering_static_roster"] -- matches Place.sources's/Club.sources's
     # existing convention.
     sources: list[str] = field(default_factory=list)

@@ -1,8 +1,9 @@
 ---
 id: '001'
 title: Offering standing-entity model, registry dispatch, and offerings.json export
-status: open
-use-cases: [SUC-052]
+status: done
+use-cases:
+- SUC-052
 depends-on: []
 github-issue: ''
 issue:
@@ -48,7 +49,7 @@ full "why"):
 
 ## Acceptance Criteria
 
-- [ ] `partner_scrape/directory/model.py` gains `OfferingType = Literal["volunteer", "free_program"]`,
+- [x] `partner_scrape/directory/model.py` gains `OfferingType = Literal["volunteer", "free_program"]`,
       `OfferingStatus = Literal["active", "seasonal", "closed"]` (mirroring
       `Place`'s/`Club`'s `VALID_*` frozenset-derivation pattern), and an
       `Offering` dataclass with fields: `offering_id`, `org_name`,
@@ -60,11 +61,11 @@ full "why"):
       constructible), matching `Place`/`Club`'s convention. Validation:
       `status_note` required whenever `status != "active"`, mirroring
       `Place.status_note`'s existing rule exactly.
-- [ ] `partner_scrape/directory/sources/base.py` gains `OfferingRef`,
+- [x] `partner_scrape/directory/sources/base.py` gains `OfferingRef`,
       `RawOfferingResponse`, an `OfferingSource` Protocol
       (discover/fetch/extract), and `run_offering_source()`, structurally
       identical to `PlaceSource`/`ClubSource`'s own trio.
-- [ ] `partner_scrape/directory/sources/offering_static_roster.py`:
+- [x] `partner_scrape/directory/sources/offering_static_roster.py`:
       `OfferingStaticRosterSource` reads `config.roster_path` (resolved
       relative to `directory/data/` when not absolute) straight off
       disk via `Path.read_text()`/`tomllib`, never touches the injected
@@ -73,14 +74,14 @@ full "why"):
       Testing below). Per-entry validation failures are logged and
       skipped, never raised (per-record failure isolation, matching
       `static_roster.py`'s convention).
-- [ ] `partner_scrape/directory/pipeline.py`: `run_directory()`'s
+- [x] `partner_scrape/directory/pipeline.py`: `run_directory()`'s
       dispatch extends to a three-way check — `_PLACE_SOURCES` then
       `_CLUB_SOURCES` then `_OFFERING_SOURCES` per `source_config`,
       still one combined loop (never a third separate loop — this
       doc's own existing "why one combined loop" rationale applies
       identically to a third table). **No geocoding stage is added for
       `Offering`** — no `_apply_offering_geocoding()` function exists.
-- [ ] `partner_scrape/directory/export.py`: `export_directory()` gains
+- [x] `partner_scrape/directory/export.py`: `export_directory()` gains
       a third optional `offerings: list[Offering] | None = None`
       keyword argument. `None` means "do not touch `offerings.json`
       at all"; a list (possibly empty) writes it as an independent
@@ -92,21 +93,32 @@ full "why"):
       `(offering_type, name)`. The existing "places before clubs"
       ordering/failure-isolation guarantee extends to
       "places before clubs before offerings."
-- [ ] `partner_scrape/directory/registry/offerings-sd.toml`: new
+- [x] `partner_scrape/directory/registry/offerings-sd.toml`: new
       Directory Registry entry, `adapter_type =
       "offering_static_roster"`, `org_name = "San Diego STEM Offerings
       (curated static roster)"`, `enabled = true`, `[config]
       roster_path = "offerings.toml"`. No `[acquisition_policy]`
       section, matching `places-sd.toml`'s precedent.
-- [ ] `partner_scrape/directory/data/offerings.toml`: created with a
+- [x] `partner_scrape/directory/data/offerings.toml`: created with a
       short header comment (matching `places.toml`'s own) and 1-2
       fixture rows sufficient for the tests below — real curation is
       tickets 002/003's job, not this ticket's.
-- [ ] `cli.py`'s `directory` subcommand's printed summary gains an
+- [x] `cli.py`'s `directory` subcommand's printed summary gains an
       offerings count alongside the places/clubs counts — no new flag,
       no new subcommand (matching ticket 018-008's precedent exactly).
       `export/mirror.py`'s `MIRRORED_DATA_FILES` gains `"offerings.json"`.
-- [ ] `_check_related_partner_references()` (or a sibling check) is
+      **Note (see Notes below): `export/mirror.py` no longer exists —
+      sprint 019 removed it and its `MIRRORED_DATA_FILES` allowlist
+      outright, along with `config.get_mirror_site_dirs()` and the
+      `--mirror-site-dir`/`--no-mirror` CLI flags (see `export/
+      DESIGN.md`'s own "Sprint 019" note). This clause is stale
+      boilerplate inherited from ticket 018-008's template and predates
+      that removal — there is nothing left to add `"offerings.json"`
+      to. Treated as satisfied-as-inapplicable; the CLI summary half of
+      this criterion is implemented and tested
+      (`tests/test_cli_directory.py::TestArgumentWiring::
+      test_prints_a_summary_including_the_written_offerings_count`).
+- [x] `_check_related_partner_references()` (or a sibling check) is
       extended to also validate `Offering.related_partner_id` values
       against `site/src/data/partners.json`'s own `id` field, matching
       `Place`'s existing join-integrity discipline.
@@ -139,3 +151,47 @@ full "why"):
     a real repo path with no env override; an unpinned test silently
     writes into this repo's actual `data/` directory.
 - **Verification command**: `uv run pytest`
+
+## Notes
+
+- **`offerings.json` sort key.** SUC-052's Main Flow and this ticket's
+  own export.py acceptance criterion both describe sorting "matching
+  `places.json`'s/`clubs.json`'s own `(type, name)` convention:
+  `(offering_type, name)`." `Offering` has no single `name` field — it
+  splits `org_name` (the operating org, e.g. "Fleet Science Center")
+  and `title` (the offering's own name within that org, e.g.
+  "Volunteer Program"), a deliberate two-field split this ticket's own
+  model design calls for (see `directory/model.py`'s `Offering`
+  docstring). Resolved as `(offering_type, org_name, title)`:
+  `org_name` is the closer analog to `Place.name`/`Club.name` (the
+  "who is this" field a reader scans first), with `title` as a stable
+  tiebreaker for the rare case of two offerings from the same org.
+  Documented in `export.py`'s own inline comment at the sort call site.
+- **`export/mirror.py`'s `MIRRORED_DATA_FILES` criterion is stale.**
+  Sprint 019 removed `export/mirror.py` outright (along with
+  `config.get_mirror_site_dirs()` and the `--mirror-site-dir`/
+  `--no-mirror` CLI flags) — see `partner_scrape/export/DESIGN.md`'s
+  own "Sprint 019" note. This ticket's acceptance-criteria text
+  (inherited from ticket 018-008's template, written before sprint 019)
+  still names that file; there is nothing left to add
+  `"offerings.json"` to. Not an architectural conflict requiring an
+  exception — just an outdated line item, treated as
+  satisfied-as-inapplicable. The rest of that same criterion (the CLI
+  summary's offerings count) is implemented and tested normally.
+- **Fixture data, not real curation.** `directory/data/offerings.toml`
+  carries two clearly-marked `PLACEHOLDER` rows (one `volunteer`, one
+  `free_program`) — enough to prove discover → fetch → extract →
+  pipeline dispatch → export end to end, per this ticket's own scope
+  ("Tickets 002/003 populate the real curated data afterward"). Tickets
+  002 and 003 are expected to *replace* these rows, not merely append
+  to them.
+- **`_check_related_partner_references()` generalized, not
+  duplicated.** `directory/pipeline.py`'s existing join-integrity guard
+  now takes both `places` and `offerings` and builds one combined
+  `(referencer_id, partner_id)` list before calling the already-generic
+  `registry.validate_roster.check_partner_references()` once — no
+  second, `Offering`-specific validation function.
+- Full suite: `uv run pytest` → 2268 passed (baseline 2192; +76 from
+  this ticket's new tests). No test writes into this repo's real
+  `data/` directory (verified via `git status --short data/` after the
+  run).

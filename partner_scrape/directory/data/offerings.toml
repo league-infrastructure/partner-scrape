@@ -1,0 +1,50 @@
+# Curated standing "here's what this org offers and how to get it"
+# records -- serving both issue 14 Strategy B (volunteer org profiles)
+# and issue 33 part 2 (free/Title I school-program records) through one
+# `offering_type`-discriminated shape (see `directory/model.py`'s
+# `Offering` docstring and this sprint's `directory/DESIGN.md` Revision
+# for the full rationale). Never a live scrape (issue 35's original
+# instruction, extended to Offerings by sprint 030).
+#
+# This ticket (sprint 030, ticket 001) ships the mechanism only, with
+# the two placeholder rows below sufficient to prove discover -> fetch
+# -> extract -> pipeline dispatch -> export end to end. The real
+# curated rosters -- six volunteer org profiles (Fleet, SDZWA, Birch,
+# the Nat, ILACSD, San Diego River Park Foundation) and seven
+# free/Title I school-program records (Zoo FREE field trips, the Nat's
+# Museum Access Fund, Living Coast Title 1 + CVESD free transport,
+# Birch financial aid, Fleet discounted trips/Science to Go/Family
+# Science Nights, Qualcomm Thinkabit Lab, Biocom Life Science
+# Station/Innov8Ed) -- are tickets 002 and 003's job, not this one (see
+# sprint.md's Tickets table). Both rows below are clearly marked
+# PLACEHOLDER and are expected to be replaced, not merely added to.
+#
+# `related_partner_id` is a deliberate, hand-verified join against
+# `site/src/data/partners.json`'s own `id` field -- never auto-derived,
+# reusing `places.toml`'s existing convention exactly. Omitted entirely
+# where no confident partner-roster match exists.
+
+[[offering]]
+offering_id = "placeholder-volunteer-offering"
+org_name = "PLACEHOLDER Volunteer Org"
+title = "PLACEHOLDER Volunteer Program"
+offering_type = "volunteer"
+description = "Fixture row proving the volunteer offering_type end to end -- replace with a real curated row in ticket 002 (issue 14 Strategy B)."
+eligibility = "Ages 18 and up."
+age_minimum = 18
+how_to_book = "Apply through the organization's volunteer portal."
+link_url = "https://example.org/volunteer"
+last_verified = "2026-09-02"
+status = "active"
+
+[[offering]]
+offering_id = "placeholder-free-program-offering"
+org_name = "PLACEHOLDER School Program Org"
+title = "PLACEHOLDER Free/Title I Program"
+offering_type = "free_program"
+description = "Fixture row proving the free_program offering_type end to end -- replace with a real curated row in ticket 003 (issue 33 part 2)."
+eligibility = "Title I schools in San Diego County."
+how_to_book = "Contact the organization's education department to schedule."
+link_url = "https://example.org/free-program"
+last_verified = "2026-09-02"
+status = "active"
