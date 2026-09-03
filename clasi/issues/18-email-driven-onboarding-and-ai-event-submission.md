@@ -166,3 +166,21 @@ restarts: it was written against the codebase as of mid-2026, and
 sprints 027-033 have since changed the extraction path substantially
 (`adapters/program_llm.py` now carries three genre profiles, and
 `extract.reduce_html_to_text()` sits in front of every LLM call).
+
+### Preserved from the removed sprint 034 plan
+
+Sprint 034 was removed on 2026-09-03 (roadmap-only, never executed). Two
+framings from that plan are worth keeping, because they are decisions
+rather than restatements of this issue:
+
+- **The tiny always-on surface is a hard boundary, not a starting point
+  to optimize away.** The webhook receiver verifies the provider
+  signature and enqueues, and does nothing else — no site-scrape, no LLM
+  call runs in the always-on path. That was written into the plan's Out
+  of Scope deliberately, because this is the project's first always-on
+  component in an otherwise entirely batch/pull system, and surface
+  creep there is the main structural risk.
+- **Phase 2 descopes rather than blocks.** If the per-partner
+  append-only store Phase 2 needs has not landed when this is next
+  planned, Phase 2 becomes its own follow-up and Phase 1's onboarding
+  work proceeds alone. Phase 1 does not depend on it.
