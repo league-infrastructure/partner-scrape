@@ -35,6 +35,20 @@ byte-identical, never re-encoded):
 
 Add ``--dry-run`` to preview what would be copied without writing.
 
+Prune (deletes files under ``data/images/opportunities/`` that are
+referenced by neither ``data/opportunities.json`` nor any
+``data/partners/*/{events,past-events}.json`` -- the inverse of the
+check-mode computation above; filenames are content-hashed, so
+deleting one whose event later reappears just costs a re-download, not
+data loss):
+
+    uv run python dev/backfill_missing_images.py --prune
+
+Add ``--dry-run`` to preview what would be deleted without deleting.
+Without ``--dry-run``, prints each deleted filename, a summary count,
+and re-runs the check-only report afterward (mirroring the
+``--source-dir`` after-check pattern above).
+
 This is a **standalone provisioning script**, matching
 ``dev/refresh_school_directories.py``'s convention: stdlib only (no
 import of ``partner_scrape.*``), never imported by runtime code, run
@@ -145,6 +159,28 @@ def backfill(data_dir: Path, source_dir: Path, missing: set[str], *, dry_run: bo
     return copied, not_found
 
 
+def prune(data_dir: Path, *, dry_run: bool) -> list[str]:
+    """Delete every file under ``data_dir/images/opportunities`` that is
+    referenced by neither ``_referenced_from_partners`` nor
+    ``_referenced_from_opportunities`` -- the inverse of the missing-file
+    computation used by ``check()``. Returns the sorted list of filenames
+    deleted (or, with ``dry_run``, that would be deleted).
+    """
+    images_dir = data_dir / IMAGES_SUBDIR
+    existing = _existing_images(data_dir)
+    referenced = _referenced_from_partners(data_dir) | _referenced_from_opportunities(data_dir)
+    orphaned = sorted(existing - referenced)
+
+    for name in orphaned:
+        if dry_run:
+            print(f"  would delete: {name}")
+        else:
+            (images_dir / name).unlink()
+            print(f"  deleted: {name}")
+
+    return orphaned
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument(
@@ -162,13 +198,32 @@ def main() -> int:
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="With --source-dir, report what would be copied without writing anything.",
+        help="With --source-dir or --prune, report what would change without writing anything.",
+    )
+    parser.add_argument(
+        "--prune",
+        action="store_true",
+        help=(
+            "Delete files under data-dir/images/opportunities that are referenced by "
+            "neither opportunities.json nor any partner's events.json/past-events.json. "
+            "Combine with --dry-run to preview without deleting."
+        ),
     )
     args = parser.parse_args()
 
     data_dir: Path = args.data_dir
 
     missing_partners, missing_opportunities = check(data_dir, heading="Before:")
+
+    if args.prune:
+        orphaned = prune(data_dir, dry_run=args.dry_run)
+        verb = "Would delete" if args.dry_run else "Deleted"
+        print(f"\n{verb} {len(orphaned)} orphaned file(s).")
+
+        if not args.dry_run:
+            missing_partners, missing_opportunities = check(data_dir, heading="\nAfter prune:")
+        else:
+            print("\n(dry run -- skipping after-check, no files were deleted)")
 
     if args.source_dir is not None:
         # Copy the union of both missing sets -- the two checks are

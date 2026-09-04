@@ -39,6 +39,13 @@ its check mode, so the inverse is nearly free, and it makes this
 repeatable instead of a one-time manual sweep. Re-run its existing
 check afterward to prove nothing referenced was removed.
 
+**Done (037-001, 2026-09-04)**: added `--prune`/`--dry-run` to
+`dev/backfill_missing_images.py`. Ran against the real repo:
+`data/images/opportunities/` went from 562 files / 322M to 485 files /
+288M — exactly 77 files removed (~34M), matching the survey. Post-prune
+check-only run reported 0 missing for both the partners-derived and
+opportunities-derived checks.
+
 ## 2. `justfile` is actively broken and partly dangerous
 
 - `dev`, `build`, `preview` all `cd site/`, which has not existed in

@@ -1,7 +1,7 @@
 ---
 id: '001'
 title: Prune orphaned opportunity images via backfill_missing_images.py --prune
-status: open
+status: done
 use-cases: []
 depends-on: []
 github-issue: ''
@@ -37,28 +37,28 @@ code, no network access).
 
 ## Acceptance Criteria
 
-- [ ] `dev/backfill_missing_images.py` gains a `--prune` flag (usable
+- [x] `dev/backfill_missing_images.py` gains a `--prune` flag (usable
       standalone or combined with the existing check-only default; no
       change to the existing `--source-dir`/backfill behavior).
-- [ ] `--prune` computes `existing - (referenced_from_partners |
+- [x] `--prune` computes `existing - (referenced_from_partners |
       referenced_from_opportunities)` and deletes exactly that set from
       `data/images/opportunities/`.
-- [ ] `--prune --dry-run` reports what would be deleted (filenames and
+- [x] `--prune --dry-run` reports what would be deleted (filenames and
       count) without deleting anything.
-- [ ] Without `--dry-run`, `--prune` prints each deleted filename and a
+- [x] Without `--dry-run`, `--prune` prints each deleted filename and a
       summary count, then re-runs the existing check and reports it
       (mirroring the existing `--source-dir` after-check pattern).
-- [ ] Running `uv run python dev/backfill_missing_images.py` (check-only,
+- [x] Running `uv run python dev/backfill_missing_images.py` (check-only,
       no flags) against the real `data/` tree after pruning reports 0
       missing for both the partners-derived and opportunities-derived
       checks.
-- [ ] Running the prune against the real repo's `data/images/opportunities/`
+- [x] Running the prune against the real repo's `data/images/opportunities/`
       removes exactly the 77 currently-orphaned files (confirm count
       before and after) and leaves `git status` showing only deletions
       under that directory (no unrelated changes).
-- [ ] The script's module docstring is updated to document `--prune`
+- [x] The script's module docstring is updated to document `--prune`
       alongside the existing check-only and backfill modes.
-- [ ] No test or manual run touches the network or writes outside a
+- [x] No test or manual run touches the network or writes outside a
       pytest `tmp_path` fixture directory — never point a test at the
       real `data/` tree.
 
@@ -108,3 +108,22 @@ before/after file counts.
   `uv run python dev/backfill_missing_images.py --prune` against the
   real repo (recorded in issue 48), followed by
   `uv run python dev/backfill_missing_images.py` to confirm 0 missing.
+
+## Notes
+
+Implemented as planned: `prune()` added parallel to `backfill()`,
+reusing `_existing_images`/`_referenced_from_partners`/
+`_referenced_from_opportunities`; `--prune` wired into `main()` with
+its own before/after check, independent of `--source-dir`. New tests
+in `tests/dev/test_backfill_missing_images.py` (7 tests, fixture-only
+under `tmp_path`).
+
+Real-repo run: `data/images/opportunities/` went from 562 files / 322M
+to 485 files / 288M — exactly 77 files removed (~34M). `--prune
+--dry-run` first confirmed the 77-file count matched the survey.
+Post-prune check-only run: `partners: 457 referenced, 457 present, 0
+missing`; `opportunities.json: 145 referenced, 145 present, 0 missing`.
+`git status` after the prune showed only 77 deletions under
+`data/images/opportunities/`, no unrelated changes.
+
+Full suite: 2538 passed (2531 baseline + 7 new).
