@@ -18,10 +18,11 @@ the resulting ``{url: lastmod}`` set against a persisted snapshot for
 ``<lastmod>``-changed URLs come back as ``EventRef``s, and the snapshot
 is rewritten to the current full state on every successful resolution.
 
-Classification patterns are ported from ``dev/inventory_sitemaps.py``'s
-``EVENT_PATTERNS``/``PROGRAM_PATTERNS`` and ``dev/lib/sitemap_parser.py``'s
-inline event-path regex as a starting point, not a dependency -- ``dev/``
-stays untouched (this ticket's Scope).
+Classification patterns were originally ported, as a starting point and
+never a dependency, from a since-deleted early prototype's
+``EVENT_PATTERNS``/``PROGRAM_PATTERNS`` and inline event-path regex
+(``dev/inventory_sitemaps.py`` and ``dev/lib/sitemap_parser.py``, both
+long removed -- see git history).
 
 This module depends only on ``Fetch & Cache``'s ``Fetcher`` protocol,
 ``Config``, ``registry.schema.SourceConfig``, and ``adapters.base.EventRef``
@@ -49,12 +50,14 @@ from partner_scrape.registry.schema import SourceConfig
 logger = logging.getLogger(__name__)
 
 #: XML namespace every standard sitemap uses (sitemaps.org protocol),
-#: matching ``dev/inventory_sitemaps.py``'s ``NS``.
+#: matching the ``NS`` constant of a since-deleted early prototype
+#: (``dev/inventory_sitemaps.py`` -- see git history).
 _NS = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
 
-#: Sitemap child-filename patterns for event content. Ported from
-#: ``dev/inventory_sitemaps.py``'s ``EVENT_PATTERNS`` -- a starting
-#: point, not a dependency.
+#: Sitemap child-filename patterns for event content. Ported, as a
+#: starting point, from a since-deleted early prototype's
+#: ``EVENT_PATTERNS`` (``dev/inventory_sitemaps.py`` -- see git
+#: history).
 EVENT_PATTERNS = re.compile(
     r"(tribe_events|tribe_event_series|tribe_events_cat|tribe_venue|tribe_organizer"
     r"|tec_recurring|ajde_events|stec_event|event|events)",
@@ -62,7 +65,7 @@ EVENT_PATTERNS = re.compile(
 )
 
 #: Sitemap child-filename patterns for program/course content. Ported
-#: from ``dev/inventory_sitemaps.py``'s ``PROGRAM_PATTERNS``.
+#: from that same since-deleted prototype's ``PROGRAM_PATTERNS``.
 PROGRAM_PATTERNS = re.compile(
     r"(program|course|workshop|camp|class|training)", re.IGNORECASE
 )
@@ -70,8 +73,9 @@ PROGRAM_PATTERNS = re.compile(
 #: URL-path pattern applied to individual ``<loc>`` values -- the
 #: fallback for sites with no dedicated event sitemap (a flat
 #: ``sitemap.xml`` urlset, or a ``<sitemapindex>`` whose children have
-#: no event/program-suggestive filename). Ported from
-#: ``dev/lib/sitemap_parser.py``'s ``get_event_urls`` inline regex.
+#: no event/program-suggestive filename). Ported from a since-deleted
+#: early prototype's ``get_event_urls`` inline regex
+#: (``dev/lib/sitemap_parser.py`` -- see git history).
 EVENT_PATH_RE = re.compile(
     r"/(events?|tribe_events|public-events?|science-events?|"
     r"programs?|courses?|camps?|classes|workshops?|training|calendar)(/|$)",

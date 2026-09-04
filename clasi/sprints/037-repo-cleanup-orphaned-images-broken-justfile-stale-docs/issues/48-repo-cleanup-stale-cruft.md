@@ -90,6 +90,12 @@ Both files were deleted long ago. The attribution is honest history but
 points at nothing a reader can open — reword so it reads as historical
 provenance rather than a live cross-reference.
 
+**Done (037-003, 2026-09-04)**: reworded all references in
+`partner_scrape/discovery/sitemap.py` and
+`partner_scrape/discovery/DESIGN.md` to name the specific deleted files
+and point to git history, rather than implying `dev/` still holds
+sitemap-related code.
+
 ## 5. `.gitignore` gaps
 
 None of these are ignored, and the first two appeared in `git status`
@@ -97,10 +103,16 @@ during the 2026-09-02 session: `.clasi/.clasi.db-wal`,
 `.clasi/.clasi.db-shm` (sqlite sidecars of the already-ignored
 `.clasi/.clasi.db`), and `.pytest_cache/`.
 
+**Done (037-003, 2026-09-04)**: added all three to `.gitignore`.
+Verified `.pytest_cache/` is suppressed by running `uv run pytest` then
+`git status` (shows only under `--ignored`, not untracked).
+
 ## 6. Redundant `docs/design/.gitkeep`
 
 `docs/design/` now holds `design.md`, `overview.md`, `specification.md`
 and `usecases.md`. The `.gitkeep` no longer keeps anything.
+
+**Done (037-003, 2026-09-04)**: deleted.
 
 ## 7. Four empty config files
 
@@ -111,6 +123,20 @@ and `usecases.md`. The `.gitkeep` no longer keeps anything.
 **Verify before deleting**: these may be scaffolding `dotconfig`
 expects for its deploy list. If removing them breaks `dotconfig`'s view
 of available deploys, leave them and record why here instead.
+
+**Done (037-003, 2026-09-04) — kept, verified**: deleted all four
+(backed up first) and ran `dotconfig load dev --stdout`:
+`✗ deployment config file not found: config/dev/public.env` (exit 1).
+`config/dev/public.env` is hard-required by `dotconfig load`. Restored
+via `git checkout --` and confirmed `dotconfig load dev --stdout`
+succeeds again and `git status` is clean on `config/`. The other three
+files, isolated individually, don't hard-fail (`secrets.env` missing:
+silent; `local/eric/public.env` missing: warns but succeeds;
+`local/eric/secrets.env` missing: silent) — but they're one documented
+scaffold per `config/AGENTS.md` (a `public.env`/`secrets.env` pair per
+deploy and per developer), so keeping only `config/dev/public.env`
+while deleting the other three would leave an inconsistent partial
+scaffold for no benefit (they're already 0 bytes). All four kept.
 
 ## Verification
 

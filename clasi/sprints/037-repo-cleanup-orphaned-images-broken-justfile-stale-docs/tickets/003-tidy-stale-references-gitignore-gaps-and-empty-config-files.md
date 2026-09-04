@@ -1,7 +1,7 @@
 ---
 id: '003'
 title: Tidy stale references, gitignore gaps, and empty config files
-status: open
+status: done
 use-cases: []
 depends-on: []
 github-issue: ''
@@ -47,20 +47,20 @@ verification gate of its own:
 
 ## Acceptance Criteria
 
-- [ ] `partner_scrape/discovery/sitemap.py`'s and
+- [x] `partner_scrape/discovery/sitemap.py`'s and
       `partner_scrape/discovery/DESIGN.md`'s references to
       `dev/inventory_sitemaps.py` / `dev/lib/sitemap_parser.py` are
       reworded to read as historical provenance (e.g. "ported from a
       since-deleted `dev/inventory_sitemaps.py`") rather than implying
       the files still exist to open.
-- [ ] `.gitignore` gains entries covering `.clasi/.clasi.db-wal`,
+- [x] `.gitignore` gains entries covering `.clasi/.clasi.db-wal`,
       `.clasi/.clasi.db-shm`, and `.pytest_cache/`. After running the
       test suite (which generates `.pytest_cache/`) and using CLASI
       normally (which generates the sqlite sidecars), `git status`
       shows none of the three as untracked.
-- [ ] `docs/design/.gitkeep` is removed (the directory is non-empty and
+- [x] `docs/design/.gitkeep` is removed (the directory is non-empty and
       stays non-empty without it).
-- [ ] For each of the four empty `config/` files: either (a) it is
+- [x] For each of the four empty `config/` files: either (a) it is
       deleted, and a check against `dotconfig`'s deploy/local-discovery
       behavior (e.g. `dotconfig load dev` and/or `dotconfig load -l
       eric`, or an equivalent listing) after deletion confirms no
@@ -68,15 +68,15 @@ verification gate of its own:
       or (b) it is kept, with the reason recorded in issue 48 (item 7)
       explaining what `dotconfig` behavior would break if it were
       removed.
-- [ ] The verification step for the config files actually ran (not just
+- [x] The verification step for the config files actually ran (not just
       reasoned about) — the ticket records the command run and its
       outcome, not just an inference from reading `config/AGENTS.md`.
-- [ ] Full test suite green (`uv run pytest`, baseline 2531 passing) —
+- [x] Full test suite green (`uv run pytest`, baseline 2531 passing) —
       none of these changes should affect test-covered code, but the
       `.gitignore`/`.pytest_cache/` change should be checked against a
       real `uv run pytest` run to confirm the ignore pattern actually
       matches.
-- [ ] No test touches the network, the live Anthropic API, or writes
+- [x] No test touches the network, the live Anthropic API, or writes
       into the `stem-ecosystem` checkout (unaffected by this ticket, but
       re-confirm the suite is still clean on that front after `.gitignore`
       changes).
@@ -128,3 +128,64 @@ comments in `sitemap.py`/`DESIGN.md`.
   test run to confirm the `.gitignore` additions actually suppress the
   named artifacts, plus the `dotconfig` deploy/local-discovery check
   described above for the config-file decision.
+
+## Notes
+
+**(a) Stale references**: reworded all four `dev/inventory_sitemaps.py`
+/ `dev/lib/sitemap_parser.py` comment references in
+`partner_scrape/discovery/sitemap.py` (module docstring, `_NS`,
+`EVENT_PATTERNS`, `PROGRAM_PATTERNS`, `EVENT_PATH_RE`) and the one in
+`partner_scrape/discovery/DESIGN.md` (the "Two-level classification"
+Design Rationale entry) to name the specific deleted files and point to
+git history, instead of "the pre-existing `dev/` exploration scripts"
+(which reads as if `dev/` still holds sitemap-related code).
+
+**(b) `.gitignore`**: added `.clasi/.clasi.db-wal`,
+`.clasi/.clasi.db-shm` next to the existing `.clasi/.clasi.db` entry,
+and a new `.pytest_cache/` entry. Verified by running `uv run pytest`
+(which generates `.pytest_cache/`) and then `git status` — `.pytest_cache/`
+shows only under `git status --ignored` (`!!`), not as untracked. The
+`-wal`/`-shm` sqlite sidecars were not present on disk at verification
+time (SQLite only materializes them during an open write transaction),
+but the ignore entries are exact-name matches identical in form to the
+already-working `.clasi/.clasi.db` entry, so the same mechanism applies.
+
+**(c) `docs/design/.gitkeep`**: deleted. `docs/design/` still holds
+`design.md`, `overview.md`, `specification.md`, `usecases.md`.
+
+**(d) Four empty `config/` files — verification actually run**: backed
+up all four files, then deleted them and ran `dotconfig load dev
+--stdout`:
+
+```
+$ rm config/dev/public.env config/dev/secrets.env \
+     config/local/eric/public.env config/local/eric/secrets.env
+$ dotconfig load dev --stdout
+  ✗ deployment config file not found: config/dev/public.env
+(exit 1)
+```
+
+`config/dev/public.env` is hard-required — `dotconfig load dev` fails
+outright without it. Restored the four files via `git checkout --`
+(confirmed `git status` clean on `config/` afterward, `dotconfig load
+dev --stdout` succeeds again). Follow-up isolation checks (each also
+restored immediately via `git checkout --`):
+- `config/dev/secrets.env` alone missing: `dotconfig load dev` still
+  succeeds (secrets section just empty).
+- `config/local/eric/public.env` alone missing: `dotconfig load dev
+  eric` succeeds with a warning (`local config file not found ...
+  public-local section will be empty`).
+- `config/local/eric/secrets.env` alone missing: `dotconfig load dev
+  eric` succeeds with no warning.
+
+**Decision: keep all four.** `config/dev/public.env` cannot be removed
+without breaking `dotconfig load dev`. The other three are individually
+removable without hard failure, but they are one documented scaffold
+per `config/AGENTS.md`'s layout (a `public.env` + `secrets.env` pair per
+deploy, and per developer under `config/local/`) — deleting three of
+the four and keeping only `config/dev/public.env` would leave an
+inconsistent, confusing partial scaffold for no real cleanup benefit
+(these are already 0 bytes). Recorded in issue 48 item 7.
+
+Full suite: 2538 passed (unchanged — this ticket touches no
+test-covered code).

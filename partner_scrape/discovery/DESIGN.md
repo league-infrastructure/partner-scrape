@@ -127,8 +127,10 @@ everything; the diff narrows the result only when the caller asks for it.
 sitemap *filenames* inside a `<sitemapindex>` (`EVENT_PATTERNS`, `PROGRAM_PATTERNS` —
 catching WordPress/TEC conventions like `tribe_events`), and once over individual URL
 *paths* (`EVENT_PATH_RE`) for sites that have no dedicated event sitemap. The patterns
-were ported from the pre-existing `dev/` exploration scripts as a starting point; `dev/`
-is not a dependency.
+were ported, as a starting point and never a dependency, from a since-deleted early
+prototype's exploration scripts (`dev/inventory_sitemaps.py`, `dev/lib/sitemap_parser.py`
+— both long removed; see git history). `dev/` today holds unrelated standalone
+maintenance scripts.
 
 **(Sprint 015) `_parse_urlset()` falls back to namespace-agnostic matching, tried only
 after the qualified query.** *Context:* `_parse_urlset()` queried only
