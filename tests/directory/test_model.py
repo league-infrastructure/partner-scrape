@@ -126,21 +126,19 @@ class TestClubValueSetConstants:
     typo in the Literal is caught here, not silently in a downstream
     validator."""
 
-    def test_valid_club_types_includes_hack_club_and_issue_35b_six(self):
+    def test_valid_club_types_is_narrowed_to_the_two_genuine_clubs(self):
         # Sprint 032 ticket 001 widened this Literal from
         # Literal["hack-club"] to include issue 35b's six remaining
         # club types -- see directory/DESIGN.md's sprint 032 Revision.
-        # Sprint 036 ticket 002 narrows it a first time, dropping
+        # Sprint 036 ticket 002 narrowed it a first time, dropping
         # "science-olympiad"/"cyberpatriot" (migrated to
-        # teams.model.Team per issue 47's meets-vs-competes rule) --
-        # ticket 003 narrows it a second time.
-        assert VALID_CLUB_TYPES == {
-            "hack-club",
-            "4-h",
-            "girls-who-code",
-            "civil-air-patrol",
-            "sea-cadets",
-        }
+        # teams.model.Team per issue 47's meets-vs-competes rule).
+        # Ticket 003 narrows it a second time, dropping
+        # "4-h"/"civil-air-patrol"/"sea-cadets" entirely (a stakeholder
+        # call, not migrated anywhere), landing at the two genuine
+        # clubs issue 47 confirms -- see directory/DESIGN.md's new
+        # "Club vs. Team: the meets-vs-competes rule" section.
+        assert VALID_CLUB_TYPES == {"hack-club", "girls-who-code"}
 
     def test_valid_club_statuses(self):
         assert VALID_CLUB_STATUSES == {"active", "inactive"}

@@ -337,7 +337,7 @@ class TestRunDirectoryRealFixtureData:
         assert atlas["latitude"] is not None
         assert atlas["longitude"] is not None
 
-    def test_dry_run_reports_thirty_clubs_with_no_network(self, tmp_path):
+    def test_dry_run_reports_five_clubs_with_no_network(self, tmp_path):
         # Ticket 018-008's own AC: every Hack Club chapter issue 35
         # names has a Club record, geocoded through the real, now
         # populated directory/data/ school directories -- not a fixture
@@ -348,17 +348,20 @@ class TestRunDirectoryRealFixtureData:
         # Who Code 1 -- 57 total). Sprint 036 ticket 002 migrated
         # Science Olympiad and CyberPatriot to `teams.model.Team` per
         # issue 47's meets-vs-competes rule (competition teams, not
-        # clubs) -- see directory/DESIGN.md's sprint 036 Revision.
-        # Ticket 003 will drop 4-H/Civil Air Patrol/Sea Cadets next.
-        # Real full-registry total is now 4 Hack Club + 7 Civil Air
-        # Patrol + 4 Sea Cadets + 14 4-H + 1 Girls Who Code = 30.
+        # clubs); ticket 003 then dropped 4-H/Civil Air Patrol/Sea
+        # Cadets entirely (a stakeholder call, not migrated anywhere)
+        # -- see directory/DESIGN.md's "Club vs. Team: the
+        # meets-vs-competes rule" section and its sprint 036 Revisions.
+        # Real full-registry total is now the two genuine clubs issue
+        # 47 confirms: 4 Hack Club + 1 Girls Who Code = 5.
         _write_real_partners_fixture(tmp_path / "unused")
         payload = run_directory(
             fetcher=_NeverCalledFetcher(), dry_run=True, site_dir=tmp_path / "unused"
         )
 
-        assert payload["clubs_meta"]["total"] == 30
-        assert len(payload["clubs"]) == 30
+        assert payload["clubs_meta"]["total"] == 5
+        assert len(payload["clubs"]) == 5
+        assert payload["clubs_meta"]["by_club_type"] == {"hack-club": 4, "girls-who-code": 1}
 
     def test_every_real_school_hosted_club_resolves_to_school_precision_never_a_guess(
         self, tmp_path
@@ -428,144 +431,6 @@ class TestRunDirectoryRealFixtureData:
         assert by_id["hack-club-mater-dei-catholic-high"]["host_school_website"] == ""
 
 
-class TestRealCivilAirPatrolGeocoding:
-    """Sprint 032 ticket 003: pins the real, committed
-    civil-air-patrol-sd.tsv roster's geocoding outcome end-to-end.
-    Unlike Hack Club/CyberPatriot, Civil Air Patrol squadrons genuinely
-    meet at non-school facilities (airfields, a VFW post, an
-    administrative office) -- per sprint.md's Architecture "Geocoding
-    note," the shared ladder's school-matching rungs 1-4 are expected
-    to miss for most entries and fall through honestly to zip
-    precision, not a defect to chase. One real exception: Squadron 714
-    genuinely meets on a K-12 charter high school's campus, so it
-    correctly resolves at school precision like any other
-    school-hosted club."""
-
-    def _real_clubs_by_id(self, tmp_path):
-        _write_real_partners_fixture(tmp_path / "unused")
-        payload = run_directory(
-            fetcher=_NeverCalledFetcher(), dry_run=True, site_dir=tmp_path / "unused"
-        )
-        return {c["club_id"]: c for c in payload["clubs"] if c["club_type"] == "civil-air-patrol"}
-
-    def test_seven_civil_air_patrol_entries_are_present(self, tmp_path):
-        assert len(self._real_clubs_by_id(tmp_path)) == 7
-
-    def test_six_non_school_entries_fall_through_to_zip_precision_honestly(self, tmp_path):
-        by_id = self._real_clubs_by_id(tmp_path)
-        non_school_ids = {
-            "civil-air-patrol-group-8-hq",
-            "civil-air-patrol-squadron-144",
-            "civil-air-patrol-squadron-201",
-            "civil-air-patrol-squadron-47",
-            "civil-air-patrol-squadron-57",
-            "civil-air-patrol-squadron-87",
-        }
-        for cid in non_school_ids:
-            club = by_id[cid]
-            assert club["location_precision"] == "zip", cid
-            assert club["needs_review"] is False, cid
-            assert club["latitude"] is not None
-            assert club["longitude"] is not None
-
-    def test_squadron_714_genuinely_resolves_at_school_precision(self, tmp_path):
-        by_id = self._real_clubs_by_id(tmp_path)
-        club = by_id["civil-air-patrol-squadron-714"]
-        assert club["location_precision"] == "school"
-        assert club["needs_review"] is False
-        assert club["matched_name"] == "Escondido Charter High"
-
-    def test_no_civil_air_patrol_entry_is_ever_flagged_needs_review(self, tmp_path):
-        by_id = self._real_clubs_by_id(tmp_path)
-        assert not any(c["needs_review"] for c in by_id.values())
-
-
-class TestRealSeaCadetsGeocoding:
-    """Sprint 032 ticket 004: pins the real, committed sea-cadets-sd.tsv
-    roster's geocoding outcome end-to-end. Like Civil Air Patrol, every
-    Naval Sea Cadet Corps unit here meets at a non-school facility
-    (a police/fire HQ, a Marine Corps air station, a Marine Corps base,
-    a naval base) -- per sprint.md's Architecture "Geocoding note," the
-    shared ladder's school-matching rungs 1-4 are expected to miss for
-    every entry. Unlike Civil Air Patrol, none of the four curated
-    units' zip codes are covered by the fixture-independent real
-    zip-centroids.toml (Escondido's 92026 is the one exception), so
-    three of the four fall through one rung further, to city
-    precision -- still a real, non-guessed ladder rung, never a
-    fabricated coordinate."""
-
-    def _real_clubs_by_id(self, tmp_path):
-        _write_real_partners_fixture(tmp_path / "unused")
-        payload = run_directory(
-            fetcher=_NeverCalledFetcher(), dry_run=True, site_dir=tmp_path / "unused"
-        )
-        return {c["club_id"]: c for c in payload["clubs"] if c["club_type"] == "sea-cadets"}
-
-    def test_four_sea_cadets_entries_are_present(self, tmp_path):
-        assert len(self._real_clubs_by_id(tmp_path)) == 4
-
-    def test_escondido_battalion_resolves_at_zip_precision(self, tmp_path):
-        by_id = self._real_clubs_by_id(tmp_path)
-        club = by_id["sea-cadets-escondido-battalion"]
-        assert club["location_precision"] == "zip"
-        assert club["needs_review"] is False
-        assert club["latitude"] is not None
-        assert club["longitude"] is not None
-
-    def test_the_other_three_units_fall_through_to_city_precision_honestly(self, tmp_path):
-        by_id = self._real_clubs_by_id(tmp_path)
-        city_precision_ids = {
-            "sea-cadets-gunfighter-squadron",
-            "sea-cadets-michael-monsoor-battalion",
-            "sea-cadets-chief-mcm14-division",
-        }
-        for cid in city_precision_ids:
-            club = by_id[cid]
-            assert club["location_precision"] == "city", cid
-            assert club["needs_review"] is False, cid
-            assert club["latitude"] is not None
-            assert club["longitude"] is not None
-
-    def test_no_sea_cadets_entry_is_ever_flagged_needs_review(self, tmp_path):
-        by_id = self._real_clubs_by_id(tmp_path)
-        assert not any(c["needs_review"] for c in by_id.values())
-
-
-class TestReal4HGeocoding:
-    """Sprint 032 ticket 005: pins the real, committed 4-h-sd.tsv
-    roster's geocoding outcome end-to-end. Every one of the fourteen
-    curated San Diego County 4-H community clubs meets at a non-school
-    facility (a museum, a fairgrounds, a community hall) or has no
-    specific facility name recorded at all -- per sprint.md's
-    Architecture "Geocoding note," the shared ladder's school-matching
-    rungs 1-4 are expected to miss for every entry, and every entry's
-    zip code is covered by the real, committed zip-centroids.toml, so
-    every entry resolves at zip precision, none falling through further
-    to city precision and none needing a school-matching rung at all."""
-
-    def _real_clubs_by_id(self, tmp_path):
-        _write_real_partners_fixture(tmp_path / "unused")
-        payload = run_directory(
-            fetcher=_NeverCalledFetcher(), dry_run=True, site_dir=tmp_path / "unused"
-        )
-        return {c["club_id"]: c for c in payload["clubs"] if c["club_type"] == "4-h"}
-
-    def test_fourteen_4h_entries_are_present(self, tmp_path):
-        assert len(self._real_clubs_by_id(tmp_path)) == 14
-
-    def test_every_4h_entry_resolves_at_zip_precision_honestly(self, tmp_path):
-        by_id = self._real_clubs_by_id(tmp_path)
-        for cid, club in by_id.items():
-            assert club["location_precision"] == "zip", cid
-            assert club["needs_review"] is False, cid
-            assert club["latitude"] is not None, cid
-            assert club["longitude"] is not None, cid
-
-    def test_no_4h_entry_is_ever_flagged_needs_review(self, tmp_path):
-        by_id = self._real_clubs_by_id(tmp_path)
-        assert not any(c["needs_review"] for c in by_id.values())
-
-
 class TestRealGirlsWhoCodeGeocoding:
     """Sprint 032 ticket 007: pins the real, committed
     girls-who-code-sd.tsv roster's geocoding outcome end-to-end. Only
@@ -623,10 +488,12 @@ class TestSourceFilter:
             site_dir=tmp_path / "unused",
         )
 
-        # 4 Hack Club + 7 Civil Air Patrol + 4 Sea Cadets + 14 4-H + 1
-        # Girls Who Code = 30 (CyberPatriot and Science Olympiad
-        # migrated to teams.model.Team, sprint 036 ticket 002).
-        assert payload["clubs_meta"]["total"] == 30
+        # 4 Hack Club + 1 Girls Who Code = 5 -- the two genuine
+        # clubs issue 47 confirms (CyberPatriot/Science Olympiad
+        # migrated to teams.model.Team, sprint 036 ticket 002;
+        # 4-H/Civil Air Patrol/Sea Cadets dropped entirely,
+        # ticket 003).
+        assert payload["clubs_meta"]["total"] == 5
         assert payload["meta"]["total"] == 0
 
     def test_source_filter_for_an_unregistered_adapter_type_yields_nothing(self, tmp_path):
@@ -718,11 +585,12 @@ class TestPerSourceErrorIsolation:
         )
 
         assert payload["meta"]["total"] == 0
-        # 4 Hack Club + 7 Civil Air Patrol + 4 Sea Cadets + 14 4-H
-        # + 1 Girls Who Code = 30 (CyberPatriot and Science
-        # Olympiad migrated to teams.model.Team, sprint 036
-        # ticket 002).
-        assert payload["clubs_meta"]["total"] == 30
+        # 4 Hack Club + 1 Girls Who Code = 5 -- the two genuine
+        # clubs issue 47 confirms (CyberPatriot/Science Olympiad
+        # migrated to teams.model.Team, sprint 036 ticket 002;
+        # 4-H/Civil Air Patrol/Sea Cadets dropped entirely,
+        # ticket 003).
+        assert payload["clubs_meta"]["total"] == 5
 
     def test_combined_dispatch_never_logs_a_spurious_place_warning_for_a_real_club_entry(
         self, tmp_path, caplog
@@ -947,11 +815,12 @@ class TestRunDirectoryOfferingDispatch:
         )
 
         assert payload["meta"]["total"] == 19
-        # 4 Hack Club + 7 Civil Air Patrol + 4 Sea Cadets + 14 4-H
-        # + 1 Girls Who Code = 30 (CyberPatriot and Science
-        # Olympiad migrated to teams.model.Team, sprint 036
-        # ticket 002).
-        assert payload["clubs_meta"]["total"] == 30
+        # 4 Hack Club + 1 Girls Who Code = 5 -- the two genuine
+        # clubs issue 47 confirms (CyberPatriot/Science Olympiad
+        # migrated to teams.model.Team, sprint 036 ticket 002;
+        # 4-H/Civil Air Patrol/Sea Cadets dropped entirely,
+        # ticket 003).
+        assert payload["clubs_meta"]["total"] == 5
         assert payload["offerings_meta"]["total"] == 13
 
 
@@ -1071,11 +940,12 @@ class TestOfferingPerSourceErrorIsolation:
         # The unrelated Place/Club sources are unaffected -- per-source
         # isolation, not "one broken source kills the whole run".
         assert payload["meta"]["total"] == 19
-        # 4 Hack Club + 7 Civil Air Patrol + 4 Sea Cadets + 14 4-H
-        # + 1 Girls Who Code = 30 (CyberPatriot and Science
-        # Olympiad migrated to teams.model.Team, sprint 036
-        # ticket 002).
-        assert payload["clubs_meta"]["total"] == 30
+        # 4 Hack Club + 1 Girls Who Code = 5 -- the two genuine
+        # clubs issue 47 confirms (CyberPatriot/Science Olympiad
+        # migrated to teams.model.Team, sprint 036 ticket 002;
+        # 4-H/Civil Air Patrol/Sea Cadets dropped entirely,
+        # ticket 003).
+        assert payload["clubs_meta"]["total"] == 5
 
 
 class TestOfferingRelatedPartnerIdJoinIntegrity:

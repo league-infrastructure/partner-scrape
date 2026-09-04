@@ -221,14 +221,14 @@ class TestProvenance:
         raw = RawClubResponse(ref=ref, status=200, body=roster_body)
 
         source_a = SourceConfig(
-            source_id="cyberpatriot-sd",
-            org_name="CyberPatriot teams",
+            source_id="hack-club-sd",
+            org_name="Hack Club",
             adapter_type="club_static_roster",
             config={},
         )
         source_b = SourceConfig(
-            source_id="sea-cadets-sd",
-            org_name="Sea Cadets units",
+            source_id="girls-who-code-sd",
+            org_name="Girls Who Code",
             adapter_type="club_static_roster",
             config={},
         )
@@ -236,8 +236,8 @@ class TestProvenance:
         clubs_a = list(ClubStaticRosterSource().extract(raw, source_a))
         clubs_b = list(ClubStaticRosterSource().extract(raw, source_b))
 
-        assert clubs_a[0].sources == ["cyberpatriot-sd"]
-        assert clubs_b[0].sources == ["sea-cadets-sd"]
+        assert clubs_a[0].sources == ["hack-club-sd"]
+        assert clubs_b[0].sources == ["girls-who-code-sd"]
         assert clubs_a[0].sources != clubs_b[0].sources
 
 
@@ -323,10 +323,10 @@ class TestExtractOne:
 
     def test_sources_field_carries_the_given_source_name(self):
         club = _extract_one(
-            {"club_id": "x", "name": "X", "club_type": "civil-air-patrol"}, "civil-air-patrol-sd"
+            {"club_id": "x", "name": "X", "club_type": "girls-who-code"}, "girls-who-code-sd"
         )
 
-        assert club.sources == ["civil-air-patrol-sd"]
+        assert club.sources == ["girls-who-code-sd"]
 
 
 class TestRegistryConfig:

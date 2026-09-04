@@ -1,7 +1,7 @@
 ---
 id: '003'
 title: Drop 4-H, Civil Air Patrol, and Sea Cadets; narrow ClubType to genuine clubs
-status: open
+status: done
 use-cases:
 - SUC-070
 depends-on:
@@ -29,21 +29,21 @@ checks it before mis-filing another competition team the way sprint
 
 ## Acceptance Criteria
 
-- [ ] `directory/registry/4-h-sd.toml`, `civil-air-patrol-sd.toml`,
+- [x] `directory/registry/4-h-sd.toml`, `civil-air-patrol-sd.toml`,
       `sea-cadets-sd.toml` deleted.
-- [ ] `directory/data/4-h-sd.tsv`, `civil-air-patrol-sd.tsv`,
+- [x] `directory/data/4-h-sd.tsv`, `civil-air-patrol-sd.tsv`,
       `sea-cadets-sd.tsv` deleted.
-- [ ] `directory/model.py`'s `ClubType` narrows from
+- [x] `directory/model.py`'s `ClubType` narrows from
       `Literal["hack-club", "girls-who-code", "4-h",
       "civil-air-patrol", "sea-cadets"]` (ticket 002's post-migration
       state) to `Literal["hack-club", "girls-who-code"]`;
       `VALID_CLUB_TYPES` picks up the narrowing via its existing
       `get_args()` derivation, no further change needed.
-- [ ] A real `uv run partner-scrape directory` run shows `clubs.json`'s
+- [x] A real `uv run partner-scrape directory` run shows `clubs.json`'s
       `total` drop from 30 (ticket 002's post-migration state) to 5,
       `by_club_type` reading exactly `{"hack-club": 4,
       "girls-who-code": 1}`.
-- [ ] `directory/DESIGN.md` gains an explicit, standalone
+- [x] `directory/DESIGN.md` gains an explicit, standalone
       meets-vs-competes statement (a new, quotable section — not
       folded into a Revision note where a future reader could miss
       it): a `Club` is a standing entity that *meets* with no
@@ -53,7 +53,7 @@ checks it before mis-filing another competition team the way sprint
       competition is robotics. Cite this sprint's own history (sprint
       032 mis-populated `Club` with four competition-team types; this
       sprint corrected it) as the concrete cautionary example.
-- [ ] No dangling reference to a dropped `ClubType` value anywhere in
+- [x] No dangling reference to a dropped `ClubType` value anywhere in
       `directory/registry/*.toml`, `directory/data/*`, or any test
       fixture.
 
