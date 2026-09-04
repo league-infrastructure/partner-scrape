@@ -33,16 +33,36 @@ on this record to put one. Do not add one, even behind a flag.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Literal
+from typing import Literal, get_args
 
-#: Short program code. Only ``"FTC"`` is produced by this ticket
-#: (``sources/ftcscout.py``); ``"FRC"`` arrives with ticket 011-003's
-#: ``sources/tba.py``, ``"FLL"`` only with the deferred follow-on
-#: sprint's static-roster import. ``"VEX"`` arrives with sprint 016
-#: ticket 005's ``sources/robotevents.py`` -- see ``Team.number``'s
-#: docstring below for why that source is also what forced ``number``
-#: to widen from ``int`` to ``str``.
-League = Literal["FTC", "FRC", "FLL", "VEX"]
+#: Short program/competition-circuit code. Only ``"FTC"`` is produced by
+#: this ticket (``sources/ftcscout.py``); ``"FRC"`` arrives with ticket
+#: 011-003's ``sources/tba.py``, ``"FLL"`` only with the deferred
+#: follow-on sprint's static-roster import. ``"VEX"`` arrives with
+#: sprint 016 ticket 005's ``sources/robotevents.py`` -- see
+#: ``Team.number``'s docstring below for why that source is also what
+#: forced ``number`` to widen from ``int`` to ``str``. Sprint 036 widens
+#: this Literal a second time to ``"SCIOLY"`` (Science Olympiad) and
+#: ``"CYBERPATRIOT"``, generalizing ``Team`` from "FIRST/VEX robotics
+#: team" to "any STEM competition team" -- see ``teams/DESIGN.md``'s
+#: sprint 036 Revision for the full Design Rationale (widen the
+#: existing field rather than add a separate discriminator) this
+#: docstring summarizes: ``league``/``program`` already function as
+#: "short discriminator code" + "human-readable name," a semantics that
+#: was never robotics-specific, only its value set was.
+League = Literal["FTC", "FRC", "FLL", "VEX", "SCIOLY", "CYBERPATRIOT"]
+
+#: Derived from :data:`League` rather than hand-listed a second time --
+#: the same drift-proof pattern ``directory.model.VALID_CLUB_TYPES``
+#: uses for ``ClubType``. Sprint 036 ticket 001 adds this: no prior
+#: source ever needed to validate an untrusted ``league`` value (every
+#: existing source -- ``ftcscout.py``/``tba.py``/``static_roster.py``/
+#: ``robotevents.py`` -- hands ``league`` a single hard-coded literal it
+#: controls itself), but the new generic ``team_static_roster.py``
+#: reads ``league`` from untrusted TSV rows and needs something to
+#: validate against, the same way ``club_static_roster.py`` validates
+#: ``club_type`` against ``VALID_CLUB_TYPES``.
+VALID_LEAGUES: frozenset[str] = frozenset(get_args(League))
 
 #: Which rung of ``teams/geo.py``'s seven-rung offline ladder (ticket
 #: 011-004) produced this Team's coordinates. ``"none"`` is the

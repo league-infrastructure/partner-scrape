@@ -175,6 +175,19 @@ below is this addition's own private `adapter_type -> League` lookup,
 matching `_TEAM_SOURCES`'s existing "private lookup local to the one
 caller that needs it" convention, not a new public registry.
 
+Sprint 036 ticket 001 adds a fifth entry, `"team_static_roster"` (the
+generic curated STEM-competition-team roster source -- see
+`sources/team_static_roster.py`'s own module docstring). Like
+`"static_roster"` (FLL), it is a "source" in name and protocol shape
+only -- there is no acquisition step to isolate a failure from, only a
+local file read -- so this loop's existing per-source `try`/`except`
+isolates it identically, and it is deliberately **not** added to
+`_SOURCE_LEAGUES`: that lookup exists only to name which league a
+`config.CredentialError` failure belongs to, and a static-roster source
+never raises one (no credential to fail). This ticket adds the
+mechanism only; ticket 002 registers the first two real entries
+(Science Olympiad, CyberPatriot).
+
 Sprint 023 ticket 002 adds a *third* signal, this time in the
 published artifact itself rather than the run log: the same league
 codes collected into `credential_failures` above are threaded through
@@ -218,6 +231,7 @@ from partner_scrape.teams.sources.ftcscout import FTCScoutSource
 from partner_scrape.teams.sources.robotevents import VexTeamSource
 from partner_scrape.teams.sources.static_roster import StaticRosterSource
 from partner_scrape.teams.sources.tba import TBASource
+from partner_scrape.teams.sources.team_static_roster import TeamStaticRosterSource
 from partner_scrape.teams.sponsor_cache import SponsorCache
 from partner_scrape.teams.sponsor_canonical import canonicalize_sponsors
 from partner_scrape.teams.sponsor_extract import extract_sponsors
@@ -244,6 +258,12 @@ _TEAM_SOURCES: dict[str, TeamSource] = {
     "tba": TBASource(),
     "static_roster": StaticRosterSource(),
     "robotevents": VexTeamSource(),
+    # Sprint 036 ticket 001: the generic curated STEM-competition-team
+    # roster source (see sources/team_static_roster.py's own module
+    # docstring). Ticket 002 registers the first two real entries
+    # (Science Olympiad, CyberPatriot); this line adds the mechanism
+    # only, no new registry entry.
+    "team_static_roster": TeamStaticRosterSource(),
 }
 
 #: `adapter_type` -> `League` (`teams/model.py`'s `League` docstring) --

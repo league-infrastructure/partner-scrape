@@ -1,6 +1,6 @@
 # teams
 
-**Owner:** Eric Busboom · **Last reviewed:** 2026-08-29 (sprint 013 — website verification and sponsor extraction added) · **Status:** all five sprint 011/012 increments complete (FTC + FRC + geocoding + site pages + FLL static roster), plus sprint 013's website verification and sponsor-extraction stages
+**Owner:** Eric Busboom · **Last reviewed:** 2026-09-03 (sprint 036 ticket 001 — `League` generalized beyond FIRST/VEX robotics; generic `team_static_roster` source added) · **Status:** all five sprint 011/012 increments complete (FTC + FRC + geocoding + site pages + FLL static roster), plus sprint 013's website verification and sponsor-extraction stages, sprint 016's VEX league, sprint 021's description extraction, sprint 023's credential-failure alerting, and sprint 036's generalization to any STEM competition team (not exclusively robotics)
 
 ---
 
@@ -469,6 +469,83 @@ documented in TBA's own OpenAPI spec as "Will be NULL, for future
 development" and confirmed NULL for all 78 SD teams, so this source
 never reads them at all — **TBA is not a geocoding source**; only
 ticket 011-004's `geo.py` sets `Team.latitude`/`longitude`.
+
+**Sprint 036 ticket 001 generalizes `Team` from "FIRST/VEX robotics
+team" to "any STEM competition team" -- the model-level change sprint
+036 depends on before any migration or new competition-team data can
+happen.** Issue 47's own framing (the stakeholder, 2026-09-03): "The
+science olympiad teams: go move them over to teams. That makes the
+team category not just robotics team. That makes a general team."
+Sprint 032 had already curated Science Olympiad (24) and CyberPatriot
+(3) rosters, but put them in `directory.model.Club` instead, because
+`Team`'s `League` Literal (`"FTC"`/`"FRC"`/`"FLL"`/`"VEX"`) had no home
+for a non-robotics competition. This ticket widens `League` to also
+include `"SCIOLY"` and `"CYBERPATRIOT"` and adds
+`VALID_LEAGUES: frozenset[str] = frozenset(get_args(League))` --
+`League` had no derived frozenset until now (unlike `directory.model.
+ClubType`'s `VALID_CLUB_TYPES`) because every existing source
+(`ftcscout.py`/`tba.py`/`static_roster.py`/`robotevents.py`) hands
+`league` a single hard-coded literal it controls itself; the new
+generic `sources/team_static_roster.py` (below) reads `league` from
+untrusted TSV rows and needs something to validate against.
+
+**Decision: widen `League` itself, not add a new `competition_kind`
+discriminator field.** `league`/`program` already function as "short
+discriminator code" + "human-readable name" -- FTC/FRC/FLL/VEX are four
+different sanctioning organizations/programs, not subdivisions of one
+umbrella "league," so the field was never robotics-specific in its
+*semantics*, only in its *value set*. Every real consumer of
+`Team.league` in this codebase (`export._build_meta`'s `by_league`
+breakdown, `export_teams`'s sort key, `pipeline.py`'s `_SOURCE_LEAGUES`
+credential-alert lookup) is a generic breakdown-by-code operation
+already, with no logic assuming "these four codes are the complete
+robotics set" -- nothing breaks by adding a fifth/sixth code. A
+`competition_kind` field would need to be populated, validated, and
+kept in sync with `league` for every current and future value with no
+current consumer need for that coarser axis -- speculative generality
+this project's own anti-pattern list warns against. `meta.
+credential_failures`'s semantics are unaffected by the widening: only
+the two credentialed sources (`tba`, `robotevents`) can ever populate
+it, and every static-roster-sourced league code (`FLL`, `SCIOLY`,
+`CYBERPATRIOT`) can never appear there, by construction -- see
+`pipeline.py`'s own module docstring for why `"team_static_roster"` is
+deliberately absent from `_SOURCE_LEAGUES`. See `clasi/sprints/
+036-generalize-teams-to-stem-competition-teams-and-narrow-clubs/
+sprint.md`'s Design Rationale for the full alternatives-considered
+writeup.
+
+**Decision: a new `sources/team_static_roster.py` module, not a
+further generalization of `sources/static_roster.py` (FLL) in place.**
+`directory/`'s sprint-032 precedent generalized `hack_club_static_
+roster.py` in place (rename + widen) because that module had *no*
+type-specific parsing logic to begin with. FLL's `sources/static_
+roster.py` is the opposite case: `_parse_area`'s Area/Neighborhood
+column parsing, the `Family/Community` substring sentinel, and
+`PROGRAM_BY_RAW` are real, load-bearing FLL-specific dirt that a
+Science Olympiad or CyberPatriot roster does not need and should not
+inherit accidentally. `sources/team_static_roster.py` instead mirrors
+`directory.sources.club_static_roster`'s already-proven generic shape
+exactly: read `league`/`program`/`number`/`name`/`organization`/
+`org_type`/`city`/`postal_code`/`website` straight off each TSV row,
+validate `league` against `VALID_LEAGUES`, stamp `Team.sources` from
+the registering `SourceConfig.source_id`. For a competition type with
+no official team-numbering registry, `number` holds a stable
+school-name slug instead of a sanctioned numeric designator --
+`team_id = f"{league.lower()}-{number}"` is built identically to every
+other source (collision-free because school names are unique within
+one curated roster), mirroring `Club.club_id`'s slug convention and the
+sprint-016 precedent of widening `number`'s *semantics* (not its type)
+to fit a new source's identifier shape. `teams/sources/` now has two
+static-roster-style modules (`static_roster.py` for FLL's bespoke dirt,
+`team_static_roster.py` for every other curated roster) rather than
+one unified module -- accepted, the same "one live-source-shaped module
+per genuinely distinct dirt profile" convention this package already
+follows for `ftcscout.py`/`tba.py`/`robotevents.py`.
+
+`teams.pipeline._TEAM_SOURCES` gains a `"team_static_roster"` entry
+(see `pipeline.py`'s own module docstring). This ticket adds the
+*mechanism* only -- no new registry entry or roster data file; ticket
+002 migrates Science Olympiad and CyberPatriot through it.
 
 ## 3. Constraints and Invariants
 

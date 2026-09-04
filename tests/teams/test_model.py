@@ -15,7 +15,7 @@ from __future__ import annotations
 
 import dataclasses
 
-from partner_scrape.teams.model import Team
+from partner_scrape.teams.model import VALID_LEAGUES, Team
 
 
 class TestTeamDefaults:
@@ -104,6 +104,20 @@ class TestTeamDefaults:
             "Qualcomm": "structured",
         }
         assert team.sibling_team_ids == ["frc-1622"]
+
+
+class TestValidLeagues:
+    """Sprint 036 ticket 001: `League` widens to also include the two
+    non-robotics competition types ticket 002 migrates
+    (`"SCIOLY"`, `"CYBERPATRIOT"`); `VALID_LEAGUES` is derived via
+    `get_args()`, the same drift-proof pattern `directory.model.
+    VALID_CLUB_TYPES` uses for `ClubType`."""
+
+    def test_valid_leagues_contains_exactly_the_widened_value_set(self):
+        assert VALID_LEAGUES == {"FTC", "FRC", "FLL", "VEX", "SCIOLY", "CYBERPATRIOT"}
+
+    def test_existing_robotics_leagues_are_still_valid(self):
+        assert {"FTC", "FRC", "FLL", "VEX"} <= VALID_LEAGUES
 
 
 class TestNoEmailField:

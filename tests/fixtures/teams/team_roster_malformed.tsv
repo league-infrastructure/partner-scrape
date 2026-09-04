@@ -1,0 +1,6 @@
+league	program	number	name	organization	org_type	city	postal_code	website
+	Science Olympiad	some-school	Team at Some School	Some School	school	San Diego	92101
+SCIOLY	Science Olympiad		Team at No Number	No Number School	school	San Diego	92101
+SCIOLY	Science Olympiad	no-name		No Name School	school	San Diego	92101
+NOTALEAGUE	Not A League	some-school	Team at Some School	Some School	school	San Diego	92101
+SCIOLY	Science Olympiad	good-school	Team at Good School	Good School	school	San Diego	92101	https://example.org

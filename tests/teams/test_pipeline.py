@@ -346,6 +346,54 @@ class TestUnrecognizedAdapterTypeIsSkippedNotFatal:
         assert payload["meta"]["total"] == 0
 
 
+class TestTeamStaticRosterDispatch:
+    """Sprint 036 ticket 001: a fixture Team Registry entry with
+    `adapter_type = "team_static_roster"` dispatches to
+    `TeamStaticRosterSource` correctly and participates in
+    `merge_teams()`/`geocode_teams()` unchanged -- the same "a new
+    source needs zero change to merge/geocode/export" precedent every
+    prior source addition (sprint 012's `static_roster`, sprint 016's
+    `robotevents`) already established."""
+
+    def test_a_team_static_roster_entry_dispatches_and_round_trips_through_the_pipeline(
+        self, tmp_path
+    ):
+        roster = tmp_path / "roster.tsv"
+        roster.write_text(
+            "league\tprogram\tnumber\tname\torganization\torg_type\tcity\tpostal_code\twebsite\n"
+            "SCIOLY\tScience Olympiad\tcanyon-crest-academy\t"
+            "Science Olympiad Team at Canyon Crest Academy\tCanyon Crest Academy\tschool\t"
+            "San Diego\t92130\t\n",
+            encoding="utf-8",
+        )
+        registry_dir = tmp_path / "registry"
+        registry_dir.mkdir()
+        (registry_dir / "science-olympiad-sd.toml").write_text(
+            'org_name = "Science Olympiad"\n'
+            'adapter_type = "team_static_roster"\n'
+            "enabled = true\n"
+            "[config]\n"
+            f'roster_path = "{roster}"\n'
+        )
+
+        payload = run_teams(
+            registry_dir=registry_dir,
+            fetcher=FixtureFetcher({}),
+            dry_run=True,
+        )
+
+        assert payload["meta"]["total"] == 1
+        team = payload["teams"][0]
+        assert team["league"] == "SCIOLY"
+        assert team["team_id"] == "scioly-canyon-crest-academy"
+        # geocode_teams() ran over this Team unchanged -- Canyon Crest
+        # Academy is a real school in the committed CDE directory, so
+        # this resolves at school precision, proving the new source
+        # participates in the shared geocoding ladder like any other.
+        assert team["location_precision"] == "school"
+        assert payload["meta"]["by_league"]["SCIOLY"] == 1
+
+
 class TestSourceFailureIsolation:
     """A `TeamSource` whose `discover`/`fetch`/`extract` chain raises is
     logged and skipped -- one broken source must never take down the

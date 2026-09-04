@@ -1,7 +1,7 @@
 ---
 id: '001'
 title: Generalize Team/League and add the generic team_static_roster source
-status: open
+status: done
 use-cases:
 - SUC-068
 depends-on: []
@@ -38,15 +38,15 @@ it).
 
 ## Acceptance Criteria
 
-- [ ] `teams/model.py`: `League` widens to include `"SCIOLY"` and
+- [x] `teams/model.py`: `League` widens to include `"SCIOLY"` and
       `"CYBERPATRIOT"` (ticket 002's two migrated types); a new
       `VALID_LEAGUES: frozenset[str] = frozenset(get_args(League))` is
       added, matching `VALID_CLUB_TYPES`'s/`VALID_CATEGORIES`'s
       derivation pattern exactly.
-- [ ] No existing `Team` field changes shape or is added/removed;
+- [x] No existing `Team` field changes shape or is added/removed;
       `TEAMS_SCHEMA_FIELDS` (derived from `dataclasses.fields(Team)`)
       is unchanged.
-- [ ] `teams/sources/team_static_roster.py` (new) implements the
+- [x] `teams/sources/team_static_roster.py` (new) implements the
       `TeamSource` protocol: `discover()`/`fetch()` read a committed
       TSV off disk exactly like `club_static_roster.py`'s
       `discover()`/`fetch()` (never calling the injected `Fetcher`);
@@ -57,7 +57,7 @@ it).
       matching `club_static_roster.py`'s `_extract_one` convention
       exactly) and stamping `Team.sources` from the registering
       `SourceConfig.source_id`, never a hard-coded literal.
-- [ ] Document, in this module's own docstring, that for a competition
+- [x] Document, in this module's own docstring, that for a competition
       type with no official team-numbering registry, `number` holds a
       stable school-name slug instead of a sanctioned numeric
       designator, and `team_id = f"{league.lower()}-{number}"` is built
@@ -65,15 +65,15 @@ it).
       names are unique within one curated roster) — mirrors
       `Club.club_id`'s slug convention and the sprint-016 precedent of
       widening `number`'s semantics.
-- [ ] `teams/pipeline.py`'s `_TEAM_SOURCES` gains a
+- [x] `teams/pipeline.py`'s `_TEAM_SOURCES` gains a
       `"team_static_roster": TeamStaticRosterSource()` entry. No change
       to `_SOURCE_LEAGUES`, `_check_sunset_seasons`, or any other
       pipeline stage's sequencing.
-- [ ] `teams/DESIGN.md` updated: document the widened `League`
+- [x] `teams/DESIGN.md` updated: document the widened `League`
       vocabulary's rationale (see sprint.md's Design Rationale for the
       content to transcribe) and the new source module's place in
       `teams/sources/`, alongside the existing four.
-- [ ] `tests/teams/test_sources_base.py`'s forbidden-import scan (no
+- [x] `tests/teams/test_sources_base.py`'s forbidden-import scan (no
       module under `teams/sources/` may import `adapters.base`) passes
       for the new module unmodified — no special-casing needed, the
       scan already covers every file in the package.
