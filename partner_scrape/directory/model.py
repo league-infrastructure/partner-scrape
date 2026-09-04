@@ -175,26 +175,30 @@ class Place:
 #: only ``"hack-club"``; sprint 032 ticket 001 widened this Literal to
 #: also include issue 35b's six remaining club types --
 #: ``"cyberpatriot"``, ``"science-olympiad"``, ``"4-h"``,
-#: ``"girls-who-code"``, ``"civil-air-patrol"``, and ``"sea-cadets"`` --
-#: a data-only addition, never a model change (ticket 018-008's own
-#: scope: "kept general enough that issue 35b's future club types fit
-#: without a model change"; see ``directory/DESIGN.md``'s sprint 032
-#: Revision for the full rationale). Kept a plain ``str`` on the
-#: dataclass itself, matching ``Place.category``'s/``Team.org_type``'s
-#: own "don't over-type a field a small, hand-curated dataset already
-#: controls tightly" convention -- this Literal exists for
-#: documentation and for :data:`VALID_CLUB_TYPES`'s drift-proof
-#: derivation, consulted by
+#: ``"girls-who-code"``, ``"civil-air-patrol"``, and ``"sea-cadets"``.
+#: Sprint 036 ticket 002 narrowed it a first time, dropping
+#: ``"science-olympiad"``/``"cyberpatriot"`` -- both are competition
+#: teams, not clubs, per issue 47's meets-vs-competes rule, and
+#: migrated to ``teams.model.Team`` (``League`` values ``"SCIOLY"``/
+#: ``"CYBERPATRIOT"``) via the new ``teams.sources.
+#: team_static_roster.TeamStaticRosterSource``, preserving their
+#: verified geocoding exactly -- see ``directory/DESIGN.md``'s sprint
+#: 036 Revision for the migration detail and the diff-check gate that
+#: proved it. **Sprint 036 ticket 003 narrows it a second time**,
+#: dropping ``"4-h"``/``"civil-air-patrol"``/``"sea-cadets"`` entirely
+#: (25 entries, a stakeholder call -- "the military stuff you can
+#: drop" -- not migrated anywhere, unlike ticket 002's two competition
+#: types), landing at the two genuine clubs issue 47 confirms:
+#: ``Literal["hack-club", "girls-who-code"]``. See
+#: ``directory/DESIGN.md``'s new, standalone meets-vs-competes section
+#: for the rule this narrowing enforces going forward. Kept a plain
+#: ``str`` on the dataclass itself, matching ``Place.category``'s/
+#: ``Team.org_type``'s own "don't over-type a field a small,
+#: hand-curated dataset already controls tightly" convention -- this
+#: Literal exists for documentation and for :data:`VALID_CLUB_TYPES`'s
+#: drift-proof derivation, consulted by
 #: ``sources/club_static_roster.py``'s per-entry validation.
-ClubType = Literal[
-    "hack-club",
-    "cyberpatriot",
-    "science-olympiad",
-    "4-h",
-    "girls-who-code",
-    "civil-air-patrol",
-    "sea-cadets",
-]
+ClubType = Literal["hack-club", "girls-who-code"]
 
 #: Derived from :data:`ClubType`, the same drift-proof pattern
 #: :data:`VALID_CATEGORIES` uses for :data:`Category`.

@@ -26,7 +26,7 @@ re-publishes here as a projection — see `partners.json` below.
 | `partners.json` | envelope | `generated_at`, `partner_count`, `partners[]` — the curated roster projected, each with `slug`, `events_url`, `past_events_url`. |
 | `partners/<slug>/events.json` | envelope | `generated_at`, `partner_slug`, `kind: "current"`, `event_count`, `events[]`. |
 | `partners/<slug>/past-events.json` | envelope | Same, `kind: "past"`. |
-| `teams.json` | envelope | `meta` + `teams[]` — FIRST robotics teams (FRC/FTC/FLL, and VEX when credentialed). |
+| `teams.json` | envelope | `meta` + `teams[]` — STEM competition teams: FIRST/VEX robotics (FRC/FTC/FLL/VEX, VEX when credentialed) plus any other curated competition type this pipeline tracks (currently also Science Olympiad, CyberPatriot, MATHCOUNTS, TARC — sprint 036). |
 | `places.json` | envelope | `meta` + `places[]` — curated makerspaces, planetariums, observatories, tide pools, nature centers, library maker labs. |
 | `clubs.json` | envelope | `meta` + `clubs[]` — curated club chapters/units/teams. |
 | `offerings.json` | envelope | `meta` + `offerings[]` — **undated** standing offerings: volunteer profiles and free/Title I school programs. |
@@ -157,8 +157,24 @@ county."
 `meta`: `generated`, `total`, `by_league`, `out_of_region`,
 `by_location_precision`, `credential_failures`.
 
+**As of sprint 036, `teams.json` is not exclusively robotics.** `Team`
+generalized from "FIRST/VEX robotics team" to "any STEM competition
+team" — a standing entity that *competes*, in any discipline (see
+`directory/DESIGN.md`'s "Club vs. Team: the meets-vs-competes rule" for
+the model boundary this enforces, and `teams/DESIGN.md`'s §7 for the
+full sprint history). `league` is currently one of `FTC`, `FRC`, `FLL`,
+`VEX` (the four FIRST/VEX robotics programs), `SCIOLY` (Science
+Olympiad), `CYBERPATRIOT`, `MATHCOUNTS`, or `TARC` (American Rocketry
+Challenge) — **`by_league`'s key set is not closed to the four robotics
+codes and should not be assumed to be**; a future sprint may add
+another curated competition type the same way sprint 036 added these
+four.
+
 - `number` is a **string**, not an integer (teams sort naturally, not
-  numerically).
+  numerically). For a competition type with no official team-numbering
+  registry (Science Olympiad, CyberPatriot, MATHCOUNTS, TARC), `number`
+  holds a stable school-name slug instead of a sanctioned numeric
+  designator.
 - `org_key` / `sibling_team_ids` link teams that share a host organization.
 - **`website_status` and `description_status` are deliberately independent.**
   `website_status` says the site is reachable; `description_status`
@@ -169,7 +185,26 @@ county."
   because an API key was missing. A league in this array has **no data**, which
   is a completely different thing from a league that genuinely has zero teams.
   Always check it before concluding a league is empty. `VEX` is currently
-  listed (`ROBOTEVENTS_KEY` is unprovisioned).
+  listed (`ROBOTEVENTS_KEY` is unprovisioned). This is still accurate after
+  sprint 036's widening: only the two *credentialed* sources (`FTC`'s
+  FTCScout needs no key; `FRC` via TBA, `VEX` via RobotEvents need one) can
+  ever populate this array — every static-roster-sourced league code
+  (`FLL`, `SCIOLY`, `CYBERPATRIOT`, `MATHCOUNTS`, `TARC`) reads its data
+  from a committed file, never a credentialed API, so it can never appear
+  here, by construction.
+- **Sprint 036 background:** Science Olympiad (24 teams) and CyberPatriot
+  (3 teams) were migrated in from `clubs.json` (they were mis-classified as
+  clubs by sprint 032 — see `clubs.json`'s own section below); MATHCOUNTS
+  (13 teams, San Diego Chapter, from cspeef.org's official 2026 results PDF)
+  and TARC (1 team, Del Norte High School) were newly curated. **TARC's one
+  team is a national-finalist subset, not a census of San Diego rocketry
+  teams** — its source, rocketrychallenge.org's 2026 National Finalists
+  page, surfaces only the top-100-of-1,107 national cutoff, so most actual
+  San Diego-area TARC entrants are not represented; do not read "1 team" as
+  "San Diego has one rocketry team." All four arrive via the generic
+  `team_static_roster` acquisition mechanism (`teams/sources/
+  team_static_roster.py`), the same one FLL's dedicated `static_roster.py`
+  module long predates.
 
 ---
 
@@ -188,11 +223,23 @@ county."
 `latitude`, `longitude`, `location_precision`, `matched_name`, `needs_review`,
 `website`, `host_school_website`, `meeting_note`, `status`, `status_note`
 
-`club_type`: `4-h`, `civil-air-patrol`, `cyberpatriot`, `girls-who-code`,
-`hack-club`, `science-olympiad`, `sea-cadets`.
+`club_type`: `hack-club`, `girls-who-code`.
+
+As of sprint 036, `Club` is narrowed to exactly the entities that satisfy
+`directory/DESIGN.md`'s explicit "meets-vs-competes" rule: a standing
+entity that only *meets*, with no competition circuit attached (5 clubs
+total — `hack-club` 4, `girls-who-code` 1).
 
 VEX teams are **not** here — they arrive through the RobotEvents adapter and
-belong in `teams.json`.
+belong in `teams.json`. **Science Olympiad and CyberPatriot teams are not
+here either — they moved to `teams.json` in sprint 036**, once `Team`
+generalized beyond FIRST/VEX robotics and had a real home for a
+non-robotics competition team (they were only ever here because sprint
+032 had nowhere else to put them). 4-H, Civil Air Patrol, and Sea Cadets
+— the other three types sprint 032 had curated here — were dropped from
+this project's scope entirely (sprint 036 ticket 003): neither clubs nor
+competition teams this pipeline tracks, and no longer present anywhere in
+`data/`.
 
 ## `offerings.json` — 13 fields
 
@@ -316,5 +363,16 @@ the same ticket. There is no automated drift guard on this file yet — the
 `TEAMS_SCHEMA_FIELDS` drift-guard test from sprint 017 is the pattern to
 follow if you add one.
 
-Last verified against a real pipeline run: **2026-09-02** — 360
-opportunities, 278 teams, 19 places, 57 clubs, 13 offerings, 211 partners.
+Last verified against a real pipeline run: **2026-09-03** (sprint 036) —
+319 teams, 19 places, 5 clubs, 13 offerings (all four live-confirmed via
+real `uv run partner-scrape teams --dry-run -v` / `uv run partner-scrape
+directory --dry-run -v` runs against the real, committed registries).
+`opportunities.json` (360) and `partners.json` (211) are carried over
+from the last full `uv run partner-scrape -v` run (**2026-09-02**, pre-
+sprint-036) — this sprint's scope never touched the opportunities/
+partners pipelines, but those two counts drift with the calendar on
+every run regardless of code changes, so treat them as approximate
+until the next full run re-verifies them (`data/` itself is not
+regenerated by this sprint's tickets — see this document's own
+"How this directory is regenerated" section above for the commands
+that do).
