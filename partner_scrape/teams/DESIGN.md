@@ -1871,3 +1871,49 @@ after `geocode_teams()`), the same single-call-sequencing cost
   design, and a future sprint wanting persistence would need to read back
   the prior `teams.json` before merging, which no stage in this
   subsystem does today for any field.
+
+## 7. Sprint 036 ticket 005 research findings — new STEM competition-team types
+
+Issue 47 asked for a bounded brainstorm-and-hunt for San Diego STEM
+competition-team types beyond robotics/Science Olympiad/CyberPatriot.
+Full per-type detail (what was fetched, what it showed, why each
+disposition was reached) lives in `clasi/sprints/
+036-generalize-teams-to-stem-competition-teams-and-narrow-clubs/
+tickets/005-research-new-stem-competition-team-types-for-san-diego-
+rosters.md`'s own Notes section — this section is the durable summary a
+future sprint planner needs without re-opening that ticket. Every
+"roster found" row below was confirmed by a real, live `curl` fetch
+(not a search-summary inference), per this ticket's own verification
+standard.
+
+| Type | Disposition | San Diego evidence |
+|------|-------------|---------------------|
+| **MATHCOUNTS San Diego Chapter** | Roster found and verified | 13 named schools, cspeef.org 2026 official-results PDF (linked from the existing, disabled `mathcounts-sd-chapter.toml` event registration) |
+| **American Rocketry Challenge (TARC)** | Roster found and verified, thin | 1 named school (Del Norte High School), rocketrychallenge.org 2026 National Finalists page (top 100 of 1,107 national entrants only) |
+| SkillsUSA chapters | Roster exists but not usable | 2 named SD County schools on an internal Chapter-of-Excellence award list, not a competition roster or chapter census |
+| Mayor's Cyber Cup (now SoCal Cyber Cup) | Roster exists but not usable | Explicitly gated to sponsors only (ndia-sd.org); also not SD-exclusive (5-county) |
+| Zero Robotics | Roster exists but not usable | Team data is login-gated (zerorobotics.mit.edu) |
+| DOE Science Bowl (San Diego HS Regional) | No public roster exists | science.osti.gov is a registration portal only |
+| Garibaldi Bowl (NOSB, San Diego) | No public roster exists | Only the regional winner (Canyon Crest Academy) is publicly known |
+| SeaPerch San Diego Regional | No public roster exists | classroomofthefuture.org page is registration/rules only |
+| Botball Greater San Diego | No public roster exists | Region-team-list URL 404s |
+| Envirothon | No public roster exists | Only vague "LA and SD area" participation language found |
+| Future City | No public roster exists (not SD-specific) | San Diego has no own region; folds into "California (Southern)," hosted in LA |
+| TSA chapters | No public roster exists | No live California TSA chapter directory found |
+| eCyberMission | No public roster exists | Also a poor "standing group" fit (ad hoc project team) |
+| Junior Solar Sprint | No public roster exists | Only pre-2020 historical coverage found |
+| Solar Cup | No public roster exists (not SD-specific) | MWD's program is Los-Angeles-basin-centered |
+| Math Circle / AMC-AIME (SD Math Circle) | No public roster exists | `/events/arml` page stale since 2020; underlying team is one composite all-star squad, not per-school |
+| picoCTF | No public roster exists | Ad hoc self-formed teams; also a poor "standing group" fit |
+| MATE ROV Competition *(discovered)* | No public roster exists / no confirmed SD regional | — |
+| Congressional App Challenge *(discovered, already an sprint-029 event)* | Not researched to roster depth | Registered page lists districts, not teams; deferred to a future ticket |
+
+**Recommendation for ticket 006:** populate **MATHCOUNTS San Diego
+Chapter** as the primary new type (13-school roster, directly
+analogous to the Science Olympiad/CyberPatriot precedent). **American
+Rocketry Challenge (TARC)** is offered as a thin second candidate (1
+verified San Diego team, Del Norte High School) — ticket 006 should
+weigh whether a 1-team league is worth shipping (CyberPatriot's
+precedent of 3 suggests small leagues are acceptable) against simply
+recording it as a deferred finding. No other candidate cleared the
+"real, live, verifiable, San Diego-specific roster" bar this pass.
