@@ -1,5 +1,13 @@
 ---
-status: pending
+status: in-progress
+sprint: '036'
+tickets:
+- 036-001
+- 036-002
+- 036-003
+- 036-004
+- 036-005
+- 036-006
 ---
 
 # Generalize teams to all STEM competition teams; narrow clubs to real clubs
