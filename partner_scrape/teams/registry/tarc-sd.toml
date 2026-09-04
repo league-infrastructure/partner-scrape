@@ -1,0 +1,49 @@
+# American Rocketry Challenge (TARC) San Diego-area teams static
+# roster -- a committed, hand-curated roster, not a live acquisition
+# source, matching science-olympiad-sd.toml's/cyberpatriot-sd.toml's
+# own precedent (issue 47's own "curated static-roster datasets by
+# design" instruction).
+#
+# **Deliberately thin, and documented as such -- do not read "1 team"
+# as "San Diego has one rocketry team."** Sprint 036 ticket 005's
+# research checked rocketrychallenge.org's official 2026 "National
+# Finalists" page (the top 100 of 1,107 teams nationally that qualified
+# for the May 2026 National Finals) -- the only public, dated,
+# officially-published TARC roster this bounded research pass could
+# find. Exactly one San Diego-area entry appears there: Del Norte High
+# School. This page surfaces only the ~9% of national entrants that
+# clear the finals cutoff, so it almost certainly misses most actual
+# San Diego-area TARC teams (a normal regional/local TARC program
+# fields many more entrants than ever reach nationals) -- this roster
+# is a verified subset of one national results page, not a census of
+# San Diego rocketry teams. See ticket 005's Notes and teams/DESIGN.md's
+# sprint 036 ticket 005 research findings section for the full
+# candidate comparison and this call's rationale (built anyway,
+# following the CyberPatriot precedent of shipping a small, real,
+# verified league rather than omitting a confirmed team for being the
+# only one found).
+#
+# Live-verified 2026-09-03 (this ticket's own execution, via `curl`
+# from an unsandboxed shell): https://www.rocketrychallenge.org/result/
+# 2026-finalists/ returned HTTP 200 (61804 bytes); the fetched
+# team/city/state table was checked against every San Diego County city
+# name -- only Del Norte High School, San Diego, California appears.
+#
+# `adapter_type` is read by teams.pipeline to select the matching
+# TeamSource ("team_static_roster" ->
+# teams.sources.team_static_roster.TeamStaticRosterSource), not by
+# adapters.base.ADAPTERS -- see sources/team_static_roster.py's own
+# module docstring.
+#
+# No [acquisition_policy] section: TeamStaticRosterSource reads
+# config.roster_path straight off disk, matching science-olympiad-sd.
+# toml's/cyberpatriot-sd.toml's own precedent exactly.
+
+org_name = "American Rocketry Challenge (TARC) San Diego-area teams (curated static roster, national-finalist subset only)"
+adapter_type = "team_static_roster"
+enabled = true
+
+[config]
+# Resolved relative to teams/data/ when not already an absolute path
+# (sources/team_static_roster.py's discover()).
+roster_path = "tarc-sd.tsv"

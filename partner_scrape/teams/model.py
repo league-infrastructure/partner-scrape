@@ -49,8 +49,15 @@ from typing import Literal, get_args
 #: existing field rather than add a separate discriminator) this
 #: docstring summarizes: ``league``/``program`` already function as
 #: "short discriminator code" + "human-readable name," a semantics that
-#: was never robotics-specific, only its value set was.
-League = Literal["FTC", "FRC", "FLL", "VEX", "SCIOLY", "CYBERPATRIOT"]
+#: was never robotics-specific, only its value set was. Ticket 006
+#: widens it a third time, to ``"MATHCOUNTS"`` and ``"TARC"``
+#: (American Rocketry Challenge) -- the two candidates ticket 005's
+#: bounded research pass (of issue 47's 16-item starting list) found a
+#: real, live, San Diego-specific public roster for; see
+#: ``teams/DESIGN.md``'s sprint 036 ticket 005 research findings
+#: section for the full comparison against the other 14 candidates that
+#: did not clear the bar.
+League = Literal["FTC", "FRC", "FLL", "VEX", "SCIOLY", "CYBERPATRIOT", "MATHCOUNTS", "TARC"]
 
 #: Derived from :data:`League` rather than hand-listed a second time --
 #: the same drift-proof pattern ``directory.model.VALID_CLUB_TYPES``

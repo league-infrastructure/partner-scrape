@@ -450,17 +450,21 @@ class TestBothRealSourcesTogether:
     7 FRC teams -- the real Team Registry (`ftc-sd.toml` + `frc-sd.toml`
     +, since sprint 012, `fll-sd.toml`) driven against both real fixture
     sets plus the real, committed 48-team FLL static roster in one run:
-    234 total (152 FTC + 7 FRC fixture + 48 FLL + 24 SCIOLY + 3
-    CYBERPATRIOT -- `static_roster`/`team_static_roster` never touch
-    the fetcher, so they always contribute regardless of which fixtures
-    this class's fetcher doubles register). (Ticket 011-003's
-    original AC said 59 FRC/211 total -- that number came from a
-    hand-authored fixture with an undetected state_prov bug; see
-    `tests/teams/test_sources_tba.py`'s module docstring and this
-    reopened ticket's own commit for why the fixture -- and this
-    number -- changed. The real, live `partner-scrape teams` total is
-    278 (152 FTC + 78 FRC + 48 FLL); see `sources/tba.py`'s and
-    `sources/static_roster.py`'s module docstrings.)"""
+    248 total (152 FTC + 7 FRC fixture + 48 FLL + 24 SCIOLY + 3
+    CYBERPATRIOT + 13 MATHCOUNTS + 1 TARC -- `static_roster`/
+    `team_static_roster` never touch the fetcher, so they always
+    contribute regardless of which fixtures this class's fetcher
+    doubles register). (Ticket 011-003's original AC said 59 FRC/211
+    total -- that number came from a hand-authored fixture with an
+    undetected state_prov bug; see `tests/teams/test_sources_tba.py`'s
+    module docstring and this reopened ticket's own commit for why the
+    fixture -- and this number -- changed. The real, live
+    `partner-scrape teams` total is 278 (152 FTC + 78 FRC + 48 FLL); see
+    `sources/tba.py`'s and `sources/static_roster.py`'s module
+    docstrings. Sprint 036 ticket 006 adds 14 more (13 MATHCOUNTS + 1
+    TARC), live-verified via a real `partner-scrape teams --dry-run -v`
+    run at 319 total once VEX is included -- see `teams/DESIGN.md`'s
+    sprint 036 ticket 005 research findings section.)"""
 
     def test_207_teams_total_152_ftc_7_frc_48_fll(self, monkeypatch, tmp_path):
         monkeypatch.setenv("TBA_KEY", "fixture-test-key")
@@ -472,16 +476,20 @@ class TestBothRealSourcesTogether:
         # always-on static-roster entries (science-olympiad-sd.toml,
         # cyberpatriot-sd.toml, 24 + 3 real committed rows) -- every
         # unfiltered run_teams() call now contributes 27 more teams,
-        # the same way sprint 012's fll-sd.toml did.
-        assert payload["meta"]["total"] == 234
+        # the same way sprint 012's fll-sd.toml did. Sprint 036 ticket
+        # 006 adds two more always-on entries (mathcounts-sd.toml,
+        # tarc-sd.toml, 13 + 1 real committed rows).
+        assert payload["meta"]["total"] == 248
         assert payload["meta"]["by_league"] == {
             "FTC": 152,
             "FRC": 7,
             "FLL": 48,
             "SCIOLY": 24,
             "CYBERPATRIOT": 3,
+            "MATHCOUNTS": 13,
+            "TARC": 1,
         }
-        assert len(payload["teams"]) == 234
+        assert len(payload["teams"]) == 248
 
     def test_merge_ran_canyon_crest_academy_links_across_leagues(self, monkeypatch, tmp_path):
         # Canyon Crest Academy: FTC 7159/9837/14425 (real fixture) and
@@ -556,10 +564,10 @@ class TestTbaFailureIsolation:
     criteria). Since sprint 012, "every other source that succeeded"
     is FTCScout (152, via this class's fixture Fetcher) *and*
     `static_roster`/`team_static_roster` (48 FLL + 24 SCIOLY + 3
-    CYBERPATRIOT = 75, the real committed static rosters -- none of
-    them touch the fetcher, so a TBA-only failure never isolates any
-    of them): 227 total, not 152. TBA remains the only source these
-    tests make fail.
+    CYBERPATRIOT + 13 MATHCOUNTS + 1 TARC = 89, the real committed
+    static rosters -- none of them touch the fetcher, so a TBA-only
+    failure never isolates any of them): 241 total, not 152. TBA
+    remains the only source these tests make fail.
 
     Sprint 023 ticket 002: every test below that asserts an exact
     `credential_failures` value also sets `ROBOTEVENTS_KEY` to a
@@ -580,10 +588,18 @@ class TestTbaFailureIsolation:
 
         payload = run_teams(fetcher=fetcher, dry_run=True)
 
-        assert payload["meta"]["total"] == 227
-        assert payload["meta"]["by_league"] == {"FTC": 152, "FLL": 48, "SCIOLY": 24, "CYBERPATRIOT": 3}
+        assert payload["meta"]["total"] == 241
+        assert payload["meta"]["by_league"] == {
+            "FTC": 152,
+            "FLL": 48,
+            "SCIOLY": 24,
+            "CYBERPATRIOT": 3,
+            "MATHCOUNTS": 13,
+            "TARC": 1,
+        }
         assert all(
-            t["league"] in ("FTC", "FLL", "SCIOLY", "CYBERPATRIOT") for t in payload["teams"]
+            t["league"] in ("FTC", "FLL", "SCIOLY", "CYBERPATRIOT", "MATHCOUNTS", "TARC")
+            for t in payload["teams"]
         )
         # The TBA status probe was never even attempted -- the missing
         # key is caught in _auth_headers() before any fetcher.get().
@@ -604,8 +620,15 @@ class TestTbaFailureIsolation:
 
         payload = run_teams(fetcher=fetcher, dry_run=True)
 
-        assert payload["meta"]["total"] == 227
-        assert payload["meta"]["by_league"] == {"FTC": 152, "FLL": 48, "SCIOLY": 24, "CYBERPATRIOT": 3}
+        assert payload["meta"]["total"] == 241
+        assert payload["meta"]["by_league"] == {
+            "FTC": 152,
+            "FLL": 48,
+            "SCIOLY": 24,
+            "CYBERPATRIOT": 3,
+            "MATHCOUNTS": 13,
+            "TARC": 1,
+        }
         # Sprint 023 ticket 002 AC.
         assert payload["meta"]["credential_failures"] == ["FRC"]
 
@@ -621,8 +644,15 @@ class TestTbaFailureIsolation:
         run_teams(fetcher=fetcher, dry_run=False)
 
         written = json.loads((own_data_dir / "teams.json").read_text())
-        assert written["meta"]["total"] == 227
-        assert written["meta"]["by_league"] == {"FTC": 152, "FLL": 48, "SCIOLY": 24, "CYBERPATRIOT": 3}
+        assert written["meta"]["total"] == 241
+        assert written["meta"]["by_league"] == {
+            "FTC": 152,
+            "FLL": 48,
+            "SCIOLY": 24,
+            "CYBERPATRIOT": 3,
+            "MATHCOUNTS": 13,
+            "TARC": 1,
+        }
         # Sprint 023 ticket 002 AC: real-write path carries the same
         # active signal as dry_run, read back off disk (not just the
         # in-memory payload).
@@ -646,8 +676,15 @@ class TestTbaFailureIsolation:
         run_teams(fetcher=fetcher, dry_run=False)
 
         written = json.loads((own_data_dir / "teams.json").read_text())
-        assert written["meta"]["total"] == 227
-        assert written["meta"]["by_league"] == {"FTC": 152, "FLL": 48, "SCIOLY": 24, "CYBERPATRIOT": 3}
+        assert written["meta"]["total"] == 241
+        assert written["meta"]["by_league"] == {
+            "FTC": 152,
+            "FLL": 48,
+            "SCIOLY": 24,
+            "CYBERPATRIOT": 3,
+            "MATHCOUNTS": 13,
+            "TARC": 1,
+        }
         assert written["meta"]["credential_failures"] == ["FRC"]
 
     def test_missing_tba_key_logs_exactly_one_aggregate_credential_warning_naming_frc(
@@ -701,8 +738,9 @@ class TestRobotEventsFailureIsolation:
     `teams.json` carrying every *other* source that succeeded --
     per-source isolation, matching `TestTbaFailureIsolation`'s identical
     contract one league over. FTCScout (152) + TBA (7, fixture) + FLL
-    (48, real, always-on) succeed here; RobotEvents is the only source
-    these tests make fail -- 234 total, no `"VEX"` key in `by_league`."""
+    (48, real, always-on) + SCIOLY (24) + CYBERPATRIOT (3) + MATHCOUNTS
+    (13) + TARC (1) succeed here; RobotEvents is the only source these
+    tests make fail -- 248 total, no `"VEX"` key in `by_league`."""
 
     def test_missing_robotevents_key_still_publishes_207_teams(self, monkeypatch, tmp_path):
         monkeypatch.setenv("TBA_KEY", "fixture-test-key")
@@ -711,8 +749,16 @@ class TestRobotEventsFailureIsolation:
 
         payload = run_teams(fetcher=fetcher, dry_run=True)
 
-        assert payload["meta"]["total"] == 234
-        assert payload["meta"]["by_league"] == {"FTC": 152, "FRC": 7, "FLL": 48, "SCIOLY": 24, "CYBERPATRIOT": 3}
+        assert payload["meta"]["total"] == 248
+        assert payload["meta"]["by_league"] == {
+            "FTC": 152,
+            "FRC": 7,
+            "FLL": 48,
+            "SCIOLY": 24,
+            "CYBERPATRIOT": 3,
+            "MATHCOUNTS": 13,
+            "TARC": 1,
+        }
         assert "VEX" not in payload["meta"]["by_league"]
         # The RobotEvents probe was never even attempted -- the missing
         # key is caught in _auth_headers() before any fetcher.get().
@@ -732,8 +778,16 @@ class TestRobotEventsFailureIsolation:
 
         payload = run_teams(fetcher=fetcher, dry_run=True)
 
-        assert payload["meta"]["total"] == 234
-        assert payload["meta"]["by_league"] == {"FTC": 152, "FRC": 7, "FLL": 48, "SCIOLY": 24, "CYBERPATRIOT": 3}
+        assert payload["meta"]["total"] == 248
+        assert payload["meta"]["by_league"] == {
+            "FTC": 152,
+            "FRC": 7,
+            "FLL": 48,
+            "SCIOLY": 24,
+            "CYBERPATRIOT": 3,
+            "MATHCOUNTS": 13,
+            "TARC": 1,
+        }
         # Sprint 023 ticket 002 AC.
         assert payload["meta"]["credential_failures"] == ["VEX"]
 
@@ -747,8 +801,16 @@ class TestRobotEventsFailureIsolation:
         run_teams(fetcher=fetcher, dry_run=False)
 
         written = json.loads((own_data_dir / "teams.json").read_text())
-        assert written["meta"]["total"] == 234
-        assert written["meta"]["by_league"] == {"FTC": 152, "FRC": 7, "FLL": 48, "SCIOLY": 24, "CYBERPATRIOT": 3}
+        assert written["meta"]["total"] == 248
+        assert written["meta"]["by_league"] == {
+            "FTC": 152,
+            "FRC": 7,
+            "FLL": 48,
+            "SCIOLY": 24,
+            "CYBERPATRIOT": 3,
+            "MATHCOUNTS": 13,
+            "TARC": 1,
+        }
         # Sprint 023 ticket 002 AC: real-write path, read back off disk.
         assert written["meta"]["credential_failures"] == ["VEX"]
 
@@ -771,8 +833,16 @@ class TestRobotEventsFailureIsolation:
         run_teams(fetcher=fetcher, dry_run=False)
 
         written = json.loads((own_data_dir / "teams.json").read_text())
-        assert written["meta"]["total"] == 234
-        assert written["meta"]["by_league"] == {"FTC": 152, "FRC": 7, "FLL": 48, "SCIOLY": 24, "CYBERPATRIOT": 3}
+        assert written["meta"]["total"] == 248
+        assert written["meta"]["by_league"] == {
+            "FTC": 152,
+            "FRC": 7,
+            "FLL": 48,
+            "SCIOLY": 24,
+            "CYBERPATRIOT": 3,
+            "MATHCOUNTS": 13,
+            "TARC": 1,
+        }
         assert written["meta"]["credential_failures"] == ["VEX"]
 
     def test_missing_robotevents_key_logs_exactly_one_aggregate_credential_warning_naming_vex(
@@ -899,7 +969,7 @@ class TestRobotEventsIntegration:
         payload = run_teams(fetcher=fetcher, dry_run=True)
 
         assert payload["meta"]["by_league"]["VEX"] == 4  # page0's 4 in-county records
-        assert payload["meta"]["total"] == 238  # 234 + 4 VEX
+        assert payload["meta"]["total"] == 252  # 248 + 4 VEX
         by_id = {t["team_id"]: t for t in payload["teams"]}
         assert "vex-90210A" in by_id
         assert "vex-90210B" in by_id
@@ -975,7 +1045,13 @@ class TestGeocodingAggregateDistribution:
     89 school, 10 zip, 104 city, 4 none, 6 needs_review, 6 out_of_region
     (out_of_region comes entirely from `sources.ftcscout.
     OUT_OF_REGION_CITIES`, unaffected by either the TBA fix or the FLL
-    static roster).
+    static roster). Sprint 036 tickets 002/006 add 27 + 14 more
+    school-precision-resolving static-roster teams (Science Olympiad,
+    CyberPatriot, MATHCOUNTS, TARC -- every one of them resolves against
+    a real committed CDE/NCES school row): 248 total, one additional
+    `needs_review` (MATHCOUNTS' Thurgood Marshall Middle School, a
+    genuine below-0.85-Jaccard fuzzy match against CDE's "Marshall
+    Middle") on top of the pre-existing count.
     """
 
     def test_precision_distribution_stays_within_expected_bounds(self, monkeypatch, tmp_path):
@@ -984,7 +1060,7 @@ class TestGeocodingAggregateDistribution:
 
         payload = run_teams(fetcher=fetcher, dry_run=True)
 
-        assert payload["meta"]["total"] == 234
+        assert payload["meta"]["total"] == 248
         by_precision = payload["meta"]["by_location_precision"]
 
         # School precision is the ladder's top rungs (overrides + exact
@@ -997,7 +1073,7 @@ class TestGeocodingAggregateDistribution:
         # "none" must stay a small residue, not a large fraction.
         assert by_precision.get("none", 0) <= 10
         # Every located team is accounted for.
-        assert sum(by_precision.values()) == 234
+        assert sum(by_precision.values()) == 248
 
         needs_review_count = sum(1 for t in payload["teams"] if t["needs_review"])
         # A small, meaningful minority -- if this ever approaches the

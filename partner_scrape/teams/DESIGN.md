@@ -1,6 +1,6 @@
 # teams
 
-**Owner:** Eric Busboom · **Last reviewed:** 2026-09-03 (sprint 036 ticket 001 — `League` generalized beyond FIRST/VEX robotics; generic `team_static_roster` source added) · **Status:** all five sprint 011/012 increments complete (FTC + FRC + geocoding + site pages + FLL static roster), plus sprint 013's website verification and sponsor-extraction stages, sprint 016's VEX league, sprint 021's description extraction, sprint 023's credential-failure alerting, and sprint 036's generalization to any STEM competition team (not exclusively robotics)
+**Owner:** Eric Busboom · **Last reviewed:** 2026-09-03 (sprint 036 ticket 006 — `League` widened a third time to `MATHCOUNTS`/`TARC`; both populated via `team_static_roster`, 305 → 319 teams) · **Status:** all five sprint 011/012 increments complete (FTC + FRC + geocoding + site pages + FLL static roster), plus sprint 013's website verification and sponsor-extraction stages, sprint 016's VEX league, sprint 021's description extraction, sprint 023's credential-failure alerting, and sprint 036's generalization to any STEM competition team (not exclusively robotics), now carrying Science Olympiad, CyberPatriot, MATHCOUNTS, and TARC alongside FTC/FRC/FLL/VEX
 
 ---
 
@@ -560,6 +560,39 @@ that proved geocoding reproduces byte-identically before any `Club`
 data was deleted, and the accepted `meeting_note`-narrative scope
 boundary. Expected total once this ships: **305 teams** (152 FTC + 78
 FRC + 48 FLL + 24 SCIOLY + 3 CYBERPATRIOT), up from 278.
+
+**Sprint 036 ticket 006 widens `League` a third time, to `"MATHCOUNTS"`
+and `"TARC"` (American Rocketry Challenge), and populates both through
+the same `team_static_roster.py` mechanism** -- the two candidates
+ticket 005's bounded research pass (of issue 47's 16-item starting
+list, plus 2 discovered along the way) found a real, live, San
+Diego-specific public roster for; see §7 below for the full comparison
+against the 15 that did not clear the bar. `teams/data/mathcounts-sd.
+tsv` (13 schools) and `teams/registry/mathcounts-sd.toml` are built
+directly from the official, dated 2026 San Diego Chapter MATHCOUNTS
+results PDF (cspeef.org) -- a genuinely new curated roster, not a
+migration, the first of that kind through this mechanism since ticket
+002's Science Olympiad/CyberPatriot migration. `teams/data/tarc-sd.tsv`
+(1 school, Del Norte High School) and `teams/registry/tarc-sd.toml` are
+deliberately thin and documented as such in the TOML's own header: the
+source (rocketrychallenge.org's 2026 National Finalists page) surfaces
+only the top-100-of-1,107 national cutoff, so this is a verified subset
+of one national results page, not a census of San Diego rocketry
+teams -- built anyway, following CyberPatriot's own precedent of
+shipping a small, real, verified league rather than omitting a
+confirmed team for being the only one found. Both rosters were
+geocoded through the normal, unmodified `teams.geo.geocode_teams()`
+pass (no pre-verified geocoding to preserve, unlike ticket 002's
+migration): 13 of 14 new rows resolve at school precision via an exact
+normalized-name match against the real committed CDE/NCES school
+directories; the 14th (MATHCOUNTS' Thurgood Marshall Middle School)
+also resolves at school precision but is honestly flagged
+`needs_review = true` (a genuine sub-0.85-Jaccard fuzzy match against
+CDE's own "Marshall Middle" record) -- exactly the ladder's designed
+behavior, not a special case. Expected total once this ships: **319
+teams** (152 FTC + 78 FRC + 48 FLL + 24 SCIOLY + 3 CYBERPATRIOT + 13
+MATHCOUNTS + 1 TARC), up from 305 -- live-confirmed via a real
+`partner-scrape teams --dry-run -v` run.
 
 ## 3. Constraints and Invariants
 
@@ -1917,3 +1950,19 @@ weigh whether a 1-team league is worth shipping (CyberPatriot's
 precedent of 3 suggests small leagues are acceptable) against simply
 recording it as a deferred finding. No other candidate cleared the
 "real, live, verifiable, San Diego-specific roster" bar this pass.
+
+**Ticket 006's outcome: both were populated.** Re-verification during
+ticket 006's own execution (a fresh, real `curl` against cspeef.org's
+event page and results PDF, and against rocketrychallenge.org's 2026
+finalists page — all three HTTP 200, matching ticket 005's own findings
+exactly) confirmed both rosters still hold. MATHCOUNTS shipped as 13
+teams (`teams/data/mathcounts-sd.tsv`, `teams/registry/
+mathcounts-sd.toml`); TARC shipped as 1 team
+(`teams/data/tarc-sd.tsv`, `teams/registry/tarc-sd.toml`), with its
+"national-finalist subset, not a census" caveat stated directly in the
+TOML's own header so a future reader never mistakes "1 team" for "San
+Diego has one rocketry team." Neither population flips
+`registry/sources/mathcounts-sd-chapter.toml`'s own `enabled = false`
+event-source flag — that WAF-block re-check is issue 45's scope, not
+this ticket's. See §2 above (the "Sprint 036 ticket 006" paragraph) for
+the geocoding-outcome detail and the final 319-team total.

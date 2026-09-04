@@ -220,7 +220,7 @@ class TestExtractOne:
 
     def test_unrecognized_league_raises_value_error(self):
         with pytest.raises(ValueError, match="unrecognized league"):
-            _extract_one({"league": "MATHCOUNTS", "number": "x", "name": "X"}, "test-source")
+            _extract_one({"league": "NOTALEAGUE", "number": "x", "name": "X"}, "test-source")
 
     def test_sources_field_carries_the_given_source_name(self):
         team = _extract_one(

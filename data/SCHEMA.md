@@ -170,6 +170,23 @@ county."
   is a completely different thing from a league that genuinely has zero teams.
   Always check it before concluding a league is empty. `VEX` is currently
   listed (`ROBOTEVENTS_KEY` is unprovisioned).
+- **Sprint 036 ticket 006** added two curated, static-roster-sourced
+  `league` codes beyond the pre-sprint-036 robotics set (see
+  `teams/DESIGN.md`'s sprint 036 §2/§7 for full detail): `MATHCOUNTS`
+  (13 teams — every school that fielded a team at the 2026 San Diego
+  Chapter MATHCOUNTS Competition, per cspeef.org's official, dated
+  results PDF) and `TARC` (1 team — American Rocketry Challenge; Del
+  Norte High School, the only San Diego-area team on
+  rocketrychallenge.org's 2026 National Finalists page. **This is a
+  national-finalist subset, not a census of San Diego rocketry teams**
+  — that page surfaces only the top-100-of-1,107 national cutoff, so
+  most actual San Diego-area TARC entrants are not represented). Like
+  every other static-roster league (`FLL`, `SCIOLY`, `CYBERPATRIOT`),
+  neither `MATHCOUNTS` nor `TARC` can ever appear in
+  `meta.credential_failures`. (`teams.json`'s overall shape/count/
+  vocabulary is being brought fully up to date across sprint 036's
+  whole arc by a follow-on documentation ticket; the count/vocabulary
+  notes above are current as of ticket 006 specifically.)
 
 ---
 

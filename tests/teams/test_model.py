@@ -111,10 +111,21 @@ class TestValidLeagues:
     non-robotics competition types ticket 002 migrates
     (`"SCIOLY"`, `"CYBERPATRIOT"`); `VALID_LEAGUES` is derived via
     `get_args()`, the same drift-proof pattern `directory.model.
-    VALID_CLUB_TYPES` uses for `ClubType`."""
+    VALID_CLUB_TYPES` uses for `ClubType`. Ticket 006 widens it a third
+    time to `"MATHCOUNTS"`/`"TARC"`, the two new competition types
+    ticket 005's research found a real San Diego roster for."""
 
     def test_valid_leagues_contains_exactly_the_widened_value_set(self):
-        assert VALID_LEAGUES == {"FTC", "FRC", "FLL", "VEX", "SCIOLY", "CYBERPATRIOT"}
+        assert VALID_LEAGUES == {
+            "FTC",
+            "FRC",
+            "FLL",
+            "VEX",
+            "SCIOLY",
+            "CYBERPATRIOT",
+            "MATHCOUNTS",
+            "TARC",
+        }
 
     def test_existing_robotics_leagues_are_still_valid(self):
         assert {"FTC", "FRC", "FLL", "VEX"} <= VALID_LEAGUES
