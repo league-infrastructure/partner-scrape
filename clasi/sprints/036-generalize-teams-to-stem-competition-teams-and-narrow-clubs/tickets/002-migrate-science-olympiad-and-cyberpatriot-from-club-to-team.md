@@ -1,7 +1,7 @@
 ---
 id: '002'
 title: Migrate Science Olympiad and CyberPatriot from Club to Team
-status: open
+status: done
 use-cases:
 - SUC-069
 depends-on:
@@ -40,7 +40,7 @@ diff check below is a hard gate before any `Club` data is deleted.
 
 ## Acceptance Criteria
 
-- [ ] `teams/data/science-olympiad-sd.tsv` and `cyberpatriot-sd.tsv`
+- [x] `teams/data/science-olympiad-sd.tsv` and `cyberpatriot-sd.tsv`
       (new) carry `league="SCIOLY"`/`"CYBERPATRIOT"`,
       `program="Science Olympiad"`/`"CyberPatriot"`, `number` set to a
       stable school-name slug (per ticket 001's documented convention),
@@ -52,16 +52,16 @@ diff check below is a hard gate before any `Club` data is deleted.
       structurally reserved for LLM-generated content only (see
       sprint.md's Migration Concerns for why this is an accepted,
       documented scope boundary, not an oversight).
-- [ ] `teams/registry/science-olympiad-sd.toml`,
+- [x] `teams/registry/science-olympiad-sd.toml`,
       `cyberpatriot-sd.toml` (new), `adapter_type =
       "team_static_roster"`, enabled, `roster_path` pointing at the new
       TSVs, header comments crediting sprint 032's original curation
       research (org_name/citation continuity, not re-verified from
       scratch this ticket).
-- [ ] A real pipeline run (`run_teams()` with the new registry entries
+- [x] A real pipeline run (`run_teams()` with the new registry entries
       active) produces 27 new `Team` records (24 Science Olympiad + 3
       CyberPatriot); `teams.json`'s `total` goes from 278 to 305.
-- [ ] **Diff-check gate**: for every one of the 27 migrated rows, the
+- [x] **Diff-check gate**: for every one of the 27 migrated rows, the
       resulting `Team.location_precision`/`latitude`/`longitude`/
       `matched_name`/`needs_review` is byte-identical to the
       corresponding pre-migration `Club` row's values (captured from
@@ -72,7 +72,7 @@ diff check below is a hard gate before any `Club` data is deleted.
       entry (the ladder's existing escape hatch) before proceeding —
       never accepted silently and never worked around by inventing a
       new preservation mechanism.
-- [ ] Only after the diff-check gate passes: `directory/registry/
+- [x] Only after the diff-check gate passes: `directory/registry/
       science-olympiad-sd.toml`, `cyberpatriot-sd.toml` and
       `directory/data/science-olympiad-sd.tsv`, `cyberpatriot-sd.tsv`
       are deleted; `directory/model.py`'s `ClubType` narrows to drop
@@ -82,11 +82,11 @@ diff check below is a hard gate before any `Club` data is deleted.
       in ticket 003). This lands in the same commit as the registry/
       data removal so no commit ever has a `ClubType` value with no
       backing registry entry, or vice versa.
-- [ ] A real `uv run partner-scrape directory` run after removal shows
+- [x] A real `uv run partner-scrape directory` run after removal shows
       `clubs.json`'s `total` drop from 57 to 30 (Science Olympiad/
       CyberPatriot gone; 4-H/Civil Air Patrol/Sea Cadets/Hack Club/
       Girls Who Code still present, ticket 003's concern).
-- [ ] `teams/DESIGN.md` and `directory/DESIGN.md` each get a short note
+- [x] `teams/DESIGN.md` and `directory/DESIGN.md` each get a short note
       recording the migration (what moved, when, why) — full
       contract-level documentation lands in ticket 004.
 

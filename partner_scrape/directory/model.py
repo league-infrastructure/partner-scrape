@@ -175,21 +175,27 @@ class Place:
 #: only ``"hack-club"``; sprint 032 ticket 001 widened this Literal to
 #: also include issue 35b's six remaining club types --
 #: ``"cyberpatriot"``, ``"science-olympiad"``, ``"4-h"``,
-#: ``"girls-who-code"``, ``"civil-air-patrol"``, and ``"sea-cadets"`` --
-#: a data-only addition, never a model change (ticket 018-008's own
-#: scope: "kept general enough that issue 35b's future club types fit
-#: without a model change"; see ``directory/DESIGN.md``'s sprint 032
-#: Revision for the full rationale). Kept a plain ``str`` on the
-#: dataclass itself, matching ``Place.category``'s/``Team.org_type``'s
-#: own "don't over-type a field a small, hand-curated dataset already
-#: controls tightly" convention -- this Literal exists for
-#: documentation and for :data:`VALID_CLUB_TYPES`'s drift-proof
-#: derivation, consulted by
-#: ``sources/club_static_roster.py``'s per-entry validation.
+#: ``"girls-who-code"``, ``"civil-air-patrol"``, and ``"sea-cadets"``.
+#: **Sprint 036 ticket 002 narrows it a first time**, dropping
+#: ``"science-olympiad"``/``"cyberpatriot"`` -- both are competition
+#: teams, not clubs, per issue 47's meets-vs-competes rule, and have
+#: migrated to ``teams.model.Team`` (``League`` values ``"SCIOLY"``/
+#: ``"CYBERPATRIOT"``) via the new ``teams.sources.
+#: team_static_roster.TeamStaticRosterSource``, preserving their
+#: verified geocoding exactly -- see ``directory/DESIGN.md``'s sprint
+#: 036 Revision for the migration detail and the diff-check gate that
+#: proved it. Ticket 003 narrows this Literal a second time, dropping
+#: ``"4-h"``/``"civil-air-patrol"``/``"sea-cadets"`` (organizations this
+#: project has decided not to carry at all), landing at
+#: ``Literal["hack-club", "girls-who-code"]``. Kept a plain ``str`` on
+#: the dataclass itself, matching ``Place.category``'s/``Team.
+#: org_type``'s own "don't over-type a field a small, hand-curated
+#: dataset already controls tightly" convention -- this Literal exists
+#: for documentation and for :data:`VALID_CLUB_TYPES`'s drift-proof
+#: derivation, consulted by ``sources/club_static_roster.py``'s
+#: per-entry validation.
 ClubType = Literal[
     "hack-club",
-    "cyberpatriot",
-    "science-olympiad",
     "4-h",
     "girls-who-code",
     "civil-air-patrol",

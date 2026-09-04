@@ -323,10 +323,10 @@ class TestExtractOne:
 
     def test_sources_field_carries_the_given_source_name(self):
         club = _extract_one(
-            {"club_id": "x", "name": "X", "club_type": "cyberpatriot"}, "cyberpatriot-sd"
+            {"club_id": "x", "name": "X", "club_type": "civil-air-patrol"}, "civil-air-patrol-sd"
         )
 
-        assert club.sources == ["cyberpatriot-sd"]
+        assert club.sources == ["civil-air-patrol-sd"]
 
 
 class TestRegistryConfig:

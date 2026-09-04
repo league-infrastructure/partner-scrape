@@ -130,10 +130,12 @@ class TestClubValueSetConstants:
         # Sprint 032 ticket 001 widened this Literal from
         # Literal["hack-club"] to include issue 35b's six remaining
         # club types -- see directory/DESIGN.md's sprint 032 Revision.
+        # Sprint 036 ticket 002 narrows it a first time, dropping
+        # "science-olympiad"/"cyberpatriot" (migrated to
+        # teams.model.Team per issue 47's meets-vs-competes rule) --
+        # ticket 003 narrows it a second time.
         assert VALID_CLUB_TYPES == {
             "hack-club",
-            "cyberpatriot",
-            "science-olympiad",
             "4-h",
             "girls-who-code",
             "civil-air-patrol",

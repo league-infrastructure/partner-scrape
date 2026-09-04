@@ -547,6 +547,20 @@ follows for `ftcscout.py`/`tba.py`/`robotevents.py`.
 *mechanism* only -- no new registry entry or roster data file; ticket
 002 migrates Science Olympiad and CyberPatriot through it.
 
+**Sprint 036 ticket 002 migrates the first two real competition-team
+types through the mechanism above: Science Olympiad (24 teams) and
+CyberPatriot (3 teams), moved from `directory.model.Club` (sprint 032)
+rather than newly curated.** `teams/data/{science-olympiad,
+cyberpatriot}-sd.tsv` and `teams/registry/{science-olympiad,
+cyberpatriot}-sd.toml` (`adapter_type = "team_static_roster"`) carry
+the same `host_school`/`city`/`postal_code`/`website` values the
+retired `Club` rows carried, verbatim -- see `directory/DESIGN.md`'s
+sprint 036 Revision for the full migration detail, the diff-check gate
+that proved geocoding reproduces byte-identically before any `Club`
+data was deleted, and the accepted `meeting_note`-narrative scope
+boundary. Expected total once this ships: **305 teams** (152 FTC + 78
+FRC + 48 FLL + 24 SCIOLY + 3 CYBERPATRIOT), up from 278.
+
 ## 3. Constraints and Invariants
 
 - **Never register with `adapters.base.ADAPTERS`.** A team source
