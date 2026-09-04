@@ -1,85 +1,8 @@
 # directory
 
-**Owner:** Eric Busboom · **Last reviewed:** 2026-09-03 (sprint 036 ticket 003 — 4-H, Civil Air Patrol, and Sea Cadets dropped; `ClubType` narrowed to genuine clubs; explicit meets-vs-competes rule added) · **Status:** Places, Clubs (Hack Club chapters + Girls Who Code clubs — the two genuine clubs issue 47 confirms; Science Olympiad and CyberPatriot migrated to `teams.model.Team`, 4-H/Civil Air Patrol/Sea Cadets dropped entirely, sprint 036; the curated static-roster source generalized to serve any club type), and Offerings (volunteer org profiles + free/Title I school programs) complete; issue 33's educator-PD program pages (routed through `adapters/`, not this module — see this doc's sprint 030 Revision) deferred/tracked elsewhere
+**Owner:** Eric Busboom · **Last reviewed:** 2026-09-02 (sprint 032 ticket 007 — Girls Who Code clubs roster curated and registered; sprint 032 complete) · **Status:** Places, Clubs (Hack Club chapters + CyberPatriot teams + Civil Air Patrol squadrons + Naval Sea Cadet Corps units + San Diego County 4-H community clubs + Science Olympiad school teams + Girls Who Code clubs — all six of issue 35b's remaining club types now populated, five with multi-entry rosters and one (Girls Who Code) an honest single-entry starter roster; the curated static-roster source generalized to serve any club type), and Offerings (volunteer org profiles + free/Title I school programs) complete; issue 33's educator-PD program pages (routed through `adapters/`, not this module — see this doc's sprint 030 Revision) deferred/tracked elsewhere
 
 ---
-
-## Revision (2026-09-03 — sprint 036 ticket 003: 4-H, Civil Air Patrol, and Sea Cadets dropped; ClubType narrowed to genuine clubs)
-
-Drops the three remaining non-club/non-team types issue 47 calls for
-removing entirely — 4-H (14), Civil Air Patrol (7), Sea Cadets (4), 25
-entries — a stakeholder call ("the military stuff you can drop"), not
-migrated anywhere (unlike ticket 002's two competition types).
-`directory/registry/{4-h,civil-air-patrol,sea-cadets}-sd.toml` and the
-matching `directory/data/*.tsv` files are deleted; `ClubType` narrows
-from `Literal["hack-club", "girls-who-code", "4-h", "civil-air-patrol",
-"sea-cadets"]` (ticket 002's post-migration state) to
-`Literal["hack-club", "girls-who-code"]` -- the two genuine clubs issue
-47 confirms. `VALID_CLUB_TYPES` picks up the narrowing via its existing
-`get_args()` derivation, no further change needed.
-
-This ticket also adds the "Club vs. Team: the meets-vs-competes rule"
-section above -- an explicit, standalone statement (not folded into a
-Revision note, so a future sprint-planner reading this document top to
-bottom cannot miss it) of the rule sprint 032's mis-population and this
-sprint's correction both concretely illustrate.
-
-**Result**: `clubs.json`'s `total` drops from 30 (ticket 002's
-post-migration state) to 5, confirmed via a real
-`uv run partner-scrape directory --dry-run -v` run: `by_club_type`
-reads exactly `{"hack-club": 4, "girls-who-code": 1}`.
-
-## Revision (2026-09-03 — sprint 036 ticket 002: Science Olympiad and CyberPatriot migrated from Club to Team)
-
-Issue 47 draws a structural distinction sprint 032's own curation did
-not have a model to express: **Team = competes, Club = meets.** Science
-Olympiad (24 entries) and CyberPatriot (3 entries) are competition
-teams, not clubs -- they only landed in `Club` in sprint 032 because
-`teams.model.Team`'s `League` had no home for a non-robotics
-competition (sprint 036 ticket 001 fixed that). This ticket moves both
-types out of `Club` entirely: `directory/registry/{science-olympiad,
-cyberpatriot}-sd.toml` and `directory/data/{science-olympiad,
-cyberpatriot}-sd.tsv` are deleted, and `ClubType` narrows (dropping
-`"science-olympiad"`/`"cyberpatriot"`) to `Literal["hack-club", "4-h",
-"girls-who-code", "civil-air-patrol", "sea-cadets"]` -- ticket 003
-narrows it a second time.
-
-**Preservation, not re-derivation, of the verified geocoding.** The 27
-rows' `host_school`/`city`/`postal_code`/`website` values were copied
-verbatim into new `teams/data/{science-olympiad,cyberpatriot}-sd.tsv`
-files and registered via `teams/registry/{science-olympiad,
-cyberpatriot}-sd.toml` (`adapter_type = "team_static_roster"`, ticket
-001's new source). Because `teams.geo.SchoolIndex` is a
-behavior-identical subclass of the exact `geo_ladder.GeoLadder`
-`directory.pipeline._apply_club_geocoding()` already used, and
-`directory/data/`'s school directories are a byte-identical copy of
-`teams/data/`'s own, feeding the same strings through
-`teams.geo.geocode_teams()` deterministically reproduced every one of
-the 27 original matches. A real (network-free) `run_teams(dry_run=True)`
-plus a scripted diff against the pre-migration `data/clubs.json` rows
-confirmed this **before** any `Club` data was touched: all 27
-migrated `Team`s' `location_precision`/`latitude`/`longitude`/
-`matched_name`/`needs_review` are byte-identical to their original
-`Club` row's values -- San Dieguito High School Academy's
-`needs_review = true` survives unchanged (rung-3 same-city fuzzy match,
-CDE's own record named "San Dieguito HS Academy"), The Preuss School UC
-San Diego's `"city"`-precision fallthrough (no CDE/NCES match) survives
-unchanged, and the other 25 school-precision, non-flagged matches
-survive unchanged. No divergence was found, so no `school-overrides.
-toml` entry was needed.
-
-**Accepted, documented scope boundary: the `meeting_note` narrative is
-not carried over.** Each migrated `Club` row's free-text competition-
-result narrative (tournament placements, program descriptions) has no
-`Team` field to land in -- `Team.description` is structurally reserved
-for LLM-summarized website content only. Issue 47 asks only that
-geocoding/`needs_review`/`matched_name` survive, not the narrative.
-
-**Result**: `clubs.json`'s `total` drops from 57 to 30 (4-H 14, Civil
-Air Patrol 7, Sea Cadets 4, Hack Club 4, Girls Who Code 1 remain --
-ticket 003's concern); `teams.json`'s `total` rises from 278 to 305 (24
-Science Olympiad + 3 CyberPatriot added, `meta.by_league` gains
-`"SCIOLY": 24`/`"CYBERPATRIOT": 3`).
 
 ## Revision (2026-09-02 — sprint 032 ticket 007: Girls Who Code clubs roster curated and registered; sprint 032 complete)
 
@@ -682,42 +605,6 @@ own "never nested inside `places.json`" precedent for the identical
 reason (an offerings run's freshness/count must never be confused with
 the places or clubs export's own). `offerings` defaults to `None`
 ("do not touch `offerings.json`"), matching `clubs`'s exact contract.
-
-## Club vs. Team: the meets-vs-competes rule
-
-**A `Club` is a standing entity that *meets*, with no competition
-circuit attached. A standing entity that *competes* — enters a named
-STEM competition, in any discipline — belongs in `Team`
-(`partner_scrape/teams/`), never in `Club`, regardless of whether that
-competition is robotics.**
-
-This is not a stylistic preference; it is the rule this module's own
-history exists to enforce going forward. Sprint 032 curated six club
-types into `Club` in good faith, but four of them were never clubs by
-this rule: Science Olympiad and CyberPatriot are competition teams (a
-school fields a team, which enters a named tournament and is scored
-against other teams), and 4-H, Civil Air Patrol, and Sea Cadets are
-organizations this project decided not to carry at all. They ended up
-here only because `teams.model.Team`'s `League` was, at the time,
-closed to FIRST/VEX robotics (`Literal["FTC", "FRC", "FLL", "VEX"]`),
-leaving no other home for a non-robotics competition team — sprint 036
-generalized `League` specifically to close that gap (see
-`teams/DESIGN.md`'s sprint 036 Revision), migrated the two genuine
-competition types out (ticket 002), and dropped the three
-non-club/non-team organizations outright (ticket 003), landing `Club`
-at the two types that actually satisfy this rule: Hack Club and Girls
-Who Code, both school-based coding clubs with no competition circuit.
-
-**The test for a future club type, before it is ever curated:** does
-this organization enter a named competition and get scored against
-other teams? If yes, it is a `Team`, not a `Club`, no matter how
-informal or non-robotics the competition is — build (or reuse) a
-`teams.sources.team_static_roster`-style source, not a `Club` roster.
-If no — it is a standing group that meets, with dues, projects, or
-activities but no competition to place in — `Club` is the right model.
-When genuinely unsure, check `issue 47`'s original framing and this
-section before curating a roster; do not assume the ambiguity away the
-way sprint 032 did.
 
 ## 1. Purpose
 

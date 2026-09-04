@@ -1,7 +1,7 @@
 ---
 id: '036'
 title: Generalize teams to STEM competition teams and narrow clubs
-status: executing
+status: done
 branch: sprint/036-generalize-teams-to-stem-competition-teams-and-narrow-clubs
 use-cases:
 - SUC-068
