@@ -1,7 +1,7 @@
 ---
 id: '002'
 title: Retire the broken/dangerous justfile and rewrite README's publishing section
-status: open
+status: done
 use-cases: []
 depends-on: []
 github-issue: ''
@@ -36,36 +36,36 @@ specifically so they can't drift out of sync with each other.
 
 ## Acceptance Criteria
 
-- [ ] No `justfile` recipe, if a `justfile` still exists at all, runs
+- [x] No `justfile` recipe, if a `justfile` still exists at all, runs
       `git push` against `master` or dispatches/watches `pages.yml`
       (`gh workflow run pages.yml`, `gh run watch`, etc.) in any form —
       not commented out, not guarded, not renamed. `pub` is removed
       entirely.
-- [ ] `dev`, `build`, `preview` are either removed (the honest default,
+- [x] `dev`, `build`, `preview` are either removed (the honest default,
       per issue 48, now that this repo does not publish the site) or
       rewritten so a reader cannot run them expecting a working `site/`
       without understanding they need a separate `stem-ecosystem`
       clone — prefer removal unless there's a concrete reason raised
       during implementation to keep a documented manual-clone recipe.
-- [ ] If every recipe is removed, the `justfile` itself is deleted
+- [x] If every recipe is removed, the `justfile` itself is deleted
       rather than left as an empty shell — record this choice (and
       which alternative was rejected) either in the ticket or issue 48.
-- [ ] `just --list` (if a `justfile` remains) runs clean with no recipe
+- [x] `just --list` (if a `justfile` remains) runs clean with no recipe
       pointing at a path that does not exist.
-- [ ] README's beta-preview section is rewritten to state plainly that
+- [x] README's beta-preview section is rewritten to state plainly that
       GitHub Pages publishing from this repo is disabled
       (`disabled_manually`, 2026-09-03) and that the live site continues
       serving its last deploy; it no longer instructs the reader to
       clone `stem-ecosystem` into `site/` for a local `just dev`/`just
       build` workflow that no longer exists in this repo.
-- [ ] README's reference to the `justfile` for local-dev details (if
+- [x] README's reference to the `justfile` for local-dev details (if
       any survives) matches what the `justfile` actually contains after
       this ticket — no dangling "see the justfile for details" pointing
       at a recipe that no longer exists.
-- [ ] `.github/workflows/pages.yml` itself is untouched (already
+- [x] `.github/workflows/pages.yml` itself is untouched (already
       disabled; out of scope per sprint.md) — this ticket only removes
       the repo-local recipe that dispatches it.
-- [ ] Full test suite still green; this ticket has no test surface of
+- [x] Full test suite still green; this ticket has no test surface of
       its own (docs/config only), so verification is `just --list` (if
       applicable) plus a read-through of the rewritten README section.
 
@@ -110,3 +110,29 @@ change). Note in issue 48 (items 2 and 3) what was actually done
 - **Verification command**: `uv run pytest`, plus manual `just --list`
   and a grep for stale `just pub`/`just dev`/`just build`/`just preview`
   references elsewhere in the repo.
+
+## Notes
+
+Decision: deleted the `justfile` outright rather than keeping a trimmed
+`dev`/`build`/`preview` stub. Every remaining recipe `cd site/`d into a
+directory that has not existed in this repo since sprint 019 moved the
+site to `stem-ecosystem`; keeping them, even rewritten, would still
+imply a locally-runnable site workflow this repo no longer supports.
+`.github/workflows/pages.yml` does not invoke `just` at all (confirmed
+by reading the workflow), so nothing else in the repo depends on the
+`justfile` existing. `pub` (the dangerous recipe: `git push origin
+master` + `gh workflow run pages.yml` + `gh run watch`) is gone along
+with it.
+
+README's "Beta preview" section was rewritten to state that publishing
+was disabled 2026-09-03, the site keeps serving its last deploy, the
+`justfile` was removed, and to point readers who want to work on the
+site at cloning `league-infrastructure/stem-ecosystem` directly. `just
+--list` now correctly reports "No justfile found" (confirmed by manual
+run). Grepped the repo for `justfile`/`just pub`/`just dev`/`just
+build`/`just preview` outside `clasi/sprints/` — only archived
+(`clasi/sprints/done/...`) historical records remain, which is
+expected and out of scope.
+
+Full suite: 2538 passed (unchanged from ticket 001 — this ticket has no
+test surface).

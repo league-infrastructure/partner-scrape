@@ -60,6 +60,13 @@ Pages deploy. For the other three, either remove them or make it
 unmistakable that they need a manual `stem-ecosystem` clone; removal is
 the honest default now that this repo does not publish the site.
 
+**Done (037-002, 2026-09-04)**: deleted the `justfile` outright — every
+recipe `cd site/`d into a directory that hasn't existed here since
+sprint 019, so nothing useful remained once `pub` was removed.
+Confirmed `.github/workflows/pages.yml` doesn't invoke `just` at all,
+so nothing else depends on the file. `just --list` now correctly
+reports "No justfile found".
+
 ## 3. README documents publishing that is turned off
 
 README's beta-preview section describes the GitHub Pages workflow and
@@ -68,6 +75,11 @@ dev`/`just build`. Publishing was disabled 2026-09-03 (workflow
 `disabled_manually`; the site stays live serving its last deploy).
 Rewrite that section to match reality, and keep it consistent with
 whatever ticket 2 does to the justfile.
+
+**Done (037-002, 2026-09-04)**: rewrote README's "Beta preview" section
+to state publishing was disabled 2026-09-03, the site keeps serving its
+last deploy, the `justfile` was removed, and to point readers at
+cloning `stem-ecosystem` directly to work on the site.
 
 ## 4. Stale references to deleted files
 
