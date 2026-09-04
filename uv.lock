@@ -607,7 +607,7 @@ wheels = [
 
 [[package]]
 name = "partner-scrape"
-version = "0.20260902.6"
+version = "0.20260903.1"
 source = { editable = "." }
 dependencies = [
     { name = "anthropic" },
