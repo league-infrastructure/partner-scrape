@@ -1,17 +1,21 @@
 {
  "meta": {
-  "generated": "2026-09-02T22:59:54Z",
-  "total": 278,
+  "generated": "2026-09-04T03:41:39Z",
+  "total": 319,
   "by_league": {
+   "CYBERPATRIOT": 3,
    "FLL": 48,
    "FRC": 78,
-   "FTC": 152
+   "FTC": 152,
+   "MATHCOUNTS": 13,
+   "SCIOLY": 24,
+   "TARC": 1
   },
   "out_of_region": 6,
   "by_location_precision": {
-   "city": 108,
+   "school": 166,
+   "city": 109,
    "zip": 40,
-   "school": 126,
    "none": 4
   },
   "credential_failures": [
@@ -19,6 +23,120 @@
   ]
  },
  "teams": [
+  {
+   "team_id": "cyberpatriot-canyon-crest-academy",
+   "league": "CYBERPATRIOT",
+   "program": "CyberPatriot",
+   "number": "canyon-crest-academy",
+   "name": "CyberPatriot Team at Canyon Crest Academy",
+   "organization": "Canyon Crest Academy",
+   "org_type": "school",
+   "city": "San Diego",
+   "postal_code": "92130",
+   "latitude": 32.96024,
+   "longitude": -117.18835,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "Canyon Crest Academy",
+   "needs_review": false,
+   "website": "https://sites.google.com/view/cca-cyberpatriot/",
+   "website_status": "confirmed",
+   "organization_website": "www.sduhsd.net",
+   "social": [],
+   "description": "A cybersecurity club from Canyon Crest Academy and Pacific Trails Middle School that trains for CyberPatriot and other national cybersecurity competitions, covering topics like computer networking, operating system security, and ethical hacking challenges including web security and cryptography.",
+   "description_status": "generated",
+   "description_provenance": "team_website",
+   "description_fetched_at": "2026-09-04T03:41:39.217128+00:00",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "canyon crest academy",
+   "sibling_team_ids": [
+    "frc-3128",
+    "ftc-14425",
+    "ftc-7159",
+    "ftc-9837",
+    "scioly-canyon-crest-academy"
+   ]
+  },
+  {
+   "team_id": "cyberpatriot-del-norte-high",
+   "league": "CYBERPATRIOT",
+   "program": "CyberPatriot",
+   "number": "del-norte-high",
+   "name": "CyberPatriot Team at Del Norte High School",
+   "organization": "Del Norte High School",
+   "org_type": "school",
+   "city": "San Diego",
+   "postal_code": "92127",
+   "latitude": 33.015119,
+   "longitude": -117.12162,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "Del Norte High",
+   "needs_review": false,
+   "website": "https://cyberaegis.tech",
+   "website_status": "confirmed",
+   "organization_website": "www.powayusd.com/pusddnhs",
+   "social": [],
+   "description": "CyberAegis San Diego is a team that competes in regional and national competitions, aiming to win Nationals, while developing the next generation of cybersecurity professionals including white hat hackers, information defenders, and coders through rigorous training and multiple competitive opportunities.",
+   "description_status": "generated",
+   "description_provenance": "team_website",
+   "description_fetched_at": "2026-09-04T03:41:39.212354+00:00",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [
+    "Qualcomm"
+   ],
+   "sponsor_provenance": {
+    "Qualcomm": "scraped"
+   },
+   "org_key": "del norte high school",
+   "sibling_team_ids": [
+    "frc-3749",
+    "ftc-12666",
+    "scioly-del-norte-high",
+    "tarc-del-norte-high"
+   ]
+  },
+  {
+   "team_id": "cyberpatriot-scripps-ranch-high",
+   "league": "CYBERPATRIOT",
+   "program": "CyberPatriot",
+   "number": "scripps-ranch-high",
+   "name": "CyberPatriot Team at Scripps Ranch High School",
+   "organization": "Scripps Ranch High School",
+   "org_type": "school",
+   "city": "San Diego",
+   "postal_code": "92131",
+   "latitude": 32.908719,
+   "longitude": -117.11199,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "Scripps Ranch High",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "http://srhs.falcons.org",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "scripps ranch high school",
+   "sibling_team_ids": [
+    "frc-4139",
+    "scioly-scripps-ranch-high"
+   ]
+  },
   {
    "team_id": "fll-26385",
    "league": "FLL",
@@ -1586,7 +1704,7 @@
    "description": "FRC Team 812, The Midnight Mechanics, is based at The Preuss School UC San Diego, a charter school for low-income students, and builds competition robots while introducing first-generation students to engineering through hands-on experience with CAD, motor controllers, and version control. The team is known for developing sophisticated robots with advanced features like 360° vision-guided shooters and omnidirectional swerve drivetrains, and they share their robot code and custom tools openly on GitHub.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.871467+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.219598+00:00",
    "rookie_year": 2002,
    "active": true,
    "last_season": null,
@@ -1690,7 +1808,7 @@
    "description": "FRC Team 1266, The Devil Duckies, is an FRC robotics team with the motto \"Changing Perceptions – Changing Lives – Changing the Future.\"",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.873305+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.224146+00:00",
    "rookie_year": 2004,
    "active": true,
    "last_season": null,
@@ -1786,7 +1904,7 @@
    "description": "Team 1538 / The Holy Cows is the FIRST Robotics Competition team at High Tech High San Diego, founded in 2004. The team was inducted into the FIRST Hall of Fame in 2013 and won the FIRST Championship in 2026.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.875592+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.228358+00:00",
    "rookie_year": 2005,
    "active": true,
    "last_season": null,
@@ -1856,7 +1974,7 @@
    "description": "Saints Robotics operates two FIRST LEGO League teams (#25379 and #67415) based at St. Michael School in Crowley, Louisiana, competing at regional, state, and international levels including competitions in California and Canada.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.887876+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.252895+00:00",
    "rookie_year": 2005,
    "active": true,
    "last_season": null,
@@ -1928,7 +2046,7 @@
    "description": "Team Spyder 1622 represents Poway High School in FRC and FTC competitions, bringing together Poway High students, homeschoolers, and eighth-graders passionate about engineering. The team focuses on spreading STEM opportunities and values throughout their school and community while helping members develop skills in problem-solving, entrepreneurship, and creativity.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.888494+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.254391+00:00",
    "rookie_year": 2005,
    "active": true,
    "last_season": null,
@@ -1941,7 +2059,8 @@
    "org_key": "poway high school",
    "sibling_team_ids": [
     "ftc-1622",
-    "ftc-20422"
+    "ftc-20422",
+    "scioly-poway-high"
    ]
   },
   {
@@ -2101,7 +2220,7 @@
    "description": "Team Paradox (FRC Team 2102) is a student-run robotics team based at San Dieguito Academy in Encinitas, California, competing in the FIRST Robotics Competition.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.889367+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.256787+00:00",
    "rookie_year": 2007,
    "active": true,
    "last_season": null,
@@ -2213,7 +2332,7 @@
    "description": "Parker Robotics is a family of FIRST robotics teams at Francis Parker School in San Diego that includes FRC, FTC, and FLL programs designed to teach students engineering, teamwork, and innovation across all grade levels.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.890162+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.259188+00:00",
    "rookie_year": 2008,
    "active": true,
    "last_season": null,
@@ -2245,7 +2364,7 @@
    "description": "TitanBot is Eastlake High School's FIRST Robotics Team 2543, a nonprofit organization run by high school students that aims to provide students with skills and experiences in STEM and business while promoting the values of FIRST through departmentalized goals in engineering, media, finance, human resources, and public relations.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.893342+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.266725+00:00",
    "rookie_year": 2008,
    "active": true,
    "last_season": null,
@@ -2341,14 +2460,16 @@
    "description": "FRC Team 2658 Σ-Motion is a student-run high school robotics team at Rancho Bernardo High School founded in 2008, dedicated to promoting STEM education and FIRST values through robotics competition. The team won the 2026 San Diego Regional Championship and has designed and built over 12 robots since its establishment.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.894000+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.269367+00:00",
    "rookie_year": 2008,
    "active": true,
    "last_season": null,
    "sponsors": [],
    "sponsor_provenance": {},
    "org_key": "rancho bernardo high school",
-   "sibling_team_ids": []
+   "sibling_team_ids": [
+    "scioly-rancho-bernardo-high"
+   ]
   },
   {
    "team_id": "frc-2663",
@@ -2472,7 +2593,7 @@
    "description": "Vikings Robotics is the FRC team of La Jolla High School in San Diego that has participated in the FIRST Robotics Competition since 2009, with notable achievements including a 2022 regional quarterfinalist finish and a 2011 Las Vegas regional win. The team's mission is to build real-world STEM skills and inspire young people through a six-week annual design and build competition.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.894437+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.270559+00:00",
    "rookie_year": 2009,
    "active": true,
    "last_season": null,
@@ -2570,7 +2691,7 @@
    "description": "Team 3128: Aluminum Narwhals is an FRC team that participates in FIRST Robotics Competition and offers a robotics summer camp.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.895292+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.273105+00:00",
    "rookie_year": 2010,
    "active": true,
    "last_season": null,
@@ -2578,9 +2699,11 @@
    "sponsor_provenance": {},
    "org_key": "canyon crest academy",
    "sibling_team_ids": [
+    "cyberpatriot-canyon-crest-academy",
     "ftc-14425",
     "ftc-7159",
-    "ftc-9837"
+    "ftc-9837",
+    "scioly-canyon-crest-academy"
    ]
   },
   {
@@ -2670,7 +2793,7 @@
    "description": "FRC Team 3255, the SuperNURDs, is based at San Pasqual High School in Escondido and has been established since 2009 with 25 team members. The team has won multiple regional competitions (2012, 2015, 2017, 2020), entrepreneurship awards (2017, 2018), and dean's list honors (2011, 2018).",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.899445+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.282594+00:00",
    "rookie_year": 2010,
    "active": true,
    "last_season": null,
@@ -2709,7 +2832,9 @@
    "sponsors": [],
    "sponsor_provenance": {},
    "org_key": "westview high school",
-   "sibling_team_ids": []
+   "sibling_team_ids": [
+    "scioly-westview-high"
+   ]
   },
   {
    "team_id": "frc-3477",
@@ -2805,7 +2930,9 @@
    "sponsors": [],
    "sponsor_provenance": {},
    "org_key": "torrey pines high school",
-   "sibling_team_ids": []
+   "sibling_team_ids": [
+    "scioly-torrey-pines-high"
+   ]
   },
   {
    "team_id": "frc-3704",
@@ -2870,7 +2997,10 @@
    "sponsor_provenance": {},
    "org_key": "del norte high school",
    "sibling_team_ids": [
-    "ftc-12666"
+    "cyberpatriot-del-norte-high",
+    "ftc-12666",
+    "scioly-del-norte-high",
+    "tarc-del-norte-high"
    ]
   },
   {
@@ -3031,7 +3161,10 @@
    "sponsors": [],
    "sponsor_provenance": {},
    "org_key": "scripps ranch high school",
-   "sibling_team_ids": []
+   "sibling_team_ids": [
+    "cyberpatriot-scripps-ranch-high",
+    "scioly-scripps-ranch-high"
+   ]
   },
   {
    "team_id": "frc-4160",
@@ -3320,14 +3453,16 @@
    "description": "Team 5025 Pacific Steel is an FRC team based in San Diego, CA that focuses on inspiring students to pursue their interests through teamwork, collaboration, and problem-solving in robotics competition.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.904685+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.293525+00:00",
    "rookie_year": 2014,
    "active": true,
    "last_season": null,
    "sponsors": [],
    "sponsor_provenance": {},
    "org_key": "cathedral catholic high school",
-   "sibling_team_ids": []
+   "sibling_team_ids": [
+    "scioly-cathedral-catholic-high"
+   ]
   },
   {
    "team_id": "frc-5137",
@@ -3352,7 +3487,7 @@
    "description": "FRC Team 5137 Iron Kodiaks is based at Mission Hills High School in San Marcos and focuses on cultivating innovation, teamwork, perseverance, and leadership through hands-on STEM education. The team develops engineering and problem-solving skills while gaining experience in project management, marketing, and fundraising, and recently earned the Excellence in Engineering Award at the Orange County District FIRST Robotics Competition.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.906998+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.298377+00:00",
    "rookie_year": 2014,
    "active": true,
    "last_season": null,
@@ -3512,7 +3647,7 @@
    "description": "FRC Team 5514 MavBots is based at La Costa Canyon High School and competes in FIRST Robotics Competition. The program has experienced significant growth with doubled student participation and a new robotics training room on campus.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.908475+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.300424+00:00",
    "rookie_year": 2015,
    "active": true,
    "last_season": null,
@@ -3615,7 +3750,9 @@
    "sponsors": [],
    "sponsor_provenance": {},
    "org_key": "rancho buena vista high school",
-   "sibling_team_ids": []
+   "sibling_team_ids": [
+    "scioly-rancho-buena-vista-high"
+   ]
   },
   {
    "team_id": "frc-6659",
@@ -3683,7 +3820,9 @@
    "sponsors": [],
    "sponsor_provenance": {},
    "org_key": "san marcos high school",
-   "sibling_team_ids": []
+   "sibling_team_ids": [
+    "scioly-san-marcos-high"
+   ]
   },
   {
    "team_id": "frc-6885",
@@ -3718,7 +3857,9 @@
    "sponsors": [],
    "sponsor_provenance": {},
    "org_key": "academy of our lady of peace",
-   "sibling_team_ids": []
+   "sibling_team_ids": [
+    "scioly-academy-our-lady-of-peace"
+   ]
   },
   {
    "team_id": "frc-6995",
@@ -3813,7 +3954,7 @@
    "description": "Lancer EVO is a rookie robotics team with an ambition to change lives on and off the robot arena.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.910212+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.302854+00:00",
    "rookie_year": 2019,
    "active": true,
    "last_season": null,
@@ -3995,7 +4136,7 @@
    "description": "Wild Raccoons Team 8891 is a student-led FIRST Robotics Competition team from Oceanside High School that designs, builds, and programs competitive robots while developing engineering, programming, and design skills. Beyond competition, the team is committed to community impact through workshops, mentoring younger students, and promoting STEM education.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.911501+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.304748+00:00",
    "rookie_year": 2022,
    "active": true,
    "last_season": null,
@@ -4067,14 +4208,16 @@
    "description": "MarauderTech 9573 is the FIRST Robotics Competition team from Mira Mesa High School in San Diego, CA. The team participates in regional and off-season competitions, challenging members to design, build, and program robots.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.911884+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.305292+00:00",
    "rookie_year": 2024,
    "active": true,
    "last_season": null,
    "sponsors": [],
    "sponsor_provenance": {},
    "org_key": "mira mesa high school",
-   "sibling_team_ids": []
+   "sibling_team_ids": [
+    "scioly-mira-mesa-high"
+   ]
   },
   {
    "team_id": "frc-9730",
@@ -4238,7 +4381,7 @@
    "description": "Team Spyder 1622 represents Poway High School in FRC and FTC competitions, comprising Poway High students, homeschool students, and passionate 8th graders focused on spreading robotics opportunities and STEM education throughout their community.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.912438+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.306137+00:00",
    "rookie_year": 2007,
    "active": true,
    "last_season": null,
@@ -4257,7 +4400,8 @@
    "org_key": "poway high school",
    "sibling_team_ids": [
     "frc-1622",
-    "ftc-20422"
+    "ftc-20422",
+    "scioly-poway-high"
    ]
   },
   {
@@ -4285,7 +4429,7 @@
    "description": "FTC 3650 Limited Liability is a school-based team at La Jolla Country Day School founded in 2009 that designs and builds robots in-house with a primary focus on autonomous performance and reliability.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.913052+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.307295+00:00",
    "rookie_year": 2009,
    "active": true,
    "last_season": null,
@@ -4364,7 +4508,9 @@
     "AFCEA": "structured"
    },
    "org_key": "grauer school",
-   "sibling_team_ids": []
+   "sibling_team_ids": [
+    "scioly-grauer-school"
+   ]
   },
   {
    "team_id": "ftc-4216",
@@ -4438,7 +4584,8 @@
    "sponsor_provenance": {},
    "org_key": "pacific ridge school",
    "sibling_team_ids": [
-    "ftc-9266"
+    "ftc-9266",
+    "scioly-pacific-ridge-school"
    ]
   },
   {
@@ -4477,7 +4624,8 @@
    "org_key": "carlsbad high school",
    "sibling_team_ids": [
     "ftc-6226",
-    "ftc-9049"
+    "ftc-9049",
+    "scioly-carlsbad-high"
    ]
   },
   {
@@ -4537,14 +4685,16 @@
    "description": "Mt. Carmel High School's robotics club, known as Sundevil Robotics, focuses on engaging students in robotics activities and maintains an active presence through regular club meetings and social media updates.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.913798+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.308790+00:00",
    "rookie_year": 2011,
    "active": true,
    "last_season": null,
    "sponsors": [],
    "sponsor_provenance": {},
    "org_key": "mt carmel high school",
-   "sibling_team_ids": []
+   "sibling_team_ids": [
+    "scioly-mt-carmel-high"
+   ]
   },
   {
    "team_id": "ftc-5136",
@@ -4656,7 +4806,8 @@
    "org_key": "carlsbad high school",
    "sibling_team_ids": [
     "ftc-5015",
-    "ftc-9049"
+    "ftc-9049",
+    "scioly-carlsbad-high"
    ]
   },
   {
@@ -4728,7 +4879,7 @@
    "description": "FTC Team 7159 Robo Ravens is a 10+ year old robotics team based at Canyon Crest Academy in San Diego, open to all middle and high school students, with a focus on inspiring students to pursue STEM through an award-winning outreach program.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.916694+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.318114+00:00",
    "rookie_year": 2013,
    "active": true,
    "last_season": null,
@@ -4736,9 +4887,11 @@
    "sponsor_provenance": {},
    "org_key": "canyon crest academy",
    "sibling_team_ids": [
+    "cyberpatriot-canyon-crest-academy",
     "frc-3128",
     "ftc-14425",
-    "ftc-9837"
+    "ftc-9837",
+    "scioly-canyon-crest-academy"
    ]
   },
   {
@@ -4800,7 +4953,7 @@
    "description": "RSF Singularity is a first-year FTC team of seven 7th graders from Roger Rowe Middle School in Rancho Santa Fe, California, with most members having prior FLL experience. The team has progressed from the FLL program through teams like Maze Runners and Solarcyclers to compete in the First Tech Challenge.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.918858+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.321889+00:00",
    "rookie_year": 2013,
    "active": true,
    "last_season": null,
@@ -4849,7 +5002,8 @@
     "ftc-10809",
     "ftc-15097",
     "ftc-23997",
-    "ftc-9261"
+    "ftc-9261",
+    "scioly-sage-creek-high"
    ]
   },
   {
@@ -4887,7 +5041,8 @@
    },
    "org_key": "university city high school",
    "sibling_team_ids": [
-    "ftc-11288"
+    "ftc-11288",
+    "scioly-university-city-high"
    ]
   },
   {
@@ -4983,7 +5138,7 @@
    "description": "Team #9049 Robopuffs is a robotics team from Carlsbad High School that aims to empower and inspire women to pursue STEM fields and bridge the gender gap in science and technology through FIRST robotics.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.919786+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.323744+00:00",
    "rookie_year": 2014,
    "active": true,
    "last_season": null,
@@ -5004,7 +5159,8 @@
    "org_key": "carlsbad high school",
    "sibling_team_ids": [
     "ftc-5015",
-    "ftc-6226"
+    "ftc-6226",
+    "scioly-carlsbad-high"
    ]
   },
   {
@@ -5082,7 +5238,8 @@
     "ftc-10809",
     "ftc-15097",
     "ftc-23997",
-    "ftc-8097"
+    "ftc-8097",
+    "scioly-sage-creek-high"
    ]
   },
   {
@@ -5118,7 +5275,8 @@
    "sponsor_provenance": {},
    "org_key": "pacific ridge school",
    "sibling_team_ids": [
-    "ftc-4262"
+    "ftc-4262",
+    "scioly-pacific-ridge-school"
    ]
   },
   {
@@ -5188,9 +5346,11 @@
    "sponsor_provenance": {},
    "org_key": "canyon crest academy",
    "sibling_team_ids": [
+    "cyberpatriot-canyon-crest-academy",
     "frc-3128",
     "ftc-14425",
-    "ftc-7159"
+    "ftc-7159",
+    "scioly-canyon-crest-academy"
    ]
   },
   {
@@ -5288,7 +5448,7 @@
    "description": "Green.Griffins (FTC Team 10092) is an 8th year community-based robotics team hosted by Francis Parker School in San Diego, founded in 2015 with a mission to share knowledge with other teams, learn from STEM professionals, and help the community.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.922026+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.327538+00:00",
    "rookie_year": 2015,
    "active": true,
    "last_season": null,
@@ -5370,7 +5530,7 @@
    "description": "Crow Force (Team #10809) is an FTC robotics team from Sage Creek High School in Carlsbad that has qualified for the 2026 FIRST World Championship and is dedicated to inspiring students through hands-on engineering, teamwork, and STEM outreach in their community.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.922948+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.347008+00:00",
    "rookie_year": 2015,
    "active": true,
    "last_season": null,
@@ -5391,7 +5551,8 @@
     "ftc-15097",
     "ftc-23997",
     "ftc-8097",
-    "ftc-9261"
+    "ftc-9261",
+    "scioly-sage-creek-high"
    ]
   },
   {
@@ -5421,7 +5582,7 @@
    "description": "Inspiration Robotics is a San Diego-based team founded in 2011 that competes in RoboBoat, RoboSub, and RobotX competitions with students ranging from middle school to college, aiming to teach robotics skills and spread STEM knowledge to others.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.926620+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.359436+00:00",
    "rookie_year": 2016,
    "active": true,
    "last_season": null,
@@ -5462,7 +5623,7 @@
    "description": "The Clueless is a FIRST Tech Challenge (FTC) team founded in 2016 with 13 members from 8 middle and high schools across San Diego that has set the world record twice, qualified to the World Championship 6 times, and won the divisional Inspire Award three times. Beyond competing, the team runs community initiatives including Unity Robotics (which has founded 9 new FLL teams), a Global Mentorship Program (matching 40 teams), IGNITE (founding 8 FTC teams in South Africa), and an EV3 donation program (distributing 105+ EV3s to 2,000+ students).",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.929156+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.367196+00:00",
    "rookie_year": 2016,
    "active": true,
    "last_season": null,
@@ -5512,7 +5673,7 @@
    "description": "Team 11285 Patent Pending is a high school robotics team from Mt. Carmel High School established in 2011 that competes in FIRST Tech Challenge, focusing on engineering, programming, and teamwork through the design and creation of innovative robotic solutions.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.929979+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.372322+00:00",
    "rookie_year": 2016,
    "active": true,
    "last_season": null,
@@ -5562,7 +5723,8 @@
    },
    "org_key": "university city high school",
    "sibling_team_ids": [
-    "ftc-8380"
+    "ftc-8380",
+    "scioly-university-city-high"
    ]
   },
   {
@@ -5592,7 +5754,7 @@
    "description": "FTC Team #12405 Lost Ctrl is a third-season veteran team that competes in the FIRST Tech Challenge, with 11 core members, a coach, and parent volunteers who meet weekly at El Camino High School to program, engineer, and pursue outreach opportunities.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.930711+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.376616+00:00",
    "rookie_year": 2016,
    "active": true,
    "last_season": null,
@@ -5627,7 +5789,7 @@
    "description": "FTC Team 12499 Gear Up is a high school robotics team from San Diego, California that competes in the FIRST Tech Challenge, focusing on robot design, software development, and community outreach to promote STEM education.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.931480+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.380444+00:00",
    "rookie_year": 2016,
    "active": true,
    "last_season": null,
@@ -5723,7 +5885,10 @@
    "sponsor_provenance": {},
    "org_key": "del norte high school",
    "sibling_team_ids": [
-    "frc-3749"
+    "cyberpatriot-del-norte-high",
+    "frc-3749",
+    "scioly-del-norte-high",
+    "tarc-del-norte-high"
    ]
   },
   {
@@ -5762,7 +5927,8 @@
    "org_key": "black mountain middle school",
    "sibling_team_ids": [
     "ftc-13084",
-    "ftc-24142"
+    "ftc-24142",
+    "mathcounts-black-mountain-middle"
    ]
   },
   {
@@ -5841,7 +6007,8 @@
    "org_key": "black mountain middle school",
    "sibling_team_ids": [
     "ftc-12778",
-    "ftc-24142"
+    "ftc-24142",
+    "mathcounts-black-mountain-middle"
    ]
   },
   {
@@ -5940,7 +6107,8 @@
    "org_key": "meadowbrook middle school",
    "sibling_team_ids": [
     "ftc-16589",
-    "ftc-18426"
+    "ftc-18426",
+    "mathcounts-meadowbrook-middle"
    ]
   },
   {
@@ -6234,9 +6402,11 @@
    "sponsor_provenance": {},
    "org_key": "canyon crest academy",
    "sibling_team_ids": [
+    "cyberpatriot-canyon-crest-academy",
     "frc-3128",
     "ftc-7159",
-    "ftc-9837"
+    "ftc-9837",
+    "scioly-canyon-crest-academy"
    ]
   },
   {
@@ -6266,7 +6436,7 @@
    "description": "FTC Team 14496 Roboctopi is a community-based FIRST Technology Challenge team that has been competing in FIRST robotics for eight years, with six of those years in FTC.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.934128+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.396126+00:00",
    "rookie_year": 2018,
    "active": true,
    "last_season": null,
@@ -6300,7 +6470,7 @@
    "description": "The Alpacas are a 7-member FTC robotics team from San Diego, California that competes in the FIRST Tech Challenge, focused on programming and building robots while developing science and technology skills.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.935254+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.409971+00:00",
    "rookie_year": 2018,
    "active": true,
    "last_season": null,
@@ -6445,7 +6615,8 @@
     "ftc-10809",
     "ftc-23997",
     "ftc-8097",
-    "ftc-9261"
+    "ftc-9261",
+    "scioly-sage-creek-high"
    ]
   },
   {
@@ -6471,7 +6642,7 @@
    "description": "Garagebot 15146 is a FTC robotics team based in Solana Beach, California that aims to prepare, equip, and promote quality STEM leaders through a Christ-centered community.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.937010+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.430909+00:00",
    "rookie_year": 2018,
    "active": true,
    "last_season": null,
@@ -6674,7 +6845,8 @@
    "org_key": "meadowbrook middle school",
    "sibling_team_ids": [
     "ftc-13224",
-    "ftc-18426"
+    "ftc-18426",
+    "mathcounts-meadowbrook-middle"
    ]
   },
   {
@@ -6708,7 +6880,8 @@
    "sponsor_provenance": {},
    "org_key": "design 39 campus",
    "sibling_team_ids": [
-    "ftc-19793"
+    "ftc-19793",
+    "mathcounts-design-39-campus"
    ]
   },
   {
@@ -7032,7 +7205,7 @@
    "description": "Robowaves 18236 is a second-year FIRST Tech Challenge robotics team from The Waldorf School San Diego High School in California that competes in FTC robotics competitions.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.942307+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.460398+00:00",
    "rookie_year": 2020,
    "active": true,
    "last_season": null,
@@ -7177,7 +7350,8 @@
    "org_key": "meadowbrook middle school",
    "sibling_team_ids": [
     "ftc-13224",
-    "ftc-16589"
+    "ftc-16589",
+    "mathcounts-meadowbrook-middle"
    ]
   },
   {
@@ -7235,7 +7409,7 @@
    "description": "Vikings Robotics is the FRC team of La Jolla High School in San Diego, participating in the FIRST Robotics Competition since 2009, where teams design and build robots in a 6-week build season to compete in yearly sport-like events. The team aims to develop real-world STEM skills and foster an ambitious, inclusive community that inspires young people to pursue engineering and technical fields.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.942736+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.463246+00:00",
    "rookie_year": 2020,
    "active": true,
    "last_season": null,
@@ -7276,7 +7450,9 @@
    "sponsors": [],
    "sponsor_provenance": {},
    "org_key": "oak valley middle school",
-   "sibling_team_ids": []
+   "sibling_team_ids": [
+    "mathcounts-oak-valley-middle"
+   ]
   },
   {
    "team_id": "ftc-19659",
@@ -7377,7 +7553,8 @@
    },
    "org_key": "design 39 campus",
    "sibling_team_ids": [
-    "ftc-16652"
+    "ftc-16652",
+    "mathcounts-design-39-campus"
    ]
   },
   {
@@ -7556,7 +7733,8 @@
    "org_key": "poway high school",
    "sibling_team_ids": [
     "frc-1622",
-    "ftc-1622"
+    "ftc-1622",
+    "scioly-poway-high"
    ]
   },
   {
@@ -7624,7 +7802,7 @@
    "description": "Pandamonium 21303 is an FTC team that shares content including tutorial videos on coding Mecanum wheels.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.943775+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.466276+00:00",
    "rookie_year": 2022,
    "active": true,
    "last_season": null,
@@ -7878,7 +8056,10 @@
    "sponsors": [],
    "sponsor_provenance": {},
    "org_key": "bishops school",
-   "sibling_team_ids": []
+   "sibling_team_ids": [
+    "mathcounts-bishops-school",
+    "scioly-bishops-school"
+   ]
   },
   {
    "team_id": "ftc-22687",
@@ -7935,7 +8116,7 @@
    "description": "Triple Fault Robotics is a team of makers from San Diego.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.944061+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.470868+00:00",
    "rookie_year": 2023,
    "active": true,
    "last_season": null,
@@ -7969,7 +8150,7 @@
    "description": "C.A.R.T Robotics is FTC team #23280 based in San Diego, originally founded in 2020 as a FLL team and now competing in FIRST Tech Challenge with a 15-member team that also provides technology tutoring services to community kids.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.947541+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.481143+00:00",
    "rookie_year": 2023,
    "active": true,
    "last_season": null,
@@ -8067,7 +8248,7 @@
    "description": "FTC Team #23696 Kinematic Flying Chickens is in their second year of competition, with a focus on developing core FIRST values through robotics, autonomous programming, and strategic alliance building. The team emphasizes collaborative effort across build, programming, and drive teams, supported by dedicated coaches and community volunteers.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.949929+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.486216+00:00",
    "rookie_year": 2023,
    "active": true,
    "last_season": null,
@@ -8114,7 +8295,8 @@
     "ftc-10809",
     "ftc-15097",
     "ftc-8097",
-    "ftc-9261"
+    "ftc-9261",
+    "scioly-sage-creek-high"
    ]
   },
   {
@@ -8240,7 +8422,8 @@
     "ftc-26471",
     "ftc-32005",
     "ftc-32007",
-    "ftc-33418"
+    "ftc-33418",
+    "mathcounts-francis-parker"
    ]
   },
   {
@@ -8307,7 +8490,8 @@
    "org_key": "black mountain middle school",
    "sibling_team_ids": [
     "ftc-12778",
-    "ftc-13084"
+    "ftc-13084",
+    "mathcounts-black-mountain-middle"
    ]
   },
   {
@@ -8680,7 +8864,7 @@
    "description": "RoboGenesis #26235-A is a FIRST Tech Challenge team.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.950727+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.489383+00:00",
    "rookie_year": 2024,
    "active": true,
    "last_season": null,
@@ -8733,7 +8917,8 @@
     "ftc-24041",
     "ftc-32005",
     "ftc-32007",
-    "ftc-33418"
+    "ftc-33418",
+    "mathcounts-francis-parker"
    ]
   },
   {
@@ -8924,7 +9109,8 @@
    "sponsor_provenance": {},
    "org_key": "san diego french american school",
    "sibling_team_ids": [
-    "ftc-27602"
+    "ftc-27602",
+    "mathcounts-san-diego-french-american"
    ]
   },
   {
@@ -8958,7 +9144,8 @@
    "sponsor_provenance": {},
    "org_key": "san diego french american school",
    "sibling_team_ids": [
-    "ftc-27600"
+    "ftc-27600",
+    "mathcounts-san-diego-french-american"
    ]
   },
   {
@@ -9282,7 +9469,7 @@
    "description": "SegFault is an FTC robotics team with the team number 31862.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.951527+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.494290+00:00",
    "rookie_year": 2025,
    "active": true,
    "last_season": null,
@@ -9357,7 +9544,8 @@
     "ftc-24041",
     "ftc-26471",
     "ftc-32007",
-    "ftc-33418"
+    "ftc-33418",
+    "mathcounts-francis-parker"
    ]
   },
   {
@@ -9394,7 +9582,8 @@
     "ftc-24041",
     "ftc-26471",
     "ftc-32005",
-    "ftc-33418"
+    "ftc-33418",
+    "mathcounts-francis-parker"
    ]
   },
   {
@@ -9486,7 +9675,7 @@
    "description": "Flight Risk #32159 is an FTC robotics team at Sage Creek High School with approximately 95% freshmen members experiencing robotics for the first time, focusing on building foundational technical skills, teamwork, and personal growth through hands-on engineering challenges in a highly supportive, energetic environment.",
    "description_status": "generated",
    "description_provenance": "team_website",
-   "description_fetched_at": "2026-09-02T22:59:54.952631+00:00",
+   "description_fetched_at": "2026-09-04T03:41:39.499844+00:00",
    "rookie_year": 2025,
    "active": true,
    "last_season": null,
@@ -9737,7 +9926,1311 @@
     "ftc-24041",
     "ftc-26471",
     "ftc-32005",
-    "ftc-32007"
+    "ftc-32007",
+    "mathcounts-francis-parker"
+   ]
+  },
+  {
+   "team_id": "mathcounts-bishops-school",
+   "league": "MATHCOUNTS",
+   "program": "MATHCOUNTS",
+   "number": "bishops-school",
+   "name": "MATHCOUNTS Team at The Bishop's School",
+   "organization": "The Bishop's School",
+   "org_type": "school",
+   "city": "La Jolla",
+   "postal_code": "92037",
+   "latitude": 32.841228,
+   "longitude": -117.278766,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "The Bishop'S School",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "bishops school",
+   "sibling_team_ids": [
+    "ftc-22650",
+    "scioly-bishops-school"
+   ]
+  },
+  {
+   "team_id": "mathcounts-black-mountain-middle",
+   "league": "MATHCOUNTS",
+   "program": "MATHCOUNTS",
+   "number": "black-mountain-middle",
+   "name": "MATHCOUNTS Team at Black Mountain Middle School",
+   "organization": "Black Mountain Middle School",
+   "org_type": "school",
+   "city": "San Diego",
+   "postal_code": "92129",
+   "latitude": 32.96914,
+   "longitude": -117.12709,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "Black Mountain Middle",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "www.powayusd.com/pusdbmms",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "black mountain middle school",
+   "sibling_team_ids": [
+    "ftc-12778",
+    "ftc-13084",
+    "ftc-24142"
+   ]
+  },
+  {
+   "team_id": "mathcounts-carmel-valley-middle",
+   "league": "MATHCOUNTS",
+   "program": "MATHCOUNTS",
+   "number": "carmel-valley-middle",
+   "name": "MATHCOUNTS Team at Carmel Valley Middle School",
+   "organization": "Carmel Valley Middle School",
+   "org_type": "school",
+   "city": "San Diego",
+   "postal_code": "92130",
+   "latitude": 32.946669,
+   "longitude": -117.22895,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "Carmel Valley Middle",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "http://sduhsd.net/cv",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "carmel valley middle school",
+   "sibling_team_ids": []
+  },
+  {
+   "team_id": "mathcounts-design-39-campus",
+   "league": "MATHCOUNTS",
+   "program": "MATHCOUNTS",
+   "number": "design-39-campus",
+   "name": "MATHCOUNTS Team at Design 39 Campus",
+   "organization": "Design 39 Campus",
+   "org_type": "school",
+   "city": "San Diego",
+   "postal_code": "92127",
+   "latitude": 33.018484,
+   "longitude": -117.12715,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "Design 39 Campus",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "www.powayusd.com/pusddesign39/",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "design 39 campus",
+   "sibling_team_ids": [
+    "ftc-16652",
+    "ftc-19793"
+   ]
+  },
+  {
+   "team_id": "mathcounts-francis-parker",
+   "league": "MATHCOUNTS",
+   "program": "MATHCOUNTS",
+   "number": "francis-parker",
+   "name": "MATHCOUNTS Team at Francis Parker School",
+   "organization": "Francis Parker School",
+   "org_type": "school",
+   "city": "San Diego",
+   "postal_code": "92111",
+   "latitude": 32.771322,
+   "longitude": -117.177273,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "Francis Parker School",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "francis parker school",
+   "sibling_team_ids": [
+    "ftc-24041",
+    "ftc-26471",
+    "ftc-32005",
+    "ftc-32007",
+    "ftc-33418"
+   ]
+  },
+  {
+   "team_id": "mathcounts-meadowbrook-middle",
+   "league": "MATHCOUNTS",
+   "program": "MATHCOUNTS",
+   "number": "meadowbrook-middle",
+   "name": "MATHCOUNTS Team at Meadowbrook Middle School",
+   "organization": "Meadowbrook Middle School",
+   "org_type": "school",
+   "city": "Poway",
+   "postal_code": "92064",
+   "latitude": 32.963401,
+   "longitude": -117.06405,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "Meadowbrook Middle",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "www.powayusd.com/pusdmbms",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "meadowbrook middle school",
+   "sibling_team_ids": [
+    "ftc-13224",
+    "ftc-16589",
+    "ftc-18426"
+   ]
+  },
+  {
+   "team_id": "mathcounts-mesa-verde-middle",
+   "league": "MATHCOUNTS",
+   "program": "MATHCOUNTS",
+   "number": "mesa-verde-middle",
+   "name": "MATHCOUNTS Team at Mesa Verde Middle School",
+   "organization": "Mesa Verde Middle School",
+   "org_type": "school",
+   "city": "San Diego",
+   "postal_code": "92129",
+   "latitude": 32.962739,
+   "longitude": -117.14671,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "Mesa Verde Middle",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "www.powayusd.com/pusdmvms",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "mesa verde middle school",
+   "sibling_team_ids": []
+  },
+  {
+   "team_id": "mathcounts-muirlands-middle",
+   "league": "MATHCOUNTS",
+   "program": "MATHCOUNTS",
+   "number": "muirlands-middle",
+   "name": "MATHCOUNTS Team at Muirlands Middle School",
+   "organization": "Muirlands Middle School",
+   "org_type": "school",
+   "city": "La Jolla",
+   "postal_code": "92037",
+   "latitude": 32.83213,
+   "longitude": -117.2697,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "Muirlands Middle",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "www.muirlands.sandiegounified.org/",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "muirlands middle school",
+   "sibling_team_ids": []
+  },
+  {
+   "team_id": "mathcounts-oak-valley-middle",
+   "league": "MATHCOUNTS",
+   "program": "MATHCOUNTS",
+   "number": "oak-valley-middle",
+   "name": "MATHCOUNTS Team at Oak Valley Middle School",
+   "organization": "Oak Valley Middle School",
+   "org_type": "school",
+   "city": "San Diego",
+   "postal_code": "92127",
+   "latitude": 32.999254,
+   "longitude": -117.1098,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "Oak Valley Middle",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "www.powayusd.com/pusdovms",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "oak valley middle school",
+   "sibling_team_ids": [
+    "ftc-19633"
+   ]
+  },
+  {
+   "team_id": "mathcounts-pacific-trails-middle",
+   "league": "MATHCOUNTS",
+   "program": "MATHCOUNTS",
+   "number": "pacific-trails-middle",
+   "name": "MATHCOUNTS Team at Pacific Trails Middle School",
+   "organization": "Pacific Trails Middle School",
+   "org_type": "school",
+   "city": "San Diego",
+   "postal_code": "92130",
+   "latitude": 32.958864,
+   "longitude": -117.18624,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "Pacific Trails Middle",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "www.sduhsd.net/our-schools/pacific-trails-middle-school/index.html",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "pacific trails middle school",
+   "sibling_team_ids": []
+  },
+  {
+   "team_id": "mathcounts-san-diego-french-american",
+   "league": "MATHCOUNTS",
+   "program": "MATHCOUNTS",
+   "number": "san-diego-french-american",
+   "name": "MATHCOUNTS Team at San Diego French American School",
+   "organization": "San Diego French American School",
+   "org_type": "school",
+   "city": "La Jolla",
+   "postal_code": "92037",
+   "latitude": 32.83438,
+   "longitude": -117.247591,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "San Diego French American School",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "san diego french american school",
+   "sibling_team_ids": [
+    "ftc-27600",
+    "ftc-27602"
+   ]
+  },
+  {
+   "team_id": "mathcounts-sycamore-ridge",
+   "league": "MATHCOUNTS",
+   "program": "MATHCOUNTS",
+   "number": "sycamore-ridge",
+   "name": "MATHCOUNTS Team at Sycamore Ridge School",
+   "organization": "Sycamore Ridge School",
+   "org_type": "school",
+   "city": "San Diego",
+   "postal_code": "92130",
+   "latitude": 32.954011,
+   "longitude": -117.19998,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "Sycamore Ridge",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "www.dmusd.org/sycamore",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "sycamore ridge school",
+   "sibling_team_ids": []
+  },
+  {
+   "team_id": "mathcounts-thurgood-marshall-middle",
+   "league": "MATHCOUNTS",
+   "program": "MATHCOUNTS",
+   "number": "thurgood-marshall-middle",
+   "name": "MATHCOUNTS Team at Thurgood Marshall Middle School",
+   "organization": "Thurgood Marshall Middle School",
+   "org_type": "school",
+   "city": "San Diego",
+   "postal_code": "92131",
+   "latitude": 32.896523,
+   "longitude": -117.10011,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "Marshall Middle",
+   "needs_review": true,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "https://marshallmiddle.sandiegounified.org/",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "thurgood marshall middle school",
+   "sibling_team_ids": []
+  },
+  {
+   "team_id": "scioly-academy-our-lady-of-peace",
+   "league": "SCIOLY",
+   "program": "Science Olympiad",
+   "number": "academy-our-lady-of-peace",
+   "name": "Science Olympiad Team at Academy of Our Lady of Peace",
+   "organization": "Academy of Our Lady of Peace",
+   "org_type": "school",
+   "city": "San Diego",
+   "postal_code": "92116",
+   "latitude": 32.7653,
+   "longitude": -117.135661,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "Academy Of Our Lady Of Peace",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "academy of our lady of peace",
+   "sibling_team_ids": [
+    "frc-6885"
+   ]
+  },
+  {
+   "team_id": "scioly-bishops-school",
+   "league": "SCIOLY",
+   "program": "Science Olympiad",
+   "number": "bishops-school",
+   "name": "Science Olympiad Team at The Bishop's School",
+   "organization": "The Bishop's School",
+   "org_type": "school",
+   "city": "La Jolla",
+   "postal_code": "92037",
+   "latitude": 32.841228,
+   "longitude": -117.278766,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "The Bishop'S School",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "bishops school",
+   "sibling_team_ids": [
+    "ftc-22650",
+    "mathcounts-bishops-school"
+   ]
+  },
+  {
+   "team_id": "scioly-canyon-crest-academy",
+   "league": "SCIOLY",
+   "program": "Science Olympiad",
+   "number": "canyon-crest-academy",
+   "name": "Science Olympiad Team at Canyon Crest Academy",
+   "organization": "Canyon Crest Academy",
+   "org_type": "school",
+   "city": "San Diego",
+   "postal_code": "92130",
+   "latitude": 32.96024,
+   "longitude": -117.18835,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "Canyon Crest Academy",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "www.sduhsd.net",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "canyon crest academy",
+   "sibling_team_ids": [
+    "cyberpatriot-canyon-crest-academy",
+    "frc-3128",
+    "ftc-14425",
+    "ftc-7159",
+    "ftc-9837"
+   ]
+  },
+  {
+   "team_id": "scioly-carlsbad-high",
+   "league": "SCIOLY",
+   "program": "Science Olympiad",
+   "number": "carlsbad-high",
+   "name": "Science Olympiad Team at Carlsbad High School",
+   "organization": "Carlsbad High School",
+   "org_type": "school",
+   "city": "Carlsbad",
+   "postal_code": "92008",
+   "latitude": 33.163433,
+   "longitude": -117.3278,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "Carlsbad High",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "https://chs.carlsbadusd.net",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "carlsbad high school",
+   "sibling_team_ids": [
+    "ftc-5015",
+    "ftc-6226",
+    "ftc-9049"
+   ]
+  },
+  {
+   "team_id": "scioly-cathedral-catholic-high",
+   "league": "SCIOLY",
+   "program": "Science Olympiad",
+   "number": "cathedral-catholic-high",
+   "name": "Science Olympiad Team at Cathedral Catholic High School",
+   "organization": "Cathedral Catholic High School",
+   "org_type": "school",
+   "city": "San Diego",
+   "postal_code": "92130",
+   "latitude": 32.95965,
+   "longitude": -117.201461,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "Cathedral Catholic High School",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "cathedral catholic high school",
+   "sibling_team_ids": [
+    "frc-5025"
+   ]
+  },
+  {
+   "team_id": "scioly-del-norte-high",
+   "league": "SCIOLY",
+   "program": "Science Olympiad",
+   "number": "del-norte-high",
+   "name": "Science Olympiad Team at Del Norte High School",
+   "organization": "Del Norte High School",
+   "org_type": "school",
+   "city": "San Diego",
+   "postal_code": "92127",
+   "latitude": 33.015119,
+   "longitude": -117.12162,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "Del Norte High",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "www.powayusd.com/pusddnhs",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "del norte high school",
+   "sibling_team_ids": [
+    "cyberpatriot-del-norte-high",
+    "frc-3749",
+    "ftc-12666",
+    "tarc-del-norte-high"
+   ]
+  },
+  {
+   "team_id": "scioly-grauer-school",
+   "league": "SCIOLY",
+   "program": "Science Olympiad",
+   "number": "grauer-school",
+   "name": "Science Olympiad Team at The Grauer School",
+   "organization": "The Grauer School",
+   "org_type": "school",
+   "city": "Encinitas",
+   "postal_code": "92024",
+   "latitude": 33.028537,
+   "longitude": -117.256225,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "Grauer School The",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "grauer school",
+   "sibling_team_ids": [
+    "ftc-3848"
+   ]
+  },
+  {
+   "team_id": "scioly-la-costa-canyon-high",
+   "league": "SCIOLY",
+   "program": "Science Olympiad",
+   "number": "la-costa-canyon-high",
+   "name": "Science Olympiad Team at La Costa Canyon High School",
+   "organization": "La Costa Canyon High School",
+   "org_type": "school",
+   "city": "Carlsbad",
+   "postal_code": "92009",
+   "latitude": 33.07348,
+   "longitude": -117.22995,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "La Costa Canyon High",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "https://lc.sduhsd.net/",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "la costa canyon high school",
+   "sibling_team_ids": []
+  },
+  {
+   "team_id": "scioly-la-jolla-high",
+   "league": "SCIOLY",
+   "program": "Science Olympiad",
+   "number": "la-jolla-high",
+   "name": "Science Olympiad Team at La Jolla High School",
+   "organization": "La Jolla High School",
+   "org_type": "school",
+   "city": "La Jolla",
+   "postal_code": "92037",
+   "latitude": 32.833607,
+   "longitude": -117.27403,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "La Jolla High",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "www.lajollahigh.sandiegounified.org/",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "la jolla high school",
+   "sibling_team_ids": []
+  },
+  {
+   "team_id": "scioly-mira-mesa-high",
+   "league": "SCIOLY",
+   "program": "Science Olympiad",
+   "number": "mira-mesa-high",
+   "name": "Science Olympiad Team at Mira Mesa High School",
+   "organization": "Mira Mesa High School",
+   "org_type": "school",
+   "city": "San Diego",
+   "postal_code": "92126",
+   "latitude": 32.910904,
+   "longitude": -117.14037,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "Mira Mesa High",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "www.miramesa.sandiegounified.org/",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "mira mesa high school",
+   "sibling_team_ids": [
+    "frc-9573"
+   ]
+  },
+  {
+   "team_id": "scioly-mt-carmel-high",
+   "league": "SCIOLY",
+   "program": "Science Olympiad",
+   "number": "mt-carmel-high",
+   "name": "Science Olympiad Team at Mt. Carmel High School",
+   "organization": "Mt. Carmel High School",
+   "org_type": "school",
+   "city": "San Diego",
+   "postal_code": "92128",
+   "latitude": 32.965926,
+   "longitude": -117.12091,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "Mt. Carmel High",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "www.powayusd.com/pusdmchs",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "mt carmel high school",
+   "sibling_team_ids": [
+    "ftc-5135"
+   ]
+  },
+  {
+   "team_id": "scioly-olympian-high",
+   "league": "SCIOLY",
+   "program": "Science Olympiad",
+   "number": "olympian-high",
+   "name": "Science Olympiad Team at Olympian High School",
+   "organization": "Olympian High School",
+   "org_type": "school",
+   "city": "Chula Vista",
+   "postal_code": "91913",
+   "latitude": 32.607105,
+   "longitude": -116.97209,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "Olympian High",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "www.sweetwaterschools.org",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "olympian high school",
+   "sibling_team_ids": []
+  },
+  {
+   "team_id": "scioly-pacific-ridge-school",
+   "league": "SCIOLY",
+   "program": "Science Olympiad",
+   "number": "pacific-ridge-school",
+   "name": "Science Olympiad Team at Pacific Ridge School",
+   "organization": "Pacific Ridge School",
+   "org_type": "school",
+   "city": "Carlsbad",
+   "postal_code": "92009",
+   "latitude": 33.12287,
+   "longitude": -117.249791,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "Pacific Ridge School",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "pacific ridge school",
+   "sibling_team_ids": [
+    "ftc-4262",
+    "ftc-9266"
+   ]
+  },
+  {
+   "team_id": "scioly-poway-high",
+   "league": "SCIOLY",
+   "program": "Science Olympiad",
+   "number": "poway-high",
+   "name": "Science Olympiad Team at Poway High School",
+   "organization": "Poway High School",
+   "org_type": "school",
+   "city": "Poway",
+   "postal_code": "92064",
+   "latitude": 32.996858,
+   "longitude": -117.02366,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "Poway High",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "www.powayusd.com/pusdphs",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "poway high school",
+   "sibling_team_ids": [
+    "frc-1622",
+    "ftc-1622",
+    "ftc-20422"
+   ]
+  },
+  {
+   "team_id": "scioly-preuss-school",
+   "league": "SCIOLY",
+   "program": "Science Olympiad",
+   "number": "preuss-school",
+   "name": "Science Olympiad Team at The Preuss School UC San Diego",
+   "organization": "The Preuss School UC San Diego",
+   "org_type": "school",
+   "city": "La Jolla",
+   "postal_code": "92093",
+   "latitude": 32.842825,
+   "longitude": -117.257645,
+   "location_precision": "city",
+   "in_region": true,
+   "matched_name": "La Jolla (city centroid)",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "preuss school uc san diego",
+   "sibling_team_ids": []
+  },
+  {
+   "team_id": "scioly-rancho-bernardo-high",
+   "league": "SCIOLY",
+   "program": "Science Olympiad",
+   "number": "rancho-bernardo-high",
+   "name": "Science Olympiad Team at Rancho Bernardo High School",
+   "organization": "Rancho Bernardo High School",
+   "org_type": "school",
+   "city": "San Diego",
+   "postal_code": "92128",
+   "latitude": 32.994329,
+   "longitude": -117.06805,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "Rancho Bernardo High",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "www.powayusd.com/pusdrbhs",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "rancho bernardo high school",
+   "sibling_team_ids": [
+    "frc-2658"
+   ]
+  },
+  {
+   "team_id": "scioly-rancho-buena-vista-high",
+   "league": "SCIOLY",
+   "program": "Science Olympiad",
+   "number": "rancho-buena-vista-high",
+   "name": "Science Olympiad Team at Rancho Buena Vista High School",
+   "organization": "Rancho Buena Vista High School",
+   "org_type": "school",
+   "city": "Vista",
+   "postal_code": "92081",
+   "latitude": 33.164594,
+   "longitude": -117.24715,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "Rancho Buena Vista High",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "http://rbv.vistausd.org",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "rancho buena vista high school",
+   "sibling_team_ids": [
+    "frc-6382"
+   ]
+  },
+  {
+   "team_id": "scioly-sage-creek-high",
+   "league": "SCIOLY",
+   "program": "Science Olympiad",
+   "number": "sage-creek-high",
+   "name": "Science Olympiad Team at Sage Creek High School",
+   "organization": "Sage Creek High School",
+   "org_type": "school",
+   "city": "Carlsbad",
+   "postal_code": "92009",
+   "latitude": 33.142565,
+   "longitude": -117.24945,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "Sage Creek High",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "https://schs.carlsbadusd.net",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "sage creek high school",
+   "sibling_team_ids": [
+    "ftc-10809",
+    "ftc-15097",
+    "ftc-23997",
+    "ftc-8097",
+    "ftc-9261"
+   ]
+  },
+  {
+   "team_id": "scioly-san-dieguito-academy",
+   "league": "SCIOLY",
+   "program": "Science Olympiad",
+   "number": "san-dieguito-academy",
+   "name": "Science Olympiad Team at San Dieguito High School Academy",
+   "organization": "San Dieguito High School Academy",
+   "org_type": "school",
+   "city": "Encinitas",
+   "postal_code": "92024",
+   "latitude": 33.036329,
+   "longitude": -117.27501,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "San Dieguito HS Academy",
+   "needs_review": true,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "No Data",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "san dieguito high school academy",
+   "sibling_team_ids": []
+  },
+  {
+   "team_id": "scioly-san-marcos-high",
+   "league": "SCIOLY",
+   "program": "Science Olympiad",
+   "number": "san-marcos-high",
+   "name": "Science Olympiad Team at San Marcos High School",
+   "organization": "San Marcos High School",
+   "org_type": "school",
+   "city": "San Marcos",
+   "postal_code": "92069",
+   "latitude": 33.131215,
+   "longitude": -117.20543,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "San Marcos High",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "www.smusd.org",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "san marcos high school",
+   "sibling_team_ids": [
+    "frc-6695"
+   ]
+  },
+  {
+   "team_id": "scioly-scripps-ranch-high",
+   "league": "SCIOLY",
+   "program": "Science Olympiad",
+   "number": "scripps-ranch-high",
+   "name": "Science Olympiad Team at Scripps Ranch High School",
+   "organization": "Scripps Ranch High School",
+   "org_type": "school",
+   "city": "San Diego",
+   "postal_code": "92131",
+   "latitude": 32.908719,
+   "longitude": -117.11199,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "Scripps Ranch High",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "http://srhs.falcons.org",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "scripps ranch high school",
+   "sibling_team_ids": [
+    "cyberpatriot-scripps-ranch-high",
+    "frc-4139"
+   ]
+  },
+  {
+   "team_id": "scioly-torrey-pines-high",
+   "league": "SCIOLY",
+   "program": "Science Olympiad",
+   "number": "torrey-pines-high",
+   "name": "Science Olympiad Team at Torrey Pines High School",
+   "organization": "Torrey Pines High School",
+   "org_type": "school",
+   "city": "San Diego",
+   "postal_code": "92130",
+   "latitude": 32.956384,
+   "longitude": -117.22497,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "Torrey Pines High",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "www.sduhsd.net/tp",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "torrey pines high school",
+   "sibling_team_ids": [
+    "frc-3647"
+   ]
+  },
+  {
+   "team_id": "scioly-university-city-high",
+   "league": "SCIOLY",
+   "program": "Science Olympiad",
+   "number": "university-city-high",
+   "name": "Science Olympiad Team at University City High School",
+   "organization": "University City High School",
+   "org_type": "school",
+   "city": "San Diego",
+   "postal_code": "92122",
+   "latitude": 32.861197,
+   "longitude": -117.20954,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "University City High",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "www.universitycityhigh.org",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "university city high school",
+   "sibling_team_ids": [
+    "ftc-11288",
+    "ftc-8380"
+   ]
+  },
+  {
+   "team_id": "scioly-westview-high",
+   "league": "SCIOLY",
+   "program": "Science Olympiad",
+   "number": "westview-high",
+   "name": "Science Olympiad Team at Westview High School",
+   "organization": "Westview High School",
+   "org_type": "school",
+   "city": "San Diego",
+   "postal_code": "92129",
+   "latitude": 32.965082,
+   "longitude": -117.14808,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "Westview High",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "www.powayusd.com/pusdwvhs",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "westview high school",
+   "sibling_team_ids": [
+    "frc-3341"
+   ]
+  },
+  {
+   "team_id": "tarc-del-norte-high",
+   "league": "TARC",
+   "program": "American Rocketry Challenge",
+   "number": "del-norte-high",
+   "name": "American Rocketry Challenge Team at Del Norte High School",
+   "organization": "Del Norte High School",
+   "org_type": "school",
+   "city": "San Diego",
+   "postal_code": "92127",
+   "latitude": 33.015119,
+   "longitude": -117.12162,
+   "location_precision": "school",
+   "in_region": true,
+   "matched_name": "Del Norte High",
+   "needs_review": false,
+   "website": "",
+   "website_status": "none",
+   "organization_website": "www.powayusd.com/pusddnhs",
+   "social": [],
+   "description": "",
+   "description_status": "none",
+   "description_provenance": "",
+   "description_fetched_at": "",
+   "rookie_year": null,
+   "active": true,
+   "last_season": null,
+   "sponsors": [],
+   "sponsor_provenance": {},
+   "org_key": "del norte high school",
+   "sibling_team_ids": [
+    "cyberpatriot-del-norte-high",
+    "frc-3749",
+    "ftc-12666",
+    "scioly-del-norte-high"
    ]
   }
  ]
