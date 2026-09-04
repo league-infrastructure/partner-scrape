@@ -1,7 +1,7 @@
 ---
 id: '037'
 title: 'Repo cleanup: orphaned images, broken justfile, stale docs'
-status: executing
+status: done
 branch: sprint/037-repo-cleanup-orphaned-images-broken-justfile-stale-docs
 use-cases: []
 issues:
