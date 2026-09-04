@@ -1905,7 +1905,92 @@ after `geocode_teams()`), the same single-call-sequencing cost
   the prior `teams.json` before merging, which no stage in this
   subsystem does today for any field.
 
-## 7. Sprint 036 ticket 005 research findings — new STEM competition-team types
+## 7. Sprint 036: generalizing `Team` to any STEM competition type
+
+This section is the single durable summary of sprint 036's whole arc
+for this module — §2 above carries the ticket-by-ticket Design
+Rationale detail; this section is what a future reader should check
+first. Ticket 004 (issue 47's own doc-sync ticket) authored this
+consolidated section, drawing together content §2 already carried in
+narrower, ticket-scoped paragraphs.
+
+### 7.1 What changed, end to end
+
+Issue 47's stakeholder framing (2026-09-03): "The science olympiad
+teams: go move them over to teams. That makes the team category not
+just robotics team. That makes a general team." Before this sprint,
+`Team.League` was closed to `Literal["FTC", "FRC", "FLL", "VEX"]` —
+FIRST/VEX robotics only — so sprint 032 had nowhere to put Science
+Olympiad and CyberPatriot except `directory.model.Club`, alongside
+three organizations (4-H, Civil Air Patrol, Sea Cadets) that were never
+clubs *or* competition teams in this project's scope. Sprint 036 fixed
+the model, not just the data:
+
+1. **`League` widened three times** across this sprint's tickets, each
+   widening documented where it happened: ticket 001 added
+   `VALID_LEAGUES: frozenset[str] = frozenset(get_args(League))` (no
+   prior source ever needed to validate an untrusted `league` value);
+   ticket 002 added `"SCIOLY"`/`"CYBERPATRIOT"` for the migration;
+   ticket 006 added `"MATHCOUNTS"`/`"TARC"` for the two new types its
+   research pass found. Final value set: `Literal["FTC", "FRC", "FLL",
+   "VEX", "SCIOLY", "CYBERPATRIOT", "MATHCOUNTS", "TARC"]`. See §2's
+   "Decision: widen `League` itself, not add a new `competition_kind`
+   discriminator field" for the full alternatives-considered writeup —
+   unchanged by tickets 002/006, since widening a Literal's value set
+   needed no new decision each time.
+2. **A new, generic acquisition source, `teams/sources/
+   team_static_roster.py`,** was added (ticket 001) as the `teams/`-side
+   counterpart to `directory.sources.club_static_roster`'s sprint-032
+   generalization — see §2's "Decision: a new `sources/
+   team_static_roster.py` module" for why this is a sibling to, not a
+   further overload of, FLL's bespoke `sources/static_roster.py`. It
+   now sits in `teams/sources/` alongside `ftcscout.py`/`tba.py`/
+   `robotevents.py` (live API sources) and `static_roster.py` (FLL's
+   bespoke static roster), registered in `teams.pipeline._TEAM_SOURCES`
+   under the `"team_static_roster"` key. Every non-robotics competition
+   type this sprint touched — Science Olympiad, CyberPatriot,
+   MATHCOUNTS, TARC — is served by this one module, differing only by
+   which `teams/registry/*.toml` entry and `teams/data/*.tsv` file
+   points at it.
+3. **Science Olympiad (24) and CyberPatriot (3) migrated** from `Club`
+   to `Team` (ticket 002), preserving their already-verified geocoding
+   byte-for-byte via a diff-check gate before the original `Club` rows
+   were deleted — see §2's ticket 002 paragraph for the migration
+   detail.
+4. **MATHCOUNTS (13) and TARC (1) newly curated** through the same
+   mechanism (ticket 006) — genuinely new rosters, not migrations,
+   geocoded fresh through the normal `geocode_teams()` pass with no
+   preserved data to carry over. See §2's ticket 006 paragraph and §7.3
+   below for the research and population detail.
+5. **`Club`/`ClubType` narrowed** to the two types that are genuinely
+   clubs (Hack Club, Girls Who Code) on the `directory/` side (tickets
+   002/003) — out of scope for this file, documented fully in
+   `directory/DESIGN.md`'s own sprint 036 Revision.
+
+**Final `teams.json` shape once this ships:** 319 teams (152 FTC + 78
+FRC + 48 FLL + 24 SCIOLY + 3 CYBERPATRIOT + 13 MATHCOUNTS + 1 TARC),
+up from 278 pre-sprint. `TEAMS_SCHEMA_FIELDS` (30 fields) is unchanged
+— every addition this sprint made is a Literal-widening plus new rows,
+never a new field.
+
+### 7.2 The meets-vs-competes rule (see `directory/DESIGN.md`)
+
+The model-level distinction this whole sprint enforces — **a standing
+entity that *competes* (enters a named STEM competition, in any
+discipline) belongs in `Team`; a standing entity that only *meets*, with
+no competition circuit attached, belongs in `Club`** — is stated as an
+explicit, standalone, quotable rule in `directory/DESIGN.md`'s "Club vs.
+Team: the meets-vs-competes rule" section, not here: that document is
+where a future sprint curating a new club *or* team type should check
+first, since `Club` is the model this rule exists to keep from drifting
+back into "wherever a curated roster doesn't obviously fit `Team`" (sprint
+032's own mistake, which this sprint exists to correct structurally).
+This file's own role in the rule is simple: `Team` is the affirmative
+side of it — anything that competes, however informal or non-robotics,
+has a home here via `team_static_roster.py` (§7.1) rather than being
+mis-filed as a `Club`.
+
+### 7.3 Ticket 005 research findings — new STEM competition-team types
 
 Issue 47 asked for a bounded brainstorm-and-hunt for San Diego STEM
 competition-team types beyond robotics/Science Olympiad/CyberPatriot.
@@ -1940,6 +2025,8 @@ standard.
 | picoCTF | No public roster exists | Ad hoc self-formed teams; also a poor "standing group" fit |
 | MATE ROV Competition *(discovered)* | No public roster exists / no confirmed SD regional | — |
 | Congressional App Challenge *(discovered, already an sprint-029 event)* | Not researched to roster depth | Registered page lists districts, not teams; deferred to a future ticket |
+
+### 7.4 Ticket 006: population outcome
 
 **Recommendation for ticket 006:** populate **MATHCOUNTS San Diego
 Chapter** as the primary new type (13-school roster, directly
