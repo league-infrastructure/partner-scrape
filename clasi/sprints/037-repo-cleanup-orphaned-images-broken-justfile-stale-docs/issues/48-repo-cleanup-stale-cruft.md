@@ -1,5 +1,10 @@
 ---
-status: pending
+status: in-progress
+sprint: '037'
+tickets:
+- 037-001
+- 037-002
+- 037-003
 ---
 
 # Repo cleanup: orphaned images, broken justfile, stale docs and ignores
