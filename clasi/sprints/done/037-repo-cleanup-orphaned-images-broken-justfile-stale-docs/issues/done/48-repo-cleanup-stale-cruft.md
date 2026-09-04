@@ -1,5 +1,10 @@
 ---
-status: pending
+status: done
+sprint: '037'
+tickets:
+- 037-001
+- 037-002
+- 037-003
 ---
 
 # Repo cleanup: orphaned images, broken justfile, stale docs and ignores
@@ -34,6 +39,13 @@ its check mode, so the inverse is nearly free, and it makes this
 repeatable instead of a one-time manual sweep. Re-run its existing
 check afterward to prove nothing referenced was removed.
 
+**Done (037-001, 2026-09-04)**: added `--prune`/`--dry-run` to
+`dev/backfill_missing_images.py`. Ran against the real repo:
+`data/images/opportunities/` went from 562 files / 322M to 485 files /
+288M — exactly 77 files removed (~34M), matching the survey. Post-prune
+check-only run reported 0 missing for both the partners-derived and
+opportunities-derived checks.
+
 ## 2. `justfile` is actively broken and partly dangerous
 
 - `dev`, `build`, `preview` all `cd site/`, which has not existed in
@@ -48,6 +60,13 @@ Pages deploy. For the other three, either remove them or make it
 unmistakable that they need a manual `stem-ecosystem` clone; removal is
 the honest default now that this repo does not publish the site.
 
+**Done (037-002, 2026-09-04)**: deleted the `justfile` outright — every
+recipe `cd site/`d into a directory that hasn't existed here since
+sprint 019, so nothing useful remained once `pub` was removed.
+Confirmed `.github/workflows/pages.yml` doesn't invoke `just` at all,
+so nothing else depends on the file. `just --list` now correctly
+reports "No justfile found".
+
 ## 3. README documents publishing that is turned off
 
 README's beta-preview section describes the GitHub Pages workflow and
@@ -56,6 +75,11 @@ dev`/`just build`. Publishing was disabled 2026-09-03 (workflow
 `disabled_manually`; the site stays live serving its last deploy).
 Rewrite that section to match reality, and keep it consistent with
 whatever ticket 2 does to the justfile.
+
+**Done (037-002, 2026-09-04)**: rewrote README's "Beta preview" section
+to state publishing was disabled 2026-09-03, the site keeps serving its
+last deploy, the `justfile` was removed, and to point readers at
+cloning `stem-ecosystem` directly to work on the site.
 
 ## 4. Stale references to deleted files
 
@@ -66,6 +90,12 @@ Both files were deleted long ago. The attribution is honest history but
 points at nothing a reader can open — reword so it reads as historical
 provenance rather than a live cross-reference.
 
+**Done (037-003, 2026-09-04)**: reworded all references in
+`partner_scrape/discovery/sitemap.py` and
+`partner_scrape/discovery/DESIGN.md` to name the specific deleted files
+and point to git history, rather than implying `dev/` still holds
+sitemap-related code.
+
 ## 5. `.gitignore` gaps
 
 None of these are ignored, and the first two appeared in `git status`
@@ -73,10 +103,16 @@ during the 2026-09-02 session: `.clasi/.clasi.db-wal`,
 `.clasi/.clasi.db-shm` (sqlite sidecars of the already-ignored
 `.clasi/.clasi.db`), and `.pytest_cache/`.
 
+**Done (037-003, 2026-09-04)**: added all three to `.gitignore`.
+Verified `.pytest_cache/` is suppressed by running `uv run pytest` then
+`git status` (shows only under `--ignored`, not untracked).
+
 ## 6. Redundant `docs/design/.gitkeep`
 
 `docs/design/` now holds `design.md`, `overview.md`, `specification.md`
 and `usecases.md`. The `.gitkeep` no longer keeps anything.
+
+**Done (037-003, 2026-09-04)**: deleted.
 
 ## 7. Four empty config files
 
@@ -87,6 +123,20 @@ and `usecases.md`. The `.gitkeep` no longer keeps anything.
 **Verify before deleting**: these may be scaffolding `dotconfig`
 expects for its deploy list. If removing them breaks `dotconfig`'s view
 of available deploys, leave them and record why here instead.
+
+**Done (037-003, 2026-09-04) — kept, verified**: deleted all four
+(backed up first) and ran `dotconfig load dev --stdout`:
+`✗ deployment config file not found: config/dev/public.env` (exit 1).
+`config/dev/public.env` is hard-required by `dotconfig load`. Restored
+via `git checkout --` and confirmed `dotconfig load dev --stdout`
+succeeds again and `git status` is clean on `config/`. The other three
+files, isolated individually, don't hard-fail (`secrets.env` missing:
+silent; `local/eric/public.env` missing: warns but succeeds;
+`local/eric/secrets.env` missing: silent) — but they're one documented
+scaffold per `config/AGENTS.md` (a `public.env`/`secrets.env` pair per
+deploy and per developer), so keeping only `config/dev/public.env`
+while deleting the other three would leave an inconsistent partial
+scaffold for no benefit (they're already 0 bytes). All four kept.
 
 ## Verification
 

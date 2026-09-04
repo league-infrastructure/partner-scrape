@@ -66,15 +66,21 @@ no network access, no `ANTHROPIC_API_KEY` usage, no writes to the real
 
 ### Beta preview
 
-`partner-scrape` also hosts a GitHub Pages beta preview of the
-`stem-ecosystem` site (`.github/workflows/pages.yml`). `site/` is
-**not** tracked content in this repo -- the workflow's build job
-checks out `league-infrastructure/stem-ecosystem` at `ref: master`
-into `site/` at build time, so the beta always builds from
-stem-ecosystem's actual current source. For local `just dev`/`just
-build`, clone `stem-ecosystem` yourself into a gitignored `site/`
-directory (or point the `justfile`'s `site :=` variable elsewhere);
-see the `justfile` for details.
+`partner-scrape` used to host a GitHub Pages beta preview of the
+`stem-ecosystem` site via `.github/workflows/pages.yml`. Publishing
+from this repo was disabled 2026-09-03 (the workflow is
+`disabled_manually`) when the stakeholder turned off website
+publishing from this repo; the live site keeps serving its last
+deploy, but no new deploy is triggered from here. The workflow file
+itself is untouched and could be re-enabled in the future, but there
+is currently no supported local `just dev`/`just build` workflow in
+this repo for previewing it -- the repo-root `justfile` that drove
+that workflow has been removed as dead weight (it `cd site/`d into a
+directory that hasn't existed here since sprint 019 moved the site to
+`stem-ecosystem`, and its `pub` recipe pushed `master` and dispatched
+`pages.yml`, both no longer appropriate under the current push
+freeze). To work on the site itself, clone
+`league-infrastructure/stem-ecosystem` directly.
 
 ---
 
