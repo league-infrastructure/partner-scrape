@@ -233,6 +233,12 @@ raise and crashes the run.
 `urllib`; TOML is stdlib `tomllib`; the store is stdlib `sqlite3`. `playwright` is an
 optional extra whose import is deferred to first real use.
 
+**Python floor is 3.11 (`requires-python = ">=3.11"`).** Re-checked in sprint 038 (ticket
+012): the full suite (2617 tests) passes on CPython 3.11, 3.12 and 3.13, and nothing uses
+3.12+/3.13-only syntax or stdlib. 3.11 is the true floor because the package reads TOML
+with stdlib `tomllib` (added in 3.11); 3.10 fails at import. The wheel smoke test
+(`dev/wheel_smoke_test.py`, CI `wheel-smoke.yml`) runs on 3.11 and 3.13.
+
 **Tests are fixture-based and hermetic.** 905 tests, one test module per source module,
 saved HTML/JSON fixtures under `tests/fixtures/`, no network, no API key required.
 

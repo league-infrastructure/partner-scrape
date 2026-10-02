@@ -1,0 +1,35 @@
+# Builds the wheel, installs it into a fresh venv in a temp dir OUTSIDE the
+# repo, and runs `partner-scrape --help` (no credentials) plus one dry run
+# with SCRAPE_CACHE_DIR / PARTNER_SCRAPE_DATA_DIR set to local temp dirs.
+# See dev/wheel_smoke_test.py. Reused by publish.yml before it uploads.
+name: Wheel smoke test
+
+on:
+  push:
+    branches: ['master']
+  pull_request:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: Build and smoke-test wheel (Python ${{ matrix.python }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      # No DO_SPACES_* / AWS_* secrets are exposed to this job, and the
+      # script strips them from the environment of every command anyway.
+      - name: Smoke test the built wheel
+        run: |
+          export UV_PYTHON="$(which python)"
+          python dev/wheel_smoke_test.py

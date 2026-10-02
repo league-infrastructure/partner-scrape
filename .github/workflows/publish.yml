@@ -1,0 +1,64 @@
+# Publishes partner-scrape to PyPI when a GitHub release is published (or a
+# v* tag is pushed), using PyPI trusted publishing (OIDC) -- no API token.
+#
+# OPERATOR SETUP (one-time, not done by this repo; see README "Releasing"):
+#   1. Claim the `partner-scrape` name on PyPI (create the project, or add a
+#      "pending publisher" at https://pypi.org/manage/account/publishing/).
+#   2. Add a trusted publisher: owner league-infrastructure, repo
+#      partner-scrape, workflow publish.yml, environment pypi.
+#   3. Create a GitHub environment named `pypi` (optionally with required
+#      reviewers) in the repo settings.
+# Then cut a release/tag whose version matches pyproject.toml.
+name: Publish to PyPI
+
+on:
+  release:
+    types: [published]
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync
+      - run: uv run pytest
+
+  smoke:
+    name: Wheel smoke test
+    uses: ./.github/workflows/wheel-smoke.yml
+
+  build:
+    name: Build distributions
+    needs: [test, smoke]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  publish:
+    name: Upload to PyPI
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/partner-scrape
+    permissions:
+      id-token: write   # required for trusted publishing
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1

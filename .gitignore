@@ -1,6 +1,6 @@
 # Generated pipeline output: lives in the Spaces bucket (data/ prefix), not git.
 # A local data/ is a developer's scratch copy.
-data/
+/data/
 
 # Python
 __pycache__/

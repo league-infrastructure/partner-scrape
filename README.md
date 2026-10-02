@@ -17,6 +17,26 @@ into the data bucket that the `stem-ecosystem` site reads.
 
 ### Install
 
+From PyPI (no repo checkout needed; Python 3.11+):
+
+```bash
+pipx install partner-scrape          # or: pip install partner-scrape
+partner-scrape --help
+
+# Optional: headless-browser fetching (Playwright) needs the extra AND a browser:
+pipx install "partner-scrape[headless]"      # or: pip install "partner-scrape[headless]"
+playwright install chromium                  # with pipx: pipx run --spec "partner-scrape[headless]" playwright install chromium
+```
+
+The wheel bundles the seed source registry, the in-package data files and
+`data-schema.md`. A real run still needs the bucket credentials below;
+without them, point `SCRAPE_CACHE_DIR` and `PARTNER_SCRAPE_DATA_DIR` at local
+directories. A run also reads `partners.json` from a `stem-ecosystem`
+checkout (`--site-dir` / `SITE_DIR`, default the current directory, expected
+at `src/data/partners.json`).
+
+From a checkout (development):
+
 ```bash
 uv sync
 ```
@@ -77,6 +97,29 @@ logged and skipped -- it never aborts the rest of the run.
 ```bash
 uv run pytest
 ```
+
+The built wheel is smoke-tested end to end (fresh venv outside the repo,
+`--help` with no credentials, one dry run with local temp cache/data dirs):
+
+```bash
+python dev/wheel_smoke_test.py
+```
+
+### Releasing
+
+`.github/workflows/publish.yml` builds, tests, smoke-tests and uploads to
+PyPI via trusted publishing (OIDC, no token) when a GitHub release is
+published or a `v*` tag is pushed. The version in `pyproject.toml`
+(`dotconfig version bump`) must be new for the upload to succeed.
+
+One-time **operator steps** (not automated; not yet done):
+
+1. Claim the `partner-scrape` name on PyPI (404 as of 2026-10-02) -- or add a
+   "pending publisher" at <https://pypi.org/manage/account/publishing/>.
+2. Add a trusted publisher there: owner `league-infrastructure`, repository
+   `partner-scrape`, workflow `publish.yml`, environment `pypi`.
+3. Create a GitHub environment named `pypi` in the repo settings
+   (optionally with required reviewers).
 
 Every test runs against recorded fixtures under `tests/fixtures/` --
 no network access, no `ANTHROPIC_API_KEY` usage, no writes to the real

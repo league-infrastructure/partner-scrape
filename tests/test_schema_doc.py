@@ -18,7 +18,10 @@ def test_source_doc_lives_in_docs_and_data_is_untracked():
     assert SOURCE_DOC.is_file()
     assert "and it is committed to git" not in SOURCE_DOC.read_text(encoding="utf-8")
     ignore = (REPO_ROOT / ".gitignore").read_text(encoding="utf-8").splitlines()
-    assert "data/" in ignore
+    # Anchored: an unanchored "data/" also ignores partner_scrape/*/data/, and
+    # hatchling honours .gitignore, silently dropping those from the wheel.
+    assert "/data/" in ignore
+    assert "data/" not in ignore
 
 
 def test_wheel_force_includes_the_schema_doc():
