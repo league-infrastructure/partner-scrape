@@ -35,3 +35,6 @@ packages = ["partner_scrape"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+markers = [
+    "bucket: reads the REAL DigitalOcean Spaces bucket; skipped unless --run-bucket or RUN_BUCKET_TESTS=1",
+]

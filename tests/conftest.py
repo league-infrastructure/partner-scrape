@@ -1,5 +1,7 @@
 """Shared fixtures: keep every test off the real DigitalOcean Spaces bucket."""
 
+import os
+
 import pytest
 from moto.core.models import botocore_stubber
 
@@ -21,9 +23,33 @@ def _local_storage_locations(tmp_path, monkeypatch):
     config._s3_client = None
 
 
+def pytest_addoption(parser):
+    parser.addoption(
+        "--run-bucket",
+        action="store_true",
+        default=False,
+        help="run the opt-in tests that read the REAL bucket (also RUN_BUCKET_TESTS=1)",
+    )
+
+
+def pytest_collection_modifyitems(config, items):
+    """Skip `bucket`-marked tests (real bucket, read-only) unless opted in."""
+    if config.getoption("--run-bucket") or os.environ.get("RUN_BUCKET_TESTS") == "1":
+        return
+    skip = pytest.mark.skip(reason="real-bucket test: pass --run-bucket or RUN_BUCKET_TESTS=1")
+    for item in items:
+        if "bucket" in item.keywords:
+            item.add_marker(skip)
+
+
 @pytest.fixture(autouse=True)
-def _forbid_real_bucket(monkeypatch):
-    """Fail any test that builds an S3Store for the real bucket outside moto."""
+def _forbid_real_bucket(request, monkeypatch):
+    """Fail any test that builds an S3Store for the real bucket outside moto.
+
+    Tests marked `bucket` are the deliberate exception (opt-in, read-only).
+    """
+    if request.node.get_closest_marker("bucket"):
+        return
     original = storage.S3Store.__init__
 
     def guarded(self, bucket, prefix, client):
