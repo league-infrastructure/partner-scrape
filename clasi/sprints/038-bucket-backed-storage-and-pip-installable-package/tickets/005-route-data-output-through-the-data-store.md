@@ -1,9 +1,11 @@
 ---
 id: '005'
 title: Route data output through the data Store
-status: open
-use-cases: ["SUC-002"]
-depends-on: ["002"]
+status: in-progress
+use-cases:
+- SUC-002
+depends-on:
+- '002'
 github-issue: ''
 issue: 50-move-cache-and-data-to-digitalocean-spaces.md
 completes_issue: true
