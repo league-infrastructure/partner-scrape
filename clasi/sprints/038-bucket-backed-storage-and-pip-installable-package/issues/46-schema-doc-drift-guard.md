@@ -1,5 +1,8 @@
 ---
-status: pending
+status: in-progress
+sprint: 038
+tickets:
+- 038-010
 ---
 
 # Drift guard for data/SCHEMA.md

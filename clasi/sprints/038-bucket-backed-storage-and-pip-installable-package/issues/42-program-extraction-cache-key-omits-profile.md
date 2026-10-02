@@ -1,5 +1,8 @@
 ---
-status: pending
+status: in-progress
+sprint: 038
+tickets:
+- 038-004
 ---
 
 # Program extraction cache key omits the extraction profile

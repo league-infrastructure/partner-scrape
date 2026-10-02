@@ -1,8 +1,11 @@
 ---
 status: pending
+sprint: 038
 ---
 
 # Move the scrape cache to a DigitalOcean Space
+
+> Superseded by `50-move-cache-and-data-to-digitalocean-spaces.md`, the approved plan, which settles the open questions below.
 
 ## Description
 
