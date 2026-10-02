@@ -1,9 +1,11 @@
 ---
 id: '010'
 title: Schema doc drift guard
-status: open
-use-cases: ["SUC-005"]
-depends-on: ["009"]
+status: in-progress
+use-cases:
+- SUC-005
+depends-on:
+- 009
 github-issue: ''
 issue: 46-schema-doc-drift-guard.md
 completes_issue: true
