@@ -58,7 +58,7 @@ Three modules, layered:
   JSON output schema is *generated from `EnrichmentResult`'s own dataclass annotations*
   by `_build_enrichment_json_schema()`, so the schema and the parser cannot drift apart.
 - `cache.py` — `EnrichmentCache`, keyed by `Event.identity_key()`, one JSON file per
-  event under `{SCRAPE_CACHE_DIR}/enrichment_cache/`, storing
+  event under `enrichment/` in the scrape-cache Store (sprint 038; was `enrichment_cache/`), storing
   `(schema_version, prompt_version, content_hash, EnrichmentResult, enriched_at)`.
   `schema_version` (sprint 009) is a small integer bumped whenever `EnrichmentResult`'s
   *shape* changes; a stored entry whose version doesn't match `_CACHE_SCHEMA_VERSION` is

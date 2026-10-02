@@ -13,6 +13,7 @@ from typing import Any
 from partner_scrape.enrich.cache import _CACHE_SCHEMA_VERSION, EnrichmentCache, content_hash
 from partner_scrape.enrich.llm_client import PROMPT_VERSION, EnrichmentResult
 from partner_scrape.model import Event
+from partner_scrape.storage import LocalStore
 
 
 def _sample_event(**overrides: Any) -> Event:
@@ -146,7 +147,7 @@ class TestEnrichmentCacheRoundTrip:
         cache = EnrichmentCache(cache_dir=tmp_path)
         cache.store(_sample_event(), _sample_result())
 
-        written = list((tmp_path / "enrichment_cache").glob("*.json"))
+        written = list((tmp_path / "enrichment").glob("*.json"))
         assert len(written) == 1
 
 
@@ -156,7 +157,8 @@ class TestEnrichmentCacheDefaultsToConfiguredCacheDir:
 
         cache = EnrichmentCache()
 
-        assert cache.cache_dir == tmp_path
+        assert isinstance(cache._store, LocalStore)
+        assert cache._store.root == tmp_path
 
 
 # ---------------------------------------------------------------------
@@ -172,7 +174,7 @@ class TestCacheSchemaVersion:
         cache = EnrichmentCache(cache_dir=tmp_path)
         cache.store(_sample_event(), _sample_result())
 
-        [written] = list((tmp_path / "enrichment_cache").glob("*.json"))
+        [written] = list((tmp_path / "enrichment").glob("*.json"))
         entry = json.loads(written.read_text())
 
         assert entry["schema_version"] == _CACHE_SCHEMA_VERSION
@@ -188,7 +190,7 @@ class TestCacheSchemaVersion:
         event = _sample_event()
         cache.store(event, _sample_result())
 
-        [written] = list((tmp_path / "enrichment_cache").glob("*.json"))
+        [written] = list((tmp_path / "enrichment").glob("*.json"))
         entry = json.loads(written.read_text())
         del entry["schema_version"]
         del entry["result"]["opportunity_type"]  # pre-sprint-009 shape
@@ -201,7 +203,7 @@ class TestCacheSchemaVersion:
         event = _sample_event()
         cache.store(event, _sample_result())
 
-        [written] = list((tmp_path / "enrichment_cache").glob("*.json"))
+        [written] = list((tmp_path / "enrichment").glob("*.json"))
         entry = json.loads(written.read_text())
         entry["schema_version"] = _CACHE_SCHEMA_VERSION - 1
         written.write_text(json.dumps(entry))
@@ -216,7 +218,7 @@ class TestCacheSchemaVersion:
         event = _sample_event()
 
         cache.store(event, _sample_result(relevance_reason="stale"))
-        [written] = list((tmp_path / "enrichment_cache").glob("*.json"))
+        [written] = list((tmp_path / "enrichment").glob("*.json"))
         entry = json.loads(written.read_text())
         del entry["schema_version"]
         written.write_text(json.dumps(entry))
@@ -242,7 +244,7 @@ class TestCachePromptVersion:
         cache = EnrichmentCache(cache_dir=tmp_path)
         cache.store(_sample_event(), _sample_result())
 
-        [written] = list((tmp_path / "enrichment_cache").glob("*.json"))
+        [written] = list((tmp_path / "enrichment").glob("*.json"))
         entry = json.loads(written.read_text())
 
         assert entry["prompt_version"] == PROMPT_VERSION
@@ -259,7 +261,7 @@ class TestCachePromptVersion:
         event = _sample_event()
         cache.store(event, _sample_result())
 
-        [written] = list((tmp_path / "enrichment_cache").glob("*.json"))
+        [written] = list((tmp_path / "enrichment").glob("*.json"))
         entry = json.loads(written.read_text())
         del entry["prompt_version"]  # pre-sprint-014 entry
         written.write_text(json.dumps(entry))
@@ -271,7 +273,7 @@ class TestCachePromptVersion:
         event = _sample_event()
         cache.store(event, _sample_result())
 
-        [written] = list((tmp_path / "enrichment_cache").glob("*.json"))
+        [written] = list((tmp_path / "enrichment").glob("*.json"))
         entry = json.loads(written.read_text())
         entry["prompt_version"] = PROMPT_VERSION - 1
         written.write_text(json.dumps(entry))
@@ -288,7 +290,7 @@ class TestCachePromptVersion:
         event = _sample_event()
 
         cache.store(event, _sample_result(relevance_reason="stale"))
-        [written] = list((tmp_path / "enrichment_cache").glob("*.json"))
+        [written] = list((tmp_path / "enrichment").glob("*.json"))
         entry = json.loads(written.read_text())
         del entry["prompt_version"]
         written.write_text(json.dumps(entry))
@@ -310,7 +312,7 @@ class TestSchemaAndPromptVersionAreCheckedIndependently:
         event = _sample_event()
         cache.store(event, _sample_result())
 
-        [written] = list((tmp_path / "enrichment_cache").glob("*.json"))
+        [written] = list((tmp_path / "enrichment").glob("*.json"))
         entry = json.loads(written.read_text())
         entry["schema_version"] = _CACHE_SCHEMA_VERSION - 1
         entry["prompt_version"] = PROMPT_VERSION
@@ -325,7 +327,7 @@ class TestSchemaAndPromptVersionAreCheckedIndependently:
         event = _sample_event()
         cache.store(event, _sample_result())
 
-        [written] = list((tmp_path / "enrichment_cache").glob("*.json"))
+        [written] = list((tmp_path / "enrichment").glob("*.json"))
         entry = json.loads(written.read_text())
         entry["schema_version"] = _CACHE_SCHEMA_VERSION
         entry["prompt_version"] = PROMPT_VERSION - 1
@@ -338,7 +340,7 @@ class TestSchemaAndPromptVersionAreCheckedIndependently:
         event = _sample_event()
         cache.store(event, _sample_result())
 
-        [written] = list((tmp_path / "enrichment_cache").glob("*.json"))
+        [written] = list((tmp_path / "enrichment").glob("*.json"))
         entry = json.loads(written.read_text())
         entry["schema_version"] = _CACHE_SCHEMA_VERSION
         entry["prompt_version"] = PROMPT_VERSION
@@ -351,7 +353,7 @@ class TestSchemaAndPromptVersionAreCheckedIndependently:
         event = _sample_event()
         cache.store(event, _sample_result())
 
-        [written] = list((tmp_path / "enrichment_cache").glob("*.json"))
+        [written] = list((tmp_path / "enrichment").glob("*.json"))
         entry = json.loads(written.read_text())
         entry["schema_version"] = _CACHE_SCHEMA_VERSION - 1
         entry["prompt_version"] = PROMPT_VERSION - 1
@@ -379,7 +381,7 @@ class TestPromptVersion1To2Migration:
         event = _sample_event()
         cache.store(event, _sample_result())
 
-        [written] = list((tmp_path / "enrichment_cache").glob("*.json"))
+        [written] = list((tmp_path / "enrichment").glob("*.json"))
         entry = json.loads(written.read_text())
         entry["prompt_version"] = 1
         written.write_text(json.dumps(entry))

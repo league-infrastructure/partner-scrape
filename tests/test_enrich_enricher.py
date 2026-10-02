@@ -279,7 +279,7 @@ def _rewrite_cache_entry_prompt_version(tmp_path, prompt_version) -> None:
     ``prompt_version`` (an int) or, if ``prompt_version`` is None, no
     ``prompt_version`` key at all -- simulating a pre-sprint-014 entry.
     """
-    [written] = list((tmp_path / "enrichment_cache").glob("*.json"))
+    [written] = list((tmp_path / "enrichment").glob("*.json"))
     entry = json.loads(written.read_text())
     if prompt_version is None:
         entry.pop("prompt_version", None)
@@ -487,7 +487,7 @@ class TestFailsOpenOnLlmFailure:
         enricher.enrich([_event()])
 
         assert cache.lookup(_event()) is None
-        assert list((tmp_path / "enrichment_cache").glob("*.json")) == []
+        assert list((tmp_path / "enrichment").glob("*.json")) == []
 
     def test_next_run_retries_the_llm_rather_than_reusing_a_failed_attempt(self, tmp_path):
         cache = EnrichmentCache(cache_dir=tmp_path)

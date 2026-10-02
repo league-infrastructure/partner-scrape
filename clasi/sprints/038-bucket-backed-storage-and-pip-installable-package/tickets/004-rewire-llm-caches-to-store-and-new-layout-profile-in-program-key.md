@@ -1,7 +1,7 @@
 ---
 id: '004'
 title: Rewire LLM caches to Store and new layout; profile in program key
-status: in-progress
+status: done
 use-cases:
 - SUC-001
 depends-on:
@@ -22,11 +22,11 @@ Move the four LLM extraction caches onto the Store and add the profile to the pr
 
 ## Acceptance Criteria
 
-- [ ] `enrich/cache.py` -> `enrichment/`; `adapters/program_cache.py` -> `programs/`; `teams/description_cache.py` -> `descriptions/`; `teams/sponsor_cache.py` -> `sponsors/`; file names unchanged; constructors keep `cache_dir: Path | None`
-- [ ] Program cache key includes the extraction `profile`; NO legacy-key read fallback (stakeholder decision) -- the ~67 existing `programs/` entries re-extract once
-- [ ] Unit test: same URL and body cached under two profiles yield two distinct entries and each lookup returns its own
-- [ ] Tests asserting old folder names updated
-- [ ] adapters/DESIGN.md Open Question about the missing profile is resolved and the change noted
+- [x] `enrich/cache.py` -> `enrichment/`; `adapters/program_cache.py` -> `programs/`; `teams/description_cache.py` -> `descriptions/`; `teams/sponsor_cache.py` -> `sponsors/`; file names unchanged; constructors keep `cache_dir: Path | None`
+- [x] Program cache key includes the extraction `profile`; NO legacy-key read fallback (stakeholder decision) -- the ~67 existing `programs/` entries re-extract once
+- [x] Unit test: same URL and body cached under two profiles yield two distinct entries and each lookup returns its own
+- [x] Tests asserting old folder names updated
+- [x] adapters/DESIGN.md Open Question about the missing profile is resolved and the change noted
 
 ## Implementation Plan
 

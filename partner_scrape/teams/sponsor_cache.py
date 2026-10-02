@@ -40,10 +40,11 @@ from pathlib import Path
 from typing import Any, Callable
 
 from partner_scrape import config
+from partner_scrape.storage import LocalStore, Store
 from partner_scrape.teams.sponsor_llm import SponsorExtractionResult
 
 #: Subdirectory of `SCRAPE_CACHE_DIR` entries are stored under.
-_CACHE_SUBDIR = "sponsor_extraction_cache"
+_CACHE_SUBDIR = "sponsors"
 
 #: Bumped whenever `SponsorExtractionResult`'s shape changes, mirroring
 #: `enrich/cache.py`'s `_CACHE_SCHEMA_VERSION` precedent (sprint 009
@@ -81,8 +82,8 @@ def _entry_filename(team_id: str, candidates: list[str]) -> str:
     return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
 
 
-def _entry_path(cache_dir: Path, team_id: str, candidates: list[str]) -> Path:
-    return cache_dir / _CACHE_SUBDIR / f"{_entry_filename(team_id, candidates)}.json"
+def _entry_key(team_id: str, candidates: list[str]) -> str:
+    return f"{_CACHE_SUBDIR}/{_entry_filename(team_id, candidates)}.json"
 
 
 def _result_to_jsonable(result: SponsorExtractionResult) -> dict[str, Any]:
@@ -97,9 +98,8 @@ class SponsorCache:
     """Persisted ``(team_id, content_hash(candidates)) ->
     SponsorExtractionResult`` map.
 
-    One JSON file per key under ``{cache_dir}/sponsor_extraction_cache/``.
-    ``cache_dir`` defaults to ``config.get_scrape_cache_dir()`` when
-    omitted -- tests always pass an explicit ``tmp_path`` (this module's
+    One JSON file per key under ``sponsors/`` in the scrape-cache Store: ``cache_dir`` (wrapped
+    in a ``LocalStore``) when given, else ``config.get_scrape_cache_store()`` -- tests always pass an explicit ``tmp_path`` (this module's
     own tests, and ticket 005's ``extract_sponsors()`` tests, never touch
     the real configured cache directory).
     """
@@ -109,7 +109,9 @@ class SponsorCache:
         cache_dir: Path | None = None,
         clock: Callable[[], datetime] = lambda: datetime.now(timezone.utc),
     ) -> None:
-        self.cache_dir = cache_dir if cache_dir is not None else config.get_scrape_cache_dir()
+        self._store: Store = (
+            LocalStore(cache_dir) if cache_dir is not None else config.get_scrape_cache_store()
+        )
         self._clock = clock
 
     def lookup(self, team_id: str, candidates: list[str]) -> SponsorExtractionResult | None:
@@ -119,11 +121,9 @@ class SponsorCache:
         candidate list (a different key, so naturally no file), or a
         stale/missing `schema_version`.
         """
-        path = _entry_path(self.cache_dir, team_id, candidates)
-        if not path.exists():
+        entry = self._store.read_json(_entry_key(team_id, candidates))
+        if entry is None:
             return None
-        with open(path, encoding="utf-8") as f:
-            entry = json.load(f)
         if entry.get("schema_version") != _CACHE_SCHEMA_VERSION:
             # Missing key (pre-this-ticket entry) or a stale version --
             # both are a miss, not a deserialization error. Forces
@@ -133,8 +133,6 @@ class SponsorCache:
 
     def store(self, team_id: str, candidates: list[str], result: SponsorExtractionResult) -> None:
         """Write a fresh cache entry for ``(team_id, candidates)``."""
-        path = _entry_path(self.cache_dir, team_id, candidates)
-        path.parent.mkdir(parents=True, exist_ok=True)
         entry = {
             "schema_version": _CACHE_SCHEMA_VERSION,
             "team_id": team_id,
@@ -142,5 +140,6 @@ class SponsorCache:
             "result": _result_to_jsonable(result),
             "cached_at": self._clock().isoformat(),
         }
-        with open(path, "w", encoding="utf-8") as f:
-            json.dump(entry, f, indent=2)
+        # json.dumps defaults (ensure_ascii) + indent=2, byte-identical to
+        # the files written before the Store existed.
+        self._store.write_text(_entry_key(team_id, candidates), json.dumps(entry, indent=2), "application/json")

@@ -1368,7 +1368,7 @@ after `geocode_teams()`), the same single-call-sequencing cost
   `enrich.llm_client.FixtureLLMClient`.
 - **`teams.sponsor_cache.SponsorCache`** (sprint 013) — a content-hash
   cache keyed by `(team_id, content_hash(candidates))`, one JSON file per
-  key under `{SCRAPE_CACHE_DIR}/sponsor_extraction_cache/`, mirroring
+  key under `sponsors/` in the scrape-cache Store (sprint 038; was `sponsor_extraction_cache/`; `DescriptionCache` likewise uses `descriptions/`, was `description_extraction_cache/`), mirroring
   (not importing) `enrich.cache.EnrichmentCache`'s
   `schema_version`-guarded shape. Caching is keyed by the *candidate
   list's* content hash, not the raw page body's, so a page's unrelated
