@@ -1,9 +1,12 @@
 ---
 id: 008
 title: Verify against the real bucket (opt-in)
-status: open
-use-cases: ["SUC-001", "SUC-002"]
-depends-on: ["007"]
+status: in-progress
+use-cases:
+- SUC-001
+- SUC-002
+depends-on:
+- '007'
 github-issue: ''
 issue: 50-move-cache-and-data-to-digitalocean-spaces.md
 completes_issue: true
