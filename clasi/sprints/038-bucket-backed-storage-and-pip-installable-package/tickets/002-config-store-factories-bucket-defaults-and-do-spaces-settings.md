@@ -1,9 +1,13 @@
 ---
 id: '002'
 title: Config Store factories, bucket defaults and DO_SPACES settings
-status: open
-use-cases: ["SUC-001", "SUC-002", "SUC-004"]
-depends-on: ["001"]
+status: in-progress
+use-cases:
+- SUC-001
+- SUC-002
+- SUC-004
+depends-on:
+- '001'
 github-issue: ''
 issue: 50-move-cache-and-data-to-digitalocean-spaces.md
 completes_issue: true
