@@ -1,9 +1,12 @@
 ---
 id: '012'
 title: Wheel smoke test, publish workflow, README
-status: open
-use-cases: ["SUC-004"]
-depends-on: ["006", "009"]
+status: in-progress
+use-cases:
+- SUC-004
+depends-on:
+- '006'
+- 009
 github-issue: ''
 issue: 51-make-partner-scrape-a-pip-installable-standalone-package.md
 completes_issue: true
