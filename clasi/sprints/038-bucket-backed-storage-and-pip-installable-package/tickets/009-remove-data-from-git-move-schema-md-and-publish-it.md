@@ -1,9 +1,11 @@
 ---
 id: 009
 title: Remove data/ from git; move SCHEMA.md and publish it
-status: open
-use-cases: ["SUC-002"]
-depends-on: ["008"]
+status: in-progress
+use-cases:
+- SUC-002
+depends-on:
+- 008
 github-issue: ''
 issue: 50-move-cache-and-data-to-digitalocean-spaces.md
 completes_issue: true
