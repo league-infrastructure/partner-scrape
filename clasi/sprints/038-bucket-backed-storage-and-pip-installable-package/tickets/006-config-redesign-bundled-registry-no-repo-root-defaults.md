@@ -1,9 +1,11 @@
 ---
 id: '006'
 title: 'Config redesign: bundled registry, no REPO_ROOT defaults'
-status: open
-use-cases: ["SUC-004"]
-depends-on: ["005"]
+status: in-progress
+use-cases:
+- SUC-004
+depends-on:
+- '005'
 github-issue: ''
 issue:
 - 51-make-partner-scrape-a-pip-installable-standalone-package.md
