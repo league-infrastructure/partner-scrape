@@ -1,9 +1,11 @@
 ---
 id: '004'
 title: Rewire LLM caches to Store and new layout; profile in program key
-status: open
-use-cases: ["SUC-001"]
-depends-on: ["002"]
+status: in-progress
+use-cases:
+- SUC-001
+depends-on:
+- '002'
 github-issue: ''
 issue:
 - 50-move-cache-and-data-to-digitalocean-spaces.md
