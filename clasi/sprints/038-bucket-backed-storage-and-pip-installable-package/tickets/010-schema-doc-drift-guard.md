@@ -1,7 +1,7 @@
 ---
 id: '010'
 title: Schema doc drift guard
-status: in-progress
+status: done
 use-cases:
 - SUC-005
 depends-on:
@@ -20,10 +20,10 @@ Issue 46 drift guard targeting the new docs location.
 
 ## Acceptance Criteria
 
-- [ ] Test parses field lists from `docs/data-schema.md` and asserts each equals `SITE_SCHEMA_FIELDS`, `TEAMS_SCHEMA_FIELDS`, `PLACES_SCHEMA_FIELDS`, `CLUBS_SCHEMA_FIELDS`, `OFFERINGS_SCHEMA_FIELDS` exactly and in order
-- [ ] Failure message names the constant and the missing/extra field
-- [ ] Classifier-prompt vocabularies are NOT pinned; prose unguarded; enum-backed vocabularies only if cheap
-- [ ] Demonstrated: adding a field to a constant without updating the doc fails the suite
+- [x] Test parses field lists from `docs/data-schema.md` and asserts each equals `SITE_SCHEMA_FIELDS`, `TEAMS_SCHEMA_FIELDS`, `PLACES_SCHEMA_FIELDS`, `CLUBS_SCHEMA_FIELDS`, `OFFERINGS_SCHEMA_FIELDS` exactly and in order
+- [x] Failure message names the constant and the missing/extra field
+- [x] Classifier-prompt vocabularies are NOT pinned; prose unguarded; enum-backed vocabularies only if cheap
+- [x] Demonstrated: adding a field to a constant without updating the doc fails the suite
 
 ## Implementation Plan
 

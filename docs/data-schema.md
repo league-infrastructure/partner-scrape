@@ -371,7 +371,7 @@ other vocabulary value, or adds a published file must update this document in
 the same ticket.
 
 **Drift guard.** `tests/test_schema_doc_drift.py` parses the field list under
-each `## \`file\` — N fields` heading above and asserts it equals the constant
+each "`file` — N fields" section heading above and asserts it equals the constant
 in the table exactly and in order, including the `N` in the heading. A failure
 names the constant and the missing/extra field, so adding a field to an exporter
 without editing this document fails `uv run pytest`. When you add or remove a
