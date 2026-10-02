@@ -13,9 +13,13 @@ Run by hand (sprint 038 ticket 008), never from the default test suite
     uv run python dev/verify_bucket.py run --source coastalrootsfarm
 
 ``check`` is strictly read-only: object counts per ``cache/`` folder and
-for ``data/`` against expectations, plus byte-identity of every local
-``data/`` file (ETag == md5, no download) and a sample of cache objects
-(downloaded, parsed as JSON).
+for ``data/`` against recorded baselines (required published files exist
+and parse as JSON; object count >= the recorded minimum), plus a sample
+of cache objects (downloaded, parsed as JSON). ``data/`` is no longer in
+git, so there is no tracked tree to compare against: the source of truth
+is the recorded baseline below. To compare exactly against a local copy
+(e.g. a backup you hold) pass ``--local-data DIR``: then every file's
+md5 must equal the bucket ETag and the key sets must match.
 
 ``run`` executes ONE source of the real pipeline in-process against the
 real ``cache/`` prefix and counts cache hits/misses, HTTP fetches and
@@ -43,7 +47,6 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
 BUCKET = "jtl-stem-ecosystem-scrape"
 CACHE_PREFIX = "cache/"
 DATA_PREFIX = "data/"
@@ -62,9 +65,17 @@ EXPECTED_CACHE_MIN = {
     "descriptions": 53,
     "sponsors": 34,
 }
-#: Local data tree (repo ``data/``, minus ``mirrors/``) is expected 1:1
-#: under ``data/`` in the bucket.
-LOCAL_DATA_DIR = REPO_ROOT / "data"
+#: Baseline for the live ``data/`` prefix (917 objects at upload time,
+#: sprint 038; ``SCHEMA.md`` is added by the first run after ticket 009).
+#: Like the cache counts it is a floor: runs only add or overwrite.
+EXPECTED_DATA_MIN = 900
+#: Published files that must exist under ``data/`` and parse as JSON.
+EXPECTED_DATA_JSON = (
+    "opportunities.json", "scrape-meta.json", "partners.json", "teams.json",
+    "places.json", "clubs.json", "offerings.json", "ads.json",
+    "yield-history.json",
+)
+#: Local data trees are compared 1:1 minus ``mirrors/`` (never uploaded).
 LOCAL_DATA_EXCLUDE = ("mirrors/",)
 
 
@@ -99,7 +110,7 @@ def head(client: Any, key: str) -> dict[str, Any]:
 # -- check (read-only) -------------------------------------------------
 
 
-def local_data_files(root: Path = LOCAL_DATA_DIR) -> dict[str, Path]:
+def local_data_files(root: Path) -> dict[str, Path]:
     files: dict[str, Path] = {}
     for p in sorted(root.rglob("*")):
         if p.is_file():
@@ -109,7 +120,9 @@ def local_data_files(root: Path = LOCAL_DATA_DIR) -> dict[str, Path]:
     return files
 
 
-def check_counts(client: Any, local_cache: Path | None = None) -> list[str]:
+def check_counts(
+    client: Any, local_cache: Path | None = None, local_data: Path | None = None
+) -> list[str]:
     """Return a list of failure messages (empty == pass); prints a report."""
     failures: list[str] = []
     objs = list_objects(client, CACHE_PREFIX)
@@ -130,14 +143,24 @@ def check_counts(client: Any, local_cache: Path | None = None) -> list[str]:
         failures.append(f"cache/{folder}: unexpected folder")
 
     data = {o["Key"][len(DATA_PREFIX):] for o in list_objects(client, DATA_PREFIX)}
-    local = set(local_data_files())
-    missing, extra = sorted(local - data), sorted(data - local)
-    print(f"data/: {len(data)} objects; local data/ minus mirrors: {len(local)}")
-    print(f"  missing from bucket: {len(missing)}; only in bucket: {len(extra)}")
-    if missing:
-        failures.append(f"data/: {len(missing)} local files missing in bucket, e.g. {missing[:3]}")
-    if extra:
-        failures.append(f"data/: {len(extra)} bucket-only objects, e.g. {extra[:3]}")
+    if local_data is not None:
+        local = set(local_data_files(local_data))
+        missing, extra = sorted(local - data), sorted(data - local)
+        print(f"data/: {len(data)} objects; local {local_data} minus mirrors: {len(local)}")
+        print(f"  missing from bucket: {len(missing)}; only in bucket: {len(extra)}")
+        if missing:
+            failures.append(f"data/: {len(missing)} local files missing in bucket, e.g. {missing[:3]}")
+        if extra:
+            failures.append(f"data/: {len(extra)} bucket-only objects, e.g. {extra[:3]}")
+    else:
+        ok = len(data) >= EXPECTED_DATA_MIN
+        print(f"data/: {len(data)} objects (expected >= {EXPECTED_DATA_MIN}) {'ok' if ok else 'FAIL'}")
+        if not ok:
+            failures.append(f"data/: {len(data)} objects, expected >= {EXPECTED_DATA_MIN}")
+        absent = [k for k in EXPECTED_DATA_JSON if k not in data]
+        print(f"  required published files absent: {absent}")
+        if absent:
+            failures.append(f"data/: required files missing: {absent}")
     return failures
 
 
@@ -145,28 +168,44 @@ def _md5(path: Path) -> str:
     return hashlib.md5(path.read_bytes()).hexdigest()
 
 
-def check_byte_identity(client: Any, cache_sample: int = 25) -> list[str]:
-    """Every local data file's md5 equals the bucket ETag (no download);
-    a deterministic sample of cache objects is downloaded and parsed."""
+def check_byte_identity(
+    client: Any, cache_sample: int = 25, local_data: Path | None = None
+) -> list[str]:
+    """The required published data files download and parse as JSON; with
+    ``local_data``, every local file's md5 also equals the bucket ETag (no
+    download). A deterministic sample of cache objects is downloaded and
+    parsed."""
     failures: list[str] = []
     etags = {
         o["Key"][len(DATA_PREFIX):]: o["ETag"].strip('"')
         for o in list_objects(client, DATA_PREFIX)
     }
-    compared = mismatched = multipart = 0
-    for rel, path in local_data_files().items():
-        etag = etags.get(rel)
-        if etag is None:
+    bad_data = 0
+    for rel in EXPECTED_DATA_JSON:
+        if rel not in etags:
             continue  # reported by check_counts
-        if "-" in etag:
-            multipart += 1
-            continue
-        compared += 1
-        if _md5(path) != etag:
-            mismatched += 1
-            failures.append(f"data/{rel}: local md5 != bucket ETag")
-    print(f"data byte-identity (md5 vs ETag): compared {compared}, "
-          f"mismatched {mismatched}, multipart-skipped {multipart}")
+        body = client.get_object(Bucket=BUCKET, Key=DATA_PREFIX + rel)["Body"].read()
+        try:
+            json.loads(body)
+        except ValueError:
+            bad_data += 1
+            failures.append(f"data/{rel}: not valid JSON")
+    print(f"data required files: parsed {len(EXPECTED_DATA_JSON)}, {bad_data} not valid JSON")
+    if local_data is not None:
+        compared = mismatched = multipart = 0
+        for rel, path in local_data_files(local_data).items():
+            etag = etags.get(rel)
+            if etag is None:
+                continue  # reported by check_counts
+            if "-" in etag:
+                multipart += 1
+                continue
+            compared += 1
+            if _md5(path) != etag:
+                mismatched += 1
+                failures.append(f"data/{rel}: local md5 != bucket ETag")
+        print(f"data byte-identity (md5 vs ETag): compared {compared}, "
+              f"mismatched {mismatched}, multipart-skipped {multipart}")
 
     keys = sorted(o["Key"] for o in list_objects(client, CACHE_PREFIX))
     step = max(1, len(keys) // cache_sample)
@@ -381,6 +420,9 @@ def main(argv: list[str] | None = None) -> int:
     check = sub.add_parser("check", help="read-only counts + byte-identity checks")
     check.add_argument("--local-cache", type=Path, default=None,
                        help="local cache tree to compare exact per-folder counts against")
+    check.add_argument("--local-data", type=Path, default=None,
+                       help="local data/ tree (e.g. a backup) to compare exactly "
+                            "(key sets + md5 vs ETag); default: recorded baseline only")
     run = sub.add_parser("run", help="one-source real pipeline run (scratch data prefix)")
     run.add_argument("--source", required=True, help="registry source id, e.g. coastalrootsfarm")
     run.add_argument("--site-dir", default=None)
@@ -392,7 +434,8 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "check":
         client = _client()
-        failures = check_counts(client, args.local_cache) + check_byte_identity(client)
+        failures = (check_counts(client, args.local_cache, args.local_data)
+                    + check_byte_identity(client, local_data=args.local_data))
     else:
         failures = run_one_source(args)
     print("\nPASS" if not failures else "\nFAIL:\n  " + "\n  ".join(failures))

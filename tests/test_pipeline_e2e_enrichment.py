@@ -124,7 +124,7 @@ def _fixture_fetcher() -> FixtureFetcher:
 
 def _site_dir(tmp_path: Path) -> Path:
     """A tmp_path-backed stand-in for the sibling stem-ecosystem repo --
-    never the real `../stem-ecosystem` checkout."""
+    never a real stem-ecosystem checkout."""
     site_dir = tmp_path / "stem-ecosystem"
     data_dir = site_dir / "src" / "data"
     data_dir.mkdir(parents=True)
@@ -194,7 +194,7 @@ def _scrape_cache_dir(tmp_path, monkeypatch):
     """Point SCRAPE_CACHE_DIR at a tmp_path for every test in this file.
 
     Sitemap Discovery (`discovery/sitemap.py`) reads
-    `config.get_scrape_cache_dir()` directly (not injectable) for its
+    `config.get_scrape_cache_store()` directly (not injectable) for its
     per-source `<lastmod>` snapshot -- no test here ever touches the
     real configured cache directory.
     """
@@ -204,12 +204,12 @@ def _scrape_cache_dir(tmp_path, monkeypatch):
 
 @pytest.fixture(autouse=True)
 def _own_data_dir_default(tmp_path_factory, monkeypatch):
-    """Pin `writer.get_own_data_dir()`'s (and, sprint 020 ticket 004,
-    `ads.get_own_data_dir()`'s) resolution to a throwaway directory for
+    """Pin `writer.get_data_store()`'s (and, sprint 020 ticket 004,
+    `ads.get_data_store()`'s) resolution to a throwaway directory for
     every test in this file (sprint 020 ticket 003).
 
     `export_opportunities()`'s (and `export_ads()`'s) `own_data_dir`
-    parameter defaults to `config.get_own_data_dir()` -- a real repo
+    parameter defaults to `config.get_data_store()` -- a real repo
     path with no environment-variable override -- when a caller doesn't
     pass one explicitly. `pipeline.run()` never passes it for either
     call, so every real (non-`dry_run`) `run()` call in this file would
@@ -217,7 +217,7 @@ def _own_data_dir_default(tmp_path_factory, monkeypatch):
     directory on every test run. Mirrors this file's own
     `_scrape_cache_dir` fixture and `tests/test_export.py`'s identical
     `_own_data_dir_default` fixture, for the same underlying reason.
-    `writer` and `ads` each import `get_own_data_dir` separately, so
+    `writer` and `ads` each import `get_data_store` separately, so
     both must be patched.
 
     Returns `fake_own_data_dir` so tests can assert against the actual

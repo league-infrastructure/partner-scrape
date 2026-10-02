@@ -74,7 +74,7 @@ run's region counts under one reserved key so the next run can compute a delta �
 - **A reporter failure must never break a run.** `pipeline.run()` defaults to a no-op
   reporter and the CLI's `--no-report` restores that. Observability is a lens on the run,
   not a participant in it.
-- **`--dry-run` writes no snapshot.** `yield-history.json` is site-dir-adjacent output and
+- **`--dry-run` writes no snapshot.** `yield-history.json` is data-Store output and
   follows the same "nothing written" promise as the export.
 - **Deliberate non-goal — no remediation.** This subsystem reports; it does not disable
   sources, retry them, or alter the export. Acting on an alert is a human decision.
@@ -177,8 +177,9 @@ first-run behavior an unseen source already gets.
   trips the cliff threshold.
 - Nothing tracks enrichment quality — how many records fell back to keyword taxonomy
   because the LLM call failed — even though that is a directly observable degradation.
-- `yield-history.json` lives beside the site's data files, which makes it easy to find
-  but means it is per-checkout state that `export/mirror.py` deliberately refuses to copy.
+- `yield-history.json` lives in the data Store beside the other published files (sprint 038: the
+  bucket's `data/` prefix, not git). It holds only the latest snapshot; bucket versioning on the
+  data prefix replaces the git history that used to preserve earlier ones.
 - **(Sprint 033)** No `cliff`-style percentage-drop alert exists for regions, only a
   `zero` flag (a region that had opportunities last run and has none this run). Regional
   counts are small (single digits for several regions per issue 34's own numbers), where a

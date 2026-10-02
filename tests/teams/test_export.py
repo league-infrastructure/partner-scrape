@@ -83,13 +83,13 @@ _EMAIL_PATTERN = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 
 @pytest.fixture(autouse=True)
 def _own_data_dir_default(tmp_path_factory, monkeypatch):
-    """Pin `export.get_own_data_dir()`'s resolution to a throwaway
+    """Pin `export.get_data_store()`'s resolution to a throwaway
     directory for every test in this file (sprint 020 ticket 005).
 
     `own_data_dir` (like `site_dir`) resolves via a `config` accessor
     when omitted, but unlike `site_dir` it has no environment-variable
-    override -- `config.get_own_data_dir()` always returns this repo's
-    real `data/` directory (`DEFAULT_OWN_DATA_DIR` is "not overridable
+    override -- `config.get_data_store()` always returns this repo's
+    real `data/` directory (`the default data location` is "not overridable
     via environment variable" by design). Every test written before
     this ticket predates the `own_data_dir` parameter and so never
     passes it explicitly; without this fixture, each such test's
@@ -462,7 +462,7 @@ class TestOwnDataDirPublish:
     025 ticket 004 removed `export_teams()`'s two `stem-ecosystem`-
     checkout writes: the already-built payload written into
     partner-scrape's own `data/` directory via
-    `config.get_own_data_dir()`. Mirrors `tests/test_export.py`'s and
+    `config.get_data_store()`. Mirrors `tests/test_export.py`'s and
     `tests/test_export_ads.py`'s `TestOwnDataDirPublish` structure and
     naming conventions, scoped to `teams.json`.
     """
@@ -489,7 +489,7 @@ class TestOwnDataDirPublish:
             ]
         )
 
-    def test_omitted_own_data_dir_resolves_via_config_get_own_data_dir(
+    def test_omitted_own_data_dir_resolves_via_config_get_data_store(
         self, tmp_path, monkeypatch
     ):
         fake_own_data_dir = tmp_path / "fake-own-data"

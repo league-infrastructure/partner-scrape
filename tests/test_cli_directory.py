@@ -34,10 +34,10 @@ def _cache_dir(tmp_path, tmp_path_factory, monkeypatch):
     `cli.run_directory` itself -- and `PoliteFetcher()`'s default
     `cache_dir` reads `SCRAPE_CACHE_DIR` eagerly. `SITE_DIR` is pinned
     too so any test that omits `--site-dir` can never reach the real
-    sibling `../stem-ecosystem` checkout, matching `test_cli_teams.py`'s
+    sibling stem-ecosystem checkout, matching `test_cli_teams.py`'s
     own `_cache_dir` fixture.
 
-    Sprint 020 ticket 006: also pins `export.get_own_data_dir()`'s
+    Sprint 020 ticket 006: also pins `export.get_data_store()`'s
     resolution to a throwaway directory. `TestDirectoryEndToEnd.
     test_real_run_writes_places_json` and
     `test_never_writes_opportunities_json_scrape_meta_or_teams_json_anywhere`
@@ -49,12 +49,12 @@ def _cache_dir(tmp_path, tmp_path_factory, monkeypatch):
     identical `own_data_dir` guard, folded into this file's existing
     single autouse fixture rather than a second one.
 
-    Sprint 020 ticket 007: also pins `cli.get_own_data_dir()`'s
+    Sprint 020 ticket 007: also pins `cli.get_data_store()`'s
     resolution to the same throwaway directory.
     `TestNeverCrossesIntoOtherPipelines.test_default_run_never_calls_run_directory`
     drives the real no-subcommand/`run` path via `cli.main([])`
     (reporting enabled by default, no `--dry-run`) -- as of ticket 007,
-    that path writes `yield-history.json` into `cli.get_own_data_dir()`
+    that path writes `yield-history.json` into `cli.get_data_store()`
     a second time, alongside the `SITE_DIR` copy. Without pinning this
     too, that single test would write a real `yield-history.json` into
     this repo's actual `data/` directory on every test run.

@@ -5,8 +5,8 @@ the write target from `{site_dir}/public/data/` to `own_data_dir`).
 
 Every test passes an explicit `log_dir`/`partners_path`/`site_dir`/
 `own_data_dir` under `tmp_path` -- no test relies on
-`config.get_scrape_cache_dir()` / `config.get_site_dir()` /
-`config.get_own_data_dir()`'s real defaults or writes to a real
+`config.get_scrape_cache_store()` / `config.get_site_dir()` /
+`config.get_data_store()`'s real defaults or writes to a real
 checkout, matching `partner_log.py`'s and `writer.py`'s own test-file
 convention.
 
@@ -39,7 +39,7 @@ PARTNERS_PATH = FIXTURES_DIR / "partners.json"
 
 @pytest.fixture(autouse=True)
 def _own_data_dir_default(tmp_path_factory, monkeypatch):
-    """Pin `writer.get_own_data_dir()`'s and `publish.get_own_data_dir()`'s
+    """Pin `writer.get_data_store()`'s and `publish.get_data_store()`'s
     resolution to a throwaway directory for every test in this file
     (sprint 020 ticket 003; sprint 025 ticket 007 added the `publish`
     half once `project()` gained its own `own_data_dir` default).
@@ -753,9 +753,9 @@ class TestConfigDefaults:
             }
         ]
 
-    def test_omitted_own_data_dir_resolves_via_config_get_own_data_dir(self, tmp_path, monkeypatch):
+    def test_omitted_own_data_dir_resolves_via_config_get_data_store(self, tmp_path, monkeypatch):
         """New in sprint 025 ticket 007: `project()`'s `own_data_dir`
-        parameter defaults to `config.get_own_data_dir()`, matching
+        parameter defaults to `config.get_data_store()`, matching
         every other export function's convention -- this overrides the
         file's autouse `_own_data_dir_default` pin with its own fake
         path to prove the default resolution itself, not just that it's

@@ -17,7 +17,7 @@ history ``export/publish.py``'s ``project()`` publishes via
 (which reflect every opportunity ever seen for that partner, via the
 persistent per-partner log under ``SCRAPE_CACHE_DIR``). That gap
 turned up 172 referenced-but-missing filenames, all confirmed to
-still exist, unresized, in the sibling ``stem-ecosystem`` checkout's
+still exist, unresized, in a local ``stem-ecosystem`` checkout's
 ``public/images/opportunities/`` -- see sprint 026's ticket 001 for
 the full incident writeup.
 
@@ -36,7 +36,7 @@ Backfill (copies from a source directory of un-resized originals,
 byte-identical, never re-encoded):
 
     uv run python dev/backfill_missing_images.py \\
-        --source-dir ../stem-ecosystem/public/images/opportunities
+        --source-dir /path/to/stem-ecosystem/public/images/opportunities
 
 Add ``--dry-run`` to preview what would be copied without writing.
 

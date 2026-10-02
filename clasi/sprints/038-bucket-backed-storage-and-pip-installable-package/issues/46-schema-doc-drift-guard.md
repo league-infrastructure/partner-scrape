@@ -5,11 +5,11 @@ tickets:
 - 038-010
 ---
 
-# Drift guard for data/SCHEMA.md
+# Drift guard for docs/data-schema.md
 
 ## Description
 
-`data/SCHEMA.md` (added 2026-09-02 at the stakeholder's request) documents
+`docs/data-schema.md` (moved here from `data/SCHEMA.md` in sprint 038 ticket 009; added 2026-09-02 at the stakeholder's request) documents
 the published output in `data/` so a downstream agent can use it without
 reading the source. Its value depends entirely on being accurate, and
 right now nothing enforces that — it is maintained by convention only.
@@ -32,7 +32,7 @@ A test in the existing drift-guard style — `tests/teams/test_export.py`
 already pins `TEAMS_SCHEMA_FIELDS`; extend that pattern to the doc.
 
 The cheap, high-value version: parse the field lists out of
-`data/SCHEMA.md` and assert each matches its authoritative constant
+`docs/data-schema.md` and assert each matches its authoritative constant
 exactly and in order — `SITE_SCHEMA_FIELDS`, `TEAMS_SCHEMA_FIELDS`,
 `PLACES_SCHEMA_FIELDS`, `CLUBS_SCHEMA_FIELDS`, `OFFERINGS_SCHEMA_FIELDS`.
 That alone catches the most likely and most damaging drift: a sprint adds
@@ -52,5 +52,5 @@ freezing the document.
 ## Verification
 
 - Adding a field to any of the five constants without updating
-  `data/SCHEMA.md` fails the suite, with a message naming the constant and
+  `docs/data-schema.md` fails the suite, with a message naming the constant and
   the missing field.

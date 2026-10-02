@@ -160,7 +160,7 @@ def _clean_tba_key_env(monkeypatch):
 
 @pytest.fixture(autouse=True)
 def _own_data_dir_default(tmp_path_factory, monkeypatch):
-    """Pin `export.get_own_data_dir()`'s resolution to a throwaway
+    """Pin `export.get_data_store()`'s resolution to a throwaway
     directory for every test in this file (sprint 020 ticket 005;
     sole write target since sprint 025 ticket 004 removed
     `export_teams()`'s `site_dir` parameter entirely).
@@ -168,7 +168,7 @@ def _own_data_dir_default(tmp_path_factory, monkeypatch):
     `run_teams()` calls `export_teams(teams, dry_run=dry_run,
     credential_failures=...)` without ever passing `own_data_dir`
     through -- that parameter's default resolves via
-    `config.get_own_data_dir()` (a real repo path with no
+    `config.get_data_store()` (a real repo path with no
     environment-variable override) inside `export_teams()` itself. This
     file's several `dry_run=False` calls (each in
     `TestEndToEndAgainstTheRealRegistry`, `TestTbaFailureIsolation`, and

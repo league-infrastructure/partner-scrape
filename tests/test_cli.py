@@ -57,7 +57,7 @@ def _cache_dir(tmp_path, tmp_path_factory, monkeypatch):
     (enrichment-on is the new default, ticket 006) *before* the
     monkeypatched `cli.run` is ever reached -- `EnrichmentCache()`
     reads `SCRAPE_CACHE_DIR` eagerly at construction (see
-    `config.get_scrape_cache_dir`'s "no sane default" `RuntimeError`),
+    `config.get_scrape_cache_store`'s "no sane default" `RuntimeError`),
     so every test in this file needs it set even though none of them
     ever touch the real configured cache directory.
 
@@ -68,7 +68,7 @@ def _cache_dir(tmp_path, tmp_path_factory, monkeypatch):
     once `cli.run` is replaced), this resolution happens unconditionally
     in `cli.main()` itself. Without overriding `SITE_DIR`, any test here
     that omits `--site-dir` would resolve against the real sibling
-    `../stem-ecosystem` checkout and, for a default (non---no-report,
+    stem-ecosystem checkout and, for a default (non---no-report,
     non---dry-run) run, write a real `yield-history.json` into it. Every
     test in this file must stay hermetic, so `SITE_DIR` is pinned to the
     same `tmp_path` unconditionally.
@@ -85,19 +85,19 @@ def _cache_dir(tmp_path, tmp_path_factory, monkeypatch):
     `TestPublishWiring` below un-stubs it to test the wiring itself.
 
     As of sprint 020 ticket 007, `cli.main()` also wrote
-    `yield-history.json` a second time into `config.get_own_data_dir()`
-    (this repo's own `data/` directory) for any non-`--dry-run`,
+    `yield-history.json` a second time into `config.get_data_store()`
+    (the configured own `data/` directory) for any non-`--dry-run`,
     reporting-enabled invocation, alongside the `SITE_DIR`/
     `--yield-history` copy. Sprint 025 ticket 006 consolidated the
     read *and* write onto `own_data_dir` as the sole location (the
     site-dir copy is gone) -- see `TestYieldReportWiring` and
     `TestYieldHistoryOwnDataDirDefault` below. Unlike `own_data_dir` on
     the export modules (tickets 003-006), there is no CLI flag or
-    `run()` parameter to override this default -- `get_own_data_dir()`
-    always resolves to this repo's real `data/` directory (no
+    `run()` parameter to override this default -- `get_data_store()`
+    always resolves to the bucket's `data/` directory (no
     environment-variable override, by design). Several tests below
     already exercise a real, non-dry-run, reporting-enabled
-    `cli.main()` call; without pinning `cli.get_own_data_dir` here too,
+    `cli.main()` call; without pinning `cli.get_data_store` here too,
     those would write a real `yield-history.json` into this repo's
     actual `data/` directory on every test run. Resolved via
     `tmp_path_factory` (a directory outside this test's own `tmp_path`
@@ -248,7 +248,7 @@ class TestYieldReportWiring:
     behavior (that's `test_pipeline_e2e.py`'s job). The `_cache_dir`
     autouse fixture pins `SITE_DIR` to `tmp_path` for every test in this
     file, so any test below that omits `--site-dir` still cannot reach
-    the real sibling `../stem-ecosystem` checkout.
+    a real stem-ecosystem checkout.
     """
 
     def test_default_run_passes_a_real_yield_reporter_into_run(self, monkeypatch):
@@ -398,11 +398,11 @@ class TestYieldReportWiring:
 class TestYieldHistoryOwnDataDirDefault:
     """Sprint 025 ticket 006: `cli.main()`'s yield-history snapshot read
     (before `run()`) and write (after `run()`) are consolidated onto a
-    single default location, `config.get_own_data_dir()` (this repo's
+    single default location, `config.get_data_store()` (the configured
     own `data/` directory) -- replacing sprint 020 ticket 007's second,
     independent `own_data_dir` write that used to sit alongside a
     `SITE_DIR`/`--yield-history` write of the same report. The
-    `_cache_dir` autouse fixture pins `cli.get_own_data_dir` to a
+    `_cache_dir` autouse fixture pins `cli.get_data_store` to a
     throwaway `tmp_path_factory` directory for every test in this file,
     so these tests read that same stand-in rather than the real repo
     `data/` directory.
@@ -615,6 +615,42 @@ class TestPublishWiring:
 
         assert exit_code == 1
         assert any(record.levelno == logging.ERROR for record in caplog.records)
+
+
+class TestSchemaDocPublishing:
+    """Sprint 038 ticket 009: the schema doc is published to the data
+    Store's SCHEMA.md at the end of a normal run, never under --dry-run,
+    and a failure to publish it is logged rather than fatal."""
+
+    def test_normal_run_writes_schema_md_to_the_data_store(self, monkeypatch):
+        monkeypatch.setattr(cli, "run", lambda **kwargs: [])
+
+        assert cli.main(["--no-enrich", "--no-report"]) == 0
+
+        published = _own_data_dir() / "SCHEMA.md"
+        assert published.read_bytes() == (
+            Path(__file__).resolve().parent.parent / "docs" / "data-schema.md"
+        ).read_bytes()
+
+    def test_dry_run_does_not_publish_it(self, monkeypatch):
+        monkeypatch.setattr(cli, "run", lambda **kwargs: [])
+
+        assert cli.main(["--no-enrich", "--no-report", "--dry-run"]) == 0
+
+        assert not (_own_data_dir() / "SCHEMA.md").exists()
+
+    def test_publish_failure_is_logged_not_fatal(self, monkeypatch, caplog):
+        def _boom():
+            raise RuntimeError("bucket down")
+
+        monkeypatch.setattr(cli, "run", lambda **kwargs: [])
+        monkeypatch.setattr(cli, "publish_schema_doc", _boom)
+
+        with caplog.at_level(logging.ERROR, logger="partner_scrape.cli"):
+            exit_code = cli.main(["--no-enrich", "--no-report"])
+
+        assert exit_code == 0
+        assert any("SCHEMA.md" in r.getMessage() for r in caplog.records)
 
 
 class TestHelp:

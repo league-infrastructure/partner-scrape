@@ -5,7 +5,7 @@ dev/ is a standalone-script directory (no __init__.py, never imported
 by runtime code -- see the script's own docstring), so it is loaded
 here via importlib rather than a normal package import. Every test
 builds its own fixture data directory under tmp_path -- never against
-the real repo data/ tree (see the get_own_data_dir() hazard noted in
+the real repo data/ tree (see the data-location hazard noted in
 sprint 037's ticket 001).
 """
 

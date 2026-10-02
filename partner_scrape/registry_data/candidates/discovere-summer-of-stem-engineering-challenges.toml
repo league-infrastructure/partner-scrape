@@ -3,7 +3,7 @@
 # This file is deliberately missing adapter_type/config: it is
 # never loaded by registry.loader.load_sources(). To promote this
 # candidate, investigate its own site, add adapter_type/config,
-# and move the completed file into registry/sources/.
+# and move the completed file into registry_data/sources/.
 org_name = "DiscoverE Summer of STEM Engineering Challenges"
 candidate_url = "https://1b1e79-3e86.icpage.net/summer-of-stem-2022-sign-up"
 discovered_via = "sdcec-stem"

@@ -34,7 +34,7 @@ def _cache_dir(tmp_path, tmp_path_factory, monkeypatch):
     """`_run_teams` constructs a real `PoliteFetcher()` before calling
     `run_teams()` -- even in wiring tests that monkeypatch `cli.run_teams`
     itself -- and `PoliteFetcher()`'s default `cache_dir` reads
-    `SCRAPE_CACHE_DIR` eagerly (see `config.get_scrape_cache_dir`'s "no
+    `SCRAPE_CACHE_DIR` eagerly (see `config.get_scrape_cache_store`'s "no
     sane default" `RuntimeError`). `SITE_DIR` is pinned too, matching
     `test_cli.py`'s own `_cache_dir` fixture, even though the `teams`
     subcommand this file tests no longer reads it at all (sprint 025
@@ -48,7 +48,7 @@ def _cache_dir(tmp_path, tmp_path_factory, monkeypatch):
     it (the fixture Fetchers below only register FTCScout's URL).
     Tests that need a valid key set it explicitly.
 
-    Sprint 020 ticket 005: also pins `export.get_own_data_dir()`'s
+    Sprint 020 ticket 005: also pins `export.get_data_store()`'s
     resolution to a throwaway directory. `TestTeamsEndToEnd.
     test_real_run_writes_teams_json` and
     `test_never_writes_opportunities_json_or_scrape_meta_anywhere` drive
@@ -60,12 +60,12 @@ def _cache_dir(tmp_path, tmp_path_factory, monkeypatch):
     `_own_data_dir_default` fixture, folded into this file's existing
     single autouse fixture rather than a second one.
 
-    Sprint 020 ticket 007: also pins `cli.get_own_data_dir()`'s
+    Sprint 020 ticket 007: also pins `cli.get_data_store()`'s
     resolution to the same throwaway directory.
     `TestNeverCrossesIntoTheOtherPipeline.test_default_run_never_calls_run_teams`
     drives the real no-subcommand/`run` path via `cli.main([])`
     (reporting enabled by default, no `--dry-run`) -- as of ticket 007,
-    that path writes `yield-history.json` into `cli.get_own_data_dir()`
+    that path writes `yield-history.json` into `cli.get_data_store()`
     a second time, alongside the `SITE_DIR` copy. Without pinning this
     too, that single test would write a real `yield-history.json` into
     this repo's actual `data/` directory on every test run.

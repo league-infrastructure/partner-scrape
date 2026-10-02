@@ -16,7 +16,7 @@ inspects that instead (when the test cares about what's on disk). The
 module-level `_own_data_dir_default` autouse fixture below pins
 `own_data_dir`'s *default* resolution to a throwaway directory for
 every test in this file, so a test that never passes `own_data_dir`
-explicitly still can't reach this repo's real `data/` directory
+explicitly still can't reach the bucket's `data/` directory
 (mirrors `test_cli.py`'s `_cache_dir` autouse fixture, which pins
 `SITE_DIR` the same way for the same reason).
 """
@@ -91,12 +91,12 @@ def _opportunity(
 
 @pytest.fixture(autouse=True)
 def _own_data_dir_default(tmp_path_factory, monkeypatch):
-    """Pin `writer.get_own_data_dir()`'s resolution to a throwaway
+    """Pin `writer.get_data_store()`'s resolution to a throwaway
     directory for every test in this file (sprint 020 ticket 003).
 
     `own_data_dir` resolves via a `config` accessor when omitted --
-    `config.get_own_data_dir()` always returns this repo's real `data/`
-    directory (`DEFAULT_OWN_DATA_DIR` is "not overridable via
+    `config.get_data_store()` always returns the bucket's `data/`
+    directory (`the default data location` is "not overridable via
     environment variable" by design). A test that never passes
     `own_data_dir` explicitly would otherwise auto-create and write
     real files into this repo's actual `data/` directory on every test
@@ -110,7 +110,7 @@ def _own_data_dir_default(tmp_path_factory, monkeypatch):
     asserts the *exact* set of files written under `tmp_path`, so this
     default must land outside that tree or it would inflate that count.
     Resolved once per test (not inside the lambda) so every call to
-    `get_own_data_dir()` within a single test returns the same path,
+    `get_data_store()` within a single test returns the same path,
     matching real usage.
     """
     fake_own_data_dir = tmp_path_factory.mktemp("own-data-default")
@@ -855,7 +855,7 @@ class TestOwnDataDirErrors:
 class TestOwnDataDirPublish:
     """Sprint 020 ticket 003 (issue 60) added this write path -- the
     same payload and `scrape-meta.json` timestamp written into
-    partner-scrape's own `data/` directory via `config.get_own_data_dir()`.
+    partner-scrape's own `data/` directory via `config.get_data_store()`.
     Sprint 025 ticket 003 removed the sibling `stem-ecosystem` write this
     used to run alongside (see `TestOwnDataDirIsolation` above for the
     isolation/inversion proof) -- `own_data_dir` is now this function's
@@ -863,7 +863,7 @@ class TestOwnDataDirPublish:
     auto-creation, and dry_run behavior in isolation.
     """
 
-    def test_omitted_own_data_dir_resolves_via_config_get_own_data_dir(
+    def test_omitted_own_data_dir_resolves_via_config_get_data_store(
         self, tmp_path, monkeypatch
     ):
         fake_own_data_dir = tmp_path / "fake-own-data"

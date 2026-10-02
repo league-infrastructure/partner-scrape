@@ -3,7 +3,7 @@ per-partner, append-only accumulation layer (sprint 009 ticket 003,
 issue 15).
 
 Every test passes an explicit `log_dir`/`partners_path` under
-`tmp_path` -- no test relies on `config.get_scrape_cache_dir()` /
+`tmp_path` -- no test relies on `config.get_scrape_cache_store()` /
 `config.get_site_dir()`'s real defaults or writes to a real checkout,
 matching writer.py's own test-file convention.
 """

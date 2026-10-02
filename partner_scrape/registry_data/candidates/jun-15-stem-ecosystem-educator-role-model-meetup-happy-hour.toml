@@ -3,7 +3,7 @@
 # This file is deliberately missing adapter_type/config: it is
 # never loaded by registry.loader.load_sources(). To promote this
 # candidate, investigate its own site, add adapter_type/config,
-# and move the completed file into registry/sources/.
+# and move the completed file into registry_data/sources/.
 org_name = "Jun 15 - STEM Ecosystem Educator-Role Model Meetup Happy Hour"
 candidate_url = "https://www.eventbrite.com/e/educator-role-model-meetup-tickets-643258753247"
 discovered_via = "sdcec-stem"

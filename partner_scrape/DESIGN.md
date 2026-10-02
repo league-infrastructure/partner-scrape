@@ -241,8 +241,9 @@ saved HTML/JSON fixtures under `tests/fixtures/`, no network, no API key require
 ### Exposes
 - **`partner-scrape`** — the console script (`partner_scrape.cli:main`). Flags include
   `--registry-dir`, `--site-dir`, `--source`, `--limit`, `--dry-run`, `--no-enrich`,
-  `--no-report`, `--yield-history`, `--verbose`; plus the `discover-candidates`
-  subcommand.
+  `--no-report`, `--yield-history`, `--verbose`; plus the `discover-candidates`,
+  `teams`, and `directory` subcommands. The main pipeline is `partner-scrape --source X`
+  (there is no `run` subcommand).
 - **`pipeline.run(...) -> list[dict]`** — the programmatic entry point; returns the
   exported opportunity payload.
 - **`model.Event`, `Provenance`, `Kind`, `identity_key`, `normalize_title`,

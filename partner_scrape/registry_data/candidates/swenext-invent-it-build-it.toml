@@ -3,7 +3,7 @@
 # This file is deliberately missing adapter_type/config: it is
 # never loaded by registry.loader.load_sources(). To promote this
 # candidate, investigate its own site, add adapter_type/config,
-# and move the completed file into registry/sources/.
+# and move the completed file into registry_data/sources/.
 org_name = "SWEnext Invent It Build It"
 candidate_url = "https://we23.swe.org/schedule-highlights/invent-it-build-it/"
 discovered_via = "sdcec-stem"

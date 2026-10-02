@@ -1,7 +1,7 @@
 ---
 id: 009
 title: Remove data/ from git; move SCHEMA.md and publish it
-status: in-progress
+status: done
 use-cases:
 - SUC-002
 depends-on:
@@ -20,11 +20,11 @@ Take generated data out of git and publish the schema doc with the data.
 
 ## Acceptance Criteria
 
-- [ ] `git rm -r --cached data/`; `data/` added to `.gitignore`
-- [ ] `data/SCHEMA.md` moved to `docs/data-schema.md` (source copy); bundled in the wheel via hatch force-include (approved); published to `data/SCHEMA.md` in the data Store at the end of a run
-- [ ] Text claiming data is committed to git fixed (SCHEMA.md line 6, snapshot.py docstring, docs/deploy/scheduled-run.md)
-- [ ] `git ls-files data/` is empty; full suite passes
-- [ ] docs/design/design.md updated: Storage section, bucket versioning replaces git history for yield-history.json
+- [x] `git rm -r --cached data/`; `data/` added to `.gitignore`
+- [x] `data/SCHEMA.md` moved to `docs/data-schema.md` (source copy); bundled in the wheel via hatch force-include (approved); published to `data/SCHEMA.md` in the data Store at the end of a run
+- [x] Text claiming data is committed to git fixed (SCHEMA.md line 6, snapshot.py docstring, docs/deploy/scheduled-run.md)
+- [x] `git ls-files data/` is empty; full suite passes
+- [x] docs/design/design.md updated: Storage section, bucket versioning replaces git history for yield-history.json
 
 ## Implementation Plan
 

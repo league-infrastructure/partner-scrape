@@ -299,8 +299,9 @@ new file is dispatched entirely inside `adapters/`, unchanged.
 ## 2. Orientation
 
 Four data directories, three schema/loader pairs. The directories below live at the
-repo-root `registry/` (sibling to `partner_scrape/`), not inside this subsystem's own
-`partner_scrape/registry/` — see §1's sprint 025 ticket 001 note.
+`partner_scrape/registry_data/` (sibling to this subsystem's own
+`partner_scrape/registry/` code), not inside `registry/` itself — see §1's sprint 038
+ticket 006 note. (Sprint 025 had put them in a repo-root `registry/`.)
 
 | Directory | Schema | Loader | Contents |
 |---|---|---|---|
@@ -373,7 +374,7 @@ check and raises its own exception type (`InvalidSourceConfig`, `InvalidHubConfi
 `InvalidAdConfig`), which the directory loader catches. Validation lives next to the shape
 it validates.
 
-**Where the ads catalog lives.** `registry/ads/` holds the data but
+**Where the ads catalog lives.** `registry_data/ads/` holds the data but
 `export/ads.py` holds its schema and loader — the one place the four catalogs are not
 symmetric. The ad contract is an output-side concern (it exists to write `ads.json`) and
 was built with the export it feeds; only its *data* belongs alongside the other

@@ -74,7 +74,7 @@ def _scrape_cache_dir(tmp_path, monkeypatch):
 
     `pipeline.run()` unconditionally calls `export.partner_log.record()`
     (sprint 009 ticket 003), whose default `log_dir` resolves via
-    `config.get_scrape_cache_dir()` when a test doesn't pass one
+    `config.get_scrape_cache_store()` when a test doesn't pass one
     explicitly -- exactly none of the tests in this file do, since they
     only ever pass `site_dir`. Mirrors `test_pipeline_e2e_enrichment.py`'s
     and `test_cli.py`'s identical fixture for the same underlying reason
@@ -87,13 +87,13 @@ def _scrape_cache_dir(tmp_path, monkeypatch):
 
 @pytest.fixture(autouse=True)
 def _own_data_dir_default(tmp_path_factory, monkeypatch):
-    """Pin `writer.get_own_data_dir()`'s (and, sprint 020 ticket 004,
-    `ads.get_own_data_dir()`'s, and, sprint 025 ticket 002,
-    `pipeline.get_own_data_dir()`'s) resolution to a throwaway directory
+    """Pin `writer.get_data_store()`'s (and, sprint 020 ticket 004,
+    `ads.get_data_store()`'s, and, sprint 025 ticket 002,
+    `pipeline.get_data_store()`'s) resolution to a throwaway directory
     for every test in this file (sprint 020 ticket 003).
 
     `export_opportunities()`'s (and `export_ads()`'s) `own_data_dir`
-    parameter defaults to `config.get_own_data_dir()` -- a real repo
+    parameter defaults to `config.get_data_store()` -- a real repo
     path with no environment-variable override -- when a caller doesn't
     pass one explicitly. `pipeline.run()` never passes it for either
     call, so every real (non-`dry_run`) `run()` call in this file would
@@ -103,7 +103,7 @@ def _own_data_dir_default(tmp_path_factory, monkeypatch):
     `_own_data_dir_default` fixture, for the same underlying reason.
     `writer`, `ads`, and (since sprint 025 ticket 002 redirected the
     default `EventImageDownloader`'s write target there too) `pipeline`
-    each import `get_own_data_dir` separately, so all three must be
+    each import `get_data_store` separately, so all three must be
     patched.
 
     Returns `fake_own_data_dir` so tests that need to assert against the
@@ -185,7 +185,7 @@ class RecordingIdentityEnricher:
 def _site_dir(tmp_path: Path) -> Path:
     """A tmp_path-backed stand-in for the sibling stem-ecosystem repo,
     with `src/data/partners.json` seeded from the shared fixture --
-    never the real `../stem-ecosystem` checkout."""
+    never a real stem-ecosystem checkout."""
     site_dir = tmp_path / "stem-ecosystem"
     data_dir = site_dir / "src" / "data"
     data_dir.mkdir(parents=True)

@@ -3,7 +3,7 @@
 # This file is deliberately missing adapter_type/config: it is
 # never loaded by registry.loader.load_sources(). To promote this
 # candidate, investigate its own site, add adapter_type/config,
-# and move the completed file into registry/sources/.
+# and move the completed file into registry_data/sources/.
 org_name = "Interactive STEAM workshops and games RSVP"
 candidate_url = "https://www.eventbrite.com/e/steam-youth-community-conference-2024-conferencia-steam-registration-853365879317?aff=oddtdtcreator"
 discovered_via = "sdcec-stem"

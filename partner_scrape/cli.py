@@ -45,6 +45,7 @@ from pathlib import Path
 
 from partner_scrape.config import get_data_store, get_site_dir
 from partner_scrape.export import publish
+from partner_scrape.export.schema_doc import publish_schema_doc
 from partner_scrape.enrich.cache import EnrichmentCache
 from partner_scrape.enrich.enricher import LLMEnricher
 from partner_scrape.enrich.llm_client import AnthropicLLMClient
@@ -599,6 +600,15 @@ def main(argv: list[str] | None = None) -> int:
                 "(yield report, exit code) is still produced -- "
                 "investigate and re-run to refresh public/data/."
             )
+
+    # The schema doc travels with the data: publish it to the data
+    # Store's SCHEMA.md. A failure here is logged, never fatal -- the
+    # data itself was already written.
+    if not args.dry_run:
+        try:
+            publish_schema_doc()
+        except Exception:
+            logger.exception("could not publish SCHEMA.md to the data store")
 
     noun = "opportunity" if len(payload) == 1 else "opportunities"
     suffix = " (dry run -- nothing written)" if args.dry_run else ""
