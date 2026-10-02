@@ -153,6 +153,14 @@ implementation at the outermost layer — `cli.py` and `pipeline.run()`; tests i
 fixture-backed doubles. This is why 905 tests run with no network access and with the
 optional `playwright` dependency uninstalled.
 
+**Storage (`storage.py`).** Persistent cache and published data go through a `Store`
+protocol (`read_bytes`/`write_bytes`, text and JSON helpers, `exists`, `list`) keyed by
+`/`-separated strings, with a missing key reading as `None`. `LocalStore(root)` writes
+atomically (temp file + `os.replace`); `S3Store(bucket, prefix, client)` targets an
+S3-compatible bucket and sets `ContentType`; `store_from_location()` picks one from an
+`s3://bucket/prefix` string or a path. `storage.py` is a leaf: it never imports `config`,
+which builds Stores and injects the boto3 client.
+
 **Structural satisfaction, never a backwards import.** A module that satisfies a Protocol
 defined in `pipeline.py` does not import it. `enrich.enricher.LLMEnricher`,
 `observability.reporter.YieldReporter`, and `discovery.candidate_pipeline`'s own

@@ -61,7 +61,7 @@ read time).
 ## Crash safety
 
 Both files are written with a temp-file-then-`os.replace` swap
-(`_atomic_write_text`), never opened in-place for writing. A run that
+(`storage.LocalStore.write_bytes`), never opened in-place for writing. A run that
 crashes mid-write leaves the *previous* complete file untouched -- there
 is no window where a reader (or the next `record()` call) can observe a
 half-written `partner.json` or `opportunities.jsonl`. Because the
@@ -82,8 +82,6 @@ from __future__ import annotations
 
 import hashlib
 import json
-import os
-import tempfile
 from collections import defaultdict
 from dataclasses import fields
 from pathlib import Path
@@ -93,6 +91,7 @@ from partner_scrape.config import get_scrape_cache_dir, get_site_dir
 from partner_scrape.model import slugify
 from partner_scrape.normalize.partners import find_partner, load_partners
 from partner_scrape.normalize.run import Opportunity
+from partner_scrape.storage import LocalStore
 
 #: Subdirectory of `SCRAPE_CACHE_DIR` the accumulation store lives
 #: under. No new environment variable -- matches `enrich/cache.py`'s
@@ -193,37 +192,6 @@ def _existing_keys(lines: list[str]) -> set[tuple[str, str]]:
     return keys
 
 
-def _atomic_write_text(path: Path, text: str) -> None:
-    """Write `text` to `path` so a crash mid-write can never leave a
-    half-written file: the new content lands in a sibling temp file
-    first, fsynced, and only then atomically swapped over the target
-    via `os.replace` (atomic on POSIX and Windows within one
-    filesystem). Raises `RuntimeError` on any `OSError` -- matches
-    `writer.py`'s/`ads.py`'s loud-failure philosophy for an unwritable
-    target rather than silently skipping the write.
-    """
-    try:
-        path.parent.mkdir(parents=True, exist_ok=True)
-        fd, tmp_name = tempfile.mkstemp(
-            dir=str(path.parent), prefix=f".{path.name}.", suffix=".tmp"
-        )
-        try:
-            with os.fdopen(fd, "w", encoding="utf-8") as f:
-                f.write(text)
-                f.flush()
-                os.fsync(f.fileno())
-            os.replace(tmp_name, path)
-        except BaseException:
-            if os.path.exists(tmp_name):
-                os.remove(tmp_name)
-            raise
-    except OSError as exc:
-        raise RuntimeError(
-            f"Cannot write partner log entry to {path}: {exc}. Check that "
-            f"its parent directory is writable."
-        ) from exc
-
-
 def record(
     opportunities: Iterable[Opportunity],
     *,
@@ -308,9 +276,10 @@ def record(
         if dry_run:
             continue
 
-        _atomic_write_text(
-            partner_dir / _PARTNER_JSON_FILENAME,
+        store = LocalStore(partner_dir)
+        store.write_text(
+            _PARTNER_JSON_FILENAME,
             json.dumps(partner_record, indent=1, ensure_ascii=False, sort_keys=True),
         )
         if appended:
-            _atomic_write_text(jsonl_path, "\n".join(new_lines) + "\n")
+            store.write_text(_JSONL_FILENAME, "\n".join(new_lines) + "\n")
