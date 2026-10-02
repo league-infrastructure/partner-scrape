@@ -182,6 +182,18 @@ moved — the code (`schema.py`, `loader.py`, `hub_schema.py`, `candidates.py`,
 resolves via `config.REPO_ROOT / "registry" / "<subdir>"` rather than a path relative to
 this module's own `__file__`.
 
+**(Sprint 038 ticket 006)** The data moved again, into the package: `git mv registry/
+partner_scrape/registry_data/` (`sources/`, `hubs/`, `candidates/`, `ads/`), shipped in the
+wheel. `REPO_ROOT` no longer exists. Loaders default through `config.get_sources_dir()` /
+`get_hubs_dir()` / `get_candidates_dir()` / `get_ads_dir()`, which resolve
+`PARTNER_SCRAPE_REGISTRY_DIR` (a local directory; the setting is a location string so a
+later phase can accept `s3://` — no bucket loading exists) and otherwise the bundled copy.
+The `DEFAULT_*_DIR` constants now name the *bundled* directories (used by tests that
+validate the real committed config). `write_candidate()` defaults to
+`config.get_candidates_write_dir()`: `<override>/candidates` when an override is set, else
+`./candidates` in the CWD — never the (possibly site-packages, read-only) bundled copy; it
+dedupes against both that directory and the readable queue.
+
 **(Sprint 014)** This sprint is squarely an exercise of that "onboarding is a data
 edit" design point, at higher volume than any prior sprint: roughly 33 existing
 `sources/` entries get a triage disposition (fixed / re-typed / flagged headless /

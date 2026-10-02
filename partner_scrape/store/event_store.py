@@ -42,9 +42,6 @@ from partner_scrape import config
 from partner_scrape.enrich.cache import content_hash
 from partner_scrape.model import Event, IdentityKey, Provenance
 
-#: Default filename (under `config.get_scrape_cache_dir()`) for the store's
-#: SQLite database when no explicit ``db_path`` is given.
-_DEFAULT_DB_FILENAME = "events.db"
 
 #: Sentinel accepted (alongside a real filesystem path) so tests and
 #: callers can request an in-memory, non-persistent database.
@@ -166,7 +163,7 @@ def _effective_date(data: dict[str, Any]) -> date | None:
 class EventStore:
     """Durable, cross-run table of canonical Events, keyed by identity.
 
-    ``db_path`` defaults to ``config.get_scrape_cache_dir() / "events.db"``.
+    ``db_path`` defaults to ``config.get_event_store_path()`` (always local).
     Tests should pass an explicit ``tmp_path``-derived path, or the
     literal string ``":memory:"`` for a non-persistent database -- never
     the real configured cache directory.
@@ -179,7 +176,7 @@ class EventStore:
 
     def __init__(self, db_path: Path | str | None = None) -> None:
         if db_path is None:
-            db_path = config.get_scrape_cache_dir() / _DEFAULT_DB_FILENAME
+            db_path = config.get_event_store_path()
         self.db_path = db_path
 
         if str(db_path) != _MEMORY_DB:

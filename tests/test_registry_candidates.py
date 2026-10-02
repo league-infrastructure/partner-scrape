@@ -208,7 +208,7 @@ class TestCandidatesDirIsPhysicallySeparate:
 
     def test_default_candidates_dir_location(self):
         assert DEFAULT_CANDIDATES_DIR.name == "candidates"
-        assert DEFAULT_CANDIDATES_DIR.parent.name == "registry"
+        assert DEFAULT_CANDIDATES_DIR.parent.name == "registry_data"
 
     def test_loader_module_has_no_reference_to_candidates(self):
         import partner_scrape.registry.loader as loader_module
@@ -226,3 +226,11 @@ class TestCandidatesDirIsPhysicallySeparate:
 
         after = {s.source_id for s in load_sources()}
         assert before == after
+
+
+def test_write_candidate_default_target_is_cwd_not_bundled(tmp_path, monkeypatch):
+    monkeypatch.delenv("PARTNER_SCRAPE_REGISTRY_DIR", raising=False)
+    monkeypatch.chdir(tmp_path)
+    path = write_candidate(_candidate(org_name="Zzz Unique Org", candidate_url="https://zzz.example/"))
+    assert path is not None
+    assert path.resolve().parent == (tmp_path / "candidates").resolve()

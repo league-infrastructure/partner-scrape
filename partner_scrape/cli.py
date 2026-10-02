@@ -96,7 +96,7 @@ def _build_parser() -> argparse.ArgumentParser:
         default=None,
         help=(
             "Source Registry directory to load sources from (default: "
-            "the real seed registry under registry/sources/)."
+            "the bundled registry, or $PARTNER_SCRAPE_REGISTRY_DIR/sources)."
         ),
     )
     parser.add_argument(
@@ -105,7 +105,7 @@ def _build_parser() -> argparse.ArgumentParser:
         default=None,
         help=(
             "Sibling stem-ecosystem checkout to read partners.json from "
-            "(default: ../stem-ecosystem, or $SITE_DIR). Read-only as of "
+            "(default: $SITE_DIR, else the current directory). Read-only as of "
             "sprint 025 -- opportunities.json/scrape-meta.json/images are "
             "written to partner-scrape's own data/ directory, never here."
         ),
@@ -203,8 +203,8 @@ def _add_discover_candidates_subcommand(subparsers: argparse._SubParsersAction) 
         type=Path,
         default=None,
         help=(
-            "Hub Registry directory to load hubs from (default: the real "
-            "seed hub registry under registry/hubs/)."
+            "Hub Registry directory to load hubs from (default: the "
+            "bundled hub registry, or $PARTNER_SCRAPE_REGISTRY_DIR/hubs)."
         ),
     )
     parser.add_argument(
@@ -213,7 +213,8 @@ def _add_discover_candidates_subcommand(subparsers: argparse._SubParsersAction) 
         default=None,
         help=(
             "Candidate Review Queue directory to write stub TOML files "
-            "into (default: registry/candidates/)."
+            "into (default: $PARTNER_SCRAPE_REGISTRY_DIR/candidates if set, "
+            "else ./candidates -- never the read-only bundled copy)."
         ),
     )
     parser.add_argument(
@@ -222,8 +223,8 @@ def _add_discover_candidates_subcommand(subparsers: argparse._SubParsersAction) 
         default=None,
         help=(
             "Source Registry directory Hub Scan's dedup check reads "
-            "against (default: the real seed registry under "
-            "registry/sources/). Mirrors the `run` "
+            "against (default: the "
+            "bundled registry, or $PARTNER_SCRAPE_REGISTRY_DIR/sources). Mirrors the `run` "
             "command's own --registry-dir."
         ),
     )
@@ -351,7 +352,7 @@ def _add_directory_subcommand(subparsers: argparse._SubParsersAction) -> None:
         help=(
             "Sibling stem-ecosystem checkout to read partners.json from, "
             "for the related-partner-reference join-integrity check only "
-            "(default: ../stem-ecosystem, or $SITE_DIR) -- same default "
+            "(default: $SITE_DIR, else the current directory) -- same default "
             "as the `run` command's --site-dir. Read-only: places.json/ "
             "clubs.json/offerings.json are always written to "
             "partner-scrape's own data/ directory, never here."

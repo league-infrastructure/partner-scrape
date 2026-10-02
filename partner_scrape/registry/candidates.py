@@ -25,7 +25,11 @@ import tomllib
 from dataclasses import dataclass
 from pathlib import Path
 
-from partner_scrape.config import REPO_ROOT
+from partner_scrape.config import (
+    BUNDLED_REGISTRY_DIR,
+    get_candidates_dir,
+    get_candidates_write_dir,
+)
 from partner_scrape.discovery.hub_scan import OrgCandidate
 from partner_scrape.normalize.partners import normalize_org_name
 
@@ -38,7 +42,7 @@ logger = logging.getLogger(__name__)
 #: module's ``DEFAULT_SOURCES_DIR`` is a different, unrelated directory).
 #: See sprint 025 ticket 001 for the move out of
 #: ``partner_scrape/registry/``.
-DEFAULT_CANDIDATES_DIR = REPO_ROOT / "registry" / "candidates"
+DEFAULT_CANDIDATES_DIR = BUNDLED_REGISTRY_DIR / "candidates"
 
 _SLUG_RE = re.compile(r"[^a-z0-9]+")
 
@@ -117,7 +121,9 @@ def _is_duplicate(candidate: OrgCandidate, existing: list[CandidateStub]) -> boo
 
 def write_candidate(candidate: OrgCandidate, directory: Path | None = None) -> Path | None:
     """Persist ``candidate`` as a review-marked stub TOML file under
-    ``directory`` (defaults to :data:`DEFAULT_CANDIDATES_DIR`).
+    ``directory`` (defaults to ``config.get_candidates_write_dir()``:
+    ``<PARTNER_SCRAPE_REGISTRY_DIR>/candidates`` if set, else
+    ``./candidates`` -- never the read-only bundled copy).
 
     The written file contains exactly ``org_name``, ``candidate_url``,
     ``discovered_via`` (``candidate.hub_id``), and ``evidence_text`` --
@@ -136,10 +142,15 @@ def write_candidate(candidate: OrgCandidate, directory: Path | None = None) -> P
         The path written to, or ``None`` if ``candidate`` was already
         queued and this call was skipped.
     """
-    directory = directory or DEFAULT_CANDIDATES_DIR
+    default_target = directory is None
+    directory = directory or get_candidates_write_dir()
     directory.mkdir(parents=True, exist_ok=True)
 
-    if _is_duplicate(candidate, list_candidates(directory)):
+    existing = list_candidates(directory)
+    if default_target:
+        # Also dedupe against the readable queue (e.g. the bundled stubs).
+        existing = existing + list_candidates()
+    if _is_duplicate(candidate, existing):
         logger.info(
             "Candidate %r (%s) already queued for review; skipping duplicate write",
             candidate.org_name,
@@ -160,7 +171,7 @@ def write_candidate(candidate: OrgCandidate, directory: Path | None = None) -> P
         "# This file is deliberately missing adapter_type/config: it is",
         "# never loaded by registry.loader.load_sources(). To promote this",
         "# candidate, investigate its own site, add adapter_type/config,",
-        "# and move the completed file into registry/sources/.",
+        "# and move the completed file into the registry's sources/ directory.",
         f"org_name = {_toml_string(candidate.org_name)}",
         f"candidate_url = {_toml_string(candidate.candidate_url)}",
         f"discovered_via = {_toml_string(candidate.hub_id)}",
@@ -173,7 +184,7 @@ def write_candidate(candidate: OrgCandidate, directory: Path | None = None) -> P
 
 def list_candidates(directory: Path | None = None) -> list[CandidateStub]:
     """List every candidate stub currently queued under ``directory``
-    (defaults to :data:`DEFAULT_CANDIDATES_DIR`) for an operator to
+    (defaults to ``config.get_candidates_dir()``) for an operator to
     review.
 
     A directory that does not yet exist (no discovery run has ever
@@ -182,7 +193,7 @@ def list_candidates(directory: Path | None = None) -> list[CandidateStub]:
     ``registry.loader.load_sources``'s "malformed file is never fatal to
     the rest of the directory" contract.
     """
-    directory = directory or DEFAULT_CANDIDATES_DIR
+    directory = directory or get_candidates_dir()
     if not directory.exists():
         return []
 

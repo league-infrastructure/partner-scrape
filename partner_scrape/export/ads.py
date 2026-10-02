@@ -62,7 +62,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable
 
-from partner_scrape.config import REPO_ROOT, resolve_data_store
+from partner_scrape.config import BUNDLED_REGISTRY_DIR, get_ads_dir, resolve_data_store
 from partner_scrape.storage import Store
 
 logger = logging.getLogger(__name__)
@@ -73,10 +73,10 @@ logger = logging.getLogger(__name__)
 #: `registry/hub_schema.py`'s `_REQUIRED_FIELDS` contract.
 _REQUIRED_FIELDS = ("headline", "body", "link", "logo_src")
 
-#: Default location of the hand-authored Ad Registry's per-advertiser
-#: TOML files: `registry/ads/` at the repo root (see sprint 025 ticket
-#: 001 for the move out of `partner_scrape/registry/`).
-DEFAULT_ADS_DIR = REPO_ROOT / "registry" / "ads"
+#: The *bundled* Ad Registry directory
+#: (`partner_scrape/registry_data/ads`). Callers omitting `directory`
+#: get `config.get_ads_dir()`, which honours `PARTNER_SCRAPE_REGISTRY_DIR`.
+DEFAULT_ADS_DIR = BUNDLED_REGISTRY_DIR / "ads"
 
 
 class InvalidAdConfig(Exception):
@@ -140,10 +140,10 @@ def load_ad_configs(directory: Path | None = None) -> list[AdConfig]:
     and `registry.loader.load_sources` give their own registries.
 
     Args:
-        directory: defaults to :data:`DEFAULT_ADS_DIR` (the real seed ad
+        directory: defaults to `config.get_ads_dir()` (the bundled seed ad
             registry) when omitted.
     """
-    directory = directory or DEFAULT_ADS_DIR
+    directory = directory or get_ads_dir()
     ad_configs: list[AdConfig] = []
     for path in sorted(directory.glob("*.toml")):
         try:

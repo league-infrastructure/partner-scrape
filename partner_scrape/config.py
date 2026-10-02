@@ -81,15 +81,15 @@ DO_SPACES_ENDPOINT_ENV_VAR = "DO_SPACES_ENDPOINT"
 DO_SPACES_ACCESS_KEY_ENV_VAR = "DO_SPACES_ACCESS_KEY"
 DO_SPACES_SECRET_KEY_ENV_VAR = "DO_SPACES_SECRET_KEY"
 
-#: Environment variable that overrides the default sibling site-repo
-#: path used by Site Export (ticket 007).
+#: Environment variable naming the site checkout used by Site Export
+#: (defaults to the current working directory when unset).
 SITE_DIR_ENV_VAR = "SITE_DIR"
 
 #: Environment variable holding the Bearer token for the League's own
 #: sync.jtlapp.net query API (``leaguesync`` adapter). Assembled by
 #: dotconfig into ``config/prod/secrets.env`` -- there is no sane
 #: default, so it must be set explicitly, matching
-#: ``get_scrape_cache_dir``'s convention.
+#: the other getters' convention.
 LEAGUESYNC_API_KEY_ENV_VAR = "LEAGUESYNC_API_KEY"
 
 #: Environment variable overriding the ``leaguesync`` adapter's API base
@@ -137,7 +137,7 @@ DEFAULT_TBA_URL = "https://www.thebluealliance.com"
 #: Both ``pipeline.run()`` and ``teams.pipeline.run_teams()`` isolate
 #: this source's failure the same way they isolate any other source's
 #: (a missing/invalid key degrades that one source, never aborts the
-#: run) -- see ``registry/sources/robotevents-vex-sd.toml``'s own
+#: run) -- see ``registry_data/sources/robotevents-vex-sd.toml``'s own
 #: comment for the provisioning steps (account -> API key -> SOPS
 #: ``secrets.env`` entry).
 ROBOTEVENTS_API_KEY_ENV_VAR = "ROBOTEVENTS_KEY"
@@ -162,66 +162,108 @@ ROBOTEVENTS_URL_ENV_VAR = "ROBOTEVENTS_URL"
 #: is provisioned.
 DEFAULT_ROBOTEVENTS_URL = "https://www.robotevents.com/api/v2"
 
-# This package's own directory, e.g. .../partner-scrape/partner_scrape
+# This package's own directory, e.g. .../site-packages/partner_scrape
 _PACKAGE_DIR = Path(__file__).resolve().parent
 
-# The repo root, e.g. .../partner-scrape
-_REPO_ROOT = _PACKAGE_DIR.parent
+#: Environment variable overriding the registry location (sources/,
+#: hubs/, candidates/, ads/ subdirectories). A *location string*: a
+#: local directory today. Loaders resolve it only through
+#: :func:`get_registry_dir`, so a later phase can accept an ``s3://``
+#: location without touching callers; no bucket loading exists yet.
+PARTNER_SCRAPE_REGISTRY_DIR_ENV_VAR = "PARTNER_SCRAPE_REGISTRY_DIR"
 
-#: The repo root, e.g. ``.../partner-scrape`` -- a public alias for
-#: :data:`_REPO_ROOT`. Exists so other modules needing a root-relative
-#: default (e.g. the root-level ``registry/`` data directory) can import
-#: one shared constant instead of each recomputing their own
-#: ``Path(__file__).resolve()`` parent-chain (sprint 025 ticket 001).
-REPO_ROOT = _REPO_ROOT
+#: The registry bundled in the package (and the wheel) -- the default
+#: when :data:`PARTNER_SCRAPE_REGISTRY_DIR_ENV_VAR` is unset. Read-only
+#: by convention: when installed this lives in site-packages.
+BUNDLED_REGISTRY_DIR = _PACKAGE_DIR / "registry_data"
 
-#: Default location of the sibling ``stem-ecosystem`` site repo -- the
-#: real production site codebase, checked out next to this repo
-#: (``../stem-ecosystem`` relative to the repo root) for local
-#: interactive runs, and used by default in CI. Overridable via
-#: ``SITE_DIR``.
-DEFAULT_SITE_DIR = _REPO_ROOT.parent / "stem-ecosystem"
+#: Environment variable overriding where the local SQLite event store
+#: (``store/event_store.py``) lives.
+EVENT_STORE_PATH_ENV_VAR = "PARTNER_SCRAPE_EVENT_DB"
 
 
-def get_scrape_cache_dir() -> Path:
-    """Return the configured scrape cache directory.
+def get_registry_dir() -> Path:
+    """Return the registry root: ``PARTNER_SCRAPE_REGISTRY_DIR`` if set,
+    else the bundled :data:`BUNDLED_REGISTRY_DIR`.
 
-    Reads ``SCRAPE_CACHE_DIR`` from the environment on every call (no
-    caching), so tests can monkeypatch ``os.environ`` freely.
-
-    Raises:
-        RuntimeError: if ``SCRAPE_CACHE_DIR`` is not set. There is no
-            safe default for a directory that can hold tens of GB of
-            cached HTML -- callers must configure it explicitly (see
-            ``config/prod/public.env``).
+    Reads the environment on every call. Only local paths are supported;
+    an ``s3://`` (or other URL) value raises ``RuntimeError`` rather than
+    being silently treated as a relative path.
     """
-    value = os.environ.get(SCRAPE_CACHE_DIR_ENV_VAR)
+    value = os.environ.get(PARTNER_SCRAPE_REGISTRY_DIR_ENV_VAR)
     if not value:
+        return BUNDLED_REGISTRY_DIR
+    if "://" in value:
         raise RuntimeError(
-            f"{SCRAPE_CACHE_DIR_ENV_VAR} is not set. Configure it via the "
-            "assembled .env (see config/prod/public.env) before running "
-            "the engine."
+            f"{PARTNER_SCRAPE_REGISTRY_DIR_ENV_VAR}={value!r}: remote registry "
+            "locations are not supported yet; use a local directory."
         )
     return Path(value)
 
 
-def get_site_dir() -> Path:
-    """Return the path to the sibling ``stem-ecosystem`` site repo.
+def get_sources_dir() -> Path:
+    """Source Registry directory (``<registry>/sources``)."""
+    return get_registry_dir() / "sources"
 
-    Reads ``SITE_DIR`` from the environment if set; otherwise returns
-    ``DEFAULT_SITE_DIR`` (``../stem-ecosystem`` relative to this repo).
+
+def get_hubs_dir() -> Path:
+    """Hub Registry directory (``<registry>/hubs``)."""
+    return get_registry_dir() / "hubs"
+
+
+def get_ads_dir() -> Path:
+    """Ad Registry directory (``<registry>/ads``)."""
+    return get_registry_dir() / "ads"
+
+
+def get_candidates_dir() -> Path:
+    """Candidate Review Queue directory to *read* (``<registry>/candidates``)."""
+    return get_registry_dir() / "candidates"
+
+
+def get_candidates_write_dir() -> Path:
+    """Directory ``discover-candidates`` *writes* new stubs into.
+
+    The bundled registry is read-only when installed (site-packages), so
+    the writer never targets it by default: with a registry override set
+    it is ``<override>/candidates``; otherwise ``./candidates`` under the
+    current working directory.
+    """
+    if os.environ.get(PARTNER_SCRAPE_REGISTRY_DIR_ENV_VAR):
+        return get_candidates_dir()
+    return Path.cwd() / "candidates"
+
+
+def get_event_store_path() -> Path:
+    """Local path of the SQLite event store (always local, never a bucket).
+
+    ``PARTNER_SCRAPE_EVENT_DB`` if set; otherwise
+    ``~/.partner-scrape/events.db`` -- deliberately independent of
+    ``SCRAPE_CACHE_DIR``, which may be an ``s3://`` location.
+    """
+    value = os.environ.get(EVENT_STORE_PATH_ENV_VAR)
+    if value:
+        return Path(value)
+    return Path.home() / ".partner-scrape" / "events.db"
+
+
+def get_site_dir() -> Path:
+    """Return the site checkout directory.
+
+    ``SITE_DIR`` from the environment if set; otherwise the current
+    working directory (there is no sibling-checkout default).
     """
     value = os.environ.get(SITE_DIR_ENV_VAR)
     if value:
         return Path(value)
-    return DEFAULT_SITE_DIR
+    return Path.cwd()
 
 
 def get_leaguesync_api_key() -> str:
     """Return the Bearer token for sync.jtlapp.net, stripped of quotes.
 
     Reads ``LEAGUESYNC_API_KEY`` from the environment on every call (no
-    caching), matching ``get_scrape_cache_dir``'s pattern so tests can
+    caching), matching the other getters' pattern so tests can
     monkeypatch ``os.environ`` freely. The value observed in the
     assembled ``.env`` carries surrounding single quotes (dotconfig's
     round-trip of a SOPS-decrypted secret, e.g. ``LEAGUESYNC_API_KEY='abc123'``)
@@ -231,7 +273,7 @@ def get_leaguesync_api_key() -> str:
     Raises:
         RuntimeError: if ``LEAGUESYNC_API_KEY`` is not set (or is empty
             after stripping) -- there is no safe default for an API
-            credential, matching ``get_scrape_cache_dir``'s convention.
+            credential, matching ``get_tba_api_key``'s convention.
     """
     value = os.environ.get(LEAGUESYNC_API_KEY_ENV_VAR)
     if value is not None:

@@ -19,29 +19,11 @@ class TestCredentialError:
             raise config.CredentialError("boom")
 
 
-class TestScrapeCacheDir:
-    def test_reads_configured_value(self, monkeypatch):
-        monkeypatch.setenv("SCRAPE_CACHE_DIR", "/tmp/some-cache-dir")
-        assert config.get_scrape_cache_dir() == Path("/tmp/some-cache-dir")
-
-    def test_raises_when_unset(self, monkeypatch):
-        monkeypatch.delenv("SCRAPE_CACHE_DIR", raising=False)
-        with pytest.raises(RuntimeError):
-            config.get_scrape_cache_dir()
-
-    def test_raises_when_empty_string(self, monkeypatch):
-        monkeypatch.setenv("SCRAPE_CACHE_DIR", "")
-        with pytest.raises(RuntimeError):
-            config.get_scrape_cache_dir()
-
-
 class TestSiteDir:
-    def test_default_site_dir_when_unset(self, monkeypatch):
+    def test_default_site_dir_is_cwd_when_unset(self, monkeypatch, tmp_path):
         monkeypatch.delenv("SITE_DIR", raising=False)
-        assert config.get_site_dir() == config.DEFAULT_SITE_DIR
-
-    def test_default_site_dir_is_sibling_stem_ecosystem(self):
-        assert config.DEFAULT_SITE_DIR.name == "stem-ecosystem"
+        monkeypatch.chdir(tmp_path)
+        assert config.get_site_dir() == tmp_path
 
     def test_override_via_environment(self, monkeypatch):
         monkeypatch.setenv("SITE_DIR", "/tmp/custom-site-dir")
@@ -339,3 +321,81 @@ class TestRealBucketGuard:
         monkeypatch.delenv("SCRAPE_CACHE_DIR")
         with pytest.raises(pytest.fail.Exception, match="real bucket"):
             S3Store("jtl-stem-ecosystem-scrape", "cache", object())
+
+
+class TestRegistryDir:
+    def test_defaults_to_bundled_registry(self, monkeypatch):
+        monkeypatch.delenv("PARTNER_SCRAPE_REGISTRY_DIR", raising=False)
+        assert config.get_registry_dir() == config.BUNDLED_REGISTRY_DIR
+        assert config.BUNDLED_REGISTRY_DIR.name == "registry_data"
+        assert config.BUNDLED_REGISTRY_DIR.parent.name == "partner_scrape"
+        for sub in ("sources", "hubs", "candidates", "ads"):
+            assert (config.BUNDLED_REGISTRY_DIR / sub).is_dir()
+
+    def test_override_applies_to_every_subdir(self, monkeypatch, tmp_path):
+        monkeypatch.setenv("PARTNER_SCRAPE_REGISTRY_DIR", str(tmp_path))
+        assert config.get_sources_dir() == tmp_path / "sources"
+        assert config.get_hubs_dir() == tmp_path / "hubs"
+        assert config.get_ads_dir() == tmp_path / "ads"
+        assert config.get_candidates_dir() == tmp_path / "candidates"
+        assert config.get_candidates_write_dir() == tmp_path / "candidates"
+
+    def test_remote_location_not_supported_yet(self, monkeypatch):
+        monkeypatch.setenv("PARTNER_SCRAPE_REGISTRY_DIR", "s3://bucket/config")
+        with pytest.raises(RuntimeError, match="not supported"):
+            config.get_registry_dir()
+
+    def test_loaders_follow_override(self, monkeypatch, tmp_path):
+        from partner_scrape.registry.loader import load_sources
+
+        monkeypatch.setenv("PARTNER_SCRAPE_REGISTRY_DIR", str(tmp_path))
+        assert load_sources() == []
+
+    def test_candidates_write_dir_is_cwd_not_bundled_by_default(self, monkeypatch, tmp_path):
+        monkeypatch.delenv("PARTNER_SCRAPE_REGISTRY_DIR", raising=False)
+        monkeypatch.chdir(tmp_path)
+        assert config.get_candidates_write_dir() == tmp_path / "candidates"
+
+
+class TestEventStorePath:
+    def test_override(self, monkeypatch, tmp_path):
+        monkeypatch.setenv("PARTNER_SCRAPE_EVENT_DB", str(tmp_path / "e.db"))
+        assert config.get_event_store_path() == tmp_path / "e.db"
+
+    def test_default_is_local_and_independent_of_cache_location(self, monkeypatch):
+        monkeypatch.delenv("PARTNER_SCRAPE_EVENT_DB", raising=False)
+        monkeypatch.setenv("SCRAPE_CACHE_DIR", "s3://some-bucket/cache")
+        path = config.get_event_store_path()
+        assert path.name == "events.db"
+        assert "s3:" not in str(path)
+
+
+def test_no_module_resolves_defaults_via_repo_root():
+    import re
+
+    root = Path(config.__file__).resolve().parent
+    pattern = re.compile(r"REPO_ROOT|DEFAULT_OWN_DATA_DIR|DEFAULT_SITE_DIR")
+    offenders = [
+        str(p.relative_to(root))
+        for p in root.rglob("*.py")
+        if pattern.search(p.read_text(encoding="utf-8"))
+    ]
+    assert offenders == []
+
+
+class TestRealBucketSafety:
+    """The conftest autouse fixtures keep every test off the real bucket."""
+
+    def test_locations_are_local_under_tests(self):
+        from partner_scrape.storage import LocalStore
+
+        assert isinstance(config.get_scrape_cache_store(), LocalStore)
+        assert isinstance(config.get_data_store(), LocalStore)
+
+    def test_defaults_would_hit_the_bucket_but_the_guard_fails_the_test(self, monkeypatch):
+        monkeypatch.delenv("SCRAPE_CACHE_DIR")
+        monkeypatch.setenv("DO_SPACES_ENDPOINT", "https://sfo3.digitaloceanspaces.com")
+        monkeypatch.setenv("DO_SPACES_ACCESS_KEY", "x")
+        monkeypatch.setenv("DO_SPACES_SECRET_KEY", "x")
+        with pytest.raises(pytest.fail.Exception, match="real bucket"):
+            config.get_scrape_cache_store()

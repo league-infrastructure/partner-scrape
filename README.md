@@ -25,7 +25,11 @@ uv sync
 
 Set `SCRAPE_CACHE_DIR` (required -- no safe default; see
 `partner_scrape/config.py`) before running for real. `SITE_DIR` is
-optional and defaults to `../stem-ecosystem`.
+optional and defaults to the current directory (there is no sibling
+checkout default). The seed registry ships inside the package
+(`partner_scrape/registry_data/`); set `PARTNER_SCRAPE_REGISTRY_DIR` to a
+local directory (with `sources/`, `hubs/`, `candidates/`, `ads/`) to
+override it.
 
 ```bash
 export SCRAPE_CACHE_DIR=/path/to/a/cache/dir
@@ -34,7 +38,7 @@ export SCRAPE_CACHE_DIR=/path/to/a/cache/dir
 ### Run
 
 ```bash
-# Full run against the real seed registry and ../stem-ecosystem
+# Full run against the bundled seed registry and $SITE_DIR (or the CWD)
 uv run partner-scrape
 
 # See the payload that would be written, without touching disk

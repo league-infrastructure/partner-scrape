@@ -98,7 +98,7 @@ class TestRealSeedHubRegistry:
 
     def test_default_hubs_dir_points_at_the_real_hub_registry(self):
         assert DEFAULT_HUBS_DIR.name == "hubs"
-        assert DEFAULT_HUBS_DIR.parent.name == "registry"
+        assert DEFAULT_HUBS_DIR.parent.name == "registry_data"
 
     def test_hubs_dir_is_physically_separate_from_sources_dir(self):
         assert DEFAULT_HUBS_DIR != DEFAULT_SOURCES_DIR

@@ -153,7 +153,7 @@ class TestRealSeedRegistry:
 
     def test_default_sources_dir_points_at_the_real_registry(self):
         assert DEFAULT_SOURCES_DIR.name == "sources"
-        assert DEFAULT_SOURCES_DIR.parent.name == "registry"
+        assert DEFAULT_SOURCES_DIR.parent.name == "registry_data"
 
     def test_known_tec_sites_load_as_enabled(self):
         # Pre-existing count, updated for sprint 014 ticket 003's

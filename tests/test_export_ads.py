@@ -234,7 +234,7 @@ class TestRealSeedAdRegistry:
 
     def test_default_ads_dir_points_at_the_real_ad_registry(self):
         assert DEFAULT_ADS_DIR.name == "ads"
-        assert DEFAULT_ADS_DIR.parent.name == "registry"
+        assert DEFAULT_ADS_DIR.parent.name == "registry_data"
 
     def test_league_seed_ad_loads_with_all_required_fields_populated(self):
         loaded = load_ad_configs()

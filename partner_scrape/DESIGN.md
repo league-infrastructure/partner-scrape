@@ -83,7 +83,7 @@ every one of them if it were routed through `Opportunity`. See
   `--mirror-site-dir`/`--no-mirror` flags and the mirror step this bullet used to describe
   were removed outright — see `export/DESIGN.md`'s sprint 019 note.
 - **`config.py`** — the only module in the package that reads `os.environ`. Accessors for
-  `SCRAPE_CACHE_DIR` (required, no default), `SITE_DIR`, `LEAGUESYNC_API_KEY`, and
+  `SCRAPE_CACHE_DIR`, `SITE_DIR` (default: CWD), `LEAGUESYNC_API_KEY`, and
   `LEAGUESYNC_URL`. Values are assembled by dotconfig into
   layered `.env` files before the process starts; this module only reads what landed.
   **Sprint 011:** gains `get_tba_api_key()`/`get_tba_url()` (reading `TBA_KEY`/`TBA_URL`),
@@ -97,7 +97,13 @@ every one of them if it were routed through `Opportunity`. See
   (`DO_SPACES_ENDPOINT` region endpoint — a bucket-qualified one is rejected —
   `DO_SPACES_ACCESS_KEY`, `DO_SPACES_SECRET_KEY`) and injects it into `storage`; missing
   `DO_SPACES_*` values fail loudly only when an `s3://` location is in effect.
-  `get_scrape_cache_dir()` remains until its last caller (`store/event_store.py`) is rewired.
+  **Sprint 038 ticket 006:** `REPO_ROOT`, `DEFAULT_SITE_DIR` and the old
+  `get_scrape_cache_dir()` are gone. `get_registry_dir()` (`PARTNER_SCRAPE_REGISTRY_DIR`,
+  default the bundled `partner_scrape/registry_data/`; local paths only, `://` values are
+  rejected) plus `get_sources_dir()/get_hubs_dir()/get_ads_dir()/get_candidates_dir()`;
+  `get_candidates_write_dir()` (override's `candidates/`, else `./candidates`, never the
+  bundled copy); `get_event_store_path()` (`PARTNER_SCRAPE_EVENT_DB`, else
+  `~/.partner-scrape/events.db`); `get_site_dir()` is `SITE_DIR` or the CWD.
   `resolve_data_store(location)` maps an export function's `own_data_dir` argument (path,
   `s3://`, `Store`, or `None` = `get_data_store()`) to a Store.
 - **`model.py`** — the canonical `Event` record and the shared identity vocabulary. A flat
@@ -214,7 +220,7 @@ competing records, so a confidence constant is a project-wide contract, not a lo
 detail.
 
 **Configuration is data, and environment is read in one place.** Adding an organization is
-a new TOML file in `registry/sources/`. `config.py` is the only module that touches
+a new TOML file in `partner_scrape/registry_data/sources/`. `config.py` is the only module that touches
 `os.environ`.
 
 **Datetimes are naive San Diego wall clock.** Adapters should emit them that way; several
@@ -255,7 +261,7 @@ saved HTML/JSON fixtures under `tests/fixtures/`, no network, no API key require
 
 ### Consumes
 - **`stem-ecosystem`'s `src/data/partners.json`** — read-only, for the partner join.
-- **Environment** (via `config.py` only): `SCRAPE_CACHE_DIR`, `PARTNER_SCRAPE_DATA_DIR`, `DO_SPACES_*` (sprint 038), `SITE_DIR`,
+- **Environment** (via `config.py` only): `SCRAPE_CACHE_DIR`, `PARTNER_SCRAPE_DATA_DIR`, `PARTNER_SCRAPE_REGISTRY_DIR`, `PARTNER_SCRAPE_EVENT_DB`, `DO_SPACES_*` (sprint 038), `SITE_DIR`,
   `LEAGUESYNC_API_KEY`, `LEAGUESYNC_URL`, and (sprint 011) `TBA_KEY`/`TBA_URL`; and
   `ANTHROPIC_API_KEY`, resolved by the `anthropic` SDK itself.
 - **~100 partner websites and APIs**, reached only through `fetch/`.
