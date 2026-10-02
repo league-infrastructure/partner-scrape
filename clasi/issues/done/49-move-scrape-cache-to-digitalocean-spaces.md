@@ -1,6 +1,8 @@
 ---
-status: pending
+status: done
 sprint: 038
+tickets:
+- NONE
 ---
 
 # Move the scrape cache to a DigitalOcean Space
