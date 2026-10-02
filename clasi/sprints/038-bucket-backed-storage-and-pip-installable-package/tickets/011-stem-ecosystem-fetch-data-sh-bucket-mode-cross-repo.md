@@ -1,9 +1,11 @@
 ---
 id: '011'
 title: stem-ecosystem fetch-data.sh bucket mode (cross-repo)
-status: open
-use-cases: ["SUC-003"]
-depends-on: ["009"]
+status: in-progress
+use-cases:
+- SUC-003
+depends-on:
+- 009
 github-issue: ''
 issue: 50-move-cache-and-data-to-digitalocean-spaces.md
 completes_issue: true
