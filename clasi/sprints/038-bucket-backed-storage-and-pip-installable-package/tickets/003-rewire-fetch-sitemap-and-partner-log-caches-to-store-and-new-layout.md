@@ -1,9 +1,11 @@
 ---
 id: '003'
 title: Rewire fetch, sitemap and partner_log caches to Store and new layout
-status: open
-use-cases: ["SUC-001"]
-depends-on: ["002"]
+status: in-progress
+use-cases:
+- SUC-001
+depends-on:
+- '002'
 github-issue: ''
 issue: 50-move-cache-and-data-to-digitalocean-spaces.md
 completes_issue: true
