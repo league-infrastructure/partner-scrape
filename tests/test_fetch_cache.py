@@ -9,22 +9,29 @@ network socket, per sprint.md's test strategy for Fetch & Cache.
 
 from __future__ import annotations
 
+import hashlib
+import json
 import threading
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
 
+import boto3
 import pytest
+from moto import mock_aws
 
 from partner_scrape.fetch.cache import (
     PoliteFetcher,
     cache_path,
     conditional_headers,
     read_cache_entry,
+    touch_fetch_timestamp,
+    write_cache_entry,
 )
 from partner_scrape.fetch.fetcher import FetchResponse, UrllibFetcher
 from partner_scrape.fetch.robots import RobotsDisallowed, is_allowed
 from partner_scrape.fetch.throttle import Throttle
+from partner_scrape.storage import LocalStore
 
 FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures" / "fetch"
 
@@ -222,16 +229,61 @@ class TestCacheWrite:
         path = cache_path(tmp_path, url)
         assert path.exists()
         assert path.parent.name == "example.org"
+        assert path.parent.parent.name == "hosts"
+        assert path.relative_to(tmp_path).as_posix() == (
+            f"hosts/example.org/{hashlib.sha256(url.encode()).hexdigest()}.json"
+        )
 
     def test_cache_dir_defaults_to_configured_scrape_cache_dir(self, tmp_path, monkeypatch):
         monkeypatch.setenv("SCRAPE_CACHE_DIR", str(tmp_path))
         polite = PoliteFetcher(fetcher=FixtureFetcher({}))
 
-        assert polite.cache_dir == tmp_path
+        assert isinstance(polite.store, LocalStore)
+        assert polite.store.root == tmp_path
 
-    def test_raises_when_scrape_cache_dir_unset_and_no_override_given(self):
-        with pytest.raises(RuntimeError):
+    def test_raises_when_bucket_default_has_no_credentials(self, monkeypatch):
+        monkeypatch.delenv("SCRAPE_CACHE_DIR", raising=False)
+        for var in ("DO_SPACES_ENDPOINT", "DO_SPACES_ACCESS_KEY", "DO_SPACES_SECRET_KEY"):
+            monkeypatch.delenv(var, raising=False)
+        with pytest.raises(RuntimeError, match="DO_SPACES"):
             PoliteFetcher(fetcher=FixtureFetcher({}))
+
+    def test_accepts_a_store_directly_and_round_trips_entries(self, tmp_path):
+        store = LocalStore(tmp_path)
+        url = "https://Example.org/a"
+        write_cache_entry(store, url, _response(url, status=200, body="x"))
+
+        assert read_cache_entry(store, url)["body"] == "x"
+        assert read_cache_entry(tmp_path, url)["body"] == "x"
+
+    def test_entry_file_is_indent_2_json(self, tmp_path):
+        url = "https://example.org/a"
+        write_cache_entry(tmp_path, url, _response(url, status=200, body="caf\u00e9"))
+
+        text = cache_path(tmp_path, url).read_text(encoding="utf-8")
+        assert text.startswith('{\n  "url": ')
+        assert text == json.dumps(json.loads(text), indent=2)
+
+
+class TestBucketBackedCache:
+    def test_get_caches_under_hosts_key_in_bucket(self, monkeypatch):
+        with mock_aws():
+            client = boto3.client("s3", region_name="us-east-1")
+            client.create_bucket(Bucket="test-bucket")
+            monkeypatch.setenv("SCRAPE_CACHE_DIR", "s3://test-bucket/cache")
+            monkeypatch.setenv("DO_SPACES_ENDPOINT", "https://s3.us-east-1.amazonaws.com")
+            monkeypatch.setenv("DO_SPACES_ACCESS_KEY", "k")
+            monkeypatch.setenv("DO_SPACES_SECRET_KEY", "s")
+            url = "https://example.org/api/events"
+            fetcher = FixtureFetcher({url: _response(url, status=200, body="hi")})
+            polite = PoliteFetcher(fetcher=fetcher)
+
+            polite.get(url, respect_robots=False)
+
+            key = f"cache/hosts/example.org/{hashlib.sha256(url.encode()).hexdigest()}.json"
+            body = client.get_object(Bucket="test-bucket", Key=key)["Body"].read()
+            assert json.loads(body)["body"] == "hi"
+            assert read_cache_entry(polite.store, url)["body"] == "hi"
 
 
 class TestConditionalGet:

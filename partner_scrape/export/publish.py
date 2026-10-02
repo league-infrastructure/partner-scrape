@@ -71,24 +71,12 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from partner_scrape.config import get_own_data_dir, get_scrape_cache_dir, get_site_dir
-from partner_scrape.export.partner_log import _JSONL_FILENAME
+from partner_scrape.config import get_own_data_dir, get_site_dir
+from partner_scrape.export.partner_log import _JSONL_FILENAME, resolve_log_store
 from partner_scrape.export.writer import SITE_SCHEMA_FIELDS, is_current_or_upcoming, to_json_dict
 from partner_scrape.model import slugify
 from partner_scrape.normalize.run import Opportunity
-
-#: Subdirectory of `SCRAPE_CACHE_DIR` the accumulation store lives
-#: under -- must match `partner_log.py`'s own `_LOG_SUBDIR` exactly,
-#: since this is where `project()` reads what `record()` wrote. Kept as
-#: a separate constant (rather than importing `partner_log._LOG_SUBDIR`)
-#: because a caller-supplied `log_dir` always overrides it in practice;
-#: this is only a default.
-_LOG_SUBDIR = "partner_log"
-
-
-def _default_log_dir() -> Path:
-    return get_scrape_cache_dir() / _LOG_SUBDIR
-
+from partner_scrape.storage import Store
 
 def _default_partners_path() -> Path:
     """`{site_dir}/src/data/partners.json` -- matches `partner_log.py`'s
@@ -107,20 +95,20 @@ def _now_iso() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
-def _read_jsonl_lines(jsonl_path: Path) -> list[str]:
-    if not jsonl_path.exists():
+def _read_jsonl_lines(store: Store, key: str) -> list[str]:
+    text = store.read_text(key)
+    if text is None:
         return []
-    text = jsonl_path.read_text(encoding="utf-8")
     return [line for line in text.splitlines() if line.strip()]
 
 
-def _collapse_last_line_wins(jsonl_path: Path) -> list[dict[str, Any]]:
-    """Read `jsonl_path` and collapse to one record per `slug`, the
+def _collapse_last_line_wins(store: Store, key: str) -> list[dict[str, Any]]:
+    """Read `key` from `store` and collapse to one record per `slug`, the
     later line in file order winning -- `partner_log.record()` always
     appends, never rewrites, so file order is chronological and a plain
     dict overwrite implements "last line wins" exactly."""
     by_slug: dict[str, dict[str, Any]] = {}
-    for line in _read_jsonl_lines(jsonl_path):
+    for line in _read_jsonl_lines(store, key):
         entry = json.loads(line)
         by_slug[entry["slug"]] = entry
     return list(by_slug.values())
@@ -250,7 +238,8 @@ def project(
             when `None`. Tests should always pass an explicit `tmp_path`.
         log_dir: root of the per-partner accumulation store
             (`partner_log.py`'s `log_dir`). Defaults to
-            `config.get_scrape_cache_dir() / "partner_log"`.
+            the scrape-cache Store's `partner_log/` prefix
+            (`partner_log.resolve_log_store`).
         partners_path: path to the curated `partners.json` this
             projection joins against. Defaults to
             `{site_dir}/src/data/partners.json` -- note this is a
@@ -280,7 +269,7 @@ def project(
             matching `export_opportunities`'s loud-failure contract.
     """
     resolved_site_dir = Path(site_dir) if site_dir is not None else get_site_dir()
-    resolved_log_dir = Path(log_dir) if log_dir is not None else _default_log_dir()
+    log_store, log_prefix = resolve_log_store(log_dir)
     resolved_partners_path = (
         Path(partners_path) if partners_path is not None else _default_partners_path()
     )
@@ -313,9 +302,9 @@ def project(
 
     for partner in partners:
         partner_slug = slugify(partner.get("name", ""))
-        jsonl_path = resolved_log_dir / partner_slug / _JSONL_FILENAME
+        jsonl_key = f"{log_prefix}{partner_slug}/{_JSONL_FILENAME}"
 
-        collapsed = [_to_opportunity(entry) for entry in _collapse_last_line_wins(jsonl_path)]
+        collapsed = [_to_opportunity(entry) for entry in _collapse_last_line_wins(log_store, jsonl_key)]
         current, past = _split_current_and_past(collapsed, reference_date)
         total_current += len(current)
         total_past += len(past)

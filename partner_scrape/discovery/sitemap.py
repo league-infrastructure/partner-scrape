@@ -40,12 +40,12 @@ import json
 import logging
 import re
 import xml.etree.ElementTree as ET
-from pathlib import Path
 
 from partner_scrape import config
 from partner_scrape.adapters.base import EventRef, acquisition_kwargs
 from partner_scrape.fetch import Fetcher
 from partner_scrape.registry.schema import SourceConfig
+from partner_scrape.storage import Store
 
 logger = logging.getLogger(__name__)
 
@@ -94,30 +94,28 @@ _ROOT_SITEMAP_FILENAMES = ("sitemap_index.xml", "sitemap.xml", "sitemap-index.xm
 #: alone is not sufficient evidence a candidate URL is a real sitemap.
 _SITEMAP_ROOT_TAGS = ("urlset", "sitemapindex")
 
-#: Subdirectory of ``SCRAPE_CACHE_DIR`` snapshots are stored under.
-_SNAPSHOT_SUBDIR = "sitemap_snapshots"
+#: Key prefix (folder in the scrape-cache Store) snapshots are stored under.
+_SNAPSHOT_SUBDIR = "sitemaps"
 
 
-def _snapshot_path(source_id: str) -> Path:
-    """The on-disk path a source's ``{url: lastmod}`` snapshot lives at."""
-    return config.get_scrape_cache_dir() / _SNAPSHOT_SUBDIR / f"{source_id}.json"
+def _snapshot_key(source_id: str) -> str:
+    """The Store key a source's ``{url: lastmod}`` snapshot lives at."""
+    return f"{_SNAPSHOT_SUBDIR}/{source_id}.json"
 
 
-def _read_snapshot(path: Path) -> dict[str, str]:
+def _read_snapshot(store: Store, key: str) -> dict[str, str]:
     """Read a source's prior snapshot, or ``{}`` if this is the first
-    run for it (no snapshot file on disk yet).
+    run for it (no snapshot stored yet).
     """
-    if not path.exists():
-        return {}
-    with open(path, encoding="utf-8") as f:
-        return json.load(f)
+    snapshot = store.read_json(key)
+    return {} if snapshot is None else snapshot
 
 
-def _write_snapshot(path: Path, urls: dict[str, str]) -> None:
+def _write_snapshot(store: Store, key: str, urls: dict[str, str]) -> None:
     """Persist ``urls`` as the source's new full-state snapshot."""
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(urls, f, indent=2, sort_keys=True)
+    store.write_text(
+        key, json.dumps(urls, indent=2, sort_keys=True), "application/json"
+    )
 
 
 def _local_name(tag: str) -> str:
@@ -410,8 +408,9 @@ def discover_changed_urls(
     if current is None:
         return []
 
-    snapshot_path = _snapshot_path(source.source_id)
-    previous = _read_snapshot(snapshot_path)
+    store = config.get_scrape_cache_store()
+    snapshot_key = _snapshot_key(source.source_id)
+    previous = _read_snapshot(store, snapshot_key)
 
     refs = [
         EventRef(url=url, context={"lastmod": lastmod})
@@ -419,6 +418,6 @@ def discover_changed_urls(
         if not changed_only or previous.get(url) != lastmod
     ]
 
-    _write_snapshot(snapshot_path, current)
+    _write_snapshot(store, snapshot_key, current)
 
     return refs

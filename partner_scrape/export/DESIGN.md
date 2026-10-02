@@ -58,8 +58,11 @@ Five independent modules, each owning one output (three pre-existing, two new in
   see `normalize/DESIGN.md`), computes `published_content_hash(opportunity)` over the
   published schema fields, and appends a line to that partner's
   `{log_dir}/<partner-slug>/opportunities.jsonl` only if the `(slug, content_hash)` pair
-  is not already present — never rewriting existing lines. `log_dir` defaults to
-  `{SCRAPE_CACHE_DIR}/partner_log/`. Called from `pipeline.run()`, alongside
+  is not already present — never rewriting existing lines. `log_dir` defaults to the
+  scrape-cache `Store`'s `partner_log/` prefix (keys `partner_log/<slug>/...`, local or
+  bucket; sprint 038); an explicit `log_dir` is a local directory. `partner_log.resolve_log_store`
+  is the single resolver and `_LOG_SUBDIR` the single prefix constant, both reused by
+  `publish.py`. Called from `pipeline.run()`, alongside
   `export_opportunities`/`export_ads`, so every real run accumulates.
 - **`publish.py` (NEW, sprint 009)** · `project(site_dir=None, *, log_dir=None,
   partners_path=None, today=None, dry_run=False) -> dict` — the build-time projection.
@@ -314,7 +317,7 @@ accumulated log. `partner_log.py` never imports `publish.py` — the dependency 
 ### Consumes
 - **`Opportunity` (from `normalize/`)** — the input record. One-way: `export/` depends on
   `normalize/`, never the reverse. See `normalize/DESIGN.md`.
-- **`config.get_site_dir()`, `config.get_scrape_cache_dir()` (from `config.py`)** — the
+- **`config.get_site_dir()`, `config.get_scrape_cache_store()` (from `config.py`)** — the
   default target checkout and (sprint 009, `partner_log.py`'s default `log_dir`) the
   default accumulation-store location, when the caller does not supply one. No new
   environment variable was added for the accumulation store — it is a subdirectory of the

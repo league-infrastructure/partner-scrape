@@ -30,6 +30,7 @@ from partner_scrape.export import partner_log, publish, writer
 from partner_scrape.export.partner_log import _to_log_dict, published_content_hash
 from partner_scrape.export.publish import _to_opportunity, project
 from partner_scrape.export.writer import SITE_SCHEMA_FIELDS, export_opportunities
+from partner_scrape.storage import LocalStore
 from partner_scrape.normalize.run import WORK_BASED_LEARNING_TYPE, Opportunity
 
 FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures"
@@ -704,11 +705,13 @@ class TestConfigDefaults:
 
         assert (own_data_dir / "partners.json").exists()
 
-    def test_omitted_log_dir_resolves_via_config_get_scrape_cache_dir(self, tmp_path, monkeypatch):
+    def test_omitted_log_dir_resolves_via_config_get_scrape_cache_store(self, tmp_path, monkeypatch):
         fake_cache_dir = tmp_path / "cache"
         site_dir = _site_dir(tmp_path)
         own_data_dir = _own_data_dir(tmp_path)
-        monkeypatch.setattr(publish, "get_scrape_cache_dir", lambda: fake_cache_dir)
+        monkeypatch.setattr(
+            partner_log, "get_scrape_cache_store", lambda: LocalStore(fake_cache_dir)
+        )
 
         # No log written under fake_cache_dir/partner_log -- every
         # partner should still publish with empty event lists rather

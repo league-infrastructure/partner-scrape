@@ -117,8 +117,8 @@ pipeline:
 ## 4. Design
 
 **The snapshot as incremental state.** `sitemap.py` is the only part of the system that
-keeps discovery-time state across runs: `{SCRAPE_CACHE_DIR}/sitemap_snapshots/{source_id}`
-holds the last observed `{url: lastmod}` map. It is rewritten to the full current state
+keeps discovery-time state across runs: key `sitemaps/<source_id>.json` in the
+scrape-cache `Store` (sprint 038; was `sitemap_snapshots/`) holds the last observed `{url: lastmod}` map. It is rewritten to the full current state
 on every successful resolution, not merged — so a source whose sitemap shrinks converges
 rather than accumulating ghosts. `changed_only=False` (the default) still returns
 everything; the diff narrows the result only when the caller asks for it.
@@ -215,7 +215,7 @@ together — no second config key, no code change, matching `registry/DESIGN.md`
   `registry/DESIGN.md`.
 - **`adapters.base.EventRef`** — the output shape for the two event-URL strategies; a
   logic-free dataclass. See `adapters/DESIGN.md`.
-- **`config.get_scrape_cache_dir` (from `config.py`)** — sitemap snapshot location.
+- **`config.get_scrape_cache_store` (from `config.py`)** — sitemap snapshot location.
 - **`normalize.partners.normalize_org_name`** — string normalization for candidate
   dedup only. See the constraint above.
 

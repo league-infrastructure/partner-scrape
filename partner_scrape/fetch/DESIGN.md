@@ -174,9 +174,14 @@ that retrieves robots.txt through the *injected* `Fetcher` rather than opening i
 socket) and `throttle.py` (an in-memory `{domain: last_fetch_time}` map with per-domain
 locks).
 
-The cache is one JSON file per URL, domain-sharded:
-`{SCRAPE_CACHE_DIR}/{domain}/{sha256(url)}.json`, holding
-`{url, status, headers, body, fetched_at}`.
+The cache is one JSON object per URL, host-sharded, in the scrape-cache `Store`
+(sprint 038): key `hosts/<hostname>/<sha256(url)>.json`, holding
+`{url, status, headers, body, fetched_at}` (indent=2). The Store is local or the
+bucket (`s3://jtl-stem-ecosystem-scrape/cache` by default); `cache_dir: Path | None`
+is still accepted by `PoliteFetcher` and wrapped in a `LocalStore`. `cache_path()` is
+kept and returns the local path for a given cache directory. Local writes are atomic
+(`LocalStore` temp-then-replace); `_cache_lock` still serializes the touch
+read-modify-write.
 
 ## 3. Constraints and Invariants
 
@@ -235,9 +240,9 @@ The cache is one JSON file per URL, domain-sharded:
   strings. Parsing JSON, HTML, or iCal is the caller's job. A helper here that "just
   decodes the JSON" would start the drift toward per-vendor knowledge living in the
   transport layer.
-- **`SCRAPE_CACHE_DIR` has no default and must be set.** The cache can reach tens of GB
-  and is deliberately kept off the repo volume; `config.get_scrape_cache_dir()` raises
-  rather than guessing.
+- **`SCRAPE_CACHE_DIR` defaults to the bucket** (sprint 038). `config.get_scrape_cache_store()`
+  raises with an actionable message when the effective location is `s3://` and
+  `DO_SPACES_*` credentials are missing; a local directory is used only when set explicitly.
 
 ## 4. Design
 
@@ -364,7 +369,7 @@ returning their real XML bodies unchanged.
   `DEFAULT_RATE_LIMIT_SECONDS`, `NETWORK_IDLE_TIMEOUT_MS`** — supporting surface.
 
 ### Consumes
-- **`config.get_scrape_cache_dir()` (from `config.py`)** — the cache root. The only
+- **`config.get_scrape_cache_store()` (from `config.py`)** — the cache `Store`. The only
   configuration this package reads, and it reads it through the one module permitted to
   touch `os.environ`.
 
