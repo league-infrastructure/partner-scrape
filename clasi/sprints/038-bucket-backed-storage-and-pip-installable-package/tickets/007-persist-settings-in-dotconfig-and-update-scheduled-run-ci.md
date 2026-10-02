@@ -1,9 +1,15 @@
 ---
 id: '007'
 title: Persist settings in dotconfig and update scheduled-run CI
-status: open
-use-cases: ["SUC-001", "SUC-002"]
-depends-on: ["003", "004", "005", "006"]
+status: in-progress
+use-cases:
+- SUC-001
+- SUC-002
+depends-on:
+- '003'
+- '004'
+- '005'
+- '006'
 github-issue: ''
 issue: 50-move-cache-and-data-to-digitalocean-spaces.md
 completes_issue: true
