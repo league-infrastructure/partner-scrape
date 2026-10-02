@@ -1,7 +1,7 @@
 ---
 id: '007'
 title: Persist settings in dotconfig and update scheduled-run CI
-status: in-progress
+status: done
 use-cases:
 - SUC-001
 - SUC-002
@@ -24,10 +24,10 @@ Make settings permanent and remove git/actions-cache machinery from CI.
 
 ## Acceptance Criteria
 
-- [ ] `config/prod/public.env`: `SCRAPE_CACHE_DIR`, `PARTNER_SCRAPE_DATA_DIR` (s3 values matching defaults), `DO_SPACES_ENDPOINT=https://sfo3.digitaloceanspaces.com` (not bucket-qualified)
-- [ ] `config/prod/secrets.env` (SOPS): `DO_SPACES_ACCESS_KEY`, `DO_SPACES_SECRET_KEY`; if SOPS key is unavailable, document and hand to the operator (do not write plaintext)
-- [ ] `.github/workflows/scheduled-run.yml`: actions/cache steps removed, `git add data/` publish step removed, DO_SPACES_* secrets passed, `contents: read`
-- [ ] `docs/deploy/scheduled-run.md` updated; known external blocker (missing SITE_REPO_TOKEN) noted as an operator task
+- [x] `config/prod/public.env`: `SCRAPE_CACHE_DIR`, `PARTNER_SCRAPE_DATA_DIR` (s3 values matching defaults), `DO_SPACES_ENDPOINT=https://sfo3.digitaloceanspaces.com` (not bucket-qualified)
+- [x] `config/prod/secrets.env` (SOPS): `DO_SPACES_ACCESS_KEY`, `DO_SPACES_SECRET_KEY`; if SOPS key is unavailable, document and hand to the operator (do not write plaintext)
+- [x] `.github/workflows/scheduled-run.yml`: actions/cache steps removed, `git add data/` publish step removed, DO_SPACES_* secrets passed, `contents: read`
+- [x] `docs/deploy/scheduled-run.md` updated; known external blocker (missing SITE_REPO_TOKEN) noted as an operator task
 
 ## Implementation Plan
 
