@@ -1,31 +1,28 @@
 name: Scheduled scrape and publish
 
 # Sprint 004 / SUC-017 / issue 07: unattended weekly run of the
-# partner-scrape pipeline (scrape -> enrich -> normalize -> export),
-# publishing the refreshed data back to partner-scrape's OWN data/ on
-# this repo's master (see the "Publish refreshed data to
-# partner-scrape's own data/" step below).
+# partner-scrape pipeline (scrape -> enrich -> normalize -> export).
 #
-# (Sprint 025 ticket 008) stem-ecosystem is checked out READ-ONLY here,
-# solely to supply `{site_dir}/src/data/partners.json` as a pipeline
-# input. Nothing in this workflow writes to, commits into, or pushes the
-# stem-ecosystem checkout anymore -- the "Publish refreshed site data to
-# stem-ecosystem" step that used to do that has been removed as
-# permanently dead code, now that tickets 001-007 redirected every write
-# this pipeline makes onto partner-scrape's own data/ and registry/.
+# (Sprint 038) Cache and data live in the DigitalOcean Spaces bucket
+# (s3://jtl-stem-ecosystem-scrape/{cache,data}); the SCRAPE_CACHE_DIR /
+# PARTNER_SCRAPE_DATA_DIR defaults point there, so the job only needs to
+# supply the DO_SPACES_* credentials and endpoint. Nothing is committed
+# back to git: there is no data/ publish step and no actions/cache. The
+# source registry ships inside the package (partner_scrape/registry_data/).
+#
+# stem-ecosystem is checked out READ-ONLY, solely to supply
+# `{site_dir}/src/data/partners.json` as a pipeline input.
 #
 # Secrets required (referenced by name only -- never a literal value in
 # this file). See docs/deploy/scheduled-run.md for the one-time operator
 # setup that provisions them; that setup is NOT performed by this file:
-#   ANTHROPIC_API_KEY  - LLM enrichment (already used for local runs)
-#   SITE_REPO_TOKEN    - fine-grained PAT, `contents: write` on
-#                        stem-ecosystem, used ONLY to check it out (the
-#                        default GITHUB_TOKEN cannot check out a
-#                        different repository). Its write scope is no
-#                        longer exercised by this workflow -- see the
-#                        note above the "Checkout stem-ecosystem" step
-#                        below. Informational only: no token/secret
-#                        change is made by this ticket.
+#   ANTHROPIC_API_KEY     - LLM enrichment
+#   DO_SPACES_ACCESS_KEY  - Spaces bucket access key (cache + data)
+#   DO_SPACES_SECRET_KEY  - Spaces bucket secret key
+#   SITE_REPO_TOKEN       - fine-grained PAT with read access to
+#                           stem-ecosystem, used ONLY to check it out (the
+#                           default GITHUB_TOKEN cannot check out a
+#                           different repository).
 #
 # NOTE: GitHub only fires `schedule` triggers for workflow files that
 # exist on the repository's *default* branch, so this file has no effect
@@ -39,7 +36,7 @@ on:
   # files present on the default branch, so this has no effect until
   # this sprint's branch is merged -- see docs/deploy/scheduled-run.md.
   # One operator step remains before the FIRST unattended run can
-  # succeed: SITE_REPO_TOKEN (a fine-grained PAT with contents:write on
+  # succeed: SITE_REPO_TOKEN (a fine-grained PAT with contents:read on
   # stem-ecosystem) must be provisioned, per that same runbook. Until
   # then this job fails fast at the "Verify SITE_REPO_TOKEN is
   # configured" step below, every Monday, with an actionable message --
@@ -50,26 +47,20 @@ on:
   workflow_dispatch: {}
 
 # Manual activation/testing and the weekly cron should never race each
-# other into two concurrent runs publishing to partner-scrape's own
-# data/.
+# other into two concurrent runs writing to the same
+# bucket.
 concurrency:
   group: scheduled-run
   cancel-in-progress: false
 
-# (Sprint 020 ticket 008 / SUC-019) `contents: write` on the default
-# GITHUB_TOKEN, scoped to THIS repo only, so the "Publish refreshed data
-# to partner-scrape's own data/" step below can commit and push its own
-# data/ changes back to this repo's master. This is unrelated to, and
-# does not widen, SITE_REPO_TOKEN's separate cross-repo contents:write
-# scope on stem-ecosystem, used below only for the read-only
-# stem-ecosystem checkout -- no push happens using that token anymore
-# (Sprint 025 ticket 008 removed the step that used to do so).
+# (Sprint 038) Read-only: nothing is pushed to this repo any more; data
+# is written to the Spaces bucket.
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   scrape-and-publish:
-    name: Scrape, enrich, export, publish
+    name: Scrape, enrich, export
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -100,13 +91,9 @@ jobs:
       # workflow receives is scoped to the repo it runs in only, and
       # cannot check out (let alone push to) a different repo.
       #
-      # (Sprint 025 ticket 008) This checkout is READ-ONLY now: only
+      # This checkout is READ-ONLY: only
       # `{site_dir}/src/data/partners.json` is read from it as a
-      # pipeline input. SITE_REPO_TOKEN is still provisioned with
-      # `contents: write` on stem-ecosystem (see the top-of-file secrets
-      # note), but that write scope is no longer exercised anywhere in
-      # this workflow -- informational only, no token/secret change is
-      # made by this ticket.
+      # pipeline input.
       - name: Checkout stem-ecosystem
         uses: actions/checkout@v4
         with:
@@ -140,53 +127,19 @@ jobs:
         working-directory: partner-scrape
         run: uv run playwright install --with-deps chromium
 
-      # CI runners are ephemeral -- config/prod/public.env's
-      # SCRAPE_CACHE_DIR is a local Mac path that does not exist here, so
-      # it is deliberately never inherited. This value lives under the
-      # runner's own temp directory, sibling to both checkouts, and is
-      # discarded when the job ends regardless of the actions/cache step
-      # below.
-      - name: Configure runner-local scrape cache directory
-        run: echo "SCRAPE_CACHE_DIR=${{ runner.temp }}/scrape-cache" >> "$GITHUB_ENV"
-
-      # Only the LLM enrichment cache is restored across runs -- NOT the
-      # raw-HTML mirror portion of SCRAPE_CACHE_DIR, which should
-      # deliberately re-fetch fresh content every week. Without this,
-      # EnrichmentCache (which also persists under SCRAPE_CACHE_DIR)
-      # would start every scheduled run from empty and silently re-pay
-      # full LLM enrichment cost for every event, not just new/changed
-      # ones -- caught during this sprint's architecture self-review.
-      #
-      # The save key is suffixed with the run ID (not content-derived --
-      # a plain content hash would defeat restoration entirely, since
-      # the cache's own content changes every run) so each run's newly
-      # enriched entries are always persisted forward: actions/cache
-      # only saves on a cache-key *miss*, so a single unchanging key
-      # would restore once and then never update again. restore-keys
-      # falls back to the most recent previous run's cache by prefix.
-      - name: Restore LLM enrichment cache
-        id: restore-enrichment-cache
-        uses: actions/cache/restore@v4
-        with:
-          path: ${{ env.SCRAPE_CACHE_DIR }}/enrichment_cache
-          key: enrichment-cache-${{ github.run_id }}
-          restore-keys: |
-            enrichment-cache-
-
       - name: Run partner-scrape
         working-directory: partner-scrape
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Cache and data go to the Spaces bucket via the s3:// defaults
+          # (SCRAPE_CACHE_DIR / PARTNER_SCRAPE_DATA_DIR); only the
+          # endpoint and credentials are supplied here.
+          DO_SPACES_ENDPOINT: https://sfo3.digitaloceanspaces.com
+          DO_SPACES_ACCESS_KEY: ${{ secrets.DO_SPACES_ACCESS_KEY }}
+          DO_SPACES_SECRET_KEY: ${{ secrets.DO_SPACES_SECRET_KEY }}
         run: |
           uv run partner-scrape --site-dir "${{ github.workspace }}/stem-ecosystem" \
             | tee "${{ runner.temp }}/yield-report.txt"
-
-      - name: Save LLM enrichment cache
-        if: always()
-        uses: actions/cache/save@v4
-        with:
-          path: ${{ env.SCRAPE_CACHE_DIR }}/enrichment_cache
-          key: enrichment-cache-${{ github.run_id }}
 
       - name: Append yield report to job summary
         if: always()
@@ -198,31 +151,3 @@ jobs:
             cat "${{ runner.temp }}/yield-report.txt" 2>/dev/null || echo '(no report -- the run step failed before printing one)'
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
-
-      # (Sprint 020 ticket 008 / SUC-019 / issue 60) Publishes this run's
-      # output back to partner-scrape's OWN data/ directory on its own
-      # master, so the weekly cron keeps data/ current in git without
-      # operator intervention. `git add data/`, not `-A`: scoped to only
-      # the directory tickets 002-007 write into, never picking up an
-      # unrelated stray file the runner happened to leave behind
-      # elsewhere in this checkout. Uses only the workflow's own default
-      # GITHUB_TOKEN (contents: write, granted above) -- no new secret.
-      #
-      # (Sprint 025 ticket 008) This is now the ONLY publish step in this
-      # workflow. The sibling "Publish refreshed site data to
-      # stem-ecosystem" step that used to run before this one (`git add
-      # -A` / commit / push inside the stem-ecosystem checkout) has been
-      # removed as permanently dead code: nothing writes into the
-      # stem-ecosystem checkout anymore, so that step always no-opped.
-      - name: Publish refreshed data to partner-scrape's own data/
-        working-directory: partner-scrape
-        run: |
-          git config user.name "partner-scrape-bot"
-          git config user.email "actions@users.noreply.github.com"
-          git add data/
-          if git diff --cached --quiet; then
-            echo "No data changes this run -- nothing to publish."
-          else
-            git commit -m "chore: scheduled pipeline data refresh"
-            git push origin HEAD:master
-          fi
