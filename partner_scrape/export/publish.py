@@ -1,5 +1,5 @@
 """`publish.project()`: the build-time projection into partner-scrape's
-own `data/` tree.
+own data tree (the data Store).
 
 `export/partner_log.py` (ticket 003) accumulates every `Opportunity`
 ever seen into a durable, per-partner, append-only `.jsonl` log. That
@@ -12,8 +12,8 @@ partner, a current/upcoming events file and a past-events file.
 
 Sprint 025 ticket 007 (issue 21, "stop writing to the stem-ecosystem
 checkout") redirected this projection's write target from
-`{site_dir}/public/data/` to partner-scrape's own `data/` directory
-(`config.get_own_data_dir()`), matching every other sprint-020 export
+`{site_dir}/public/data/` to partner-scrape's own data location
+(since sprint 038 the data Store, `config.get_data_store()`), matching every other sprint-020 export
 module's convention -- for stem-ecosystem (or any consumer) to pull
 from at its own build time, rather than partner-scrape writing directly
 into a sibling checkout. `site_dir` stays as a parameter: it still
@@ -71,7 +71,7 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from partner_scrape.config import get_own_data_dir, get_site_dir
+from partner_scrape.config import get_site_dir, resolve_data_store
 from partner_scrape.export.partner_log import _JSONL_FILENAME, resolve_log_store
 from partner_scrape.export.writer import SITE_SCHEMA_FIELDS, is_current_or_upcoming, to_json_dict
 from partner_scrape.model import slugify
@@ -200,7 +200,7 @@ def project(
     *,
     log_dir: str | Path | None = None,
     partners_path: str | Path | None = None,
-    own_data_dir: str | Path | None = None,
+    own_data_dir: str | Path | Store | None = None,
     today: date | None = None,
     dry_run: bool = False,
 ) -> dict[str, Any]:
@@ -246,12 +246,11 @@ def project(
             different file from the `{own_data_dir}/partners.json` this
             function writes (see `export/DESIGN.md`'s Open Questions on
             the naming overlap).
-        own_data_dir: path to partner-scrape's own pipeline-output
-            directory -- this function's sole write target. Defaults to
-            `config.get_own_data_dir()` (`<repo_root>/data`) when
-            `None`. Created automatically if missing. Tests should
-            always pass an explicit `tmp_path` here, never rely on the
-            default.
+        own_data_dir: where to write -- a local path, an `s3://` location,
+            or a `Store`; this function's sole write target. Defaults to
+            `config.get_data_store()` when `None`. A local directory is
+            created automatically if missing. Tests should always pass
+            an explicit `tmp_path` here, never rely on the default.
         today: reference date for the current/past split. Defaults to
             `date.today()`. Tests should pass an explicit value.
         dry_run: when `True`, compute and return the summary without
@@ -273,7 +272,6 @@ def project(
     resolved_partners_path = (
         Path(partners_path) if partners_path is not None else _default_partners_path()
     )
-    resolved_own_data_dir = Path(own_data_dir) if own_data_dir is not None else get_own_data_dir()
     reference_date = today if today is not None else date.today()
 
     # own_data_dir is created automatically if missing (see docstring),
@@ -292,8 +290,6 @@ def project(
             f"{exc}. Check --site-dir ({resolved_site_dir}) or SITE_DIR, or "
             "pass partners_path directly."
         ) from exc
-
-    partners_dir = resolved_own_data_dir / "partners"
 
     published_partners: list[dict[str, Any]] = []
     total_current = 0
@@ -335,24 +331,28 @@ def project(
         "partners": published_partners,
     }
 
+    store = resolve_data_store(own_data_dir)
     try:
-        partners_dir.mkdir(parents=True, exist_ok=True)
-        (resolved_own_data_dir / "partners.json").write_text(
-            json.dumps(partners_payload, indent=1, ensure_ascii=False), encoding="utf-8"
+        store.write_text(
+            "partners.json",
+            json.dumps(partners_payload, indent=1, ensure_ascii=False),
+            "application/json",
         )
         for partner_slug, (events_payload, past_events_payload) in per_partner_events.items():
-            partner_dir = partners_dir / partner_slug
-            partner_dir.mkdir(parents=True, exist_ok=True)
-            (partner_dir / "events.json").write_text(
-                json.dumps(events_payload, indent=1, ensure_ascii=False), encoding="utf-8"
+            store.write_text(
+                f"partners/{partner_slug}/events.json",
+                json.dumps(events_payload, indent=1, ensure_ascii=False),
+                "application/json",
             )
-            (partner_dir / "past-events.json").write_text(
-                json.dumps(past_events_payload, indent=1, ensure_ascii=False), encoding="utf-8"
+            store.write_text(
+                f"partners/{partner_slug}/past-events.json",
+                json.dumps(past_events_payload, indent=1, ensure_ascii=False),
+                "application/json",
             )
-    except OSError as exc:
+    except RuntimeError as exc:
         raise RuntimeError(
-            f"Cannot write published data export to {resolved_own_data_dir}: "
-            f"{exc}. Check that own_data_dir is writable."
+            f"Cannot write published data export: {exc}. "
+            "Check that the data location is writable."
         ) from exc
 
     return summary

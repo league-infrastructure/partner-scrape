@@ -182,12 +182,6 @@ REPO_ROOT = _REPO_ROOT
 #: ``SITE_DIR``.
 DEFAULT_SITE_DIR = _REPO_ROOT.parent / "stem-ecosystem"
 
-#: Default location of this repo's own pipeline-output publish target
-#: (``data/`` at the repo root). Not overridable via environment
-#: variable -- the location is fixed by design (see sprint 020's
-#: Design Rationale and Open Questions).
-DEFAULT_OWN_DATA_DIR = _REPO_ROOT / "data"
-
 
 def get_scrape_cache_dir() -> Path:
     """Return the configured scrape cache directory.
@@ -221,16 +215,6 @@ def get_site_dir() -> Path:
     if value:
         return Path(value)
     return DEFAULT_SITE_DIR
-
-
-def get_own_data_dir() -> Path:
-    """Return the path to this repo's own pipeline-output publish target.
-
-    Always returns ``DEFAULT_OWN_DATA_DIR`` (``<repo_root>/data``) --
-    unlike ``get_site_dir()``, this has no environment variable override;
-    the location is fixed by design.
-    """
-    return DEFAULT_OWN_DATA_DIR
 
 
 def get_leaguesync_api_key() -> str:
@@ -484,3 +468,20 @@ def get_data_store() -> Store:
     unset, it defaults to :data:`DEFAULT_DATA_LOCATION`.
     """
     return _store_for(PARTNER_SCRAPE_DATA_DIR_ENV_VAR, DEFAULT_DATA_LOCATION)
+
+
+def resolve_data_store(location: str | Path | Store | None = None) -> Store:
+    """Return the data Store for an export function's ``own_data_dir``
+    argument.
+
+    ``None`` -> :func:`get_data_store`; an existing :class:`Store` is
+    used as-is; a path or ``s3://`` string builds the matching Store
+    (tests pass ``tmp_path``).
+    """
+    if location is None:
+        return get_data_store()
+    if isinstance(location, (str, Path)):
+        text = str(location)
+        client = _get_s3_client() if text.startswith("s3://") else None
+        return store_from_location(location, client)
+    return location

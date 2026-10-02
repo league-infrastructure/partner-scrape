@@ -37,14 +37,13 @@ site-side UI work) -- `headline` as the card title, `body` as its
 copy, `logo_src` resolved the same way `Opportunity.logo_src` already
 resolves an image, and the whole card wrapped in an anchor to `link`.
 
-A missing `own_data_dir` is created automatically
-(`Path.mkdir(parents=True, exist_ok=True)`); an unwritable one fails
-loudly -- mirrors `export_opportunities`'s existing contract: "fail
+A missing local data directory is created automatically; an unwritable
+one fails loudly -- mirrors `export_opportunities`'s existing contract: "fail
 loudly, do not silently skip the export."
 
 Sprint 020 ticket 004 (issue 60) added this write, into
-partner-scrape's own `data/` directory (`config.get_own_data_dir()`),
-alongside an original write into a sibling `stem-ecosystem` checkout's
+partner-scrape's own data location (since sprint 038 the data Store,
+`config.get_data_store()`), alongside an original write into a sibling `stem-ecosystem` checkout's
 `src/data/ads.json` -- the same "one export, three files, two
 directories" contract `export/writer.py`'s `export_opportunities()`
 already gave `opportunities.json`/`scrape-meta.json` (sprint 020 ticket
@@ -63,7 +62,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable
 
-from partner_scrape.config import REPO_ROOT, get_own_data_dir
+from partner_scrape.config import REPO_ROOT, resolve_data_store
+from partner_scrape.storage import Store
 
 logger = logging.getLogger(__name__)
 
@@ -168,7 +168,7 @@ def export_ads(
     ad_configs: Iterable[AdConfig],
     *,
     dry_run: bool = False,
-    own_data_dir: str | Path | None = None,
+    own_data_dir: str | Path | Store | None = None,
 ) -> list[dict[str, Any]]:
     """Write `ad_configs` into `own_data_dir`'s `ads.json` data contract.
 
@@ -178,9 +178,9 @@ def export_ads(
         dry_run: when `True`, compute and return the would-be-written
             payload without touching disk -- `own_data_dir` is not
             written.
-        own_data_dir: path to partner-scrape's own pipeline-output
-            directory. Defaults to `Config.get_own_data_dir()`
-            (`<repo_root>/data`) when `None`. Created automatically if
+        own_data_dir: where to write -- a local path, an `s3://` location,
+            or a `Store`. Defaults to `config.get_data_store()` when
+            `None`. A local directory is created automatically if
             missing. Tests should always pass an explicit `tmp_path`
             here, never rely on the default.
 
@@ -193,8 +193,6 @@ def export_ads(
             unwritable (e.g. a non-directory file). Never silently
             skips the write.
     """
-    resolved_own_data_dir = Path(own_data_dir) if own_data_dir is not None else get_own_data_dir()
-
     payload = [_to_json_dict(ad) for ad in ad_configs]
 
     if dry_run:
@@ -202,20 +200,15 @@ def export_ads(
 
     serialized_ads = json.dumps(payload, indent=1, ensure_ascii=False)
 
-    # Sprint 020 ticket 004 (issue 60) added this write, into
-    # partner-scrape's own data/ directory, alongside a since-removed
-    # write into a sibling stem-ecosystem checkout (sprint 025 ticket
-    # 003 removed that second target -- see module docstring).
-    # own_data_dir is created if missing (see module docstring).
-    own_ads_path = resolved_own_data_dir / "ads.json"
-
+    # Sprint 020 ticket 004 (issue 60) added this write; since sprint
+    # 038 it goes through the data Store (key unchanged).
+    store = resolve_data_store(own_data_dir)
     try:
-        resolved_own_data_dir.mkdir(parents=True, exist_ok=True)
-        own_ads_path.write_text(serialized_ads, encoding="utf-8")
-    except OSError as exc:
+        store.write_text("ads.json", serialized_ads, "application/json")
+    except RuntimeError as exc:
         raise RuntimeError(
-            f"Cannot write own-data ads export to {resolved_own_data_dir}: {exc}. "
-            "Check that own_data_dir is writable."
+            f"Cannot write own-data ads export: {exc}. "
+            "Check that the data location is writable."
         ) from exc
 
     return payload

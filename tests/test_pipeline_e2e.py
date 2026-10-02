@@ -39,6 +39,7 @@ from partner_scrape.fetch import PlaywrightFetcher, PoliteFetcher, Throttle
 from partner_scrape.fetch.fetcher import FetchResponse
 from partner_scrape.model import Event
 from partner_scrape.observability import YieldReporter, load_snapshot, save_snapshot
+from partner_scrape.storage import LocalStore
 from partner_scrape.pipeline import run
 from partner_scrape.registry.validate_roster import RosterValidationError
 
@@ -111,9 +112,9 @@ def _own_data_dir_default(tmp_path_factory, monkeypatch):
     without duplicating this fixture's own throwaway directory.
     """
     fake_own_data_dir = tmp_path_factory.mktemp("own-data-default")
-    monkeypatch.setattr(writer, "get_own_data_dir", lambda: fake_own_data_dir)
-    monkeypatch.setattr(ads, "get_own_data_dir", lambda: fake_own_data_dir)
-    monkeypatch.setattr(pipeline, "get_own_data_dir", lambda: fake_own_data_dir)
+    monkeypatch.setenv("PARTNER_SCRAPE_DATA_DIR", str(fake_own_data_dir))
+    monkeypatch.setenv("PARTNER_SCRAPE_DATA_DIR", str(fake_own_data_dir))
+    monkeypatch.setenv("PARTNER_SCRAPE_DATA_DIR", str(fake_own_data_dir))
     return fake_own_data_dir
 
 
@@ -665,8 +666,8 @@ class TestYieldReporterEndToEnd:
         assert by_id_1["coastalrootsfarm"].found == 2
         assert by_id_1["coastalrootsfarm"].zero_yield is False
 
-        snapshot_path = tmp_path / "yield-history.json"
-        save_snapshot(snapshot_path, first_report)
+        snapshot_store = LocalStore(tmp_path)
+        save_snapshot(snapshot_store, first_report)
 
         # Second run: coastalrootsfarm's fixture responses swapped to a
         # real, well-formed zero-event TEC page (not the fetch failure
@@ -685,7 +686,7 @@ class TestYieldReporterEndToEnd:
             reporter=second_reporter,
             today=TODAY,
         )
-        previous_snapshot = load_snapshot(snapshot_path)
+        previous_snapshot = load_snapshot(snapshot_store)
         second_report = second_reporter.report(previous_snapshot=previous_snapshot, now=second_now)
 
         by_id_2 = {s.source_id: s for s in second_report.sources}

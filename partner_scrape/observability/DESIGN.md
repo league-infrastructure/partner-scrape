@@ -38,7 +38,7 @@ Four modules in a clean data-in / data-out chain:
   `Opportunity` list into one `SourceYield` per source: `found`, `dated`, `new`,
   `dropped`, `slugs`, `previous_found`, `delta`, `error`, `zero_yield`, `cliff`.
 - `render.py` · `render_text(report) -> str` — plain-text rendering for the console.
-- `snapshot.py` · `load_snapshot(path)` / `save_snapshot(path, report)` — persistence of
+- `snapshot.py` · `load_snapshot(store)` / `save_snapshot(store, report)` (a `Store` plus key `yield-history.json`; sprint 038) — persistence of
   the run's per-source slug sets and counts to `yield-history.json`, which becomes the
   next run's `previous_snapshot`.
 
@@ -152,8 +152,8 @@ first-run behavior an unseen source already gets.
   `.sources`.
 - **`render_text(report) -> str`** — console rendering, alert lines first; sprint 033 adds
   a "Regional coverage" section after the per-source detail.
-- **`load_snapshot(path) -> dict`** (returns `{}` for a missing file) and
-  **`save_snapshot(path, report)`** — sprint 033: `save_snapshot` additionally writes this
+- **`load_snapshot(store, key="yield-history.json") -> dict`** (returns `{}` for a missing key) and
+  **`save_snapshot(store, report, key="yield-history.json")`** — sprint 033: `save_snapshot` additionally writes this
   run's region counts under the reserved `"__regions__"` key; `load_snapshot` is unchanged
   (it already returns whatever top-level keys are present).
 

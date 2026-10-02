@@ -114,7 +114,7 @@ def _own_data_dir_default(tmp_path_factory, monkeypatch):
     matching real usage.
     """
     fake_own_data_dir = tmp_path_factory.mktemp("own-data-default")
-    monkeypatch.setattr(writer, "get_own_data_dir", lambda: fake_own_data_dir)
+    monkeypatch.setenv("PARTNER_SCRAPE_DATA_DIR", str(fake_own_data_dir))
 
 
 class TestCurrentUpcomingFilter:
@@ -867,7 +867,7 @@ class TestOwnDataDirPublish:
         self, tmp_path, monkeypatch
     ):
         fake_own_data_dir = tmp_path / "fake-own-data"
-        monkeypatch.setattr(writer, "get_own_data_dir", lambda: fake_own_data_dir)
+        monkeypatch.setenv("PARTNER_SCRAPE_DATA_DIR", str(fake_own_data_dir))
 
         export_opportunities([_opportunity()], today=date(2026, 7, 19))
 

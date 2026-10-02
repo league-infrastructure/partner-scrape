@@ -53,8 +53,8 @@ def _own_data_dir_default(tmp_path_factory, monkeypatch):
     than this repo's actual `data/` directory.
     """
     fake_own_data_dir = tmp_path_factory.mktemp("own-data-default")
-    monkeypatch.setattr(writer, "get_own_data_dir", lambda: fake_own_data_dir)
-    monkeypatch.setattr(publish, "get_own_data_dir", lambda: fake_own_data_dir)
+    monkeypatch.setenv("PARTNER_SCRAPE_DATA_DIR", str(fake_own_data_dir))
+    monkeypatch.setenv("PARTNER_SCRAPE_DATA_DIR", str(fake_own_data_dir))
 
 
 def _opportunity(
@@ -763,7 +763,7 @@ class TestConfigDefaults:
         fake_own_data_dir = tmp_path / "own-data-via-config"
         site_dir = _site_dir(tmp_path)
         log_dir = tmp_path / "partner_log"
-        monkeypatch.setattr(publish, "get_own_data_dir", lambda: fake_own_data_dir)
+        monkeypatch.setenv("PARTNER_SCRAPE_DATA_DIR", str(fake_own_data_dir))
 
         project(site_dir=site_dir, log_dir=log_dir, partners_path=PARTNERS_PATH, today=date(2026, 7, 19))
 

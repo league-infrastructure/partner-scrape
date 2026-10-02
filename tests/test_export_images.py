@@ -22,6 +22,8 @@ import struct
 
 from PIL import Image
 
+from partner_scrape.storage import LocalStore
+
 from partner_scrape.export.images import (
     RESIZE_LONG_EDGE,
     EventImageDownloader,
@@ -156,7 +158,7 @@ class TestDimensionSniffing:
 class TestQualityGate:
     def test_missing_image_url_is_rejected_without_any_fetch(self, tmp_path):
         fetcher = _FakeFetcher({})
-        downloader = EventImageDownloader(tmp_path, fetcher=fetcher)
+        downloader = EventImageDownloader(LocalStore(tmp_path), "", fetcher=fetcher)
 
         assert downloader.download("") == ""
         assert downloader.download("   ") == ""
@@ -164,7 +166,7 @@ class TestQualityGate:
 
     def test_non_http_scheme_is_rejected_without_any_fetch(self, tmp_path):
         fetcher = _FakeFetcher({})
-        downloader = EventImageDownloader(tmp_path, fetcher=fetcher)
+        downloader = EventImageDownloader(LocalStore(tmp_path), "", fetcher=fetcher)
 
         assert downloader.download("file:///etc/passwd") == ""
         assert downloader.download("data:image/png;base64,AAAA") == ""
@@ -175,14 +177,14 @@ class TestQualityGate:
         fetcher = _FakeFetcher(
             {url: ImageFetchResponse(url=url, status=404, headers={}, body=b"")}
         )
-        downloader = EventImageDownloader(tmp_path, fetcher=fetcher)
+        downloader = EventImageDownloader(LocalStore(tmp_path), "", fetcher=fetcher)
 
         assert downloader.download(url) == ""
 
     def test_non_image_content_type_is_rejected(self, tmp_path):
         url = "https://example.org/page.html"
         fetcher = _FakeFetcher({url: _ok(b"<html>not an image</html>", content_type="text/html")})
-        downloader = EventImageDownloader(tmp_path, fetcher=fetcher)
+        downloader = EventImageDownloader(LocalStore(tmp_path), "", fetcher=fetcher)
 
         assert downloader.download(url) == ""
 
@@ -191,7 +193,7 @@ class TestQualityGate:
         a server that lies about Content-Type doesn't fool the gate."""
         url = "https://example.org/fake.jpg"
         fetcher = _FakeFetcher({url: _ok(b"this is not really a jpeg", content_type="image/jpeg")})
-        downloader = EventImageDownloader(tmp_path, fetcher=fetcher)
+        downloader = EventImageDownloader(LocalStore(tmp_path), "", fetcher=fetcher)
 
         assert downloader.download(url) == ""
         assert list(tmp_path.iterdir()) == []
@@ -199,7 +201,7 @@ class TestQualityGate:
     def test_tracking_pixel_sized_image_is_rejected(self, tmp_path):
         url = "https://example.org/pixel.jpg"
         fetcher = _FakeFetcher({url: _ok(TINY_JPEG)})
-        downloader = EventImageDownloader(tmp_path, fetcher=fetcher)
+        downloader = EventImageDownloader(LocalStore(tmp_path), "", fetcher=fetcher)
 
         assert downloader.download(url) == ""
         assert list(tmp_path.iterdir()) == []
@@ -208,7 +210,7 @@ class TestQualityGate:
         just_big_enough = _jpeg_bytes(80, 80)
         url = "https://example.org/small.jpg"
         fetcher = _FakeFetcher({url: _ok(just_big_enough)})
-        downloader = EventImageDownloader(tmp_path, fetcher=fetcher)
+        downloader = EventImageDownloader(LocalStore(tmp_path), "", fetcher=fetcher)
 
         filename = downloader.download(url)
 
@@ -218,19 +220,19 @@ class TestQualityGate:
     def test_oversized_body_is_rejected(self, tmp_path):
         url = "https://example.org/huge.jpg"
         fetcher = _FakeFetcher({url: _ok(LARGE_JPEG)})
-        downloader = EventImageDownloader(tmp_path, fetcher=fetcher, max_bytes=len(LARGE_JPEG) - 1)
+        downloader = EventImageDownloader(LocalStore(tmp_path), "", fetcher=fetcher, max_bytes=len(LARGE_JPEG) - 1)
 
         assert downloader.download(url) == ""
 
     def test_empty_body_is_rejected(self, tmp_path):
         url = "https://example.org/empty.jpg"
         fetcher = _FakeFetcher({url: _ok(b"")})
-        downloader = EventImageDownloader(tmp_path, fetcher=fetcher)
+        downloader = EventImageDownloader(LocalStore(tmp_path), "", fetcher=fetcher)
 
         assert downloader.download(url) == ""
 
     def test_fetcher_raising_does_not_raise_and_returns_empty(self, tmp_path):
-        downloader = EventImageDownloader(tmp_path, fetcher=_RaisingFetcher())
+        downloader = EventImageDownloader(LocalStore(tmp_path), "", fetcher=_RaisingFetcher())
 
         assert downloader.download("https://example.org/whatever.jpg") == ""
 
@@ -239,7 +241,7 @@ class TestSuccessfulDownload:
     def test_valid_jpeg_is_stored_and_filename_returned(self, tmp_path):
         url = "https://example.org/event.jpg"
         fetcher = _FakeFetcher({url: _ok(LARGE_JPEG)})
-        downloader = EventImageDownloader(tmp_path, fetcher=fetcher)
+        downloader = EventImageDownloader(LocalStore(tmp_path), "", fetcher=fetcher)
 
         filename = downloader.download(url)
 
@@ -251,18 +253,18 @@ class TestSuccessfulDownload:
     def test_valid_png_is_stored_with_png_extension(self, tmp_path):
         url = "https://example.org/event.png"
         fetcher = _FakeFetcher({url: _ok(LARGE_PNG, content_type="image/png")})
-        downloader = EventImageDownloader(tmp_path, fetcher=fetcher)
+        downloader = EventImageDownloader(LocalStore(tmp_path), "", fetcher=fetcher)
 
         filename = downloader.download(url)
 
         assert filename.endswith(".png")
         assert (tmp_path / filename).read_bytes() == LARGE_PNG
 
-    def test_dest_dir_is_created_if_missing(self, tmp_path):
+    def test_default_prefix_is_images_opportunities_and_dir_is_created(self, tmp_path):
         dest_dir = tmp_path / "images" / "opportunities"
         url = "https://example.org/event.jpg"
         fetcher = _FakeFetcher({url: _ok(LARGE_JPEG)})
-        downloader = EventImageDownloader(dest_dir, fetcher=fetcher)
+        downloader = EventImageDownloader(LocalStore(tmp_path), fetcher=fetcher)
 
         filename = downloader.download(url)
 
@@ -274,7 +276,7 @@ class TestSuccessfulDownload:
         url = "https://example.org/event.jpg"
         response = ImageFetchResponse(url=url, status=200, headers={}, body=LARGE_JPEG)
         fetcher = _FakeFetcher({url: response})
-        downloader = EventImageDownloader(tmp_path, fetcher=fetcher)
+        downloader = EventImageDownloader(LocalStore(tmp_path), "", fetcher=fetcher)
 
         assert downloader.download(url) != ""
 
@@ -284,7 +286,7 @@ class TestDedup:
         url_a = "https://example.org/banner-a.jpg"
         url_b = "https://example.org/banner-b.jpg"
         fetcher = _FakeFetcher({url_a: _ok(LARGE_JPEG), url_b: _ok(LARGE_JPEG)})
-        downloader = EventImageDownloader(tmp_path, fetcher=fetcher)
+        downloader = EventImageDownloader(LocalStore(tmp_path), "", fetcher=fetcher)
 
         filename_a = downloader.download(url_a)
         filename_b = downloader.download(url_b)
@@ -302,7 +304,7 @@ class TestDedup:
     ):
         url = "https://example.org/event.jpg"
         fetcher = _FakeFetcher({url: _ok(LARGE_JPEG)})
-        downloader = EventImageDownloader(tmp_path, fetcher=fetcher)
+        downloader = EventImageDownloader(LocalStore(tmp_path), "", fetcher=fetcher)
 
         first = downloader.download(url)
         second = downloader.download(url)
@@ -314,7 +316,7 @@ class TestDedup:
         url_a = "https://example.org/a.jpg"
         url_b = "https://example.org/b.png"
         fetcher = _FakeFetcher({url_a: _ok(LARGE_JPEG), url_b: _ok(LARGE_PNG, content_type="image/png")})
-        downloader = EventImageDownloader(tmp_path, fetcher=fetcher)
+        downloader = EventImageDownloader(LocalStore(tmp_path), "", fetcher=fetcher)
 
         filename_a = downloader.download(url_a)
         filename_b = downloader.download(url_b)
@@ -337,7 +339,7 @@ class TestResizeOnFetch:
         url = "https://example.org/huge-event.jpg"
         oversized = _real_jpeg_bytes(2000, 1000)
         fetcher = _FakeFetcher({url: _ok(oversized)})
-        downloader = EventImageDownloader(tmp_path, fetcher=fetcher)
+        downloader = EventImageDownloader(LocalStore(tmp_path), "", fetcher=fetcher)
 
         filename = downloader.download(url)
 
@@ -355,7 +357,7 @@ class TestResizeOnFetch:
         url = "https://example.org/small-event.jpg"
         small = _real_jpeg_bytes(400, 300)
         fetcher = _FakeFetcher({url: _ok(small)})
-        downloader = EventImageDownloader(tmp_path, fetcher=fetcher)
+        downloader = EventImageDownloader(LocalStore(tmp_path), "", fetcher=fetcher)
 
         filename = downloader.download(url)
 
@@ -386,7 +388,7 @@ class TestResizeOnFetch:
                 url_jpeg_sourced: _ok(oversized_jpeg),
             }
         )
-        downloader = EventImageDownloader(tmp_path, fetcher=fetcher)
+        downloader = EventImageDownloader(LocalStore(tmp_path), "", fetcher=fetcher)
 
         filename_png_sourced = downloader.download(url_png_sourced)
         filename_jpeg_sourced = downloader.download(url_jpeg_sourced)
@@ -402,7 +404,7 @@ class TestResizeOnFetch:
         url = "https://example.org/animated.gif"
         oversized_gif = _real_gif_bytes(2000, 1000)
         fetcher = _FakeFetcher({url: _ok(oversized_gif, content_type="image/gif")})
-        downloader = EventImageDownloader(tmp_path, fetcher=fetcher)
+        downloader = EventImageDownloader(LocalStore(tmp_path), "", fetcher=fetcher)
 
         filename = downloader.download(url)
 

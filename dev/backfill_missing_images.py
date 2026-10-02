@@ -1,8 +1,13 @@
 #!/usr/bin/env python3
 """One-off (and future integrity-check) backfill for
-``data/images/opportunities/``.
+``images/opportunities/`` in the data Store.
 
-RUN THIS BY HAND whenever a check against the real ``data/`` tree
+Since sprint 038 the data tree lives in the data Store
+(``config.get_data_store()``: ``PARTNER_SCRAPE_DATA_DIR``, by default the
+bucket's ``data/`` prefix), not in the repo; ``--data-dir`` points the
+script at a local directory or ``s3://`` location instead.
+
+RUN THIS BY HAND whenever a check against the real data tree
 reports missing files -- most notably right after sprint 025's first
 production run, which redirected ``EventImageDownloader``'s write
 target to ``data/images/opportunities/`` and populated it with only
@@ -35,7 +40,7 @@ byte-identical, never re-encoded):
 
 Add ``--dry-run`` to preview what would be copied without writing.
 
-Prune (deletes files under ``data/images/opportunities/`` that are
+Prune (deletes objects under ``images/opportunities/`` that are
 referenced by neither ``data/opportunities.json`` nor any
 ``data/partners/*/{events,past-events}.json`` -- the inverse of the
 check-mode computation above; filenames are content-hashed, so
@@ -49,60 +54,60 @@ Without ``--dry-run``, prints each deleted filename, a summary count,
 and re-runs the check-only report afterward (mirroring the
 ``--source-dir`` after-check pattern above).
 
-This is a **standalone provisioning script**, matching
-``dev/refresh_school_directories.py``'s convention: stdlib only (no
-import of ``partner_scrape.*``), never imported by runtime code, run
+This is a **provisioning script**, never imported by runtime code, run
 by hand. It does not fetch anything over the network -- it only
-compares and copies files already present on disk.
+compares and copies image objects between the data Store and a local
+source directory.
 """
 
 from __future__ import annotations
 
 import argparse
-import json
-import shutil
-import sys
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_DATA_DIR = REPO_ROOT / "data"
+from partner_scrape.config import get_data_store, resolve_data_store
+from partner_scrape.storage import Store
 
-#: Sub-path, relative to a data dir, where opportunity images live.
-IMAGES_SUBDIR = Path("images") / "opportunities"
+#: Key prefix, in the data Store, where opportunity images live.
+IMAGES_PREFIX = "images/opportunities/"
+
+_IMAGE_CONTENT_TYPES = {
+    ".png": "image/png",
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".gif": "image/gif",
+    ".webp": "image/webp",
+}
 
 
-def _referenced_from_partners(data_dir: Path) -> set[str]:
+def _referenced_from_partners(store: Store) -> set[str]:
     """Collect every non-empty ``image_src`` filename referenced across
-    ``data_dir/partners/*/events.json`` and ``.../past-events.json``.
+    ``partners/*/events.json`` and ``partners/*/past-events.json``.
     """
     referenced: set[str] = set()
-    partners_dir = data_dir / "partners"
-    for pattern in ("*/events.json", "*/past-events.json"):
-        for path in sorted(partners_dir.glob(pattern)):
-            doc = json.loads(path.read_text(encoding="utf-8"))
-            for event in doc.get("events", []):
-                image_src = event.get("image_src")
-                if image_src:
-                    referenced.add(image_src)
+    for key in store.list("partners/"):
+        if not key.endswith(("/events.json", "/past-events.json")):
+            continue
+        doc = store.read_json(key) or {}
+        for event in doc.get("events", []):
+            image_src = event.get("image_src")
+            if image_src:
+                referenced.add(image_src)
     return referenced
 
 
-def _referenced_from_opportunities(data_dir: Path) -> set[str]:
+def _referenced_from_opportunities(store: Store) -> set[str]:
     """Collect every non-empty ``image_src`` filename referenced in
-    ``data_dir/opportunities.json`` (a bare list of opportunity
-    records). Kept independent of the partners-derived set -- see
-    this module's docstring.
+    ``opportunities.json`` (a bare list of opportunity records). Kept
+    independent of the partners-derived set -- see this module's
+    docstring.
     """
-    path = data_dir / "opportunities.json"
-    records = json.loads(path.read_text(encoding="utf-8"))
+    records = store.read_json("opportunities.json") or []
     return {r["image_src"] for r in records if r.get("image_src")}
 
 
-def _existing_images(data_dir: Path) -> set[str]:
-    images_dir = data_dir / IMAGES_SUBDIR
-    if not images_dir.exists():
-        return set()
-    return {p.name for p in images_dir.glob("*") if p.is_file()}
+def _existing_images(store: Store) -> set[str]:
+    return {key[len(IMAGES_PREFIX):] for key in store.list(IMAGES_PREFIX)}
 
 
 def _report(label: str, referenced: set[str], existing: set[str]) -> set[str]:
@@ -114,28 +119,24 @@ def _report(label: str, referenced: set[str], existing: set[str]) -> set[str]:
     return missing
 
 
-def check(data_dir: Path, *, heading: str) -> tuple[set[str], set[str]]:
+def check(store: Store, *, heading: str) -> tuple[set[str], set[str]]:
     """Run both checks and print a report. Returns
     ``(missing_from_partners, missing_from_opportunities)``.
     """
     print(heading)
-    existing = _existing_images(data_dir)
-    partners_referenced = _referenced_from_partners(data_dir)
-    opportunities_referenced = _referenced_from_opportunities(data_dir)
+    existing = _existing_images(store)
+    partners_referenced = _referenced_from_partners(store)
+    opportunities_referenced = _referenced_from_opportunities(store)
     missing_partners = _report("partners (events.json + past-events.json)", partners_referenced, existing)
     missing_opportunities = _report("opportunities.json", opportunities_referenced, existing)
     return missing_partners, missing_opportunities
 
 
-def backfill(data_dir: Path, source_dir: Path, missing: set[str], *, dry_run: bool) -> tuple[list[str], list[str]]:
-    """Copy every filename in ``missing`` that exists in ``source_dir``
-    into ``data_dir/images/opportunities`` via ``shutil.copy2`` (exact
-    byte copy, preserves mtime, no re-encode). Returns
-    ``(copied, not_found_in_source)``.
+def backfill(store: Store, source_dir: Path, missing: set[str], *, dry_run: bool) -> tuple[list[str], list[str]]:
+    """Upload every filename in ``missing`` that exists in ``source_dir``
+    to ``images/opportunities/`` in ``store`` (exact bytes, never
+    re-encoded). Returns ``(copied, not_found_in_source)``.
     """
-    images_dir = data_dir / IMAGES_SUBDIR
-    images_dir.mkdir(parents=True, exist_ok=True)
-
     copied: list[str] = []
     not_found: list[str] = []
     for name in sorted(missing):
@@ -143,11 +144,11 @@ def backfill(data_dir: Path, source_dir: Path, missing: set[str], *, dry_run: bo
         if not src.exists():
             not_found.append(name)
             continue
-        dest = images_dir / name
         if dry_run:
             print(f"  would copy: {name}")
         else:
-            shutil.copy2(src, dest)
+            content_type = _IMAGE_CONTENT_TYPES.get(src.suffix.lower(), "application/octet-stream")
+            store.write_bytes(f"{IMAGES_PREFIX}{name}", src.read_bytes(), content_type)
             print(f"  copied: {name}")
         copied.append(name)
 
@@ -159,23 +160,22 @@ def backfill(data_dir: Path, source_dir: Path, missing: set[str], *, dry_run: bo
     return copied, not_found
 
 
-def prune(data_dir: Path, *, dry_run: bool) -> list[str]:
-    """Delete every file under ``data_dir/images/opportunities`` that is
+def prune(store: Store, *, dry_run: bool) -> list[str]:
+    """Delete every object under ``images/opportunities/`` that is
     referenced by neither ``_referenced_from_partners`` nor
-    ``_referenced_from_opportunities`` -- the inverse of the missing-file
-    computation used by ``check()``. Returns the sorted list of filenames
-    deleted (or, with ``dry_run``, that would be deleted).
+    ``_referenced_from_opportunities`` -- the inverse of the
+    missing-file computation used by ``check()``. Returns the sorted list
+    of filenames deleted (or, with ``dry_run``, that would be deleted).
     """
-    images_dir = data_dir / IMAGES_SUBDIR
-    existing = _existing_images(data_dir)
-    referenced = _referenced_from_partners(data_dir) | _referenced_from_opportunities(data_dir)
+    existing = _existing_images(store)
+    referenced = _referenced_from_partners(store) | _referenced_from_opportunities(store)
     orphaned = sorted(existing - referenced)
 
     for name in orphaned:
         if dry_run:
             print(f"  would delete: {name}")
         else:
-            (images_dir / name).unlink()
+            store.delete(f"{IMAGES_PREFIX}{name}")
             print(f"  deleted: {name}")
 
     return orphaned
@@ -185,9 +185,9 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument(
         "--data-dir",
-        type=Path,
-        default=DEFAULT_DATA_DIR,
-        help=f"Data directory to check/backfill (default: {DEFAULT_DATA_DIR})",
+        default=None,
+        help="Data location (local path or s3://bucket/prefix) to check/backfill "
+        "(default: the data Store, PARTNER_SCRAPE_DATA_DIR)",
     )
     parser.add_argument(
         "--source-dir",
@@ -204,14 +204,14 @@ def main() -> int:
         "--prune",
         action="store_true",
         help=(
-            "Delete files under data-dir/images/opportunities that are referenced by "
+            "Delete objects under images/opportunities/ that are referenced by "
             "neither opportunities.json nor any partner's events.json/past-events.json. "
             "Combine with --dry-run to preview without deleting."
         ),
     )
     args = parser.parse_args()
 
-    data_dir: Path = args.data_dir
+    data_dir: Store = resolve_data_store(args.data_dir) if args.data_dir else get_data_store()
 
     missing_partners, missing_opportunities = check(data_dir, heading="Before:")
 

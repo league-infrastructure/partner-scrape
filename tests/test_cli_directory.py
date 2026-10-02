@@ -62,8 +62,8 @@ def _cache_dir(tmp_path, tmp_path_factory, monkeypatch):
     monkeypatch.setenv("SCRAPE_CACHE_DIR", str(tmp_path))
     monkeypatch.setenv("SITE_DIR", str(tmp_path))
     fake_own_data_dir = tmp_path_factory.mktemp("own-data-default")
-    monkeypatch.setattr(directory_export, "get_own_data_dir", lambda: fake_own_data_dir)
-    monkeypatch.setattr(cli, "get_own_data_dir", lambda: fake_own_data_dir)
+    monkeypatch.setenv("PARTNER_SCRAPE_DATA_DIR", str(fake_own_data_dir))
+    monkeypatch.setenv("PARTNER_SCRAPE_DATA_DIR", str(fake_own_data_dir))
     monkeypatch.setattr(
         cli.publish,
         "project",
@@ -304,7 +304,7 @@ class TestDirectoryEndToEnd:
         # all, dry-run or not; site_dir here only still feeds
         # run_directory()'s own related_partner_id/partners.json read).
         own_data_dir = tmp_path / "own-data"
-        monkeypatch.setattr(directory_export, "get_own_data_dir", lambda: own_data_dir)
+        monkeypatch.setenv("PARTNER_SCRAPE_DATA_DIR", str(own_data_dir))
 
         exit_code = cli.main(
             ["directory", "--dry-run", "-v", "--site-dir", str(site_dir)]
@@ -329,7 +329,7 @@ class TestDirectoryEndToEnd:
         # (and still needed) for run_directory()'s own
         # related_partner_id/partners.json read.
         own_data_dir = tmp_path / "own-data"
-        monkeypatch.setattr(directory_export, "get_own_data_dir", lambda: own_data_dir)
+        monkeypatch.setenv("PARTNER_SCRAPE_DATA_DIR", str(own_data_dir))
 
         exit_code = cli.main(["directory", "--site-dir", str(site_dir)])
 

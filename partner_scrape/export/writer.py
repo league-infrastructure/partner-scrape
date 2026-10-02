@@ -2,7 +2,7 @@
 
 Publishes already-normalized `Opportunity` records (produced by
 `partner_scrape.normalize.run`, ticket 006) into partner-scrape's own
-`own_data_dir` (sprint.md Architecture > Site Export, SUC-007). This
+the data Store (`config.get_data_store()`; sprint.md Architecture > Site Export, SUC-007). This
 module does not re-derive or re-map any field -- its only
 responsibilities are:
 
@@ -16,22 +16,22 @@ responsibilities are:
    bookkeeping and not part of `stem-ecosystem/docs/site-implementation
    -spec.md`'s Opportunities table.
 4. Write `opportunities.json` and `scrape-meta.json` into
-   `own_data_dir`, matching `dev/export_site.py`'s original behavior
+   the data Store, matching `dev/export_site.py`'s original behavior
    and file shapes exactly.
 
 Sprint 020 ticket 003 (issue 60) added a second write target,
-partner-scrape's own `data/` directory (`config.get_own_data_dir()`),
+partner-scrape's own data location (since sprint 038 the data Store,
+`config.get_data_store()`, by default the bucket's `data/` prefix),
 alongside the original write into a sibling `stem-ecosystem` checkout's
 `src/data/` -- "one export, three files, two directories" -- so this
-repo's own pipeline output was inspectable and git-trackable without a
+repo's own pipeline output was inspectable without a
 `stem-ecosystem` checkout on hand. Sprint 025 ticket 003 (issue 21,
 "stop writing to the stem-ecosystem checkout") removed the
 `stem-ecosystem` write entirely: this function no longer accepts a
-`site_dir` parameter, and `own_data_dir` is now the sole write target.
+`site_dir` parameter, and the data location is now the sole write target.
 
-A missing `own_data_dir` is created automatically
-(`Path.mkdir(parents=True, exist_ok=True)`); an unwritable one fails
-loudly -- SUC-007's explicit error flow is "fail loudly, do not
+A missing local data directory is created automatically; an unwritable
+one fails loudly -- SUC-007's explicit error flow is "fail loudly, do not
 silently skip the export."
 """
 
@@ -44,8 +44,9 @@ from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
-from partner_scrape.config import get_own_data_dir
+from partner_scrape.config import resolve_data_store
 from partner_scrape.normalize.run import DEADLINE_FIRST_TYPES, Opportunity
+from partner_scrape.storage import Store
 
 #: The bucket label an unclassified (``region == ""``) `Opportunity` is
 #: tallied under in `scrape-meta.json`'s `"regions"` key (sprint 033,
@@ -204,7 +205,7 @@ def export_opportunities(
     *,
     today: date | None = None,
     dry_run: bool = False,
-    own_data_dir: str | Path | None = None,
+    own_data_dir: str | Path | Store | None = None,
 ) -> list[dict[str, Any]]:
     """Filter, dedupe, and write `opportunities` into `own_data_dir`'s
     data contract.
@@ -218,11 +219,12 @@ def export_opportunities(
         dry_run: when `True`, compute and return the would-be-written
             payload without touching disk -- `own_data_dir` is not
             written.
-        own_data_dir: path to partner-scrape's own pipeline-output
-            directory. Defaults to `Config.get_own_data_dir()`
-            (`<repo_root>/data`) when `None`. Created automatically if
-            missing. Tests should always pass an explicit `tmp_path`
-            here, never rely on the default.
+        own_data_dir: where to write -- a local path, an `s3://` location,
+            or a `Store`. Defaults to `config.get_data_store()` (by
+            default the bucket's `data/` prefix) when `None`. A local
+            directory is created automatically if missing. Tests should
+            always pass an explicit `tmp_path` here, never rely on the
+            default.
 
     Returns:
         The list of opportunity dicts that were (or, for `dry_run`,
@@ -234,7 +236,6 @@ def export_opportunities(
             unwritable (e.g. a non-directory file). Never silently
             skips the write.
     """
-    resolved_own_data_dir = Path(own_data_dir) if own_data_dir is not None else get_own_data_dir()
     reference_date = today if today is not None else date.today()
 
     current = [o for o in opportunities if is_current_or_upcoming(o, reference_date)]
@@ -251,22 +252,16 @@ def export_opportunities(
         {"last_updated": _now_iso(), "regions": _region_counts(current)}
     )
 
-    # Sprint 020 ticket 003 (issue 60) added this write, into
-    # partner-scrape's own data/ directory, alongside a since-removed
-    # write into a sibling stem-ecosystem checkout (sprint 025 ticket
-    # 003 removed that second target -- see module docstring).
-    # own_data_dir is created if missing (see module docstring).
-    own_opportunities_path = resolved_own_data_dir / "opportunities.json"
-    own_meta_path = resolved_own_data_dir / "scrape-meta.json"
-
+    # Sprint 020 ticket 003 (issue 60) added this write; since sprint
+    # 038 it goes through the data Store (keys unchanged).
+    store = resolve_data_store(own_data_dir)
     try:
-        resolved_own_data_dir.mkdir(parents=True, exist_ok=True)
-        own_opportunities_path.write_text(serialized_opportunities, encoding="utf-8")
-        own_meta_path.write_text(serialized_meta, encoding="utf-8")
-    except OSError as exc:
+        store.write_text("opportunities.json", serialized_opportunities, "application/json")
+        store.write_text("scrape-meta.json", serialized_meta, "application/json")
+    except RuntimeError as exc:
         raise RuntimeError(
-            f"Cannot write own-data export to {resolved_own_data_dir}: {exc}. "
-            "Check that own_data_dir is writable."
+            f"Cannot write own-data export: {exc}. "
+            "Check that the data location is writable."
         ) from exc
 
     return payload

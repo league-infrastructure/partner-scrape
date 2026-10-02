@@ -100,6 +100,19 @@ mirrored-into site checkout — `site/` becomes a build-time-only CI checkout of
 has no second checkout left to copy into. `export_opportunities`/`export_ads`/
 `publish.project` now write to exactly one resolved `SITE_DIR`, full stop.
 
+**Sprint 038.** Every data writer (`export_opportunities`, `export_ads`, `publish.project`,
+`teams.export_teams`, `directory.export_directory`, `observability.snapshot`) writes through
+the data `Store` (`config.get_data_store()`; `PARTNER_SCRAPE_DATA_DIR`, default
+`s3://jtl-stem-ecosystem-scrape/data`, a local directory only when set explicitly). Their
+`own_data_dir` argument accepts a path, an `s3://` location, or a `Store`
+(`config.resolve_data_store`). Keys are identical to the former `data/` layout
+(`opportunities.json`, `partners/<slug>/events.json`, `yield-history.json`, ...), each file's
+JSON formatting is unchanged, and everything is uploaded as `application/json`.
+`EventImageDownloader(store, prefix="images/opportunities/")` writes content-hash-named
+images with an `image/*` Content-Type and skips the upload when the key already exists.
+`yield-history.json` is read and saved through the Store (`observability.snapshot`); bucket
+versioning, not git, is its history. Published data is no longer committed to git.
+
 ## 3. Constraints and Invariants
 
 - **A missing or unwritable `site_dir` fails loudly.** Both `export_opportunities` and

@@ -74,8 +74,8 @@ def _cache_dir(tmp_path, tmp_path_factory, monkeypatch):
     monkeypatch.setenv("SITE_DIR", str(tmp_path))
     monkeypatch.delenv("TBA_KEY", raising=False)
     fake_own_data_dir = tmp_path_factory.mktemp("own-data-default")
-    monkeypatch.setattr(teams_export, "get_own_data_dir", lambda: fake_own_data_dir)
-    monkeypatch.setattr(cli, "get_own_data_dir", lambda: fake_own_data_dir)
+    monkeypatch.setenv("PARTNER_SCRAPE_DATA_DIR", str(fake_own_data_dir))
+    monkeypatch.setenv("PARTNER_SCRAPE_DATA_DIR", str(fake_own_data_dir))
     # `cli.main()`'s no-subcommand/`run` path calls `publish.project(...)`
     # after `run()` returns, which raises loudly on a missing curated
     # `partners.json` -- only `TestNeverCrossesIntoTheOtherPipeline`'s
@@ -291,7 +291,7 @@ class TestTeamsEndToEnd:
         # _cache_dir fixture's own pin) so this test can read the
         # written teams.json back.
         own_data_dir = tmp_path / "own-data"
-        monkeypatch.setattr(teams_export, "get_own_data_dir", lambda: own_data_dir)
+        monkeypatch.setenv("PARTNER_SCRAPE_DATA_DIR", str(own_data_dir))
 
         exit_code = cli.main(["teams", "--source", "ftcscout"])
 
@@ -306,7 +306,7 @@ class TestTeamsEndToEnd:
         monkeypatch.setattr(cli, "PoliteFetcher", lambda: fetcher)
 
         own_data_dir = tmp_path / "own-data"
-        monkeypatch.setattr(teams_export, "get_own_data_dir", lambda: own_data_dir)
+        monkeypatch.setenv("PARTNER_SCRAPE_DATA_DIR", str(own_data_dir))
         cli.main(["teams"])
 
         assert not list(tmp_path.rglob("opportunities.json"))

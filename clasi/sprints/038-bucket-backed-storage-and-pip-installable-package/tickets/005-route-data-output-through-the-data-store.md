@@ -1,7 +1,7 @@
 ---
 id: '005'
 title: Route data output through the data Store
-status: in-progress
+status: done
 use-cases:
 - SUC-002
 depends-on:
@@ -20,12 +20,12 @@ Make every writer of published output use the data Store with unchanged keys.
 
 ## Acceptance Criteria
 
-- [ ] Switched to `get_data_store()`: `export/writer.py`, `export/ads.py`, `export/publish.py`, `export/images.py`, `teams/export.py`, `directory/export.py`, `observability/snapshot.py`, `dev/backfill_missing_images.py`, and call sites in `pipeline.py`/`cli.py`
-- [ ] Keys are identical to today's `data/` layout; Content-Type `application/json` or `image/*`
-- [ ] `EventImageDownloader` takes a store plus the `images/opportunities/` prefix and skips the write when the key exists
-- [ ] `yield-history.json` is read back and saved through the Store
-- [ ] Docstrings/comments claiming data is committed to git are corrected
-- [ ] All tests use LocalStore/tmp_path and stay offline
+- [x] Switched to `get_data_store()`: `export/writer.py`, `export/ads.py`, `export/publish.py`, `export/images.py`, `teams/export.py`, `directory/export.py`, `observability/snapshot.py`, `dev/backfill_missing_images.py`, and call sites in `pipeline.py`/`cli.py`
+- [x] Keys are identical to today's `data/` layout; Content-Type `application/json` or `image/*`
+- [x] `EventImageDownloader` takes a store plus the `images/opportunities/` prefix and skips the write when the key exists
+- [x] `yield-history.json` is read back and saved through the Store
+- [x] Docstrings/comments claiming data is committed to git are corrected
+- [x] All tests use LocalStore/tmp_path and stay offline
 
 ## Implementation Plan
 

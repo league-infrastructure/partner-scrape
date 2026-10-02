@@ -183,7 +183,7 @@ def _own_data_dir_default(tmp_path_factory, monkeypatch):
     read back from -- see each one's own comment.
     """
     fake_own_data_dir = tmp_path_factory.mktemp("own-data-default")
-    monkeypatch.setattr(teams_export, "get_own_data_dir", lambda: fake_own_data_dir)
+    monkeypatch.setenv("PARTNER_SCRAPE_DATA_DIR", str(fake_own_data_dir))
 
 
 class TestEndToEndAgainstTheRealRegistry:
@@ -257,7 +257,7 @@ class TestEndToEndAgainstTheRealRegistry:
         # directly, overriding the module-level _own_data_dir_default
         # fixture just for this test.
         own_data_dir = tmp_path / "own-data"
-        monkeypatch.setattr(teams_export, "get_own_data_dir", lambda: own_data_dir)
+        monkeypatch.setenv("PARTNER_SCRAPE_DATA_DIR", str(own_data_dir))
 
         # source="ftcscout" -- see the dry-run test above for why: the
         # real registry's fll-sd.toml (sprint 012) always succeeds
@@ -639,7 +639,7 @@ class TestTbaFailureIsolation:
         monkeypatch.setenv("ROBOTEVENTS_KEY", "fixture-test-key")
         fetcher = _ftc_and_tba_fetcher()
         own_data_dir = tmp_path / "own-data"
-        monkeypatch.setattr(teams_export, "get_own_data_dir", lambda: own_data_dir)
+        monkeypatch.setenv("PARTNER_SCRAPE_DATA_DIR", str(own_data_dir))
 
         run_teams(fetcher=fetcher, dry_run=False)
 
@@ -671,7 +671,7 @@ class TestTbaFailureIsolation:
             }
         )
         own_data_dir = tmp_path / "own-data"
-        monkeypatch.setattr(teams_export, "get_own_data_dir", lambda: own_data_dir)
+        monkeypatch.setenv("PARTNER_SCRAPE_DATA_DIR", str(own_data_dir))
 
         run_teams(fetcher=fetcher, dry_run=False)
 
@@ -796,7 +796,7 @@ class TestRobotEventsFailureIsolation:
         monkeypatch.delenv("ROBOTEVENTS_KEY", raising=False)
         fetcher = _ftc_tba_and_robotevents_fetcher()
         own_data_dir = tmp_path / "own-data"
-        monkeypatch.setattr(teams_export, "get_own_data_dir", lambda: own_data_dir)
+        monkeypatch.setenv("PARTNER_SCRAPE_DATA_DIR", str(own_data_dir))
 
         run_teams(fetcher=fetcher, dry_run=False)
 
@@ -828,7 +828,7 @@ class TestRobotEventsFailureIsolation:
         }
         fetcher = FixtureFetcher(responses)
         own_data_dir = tmp_path / "own-data"
-        monkeypatch.setattr(teams_export, "get_own_data_dir", lambda: own_data_dir)
+        monkeypatch.setenv("PARTNER_SCRAPE_DATA_DIR", str(own_data_dir))
 
         run_teams(fetcher=fetcher, dry_run=False)
 
@@ -1011,7 +1011,7 @@ class TestCredentialFailuresMeta:
         monkeypatch.setenv("ROBOTEVENTS_KEY", "fixture-test-key")
         fetcher = _ftc_tba_and_robotevents_fetcher()
         own_data_dir = tmp_path / "own-data"
-        monkeypatch.setattr(teams_export, "get_own_data_dir", lambda: own_data_dir)
+        monkeypatch.setenv("PARTNER_SCRAPE_DATA_DIR", str(own_data_dir))
 
         run_teams(fetcher=fetcher, dry_run=False)
 

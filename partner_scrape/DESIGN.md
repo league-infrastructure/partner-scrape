@@ -97,7 +97,9 @@ every one of them if it were routed through `Opportunity`. See
   (`DO_SPACES_ENDPOINT` region endpoint — a bucket-qualified one is rejected —
   `DO_SPACES_ACCESS_KEY`, `DO_SPACES_SECRET_KEY`) and injects it into `storage`; missing
   `DO_SPACES_*` values fail loudly only when an `s3://` location is in effect.
-  `get_scrape_cache_dir()`/`get_own_data_dir()` remain until tickets 003–006 rewire callers.
+  `get_scrape_cache_dir()` remains until its last caller (`store/event_store.py`) is rewired.
+  `resolve_data_store(location)` maps an export function's `own_data_dir` argument (path,
+  `s3://`, `Store`, or `None` = `get_data_store()`) to a Store.
 - **`model.py`** — the canonical `Event` record and the shared identity vocabulary. A flat
   dataclass (~26 fields, sprint 009: `opportunity_type` joins the classification fields
   alongside `areas_of_interest`/`age_grade_level`/`cost_range`/`time_of_day`) plus a

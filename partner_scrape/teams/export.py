@@ -16,8 +16,8 @@ paths." Sprint 025 (ticket 004, issue 21 / stop-writing-to-
 stem-ecosystem-checkout.md) removes both `stem-ecosystem`-checkout
 writes (`src/data/teams.json` and `public/data/teams.json`):
 partner-scrape no longer writes into a sibling checkout at all, for any
-export. `own_data_dir` (`config.get_own_data_dir()`, `<repo_root>/data`
-by default) is now this function's sole write target -- "one publish,
+export. `own_data_dir` (the data Store, `config.get_data_store()`, by default;
+a local path, `s3://` location, or `Store` may be passed) is now this function's sole write target -- "one publish,
 one path." Mirrors `export/writer.py`'s `export_opportunities()` and
 `export/ads.py`'s `export_ads()`, sprint 020 tickets 003/004, which
 still write only their own third target the same way.
@@ -75,9 +75,8 @@ silently skip the export."
 
 ## One publish, one path
 
-`own_data_dir` (sprint 020 ticket 005) is created if missing
-(`Path.mkdir(parents=True, exist_ok=True)`) before the write -- a fresh
-partner-scrape clone is not guaranteed to have a `data/` directory yet.
+A local `own_data_dir` (sprint 020 ticket 005) is created if missing
+before the write (`LocalStore` makes parent directories).
 This is now this function's only write target (sprint 025 ticket 004
 removed the two `stem-ecosystem`-checkout writes this section used to
 describe -- see the module docstring's own history of that removal).
@@ -92,7 +91,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
-from partner_scrape.config import get_own_data_dir
+from partner_scrape.config import resolve_data_store
+from partner_scrape.storage import Store
 from partner_scrape.teams.model import Team
 
 #: The exact field set written to `teams.json`, minus `sources` --
@@ -199,7 +199,7 @@ def export_teams(
     teams: Iterable[Team],
     *,
     dry_run: bool = False,
-    own_data_dir: str | Path | None = None,
+    own_data_dir: str | Path | Store | None = None,
     credential_failures: Iterable[str] = (),
 ) -> dict[str, Any]:
     """Serialize and write `teams` into `teams.json`, once, into
@@ -216,10 +216,9 @@ def export_teams(
         dry_run: when `True`, compute and return the would-be-written
             payload without touching disk (`own_data_dir` is not
             written).
-        own_data_dir: path to partner-scrape's own pipeline-output
-            directory. Defaults to `Config.get_own_data_dir()`
-            (`<repo_root>/data`) when `None`. This directory is created
-            automatically if missing. Tests should always pass an
+        own_data_dir: where to write -- a local path, `s3://` location, or
+            `Store`. Defaults to `config.get_data_store()` when `None`. A
+            local directory is created automatically if missing. Tests should always pass an
             explicit `tmp_path` here, never rely on the default.
         credential_failures: sprint 023 ticket 002 -- league codes
             (e.g. `["FRC", "VEX"]`) whose acquisition source failed on
@@ -240,7 +239,6 @@ def export_teams(
             occupied by a non-directory file, or has a read-only
             parent). Never silently skips the write.
     """
-    resolved_own_data_dir = Path(own_data_dir) if own_data_dir is not None else get_own_data_dir()
 
     team_list = list(teams)
     # Sprint 016 ticket 005: t.number widened from int to str (VEX
@@ -262,19 +260,14 @@ def export_teams(
 
     # Sprint 020 ticket 005 (issue 60), sole write target since sprint
     # 025 ticket 004 removed this function's two `stem-ecosystem`-
-    # checkout writes: the payload, written into partner-scrape's own
-    # data/ directory. own_data_dir is created if missing. Mirrors
-    # export/writer.py's and export/ads.py's own third write path
-    # (sprint 020 tickets 003/004).
-    own_teams_path = resolved_own_data_dir / "teams.json"
-
+    # checkout writes; since sprint 038 it goes through the data Store.
+    store = resolve_data_store(own_data_dir)
     try:
-        resolved_own_data_dir.mkdir(parents=True, exist_ok=True)
-        own_teams_path.write_text(serialized, encoding="utf-8")
-    except OSError as exc:
+        store.write_text("teams.json", serialized, "application/json")
+    except RuntimeError as exc:
         raise RuntimeError(
-            f"Cannot write teams export to {resolved_own_data_dir}: {exc}. "
-            "Check that own_data_dir is writable."
+            f"Cannot write teams export: {exc}. "
+            "Check that the data location is writable."
         ) from exc
 
     return payload

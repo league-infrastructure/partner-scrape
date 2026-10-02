@@ -118,3 +118,10 @@ def test_storage_does_not_import_config():
     import partner_scrape.storage as m
 
     assert "config" not in vars(m)
+
+
+def test_delete_removes_key_and_missing_key_is_not_an_error(store):
+    store.write_bytes("d/x.bin", b"1")
+    store.delete("d/x.bin")
+    assert store.exists("d/x.bin") is False
+    store.delete("d/x.bin")  # already gone: no error

@@ -40,6 +40,8 @@ class Store(Protocol):
 
     def exists(self, key: str) -> bool: ...
 
+    def delete(self, key: str) -> None: ...
+
     def list(self, prefix: str = "") -> list[str]: ...
 
 
@@ -119,6 +121,13 @@ class LocalStore(_TextJsonMixin):
                 f"Check that its parent directory is writable."
             ) from exc
 
+    def delete(self, key: str) -> None:
+        """Remove `key`; a missing key is not an error (as in S3)."""
+        try:
+            self._path(key).unlink()
+        except FileNotFoundError:
+            pass
+
     def list(self, prefix: str = "") -> list[str]:
         """Sorted keys under `prefix` (a string prefix, as in S3)."""
         if not self.root.is_dir():
@@ -163,6 +172,23 @@ class S3Store(_TextJsonMixin):
         self.client.put_object(
             Bucket=self.bucket, Key=self._key(key), Body=data, **kwargs
         )
+
+    def exists(self, key: str) -> bool:
+        """Cheap existence check (HEAD) -- does not download the object."""
+        from botocore.exceptions import ClientError
+
+        try:
+            self.client.head_object(Bucket=self.bucket, Key=self._key(key))
+        except ClientError as exc:
+            code = str(exc.response.get("Error", {}).get("Code", ""))
+            if code in ("NoSuchKey", "404", "NotFound"):
+                return False
+            raise
+        return True
+
+    def delete(self, key: str) -> None:
+        """Remove `key`; a missing key is not an error (S3 semantics)."""
+        self.client.delete_object(Bucket=self.bucket, Key=self._key(key))
 
     def list(self, prefix: str = "") -> list[str]:
         """Sorted keys (relative to this store's prefix) starting with `prefix`."""

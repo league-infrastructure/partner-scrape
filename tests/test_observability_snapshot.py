@@ -11,6 +11,7 @@ from __future__ import annotations
 from datetime import datetime, timezone
 
 from partner_scrape.observability.snapshot import load_snapshot, save_snapshot
+from partner_scrape.storage import LocalStore
 from partner_scrape.observability.yield_report import RegionYield, SourceYield, YieldReport
 
 NOW = datetime(2026, 7, 19, 12, 0, tzinfo=timezone.utc)
@@ -40,23 +41,25 @@ def _region(region: str, count: int) -> RegionYield:
 class TestLoadSnapshotMissingFile:
     def test_missing_file_returns_an_empty_dict_not_an_error(self, tmp_path):
         path = tmp_path / "yield-history.json"
+        store = LocalStore(tmp_path)
 
-        assert load_snapshot(path) == {}
+        assert load_snapshot(store) == {}
 
     def test_missing_parent_directory_also_returns_an_empty_dict(self, tmp_path):
-        path = tmp_path / "nested" / "does-not-exist" / "yield-history.json"
+        store = LocalStore(tmp_path / "nested" / "does-not-exist")
 
-        assert load_snapshot(path) == {}
+        assert load_snapshot(store) == {}
 
 
 class TestSaveLoadRoundTrip:
     def test_round_trips_found_and_slugs_through_a_real_file(self, tmp_path):
         path = tmp_path / "yield-history.json"
+        store = LocalStore(tmp_path)
         source = _source("acme", found=3, slugs=frozenset({"event-a", "event-b"}))
         report = YieldReport(sources=[source], regions=[], generated_at=NOW)
 
-        save_snapshot(path, report)
-        loaded = load_snapshot(path)
+        save_snapshot(store, report)
+        loaded = load_snapshot(store)
 
         assert loaded == {
             "acme": {"found": 3, "slugs": ["event-a", "event-b"]},
@@ -65,6 +68,7 @@ class TestSaveLoadRoundTrip:
 
     def test_round_trips_multiple_sources(self, tmp_path):
         path = tmp_path / "yield-history.json"
+        store = LocalStore(tmp_path)
         report = YieldReport(
             sources=[
                 _source("acme", found=3, slugs=frozenset({"a"})),
@@ -74,8 +78,8 @@ class TestSaveLoadRoundTrip:
             generated_at=NOW,
         )
 
-        save_snapshot(path, report)
-        loaded = load_snapshot(path)
+        save_snapshot(store, report)
+        loaded = load_snapshot(store)
 
         assert loaded == {
             "acme": {"found": 3, "slugs": ["a"]},
@@ -85,17 +89,19 @@ class TestSaveLoadRoundTrip:
 
     def test_save_creates_missing_parent_directories(self, tmp_path):
         path = tmp_path / "nested" / "dir" / "yield-history.json"
+        store = LocalStore(tmp_path / "nested" / "dir")
         report = YieldReport(sources=[], regions=[], generated_at=NOW)
 
-        save_snapshot(path, report)
+        save_snapshot(store, report)
 
         assert path.exists()
-        assert load_snapshot(path) == {"__regions__": {}}
+        assert load_snapshot(store) == {"__regions__": {}}
 
     def test_save_overwrites_an_existing_file_rather_than_appending(self, tmp_path):
         path = tmp_path / "yield-history.json"
+        store = LocalStore(tmp_path)
         save_snapshot(
-            path,
+            store,
             YieldReport(
                 sources=[_source("acme", found=1, slugs=frozenset({"a"}))],
                 regions=[],
@@ -104,7 +110,7 @@ class TestSaveLoadRoundTrip:
         )
 
         save_snapshot(
-            path,
+            store,
             YieldReport(
                 sources=[_source("beta", found=2, slugs=frozenset({"b"}))],
                 regions=[],
@@ -112,7 +118,7 @@ class TestSaveLoadRoundTrip:
             ),
         )
 
-        assert load_snapshot(path) == {"beta": {"found": 2, "slugs": ["b"]}, "__regions__": {}}
+        assert load_snapshot(store) == {"beta": {"found": 2, "slugs": ["b"]}, "__regions__": {}}
 
 
 class TestRegionSnapshotRoundTrip:
@@ -122,14 +128,15 @@ class TestRegionSnapshotRoundTrip:
 
     def test_region_counts_round_trip_under_the_reserved_key(self, tmp_path):
         path = tmp_path / "yield-history.json"
+        store = LocalStore(tmp_path)
         report = YieldReport(
             sources=[_source("acme", found=1, slugs=frozenset({"a"}))],
             regions=[_region("South Bay", 8), _region("East County", 0)],
             generated_at=NOW,
         )
 
-        save_snapshot(path, report)
-        loaded = load_snapshot(path)
+        save_snapshot(store, report)
+        loaded = load_snapshot(store)
 
         assert loaded["__regions__"] == {"South Bay": {"count": 8}, "East County": {"count": 0}}
         # The per-source entries are unaffected by the reserved key's
@@ -142,9 +149,10 @@ class TestRegionSnapshotRoundTrip:
         as "no previous region baseline" the same way an unseen source
         already does."""
         path = tmp_path / "yield-history.json"
+        store = LocalStore(tmp_path)
         path.write_text('{"acme": {"found": 1, "slugs": ["a"]}}')
 
-        loaded = load_snapshot(path)
+        loaded = load_snapshot(store)
 
         assert "__regions__" not in loaded
         assert loaded["acme"] == {"found": 1, "slugs": ["a"]}
