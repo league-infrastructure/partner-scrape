@@ -1,1 +1,1 @@
-/Volumes/Proj/proj/league-projects/infrastructure/partner-scrape/.agents/skills/consolidate-architecture/SKILL.md
+/Users/eric/proj/league/infrastructure/partner-scrape/.agents/skills/consolidate-architecture/SKILL.md

@@ -1,1 +1,1 @@
-/Volumes/Proj/proj/league-projects/infrastructure/partner-scrape/.agents/skills/gh-import/SKILL.md
+/Users/eric/proj/league/infrastructure/partner-scrape/.agents/skills/gh-import/SKILL.md

@@ -1,1 +1,1 @@
-/Volumes/Proj/proj/league-projects/infrastructure/partner-scrape/.agents/skills/dispatch-subagent/SKILL.md
+/Users/eric/proj/league/infrastructure/partner-scrape/.agents/skills/dispatch-subagent/SKILL.md

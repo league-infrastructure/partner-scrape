@@ -1,1 +1,1 @@
-/Volumes/Proj/proj/league-projects/infrastructure/partner-scrape/.agents/skills/architecture-authoring/SKILL.md
+/Users/eric/proj/league/infrastructure/partner-scrape/.agents/skills/architecture-authoring/SKILL.md
