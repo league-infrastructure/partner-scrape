@@ -90,6 +90,14 @@ every one of them if it were routed through `Opportunity`. See
   mirroring `get_leaguesync_api_key()`/`get_leaguesync_url()` exactly, including the
   surrounding-quote stripping SOPS-decrypted secrets need. `config.py` remains the only
   module touching `os.environ`.
+  **Sprint 038:** gains `get_scrape_cache_store()`/`get_data_store()`, returning a `Store`
+  (see `storage.py`) for `SCRAPE_CACHE_DIR`/`PARTNER_SCRAPE_DATA_DIR` — a local path or
+  `s3://bucket/prefix`, defaulting to `s3://jtl-stem-ecosystem-scrape/{cache,data}` (local
+  only when set explicitly). Config owns the one lazily built, shared boto3 client
+  (`DO_SPACES_ENDPOINT` region endpoint — a bucket-qualified one is rejected —
+  `DO_SPACES_ACCESS_KEY`, `DO_SPACES_SECRET_KEY`) and injects it into `storage`; missing
+  `DO_SPACES_*` values fail loudly only when an `s3://` location is in effect.
+  `get_scrape_cache_dir()`/`get_own_data_dir()` remain until tickets 003–006 rewire callers.
 - **`model.py`** — the canonical `Event` record and the shared identity vocabulary. A flat
   dataclass (~26 fields, sprint 009: `opportunity_type` joins the classification fields
   alongside `areas_of_interest`/`age_grade_level`/`cost_range`/`time_of_day`) plus a
@@ -245,7 +253,7 @@ saved HTML/JSON fixtures under `tests/fixtures/`, no network, no API key require
 
 ### Consumes
 - **`stem-ecosystem`'s `src/data/partners.json`** — read-only, for the partner join.
-- **Environment** (via `config.py` only): `SCRAPE_CACHE_DIR` (required), `SITE_DIR`,
+- **Environment** (via `config.py` only): `SCRAPE_CACHE_DIR`, `PARTNER_SCRAPE_DATA_DIR`, `DO_SPACES_*` (sprint 038), `SITE_DIR`,
   `LEAGUESYNC_API_KEY`, `LEAGUESYNC_URL`, and (sprint 011) `TBA_KEY`/`TBA_URL`; and
   `ANTHROPIC_API_KEY`, resolved by the `anthropic` SDK itself.
 - **~100 partner websites and APIs**, reached only through `fetch/`.

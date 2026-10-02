@@ -31,6 +31,11 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
+from typing import Any
+from urllib.parse import urlparse
+
+from partner_scrape.storage import Store, store_from_location
+
 
 class CredentialError(RuntimeError):
     """A structural, recurring credential failure -- a missing/invalid
@@ -55,6 +60,26 @@ class CredentialError(RuntimeError):
 #: per docs/design/specification.md 3.1 -- there is no sane default,
 #: so it must be set explicitly.
 SCRAPE_CACHE_DIR_ENV_VAR = "SCRAPE_CACHE_DIR"
+
+#: Environment variable holding the root *location* for the data output
+#: (``sites.json``, images, ...): a local directory or ``s3://bucket/
+#: prefix``. Defaults to :data:`DEFAULT_DATA_LOCATION` (the bucket); a
+#: local directory only when set explicitly.
+PARTNER_SCRAPE_DATA_DIR_ENV_VAR = "PARTNER_SCRAPE_DATA_DIR"
+
+#: Default cache location -- the DigitalOcean Spaces bucket. A local
+#: ``SCRAPE_CACHE_DIR`` is used only when set explicitly.
+DEFAULT_CACHE_LOCATION = "s3://jtl-stem-ecosystem-scrape/cache"
+
+#: Default data-output location -- the DigitalOcean Spaces bucket.
+DEFAULT_DATA_LOCATION = "s3://jtl-stem-ecosystem-scrape/data"
+
+#: DigitalOcean Spaces settings, used only when an ``s3://`` location is
+#: in effect. The endpoint is the *region* endpoint, e.g.
+#: ``https://sfo3.digitaloceanspaces.com`` -- never bucket-qualified.
+DO_SPACES_ENDPOINT_ENV_VAR = "DO_SPACES_ENDPOINT"
+DO_SPACES_ACCESS_KEY_ENV_VAR = "DO_SPACES_ACCESS_KEY"
+DO_SPACES_SECRET_KEY_ENV_VAR = "DO_SPACES_SECRET_KEY"
 
 #: Environment variable that overrides the default sibling site-repo
 #: path used by Site Export (ticket 007).
@@ -346,3 +371,116 @@ def get_robotevents_url() -> str:
     if value:
         return value
     return DEFAULT_ROBOTEVENTS_URL
+
+
+# -- Bucket-backed storage (sprint 038 ticket 002) --------------------------
+
+#: The shared boto3 client and the settings it was built from. Rebuilt
+#: when the settings change so tests can monkeypatch the environment.
+_s3_client: tuple[tuple[str, str, str], Any] | None = None
+
+
+def _clean(value: str | None) -> str:
+    """Strip whitespace and the quotes dotconfig leaves on secrets."""
+    return (value or "").strip().strip("'\"").strip()
+
+
+def _validate_endpoint(endpoint: str) -> str:
+    """Return ``endpoint`` if it is a region endpoint, else raise.
+
+    A DigitalOcean Spaces endpoint must be ``https://<region>.
+    digitaloceanspaces.com``; a bucket-qualified one
+    (``https://<bucket>.<region>.digitaloceanspaces.com``) makes boto
+    address the bucket twice, so it is rejected with the fix spelled out.
+    """
+    parsed = urlparse(endpoint)
+    host = parsed.hostname or ""
+    labels = host.split(".")
+    if parsed.scheme not in ("http", "https") or not host:
+        raise RuntimeError(
+            f"{DO_SPACES_ENDPOINT_ENV_VAR}={endpoint!r} is not a URL. Set it "
+            "to the region endpoint, e.g. https://sfo3.digitaloceanspaces.com."
+        )
+    qualified = host.endswith(".digitaloceanspaces.com") and len(labels) != 3
+    if qualified or parsed.path.strip("/"):
+        region = labels[-3] if len(labels) >= 3 else "<region>"
+        raise RuntimeError(
+            f"{DO_SPACES_ENDPOINT_ENV_VAR}={endpoint!r} must be the region "
+            "endpoint, not bucket-qualified or carrying a path. Use "
+            f"https://{region}.digitaloceanspaces.com (the bucket name belongs "
+            "in the s3:// location, not the endpoint)."
+        )
+    return endpoint
+
+
+def _get_s3_client() -> Any:
+    """Return the shared boto3 S3 client, building it on first use.
+
+    Raises:
+        RuntimeError: if any ``DO_SPACES_*`` variable is missing (all
+            missing names are listed) or the endpoint is bucket-qualified.
+    """
+    global _s3_client
+    values = {
+        name: _clean(os.environ.get(name))
+        for name in (
+            DO_SPACES_ENDPOINT_ENV_VAR,
+            DO_SPACES_ACCESS_KEY_ENV_VAR,
+            DO_SPACES_SECRET_KEY_ENV_VAR,
+        )
+    }
+    missing = [name for name, value in values.items() if not value]
+    if missing:
+        raise RuntimeError(
+            f"{', '.join(missing)} not set, but an s3:// location is in "
+            "effect. Set them in the assembled .env (see "
+            "config/prod/public.env and secrets.env), or point "
+            f"{SCRAPE_CACHE_DIR_ENV_VAR}/{PARTNER_SCRAPE_DATA_DIR_ENV_VAR} at "
+            "a local directory to run without the bucket."
+        )
+    endpoint = _validate_endpoint(values[DO_SPACES_ENDPOINT_ENV_VAR])
+    settings = (
+        endpoint,
+        values[DO_SPACES_ACCESS_KEY_ENV_VAR],
+        values[DO_SPACES_SECRET_KEY_ENV_VAR],
+    )
+    if _s3_client is None or _s3_client[0] != settings:
+        import boto3  # deferred: --help and local-only runs never need it
+
+        host = urlparse(endpoint).hostname or ""
+        region = host.split(".")[0] if host.endswith(".digitaloceanspaces.com") else "us-east-1"
+        client = boto3.client(
+            "s3",
+            endpoint_url=endpoint,
+            aws_access_key_id=settings[1],
+            aws_secret_access_key=settings[2],
+            region_name=region,
+        )
+        _s3_client = (settings, client)
+    return _s3_client[1]
+
+
+def _store_for(env_var: str, default: str) -> Store:
+    """Build the Store for ``env_var``'s location (default: the bucket)."""
+    location = os.environ.get(env_var) or default
+    client = _get_s3_client() if location.startswith("s3://") else None
+    return store_from_location(location, client)
+
+
+def get_scrape_cache_store() -> Store:
+    """Return the Store holding the fetch/LLM caches.
+
+    ``SCRAPE_CACHE_DIR`` is a local path or ``s3://bucket/prefix``;
+    unset, it defaults to :data:`DEFAULT_CACHE_LOCATION`. Credentials
+    are required only when the effective location is ``s3://``.
+    """
+    return _store_for(SCRAPE_CACHE_DIR_ENV_VAR, DEFAULT_CACHE_LOCATION)
+
+
+def get_data_store() -> Store:
+    """Return the Store receiving pipeline output (``sites.json``, ...).
+
+    ``PARTNER_SCRAPE_DATA_DIR`` is a local path or ``s3://bucket/prefix``;
+    unset, it defaults to :data:`DEFAULT_DATA_LOCATION`.
+    """
+    return _store_for(PARTNER_SCRAPE_DATA_DIR_ENV_VAR, DEFAULT_DATA_LOCATION)
