@@ -1,7 +1,7 @@
 ---
 id: 008
 title: Verify against the real bucket (opt-in)
-status: in-progress
+status: done
 use-cases:
 - SUC-001
 - SUC-002
@@ -21,11 +21,11 @@ Verify code against the pre-uploaded bucket before data leaves git.
 
 ## Acceptance Criteria
 
-- [ ] Opt-in pytest marker `bucket` (skipped by default) and `dev/verify_bucket.py`
-- [ ] Object counts under each `cache/` folder and `data/` match expectations from the local trees (data/ minus mirrors/)
-- [ ] Spot-check byte-identity of sample objects
-- [ ] A one-source run (e.g. coastalrootsfarm) with the s3 cache shows cache hits and no new LLM calls for unchanged content; partner_log for that source updated
-- [ ] Results recorded in the ticket; if credentials are unavailable, escalate to team-lead rather than skipping
+- [x] Opt-in pytest marker `bucket` (skipped by default) and `dev/verify_bucket.py`
+- [x] Object counts under each `cache/` folder and `data/` match expectations from the local trees (data/ minus mirrors/)
+- [x] Spot-check byte-identity of sample objects
+- [x] A one-source run (e.g. coastalrootsfarm) with the s3 cache shows cache hits and no new LLM calls for unchanged content; partner_log for that source updated
+- [x] Results recorded in the ticket; if credentials are unavailable, escalate to team-lead rather than skipping
 
 ## Implementation Plan
 
