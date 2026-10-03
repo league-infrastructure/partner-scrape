@@ -1,7 +1,7 @@
 ---
 id: 038
 title: Bucket-backed storage and pip-installable package
-status: planning-docs
+status: done
 branch: sprint/038-bucket-backed-storage-and-pip-installable-package
 use-cases:
 - SUC-001
