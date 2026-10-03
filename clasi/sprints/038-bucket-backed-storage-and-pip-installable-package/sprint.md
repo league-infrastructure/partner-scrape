@@ -99,5 +99,6 @@ None.
 | 010 | Schema doc drift guard | 009 |
 | 011 | stem-ecosystem fetch-data.sh bucket mode (cross-repo) | 009 |
 | 012 | Wheel smoke test, publish workflow, README | 006, 009 |
+| 013 | Drop PyPI publishing | 012 |
 
 Tickets execute serially in the order listed.

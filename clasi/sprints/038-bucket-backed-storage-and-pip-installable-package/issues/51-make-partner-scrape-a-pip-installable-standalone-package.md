@@ -1,9 +1,10 @@
 ---
-status: done
+status: in-progress
 sprint: 038
 tickets:
 - 038-006
 - 038-012
+- 038-013
 ---
 
 # Make partner-scrape a pip-installable standalone package

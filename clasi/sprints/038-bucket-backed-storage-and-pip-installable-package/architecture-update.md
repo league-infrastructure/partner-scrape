@@ -70,6 +70,7 @@ Bucket layout: as in issue 50 (`cache/{hosts,enrichment,programs,descriptions,sp
 ## Step 7: Open questions
 
 - RESOLVED by stakeholder: profile in program cache key, no legacy fallback, one-time re-extraction of ~67 entries accepted.
+- DECIDED by stakeholder 2026-10-02: partner-scrape will NOT be published to PyPI; the package code moves later into a consolidated repo (with stem-ecosystem). Wheel smoke test is kept; publishing workflow dropped (ticket 013). SITE_REPO_TOKEN will not be provisioned for the same reason.
 - RESOLVED by stakeholder: SCHEMA.md bundled into the wheel via hatch force-include.
 - `requires-python >=3.13`: verify need in ticket 012.
 - DESIGN.md files in the wheel: keep (decide in 012).
