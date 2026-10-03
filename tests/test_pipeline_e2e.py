@@ -39,6 +39,7 @@ from partner_scrape.fetch import PlaywrightFetcher, PoliteFetcher, Throttle
 from partner_scrape.fetch.fetcher import FetchResponse
 from partner_scrape.model import Event
 from partner_scrape.observability import YieldReporter, load_snapshot, save_snapshot
+from partner_scrape.storage import LocalStore
 from partner_scrape.pipeline import run
 from partner_scrape.registry.validate_roster import RosterValidationError
 
@@ -73,7 +74,7 @@ def _scrape_cache_dir(tmp_path, monkeypatch):
 
     `pipeline.run()` unconditionally calls `export.partner_log.record()`
     (sprint 009 ticket 003), whose default `log_dir` resolves via
-    `config.get_scrape_cache_dir()` when a test doesn't pass one
+    `config.get_scrape_cache_store()` when a test doesn't pass one
     explicitly -- exactly none of the tests in this file do, since they
     only ever pass `site_dir`. Mirrors `test_pipeline_e2e_enrichment.py`'s
     and `test_cli.py`'s identical fixture for the same underlying reason
@@ -86,13 +87,13 @@ def _scrape_cache_dir(tmp_path, monkeypatch):
 
 @pytest.fixture(autouse=True)
 def _own_data_dir_default(tmp_path_factory, monkeypatch):
-    """Pin `writer.get_own_data_dir()`'s (and, sprint 020 ticket 004,
-    `ads.get_own_data_dir()`'s, and, sprint 025 ticket 002,
-    `pipeline.get_own_data_dir()`'s) resolution to a throwaway directory
+    """Pin `writer.get_data_store()`'s (and, sprint 020 ticket 004,
+    `ads.get_data_store()`'s, and, sprint 025 ticket 002,
+    `pipeline.get_data_store()`'s) resolution to a throwaway directory
     for every test in this file (sprint 020 ticket 003).
 
     `export_opportunities()`'s (and `export_ads()`'s) `own_data_dir`
-    parameter defaults to `config.get_own_data_dir()` -- a real repo
+    parameter defaults to `config.get_data_store()` -- a real repo
     path with no environment-variable override -- when a caller doesn't
     pass one explicitly. `pipeline.run()` never passes it for either
     call, so every real (non-`dry_run`) `run()` call in this file would
@@ -102,7 +103,7 @@ def _own_data_dir_default(tmp_path_factory, monkeypatch):
     `_own_data_dir_default` fixture, for the same underlying reason.
     `writer`, `ads`, and (since sprint 025 ticket 002 redirected the
     default `EventImageDownloader`'s write target there too) `pipeline`
-    each import `get_own_data_dir` separately, so all three must be
+    each import `get_data_store` separately, so all three must be
     patched.
 
     Returns `fake_own_data_dir` so tests that need to assert against the
@@ -111,9 +112,9 @@ def _own_data_dir_default(tmp_path_factory, monkeypatch):
     without duplicating this fixture's own throwaway directory.
     """
     fake_own_data_dir = tmp_path_factory.mktemp("own-data-default")
-    monkeypatch.setattr(writer, "get_own_data_dir", lambda: fake_own_data_dir)
-    monkeypatch.setattr(ads, "get_own_data_dir", lambda: fake_own_data_dir)
-    monkeypatch.setattr(pipeline, "get_own_data_dir", lambda: fake_own_data_dir)
+    monkeypatch.setenv("PARTNER_SCRAPE_DATA_DIR", str(fake_own_data_dir))
+    monkeypatch.setenv("PARTNER_SCRAPE_DATA_DIR", str(fake_own_data_dir))
+    monkeypatch.setenv("PARTNER_SCRAPE_DATA_DIR", str(fake_own_data_dir))
     return fake_own_data_dir
 
 
@@ -184,7 +185,7 @@ class RecordingIdentityEnricher:
 def _site_dir(tmp_path: Path) -> Path:
     """A tmp_path-backed stand-in for the sibling stem-ecosystem repo,
     with `src/data/partners.json` seeded from the shared fixture --
-    never the real `../stem-ecosystem` checkout."""
+    never a real stem-ecosystem checkout."""
     site_dir = tmp_path / "stem-ecosystem"
     data_dir = site_dir / "src" / "data"
     data_dir.mkdir(parents=True)
@@ -665,8 +666,8 @@ class TestYieldReporterEndToEnd:
         assert by_id_1["coastalrootsfarm"].found == 2
         assert by_id_1["coastalrootsfarm"].zero_yield is False
 
-        snapshot_path = tmp_path / "yield-history.json"
-        save_snapshot(snapshot_path, first_report)
+        snapshot_store = LocalStore(tmp_path)
+        save_snapshot(snapshot_store, first_report)
 
         # Second run: coastalrootsfarm's fixture responses swapped to a
         # real, well-formed zero-event TEC page (not the fetch failure
@@ -685,7 +686,7 @@ class TestYieldReporterEndToEnd:
             reporter=second_reporter,
             today=TODAY,
         )
-        previous_snapshot = load_snapshot(snapshot_path)
+        previous_snapshot = load_snapshot(snapshot_store)
         second_report = second_reporter.report(previous_snapshot=previous_snapshot, now=second_now)
 
         by_id_2 = {s.source_id: s for s in second_report.sources}

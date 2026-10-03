@@ -375,9 +375,9 @@ def _extract_one_program(
 
     text = reduce_html_to_text(raw.body)
 
-    result = cache.lookup(raw.ref.url, text)
+    profile = _resolve_extraction_profile(source)
+    result = cache.lookup(raw.ref.url, text, profile)
     if result is None:
-        profile = _resolve_extraction_profile(source)
         try:
             result = llm_client.extract_program(
                 raw.ref.url, text, profile=profile, reference_date=date.today()
@@ -390,7 +390,7 @@ def _extract_one_program(
                 exc,
             )
             return []
-        cache.store(raw.ref.url, text, result)
+        cache.store(raw.ref.url, text, result, profile)
 
     program_kind = _resolve_program_kind(raw.ref.url, source)
     if program_kind is None:
@@ -437,9 +437,9 @@ def _extract_many_programs(
 
     text = reduce_html_to_text(raw.body)
 
-    results = cache.lookup_many(raw.ref.url, text)
+    profile = _resolve_extraction_profile(source)
+    results = cache.lookup_many(raw.ref.url, text, profile)
     if results is None:
-        profile = _resolve_extraction_profile(source)
         try:
             results = llm_client.extract_programs(
                 raw.ref.url, text, profile=profile, reference_date=date.today()
@@ -452,7 +452,7 @@ def _extract_many_programs(
                 exc,
             )
             return []
-        cache.store_many(raw.ref.url, text, results)
+        cache.store_many(raw.ref.url, text, results, profile)
 
     program_kind = _resolve_program_kind(raw.ref.url, source)
     if program_kind is None:

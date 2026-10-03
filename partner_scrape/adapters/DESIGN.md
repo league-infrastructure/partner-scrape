@@ -328,6 +328,13 @@ to N separate detail pages (e.g. a CSTA-SD chapter's own upcoming-
 meetings list), the identical SIO-shape reuse this module's own
 docstring already anticipated for "sprint 030 (educator pages)."
 
+**Open question — RESOLVED in sprint 038 (issue 42): `profile` is now
+part of `ProgramExtractionCache`'s key (`sha256("{url}|{profile}")`, with
+`lookup`/`store`/`lookup_many`/`store_many` taking a `profile` argument that
+`_extract_one_program`/`_extract_many_programs` pass). There is no fallback
+read of the old profile-less key; the ~67 existing entries re-extract once,
+by stakeholder decision. The original text follows for history.**
+
 **Open question — pre-existing, not new to this revision, flagged
 here because this sprint is the second consumer to make it matter.**
 `ProgramExtractionCache`'s key is `(url, content_hash(body))` —
@@ -1348,8 +1355,8 @@ of scope for this revision.**
   convention. Not used on the LLM-fallback path, which stamps `PROGRAM_LLM_CONFIDENCE`
   (`0.9`) exactly as `program_page_multi` already does.
 - **`ProgramExtractionCache(cache_dir=None)`** (sprint 027, `adapters/program_cache.py`)
-  — one JSON file per URL+content-hash under `{SCRAPE_CACHE_DIR}/
-  program_extraction_cache/`, avoiding a repeat `ProgramLLMClient` call for an unchanged
+  — one JSON file per URL+profile (content-hash checked in the entry) under `programs/`
+  in the scrape-cache Store (sprint 038; was `{SCRAPE_CACHE_DIR}/program_extraction_cache/`), avoiding a repeat `ProgramLLMClient` call for an unchanged
   page across pipeline runs. Mirrors `enrich/cache.py`'s shape; a separate cache
   directory and class, not a reuse of `EnrichmentCache`, because the cache key differs
   (URL, not `Event.identity_key()` — no `Event` exists yet at fetch time). **(Ticket 006
@@ -1385,9 +1392,9 @@ of scope for this revision.**
   `enrich/llm_client.py`'s identical credential convention. This is a new external
   dependency for `adapters/` specifically (the package as a whole already depended on
   `anthropic` transitively via `enrich/`, but no adapter had ever called it directly).
-- **`config.get_scrape_cache_dir()` (from `config.py`)** (sprint 027,
-  `program_cache.py`) — the parent of `program_extraction_cache/`, matching
-  `enrich/cache.py`'s and `store/event_store.py`'s existing convention.
+- **`config.get_scrape_cache_store()` (from `config.py`)** (sprint 038,
+  `program_cache.py`) — the Store holding `programs/`, matching the other
+  LLM caches' convention (replaces `get_scrape_cache_dir()`, sprint 027).
 - **`extract.reduce_html_to_text(html, max_chars)` (from `extract/`)** (sprint 028) — the
   new dependency this sprint adds: `program_page.py` now imports from `extract/`, which
   it previously never did (only `generic_html.py`/`listing_html.py` depended on `extract/`

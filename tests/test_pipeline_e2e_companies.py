@@ -51,7 +51,7 @@ def _scrape_cache_dir(tmp_path, monkeypatch):
 
     `pipeline.run()` unconditionally calls `export.partner_log.record()`
     (sprint 009 ticket 003), whose default `log_dir` resolves via
-    `config.get_scrape_cache_dir()` when a test doesn't pass one
+    `config.get_scrape_cache_store()` when a test doesn't pass one
     explicitly -- matches `test_pipeline_e2e.py`'s identical fixture.
     """
     monkeypatch.setenv("SCRAPE_CACHE_DIR", str(tmp_path / "scrape_cache"))
@@ -103,7 +103,7 @@ def _fixture_fetcher() -> FixtureFetcher:
 def _site_dir(tmp_path: Path) -> Path:
     """A tmp_path-backed stand-in for the sibling stem-ecosystem repo,
     with `src/data/partners.json` seeded from the shared fixture --
-    never the real `../stem-ecosystem` checkout."""
+    never a real stem-ecosystem checkout."""
     site_dir = tmp_path / "stem-ecosystem"
     data_dir = site_dir / "src" / "data"
     data_dir.mkdir(parents=True)

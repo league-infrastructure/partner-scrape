@@ -9,7 +9,7 @@ module fetches it, validates it is really an image, quality-gates it
 (rejects tracking pixels/spacers/undersized/non-image responses), dedupes
 identical images across events, and self-hosts a local copy. No new
 extraction is added here (sprint.md's Out of Scope); this module only
-turns an already-populated remote URL into a self-hosted local file.
+turns an already-populated remote URL into a self-hosted file in the data Store (key prefix `images/opportunities/`).
 
 `pipeline.run()` wires one `EventImageDownloader` instance per export run
 into `normalize.run()` via the `image_resolver` callable parameter (a
@@ -99,6 +99,8 @@ from pathlib import Path
 from typing import Protocol
 
 from PIL import Image
+
+from partner_scrape.storage import LocalStore, Store
 
 logger = logging.getLogger(__name__)
 
@@ -291,6 +293,17 @@ _DIMENSION_PARSERS = (_png_dimensions, _jpeg_dimensions, _gif_dimensions, _webp_
 #: applied in the same order `_sniff_dimensions` tries them.
 _EXTENSIONS = (".png", ".jpg", ".gif", ".webp")
 
+#: Content-Type each stored extension is uploaded with.
+_CONTENT_TYPES = {
+    ".png": "image/png",
+    ".jpg": "image/jpeg",
+    ".gif": "image/gif",
+    ".webp": "image/webp",
+}
+
+#: Key prefix (folder in the data Store) self-hosted event images live under.
+IMAGES_PREFIX = "images/opportunities/"
+
 
 def _sniff(data: bytes) -> tuple[int, tuple[int, int]] | None:
     """Try each known format's parser in turn; return `(parser_index,
@@ -391,13 +404,17 @@ class EventImageDownloader:
 
     def __init__(
         self,
-        dest_dir: str | Path,
+        store: Store | str | Path,
+        prefix: str = IMAGES_PREFIX,
         *,
         fetcher: ImageFetcher | None = None,
         min_dimension: int = MIN_DIMENSION,
         max_bytes: int = MAX_IMAGE_BYTES,
     ) -> None:
-        self.dest_dir = Path(dest_dir)
+        self.store = (
+            store if not isinstance(store, (str, Path)) else LocalStore(Path(store))
+        )
+        self.prefix = prefix
         self.fetcher = fetcher or UrllibImageFetcher()
         self.min_dimension = min_dimension
         self.max_bytes = max_bytes
@@ -455,7 +472,12 @@ class EventImageDownloader:
             return cached
 
         filename = f"{digest[:16]}{_extension_for(final_bytes)}"
-        self.dest_dir.mkdir(parents=True, exist_ok=True)
-        (self.dest_dir / filename).write_bytes(final_bytes)
+        key = f"{self.prefix}{filename}"
+        # Content-hash names: the same key always holds the same bytes, so
+        # an existing object is never rewritten (saves a bucket upload).
+        if not self.store.exists(key):
+            self.store.write_bytes(
+                key, final_bytes, _CONTENT_TYPES[_extension_for(final_bytes)]
+            )
         self._hash_to_filename[digest] = filename
         return filename

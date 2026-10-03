@@ -83,13 +83,29 @@ every one of them if it were routed through `Opportunity`. See
   `--mirror-site-dir`/`--no-mirror` flags and the mirror step this bullet used to describe
   were removed outright — see `export/DESIGN.md`'s sprint 019 note.
 - **`config.py`** — the only module in the package that reads `os.environ`. Accessors for
-  `SCRAPE_CACHE_DIR` (required, no default), `SITE_DIR`, `LEAGUESYNC_API_KEY`, and
+  `SCRAPE_CACHE_DIR`, `SITE_DIR` (default: CWD), `LEAGUESYNC_API_KEY`, and
   `LEAGUESYNC_URL`. Values are assembled by dotconfig into
   layered `.env` files before the process starts; this module only reads what landed.
   **Sprint 011:** gains `get_tba_api_key()`/`get_tba_url()` (reading `TBA_KEY`/`TBA_URL`),
   mirroring `get_leaguesync_api_key()`/`get_leaguesync_url()` exactly, including the
   surrounding-quote stripping SOPS-decrypted secrets need. `config.py` remains the only
   module touching `os.environ`.
+  **Sprint 038:** gains `get_scrape_cache_store()`/`get_data_store()`, returning a `Store`
+  (see `storage.py`) for `SCRAPE_CACHE_DIR`/`PARTNER_SCRAPE_DATA_DIR` — a local path or
+  `s3://bucket/prefix`, defaulting to `s3://jtl-stem-ecosystem-scrape/{cache,data}` (local
+  only when set explicitly). Config owns the one lazily built, shared boto3 client
+  (`DO_SPACES_ENDPOINT` region endpoint — a bucket-qualified one is rejected —
+  `DO_SPACES_ACCESS_KEY`, `DO_SPACES_SECRET_KEY`) and injects it into `storage`; missing
+  `DO_SPACES_*` values fail loudly only when an `s3://` location is in effect.
+  **Sprint 038 ticket 006:** `REPO_ROOT`, `DEFAULT_SITE_DIR` and the old
+  `get_scrape_cache_dir()` are gone. `get_registry_dir()` (`PARTNER_SCRAPE_REGISTRY_DIR`,
+  default the bundled `partner_scrape/registry_data/`; local paths only, `://` values are
+  rejected) plus `get_sources_dir()/get_hubs_dir()/get_ads_dir()/get_candidates_dir()`;
+  `get_candidates_write_dir()` (override's `candidates/`, else `./candidates`, never the
+  bundled copy); `get_event_store_path()` (`PARTNER_SCRAPE_EVENT_DB`, else
+  `~/.partner-scrape/events.db`); `get_site_dir()` is `SITE_DIR` or the CWD.
+  `resolve_data_store(location)` maps an export function's `own_data_dir` argument (path,
+  `s3://`, `Store`, or `None` = `get_data_store()`) to a Store.
 - **`model.py`** — the canonical `Event` record and the shared identity vocabulary. A flat
   dataclass (~26 fields, sprint 009: `opportunity_type` joins the classification fields
   alongside `areas_of_interest`/`age_grade_level`/`cost_range`/`time_of_day`) plus a
@@ -153,6 +169,14 @@ implementation at the outermost layer — `cli.py` and `pipeline.run()`; tests i
 fixture-backed doubles. This is why 905 tests run with no network access and with the
 optional `playwright` dependency uninstalled.
 
+**Storage (`storage.py`).** Persistent cache and published data go through a `Store`
+protocol (`read_bytes`/`write_bytes`, text and JSON helpers, `exists`, `list`) keyed by
+`/`-separated strings, with a missing key reading as `None`. `LocalStore(root)` writes
+atomically (temp file + `os.replace`); `S3Store(bucket, prefix, client)` targets an
+S3-compatible bucket and sets `ContentType`; `store_from_location()` picks one from an
+`s3://bucket/prefix` string or a path. `storage.py` is a leaf: it never imports `config`,
+which builds Stores and injects the boto3 client.
+
 **Structural satisfaction, never a backwards import.** A module that satisfies a Protocol
 defined in `pipeline.py` does not import it. `enrich.enricher.LLMEnricher`,
 `observability.reporter.YieldReporter`, and `discovery.candidate_pipeline`'s own
@@ -196,7 +220,7 @@ competing records, so a confidence constant is a project-wide contract, not a lo
 detail.
 
 **Configuration is data, and environment is read in one place.** Adding an organization is
-a new TOML file in `registry/sources/`. `config.py` is the only module that touches
+a new TOML file in `partner_scrape/registry_data/sources/`. `config.py` is the only module that touches
 `os.environ`.
 
 **Datetimes are naive San Diego wall clock.** Adapters should emit them that way; several
@@ -209,6 +233,12 @@ raise and crashes the run.
 `urllib`; TOML is stdlib `tomllib`; the store is stdlib `sqlite3`. `playwright` is an
 optional extra whose import is deferred to first real use.
 
+**Python floor is 3.11 (`requires-python = ">=3.11"`).** Re-checked in sprint 038 (ticket
+012): the full suite (2617 tests) passes on CPython 3.11, 3.12 and 3.13, and nothing uses
+3.12+/3.13-only syntax or stdlib. 3.11 is the true floor because the package reads TOML
+with stdlib `tomllib` (added in 3.11); 3.10 fails at import. The wheel smoke test
+(`dev/wheel_smoke_test.py`, CI `wheel-smoke.yml`) runs on 3.11 and 3.13.
+
 **Tests are fixture-based and hermetic.** 905 tests, one test module per source module,
 saved HTML/JSON fixtures under `tests/fixtures/`, no network, no API key required.
 
@@ -217,8 +247,9 @@ saved HTML/JSON fixtures under `tests/fixtures/`, no network, no API key require
 ### Exposes
 - **`partner-scrape`** — the console script (`partner_scrape.cli:main`). Flags include
   `--registry-dir`, `--site-dir`, `--source`, `--limit`, `--dry-run`, `--no-enrich`,
-  `--no-report`, `--yield-history`, `--verbose`; plus the `discover-candidates`
-  subcommand.
+  `--no-report`, `--yield-history`, `--verbose`; plus the `discover-candidates`,
+  `teams`, and `directory` subcommands. The main pipeline is `partner-scrape --source X`
+  (there is no `run` subcommand).
 - **`pipeline.run(...) -> list[dict]`** — the programmatic entry point; returns the
   exported opportunity payload.
 - **`model.Event`, `Provenance`, `Kind`, `identity_key`, `normalize_title`,
@@ -237,7 +268,7 @@ saved HTML/JSON fixtures under `tests/fixtures/`, no network, no API key require
 
 ### Consumes
 - **`stem-ecosystem`'s `src/data/partners.json`** — read-only, for the partner join.
-- **Environment** (via `config.py` only): `SCRAPE_CACHE_DIR` (required), `SITE_DIR`,
+- **Environment** (via `config.py` only): `SCRAPE_CACHE_DIR`, `PARTNER_SCRAPE_DATA_DIR`, `PARTNER_SCRAPE_REGISTRY_DIR`, `PARTNER_SCRAPE_EVENT_DB`, `DO_SPACES_*` (sprint 038), `SITE_DIR`,
   `LEAGUESYNC_API_KEY`, `LEAGUESYNC_URL`, and (sprint 011) `TBA_KEY`/`TBA_URL`; and
   `ANTHROPIC_API_KEY`, resolved by the `anthropic` SDK itself.
 - **~100 partner websites and APIs**, reached only through `fetch/`.

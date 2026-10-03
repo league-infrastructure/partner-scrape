@@ -3,7 +3,7 @@ per-partner, append-only accumulation layer (sprint 009 ticket 003,
 issue 15).
 
 Every test passes an explicit `log_dir`/`partners_path` under
-`tmp_path` -- no test relies on `config.get_scrape_cache_dir()` /
+`tmp_path` -- no test relies on `config.get_scrape_cache_store()` /
 `config.get_site_dir()`'s real defaults or writes to a real checkout,
 matching writer.py's own test-file convention.
 """
@@ -19,6 +19,7 @@ import pytest
 from partner_scrape.export import partner_log
 from partner_scrape.export.partner_log import published_content_hash, record
 from partner_scrape.normalize.run import Opportunity
+from partner_scrape.storage import LocalStore
 
 FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures"
 PARTNERS_PATH = FIXTURES_DIR / "partners.json"
@@ -336,13 +337,38 @@ class TestUnwritableTarget:
 
 
 class TestConfigDefaults:
-    def test_omitted_log_dir_resolves_via_config_get_scrape_cache_dir(self, tmp_path, monkeypatch):
+    def test_omitted_log_dir_resolves_via_config_get_scrape_cache_store(self, tmp_path, monkeypatch):
         fake_cache_dir = tmp_path / "cache"
-        monkeypatch.setattr(partner_log, "get_scrape_cache_dir", lambda: fake_cache_dir)
+        monkeypatch.setattr(
+            partner_log, "get_scrape_cache_store", lambda: LocalStore(fake_cache_dir)
+        )
 
         record([_opportunity()], partners_path=PARTNERS_PATH)
 
         assert (fake_cache_dir / "partner_log" / "coastal_roots_farm" / "partner.json").exists()
+
+    def test_default_store_uses_partner_log_prefix_in_bucket(self, monkeypatch):
+        import boto3
+        from moto import mock_aws
+
+        with mock_aws():
+            client = boto3.client("s3", region_name="us-east-1")
+            client.create_bucket(Bucket="test-bucket")
+            monkeypatch.setenv("SCRAPE_CACHE_DIR", "s3://test-bucket/cache")
+            monkeypatch.setenv("DO_SPACES_ENDPOINT", "https://s3.us-east-1.amazonaws.com")
+            monkeypatch.setenv("DO_SPACES_ACCESS_KEY", "k")
+            monkeypatch.setenv("DO_SPACES_SECRET_KEY", "s")
+
+            record([_opportunity()], partners_path=PARTNERS_PATH)
+
+            keys = {
+                o["Key"]
+                for o in client.list_objects_v2(Bucket="test-bucket")["Contents"]
+            }
+            assert keys == {
+                "cache/partner_log/coastal_roots_farm/partner.json",
+                "cache/partner_log/coastal_roots_farm/opportunities.jsonl",
+            }
 
     def test_omitted_partners_path_resolves_via_config_get_site_dir(self, tmp_path, monkeypatch):
         fake_site_dir = tmp_path / "stem-ecosystem"

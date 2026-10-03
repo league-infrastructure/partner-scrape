@@ -48,7 +48,7 @@ def _scrape_cache_dir(tmp_path, monkeypatch):
 
     `pipeline.run()` unconditionally calls `export.partner_log.record()`
     (sprint 009 ticket 003), whose default `log_dir` resolves via
-    `config.get_scrape_cache_dir()` when a test doesn't pass one
+    `config.get_scrape_cache_store()` when a test doesn't pass one
     explicitly -- matches `test_pipeline_e2e.py`'s identical fixture.
     """
     monkeypatch.setenv("SCRAPE_CACHE_DIR", str(tmp_path / "scrape_cache"))
@@ -57,12 +57,12 @@ def _scrape_cache_dir(tmp_path, monkeypatch):
 
 @pytest.fixture(autouse=True)
 def _own_data_dir_default(tmp_path_factory, monkeypatch):
-    """Pin `writer.get_own_data_dir()`'s (and, sprint 020 ticket 004,
-    `ads.get_own_data_dir()`'s) resolution to a throwaway directory for
+    """Pin `writer.get_data_store()`'s (and, sprint 020 ticket 004,
+    `ads.get_data_store()`'s) resolution to a throwaway directory for
     every test in this file (sprint 020 ticket 003).
 
     `export_opportunities()`'s (and `export_ads()`'s) `own_data_dir`
-    parameter defaults to `config.get_own_data_dir()` -- a real repo
+    parameter defaults to `config.get_data_store()` -- a real repo
     path with no environment-variable override -- when a caller doesn't
     pass one explicitly. `pipeline.run()` never passes it for either
     call, so every real (non-`dry_run`) `run()` call in this file --
@@ -71,7 +71,7 @@ def _own_data_dir_default(tmp_path_factory, monkeypatch):
     `data/` directory on every test run. Mirrors this file's own
     `_scrape_cache_dir` fixture and `tests/test_export.py`'s identical
     `_own_data_dir_default` fixture, for the same underlying reason.
-    `writer` and `ads` each import `get_own_data_dir` separately, so
+    `writer` and `ads` each import `get_data_store` separately, so
     both must be patched.
 
     Returns `fake_own_data_dir` so tests can assert against the actual
@@ -79,8 +79,8 @@ def _own_data_dir_default(tmp_path_factory, monkeypatch):
     this fixture's own throwaway directory.
     """
     fake_own_data_dir = tmp_path_factory.mktemp("own-data-default")
-    monkeypatch.setattr(writer, "get_own_data_dir", lambda: fake_own_data_dir)
-    monkeypatch.setattr(ads, "get_own_data_dir", lambda: fake_own_data_dir)
+    monkeypatch.setenv("PARTNER_SCRAPE_DATA_DIR", str(fake_own_data_dir))
+    monkeypatch.setenv("PARTNER_SCRAPE_DATA_DIR", str(fake_own_data_dir))
     return fake_own_data_dir
 
 

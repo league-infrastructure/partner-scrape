@@ -5,8 +5,8 @@ the write target from `{site_dir}/public/data/` to `own_data_dir`).
 
 Every test passes an explicit `log_dir`/`partners_path`/`site_dir`/
 `own_data_dir` under `tmp_path` -- no test relies on
-`config.get_scrape_cache_dir()` / `config.get_site_dir()` /
-`config.get_own_data_dir()`'s real defaults or writes to a real
+`config.get_scrape_cache_store()` / `config.get_site_dir()` /
+`config.get_data_store()`'s real defaults or writes to a real
 checkout, matching `partner_log.py`'s and `writer.py`'s own test-file
 convention.
 
@@ -30,6 +30,7 @@ from partner_scrape.export import partner_log, publish, writer
 from partner_scrape.export.partner_log import _to_log_dict, published_content_hash
 from partner_scrape.export.publish import _to_opportunity, project
 from partner_scrape.export.writer import SITE_SCHEMA_FIELDS, export_opportunities
+from partner_scrape.storage import LocalStore
 from partner_scrape.normalize.run import WORK_BASED_LEARNING_TYPE, Opportunity
 
 FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures"
@@ -38,7 +39,7 @@ PARTNERS_PATH = FIXTURES_DIR / "partners.json"
 
 @pytest.fixture(autouse=True)
 def _own_data_dir_default(tmp_path_factory, monkeypatch):
-    """Pin `writer.get_own_data_dir()`'s and `publish.get_own_data_dir()`'s
+    """Pin `writer.get_data_store()`'s and `publish.get_data_store()`'s
     resolution to a throwaway directory for every test in this file
     (sprint 020 ticket 003; sprint 025 ticket 007 added the `publish`
     half once `project()` gained its own `own_data_dir` default).
@@ -52,8 +53,8 @@ def _own_data_dir_default(tmp_path_factory, monkeypatch):
     than this repo's actual `data/` directory.
     """
     fake_own_data_dir = tmp_path_factory.mktemp("own-data-default")
-    monkeypatch.setattr(writer, "get_own_data_dir", lambda: fake_own_data_dir)
-    monkeypatch.setattr(publish, "get_own_data_dir", lambda: fake_own_data_dir)
+    monkeypatch.setenv("PARTNER_SCRAPE_DATA_DIR", str(fake_own_data_dir))
+    monkeypatch.setenv("PARTNER_SCRAPE_DATA_DIR", str(fake_own_data_dir))
 
 
 def _opportunity(
@@ -704,11 +705,13 @@ class TestConfigDefaults:
 
         assert (own_data_dir / "partners.json").exists()
 
-    def test_omitted_log_dir_resolves_via_config_get_scrape_cache_dir(self, tmp_path, monkeypatch):
+    def test_omitted_log_dir_resolves_via_config_get_scrape_cache_store(self, tmp_path, monkeypatch):
         fake_cache_dir = tmp_path / "cache"
         site_dir = _site_dir(tmp_path)
         own_data_dir = _own_data_dir(tmp_path)
-        monkeypatch.setattr(publish, "get_scrape_cache_dir", lambda: fake_cache_dir)
+        monkeypatch.setattr(
+            partner_log, "get_scrape_cache_store", lambda: LocalStore(fake_cache_dir)
+        )
 
         # No log written under fake_cache_dir/partner_log -- every
         # partner should still publish with empty event lists rather
@@ -750,9 +753,9 @@ class TestConfigDefaults:
             }
         ]
 
-    def test_omitted_own_data_dir_resolves_via_config_get_own_data_dir(self, tmp_path, monkeypatch):
+    def test_omitted_own_data_dir_resolves_via_config_get_data_store(self, tmp_path, monkeypatch):
         """New in sprint 025 ticket 007: `project()`'s `own_data_dir`
-        parameter defaults to `config.get_own_data_dir()`, matching
+        parameter defaults to `config.get_data_store()`, matching
         every other export function's convention -- this overrides the
         file's autouse `_own_data_dir_default` pin with its own fake
         path to prove the default resolution itself, not just that it's
@@ -760,7 +763,7 @@ class TestConfigDefaults:
         fake_own_data_dir = tmp_path / "own-data-via-config"
         site_dir = _site_dir(tmp_path)
         log_dir = tmp_path / "partner_log"
-        monkeypatch.setattr(publish, "get_own_data_dir", lambda: fake_own_data_dir)
+        monkeypatch.setenv("PARTNER_SCRAPE_DATA_DIR", str(fake_own_data_dir))
 
         project(site_dir=site_dir, log_dir=log_dir, partners_path=PARTNERS_PATH, today=date(2026, 7, 19))
 

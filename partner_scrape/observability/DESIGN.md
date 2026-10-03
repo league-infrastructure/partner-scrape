@@ -38,7 +38,7 @@ Four modules in a clean data-in / data-out chain:
   `Opportunity` list into one `SourceYield` per source: `found`, `dated`, `new`,
   `dropped`, `slugs`, `previous_found`, `delta`, `error`, `zero_yield`, `cliff`.
 - `render.py` · `render_text(report) -> str` — plain-text rendering for the console.
-- `snapshot.py` · `load_snapshot(path)` / `save_snapshot(path, report)` — persistence of
+- `snapshot.py` · `load_snapshot(store)` / `save_snapshot(store, report)` (a `Store` plus key `yield-history.json`; sprint 038) — persistence of
   the run's per-source slug sets and counts to `yield-history.json`, which becomes the
   next run's `previous_snapshot`.
 
@@ -74,7 +74,7 @@ run's region counts under one reserved key so the next run can compute a delta �
 - **A reporter failure must never break a run.** `pipeline.run()` defaults to a no-op
   reporter and the CLI's `--no-report` restores that. Observability is a lens on the run,
   not a participant in it.
-- **`--dry-run` writes no snapshot.** `yield-history.json` is site-dir-adjacent output and
+- **`--dry-run` writes no snapshot.** `yield-history.json` is data-Store output and
   follows the same "nothing written" promise as the export.
 - **Deliberate non-goal — no remediation.** This subsystem reports; it does not disable
   sources, retry them, or alter the export. Acting on an alert is a human decision.
@@ -152,8 +152,8 @@ first-run behavior an unseen source already gets.
   `.sources`.
 - **`render_text(report) -> str`** — console rendering, alert lines first; sprint 033 adds
   a "Regional coverage" section after the per-source detail.
-- **`load_snapshot(path) -> dict`** (returns `{}` for a missing file) and
-  **`save_snapshot(path, report)`** — sprint 033: `save_snapshot` additionally writes this
+- **`load_snapshot(store, key="yield-history.json") -> dict`** (returns `{}` for a missing key) and
+  **`save_snapshot(store, report, key="yield-history.json")`** — sprint 033: `save_snapshot` additionally writes this
   run's region counts under the reserved `"__regions__"` key; `load_snapshot` is unchanged
   (it already returns whatever top-level keys are present).
 
@@ -177,8 +177,9 @@ first-run behavior an unseen source already gets.
   trips the cliff threshold.
 - Nothing tracks enrichment quality — how many records fell back to keyword taxonomy
   because the LLM call failed — even though that is a directly observable degradation.
-- `yield-history.json` lives beside the site's data files, which makes it easy to find
-  but means it is per-checkout state that `export/mirror.py` deliberately refuses to copy.
+- `yield-history.json` lives in the data Store beside the other published files (sprint 038: the
+  bucket's `data/` prefix, not git). It holds only the latest snapshot; bucket versioning on the
+  data prefix replaces the git history that used to preserve earlier ones.
 - **(Sprint 033)** No `cliff`-style percentage-drop alert exists for regions, only a
   `zero` flag (a region that had opportunities last run and has none this run). Regional
   counts are small (single digits for several regions per issue 34's own numbers), where a

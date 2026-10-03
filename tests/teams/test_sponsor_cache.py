@@ -13,6 +13,7 @@ import json
 from pathlib import Path
 
 from partner_scrape.teams.sponsor_cache import _CACHE_SCHEMA_VERSION, SponsorCache, content_hash
+from partner_scrape.storage import LocalStore
 from partner_scrape.teams.sponsor_llm import SponsorExtractionResult
 
 SPONSOR_CACHE_MODULE_PATH = Path(__file__).resolve().parents[2] / "partner_scrape" / "teams" / "sponsor_cache.py"
@@ -122,7 +123,7 @@ class TestSponsorCacheRoundTrip:
         cache = SponsorCache(cache_dir=tmp_path)
         cache.store("ftc-12499", ["Qualcomm"], SponsorExtractionResult(confirmed_sponsors=["Qualcomm"]))
 
-        written = list((tmp_path / "sponsor_extraction_cache").glob("*.json"))
+        written = list((tmp_path / "sponsors").glob("*.json"))
         assert len(written) == 1
 
 
@@ -132,7 +133,8 @@ class TestSponsorCacheDefaultsToConfiguredCacheDir:
 
         cache = SponsorCache()
 
-        assert cache.cache_dir == tmp_path
+        assert isinstance(cache._store, LocalStore)
+        assert cache._store.root == tmp_path
 
 
 # ---------------------------------------------------------------------
@@ -145,7 +147,7 @@ class TestCacheSchemaVersion:
         cache = SponsorCache(cache_dir=tmp_path)
         cache.store("ftc-12499", ["Qualcomm"], SponsorExtractionResult(confirmed_sponsors=["Qualcomm"]))
 
-        [written] = list((tmp_path / "sponsor_extraction_cache").glob("*.json"))
+        [written] = list((tmp_path / "sponsors").glob("*.json"))
         entry = json.loads(written.read_text())
 
         assert entry["schema_version"] == _CACHE_SCHEMA_VERSION
@@ -155,7 +157,7 @@ class TestCacheSchemaVersion:
         candidates = ["Qualcomm"]
         cache.store("ftc-12499", candidates, SponsorExtractionResult(confirmed_sponsors=["Qualcomm"]))
 
-        [written] = list((tmp_path / "sponsor_extraction_cache").glob("*.json"))
+        [written] = list((tmp_path / "sponsors").glob("*.json"))
         entry = json.loads(written.read_text())
         del entry["schema_version"]
         written.write_text(json.dumps(entry))
@@ -167,7 +169,7 @@ class TestCacheSchemaVersion:
         candidates = ["Qualcomm"]
         cache.store("ftc-12499", candidates, SponsorExtractionResult(confirmed_sponsors=["Qualcomm"]))
 
-        [written] = list((tmp_path / "sponsor_extraction_cache").glob("*.json"))
+        [written] = list((tmp_path / "sponsors").glob("*.json"))
         entry = json.loads(written.read_text())
         entry["schema_version"] = _CACHE_SCHEMA_VERSION - 1
         written.write_text(json.dumps(entry))
@@ -179,7 +181,7 @@ class TestCacheSchemaVersion:
         candidates = ["Qualcomm"]
 
         cache.store("ftc-12499", candidates, SponsorExtractionResult(confirmed_sponsors=[]))
-        [written] = list((tmp_path / "sponsor_extraction_cache").glob("*.json"))
+        [written] = list((tmp_path / "sponsors").glob("*.json"))
         entry = json.loads(written.read_text())
         del entry["schema_version"]
         written.write_text(json.dumps(entry))

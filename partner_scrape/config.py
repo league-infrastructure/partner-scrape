@@ -31,6 +31,11 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
+from typing import Any
+from urllib.parse import urlparse
+
+from partner_scrape.storage import Store, store_from_location
+
 
 class CredentialError(RuntimeError):
     """A structural, recurring credential failure -- a missing/invalid
@@ -56,15 +61,35 @@ class CredentialError(RuntimeError):
 #: so it must be set explicitly.
 SCRAPE_CACHE_DIR_ENV_VAR = "SCRAPE_CACHE_DIR"
 
-#: Environment variable that overrides the default sibling site-repo
-#: path used by Site Export (ticket 007).
+#: Environment variable holding the root *location* for the data output
+#: (``sites.json``, images, ...): a local directory or ``s3://bucket/
+#: prefix``. Defaults to :data:`DEFAULT_DATA_LOCATION` (the bucket); a
+#: local directory only when set explicitly.
+PARTNER_SCRAPE_DATA_DIR_ENV_VAR = "PARTNER_SCRAPE_DATA_DIR"
+
+#: Default cache location -- the DigitalOcean Spaces bucket. A local
+#: ``SCRAPE_CACHE_DIR`` is used only when set explicitly.
+DEFAULT_CACHE_LOCATION = "s3://jtl-stem-ecosystem-scrape/cache"
+
+#: Default data-output location -- the DigitalOcean Spaces bucket.
+DEFAULT_DATA_LOCATION = "s3://jtl-stem-ecosystem-scrape/data"
+
+#: DigitalOcean Spaces settings, used only when an ``s3://`` location is
+#: in effect. The endpoint is the *region* endpoint, e.g.
+#: ``https://sfo3.digitaloceanspaces.com`` -- never bucket-qualified.
+DO_SPACES_ENDPOINT_ENV_VAR = "DO_SPACES_ENDPOINT"
+DO_SPACES_ACCESS_KEY_ENV_VAR = "DO_SPACES_ACCESS_KEY"
+DO_SPACES_SECRET_KEY_ENV_VAR = "DO_SPACES_SECRET_KEY"
+
+#: Environment variable naming the site checkout used by Site Export
+#: (defaults to the current working directory when unset).
 SITE_DIR_ENV_VAR = "SITE_DIR"
 
 #: Environment variable holding the Bearer token for the League's own
 #: sync.jtlapp.net query API (``leaguesync`` adapter). Assembled by
 #: dotconfig into ``config/prod/secrets.env`` -- there is no sane
 #: default, so it must be set explicitly, matching
-#: ``get_scrape_cache_dir``'s convention.
+#: the other getters' convention.
 LEAGUESYNC_API_KEY_ENV_VAR = "LEAGUESYNC_API_KEY"
 
 #: Environment variable overriding the ``leaguesync`` adapter's API base
@@ -112,7 +137,7 @@ DEFAULT_TBA_URL = "https://www.thebluealliance.com"
 #: Both ``pipeline.run()`` and ``teams.pipeline.run_teams()`` isolate
 #: this source's failure the same way they isolate any other source's
 #: (a missing/invalid key degrades that one source, never aborts the
-#: run) -- see ``registry/sources/robotevents-vex-sd.toml``'s own
+#: run) -- see ``registry_data/sources/robotevents-vex-sd.toml``'s own
 #: comment for the provisioning steps (account -> API key -> SOPS
 #: ``secrets.env`` entry).
 ROBOTEVENTS_API_KEY_ENV_VAR = "ROBOTEVENTS_KEY"
@@ -137,82 +162,108 @@ ROBOTEVENTS_URL_ENV_VAR = "ROBOTEVENTS_URL"
 #: is provisioned.
 DEFAULT_ROBOTEVENTS_URL = "https://www.robotevents.com/api/v2"
 
-# This package's own directory, e.g. .../partner-scrape/partner_scrape
+# This package's own directory, e.g. .../site-packages/partner_scrape
 _PACKAGE_DIR = Path(__file__).resolve().parent
 
-# The repo root, e.g. .../partner-scrape
-_REPO_ROOT = _PACKAGE_DIR.parent
+#: Environment variable overriding the registry location (sources/,
+#: hubs/, candidates/, ads/ subdirectories). A *location string*: a
+#: local directory today. Loaders resolve it only through
+#: :func:`get_registry_dir`, so a later phase can accept an ``s3://``
+#: location without touching callers; no bucket loading exists yet.
+PARTNER_SCRAPE_REGISTRY_DIR_ENV_VAR = "PARTNER_SCRAPE_REGISTRY_DIR"
 
-#: The repo root, e.g. ``.../partner-scrape`` -- a public alias for
-#: :data:`_REPO_ROOT`. Exists so other modules needing a root-relative
-#: default (e.g. the root-level ``registry/`` data directory) can import
-#: one shared constant instead of each recomputing their own
-#: ``Path(__file__).resolve()`` parent-chain (sprint 025 ticket 001).
-REPO_ROOT = _REPO_ROOT
+#: The registry bundled in the package (and the wheel) -- the default
+#: when :data:`PARTNER_SCRAPE_REGISTRY_DIR_ENV_VAR` is unset. Read-only
+#: by convention: when installed this lives in site-packages.
+BUNDLED_REGISTRY_DIR = _PACKAGE_DIR / "registry_data"
 
-#: Default location of the sibling ``stem-ecosystem`` site repo -- the
-#: real production site codebase, checked out next to this repo
-#: (``../stem-ecosystem`` relative to the repo root) for local
-#: interactive runs, and used by default in CI. Overridable via
-#: ``SITE_DIR``.
-DEFAULT_SITE_DIR = _REPO_ROOT.parent / "stem-ecosystem"
-
-#: Default location of this repo's own pipeline-output publish target
-#: (``data/`` at the repo root). Not overridable via environment
-#: variable -- the location is fixed by design (see sprint 020's
-#: Design Rationale and Open Questions).
-DEFAULT_OWN_DATA_DIR = _REPO_ROOT / "data"
+#: Environment variable overriding where the local SQLite event store
+#: (``store/event_store.py``) lives.
+EVENT_STORE_PATH_ENV_VAR = "PARTNER_SCRAPE_EVENT_DB"
 
 
-def get_scrape_cache_dir() -> Path:
-    """Return the configured scrape cache directory.
+def get_registry_dir() -> Path:
+    """Return the registry root: ``PARTNER_SCRAPE_REGISTRY_DIR`` if set,
+    else the bundled :data:`BUNDLED_REGISTRY_DIR`.
 
-    Reads ``SCRAPE_CACHE_DIR`` from the environment on every call (no
-    caching), so tests can monkeypatch ``os.environ`` freely.
-
-    Raises:
-        RuntimeError: if ``SCRAPE_CACHE_DIR`` is not set. There is no
-            safe default for a directory that can hold tens of GB of
-            cached HTML -- callers must configure it explicitly (see
-            ``config/prod/public.env``).
+    Reads the environment on every call. Only local paths are supported;
+    an ``s3://`` (or other URL) value raises ``RuntimeError`` rather than
+    being silently treated as a relative path.
     """
-    value = os.environ.get(SCRAPE_CACHE_DIR_ENV_VAR)
+    value = os.environ.get(PARTNER_SCRAPE_REGISTRY_DIR_ENV_VAR)
     if not value:
+        return BUNDLED_REGISTRY_DIR
+    if "://" in value:
         raise RuntimeError(
-            f"{SCRAPE_CACHE_DIR_ENV_VAR} is not set. Configure it via the "
-            "assembled .env (see config/prod/public.env) before running "
-            "the engine."
+            f"{PARTNER_SCRAPE_REGISTRY_DIR_ENV_VAR}={value!r}: remote registry "
+            "locations are not supported yet; use a local directory."
         )
     return Path(value)
 
 
-def get_site_dir() -> Path:
-    """Return the path to the sibling ``stem-ecosystem`` site repo.
+def get_sources_dir() -> Path:
+    """Source Registry directory (``<registry>/sources``)."""
+    return get_registry_dir() / "sources"
 
-    Reads ``SITE_DIR`` from the environment if set; otherwise returns
-    ``DEFAULT_SITE_DIR`` (``../stem-ecosystem`` relative to this repo).
+
+def get_hubs_dir() -> Path:
+    """Hub Registry directory (``<registry>/hubs``)."""
+    return get_registry_dir() / "hubs"
+
+
+def get_ads_dir() -> Path:
+    """Ad Registry directory (``<registry>/ads``)."""
+    return get_registry_dir() / "ads"
+
+
+def get_candidates_dir() -> Path:
+    """Candidate Review Queue directory to *read* (``<registry>/candidates``)."""
+    return get_registry_dir() / "candidates"
+
+
+def get_candidates_write_dir() -> Path:
+    """Directory ``discover-candidates`` *writes* new stubs into.
+
+    The bundled registry is read-only when installed (site-packages), so
+    the writer never targets it by default: with a registry override set
+    it is ``<override>/candidates``; otherwise ``./candidates`` under the
+    current working directory.
+    """
+    if os.environ.get(PARTNER_SCRAPE_REGISTRY_DIR_ENV_VAR):
+        return get_candidates_dir()
+    return Path.cwd() / "candidates"
+
+
+def get_event_store_path() -> Path:
+    """Local path of the SQLite event store (always local, never a bucket).
+
+    ``PARTNER_SCRAPE_EVENT_DB`` if set; otherwise
+    ``~/.partner-scrape/events.db`` -- deliberately independent of
+    ``SCRAPE_CACHE_DIR``, which may be an ``s3://`` location.
+    """
+    value = os.environ.get(EVENT_STORE_PATH_ENV_VAR)
+    if value:
+        return Path(value)
+    return Path.home() / ".partner-scrape" / "events.db"
+
+
+def get_site_dir() -> Path:
+    """Return the site checkout directory.
+
+    ``SITE_DIR`` from the environment if set; otherwise the current
+    working directory (there is no sibling-checkout default).
     """
     value = os.environ.get(SITE_DIR_ENV_VAR)
     if value:
         return Path(value)
-    return DEFAULT_SITE_DIR
-
-
-def get_own_data_dir() -> Path:
-    """Return the path to this repo's own pipeline-output publish target.
-
-    Always returns ``DEFAULT_OWN_DATA_DIR`` (``<repo_root>/data``) --
-    unlike ``get_site_dir()``, this has no environment variable override;
-    the location is fixed by design.
-    """
-    return DEFAULT_OWN_DATA_DIR
+    return Path.cwd()
 
 
 def get_leaguesync_api_key() -> str:
     """Return the Bearer token for sync.jtlapp.net, stripped of quotes.
 
     Reads ``LEAGUESYNC_API_KEY`` from the environment on every call (no
-    caching), matching ``get_scrape_cache_dir``'s pattern so tests can
+    caching), matching the other getters' pattern so tests can
     monkeypatch ``os.environ`` freely. The value observed in the
     assembled ``.env`` carries surrounding single quotes (dotconfig's
     round-trip of a SOPS-decrypted secret, e.g. ``LEAGUESYNC_API_KEY='abc123'``)
@@ -222,7 +273,7 @@ def get_leaguesync_api_key() -> str:
     Raises:
         RuntimeError: if ``LEAGUESYNC_API_KEY`` is not set (or is empty
             after stripping) -- there is no safe default for an API
-            credential, matching ``get_scrape_cache_dir``'s convention.
+            credential, matching ``get_tba_api_key``'s convention.
     """
     value = os.environ.get(LEAGUESYNC_API_KEY_ENV_VAR)
     if value is not None:
@@ -346,3 +397,133 @@ def get_robotevents_url() -> str:
     if value:
         return value
     return DEFAULT_ROBOTEVENTS_URL
+
+
+# -- Bucket-backed storage (sprint 038 ticket 002) --------------------------
+
+#: The shared boto3 client and the settings it was built from. Rebuilt
+#: when the settings change so tests can monkeypatch the environment.
+_s3_client: tuple[tuple[str, str, str], Any] | None = None
+
+
+def _clean(value: str | None) -> str:
+    """Strip whitespace and the quotes dotconfig leaves on secrets."""
+    return (value or "").strip().strip("'\"").strip()
+
+
+def _validate_endpoint(endpoint: str) -> str:
+    """Return ``endpoint`` if it is a region endpoint, else raise.
+
+    A DigitalOcean Spaces endpoint must be ``https://<region>.
+    digitaloceanspaces.com``; a bucket-qualified one
+    (``https://<bucket>.<region>.digitaloceanspaces.com``) makes boto
+    address the bucket twice, so it is rejected with the fix spelled out.
+    """
+    parsed = urlparse(endpoint)
+    host = parsed.hostname or ""
+    labels = host.split(".")
+    if parsed.scheme not in ("http", "https") or not host:
+        raise RuntimeError(
+            f"{DO_SPACES_ENDPOINT_ENV_VAR}={endpoint!r} is not a URL. Set it "
+            "to the region endpoint, e.g. https://sfo3.digitaloceanspaces.com."
+        )
+    qualified = host.endswith(".digitaloceanspaces.com") and len(labels) != 3
+    if qualified or parsed.path.strip("/"):
+        region = labels[-3] if len(labels) >= 3 else "<region>"
+        raise RuntimeError(
+            f"{DO_SPACES_ENDPOINT_ENV_VAR}={endpoint!r} must be the region "
+            "endpoint, not bucket-qualified or carrying a path. Use "
+            f"https://{region}.digitaloceanspaces.com (the bucket name belongs "
+            "in the s3:// location, not the endpoint)."
+        )
+    return endpoint
+
+
+def _get_s3_client() -> Any:
+    """Return the shared boto3 S3 client, building it on first use.
+
+    Raises:
+        RuntimeError: if any ``DO_SPACES_*`` variable is missing (all
+            missing names are listed) or the endpoint is bucket-qualified.
+    """
+    global _s3_client
+    values = {
+        name: _clean(os.environ.get(name))
+        for name in (
+            DO_SPACES_ENDPOINT_ENV_VAR,
+            DO_SPACES_ACCESS_KEY_ENV_VAR,
+            DO_SPACES_SECRET_KEY_ENV_VAR,
+        )
+    }
+    missing = [name for name, value in values.items() if not value]
+    if missing:
+        raise RuntimeError(
+            f"{', '.join(missing)} not set, but an s3:// location is in "
+            "effect. Set them in the assembled .env (see "
+            "config/prod/public.env and secrets.env), or point "
+            f"{SCRAPE_CACHE_DIR_ENV_VAR}/{PARTNER_SCRAPE_DATA_DIR_ENV_VAR} at "
+            "a local directory to run without the bucket."
+        )
+    endpoint = _validate_endpoint(values[DO_SPACES_ENDPOINT_ENV_VAR])
+    settings = (
+        endpoint,
+        values[DO_SPACES_ACCESS_KEY_ENV_VAR],
+        values[DO_SPACES_SECRET_KEY_ENV_VAR],
+    )
+    if _s3_client is None or _s3_client[0] != settings:
+        import boto3  # deferred: --help and local-only runs never need it
+
+        host = urlparse(endpoint).hostname or ""
+        region = host.split(".")[0] if host.endswith(".digitaloceanspaces.com") else "us-east-1"
+        client = boto3.client(
+            "s3",
+            endpoint_url=endpoint,
+            aws_access_key_id=settings[1],
+            aws_secret_access_key=settings[2],
+            region_name=region,
+        )
+        _s3_client = (settings, client)
+    return _s3_client[1]
+
+
+def _store_for(env_var: str, default: str) -> Store:
+    """Build the Store for ``env_var``'s location (default: the bucket)."""
+    location = os.environ.get(env_var) or default
+    client = _get_s3_client() if location.startswith("s3://") else None
+    return store_from_location(location, client)
+
+
+def get_scrape_cache_store() -> Store:
+    """Return the Store holding the fetch/LLM caches.
+
+    ``SCRAPE_CACHE_DIR`` is a local path or ``s3://bucket/prefix``;
+    unset, it defaults to :data:`DEFAULT_CACHE_LOCATION`. Credentials
+    are required only when the effective location is ``s3://``.
+    """
+    return _store_for(SCRAPE_CACHE_DIR_ENV_VAR, DEFAULT_CACHE_LOCATION)
+
+
+def get_data_store() -> Store:
+    """Return the Store receiving pipeline output (``sites.json``, ...).
+
+    ``PARTNER_SCRAPE_DATA_DIR`` is a local path or ``s3://bucket/prefix``;
+    unset, it defaults to :data:`DEFAULT_DATA_LOCATION`.
+    """
+    return _store_for(PARTNER_SCRAPE_DATA_DIR_ENV_VAR, DEFAULT_DATA_LOCATION)
+
+
+def resolve_data_store(location: str | Path | Store | None = None) -> Store:
+    """Return the data Store for an export function's ``own_data_dir``
+    argument.
+
+    ``None`` -> :func:`get_data_store`; an existing :class:`Store` is
+    used as-is; a path or ``s3://`` string builds the matching Store
+    (tests pass ``tmp_path``).
+    """
+    if location is None:
+        return get_data_store()
+    if isinstance(location, (str, Path)):
+        text = str(location)
+        client = _get_s3_client() if text.startswith("s3://") else None
+        return store_from_location(location, client)
+    return location

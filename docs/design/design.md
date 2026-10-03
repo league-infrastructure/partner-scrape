@@ -44,6 +44,7 @@ system is built around that expectation — a partial result ships, and the gap 
 | `tests/` | 905 fixture-based tests, one module per source module. No network. |
 | `docs/` | This design set, plus `overview.md`, `specification.md`, `usecases.md`, and deployment notes. |
 | `clasi/`, `.clasi/` | CLASI SE process artifacts — sprints, issues, reflections. |
+| `data/` | **Not tracked.** A gitignored local scratch copy of the published output; the real output lives in the Spaces bucket (see §5 Storage). `docs/data-schema.md` is the schema doc's source of truth. |
 | `site/` | This repo's own checkout of the Astro site (the beta the team develops against). |
 | `dev/` | Pre-existing exploration scripts. Not a dependency of the package; logic was ported, not imported. |
 | `config/` | Layered dotconfig `.env` files, assembled before the process starts. |
@@ -51,7 +52,7 @@ system is built around that expectation — a partial result ships, and the gap 
 ## 3. The pipeline
 
 ```
-registry/       load_active_sources()            ~100 TOML files, one per organization
+registry_data/  load_active_sources()            ~100 TOML files, one per organization (bundled in the package)
    ↓
 adapters/       ThreadPoolExecutor(8):           per-source error isolation —
                 discover → fetch → extract       a failure is logged and skipped
@@ -110,7 +111,7 @@ previously-cached event; the already-built headless-fetch path (`fetch/headless.
 `pipeline.py`'s `fetch_strategy` wiring, both unchanged since sprint 003/005) gets
 turned on in more environments and flagged for more sources purely via registry data
 and CI/dependency configuration; roughly 33 previously zero-adapter-yield sources in
-`registry/sources/` get a triage disposition, including two corrected
+`registry_data/sources/` get a triage disposition, including two corrected
 mis-registrations; and roughly 20 new sources are registered against the three
 existing structured-API adapters (`tec_rest`, `ical`, `localist`) with zero new
 adapter code. None of this moves the pipeline diagram in §3 above, changes which
@@ -150,7 +151,7 @@ graph LR
     end
     EX["extract/<br/>(reduce_html_to_text --<br/>new export, sprint 028)"]
     FE["fetch/<br/>(Fetcher)"]
-    RG["registry/<br/>(SourceConfig)"]
+    RG["registry_data/<br/>(SourceConfig)"]
     MD["model.py<br/>(Event)"]
 
     PP -->|"reduce raw.body<br/>before hash/LLM call (NEW)"| EX
@@ -329,6 +330,21 @@ project-wide contract.
 
 **Configuration is data; environment is read in one place.** Onboarding an organization is
 a new TOML file. `config.py` is the only module that touches `os.environ`.
+
+**Storage (sprint 038).** Persistent state lives in a DigitalOcean Spaces bucket
+(`jtl-stem-ecosystem-scrape`), reached only through the `storage.Store` protocol
+(`LocalStore` / `S3Store`); `config.get_scrape_cache_store()` and `get_data_store()` are
+the factories, defaulting to the `cache/` and `data/` prefixes (`SCRAPE_CACHE_DIR` /
+`PARTNER_SCRAPE_DATA_DIR` accept a local path or `s3://` URL). The published output
+(`opportunities.json`, `teams.json`, `partners/…`, `images/…`, `yield-history.json`, …) is
+**not committed to git**: `data/` is gitignored and consumers read the bucket. History
+that git used to provide — notably `yield-history.json`, which holds only the *latest*
+snapshot — is provided by **bucket versioning** on the data prefix (an operator setting,
+not code). The schema doc is authored at `docs/data-schema.md`, bundled into the wheel,
+and published to `data/SCHEMA.md` in the data Store at the end of every non-dry-run
+`partner-scrape` run. The CLI is `partner-scrape [--source X …]` for the main pipeline
+(there is no `run` subcommand) plus the `teams`, `directory`, and `discover-candidates`
+subcommands.
 
 **Datetimes are naive San Diego wall clock,** enforced by a single coercion in
 `normalize.run()`.

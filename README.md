@@ -13,28 +13,61 @@ a data-driven Source Registry, politely fetches and caches each source,
 ingests events via a per-source adapter (The Events Calendar REST,
 WordPress REST, or iCal/RSS), normalizes and deduplicates them into the
 site's opportunity schema, and exports current+upcoming opportunities
-into the sibling `stem-ecosystem` repo.
+into the data bucket that the `stem-ecosystem` site reads.
 
 ### Install
 
+Python 3.11+. From a checkout:
+
 ```bash
 uv sync
+uv run partner-scrape --help
+
+# Optional: headless-browser fetching (Playwright) needs the extra AND a browser:
+uv sync --extra headless
+uv run playwright install chromium
 ```
+
+Or build a wheel and install it elsewhere (this package is not published to
+any package index):
+
+```bash
+uv build
+pipx install dist/partner_scrape-*.whl      # or: pip install dist/partner_scrape-*.whl
+partner-scrape --help
+```
+
+The wheel bundles the seed source registry, the in-package data files and
+`data-schema.md`. A real run still needs the bucket credentials below;
+without them, point `SCRAPE_CACHE_DIR` and `PARTNER_SCRAPE_DATA_DIR` at local
+directories. A run also reads `partners.json` from a `stem-ecosystem`
+checkout (`--site-dir` / `SITE_DIR`, default the current directory, expected
+at `src/data/partners.json`).
 
 ### Configure
 
-Set `SCRAPE_CACHE_DIR` (required -- no safe default; see
-`partner_scrape/config.py`) before running for real. `SITE_DIR` is
-optional and defaults to `../stem-ecosystem`.
+Cache and published data live in the DigitalOcean Spaces bucket
+`jtl-stem-ecosystem-scrape` (`cache/` and `data/` prefixes) -- **not in
+git**. For a real run set `DO_SPACES_ENDPOINT`, `DO_SPACES_ACCESS_KEY` and
+`DO_SPACES_SECRET_KEY` (assembled into `.env` by `dotconfig load prod`;
+`set -a; source .env; set +a`). To work locally instead, point
+`SCRAPE_CACHE_DIR` and `PARTNER_SCRAPE_DATA_DIR` at local directories (a
+path or an `s3://bucket/prefix` URL; see `partner_scrape/config.py`).
+`SITE_DIR` is optional and defaults to the current directory (there is no
+sibling checkout default). The seed registry ships inside the package
+(`partner_scrape/registry_data/`); set `PARTNER_SCRAPE_REGISTRY_DIR` to a
+local directory (with `sources/`, `hubs/`, `candidates/`, `ads/`) to
+override it.
 
 ```bash
 export SCRAPE_CACHE_DIR=/path/to/a/cache/dir
+export PARTNER_SCRAPE_DATA_DIR=/path/to/a/data/dir
 ```
 
 ### Run
 
 ```bash
-# Full run against the real seed registry and ../stem-ecosystem
+# Full run against the bundled seed registry and $SITE_DIR (or the CWD)
 uv run partner-scrape
 
 # See the payload that would be written, without touching disk
@@ -51,6 +84,14 @@ uv run partner-scrape --limit 3
 uv run python -m partner_scrape.cli --dry-run
 ```
 
+The CLI is `partner-scrape [flags]` -- there is no `run` subcommand;
+`--source X` scopes the main run to one source. Other pipelines are the
+`teams`, `directory` and `discover-candidates` subcommands.
+
+Output schema: `docs/data-schema.md` (bundled in the wheel and published
+to `data/SCHEMA.md` in the data bucket at the end of every non-dry-run).
+`data/` is gitignored; a local `data/` is only a scratch copy.
+
 One source's adapter failing (network error, malformed response, ...) is
 logged and skipped -- it never aborts the rest of the run.
 
@@ -60,9 +101,16 @@ logged and skipped -- it never aborts the rest of the run.
 uv run pytest
 ```
 
+The built wheel is smoke-tested end to end (fresh venv outside the repo,
+`--help` with no credentials, one dry run with local temp cache/data dirs):
+
+```bash
+python dev/wheel_smoke_test.py
+```
+
 Every test runs against recorded fixtures under `tests/fixtures/` --
 no network access, no `ANTHROPIC_API_KEY` usage, no writes to the real
-`../stem-ecosystem` checkout.
+bucket or any `stem-ecosystem` checkout.
 
 ### Beta preview
 

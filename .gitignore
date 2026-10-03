@@ -1,5 +1,6 @@
-# Mirrored site data (large, generated at runtime)
-data/mirrors/
+# Generated pipeline output: lives in the Spaces bucket (data/ prefix), not git.
+# A local data/ is a developer's scratch copy.
+/data/
 
 # Python
 __pycache__/

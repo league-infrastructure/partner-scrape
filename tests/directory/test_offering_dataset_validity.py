@@ -18,7 +18,7 @@ that regresses one of these is caught directly.
 `TestRelatedPartnerIdJoinIntegrity` drives the real, committed roster
 through `directory.pipeline.run_directory()`'s own join-integrity guard
 (`_check_related_partner_references()`) with `dry_run=True` (so no
-export ever runs -- no `get_own_data_dir()` pinning needed, matching
+export ever runs -- no `get_data_store()` pinning needed, matching
 this sprint's own test hazard warning) and a fixture `site_dir` whose
 `partners.json` carries exactly the `related_partner_id` values the
 real roster references, parsed straight out of `offerings.toml`'s own
@@ -223,7 +223,7 @@ class TestRelatedPartnerIdJoinIntegrity:
         (data_dir / "partners.json").write_text(json.dumps(partners), encoding="utf-8")
 
         # dry_run=True: computes the would-be-written payload without
-        # touching disk -- no get_own_data_dir() pinning needed, since
+        # touching disk -- no get_data_store() pinning needed, since
         # export_directory() is never reached. source= isolates the
         # offering source alone so Places'/Clubs' own related_partner_id
         # references (which this fixture partners.json does not carry)

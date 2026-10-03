@@ -36,16 +36,18 @@ existing partner join, so keying by the resolved partner has no
 "which source owns this copy" ambiguity to answer.
 
 ```
-{log_dir}/<partner-slug>/partner.json          -- curated partner record,
+partner_log/<partner-slug>/partner.json          -- curated partner record,
                                                    refreshed every call
-{log_dir}/<partner-slug>/opportunities.jsonl   -- append-only; one JSON
+partner_log/<partner-slug>/opportunities.jsonl   -- append-only; one JSON
                                                    object per line
 ```
 
-`log_dir` defaults to `{config.get_scrape_cache_dir()}/partner_log/` --
-no new environment variable, matching `enrich/cache.py`'s and
-`store/event_store.py`'s existing "subdirectory of `SCRAPE_CACHE_DIR`"
-convention.
+These are keys in the scrape-cache `Store` (`config.get_scrape_cache_store()`),
+so they live under `SCRAPE_CACHE_DIR`'s `partner_log/` prefix -- local or
+bucket. An explicit `log_dir` instead roots a `LocalStore` at that
+directory with the `partner_log/` prefix dropped (`<slug>/partner.json`).
+`resolve_log_store()` is the single place that decides this; `publish.py`
+reuses it.
 
 ## Append/skip identity
 
@@ -61,7 +63,7 @@ read time).
 ## Crash safety
 
 Both files are written with a temp-file-then-`os.replace` swap
-(`_atomic_write_text`), never opened in-place for writing. A run that
+(`storage.LocalStore.write_bytes`), never opened in-place for writing. A run that
 crashes mid-write leaves the *previous* complete file untouched -- there
 is no window where a reader (or the next `record()` call) can observe a
 half-written `partner.json` or `opportunities.jsonl`. Because the
@@ -82,22 +84,19 @@ from __future__ import annotations
 
 import hashlib
 import json
-import os
-import tempfile
 from collections import defaultdict
 from dataclasses import fields
 from pathlib import Path
 from typing import Any, Iterable
 
-from partner_scrape.config import get_scrape_cache_dir, get_site_dir
+from partner_scrape.config import get_scrape_cache_store, get_site_dir
 from partner_scrape.model import slugify
 from partner_scrape.normalize.partners import find_partner, load_partners
 from partner_scrape.normalize.run import Opportunity
+from partner_scrape.storage import LocalStore, Store
 
-#: Subdirectory of `SCRAPE_CACHE_DIR` the accumulation store lives
-#: under. No new environment variable -- matches `enrich/cache.py`'s
-#: `_CACHE_SUBDIR` and `store/event_store.py`'s default-under-cache-dir
-#: convention.
+#: Key prefix (folder in the scrape-cache Store) the accumulation store
+#: lives under. Single source of truth: `export/publish.py` imports it.
 _LOG_SUBDIR = "partner_log"
 
 #: Filename of each partner's append-only opportunities log, relative
@@ -151,8 +150,16 @@ def published_content_hash(opportunity: Opportunity) -> str:
     return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
 
 
-def _default_log_dir() -> Path:
-    return get_scrape_cache_dir() / _LOG_SUBDIR
+def resolve_log_store(log_dir: str | Path | None) -> tuple[Store, str]:
+    """Return ``(store, key_prefix)`` for the partner log.
+
+    An explicit ``log_dir`` is a local directory (``LocalStore``, empty
+    prefix). ``None`` means the configured scrape-cache Store under the
+    ``partner_log/`` prefix.
+    """
+    if log_dir is not None:
+        return LocalStore(Path(log_dir)), ""
+    return get_scrape_cache_store(), f"{_LOG_SUBDIR}/"
 
 
 def _default_partners_path() -> Path:
@@ -178,10 +185,10 @@ def _to_log_dict(opportunity: Opportunity, content_hash: str) -> dict[str, Any]:
     return record
 
 
-def _read_existing_lines(jsonl_path: Path) -> list[str]:
-    if not jsonl_path.exists():
+def _read_existing_lines(store: Store, key: str) -> list[str]:
+    text = store.read_text(key)
+    if text is None:
         return []
-    text = jsonl_path.read_text(encoding="utf-8")
     return [line for line in text.splitlines() if line.strip()]
 
 
@@ -191,37 +198,6 @@ def _existing_keys(lines: list[str]) -> set[tuple[str, str]]:
         entry = json.loads(line)
         keys.add((entry["slug"], entry["content_hash"]))
     return keys
-
-
-def _atomic_write_text(path: Path, text: str) -> None:
-    """Write `text` to `path` so a crash mid-write can never leave a
-    half-written file: the new content lands in a sibling temp file
-    first, fsynced, and only then atomically swapped over the target
-    via `os.replace` (atomic on POSIX and Windows within one
-    filesystem). Raises `RuntimeError` on any `OSError` -- matches
-    `writer.py`'s/`ads.py`'s loud-failure philosophy for an unwritable
-    target rather than silently skipping the write.
-    """
-    try:
-        path.parent.mkdir(parents=True, exist_ok=True)
-        fd, tmp_name = tempfile.mkstemp(
-            dir=str(path.parent), prefix=f".{path.name}.", suffix=".tmp"
-        )
-        try:
-            with os.fdopen(fd, "w", encoding="utf-8") as f:
-                f.write(text)
-                f.flush()
-                os.fsync(f.fileno())
-            os.replace(tmp_name, path)
-        except BaseException:
-            if os.path.exists(tmp_name):
-                os.remove(tmp_name)
-            raise
-    except OSError as exc:
-        raise RuntimeError(
-            f"Cannot write partner log entry to {path}: {exc}. Check that "
-            f"its parent directory is writable."
-        ) from exc
 
 
 def record(
@@ -248,7 +224,8 @@ def record(
         opportunities: this run's normalized `Opportunity` records
             (typically `normalize.run()`'s output).
         log_dir: root of the per-partner accumulation store. Defaults to
-            `config.get_scrape_cache_dir() / "partner_log"` when `None`.
+            the scrape-cache Store's `partner_log/` prefix when `None`
+            (see `resolve_log_store`).
             Tests should always pass an explicit `tmp_path` here, never
             rely on the default.
         partners_path: path to the site's curated `partners.json`.
@@ -262,9 +239,9 @@ def record(
 
     Raises:
         RuntimeError: a partner's directory under `log_dir` cannot be
-            created or written to. Never silently skips accumulation.
+            created or written to (local store). Never silently skips accumulation.
     """
-    resolved_log_dir = Path(log_dir) if log_dir is not None else _default_log_dir()
+    log_store, prefix = resolve_log_store(log_dir)
     resolved_partners_path = (
         Path(partners_path) if partners_path is not None else _default_partners_path()
     )
@@ -275,8 +252,8 @@ def record(
         by_slug[slugify(opportunity.partner_name)].append(opportunity)
 
     for partner_slug, opps in by_slug.items():
-        partner_dir = resolved_log_dir / partner_slug
-        jsonl_path = partner_dir / _JSONL_FILENAME
+        partner_prefix = f"{prefix}{partner_slug}/"
+        jsonl_key = f"{partner_prefix}{_JSONL_FILENAME}"
 
         # No match in the curated roster -> keep the org name, leave
         # `id` unset (`find_partner`'s existing non-fatal convention,
@@ -287,7 +264,7 @@ def record(
             dict(curated) if curated is not None else {"id": opps[0].partner_id, "name": opps[0].partner_name}
         )
 
-        existing_lines = _read_existing_lines(jsonl_path)
+        existing_lines = _read_existing_lines(log_store, jsonl_key)
         existing_keys = _existing_keys(existing_lines)
 
         new_lines = list(existing_lines)
@@ -308,9 +285,9 @@ def record(
         if dry_run:
             continue
 
-        _atomic_write_text(
-            partner_dir / _PARTNER_JSON_FILENAME,
+        log_store.write_text(
+            f"{partner_prefix}{_PARTNER_JSON_FILENAME}",
             json.dumps(partner_record, indent=1, ensure_ascii=False, sort_keys=True),
         )
         if appended:
-            _atomic_write_text(jsonl_path, "\n".join(new_lines) + "\n")
+            log_store.write_text(jsonl_key, "\n".join(new_lines) + "\n")

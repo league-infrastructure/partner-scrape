@@ -5,7 +5,7 @@ dev/ is a standalone-script directory (no __init__.py, never imported
 by runtime code -- see the script's own docstring), so it is loaded
 here via importlib rather than a normal package import. Every test
 builds its own fixture data directory under tmp_path -- never against
-the real repo data/ tree (see the get_own_data_dir() hazard noted in
+the real repo data/ tree (see the data-location hazard noted in
 sprint 037's ticket 001).
 """
 
@@ -17,6 +17,8 @@ import sys
 from pathlib import Path
 
 import pytest
+
+from partner_scrape.storage import LocalStore
 
 _MODULE_PATH = Path(__file__).resolve().parent.parent.parent / "dev" / "backfill_missing_images.py"
 _spec = importlib.util.spec_from_file_location("backfill_missing_images", _MODULE_PATH)
@@ -60,7 +62,7 @@ def test_prune_dry_run_reports_without_deleting(tmp_path: Path) -> None:
     data_dir = _make_data_dir(tmp_path)
     images_dir = data_dir / "images" / "opportunities"
 
-    orphaned = backfill_missing_images.prune(data_dir, dry_run=True)
+    orphaned = backfill_missing_images.prune(LocalStore(data_dir), dry_run=True)
 
     assert orphaned == ["orphan-1.jpg", "orphan-2.jpg"]
     # Nothing was actually deleted.
@@ -76,7 +78,7 @@ def test_prune_deletes_exactly_the_orphaned_set(tmp_path: Path) -> None:
     data_dir = _make_data_dir(tmp_path)
     images_dir = data_dir / "images" / "opportunities"
 
-    orphaned = backfill_missing_images.prune(data_dir, dry_run=False)
+    orphaned = backfill_missing_images.prune(LocalStore(data_dir), dry_run=False)
 
     assert orphaned == ["orphan-1.jpg", "orphan-2.jpg"]
     remaining = {p.name for p in images_dir.glob("*")}
@@ -90,7 +92,7 @@ def test_prune_with_nothing_orphaned_deletes_nothing(tmp_path: Path) -> None:
     (images_dir / "orphan-1.jpg").unlink()
     (images_dir / "orphan-2.jpg").unlink()
 
-    orphaned = backfill_missing_images.prune(data_dir, dry_run=False)
+    orphaned = backfill_missing_images.prune(LocalStore(data_dir), dry_run=False)
 
     assert orphaned == []
     assert {p.name for p in images_dir.glob("*")} == {"opp-ref.jpg", "partner-ref.jpg"}
@@ -103,7 +105,7 @@ def test_check_only_default_unaffected_by_prune_flag(tmp_path: Path) -> None:
     """
     data_dir = _make_data_dir(tmp_path)
 
-    missing_partners, missing_opportunities = backfill_missing_images.check(data_dir, heading="Before:")
+    missing_partners, missing_opportunities = backfill_missing_images.check(LocalStore(data_dir), heading="Before:")
 
     assert missing_partners == set()
     assert missing_opportunities == set()
@@ -113,7 +115,7 @@ def test_check_reports_missing_when_referenced_file_absent(tmp_path: Path) -> No
     data_dir = _make_data_dir(tmp_path)
     (data_dir / "images" / "opportunities" / "opp-ref.jpg").unlink()
 
-    missing_partners, missing_opportunities = backfill_missing_images.check(data_dir, heading="Before:")
+    missing_partners, missing_opportunities = backfill_missing_images.check(LocalStore(data_dir), heading="Before:")
 
     assert missing_partners == set()
     assert missing_opportunities == {"opp-ref.jpg"}

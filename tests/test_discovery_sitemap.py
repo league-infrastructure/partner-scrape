@@ -112,7 +112,7 @@ def _cache_dir(tmp_path, monkeypatch):
 
 
 def _write_snapshot(tmp_path: Path, lastmods: dict[str, str]) -> None:
-    snapshot_path = tmp_path / "sitemap_snapshots" / "fixture_org.json"
+    snapshot_path = tmp_path / "sitemaps" / "fixture_org.json"
     snapshot_path.parent.mkdir(parents=True, exist_ok=True)
     snapshot_path.write_text(json.dumps(lastmods))
 
@@ -273,7 +273,7 @@ class TestMalformedSitemap:
 
     def test_malformed_sitemap_leaves_existing_snapshot_untouched(self, tmp_path):
         _write_snapshot(tmp_path, CURRENT_LASTMODS)
-        snapshot_path = tmp_path / "sitemap_snapshots" / "fixture_org.json"
+        snapshot_path = tmp_path / "sitemaps" / "fixture_org.json"
         before = snapshot_path.read_text()
         fetcher = self._all_malformed()
 
@@ -340,7 +340,7 @@ class TestRoundTrip:
 
         discover_changed_urls(_source(), fetcher)
 
-        snapshot_path = tmp_path / "sitemap_snapshots" / "fixture_org.json"
+        snapshot_path = tmp_path / "sitemaps" / "fixture_org.json"
         assert json.loads(snapshot_path.read_text()) == CURRENT_LASTMODS
 
 

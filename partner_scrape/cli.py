@@ -43,15 +43,21 @@ import logging
 import sys
 from pathlib import Path
 
-from partner_scrape.config import get_own_data_dir, get_site_dir
+from partner_scrape.config import get_data_store, get_site_dir
 from partner_scrape.export import publish
+from partner_scrape.export.schema_doc import publish_schema_doc
 from partner_scrape.enrich.cache import EnrichmentCache
 from partner_scrape.enrich.enricher import LLMEnricher
 from partner_scrape.enrich.llm_client import AnthropicLLMClient
 from partner_scrape.fetch import PoliteFetcher
 from partner_scrape.observability.render import render_text
 from partner_scrape.observability.reporter import YieldReporter
-from partner_scrape.observability.snapshot import load_snapshot, save_snapshot
+from partner_scrape.observability.snapshot import (
+    YIELD_HISTORY_KEY,
+    load_snapshot,
+    save_snapshot,
+)
+from partner_scrape.storage import LocalStore, Store
 
 # `pipeline` must be imported before `discovery.candidate_pipeline` below
 # -- not just style. `pipeline`'s own first import is `partner_scrape.
@@ -91,7 +97,7 @@ def _build_parser() -> argparse.ArgumentParser:
         default=None,
         help=(
             "Source Registry directory to load sources from (default: "
-            "the real seed registry under registry/sources/)."
+            "the bundled registry, or $PARTNER_SCRAPE_REGISTRY_DIR/sources)."
         ),
     )
     parser.add_argument(
@@ -100,7 +106,7 @@ def _build_parser() -> argparse.ArgumentParser:
         default=None,
         help=(
             "Sibling stem-ecosystem checkout to read partners.json from "
-            "(default: ../stem-ecosystem, or $SITE_DIR). Read-only as of "
+            "(default: $SITE_DIR, else the current directory). Read-only as of "
             "sprint 025 -- opportunities.json/scrape-meta.json/images are "
             "written to partner-scrape's own data/ directory, never here."
         ),
@@ -143,9 +149,9 @@ def _build_parser() -> argparse.ArgumentParser:
         metavar="PATH",
         help=(
             "Path to the per-source yield-history snapshot JSON file "
-            "(default: {own-data-dir}/yield-history.json -- this repo's "
-            "own data/ directory per Config.get_own_data_dir(), not "
-            "--site-dir). Ignored when --no-report is given."
+            "(default: yield-history.json in the data Store -- "
+            "config.get_data_store(), not --site-dir). Ignored when "
+            "--no-report is given."
         ),
     )
     parser.add_argument(
@@ -198,8 +204,8 @@ def _add_discover_candidates_subcommand(subparsers: argparse._SubParsersAction) 
         type=Path,
         default=None,
         help=(
-            "Hub Registry directory to load hubs from (default: the real "
-            "seed hub registry under registry/hubs/)."
+            "Hub Registry directory to load hubs from (default: the "
+            "bundled hub registry, or $PARTNER_SCRAPE_REGISTRY_DIR/hubs)."
         ),
     )
     parser.add_argument(
@@ -208,7 +214,8 @@ def _add_discover_candidates_subcommand(subparsers: argparse._SubParsersAction) 
         default=None,
         help=(
             "Candidate Review Queue directory to write stub TOML files "
-            "into (default: registry/candidates/)."
+            "into (default: $PARTNER_SCRAPE_REGISTRY_DIR/candidates if set, "
+            "else ./candidates -- never the read-only bundled copy)."
         ),
     )
     parser.add_argument(
@@ -217,8 +224,8 @@ def _add_discover_candidates_subcommand(subparsers: argparse._SubParsersAction) 
         default=None,
         help=(
             "Source Registry directory Hub Scan's dedup check reads "
-            "against (default: the real seed registry under "
-            "registry/sources/). Mirrors the `run` "
+            "against (default: the "
+            "bundled registry, or $PARTNER_SCRAPE_REGISTRY_DIR/sources). Mirrors the `run` "
             "command's own --registry-dir."
         ),
     )
@@ -346,7 +353,7 @@ def _add_directory_subcommand(subparsers: argparse._SubParsersAction) -> None:
         help=(
             "Sibling stem-ecosystem checkout to read partners.json from, "
             "for the related-partner-reference join-integrity check only "
-            "(default: ../stem-ecosystem, or $SITE_DIR) -- same default "
+            "(default: $SITE_DIR, else the current directory) -- same default "
             "as the `run` command's --site-dir. Read-only: places.json/ "
             "clubs.json/offerings.json are always written to "
             "partner-scrape's own data/ directory, never here."
@@ -518,12 +525,13 @@ def main(argv: list[str] | None = None) -> int:
     # tests and any local usage that doesn't want yield-history.json
     # read or written at all.
     yield_reporter: YieldReporter | None = None
-    yield_history_path: Path | None = None
+    yield_history_store: Store | None = None
+    yield_history_key = YIELD_HISTORY_KEY
     previous_snapshot: dict[str, object] = {}
     if not args.no_report:
         # Ticket 006 (sprint 025): the snapshot read (here) and the
         # snapshot write (below, at the single save_snapshot() call)
-        # share one default location -- own_data_dir/yield-history.json
+        # share one default location -- the data Store's yield-history.json
         # -- not {site-dir}/src/data/yield-history.json. Sprint 020
         # ticket 007 added a second, independent own_data_dir write
         # alongside the site-dir one and the site-dir *read* stayed
@@ -532,12 +540,12 @@ def main(argv: list[str] | None = None) -> int:
         # would freeze every future found/dropped delta computation
         # against a permanently stale snapshot -- see this ticket's
         # file for the full reasoning.
-        yield_history_path = (
-            args.yield_history
-            if args.yield_history is not None
-            else get_own_data_dir() / "yield-history.json"
-        )
-        previous_snapshot = load_snapshot(yield_history_path)
+        if args.yield_history is not None:
+            yield_history_store = LocalStore(args.yield_history.parent)
+            yield_history_key = args.yield_history.name
+        else:
+            yield_history_store = get_data_store()
+        previous_snapshot = load_snapshot(yield_history_store, yield_history_key)
         yield_reporter = YieldReporter()
 
     payload = run(
@@ -593,6 +601,15 @@ def main(argv: list[str] | None = None) -> int:
                 "investigate and re-run to refresh public/data/."
             )
 
+    # The schema doc travels with the data: publish it to the data
+    # Store's SCHEMA.md. A failure here is logged, never fatal -- the
+    # data itself was already written.
+    if not args.dry_run:
+        try:
+            publish_schema_doc()
+        except Exception:
+            logger.exception("could not publish SCHEMA.md to the data store")
+
     noun = "opportunity" if len(payload) == 1 else "opportunities"
     suffix = " (dry run -- nothing written)" if args.dry_run else ""
     print(f"partner-scrape: wrote {len(payload)} {noun}{suffix}.")
@@ -606,15 +623,15 @@ def main(argv: list[str] | None = None) -> int:
         # promise here, even though (as of ticket 006) it no longer
         # lives under --site-dir itself.
         if not args.dry_run:
-            assert yield_history_path is not None  # set above whenever yield_reporter is
+            assert yield_history_store is not None  # set above whenever yield_reporter is
             # Ticket 006 (sprint 025): a single save_snapshot() call, at
-            # yield_history_path -- which already defaults to
-            # own_data_dir/yield-history.json above, the same path
-            # load_snapshot() read from before run() executed. Sprint
+            # the same Store/key
+            # load_snapshot() read from before run() executed (the data
+            # Store's yield-history.json by default). Sprint
             # 020 ticket 007's second, independent own_data_dir write
             # (alongside a site-dir one) is gone: it's now redundant
             # with this single call.
-            save_snapshot(yield_history_path, report)
+            save_snapshot(yield_history_store, report, yield_history_key)
 
     # A publish.project() failure above is real (public/data/ is stale
     # until re-run) even though the rest of this run succeeded -- signal

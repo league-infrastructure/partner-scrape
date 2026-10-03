@@ -25,7 +25,7 @@ Sprint 017 first gave both files a sibling `stem-ecosystem` checkout
 write target (`{site_dir}/src/data/` and `{site_dir}/public/data/`),
 and sprint 020 (ticket 006, issue 60) added a third write target for
 each, into partner-scrape's own `own_data_dir`
-(`config.get_own_data_dir()`, `<repo_root>/data` by default) -- "one
+(the data Store, `config.get_data_store()`, by default) -- "one
 publish, three paths" per file. Sprint 025 (ticket 005, issue 21 /
 stop-writing-to-stem-ecosystem-checkout.md) removes both
 `stem-ecosystem`-checkout writes for both files: `export_directory()`
@@ -163,8 +163,7 @@ later file's failure never leaves an earlier one half written, and an
 earlier file's write failure raises before any later file is ever
 touched, the same "places before clubs" ordering principle as before,
 now extended to "places before clubs before offerings." `own_data_dir`
-is created automatically (`Path.mkdir(parents=True, exist_ok=True)`) if
-missing, matching `teams/export.py`'s identical "not guaranteed to
+is created automatically if it is a missing local directory, matching `teams/export.py`'s identical "not guaranteed to
 exist yet" rationale.
 """
 
@@ -176,7 +175,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
-from partner_scrape.config import get_own_data_dir
+from partner_scrape.config import resolve_data_store
+from partner_scrape.storage import Store
 from partner_scrape.directory.model import Club, Offering, Place
 
 #: The exact field set written to `places.json`, minus `sources` --
@@ -310,7 +310,7 @@ def export_directory(
     clubs: Iterable[Club] | None = None,
     offerings: Iterable[Offering] | None = None,
     dry_run: bool = False,
-    own_data_dir: str | Path | None = None,
+    own_data_dir: str | Path | Store | None = None,
 ) -> dict[str, Any]:
     """Serialize and write `places` into `places.json`, once, into
     partner-scrape's own `own_data_dir` (sprint 020 ticket 006; sole
@@ -353,10 +353,9 @@ def export_directory(
         dry_run: when `True`, compute and return the would-be-written
             payload without touching disk (`own_data_dir` is not
             written, for any of the three files).
-        own_data_dir: path to partner-scrape's own pipeline-output
-            directory. Defaults to `Config.get_own_data_dir()`
-            (`<repo_root>/data`) when `None`. This directory is created
-            automatically if missing. Tests should always pass an
+        own_data_dir: where to write -- a local path, `s3://` location, or
+            `Store`. Defaults to `config.get_data_store()` when `None`. A
+            local directory is created automatically if missing. Tests should always pass an
             explicit `tmp_path` here, never rely on the default.
 
     Returns:
@@ -379,8 +378,6 @@ def export_directory(
             `own_data_dir`-write contract, extended here to
             "places.json before clubs.json before offerings.json".
     """
-    resolved_own_data_dir = Path(own_data_dir) if own_data_dir is not None else get_own_data_dir()
-
     place_list = sorted(list(places), key=lambda p: (p.category, p.name))
 
     payload: dict[str, Any] = {
@@ -431,18 +428,16 @@ def export_directory(
     # Sprint 020 ticket 006 (issue 60), sole write target since sprint
     # 025 ticket 005 removed this function's two `stem-ecosystem`-
     # checkout writes: the payload, written into partner-scrape's own
-    # data/ directory. own_data_dir is created if missing. Only once
+    # data location (the data Store). Only once
     # this write succeeds is clubs.json touched at all (see the `if
     # club_payload is not None` block below).
-    own_places_path = resolved_own_data_dir / "places.json"
-
+    store = resolve_data_store(own_data_dir)
     try:
-        resolved_own_data_dir.mkdir(parents=True, exist_ok=True)
-        own_places_path.write_text(serialized, encoding="utf-8")
-    except OSError as exc:
+        store.write_text("places.json", serialized, "application/json")
+    except RuntimeError as exc:
         raise RuntimeError(
-            f"Cannot write places export to {resolved_own_data_dir}: {exc}. "
-            "Check that own_data_dir is writable."
+            f"Cannot write places export: {exc}. "
+            "Check that the data location is writable."
         ) from exc
 
     if club_payload is not None:
@@ -451,14 +446,12 @@ def export_directory(
         # Same sole write target as places.json above, reached only
         # once places.json's own write has succeeded -- mirrors
         # places.json's own ordering guarantee above.
-        own_clubs_path = resolved_own_data_dir / "clubs.json"
         try:
-            resolved_own_data_dir.mkdir(parents=True, exist_ok=True)
-            own_clubs_path.write_text(serialized_clubs, encoding="utf-8")
-        except OSError as exc:
+            store.write_text("clubs.json", serialized_clubs, "application/json")
+        except RuntimeError as exc:
             raise RuntimeError(
-                f"Cannot write clubs export to {resolved_own_data_dir}: {exc}. "
-                "Check that own_data_dir is writable."
+                f"Cannot write clubs export: {exc}. "
+                "Check that the data location is writable."
             ) from exc
 
     if offering_payload is not None:
@@ -475,14 +468,12 @@ def export_directory(
         # possibly empty, `clubs` list, but a caller driving
         # export_directory() directly is free to pass offerings without
         # clubs).
-        own_offerings_path = resolved_own_data_dir / "offerings.json"
         try:
-            resolved_own_data_dir.mkdir(parents=True, exist_ok=True)
-            own_offerings_path.write_text(serialized_offerings, encoding="utf-8")
-        except OSError as exc:
+            store.write_text("offerings.json", serialized_offerings, "application/json")
+        except RuntimeError as exc:
             raise RuntimeError(
-                f"Cannot write offerings export to {resolved_own_data_dir}: {exc}. "
-                "Check that own_data_dir is writable."
+                f"Cannot write offerings export: {exc}. "
+                "Check that the data location is writable."
             ) from exc
 
     return payload

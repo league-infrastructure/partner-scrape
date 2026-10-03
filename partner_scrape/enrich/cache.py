@@ -41,9 +41,10 @@ from typing import Any, Callable
 from partner_scrape import config
 from partner_scrape.enrich.llm_client import PROMPT_VERSION, EnrichmentResult
 from partner_scrape.model import Event, IdentityKey
+from partner_scrape.storage import LocalStore, Store
 
 #: Subdirectory of `SCRAPE_CACHE_DIR` entries are stored under.
-_CACHE_SUBDIR = "enrichment_cache"
+_CACHE_SUBDIR = "enrichment"
 
 #: Sprint 009 (issue 13). Bumped whenever `EnrichmentResult`'s shape
 #: changes. `content_hash` covers only an Event's *input* (enrichable)
@@ -95,8 +96,8 @@ def _identity_key_filename(identity_key: IdentityKey) -> str:
     return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
 
 
-def _entry_path(cache_dir: Path, identity_key: IdentityKey) -> Path:
-    return cache_dir / _CACHE_SUBDIR / f"{_identity_key_filename(identity_key)}.json"
+def _entry_key(identity_key: IdentityKey) -> str:
+    return f"{_CACHE_SUBDIR}/{_identity_key_filename(identity_key)}.json"
 
 
 def _result_to_jsonable(result: EnrichmentResult) -> dict[str, Any]:
@@ -128,8 +129,8 @@ class EnrichmentCache:
     """Persisted `identity_key -> (content_hash, EnrichmentResult, enriched_at)` map.
 
     One JSON file per Event `identity_key()` under
-    `{cache_dir}/enrichment_cache/`. `cache_dir` defaults to
-    `config.get_scrape_cache_dir()` when omitted -- tests always pass an
+    `enrichment/` in the scrape-cache Store: `cache_dir` (wrapped in a
+    `LocalStore`) when given, else `config.get_scrape_cache_store()` -- tests always pass an
     explicit `tmp_path` (this module's own tests, and ticket 005's
     `LLMEnricher` tests, never touch the real configured cache
     directory).
@@ -140,7 +141,9 @@ class EnrichmentCache:
         cache_dir: Path | None = None,
         clock: Callable[[], datetime] = lambda: datetime.now(timezone.utc),
     ) -> None:
-        self.cache_dir = cache_dir if cache_dir is not None else config.get_scrape_cache_dir()
+        self._store: Store = (
+            LocalStore(cache_dir) if cache_dir is not None else config.get_scrape_cache_store()
+        )
         self._clock = clock
 
     def lookup(self, event: Event) -> EnrichmentResult | None:
@@ -149,11 +152,9 @@ class EnrichmentCache:
         (no cache entry yet, or the Event's enrichable content changed
         since it was cached).
         """
-        path = _entry_path(self.cache_dir, event.identity_key())
-        if not path.exists():
+        entry = self._store.read_json(_entry_key(event.identity_key()))
+        if entry is None:
             return None
-        with open(path, encoding="utf-8") as f:
-            entry = json.load(f)
         if entry.get("schema_version") != _CACHE_SCHEMA_VERSION:
             # Missing key (pre-sprint-009 entry) or a stale version --
             # both are a miss, not a deserialization error. Forces
@@ -175,8 +176,6 @@ class EnrichmentCache:
 
     def store(self, event: Event, result: EnrichmentResult) -> None:
         """Write a fresh cache entry for ``event`` at its current content hash."""
-        path = _entry_path(self.cache_dir, event.identity_key())
-        path.parent.mkdir(parents=True, exist_ok=True)
         entry = {
             "schema_version": _CACHE_SCHEMA_VERSION,
             "prompt_version": PROMPT_VERSION,
@@ -184,5 +183,8 @@ class EnrichmentCache:
             "result": _result_to_jsonable(result),
             "enriched_at": self._clock().isoformat(),
         }
-        with open(path, "w", encoding="utf-8") as f:
-            json.dump(entry, f, indent=2)
+        # json.dumps defaults (ensure_ascii) + indent=2, byte-identical to
+        # the files written before the Store existed.
+        self._store.write_text(
+            _entry_key(event.identity_key()), json.dumps(entry, indent=2), "application/json"
+        )

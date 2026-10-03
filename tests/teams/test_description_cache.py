@@ -13,6 +13,7 @@ import json
 from pathlib import Path
 
 from partner_scrape.teams.description_cache import _CACHE_SCHEMA_VERSION, DescriptionCache, content_hash
+from partner_scrape.storage import LocalStore
 from partner_scrape.teams.description_llm import DescriptionExtractionResult
 
 DESCRIPTION_CACHE_MODULE_PATH = (
@@ -124,7 +125,7 @@ class TestDescriptionCacheRoundTrip:
         cache = DescriptionCache(cache_dir=tmp_path)
         cache.store("ftc-12499", "Some content.", DescriptionExtractionResult(description="A robotics team."))
 
-        written = list((tmp_path / "description_extraction_cache").glob("*.json"))
+        written = list((tmp_path / "descriptions").glob("*.json"))
         assert len(written) == 1
 
 
@@ -134,7 +135,8 @@ class TestDescriptionCacheDefaultsToConfiguredCacheDir:
 
         cache = DescriptionCache()
 
-        assert cache.cache_dir == tmp_path
+        assert isinstance(cache._store, LocalStore)
+        assert cache._store.root == tmp_path
 
 
 # ---------------------------------------------------------------------
@@ -147,7 +149,7 @@ class TestCacheSchemaVersion:
         cache = DescriptionCache(cache_dir=tmp_path)
         cache.store("ftc-12499", "Some content.", DescriptionExtractionResult(description="A robotics team."))
 
-        [written] = list((tmp_path / "description_extraction_cache").glob("*.json"))
+        [written] = list((tmp_path / "descriptions").glob("*.json"))
         entry = json.loads(written.read_text())
 
         assert entry["schema_version"] == _CACHE_SCHEMA_VERSION
@@ -157,7 +159,7 @@ class TestCacheSchemaVersion:
         content = "Some content."
         cache.store("ftc-12499", content, DescriptionExtractionResult(description="A robotics team."))
 
-        [written] = list((tmp_path / "description_extraction_cache").glob("*.json"))
+        [written] = list((tmp_path / "descriptions").glob("*.json"))
         entry = json.loads(written.read_text())
         del entry["schema_version"]
         written.write_text(json.dumps(entry))
@@ -169,7 +171,7 @@ class TestCacheSchemaVersion:
         content = "Some content."
         cache.store("ftc-12499", content, DescriptionExtractionResult(description="A robotics team."))
 
-        [written] = list((tmp_path / "description_extraction_cache").glob("*.json"))
+        [written] = list((tmp_path / "descriptions").glob("*.json"))
         entry = json.loads(written.read_text())
         entry["schema_version"] = _CACHE_SCHEMA_VERSION - 1
         written.write_text(json.dumps(entry))
@@ -181,7 +183,7 @@ class TestCacheSchemaVersion:
         content = "Some content."
 
         cache.store("ftc-12499", content, DescriptionExtractionResult(description=""))
-        [written] = list((tmp_path / "description_extraction_cache").glob("*.json"))
+        [written] = list((tmp_path / "descriptions").glob("*.json"))
         entry = json.loads(written.read_text())
         del entry["schema_version"]
         written.write_text(json.dumps(entry))

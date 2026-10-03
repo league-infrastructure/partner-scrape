@@ -20,9 +20,29 @@ workflow too. **Steps 2–5 below remain operator-only and are not yet
 performed** — the weekly cron will not succeed until an operator
 completes them.
 
+**(Sprint 038) Storage moved to a bucket.** The workflow no longer uses
+`actions/cache` and no longer commits `data/` back to git
+(`permissions: contents: read`). Cache and data live in the DigitalOcean
+Spaces bucket `jtl-stem-ecosystem-scrape` (`cache/` and `data/`
+prefixes, the built-in defaults). The job passes `DO_SPACES_ENDPOINT`
+(`https://sfo3.digitaloceanspaces.com`, region endpoint, not
+bucket-qualified) plus the `DO_SPACES_ACCESS_KEY` and
+`DO_SPACES_SECRET_KEY` secrets. Those keys are stored SOPS-encrypted in
+`config/prod/secrets.env`; they must also be pushed to GitHub Actions
+(step 3) — **operator task**, not done by the ticket that changed the
+workflow. The stem-ecosystem checkout is now read-only (it only supplies
+`partners.json`), so `SITE_REPO_TOKEN` needs only `contents: read`.
+
+**Known external blocker:** `SITE_REPO_TOKEN` will not be provisioned.
+partner-scrape and stem-ecosystem are being consolidated into one repo, so
+the token is not worth creating in the meantime. Until the consolidation, the
+"Verify SITE_REPO_TOKEN is configured" step will keep failing fast on every
+weekly run. The workflow itself is unchanged.
+
 No secret value is written anywhere in this repo, this document, or the
 workflow file itself — every secret is referenced only by name
-(`${{ secrets.ANTHROPIC_API_KEY }}` / `${{ secrets.SITE_REPO_TOKEN }}`)
+(`${{ secrets.ANTHROPIC_API_KEY }}` / `${{ secrets.SITE_REPO_TOKEN }}` /
+`${{ secrets.DO_SPACES_ACCESS_KEY }}` / `${{ secrets.DO_SPACES_SECRET_KEY }}`)
 inside the workflow, and lives encrypted at rest under
 `config/prod/secrets.env` (SOPS) until pushed to GitHub.
 
@@ -62,7 +82,7 @@ possible:
 
 - **Resource owner**: `league-infrastructure`
 - **Repository access**: only `stem-ecosystem` (not "all repositories")
-- **Permissions**: Repository → **Contents: Read and write**. Nothing
+- **Permissions**: Repository → **Contents: Read** (the checkout is read-only since sprint 038; write is no longer needed). Nothing
   else — no Actions, no Administration, no Metadata beyond the
   read-access GitHub requires implicitly.
 - **Expiration**: GitHub enforces a maximum for fine-grained PATs
@@ -74,16 +94,17 @@ Copy the token value — it is shown once.
 ## 3. Add the token to this repo's encrypted secrets, then push it
 
 ```bash
-# Add SITE_REPO_TOKEN=<the PAT value> to config/prod/secrets.env,
-# then re-encrypt in place:
+# Add SITE_REPO_TOKEN=<the PAT value> to the secrets section of .env
+# (after `dotconfig load prod`), then re-encrypt in place:
 dotconfig save -d prod
 
 # Dry-run first -- confirms which keys/repo would be affected without
 # actually writing anything to GitHub:
 dotconfig gh-push -d prod --actions --repo league-infrastructure/partner-scrape --dry-run
 
-# Then for real -- pushes both ANTHROPIC_API_KEY and SITE_REPO_TOKEN to
-# this repo's Actions secrets:
+# Then for real -- pushes ANTHROPIC_API_KEY, SITE_REPO_TOKEN,
+# DO_SPACES_ACCESS_KEY and DO_SPACES_SECRET_KEY to this repo's Actions
+# secrets:
 dotconfig gh-push -d prod --actions --repo league-infrastructure/partner-scrape
 ```
 
@@ -96,8 +117,8 @@ store, not into any file in this repo.
 ## 4. Verify both secrets are present
 
 In the GitHub UI: `partner-scrape` repo → **Settings → Secrets and
-variables → Actions** → confirm `ANTHROPIC_API_KEY` and
-`SITE_REPO_TOKEN` both appear (values are never shown, only names and
+variables → Actions** → confirm `ANTHROPIC_API_KEY`,
+`SITE_REPO_TOKEN`, `DO_SPACES_ACCESS_KEY` and `DO_SPACES_SECRET_KEY` all appear (values are never shown, only names and
 last-updated timestamps — that's expected).
 
 Equivalently, via `gh`:
@@ -106,7 +127,7 @@ Equivalently, via `gh`:
 gh api repos/league-infrastructure/partner-scrape/actions/secrets --jq '.secrets[].name'
 ```
 
-should list both names.
+should list all four names.
 
 ## 5. Trigger one manual run before trusting the cron
 
@@ -121,21 +142,9 @@ gh workflow run scheduled-run.yml --repo league-infrastructure/partner-scrape
 Confirm, for that run:
 
 - The job summary shows a per-source yield report.
-- `stem-ecosystem`'s `master` branch received a new commit (check its
-  commit history) — or, if the run happened to produce no data changes,
-  confirm the job log shows "No data changes this run -- nothing to
-  publish." instead.
-- If a commit landed, `stem-ecosystem`'s existing `deploy.yml` fired on
-  that push (check its own Actions tab) and the live site's "last
-  updated" stamp reflects the new run.
-- **(Sprint 020 ticket 008 / SUC-019)** `partner-scrape`'s own `master`
-  also received a new commit to `data/` (check its commit history) — or,
-  if the run happened to produce no data changes, the job log shows the
-  same "No data changes this run -- nothing to publish." message for
-  the "Publish refreshed data to partner-scrape's own data/" step. This
-  publish uses the workflow's own default `GITHUB_TOKEN`
-  (`permissions.contents: write`, scoped to `partner-scrape` only) — no
-  additional secret or operator setup is required for it.
+- The run wrote fresh objects under `s3://jtl-stem-ecosystem-scrape/data/`
+  and `cache/` (check the bucket listing / last-modified times). Nothing
+  is committed to either git repo by the workflow.
 
 Only after a real end-to-end run like this succeeds should the weekly
 cron be trusted to run unattended.

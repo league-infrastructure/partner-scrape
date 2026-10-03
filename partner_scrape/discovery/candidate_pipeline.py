@@ -88,7 +88,7 @@ def discover_candidates(
     1. For each hub, :func:`~partner_scrape.discovery.hub_scan.scan_hub`
        produces candidates already deduped against the Source Registry
        (``sources_dir`` overrides the directory checked; defaults to the
-       real ``registry/sources/`` when omitted -- see ``scan_hub``'s own
+       bundled registry (``config.get_sources_dir()``) when omitted -- see ``scan_hub``'s own
        docstring).
     2. When ``enricher`` is given, every remaining candidate's evidence
        is packaged into a synthetic ``Event`` (:func:`_synthetic_event`)
@@ -101,7 +101,7 @@ def discover_candidates(
        "(optional) relevance gate" framing.
     3. Every surviving candidate is written via
        ``registry.candidates.write_candidate`` (``candidates_dir``
-       overrides the real ``registry/candidates/`` directory). A
+       overrides ``config.get_candidates_write_dir()``). A
        candidate already present in the queue is silently skipped there,
        not duplicated.
 

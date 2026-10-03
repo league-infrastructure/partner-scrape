@@ -1,9 +1,9 @@
-"""On-disk response cache, conditional-GET header construction, and the
-``PoliteFetcher`` orchestrator.
+"""Response cache (over a ``Store``), conditional-GET header construction,
+and the ``PoliteFetcher`` orchestrator.
 
-Cache layout: one JSON file per URL, domain-sharded --
-``{cache_dir}/{domain}/{sha256(url)}.json`` -- containing
-``{url, status, headers, body, fetched_at}``. One file per URL keeps the
+Cache layout: one JSON object per URL, host-sharded --
+``hosts/{hostname}/{sha256(url)}.json`` in the scrape-cache Store --
+containing ``{url, status, headers, body, fetched_at}``. One file per URL keeps the
 format simple enough to inspect by hand, which matters for debugging a
 live source later (see sprint.md's Implementation Plan for this
 ticket).
@@ -29,6 +29,10 @@ from partner_scrape import config
 from partner_scrape.fetch.fetcher import DEFAULT_USER_AGENT, FetchResponse, Fetcher, UrllibFetcher
 from partner_scrape.fetch.robots import RobotsDisallowed, is_allowed
 from partner_scrape.fetch.throttle import DEFAULT_RATE_LIMIT_SECONDS, Throttle
+from partner_scrape.storage import LocalStore, Store
+
+#: Key prefix (folder in the scrape-cache Store) page cache entries live under.
+_HOSTS_SUBDIR = "hosts"
 
 
 def domain_of(url: str) -> str:
@@ -40,24 +44,35 @@ def _cache_key(url: str) -> str:
     return hashlib.sha256(url.encode("utf-8")).hexdigest()
 
 
+def _entry_key(url: str) -> str:
+    """The Store key a given URL's cache entry lives (or would live) at."""
+    return f"{_HOSTS_SUBDIR}/{domain_of(url)}/{_cache_key(url)}.json"
+
+
+def _as_store(cache: Store | Path) -> Store:
+    """Accept a ``Store`` or a local ``Path`` (wrapped in a ``LocalStore``)."""
+    return LocalStore(cache) if isinstance(cache, Path) else cache
+
+
 def cache_path(cache_dir: Path, url: str) -> Path:
-    """The on-disk path a given URL's cache entry lives (or would live) at."""
-    return cache_dir / domain_of(url) / f"{_cache_key(url)}.json"
+    """The local path a given URL's cache entry lives (or would live) at
+    when the cache is a local directory ``cache_dir``."""
+    return cache_dir / _entry_key(url)
 
 
-def read_cache_entry(cache_dir: Path, url: str) -> dict[str, Any] | None:
+def read_cache_entry(cache: Store | Path, url: str) -> dict[str, Any] | None:
     """Read ``url``'s cache entry, or ``None`` if it has never been cached."""
-    path = cache_path(cache_dir, url)
-    if not path.exists():
-        return None
-    with open(path, encoding="utf-8") as f:
-        return json.load(f)
+    return _as_store(cache).read_json(_entry_key(url))
 
 
-def write_cache_entry(cache_dir: Path, url: str, response: FetchResponse) -> None:
-    """Write ``response`` as ``url``'s cache entry, creating parent dirs."""
-    path = cache_path(cache_dir, url)
-    path.parent.mkdir(parents=True, exist_ok=True)
+def _write_entry(store: Store, url: str, entry: dict[str, Any]) -> None:
+    # json.dumps defaults (ensure_ascii) + indent=2, byte-identical to the
+    # files written before the Store existed.
+    store.write_text(_entry_key(url), json.dumps(entry, indent=2), "application/json")
+
+
+def write_cache_entry(cache: Store | Path, url: str, response: FetchResponse) -> None:
+    """Write ``response`` as ``url``'s cache entry."""
     entry = {
         "url": response.url,
         "status": response.status,
@@ -65,22 +80,21 @@ def write_cache_entry(cache_dir: Path, url: str, response: FetchResponse) -> Non
         "body": response.body,
         "fetched_at": response.fetched_at.isoformat(),
     }
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(entry, f, indent=2)
+    _write_entry(_as_store(cache), url, entry)
 
 
-def touch_fetch_timestamp(cache_dir: Path, url: str, fetched_at: datetime) -> None:
+def touch_fetch_timestamp(cache: Store | Path, url: str, fetched_at: datetime) -> None:
     """Bump only the cached entry's ``fetched_at`` -- used on a 304 reply,
     where the body/headers are still current and must not be rewritten.
 
     A no-op if ``url`` has no cache entry (nothing to touch).
     """
-    entry = read_cache_entry(cache_dir, url)
+    store = _as_store(cache)
+    entry = read_cache_entry(store, url)
     if entry is None:
         return
     entry["fetched_at"] = fetched_at.isoformat()
-    with open(cache_path(cache_dir, url), "w", encoding="utf-8") as f:
-        json.dump(entry, f, indent=2)
+    _write_entry(store, url, entry)
 
 
 def entry_to_response(entry: dict[str, Any]) -> FetchResponse:
@@ -130,7 +144,8 @@ class PoliteFetcher:
 
     Composes an injectable ``Fetcher`` (defaults to ``UrllibFetcher``)
     with a robots.txt permission check, a per-domain ``Throttle``, and
-    an on-disk conditional-GET cache under ``cache_dir``.
+    a conditional-GET cache over a ``Store``: ``cache_dir`` (wrapped in a
+    ``LocalStore``) when given, else ``config.get_scrape_cache_store()``.
 
     ``rate_limit_seconds`` and ``respect_robots`` are accepted per call
     as plain values rather than read from a ``SourceConfig`` here --
@@ -140,7 +155,7 @@ class PoliteFetcher:
     adapters) pull the values out of its ``acquisition_policy`` dict
     themselves.
 
-    ``cache_dir`` defaults to ``config.get_scrape_cache_dir()`` when
+    ``cache_dir`` defaults to ``config.get_scrape_cache_store()`` when
     omitted -- the "FETCH reads cache dir from CFG" edge in sprint.md's
     dependency diagram. Tests always pass ``cache_dir`` explicitly (a
     ``tmp_path``) or monkeypatch ``SCRAPE_CACHE_DIR`` first; neither
@@ -178,7 +193,9 @@ class PoliteFetcher:
         user_agent: str = DEFAULT_USER_AGENT,
         clock: Callable[[], datetime] = lambda: datetime.now(timezone.utc),
     ):
-        self.cache_dir = cache_dir if cache_dir is not None else config.get_scrape_cache_dir()
+        self.store: Store = (
+            LocalStore(cache_dir) if cache_dir is not None else config.get_scrape_cache_store()
+        )
         self.fetcher = fetcher or UrllibFetcher(user_agent=user_agent)
         self.throttle = throttle or Throttle()
         self.user_agent = user_agent
@@ -226,7 +243,7 @@ class PoliteFetcher:
         # call below, so unrelated domains' fetches stay fully
         # concurrent.
         with self._cache_lock:
-            cached_entry = read_cache_entry(self.cache_dir, url)
+            cached_entry = read_cache_entry(self.store, url)
         request_headers = {**conditional_headers(cached_entry), **(headers or {})}
 
         self.throttle.wait(domain_of(url), rate_limit_seconds)
@@ -235,7 +252,7 @@ class PoliteFetcher:
         if response.status == 304 and cached_entry is not None:
             fetched_at = self._clock()
             with self._cache_lock:
-                touch_fetch_timestamp(self.cache_dir, url, fetched_at)
+                touch_fetch_timestamp(self.store, url, fetched_at)
             reused = entry_to_response(cached_entry)
             reused.fetched_at = fetched_at
             return reused
@@ -243,7 +260,7 @@ class PoliteFetcher:
         if 200 <= response.status < 300:
             response.fetched_at = self._clock()
             with self._cache_lock:
-                write_cache_entry(self.cache_dir, url, response)
+                write_cache_entry(self.store, url, response)
             return response
 
         return response

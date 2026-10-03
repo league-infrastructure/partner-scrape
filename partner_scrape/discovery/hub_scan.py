@@ -171,7 +171,7 @@ def scan_hub(
     existing :class:`~partner_scrape.registry.schema.SourceConfig` is
     dropped, never returned. ``sources_dir`` overrides the registry
     directory checked (defaults to the real
-    ``registry.loader.DEFAULT_SOURCES_DIR`` when omitted) -- tests pass a
+    ``config.get_sources_dir()`` when omitted) -- tests pass a
     fixture directory.
 
     This function produces candidates only: it never filters by

@@ -14,15 +14,16 @@ import logging
 import tomllib
 from pathlib import Path
 
-from partner_scrape.config import REPO_ROOT
+from partner_scrape.config import BUNDLED_REGISTRY_DIR, get_sources_dir
 from partner_scrape.registry.schema import InvalidSourceConfig, SourceConfig
 
 logger = logging.getLogger(__name__)
 
-#: Default location of the Source Registry's per-organization TOML
-#: files: ``registry/sources/`` at the repo root (sibling to
-#: ``partner_scrape/``, not inside it -- see sprint 025 ticket 001).
-DEFAULT_SOURCES_DIR = REPO_ROOT / "registry" / "sources"
+#: The *bundled* Source Registry directory shipped in the package
+#: (``partner_scrape/registry_data/sources``). Callers omitting
+#: ``directory`` get :func:`partner_scrape.config.get_sources_dir`
+#: instead, which honours ``PARTNER_SCRAPE_REGISTRY_DIR``.
+DEFAULT_SOURCES_DIR = BUNDLED_REGISTRY_DIR / "sources"
 
 
 def load_sources(directory: Path | None = None) -> list[SourceConfig]:
@@ -39,10 +40,11 @@ def load_sources(directory: Path | None = None) -> list[SourceConfig]:
     directory's load.
 
     Args:
-        directory: defaults to :data:`DEFAULT_SOURCES_DIR` (the real
-            seed registry) when omitted.
+        directory: defaults to ``config.get_sources_dir()`` (the
+            bundled registry unless ``PARTNER_SCRAPE_REGISTRY_DIR`` is
+            set) when omitted.
     """
-    directory = directory or DEFAULT_SOURCES_DIR
+    directory = directory or get_sources_dir()
     sources: list[SourceConfig] = []
     for path in sorted(directory.glob("*.toml")):
         try:

@@ -31,9 +31,10 @@ from typing import Any
 
 from partner_scrape import config
 from partner_scrape.adapters.program_llm import ProgramExtractionResult
+from partner_scrape.storage import LocalStore, Store
 
 #: Subdirectory of ``SCRAPE_CACHE_DIR`` entries are stored under.
-_CACHE_SUBDIR = "program_extraction_cache"
+_CACHE_SUBDIR = "programs"
 
 #: Bumped whenever ``ProgramExtractionResult``'s shape changes, or when
 #: this cache's own on-disk entry shape changes. ``content_hash`` covers
@@ -66,18 +67,23 @@ def content_hash(body: str) -> str:
     return hashlib.sha256(body.encode("utf-8")).hexdigest()
 
 
-def _url_filename(url: str) -> str:
-    """Hash ``url`` into a filesystem-safe cache filename stem.
+def _entry_filename(url: str, profile: str) -> str:
+    """Hash ``(url, profile)`` into a filesystem-safe cache filename stem.
 
     URLs, like ``Event`` identity keys, can contain characters that are
     not safe to use as a filename directly -- mirrors ``enrich/cache.py``'s
-    ``_identity_key_filename`` convention.
+    ``_identity_key_filename`` convention. The extraction ``profile``
+    (``"program"``/``"competition"``/``"pd"``) is part of the key (sprint
+    038, issue 42): the same URL and body extracted under two profiles
+    are two distinct entries. There is deliberately no fallback read of
+    the pre-038 profile-less key; those entries simply miss once.
     """
-    return hashlib.sha256(url.encode("utf-8")).hexdigest()
+    canonical = f"{url}|{profile}"
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
 
 
-def _entry_path(cache_dir: Path, url: str) -> Path:
-    return cache_dir / _CACHE_SUBDIR / f"{_url_filename(url)}.json"
+def _entry_key(url: str, profile: str) -> str:
+    return f"{_CACHE_SUBDIR}/{_entry_filename(url, profile)}.json"
 
 
 def _result_to_jsonable(result: ProgramExtractionResult) -> dict[str, Any]:
@@ -99,27 +105,28 @@ def _result_from_jsonable(data: dict[str, Any]) -> ProgramExtractionResult:
 
 
 class ProgramExtractionCache:
-    """Persisted ``url -> (content_hash, ProgramExtractionResult)`` map.
+    """Persisted ``(url, profile) -> (content_hash, ProgramExtractionResult)`` map.
 
-    One JSON file per URL under ``{cache_dir}/program_extraction_cache/``.
-    ``cache_dir`` defaults to ``config.get_scrape_cache_dir()`` when
-    omitted -- tests always pass an explicit ``tmp_path``.
+    One JSON file per ``(url, profile)`` under ``programs/`` in the
+    scrape-cache Store: ``cache_dir`` (wrapped in a ``LocalStore``) when
+    given, else ``config.get_scrape_cache_store()`` -- tests always pass
+    an explicit ``tmp_path``.
     """
 
     def __init__(self, cache_dir: Path | None = None) -> None:
-        self.cache_dir = cache_dir if cache_dir is not None else config.get_scrape_cache_dir()
+        self._store: Store = (
+            LocalStore(cache_dir) if cache_dir is not None else config.get_scrape_cache_store()
+        )
 
-    def lookup(self, url: str, body: str) -> ProgramExtractionResult | None:
+    def lookup(self, url: str, body: str, profile: str = "program") -> ProgramExtractionResult | None:
         """Return the cached ``ProgramExtractionResult`` for ``url`` if its
         current content hash matches the cached entry's, else ``None``
         (no cache entry yet, or the page changed since it was last
         cached).
         """
-        path = _entry_path(self.cache_dir, url)
-        if not path.exists():
+        entry = self._store.read_json(_entry_key(url, profile))
+        if entry is None:
             return None
-        with open(path, encoding="utf-8") as f:
-            entry = json.load(f)
         if entry.get("schema_version") != _CACHE_SCHEMA_VERSION:
             # Missing key or a stale version -- both are a miss, not a
             # deserialization error. Forces exactly one re-extraction.
@@ -128,19 +135,22 @@ class ProgramExtractionCache:
             return None
         return _result_from_jsonable(entry["result"])
 
-    def store(self, url: str, body: str, result: ProgramExtractionResult) -> None:
+    def store(
+        self, url: str, body: str, result: ProgramExtractionResult, profile: str = "program"
+    ) -> None:
         """Write a fresh cache entry for ``url`` at its current content hash."""
-        path = _entry_path(self.cache_dir, url)
-        path.parent.mkdir(parents=True, exist_ok=True)
         entry = {
             "schema_version": _CACHE_SCHEMA_VERSION,
             "content_hash": content_hash(body),
             "result": _result_to_jsonable(result),
         }
-        with open(path, "w", encoding="utf-8") as f:
-            json.dump(entry, f, indent=2)
+        # json.dumps defaults (ensure_ascii) + indent=2, byte-identical to
+        # the files written before the Store existed.
+        self._store.write_text(_entry_key(url, profile), json.dumps(entry, indent=2), "application/json")
 
-    def lookup_many(self, url: str, body: str) -> list[ProgramExtractionResult] | None:
+    def lookup_many(
+        self, url: str, body: str, profile: str = "program"
+    ) -> list[ProgramExtractionResult] | None:
         """The list-valued counterpart to :meth:`lookup`, for
         ``program_page_multi`` sources (ticket 006 exception revision).
 
@@ -149,11 +159,9 @@ class ProgramExtractionCache:
         content hash -- identical miss conditions, applied to the
         list-shaped entry :meth:`store_many` writes.
         """
-        path = _entry_path(self.cache_dir, url)
-        if not path.exists():
+        entry = self._store.read_json(_entry_key(url, profile))
+        if entry is None:
             return None
-        with open(path, encoding="utf-8") as f:
-            entry = json.load(f)
         if entry.get("schema_version") != _CACHE_SCHEMA_VERSION:
             return None
         if entry.get("content_hash") != content_hash(body):
@@ -163,7 +171,13 @@ class ProgramExtractionCache:
             return None
         return [_result_from_jsonable(r) for r in results]
 
-    def store_many(self, url: str, body: str, results: list[ProgramExtractionResult]) -> None:
+    def store_many(
+        self,
+        url: str,
+        body: str,
+        results: list[ProgramExtractionResult],
+        profile: str = "program",
+    ) -> None:
         """The list-valued counterpart to :meth:`store`, for
         ``program_page_multi`` sources (ticket 006 exception revision).
 
@@ -173,12 +187,11 @@ class ProgramExtractionCache:
         source -- safe by construction, since a real URL is only ever
         registered as one adapter type.
         """
-        path = _entry_path(self.cache_dir, url)
-        path.parent.mkdir(parents=True, exist_ok=True)
         entry = {
             "schema_version": _CACHE_SCHEMA_VERSION,
             "content_hash": content_hash(body),
             "results": [_result_to_jsonable(r) for r in results],
         }
-        with open(path, "w", encoding="utf-8") as f:
-            json.dump(entry, f, indent=2)
+        # json.dumps defaults (ensure_ascii) + indent=2, byte-identical to
+        # the files written before the Store existed.
+        self._store.write_text(_entry_key(url, profile), json.dumps(entry, indent=2), "application/json")

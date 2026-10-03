@@ -46,7 +46,7 @@ from pathlib import Path
 from typing import Any, Callable, Protocol, Sequence
 
 from partner_scrape.adapters import run as run_adapter
-from partner_scrape.config import get_own_data_dir, get_site_dir
+from partner_scrape.config import get_data_store, get_site_dir
 from partner_scrape.export import (
     EventImageDownloader,
     export_ads,
@@ -337,18 +337,18 @@ def run(
 
     Args:
         registry_dir: Source Registry directory to load sources from.
-            Defaults to the real seed registry (`registry/sources/`) when
+            Defaults to the bundled registry (or `$PARTNER_SCRAPE_REGISTRY_DIR/sources`) when
             omitted -- see `registry.load_active_sources`.
         site_dir: sibling `stem-ecosystem` checkout to read from --
             specifically, `partners_path`'s default location (see below).
-            Defaults to `Config.get_site_dir()` (`../stem-ecosystem`, or
-            `$SITE_DIR`) when omitted. Read-only as of sprint 025 ticket
+            Defaults to `Config.get_site_dir()` (`$SITE_DIR`, else the
+            current directory) when omitted. Read-only as of sprint 025 ticket
             007: nothing this function does writes into `site_dir`.
             Tests should always pass an explicit `tmp_path`-based
             directory here.
         ads_dir: directory of hand-authored ad-config TOML files (Ad
             Content Export, sprint 005 ticket 005). Defaults to the real
-            seed ad registry (`registry/ads/`) when
+            bundled ad registry (or `$PARTNER_SCRAPE_REGISTRY_DIR/ads`) when
             omitted -- see `export.ads.load_ad_configs`. Tests that don't
             care about the exact seeded ad content may pass an explicit
             fixture directory here.
@@ -420,7 +420,7 @@ def run(
             (sprint 008 ticket 008, issue 19). Defaults to `None`, which
             makes `run()` construct a real
             `export.images.EventImageDownloader` writing into
-            `get_own_data_dir() / "images" / "opportunities"` (sprint 025
+            the data Store's `images/opportunities/` prefix (sprint 025
             ticket 002; before that ticket, this wrote into
             `{resolved site_dir}/public/images/opportunities/` instead) --
             *unless* `dry_run` is `True`, in which case no downloader is
@@ -622,14 +622,12 @@ def run(
     # contract.
     resolved_image_resolver = image_resolver
     if resolved_image_resolver is None and not dry_run:
-        # Sprint 025 ticket 002: this repo's own `get_own_data_dir()`
-        # publish target, not `{resolved_site_dir}/public/images/...` --
+        # Sprint 025 ticket 002: this repo's own data publish target
+        # (the data Store since sprint 038), not `{resolved_site_dir}/public/images/...` --
         # every other export write already goes through `own_data_dir`
         # (see `export/writer.py`, `export/ads.py`); this was the one
         # write path sprint 020 never gave that equivalent.
-        resolved_image_resolver = EventImageDownloader(
-            get_own_data_dir() / "images" / "opportunities"
-        ).download
+        resolved_image_resolver = EventImageDownloader(get_data_store()).download
 
     opportunities = normalize_run(
         events,

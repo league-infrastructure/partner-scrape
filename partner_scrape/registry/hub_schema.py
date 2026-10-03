@@ -26,7 +26,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-from partner_scrape.config import REPO_ROOT
+from partner_scrape.config import BUNDLED_REGISTRY_DIR, get_hubs_dir
 
 logger = logging.getLogger(__name__)
 
@@ -36,11 +36,12 @@ logger = logging.getLogger(__name__)
 #: ``registry/schema.py``'s ``_REQUIRED_FIELDS`` contract.
 _REQUIRED_FIELDS = ("hub_name", "page_urls")
 
-#: Default location of the Hub Registry's per-hub TOML files:
-#: ``registry/hubs/`` at the repo root -- physically separate from
-#: ``registry/sources/`` (see this module's docstring; see sprint 025
-#: ticket 001 for the move out of ``partner_scrape/registry/``).
-DEFAULT_HUBS_DIR = REPO_ROOT / "registry" / "hubs"
+#: The *bundled* Hub Registry directory
+#: (``partner_scrape/registry_data/hubs``) -- physically separate from
+#: ``sources/`` (see this module's docstring). Callers omitting
+#: ``directory`` get ``config.get_hubs_dir()``, which honours
+#: ``PARTNER_SCRAPE_REGISTRY_DIR``.
+DEFAULT_HUBS_DIR = BUNDLED_REGISTRY_DIR / "hubs"
 
 
 class InvalidHubConfig(Exception):
@@ -117,10 +118,10 @@ def load_hubs(directory: Path | None = None) -> list[HubConfig]:
     gives the Source Registry.
 
     Args:
-        directory: defaults to :data:`DEFAULT_HUBS_DIR` (the real seed
+        directory: defaults to ``config.get_hubs_dir()`` (the bundled seed
             hub registry) when omitted.
     """
-    directory = directory or DEFAULT_HUBS_DIR
+    directory = directory or get_hubs_dir()
     hubs: list[HubConfig] = []
     for path in sorted(directory.glob("*.toml")):
         try:

@@ -16,6 +16,7 @@ from partner_scrape.adapters.program_cache import (
     content_hash,
 )
 from partner_scrape.adapters.program_llm import ProgramExtractionResult
+from partner_scrape.storage import LocalStore
 
 
 def _sample_result(**overrides: Any) -> ProgramExtractionResult:
@@ -103,7 +104,7 @@ class TestProgramExtractionCacheRoundTrip:
         cache = ProgramExtractionCache(cache_dir=tmp_path)
         cache.store("https://example.org/fre-hs", "body", _sample_result())
 
-        written = list((tmp_path / "program_extraction_cache").glob("*.json"))
+        written = list((tmp_path / "programs").glob("*.json"))
         assert len(written) == 1
 
 
@@ -153,7 +154,7 @@ class TestProgramExtractionCacheLookupManyRoundTrip:
         cache = ProgramExtractionCache(cache_dir=tmp_path)
         cache.store_many("https://example.org/sio-internships", "body", [_sample_result()])
 
-        written = list((tmp_path / "program_extraction_cache").glob("*.json"))
+        written = list((tmp_path / "programs").glob("*.json"))
         assert len(written) == 1
 
     def test_empty_list_round_trips(self, tmp_path):
@@ -169,12 +170,73 @@ class TestProgramExtractionCacheLookupManyRoundTrip:
         body = "body"
         cache.store_many(url, body, [_sample_result()])
 
-        [written] = list((tmp_path / "program_extraction_cache").glob("*.json"))
+        [written] = list((tmp_path / "programs").glob("*.json"))
         entry = json.loads(written.read_text())
         entry["schema_version"] = _CACHE_SCHEMA_VERSION - 1
         written.write_text(json.dumps(entry))
 
         assert cache.lookup_many(url, body) is None
+
+
+class TestProgramExtractionCacheProfileInKey:
+    """Sprint 038, issue 42: the extraction profile is part of the key."""
+
+    def test_same_url_and_body_under_two_profiles_are_distinct_entries(self, tmp_path):
+        cache = ProgramExtractionCache(cache_dir=tmp_path)
+        url = "https://example.org/event"
+        body = "the page body"
+        as_program = _sample_result(program_name="As program")
+        as_competition = _sample_result(program_name="As competition")
+
+        cache.store(url, body, as_program, "program")
+        cache.store(url, body, as_competition, "competition")
+
+        assert cache.lookup(url, body, "program") == as_program
+        assert cache.lookup(url, body, "competition") == as_competition
+        assert cache.lookup(url, body, "pd") is None
+        assert len(list((tmp_path / "programs").glob("*.json"))) == 2
+
+    def test_same_url_and_body_under_two_profiles_distinct_for_many(self, tmp_path):
+        cache = ProgramExtractionCache(cache_dir=tmp_path)
+        url = "https://example.org/events"
+        body = "the page body"
+        program_results = [_sample_result(program_name="P1")]
+        pd_results = [_sample_result(program_name="D1"), _sample_result(program_name="D2")]
+
+        cache.store_many(url, body, program_results, "program")
+        cache.store_many(url, body, pd_results, "pd")
+
+        assert cache.lookup_many(url, body, "program") == program_results
+        assert cache.lookup_many(url, body, "pd") == pd_results
+
+    def test_profile_defaults_to_program(self, tmp_path):
+        cache = ProgramExtractionCache(cache_dir=tmp_path)
+        result = _sample_result()
+        cache.store("https://example.org/x", "body", result)
+
+        assert cache.lookup("https://example.org/x", "body", "program") == result
+
+    def test_legacy_profile_less_entry_is_not_read(self, tmp_path):
+        """No legacy-key fallback (stakeholder decision): an entry stored
+        under the pre-038 key (sha256 of the bare URL) is a miss."""
+        import hashlib
+
+        url = "https://example.org/legacy"
+        body = "the page body"
+        legacy = tmp_path / "programs" / f"{hashlib.sha256(url.encode()).hexdigest()}.json"
+        legacy.parent.mkdir(parents=True)
+        legacy.write_text(
+            json.dumps(
+                {
+                    "schema_version": _CACHE_SCHEMA_VERSION,
+                    "content_hash": content_hash(body),
+                    "result": _sample_result().__dict__,
+                }
+            )
+        )
+        cache = ProgramExtractionCache(cache_dir=tmp_path)
+
+        assert cache.lookup(url, body, "program") is None
 
 
 class TestProgramExtractionCacheDefaultsToConfiguredCacheDir:
@@ -183,7 +245,8 @@ class TestProgramExtractionCacheDefaultsToConfiguredCacheDir:
 
         cache = ProgramExtractionCache()
 
-        assert cache.cache_dir == tmp_path
+        assert isinstance(cache._store, LocalStore)
+        assert cache._store.root == tmp_path
 
 
 # ---------------------------------------------------------------------
@@ -196,7 +259,7 @@ class TestCacheSchemaVersion:
         cache = ProgramExtractionCache(cache_dir=tmp_path)
         cache.store("https://example.org/fre-hs", "body", _sample_result())
 
-        [written] = list((tmp_path / "program_extraction_cache").glob("*.json"))
+        [written] = list((tmp_path / "programs").glob("*.json"))
         entry = json.loads(written.read_text())
 
         assert entry["schema_version"] == _CACHE_SCHEMA_VERSION
@@ -207,7 +270,7 @@ class TestCacheSchemaVersion:
         body = "body"
         cache.store(url, body, _sample_result())
 
-        [written] = list((tmp_path / "program_extraction_cache").glob("*.json"))
+        [written] = list((tmp_path / "programs").glob("*.json"))
         entry = json.loads(written.read_text())
         del entry["schema_version"]
         written.write_text(json.dumps(entry))
@@ -220,7 +283,7 @@ class TestCacheSchemaVersion:
         body = "body"
         cache.store(url, body, _sample_result())
 
-        [written] = list((tmp_path / "program_extraction_cache").glob("*.json"))
+        [written] = list((tmp_path / "programs").glob("*.json"))
         entry = json.loads(written.read_text())
         entry["schema_version"] = _CACHE_SCHEMA_VERSION - 1
         written.write_text(json.dumps(entry))
@@ -233,7 +296,7 @@ class TestCacheSchemaVersion:
         body = "body"
 
         cache.store(url, body, _sample_result(program_name="stale"))
-        [written] = list((tmp_path / "program_extraction_cache").glob("*.json"))
+        [written] = list((tmp_path / "programs").glob("*.json"))
         entry = json.loads(written.read_text())
         del entry["schema_version"]
         written.write_text(json.dumps(entry))
@@ -271,7 +334,7 @@ class TestSchemaVersionBumpForRegistrationDeadline:
         body = "body"
         cache.store(url, body, _sample_result())
 
-        [written] = list((tmp_path / "program_extraction_cache").glob("*.json"))
+        [written] = list((tmp_path / "programs").glob("*.json"))
         entry = json.loads(written.read_text())
         entry["schema_version"] = 2
         # The pre-bump on-disk shape: no registration_deadline key at
@@ -290,7 +353,7 @@ class TestSchemaVersionBumpForRegistrationDeadline:
         body = "body"
         cache.store_many(url, body, [_sample_result()])
 
-        [written] = list((tmp_path / "program_extraction_cache").glob("*.json"))
+        [written] = list((tmp_path / "programs").glob("*.json"))
         entry = json.loads(written.read_text())
         entry["schema_version"] = 2
         for result in entry["results"]:
@@ -298,3 +361,30 @@ class TestSchemaVersionBumpForRegistrationDeadline:
         written.write_text(json.dumps(entry))
 
         assert cache.lookup_many(url, body) is None
+
+
+# ---------------------------------------------------------------------
+# Bucket-backed (moto) round trip, sprint 038
+# ---------------------------------------------------------------------
+
+
+class TestProgramExtractionCacheOverS3:
+    def test_round_trip_through_a_bucket_backed_store(self, monkeypatch):
+        import boto3
+        from moto import mock_aws
+
+        monkeypatch.setenv("DO_SPACES_ENDPOINT", "https://s3.us-east-1.amazonaws.com")
+        monkeypatch.setenv("DO_SPACES_ACCESS_KEY", "test")
+        monkeypatch.setenv("DO_SPACES_SECRET_KEY", "test")
+        monkeypatch.setenv("SCRAPE_CACHE_DIR", "s3://test-bucket/cache")
+        with mock_aws():
+            client = boto3.client("s3", region_name="us-east-1")
+            client.create_bucket(Bucket="test-bucket")
+            cache = ProgramExtractionCache()
+            result = _sample_result()
+            cache.store("https://example.org/s3", "body", result, "pd")
+
+            assert cache.lookup("https://example.org/s3", "body", "pd") == result
+            keys = [o["Key"] for o in client.list_objects_v2(Bucket="test-bucket")["Contents"]]
+            assert len(keys) == 1
+            assert keys[0].startswith("cache/programs/")
