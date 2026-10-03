@@ -59,9 +59,8 @@ Issues 50 (phases 1-2), 49 (superseded), 51, 46, 42. Verification against the al
 
 ### Operator tasks (not tickets)
 
-- Claim the `partner-scrape` PyPI name and configure trusted publishing.
-- Enable bucket versioning on `jtl-stem-ecosystem-scrape`.
-- Known external blocker: the scheduled-run workflow currently fails at the start of every run because the `SITE_REPO_TOKEN` secret is missing; stakeholder must add it (until phase 4 removes the need).
+- Enable bucket versioning on `jtl-stem-ecosystem-scrape`. This must be done with a full-access Spaces key: the bucket-scoped project key got AccessDenied on PutBucketVersioning.
+- `SITE_REPO_TOKEN` will not be provisioned: partner-scrape is being consolidated with stem-ecosystem into one repo, so the weekly job's verify step will keep failing until then. The package is likewise not published to PyPI for the same reason.
 - Correct the `.env` `DO_SPACES_ENDPOINT` (it is bucket-qualified); ticket 006 persists the correct value in dotconfig.
 - Add `DO_SPACES_*` secrets to GitHub Actions.
 

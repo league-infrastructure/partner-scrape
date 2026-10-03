@@ -33,9 +33,11 @@ bucket-qualified) plus the `DO_SPACES_ACCESS_KEY` and
 workflow. The stem-ecosystem checkout is now read-only (it only supplies
 `partners.json`), so `SITE_REPO_TOKEN` needs only `contents: read`.
 
-**Known external blocker:** `SITE_REPO_TOKEN` is still not provisioned on
-GitHub, so the "Verify SITE_REPO_TOKEN is configured" step fails fast
-until an operator completes step 2–3. This is an operator task.
+**Known external blocker:** `SITE_REPO_TOKEN` will not be provisioned.
+partner-scrape and stem-ecosystem are being consolidated into one repo, so
+the token is not worth creating in the meantime. Until the consolidation, the
+"Verify SITE_REPO_TOKEN is configured" step will keep failing fast on every
+weekly run. The workflow itself is unchanged.
 
 No secret value is written anywhere in this repo, this document, or the
 workflow file itself — every secret is referenced only by name
